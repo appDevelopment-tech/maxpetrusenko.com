@@ -1,0 +1,470 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Design Tokens / CSS Variables */
+:root {
+  --ink: #0c1115;
+  --ink-soft: #1c242c;
+  --sand: #f7f1e6;
+  --paper: #ffffff;
+  --accent-tech: #0f7ea9;
+  --accent-spirit: #0e615d;
+  --accent-mindfold: #d2a35d;
+  --muted: #4b535c;
+  --line: #e6e0d8;
+  --shadow: 0 25px 80px rgba(12, 17, 21, 0.14);
+  --radius: 18px;
+  --font-sans: "DM Sans", "Inter", system-ui, -apple-system, sans-serif;
+  --font-serif: "Cormorant Garamond", "Epilogue", "DM Sans", system-ui, -apple-system, sans-serif;
+  color-scheme: light;
+  /* Z-index scale for layering */
+  --z-header: 50;
+  --z-modal: 100;
+  --z-tooltip: 150;
+}
+
+/* Base Styles */
+@layer base {
+  html {
+    background: var(--sand);
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    background: radial-gradient(circle at 20% 20%, rgba(210, 163, 93, 0.16), transparent 32%),
+      radial-gradient(circle at 80% 0%, rgba(14, 97, 93, 0.18), transparent 28%), var(--sand);
+    color: var(--ink);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  img {
+    max-width: 100%;
+    display: block;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-serif);
+    color: var(--ink);
+    letter-spacing: 0.02em;
+  }
+
+  /* Force light mode */
+  @media (prefers-color-scheme: dark) {
+    :root {
+      color-scheme: light;
+    }
+    html,
+    body {
+      background: #f7f1e6 !important;
+      color: var(--ink) !important;
+    }
+  }
+}
+
+/* Component Styles */
+@layer components {
+  .container {
+    @apply w-full max-w-[1080px] mx-auto px-4;
+  }
+
+  .page {
+    @apply py-11 md:py-16;
+  }
+
+  /* Navigation */
+  .nav-bar {
+    @apply flex items-center justify-between gap-3 py-4 md:py-5;
+  }
+
+  .menu-toggle {
+    @apply hidden items-center justify-center gap-2 px-3 py-2.5 rounded-xl border text-ink font-bold cursor-pointer;
+    border-color: rgba(12, 17, 21, 0.12);
+    background-color: rgba(12, 17, 21, 0.06);
+  }
+
+  .brand {
+    @apply font-serif font-bold tracking-wide text-sm uppercase;
+  }
+
+  .nav-links {
+    @apply flex items-center gap-3 md:gap-4 flex-wrap;
+  }
+
+  .nav-links.collapsed {
+    @apply hidden !important;
+  }
+
+  .nav-links.open {
+    @apply flex !important;
+  }
+
+  .nav-links a {
+    @apply px-3.5 py-2.5 rounded-xl font-semibold text-ink transition-all duration-200;
+  }
+  .nav-links a:hover {
+    background-color: rgba(12, 17, 21, 0.08);
+  }
+
+  .nav-links a.active {
+    background-color: rgba(12, 17, 21, 0.08);
+  }
+
+  /* Buttons */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2.5 px-5 py-3.5 rounded-xl border font-bold cursor-pointer transition-all duration-200 text-[15px] text-ink;
+  }
+
+  .btn.primary {
+    @apply bg-gradient-to-br from-accent-spirit to-[#0b4e50] text-[#f4f1ea] shadow-primary;
+  }
+
+  .btn.primary:hover {
+    @apply -translate-y-0.5 shadow-primaryHover;
+  }
+
+  .btn.secondary {
+    border-color: rgba(12, 17, 21, 0.12);
+    background-color: rgba(12, 17, 21, 0.06);
+  }
+
+  .btn.secondary:hover {
+    @apply -translate-y-[1px];
+    border-color: rgba(12, 17, 21, 0.2);
+  }
+
+  .btn.sm {
+    @apply px-3 py-2 text-sm;
+  }
+
+  /* Cards & Tiles */
+  .card {
+    background-color: rgba(255, 255, 255, 0.92);
+    border-color: rgba(12, 17, 21, 0.08);
+    @apply rounded-tile shadow-card px-4.5 py-4.5 py-5;
+  }
+
+  .card p {
+    @apply text-muted text-[15px];
+  }
+
+  .tile {
+    @apply relative flex items-center justify-between gap-3 px-4.5 py-4 rounded-tile shadow-tile transition-all duration-200 hover:-translate-y-0.5 hover:shadow-tileHover;
+    background-color: rgba(255, 255, 255, 0.92);
+    border-color: rgba(12, 17, 21, 0.08);
+  }
+  .tile:hover {
+    border-color: rgba(14, 97, 93, 0.25);
+  }
+
+  .tile-meta {
+    display: grid;
+    gap: 0.25rem;
+  }
+
+  .tile-title {
+    @apply font-bold text-base tracking-wide;
+  }
+
+  .tile-desc {
+    @apply text-sm text-[#2a3138];
+  }
+
+  .badge {
+    @apply inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-accent-tech to-[#0a5f8b] text-[#f4f7f0] font-bold text-sm shadow-[0_12px_24px_rgba(11,140,122,0.28)] whitespace-nowrap;
+  }
+
+  .badge.spirit {
+    @apply from-accent-spirit to-[#0b4e50];
+  }
+
+  .badge.mindfold {
+    @apply from-accent-mindfold to-[#b07b2c];
+  }
+
+  /* Sections */
+  .section {
+    @apply mt-10;
+  }
+
+  .section-head {
+    @apply flex items-center justify-between gap-3 mb-3.5 flex-wrap;
+  }
+
+  .section-note {
+    @apply text-muted text-sm;
+  }
+
+  .eyebrow {
+    background-color: rgba(12, 17, 21, 0.06);
+    @apply inline-flex items-center gap-2 px-3.5 py-2.5 rounded-full text-muted text-sm;
+  }
+
+  .eyebrow .dot {
+    @apply w-2 h-2 rounded-full bg-accent-spirit shadow-[0_0_0_6px_rgba(210,163,93,0.24)];
+  }
+
+  .pill {
+    border-color: rgba(12, 17, 21, 0.12);
+    background-color: rgba(255, 255, 255, 0.8);
+    @apply inline-flex items-center gap-2.5 px-3.5 py-2.5 rounded-full border font-semibold text-muted;
+  }
+
+  .pill-row {
+    @apply flex gap-2.5 flex-wrap;
+  }
+
+  .grid {
+    display: grid;
+    gap: 1.125rem;
+  }
+
+  .cards-3 {
+    @apply grid-cols-1 md:grid-cols-[repeat(auto-fit,minmax(240px,1fr))];
+  }
+
+  .split {
+    display: grid;
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+    gap: 1.125rem;
+  }
+  @media (min-width: 768px) {
+    .split {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  .list {
+    @apply list-none;
+  }
+
+  .list li {
+    @apply ml-4 before:content-['→'] before:mr-2;
+  }
+
+  /* Footer */
+  .footer {
+    border-top-color: rgba(12, 17, 21, 0.06);
+    @apply container py-6 md:py-9 text-muted text-sm flex items-center justify-between gap-3.5 flex-wrap border-t mt-15;
+  }
+
+  .footer-links {
+    @apply flex gap-3 flex-wrap;
+  }
+
+  .footer-links a {
+    background-color: rgba(12, 17, 21, 0.05);
+    @apply px-3 py-2 rounded-xl;
+  }
+
+  /* Hero */
+  .hero {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+    align-items: start;
+    padding-top: 3.5rem;
+    padding-bottom: 3rem;
+  }
+  @media (min-width: 640px) {
+    .hero {
+      gap: 3rem;
+    }
+  }
+  @media (min-width: 768px) {
+    .hero {
+      padding-top: 4.5rem;
+      padding-bottom: 4rem;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+    }
+  }
+  @media (min-width: 1024px) {
+    .hero {
+      grid-template-columns: 1.05fr 0.95fr;
+    }
+  }
+
+  .hero-text p {
+    @apply text-base md:text-lg text-ink-soft max-w-[620px] mt-3;
+  }
+
+  .hero-actions {
+    @apply flex flex-wrap gap-3 mt-5 md:mt-6;
+  }
+
+  .hero-cta-note {
+    @apply text-muted text-sm mt-3;
+  }
+
+  .hero-card {
+    @apply space-y-3;
+  }
+
+  /* Tweet Card */
+  .tweet-card {
+    background-color: rgba(255, 255, 255, 0.92);
+    border-color: rgba(12, 17, 21, 0.08);
+    @apply rounded-tile p-5 flex gap-4 items-start;
+  }
+
+  .tweet-card img {
+    @apply w-24 h-24 rounded-xl object-cover flex-shrink-0;
+  }
+
+  .tweet-card h3 {
+    @apply font-serif text-xl mb-2;
+  }
+
+  .stat-list {
+    @apply flex flex-col gap-1 text-sm;
+  }
+
+  .stat-list span {
+    @apply text-muted;
+  }
+
+  /* Article Cards */
+  .article-list {
+    display: grid;
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+    gap: 1rem;
+  }
+  @media (min-width: 640px) {
+    .article-list {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (min-width: 1024px) {
+    .article-list {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  .work-list {
+    display: grid;
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+    gap: 1rem;
+  }
+  @media (min-width: 768px) {
+    .work-list {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (min-width: 1024px) {
+    .work-list {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  .article-card {
+    background-color: rgba(255, 255, 255, 0.92);
+    border-color: rgba(12, 17, 21, 0.08);
+    @apply rounded-tile overflow-hidden transition-all duration-200 hover:-translate-y-0.5 hover:shadow-tileHover;
+  }
+
+  .article-thumb {
+    @apply w-full aspect-video object-cover;
+  }
+
+  .article-body {
+    @apply p-4;
+  }
+
+  .article-title {
+    @apply block font-serif text-lg leading-tight mb-2 font-bold;
+  }
+
+  .article-sub {
+    @apply block text-sm text-muted mb-3;
+  }
+
+  .article-meta {
+    @apply flex items-center gap-3 text-xs text-muted;
+  }
+
+  .article-meta svg {
+    @apply w-4 h-4;
+  }
+
+  .embed-image {
+    @apply block rounded-tile overflow-hidden shadow-tile transition-all duration-200 hover:-translate-y-0.5 hover:shadow-tileHover;
+  }
+
+  .embed-image img {
+    @apply w-full;
+  }
+
+  /* Email Modal */
+  .email-modal-backdrop {
+    background-color: rgba(12, 17, 21, 0.5);
+    @apply fixed inset-0 backdrop-blur-sm z-[100] hidden items-center justify-center p-4;
+  }
+
+  .email-modal {
+    @apply bg-white rounded-tile shadow-hero p-6 max-w-md w-full;
+  }
+
+  .email-modal h3 {
+    @apply font-serif text-2xl mb-2;
+  }
+
+  .email-modal p {
+    @apply text-muted mb-4;
+  }
+
+  .email-modal input[type="email"] {
+    border-color: rgba(12, 17, 21, 0.12);
+    background-color: rgba(12, 17, 21, 0.06);
+    @apply w-full px-4 py-3 rounded-xl border text-ink focus:outline-none;
+  }
+  .email-modal input[type="email"]:focus {
+    border-color: rgba(12, 17, 21, 0.2);
+  }
+
+  .email-modal label {
+    @apply flex items-center gap-2 text-sm mt-3;
+  }
+
+  .email-status {
+    @apply text-sm mt-2 min-h-5;
+  }
+
+  .email-modal-actions {
+    @apply flex gap-2 mt-4;
+  }
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .nav-bar {
+    @apply items-start flex-col gap-2.5;
+  }
+
+  .menu-toggle {
+    @apply inline-flex;
+  }
+
+  .nav-links {
+    @apply w-full flex-col items-start gap-2.5 py-2.5;
+  }
+
+  .nav-links a {
+    @apply w-full px-3 py-2.5;
+  }
+}

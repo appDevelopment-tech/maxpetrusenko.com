@@ -1,0 +1,11 @@
+# Wrangler configuration for Cloudflare Pages deployment
+# See: https://developers.cloudflare.com/pages/functions/wrangler-configuration/
+
+name = "maxpetrusenko-site"
+compatibility_date = "2024-01-01"
+
+# Enable Node.js compatibility for Next.js
+compatibility_flags = ["nodejs_compat"]
+
+# Build output directory for Pages deployment
+pages_build_output_dir = ".vercel/output/static"
