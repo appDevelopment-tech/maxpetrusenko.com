@@ -163,10 +163,15 @@
     @apply text-muted text-[15px];
   }
 
+  .tiles {
+    display: grid;
+    gap: 18px;
+  }
+
   .tile {
     @apply relative flex items-center justify-between gap-3 px-4.5 py-4 rounded-tile shadow-tile transition-all duration-200 hover:-translate-y-0.5 hover:shadow-tileHover;
     background-color: rgba(255, 255, 255, 0.92);
-    border-color: rgba(12, 17, 21, 0.08);
+    border: 1px solid rgba(12, 17, 21, 0.08);
   }
   .tile:hover {
     border-color: rgba(14, 97, 93, 0.25);
@@ -200,6 +205,7 @@
   /* Sections */
   .section {
     @apply mt-10;
+    padding-bottom: 2.5rem;
   }
 
   .section-head {
@@ -231,7 +237,7 @@
 
   .grid {
     display: grid;
-    gap: 1.125rem;
+    gap: 1.6875rem;
   }
 
   .cards-3 {
@@ -241,7 +247,7 @@
   .split {
     display: grid;
     grid-template-columns: repeat(1, minmax(0, 1fr));
-    gap: 1.125rem;
+    gap: 1.6875rem;
   }
   @media (min-width: 768px) {
     .split {
@@ -308,31 +314,113 @@
     @apply flex flex-wrap gap-3 mt-5 md:mt-6;
   }
 
+  .hero-actions-compact {
+    margin-top: 10px;
+  }
+
+  .hero-actions-spaced {
+    margin-top: 16px;
+  }
+
   .hero-cta-note {
     @apply text-muted text-sm mt-3;
+    padding-top: 12px;
   }
 
   .hero-card {
+    background-color: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(12, 17, 21, 0.08);
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 16px 36px rgba(12, 17, 21, 0.1);
     @apply space-y-3;
+  }
+
+  .hero-card.quick-paths {
+    background-color: #fff;
+    border: 1px solid rgba(12, 17, 21, 0.06);
+    border-radius: 22px;
+    padding: 22px;
+    box-shadow: 0 18px 38px rgba(12, 17, 21, 0.08);
+  }
+
+  .hero-card.quick-paths h3 {
+    margin-bottom: 12px;
+  }
+
+  .hero-card.quick-paths .tile {
+    background-color: #fff;
+    border: 1px solid rgba(12, 17, 21, 0.08);
+    border-radius: 16px;
+    box-shadow: 0 10px 18px rgba(12, 17, 21, 0.08);
+  }
+
+  .hero-card.quick-paths .tile:hover {
+    border-color: rgba(12, 17, 21, 0.12);
+    box-shadow: 0 14px 24px rgba(12, 17, 21, 0.12);
+  }
+
+  .hero-card.quick-paths .badge {
+    border-radius: 999px;
+    padding: 8px 14px;
+    font-size: 14px;
+    font-weight: 600;
+    background: #2f6d98;
+    color: #f4f1ea;
+    box-shadow: 0 10px 18px rgba(12, 17, 21, 0.12);
+  }
+
+  .hero-card.quick-paths .badge.spirit {
+    background: #215a57;
+  }
+
+  .hero-card.quick-paths .badge.mindfold {
+    background: #c28a35;
   }
 
   /* Tweet Card */
   .tweet-card {
-    background-color: rgba(255, 255, 255, 0.92);
-    border-color: rgba(12, 17, 21, 0.08);
-    @apply rounded-tile p-5 flex gap-4 items-start;
+    background-color: #fff;
+    border: 1px solid rgba(12, 17, 21, 0.08);
+    border-radius: 20px;
+    box-shadow: 0 18px 38px rgba(12, 17, 21, 0.08);
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    gap: 16px;
+    align-items: start;
+    padding: 14px;
   }
 
   .tweet-card img {
-    @apply w-24 h-24 rounded-xl object-cover flex-shrink-0;
+    width: 100%;
+    height: 100%;
+    border-radius: 12px;
+    object-fit: cover;
+  }
+
+  @media (max-width: 680px) {
+    .tweet-card {
+      grid-template-columns: 1fr;
+    }
+
+    .tweet-card img {
+      width: 100%;
+      height: auto;
+    }
   }
 
   .tweet-card h3 {
     @apply font-serif text-xl mb-2;
   }
 
+  .tweet-card p {
+    margin: 0 0 8px 0;
+    color: var(--muted);
+  }
+
   .stat-list {
     @apply flex flex-col gap-1 text-sm;
+    margin: 8px 0 12px;
   }
 
   .stat-list span {
@@ -342,60 +430,75 @@
   /* Article Cards */
   .article-list {
     display: grid;
-    grid-template-columns: repeat(1, minmax(0, 1fr));
-    gap: 1rem;
-  }
-  @media (min-width: 640px) {
-    .article-list {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-  }
-  @media (min-width: 1024px) {
-    .article-list {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
+    gap: 21px;
+    margin-top: 12px;
   }
 
   .work-list {
     display: grid;
-    grid-template-columns: repeat(1, minmax(0, 1fr));
-    gap: 1rem;
-  }
-  @media (min-width: 768px) {
-    .work-list {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-  }
-  @media (min-width: 1024px) {
-    .work-list {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
+    gap: 21px;
+    margin-top: 12px;
   }
 
   .article-card {
-    background-color: rgba(255, 255, 255, 0.92);
-    border-color: rgba(12, 17, 21, 0.08);
-    @apply rounded-tile overflow-hidden transition-all duration-200 hover:-translate-y-0.5 hover:shadow-tileHover;
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    gap: 16px;
+    padding: 14px;
+    background: rgba(255, 255, 255, 0.92);
+    border: 1px solid rgba(12, 17, 21, 0.08);
+    border-radius: 14px;
+    box-shadow: 0 10px 22px rgba(12, 17, 21, 0.08);
+    transition: transform 0.15s ease, box-shadow 0.2s ease;
+  }
+  .article-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 14px 26px rgba(12, 17, 21, 0.12);
+  }
+  @media (max-width: 640px) {
+    .article-card {
+      grid-template-columns: 1fr;
+    }
   }
 
   .article-thumb {
-    @apply w-full aspect-video object-cover;
+    width: 100%;
+    height: 100%;
+    min-height: 120px;
+    object-fit: cover;
+    border-radius: 10px;
+    background: #e8e6df;
+  }
+  @media (max-width: 680px) {
+    .article-thumb {
+      height: 180px;
+    }
   }
 
   .article-body {
-    @apply p-4;
+    display: grid;
+    gap: 8px;
   }
 
   .article-title {
-    @apply block font-serif text-lg leading-tight mb-2 font-bold;
+    font-weight: 700;
+    font-size: 17px;
+    letter-spacing: 0.2px;
+    margin-bottom: 8px;
   }
 
   .article-sub {
-    @apply block text-sm text-muted mb-3;
+    color: var(--muted);
+    font-size: 14px;
   }
 
   .article-meta {
-    @apply flex items-center gap-3 text-xs text-muted;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--muted);
+    font-size: 13px;
+    flex-wrap: wrap;
   }
 
   .article-meta svg {
@@ -403,11 +506,27 @@
   }
 
   .embed-image {
-    @apply block rounded-tile overflow-hidden shadow-tile transition-all duration-200 hover:-translate-y-0.5 hover:shadow-tileHover;
+    position: relative;
+    display: block;
+    width: 100%;
+    max-width: 640px;
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid rgba(12, 17, 21, 0.08);
+    box-shadow: 0 12px 28px rgba(12, 17, 21, 0.12);
+    background: #111;
+    margin: 0 auto;
+    transition: transform 0.15s ease, box-shadow 0.2s ease;
+  }
+  .embed-image:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 16px 32px rgba(12, 17, 21, 0.16);
   }
 
   .embed-image img {
-    @apply w-full;
+    width: 100%;
+    height: auto;
+    display: block;
   }
 
   /* Email Modal */
