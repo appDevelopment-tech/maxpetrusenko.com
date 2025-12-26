@@ -57,7 +57,7 @@ export default function HomePage() {
             </div>
           </div>
 
-          <div className="hero-card">
+          <div className="hero-card quick-paths">
             <h3>Quick paths</h3>
             <div className="tiles">
               <a className="tile" href={siteConfig.externalLinks.atelier} target="_blank" rel="noopener">
@@ -115,8 +115,8 @@ export default function HomePage() {
             <Image
               src="https://pbs.twimg.com/media/GxxJBKwW4AAUxYs?format=jpg&name=900x900"
               alt="Claude Code sub-agents overview"
-              width={96}
-              height={96}
+              width={400}
+              height={400}
             />
             <div>
               <h3>Top post</h3>
@@ -126,13 +126,13 @@ export default function HomePage() {
                 happened:
               </p>
               <div className="stat-list">
-                <span>→ $253k saved annually</span>
-                <span>→ 3x faster feature delivery</span>
-                <span>→ 73% fewer bugs in production</span>
-                <span>→ Zero regressions across 127 PRs</span>
-                <span>→ 511.6K views</span>
+                <span>&rarr; $253k saved annually</span>
+                <span>&rarr; 3x faster feature delivery</span>
+                <span>&rarr; 73% fewer bugs in production</span>
+                <span>&rarr; Zero regressions across 127 PRs</span>
+                <span>&rarr; 511.6K views</span>
               </div>
-              <div className="hero-actions" style={{ marginTop: 10 }}>
+              <div className="hero-actions hero-actions-compact">
                 <a
                   className="btn primary"
                   href="https://x.com/petrusenko_max/status/1953516625161834824"
@@ -174,9 +174,6 @@ export default function HomePage() {
                 <span className="article-sub">
                   36K views · 26K reads · 7 min read
                 </span>
-                <div className="article-meta">
-                  <span className="stat">7 min read</span>
-                </div>
               </div>
             </a>
             <a
@@ -199,9 +196,6 @@ export default function HomePage() {
                 <span className="article-sub">
                   249K views · 26K reads · GrapheneOS privacy
                 </span>
-                <div className="article-meta">
-                  <span className="stat">6 min read</span>
-                </div>
               </div>
             </a>
             <a
@@ -224,9 +218,6 @@ export default function HomePage() {
                 <span className="article-sub">
                   41K presentations · 8.7K views · 5.4K reads
                 </span>
-                <div className="article-meta">
-                  <span className="stat">8 min read</span>
-                </div>
               </div>
             </a>
           </div>
@@ -283,7 +274,7 @@ export default function HomePage() {
             <div className="card">
               <h3>How to book</h3>
               <p>Limited spots. Message to align intentions, readiness, and timing.</p>
-              <div className="hero-actions" style={{ marginTop: 10 }}>
+              <div className="hero-actions hero-actions-compact">
                 <a
                   className="btn primary"
                   href="https://wa.me/17865436688?text=Hi%20Max%2C%20I%27m%20interested%20in%20the%20Kyo-tai%20immersion%20(%24333).%20Preferred%20day%2Ftime%3A%20____.%20Intentions%3A%20____."
