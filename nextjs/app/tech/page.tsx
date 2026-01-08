@@ -115,13 +115,14 @@ export default function TechPage() {
             <span className="section-note">Specialized expertise for modern builders.</span>
           </div>
           <div className="cards-3 grid">
-            <div className="card">
+            <div className="card card-with-actions">
               <h3>Claude Code</h3>
               <p>
                 Setup and optimization for development teams. Sub-agent
                 configuration, custom skills, workflow integration, and
                 multi-agent systems.
               </p>
+              <div className="card-actions-spacer"></div>
               <div className="hero-actions" style={{ marginTop: 16 }}>
                 <a
                   className="btn secondary"
@@ -133,13 +134,14 @@ export default function TechPage() {
                 </a>
               </div>
             </div>
-            <div className="card">
+            <div className="card card-with-actions">
               <h3>n8n Automation</h3>
               <p>
                 Workflow automation connecting your tools. API integrations,
                 data pipelines, custom nodes. From simple triggers to complex
                 multi-step flows.
               </p>
+              <div className="card-actions-spacer"></div>
               <div className="hero-actions" style={{ marginTop: 16 }}>
                 <a
                   className="btn secondary"
@@ -151,13 +153,14 @@ export default function TechPage() {
                 </a>
               </div>
             </div>
-            <div className="card">
+            <div className="card card-with-actions">
               <h3>ChatGPT Integration</h3>
               <p>
                 Integrate OpenAI's API into your products. Custom prompts,
                 function calling, RAG with vector databases, fine-tuning for
                 domain expertise.
               </p>
+              <div className="card-actions-spacer"></div>
               <div className="hero-actions" style={{ marginTop: 16 }}>
                 <a
                   className="btn secondary"

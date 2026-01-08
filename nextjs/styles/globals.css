@@ -163,6 +163,20 @@
     @apply text-muted text-[15px];
   }
 
+  /* Card with aligned actions at bottom */
+  .card-with-actions {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .card-with-actions .card-actions-spacer {
+    flex: 1;
+  }
+
+  .card-with-actions .hero-actions {
+    margin-top: auto;
+  }
+
   .tiles {
     display: grid;
     gap: 18px;

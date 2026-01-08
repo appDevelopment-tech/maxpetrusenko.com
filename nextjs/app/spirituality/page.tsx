@@ -111,11 +111,12 @@ export default function SpiritualityPage() {
             <h2>Booking</h2>
           </div>
           <div className="cards-3 grid">
-            <div className="card">
+            <div className="card card-with-actions">
               <h3>WhatsApp</h3>
               <p>
                 Fastest channel. Send your intention and preferred day/time.
               </p>
+              <div className="card-actions-spacer"></div>
               <div className="hero-actions" style={{ marginTop: 12 }}>
                 <a
                   className="btn primary"
@@ -127,9 +128,10 @@ export default function SpiritualityPage() {
                 </a>
               </div>
             </div>
-            <div className="card">
+            <div className="card card-with-actions">
               <h3>Email</h3>
               <p>Prefer email? Share your availability and intentions.</p>
+              <div className="card-actions-spacer"></div>
               <div className="hero-actions" style={{ marginTop: 12 }}>
                 <a
                   className="btn secondary"
@@ -141,12 +143,13 @@ export default function SpiritualityPage() {
                 </a>
               </div>
             </div>
-            <div className="card">
+            <div className="card card-with-actions">
               <h3>Questions</h3>
               <p>
                 Ask anything before you book; boundaries and pacing are set
                 together.
               </p>
+              <div className="card-actions-spacer"></div>
               <div className="hero-actions" style={{ marginTop: 12 }}>
                 <a
                   className="btn secondary"
