@@ -33,6 +33,26 @@ export function JsonLd({ type, data }: JsonLdProps) {
       "@type": "BreadcrumbList",
       ...data,
     },
+    ProfessionalService: {
+      "@context": "https://schema.org",
+      "@type": "ProfessionalService",
+      ...data,
+    },
+    FAQPage: {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      ...data,
+    },
+    SoftwareApplication: {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      ...data,
+    },
+    TechArticle: {
+      "@context": "https://schema.org",
+      "@type": "TechArticle",
+      ...data,
+    },
   };
 
   const schema = schemas[type];

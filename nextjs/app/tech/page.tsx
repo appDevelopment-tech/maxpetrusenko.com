@@ -3,11 +3,16 @@ import Image from "next/image";
 import { siteConfig } from "@/config/site";
 import { generateMetadata, absoluteUrl } from "@/lib/seo/metadata";
 import { JsonLd } from "@/components/seo/JsonLd";
-import { generateWebPageSchema, generateBreadcrumbSchema } from "@/lib/seo/structured-data";
+import {
+  generateWebPageSchema,
+  generateBreadcrumbSchema,
+  generateTechServiceSchema,
+  generateTechFAQSchema,
+} from "@/lib/seo/structured-data";
 
 export const metadata = generateMetadata({
   title: "Tech",
-  description: "Tech portfolio and products by Max Petrusenko.",
+  description: "AI automation consultant specializing in Claude Code, n8n workflows, and ChatGPT integrations. Available remotely worldwide and in-person in Miami, Ubud Bali, and globally while traveling.",
   ogType: "website",
   canonical: absoluteUrl("/tech"),
 });
@@ -29,6 +34,14 @@ export default function TechPage() {
           { name: "Home", url: "/" },
           { name: "Tech", url: "/tech" },
         ])}
+      />
+      <JsonLd
+        type="ProfessionalService"
+        data={generateTechServiceSchema()}
+      />
+      <JsonLd
+        type="FAQPage"
+        data={generateTechFAQSchema()}
       />
 
       <div className="container">
@@ -93,6 +106,109 @@ export default function TechPage() {
               </a>
             </div>
           </div>
+        </section>
+
+        <section className="section">
+          <div className="section-head">
+            <h2>AI & Automation Services</h2>
+            <span className="section-note">Specialized expertise for modern builders.</span>
+          </div>
+          <div className="cards-3 grid">
+            <div className="card">
+              <h3>Claude Code</h3>
+              <p>
+                Setup and optimization for development teams. Sub-agent
+                configuration, custom skills, workflow integration, and
+                multi-agent systems.
+              </p>
+              <div className="hero-actions" style={{ marginTop: 16 }}>
+                <a
+                  className="btn secondary"
+                  href="https://medium.com/p/65b991356c25"
+                  target="_blank"
+                  rel="noopener"
+                >
+                  Read guide
+                </a>
+              </div>
+            </div>
+            <div className="card">
+              <h3>n8n Automation</h3>
+              <p>
+                Workflow automation connecting your tools. API integrations,
+                data pipelines, custom nodes. From simple triggers to complex
+                multi-step flows.
+              </p>
+              <div className="hero-actions" style={{ marginTop: 16 }}>
+                <a
+                  className="btn secondary"
+                  href="https://n8n.io"
+                  target="_blank"
+                  rel="noopener"
+                >
+                  About n8n
+                </a>
+              </div>
+            </div>
+            <div className="card">
+              <h3>ChatGPT Integration</h3>
+              <p>
+                Integrate OpenAI's API into your products. Custom prompts,
+                function calling, RAG with vector databases, fine-tuning for
+                domain expertise.
+              </p>
+              <div className="hero-actions" style={{ marginTop: 16 }}>
+                <a
+                  className="btn secondary"
+                  href="mailto:hello@maxpetrusenko.com?subject=ChatGPT%20integration"
+                  target="_blank"
+                  rel="noopener"
+                >
+                  Discuss
+                </a>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="section">
+          <div className="section-head">
+            <h2>Location & Availability</h2>
+            <span className="section-note">Remote-first with in-person options.</span>
+          </div>
+          <div className="cards-3 grid">
+            <div className="card">
+              <h3>🌍 Remote / Global</h3>
+              <p>
+                I work with clients worldwide via remote collaboration. Claude
+                Code setup, n8n workflows, and automation consulting can all be
+                done entirely remotely.
+              </p>
+            </div>
+            <div className="card">
+              <h3>📍 Miami, Florida</h3>
+              <p>
+                Seasonal base (March-June, August-December). Available for
+                in-person consulting, team training, and onsite automation setup
+                in Miami and South Florida.
+              </p>
+            </div>
+            <div className="card">
+              <h3>🏝️ Ubud, Bali</h3>
+              <p>
+                Seasonal base (June-August). Combine automation work with a trip
+                to Bali. In-person consulting available on the island.
+              </p>
+            </div>
+          </div>
+          <p className="text-muted text-sm mt-4 text-center">
+            Currently traveling: Dubai → Athens → Lisbon.{" "}
+            <a
+              href="mailto:hello@maxpetrusenko.com?subject=Location%20check"
+            >
+              Contact for current location.
+            </a>
+          </p>
         </section>
 
         <section className="section">
@@ -405,6 +521,65 @@ export default function TechPage() {
                 </div>
               </div>
             </a>
+          </div>
+        </section>
+
+        <section className="section">
+          <div className="section-head">
+            <h2>Frequently Asked Questions</h2>
+          </div>
+          <div className="cards-3 grid">
+            <div className="card">
+              <h3>What AI tools do you specialize in?</h3>
+              <p>
+                Claude Code for development automation, n8n for workflow
+                orchestration, ChatGPT API for product integrations. I also
+                work with complementary tools like vector databases and automation
+                platforms.
+              </p>
+            </div>
+            <div className="card">
+              <h3>How does Claude Code compare to GitHub Copilot?</h3>
+              <p>
+                Claude Code is a CLI agent that can read your entire codebase,
+                run commands, execute tests, and make architectural decisions.
+                Copilot provides inline suggestions. Claude Code is more
+                autonomous and capable of multi-step reasoning.
+              </p>
+            </div>
+            <div className="card">
+              <h3>What can I automate with n8n?</h3>
+              <p>
+                Almost anything: content scheduling, lead management, data sync
+                between tools, AI-powered workflows, document processing, custom
+                API integrations. If it has an API, n8n can connect it.
+              </p>
+            </div>
+            <div className="card">
+              <h3>Do you offer training for teams?</h3>
+              <p>
+                Yes. I can train your team on AI tooling best practices, set up
+                workflows, and create documentation. Training is customized to
+                your stack and use cases.
+              </p>
+            </div>
+            <div className="card">
+              <h3>What's your pricing model?</h3>
+              <p>
+                One-time setups (Claude Code configuration, simple automations)
+                start at project-based pricing. Ongoing retainers for complex
+                systems and team support. Contact hello@maxpetrusenko.com with
+                your requirements.
+              </p>
+            </div>
+            <div className="card">
+              <h3>Can you help with product strategy too?</h3>
+              <p>
+                Yes. I offer product & UX consulting to shape what to build, not
+                just how. Calm, outcome-first product definition before a line
+                of code is written.
+              </p>
+            </div>
           </div>
         </section>
       </div>

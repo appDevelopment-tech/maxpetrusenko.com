@@ -29,6 +29,18 @@ export default function HomePage() {
         data={generateBreadcrumbSchema([{ name: "Home", url: "/" }])}
       />
 
+      <div className="location-banner">
+        <span className="location-item">
+          <span className="location-icon">📍</span>
+          <span>Currently: <strong>Dubai</strong> (Jan-Feb) → <strong>Athens</strong> (Feb-Mar) → <strong>Lisbon</strong> (Mar)</span>
+        </span>
+        <span className="location-divider">•</span>
+        <span className="location-item">
+          <span className="location-icon">🔵</span>
+          <span>Regular bases: <strong>Miami</strong> (Mar-Jun) &amp; <strong>Ubud, Bali</strong> (Jun-Aug)</span>
+        </span>
+      </div>
+
       <div className="container">
         <section className="hero">
           <div className="hero-text">

@@ -263,6 +263,53 @@
     @apply ml-4 before:content-['→'] before:mr-2;
   }
 
+  /* Location Banner */
+  .location-banner {
+    @apply w-full max-w-[1080px] mx-auto px-4 py-3 md:py-3.5;
+    background: linear-gradient(135deg, rgba(14, 97, 93, 0.08) 0%, rgba(210, 163, 93, 0.06) 100%);
+    border: 1px solid rgba(14, 97, 93, 0.15);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px 16px;
+    flex-wrap: wrap;
+    margin: 16px auto 0;
+  }
+
+  .location-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    color: var(--ink-soft);
+  }
+
+  .location-icon {
+    font-size: 16px;
+  }
+
+  .location-item strong {
+    color: var(--accent-spirit);
+    font-weight: 600;
+  }
+
+  .location-divider {
+    color: rgba(12, 17, 21, 0.2);
+    font-weight: 300;
+  }
+
+  @media (max-width: 640px) {
+    .location-banner {
+      flex-direction: column;
+      gap: 8px;
+      text-align: center;
+    }
+    .location-divider {
+      display: none;
+    }
+  }
+
   /* Footer */
   .footer {
     border-top-color: rgba(12, 17, 21, 0.06);

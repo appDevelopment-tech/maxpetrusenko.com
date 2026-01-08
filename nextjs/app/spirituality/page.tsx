@@ -2,11 +2,18 @@ import Link from "next/link";
 import { siteConfig } from "@/config/site";
 import { generateMetadata, absoluteUrl } from "@/lib/seo/metadata";
 import { JsonLd } from "@/components/seo/JsonLd";
-import { generateOrganizationSchema, generateWebPageSchema, generateBreadcrumbSchema } from "@/lib/seo/structured-data";
+import {
+  generateOrganizationSchema,
+  generateWebPageSchema,
+  generateBreadcrumbSchema,
+  generateProfessionalServiceSchema,
+  generateFAQSchema,
+  SERVICE_LOCATIONS,
+} from "@/lib/seo/structured-data";
 
 export const metadata = generateMetadata({
-  title: "Spirituality",
-  description: "Presence Atelier and Mindfold—private tantra, somatic energy work, and sensory journeys.",
+  title: "Spirituality - Tantra & Somatic Energy Work",
+  description: "Professional tantra massage and somatic energy work for men, women, and couples in Ubud, Bali and Miami, Florida. Certified tantric practitioner with nervous system reset, deep repatterning, and conscious presence sessions. Available in South Florida from West Palm Beach to the Keys.",
   ogType: "website",
   canonical: absoluteUrl("/spirituality"),
 });
@@ -15,11 +22,13 @@ export default function SpiritualityPage() {
   return (
     <>
       <JsonLd type="Organization" data={generateOrganizationSchema()} />
+      <JsonLd type="ProfessionalService" data={generateProfessionalServiceSchema()} />
+      <JsonLd type="FAQPage" data={generateFAQSchema()} />
       <JsonLd
         type="WebPage"
         data={generateWebPageSchema({
-          title: "Spirituality - Presence Atelier",
-          description: "Private tantra and somatic sessions in Ubud. Nervous system regulation, deep rewiring, and conscious presence.",
+          title: "Spirituality - Tantra & Somatic Energy Work",
+          description: "Professional tantra massage and somatic energy work for men, women, and couples in Ubud, Bali and Miami, Florida. Certified tantric practitioner serving South Florida and Gianyar Regency.",
           url: "/spirituality",
         })}
       />
@@ -234,6 +243,145 @@ export default function SpiritualityPage() {
               <p>
                 Available by alignment; we set agreements together in a
                 pre-call.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section className="section">
+          <div className="section-head">
+            <h2>Service Areas</h2>
+            <span className="section-note">
+              Private sessions at my temple or yours. I travel to you.
+            </span>
+          </div>
+          <div className="split">
+            <div className="card">
+              <h3>Bali Base — Ubud &amp; Gianyar Regency</h3>
+              <p>
+                Private tantra and somatic sessions in Ubud with travel to
+                surrounding villages:{" "}
+                {SERVICE_LOCATIONS.bali.slice(0, -1).join(", ")}, and{" "}
+                {SERVICE_LOCATIONS.bali[SERVICE_LOCATIONS.bali.length - 2]}.
+              </p>
+              <p style={{ marginTop: 12 }}>
+                <small>June — August annually</small>
+              </p>
+            </div>
+            <div className="card">
+              <h3>Florida Base — Miami to West Palm Beach</h3>
+              <p>
+                Serving the greater Miami-Fort Lauderdale area including: Miami,
+                Miami Beach, North Miami, Coral Gables, Aventura, Hollywood,
+                Pembroke Pines, Fort Lauderdale, Pompano Beach, Boca Raton,
+                Delray Beach, West Palm Beach, and surrounding cities in
+                Miami-Dade, Broward, and Palm Beach counties.
+              </p>
+              <p style={{ marginTop: 12 }}>
+                <small>March — June &amp; August onwards</small>
+              </p>
+            </div>
+          </div>
+          <div className="card" style={{ marginTop: 14 }}>
+            <h3>Global Availability</h3>
+            <p>
+              I travel between bases and am available for sessions worldwide.
+              Current and upcoming locations are displayed on the homepage.
+              Message to arrange sessions in your city.
+            </p>
+          </div>
+        </section>
+
+        <section className="section">
+          <div className="section-head">
+            <h2>Frequently Asked Questions</h2>
+            <span className="section-note">
+              Answers to common questions about tantra and somatic sessions.
+            </span>
+          </div>
+          <div className="cards-3 grid">
+            <div className="card">
+              <h4>What is tantra massage?</h4>
+              <p>
+                Tantra massage is a somatic energy work practice combining
+                breathwork, conscious touch, and presence techniques for nervous
+                system regulation and deep embodied awareness. Sessions are
+                non-sexual, focused on energetic expansion and conscious presence.
+              </p>
+            </div>
+            <div className="card">
+              <h4>Do you work with men, women, and couples?</h4>
+              <p>
+                Yes. I offer 1:1 tantra massage and somatic energy work sessions
+                for individuals of all genders, plus couples sessions for partners
+                seeking to deepen connection through somatic practice. Sessions
+                are LGBTQ+ inclusive.
+              </p>
+            </div>
+            <div className="card">
+              <h4>What&apos;s the difference between session types?</h4>
+              <p>
+                <strong>Nervous System Reset</strong> is a 90-minute session to
+                arrive safely in your body. <strong>Deep Repatterning</strong> is
+                a longer arc for transformation. <strong>Kyo-tai Immersion</strong>{" "}
+                is intensive bodywork for those ready for forceful guidance.
+              </p>
+            </div>
+            <div className="card">
+              <h4>Where are you currently located?</h4>
+              <p>
+                I maintain regular bases in Ubud, Bali (Gianyar Regency) and
+                Miami, Florida. I also travel globally for sessions. Check the
+                homepage for my current location. I offer sessions at my private
+                temple space and can travel to yours.
+              </p>
+            </div>
+            <div className="card">
+              <h4>Is tantra massage sexual?</h4>
+              <p>
+                No. Tantra massage in my practice is a somatic energy work and
+                healing modality, not a sexual service. Sessions are non-sexual
+                with clear boundaries. I do not initiate or respond to sexual
+                behavior. The focus is on nervous system regulation and conscious
+                presence.
+              </p>
+            </div>
+            <div className="card">
+              <h4>What can I expect during a session?</h4>
+              <p>
+                Sessions begin with intention-setting and boundary agreement. I
+                guide breathwork, somatic awareness, and conscious touch
+                techniques. You remain clothed or draped throughout. You can
+                pause or redirect at any moment. Consent is verbal, ongoing, and
+                respected.
+              </p>
+            </div>
+            <div className="card">
+              <h4>Do I need prior experience?</h4>
+              <p>
+                All experience levels are welcome. Sessions are tailored to where
+                you are. If you&apos;re new to somatic or tantra practices, I guide
+                you slowly with clear communication. If you have experience, we
+                can deepen into more intensive work.
+              </p>
+            </div>
+            <div className="card">
+              <h4>How do I book a session?</h4>
+              <p>
+                The fastest way is via WhatsApp: +1-786-543-6688. You can also
+                email hello@maxpetrusenko.com. Before your session, I&apos;ll ask
+                you to complete a brief questionnaire about your experience,
+                intentions, and boundaries.
+              </p>
+            </div>
+            <div className="card">
+              <h4>What cities do you serve in Florida?</h4>
+              <p>
+                I serve the greater Miami-Fort Lauderdale area including Miami,
+                Miami Beach, North Miami, Coral Gables, Aventura, Hollywood,
+                Pembroke Pines, Fort Lauderdale, Pompano Beach, Boca Raton,
+                Delray Beach, West Palm Beach, and surrounding cities in
+                Miami-Dade, Broward, and Palm Beach counties.
               </p>
             </div>
           </div>
