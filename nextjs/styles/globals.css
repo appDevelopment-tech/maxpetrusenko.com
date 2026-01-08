@@ -167,6 +167,7 @@
   .card-with-actions {
     display: flex;
     flex-direction: column;
+    height: 100%;
   }
 
   .card-with-actions .card-actions-spacer {
@@ -252,6 +253,7 @@
   .grid {
     display: grid;
     gap: 1.6875rem;
+    align-items: stretch;
   }
 
   .cards-3 {
