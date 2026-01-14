@@ -33,12 +33,10 @@ export async function POST(request: Request) {
       );
     }
 
-    // In a real deployment with Cloudflare Pages, you would use:
-    // const kv = (process.env as CloudflareEnv).EMAIL_SUBS;
-    // await kv.put(email, JSON.stringify({ email, consent, source, ts: Date.now() }));
-
-    // For local development, we'll simulate success
-    console.log("[Subscription]", { email, consent, source, ts: Date.now() });
+    // Store in Cloudflare KV
+    const kv = (process.env as CloudflareEnv).EMAIL_SUBS;
+    await kv.put(email, JSON.stringify({ email, consent, source, ts: Date.now() }));
+    console.log("[Subscription saved]", { email, source });
 
     return NextResponse.json({ ok: true } as SubscribeResponse, { status: 200 });
   } catch (error) {

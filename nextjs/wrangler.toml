@@ -9,3 +9,8 @@ compatibility_flags = ["nodejs_compat"]
 
 # Build output directory for Pages deployment
 pages_build_output_dir = ".vercel/output/static"
+
+# KV namespace bindings
+[[kv_namespaces]]
+binding = "EMAIL_SUBS"
+id = "90a570d807f04bc4abb9b46282291e5b"
