@@ -34,7 +34,7 @@ export async function POST(request: Request) {
     }
 
     // Store in Cloudflare KV
-    const kv = (process.env as CloudflareEnv).EMAIL_SUBS;
+    const kv = (process.env as unknown as CloudflareEnv).EMAIL_SUBS;
     await kv.put(email, JSON.stringify({ email, consent, source, ts: Date.now() }));
     console.log("[Subscription saved]", { email, source });
 
