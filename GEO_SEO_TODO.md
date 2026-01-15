@@ -190,3 +190,95 @@ Monthly (1-2 hours total):
 - Update GitHub profile
 - Consider Trustpilot integration for testimonials
 - Monthly: Query AI for "Who is Max Petrusenko?" and verify accuracy
+--------------
+Website Review & Rating
+
+ Overall Rating: 7.5/10
+
+ ---
+ Breakdown by Category
+
+ Design & UX: 8/10 ✅
+
+ - Clean, modern aesthetic
+ - Good visual hierarchy
+ - Consistent card-based layout
+ - Clear typography and spacing
+ - Color-coded sections (tech vs somatic)
+ - Minor issue: Button text inconsistency across pages
+
+ Content Completeness: 7/10 ⚠️
+
+ - Home page: Complete with social proof, featured work
+ - Somatic cluster: Complete and well-structured
+ - Tech section: AI automation page detailed, case studies present
+ - Performance page: Has placeholders (Resources "coming soon")
+ - Issues:
+   - Only 3 testimonials (all spirituality) - tech/mindfold testimonials missing
+   - /links page has placeholder tech profile links
+   - Some TODO comments were removed but content still needs filling
+
+ SEO/GEO Implementation: 8/10 ✅
+
+ - Structured data (Schema.org) comprehensive
+ - Sitemap includes all pages
+ - Meta descriptions present on all pages
+ - LLM.txt file present
+ - Hidden keywords for AI extraction
+ - Minor: Could add more FAQ schema
+
+ Technical Quality: 8/10 ✅
+
+ - Clean Next.js 15 codebase
+ - TypeScript throughout
+ - Good component organization
+ - CMS abstraction for content
+ - Cloudflare Workers deployment ready
+ - Minor: Some console warnings about lockfiles
+
+ Content Depth: 7/10 ⚠️
+
+ - 4 detailed case studies
+ - Clear service descriptions
+ - Process/outcomes documented
+ - Missing:
+   - Tech testimonials (only spirituality ones exist)
+   - API integrations page (referenced but not created)
+   - Content systems page (referenced but not created)
+   - Some pricing details marked "coming soon"
+
+ ---
+ Issues Found
+
+ High Priority
+
+ 1. Tech testimonials missing - /lib/cms/testimonials.ts has only 3 spirituality testimonials
+ 2. Service pages incomplete - /tech/api-integrations and /tech/content-systems not created
+
+ Medium Priority
+
+ 3. Button text inconsistency - "Book via WhatsApp", "Text to book", "Message", "Inquire" used interchangeably
+ 4. Performance page - Some offers need pricing details filled in
+
+ Low Priority
+
+ 5. Links page - Tech profile section has placeholder links
+ 6. Mobile responsiveness - Not fully tested
+
+ ---
+ Quick Wins to Reach 9/10
+
+ 1. Add 2-3 tech client testimonials
+ 2. Create /tech/api-integrations page (reuse extraction unit structure)
+ 3. Standardize WhatsApp button text to "Book via WhatsApp" or "Inquire"
+ 4. Fill in pricing on Performance page offers
+
+ ---
+ What's Working Well
+
+ - ✅ Homepage clearly communicates dual identity (tech + somatic)
+ - ✅ Social proof bar adds credibility (200+ sessions, 4.9/5)
+ - ✅ Location banner shows current availability
+ - ✅ Case studies are detailed with metrics
+ - ✅ Clear CTAs throughout
+ - ✅ Good SEO foundation with structured data
