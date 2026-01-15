@@ -11,10 +11,12 @@ export const siteConfig: SiteConfig = {
   },
   navigation: [
     { name: "Home", href: "/" },
-    { name: "Links", href: "/links" },
     { name: "Tech", href: "/tech" },
+    { name: "Links", href: "/links" },
     { name: "Spirituality", href: "/spirituality" },
     { name: "About", href: "/about" },
+    { name: "Proof", href: "/proof" },
+    { name: "Identity", href: "/identity" },
     { name: "Mindfold", href: "/mindfold/events" },
   ],
   social: {

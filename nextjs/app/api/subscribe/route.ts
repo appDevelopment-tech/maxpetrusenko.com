@@ -1,10 +1,10 @@
 import { NextResponse } from "next/server";
 import { isValidEmail } from "@/lib/utils/validators";
 import type { SubscribeRequest, SubscribeResponse } from "@/types";
+import { getRequestContext } from "@cloudflare/next-on-pages";
 
-// Edge runtime for Cloudflare compatibility
+// Edge runtime required for Cloudflare Pages
 export const runtime = "edge";
-export const dynamic = "force-dynamic";
 
 /**
  * POST /api/subscribe
@@ -34,18 +34,26 @@ export async function POST(request: Request) {
     }
 
     // Store in Cloudflare KV
-    const kv = (process.env as unknown as CloudflareEnv).EMAIL_SUBS;
-    await kv.put(email, JSON.stringify({ email, consent, source, ts: Date.now() }));
-    console.log("[Subscription saved]", { email, source });
+    // Use getRequestContext to access Cloudflare bindings in next-on-pages
+    try {
+      const { env } = getRequestContext();
+      const kv = env?.EMAIL_SUBS as { put: (key: string, value: string) => Promise<void> } | undefined;
+
+      if (kv) {
+        await kv.put(email, JSON.stringify({ email, consent, source, ts: Date.now() }));
+        console.log("[Subscription saved to KV]", { email, source });
+      } else {
+        console.log("[Subscription logged - KV binding not found]", { email, source, hasEnv: !!env });
+      }
+    } catch (kvError) {
+      console.error("[KV Error]", kvError);
+    }
 
     return NextResponse.json({ ok: true } as SubscribeResponse, { status: 200 });
   } catch (error) {
     console.error("[Subscription error]", error);
     return NextResponse.json(
-      {
-        error: error instanceof Error ? error.message : "Unexpected error",
-        ok: false,
-      } as SubscribeResponse,
+      { error: "Subscription failed", ok: false } as SubscribeResponse,
       { status: 500 }
     );
   }

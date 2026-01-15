@@ -39,7 +39,7 @@ export function EmailCapture() {
     setStatus("Sending...");
 
     try {
-      const response = await fetch("/api/subscribe", {
+      const response = await fetch("https://newsletter-api.max-petrusenko.workers.dev/api/subscribe", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -49,9 +49,9 @@ export function EmailCapture() {
         }),
       });
 
-      const data = await response.json();
+      const data = await response.json() as { ok?: boolean; error?: string };
 
-      if (!response.ok) {
+      if (!response.ok || !data.ok) {
         throw new Error(data.error || "Request failed");
       }
 

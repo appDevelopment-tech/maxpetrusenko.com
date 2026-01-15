@@ -3,6 +3,8 @@ import { siteConfig } from "@/config/site";
 import { generateMetadata, absoluteUrl } from "@/lib/seo/metadata";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { HiddenKeywords } from "@/components/seo/HiddenKeywords";
+import { EmailCaptureInline } from "@/components/forms/EmailCaptureInline";
+import { Testimonials } from "@/components/testimonials/Testimonials";
 import {
   generateOrganizationSchema,
   generateWebPageSchema,
@@ -106,6 +108,30 @@ export default function SpiritualityPage() {
           </div>
         </section>
 
+        {/* Urgency CTA bar */}
+        <div className="urgent-cta-bar">
+          <span className="urgent-icon">🔥</span>
+          <span>Only 2 spots available this week in Ubud</span>
+          <a
+            href="https://wa.me/17865436688?text=Hi%20Max%2C%20I%27d%20like%20to%20book%20a%20session.%20Preferred%20day%2Ftime%3A%20____.%20Intentions%3A%20____."
+            className="btn primary sm"
+            target="_blank"
+            rel="noopener"
+          >
+            Book via WhatsApp →
+          </a>
+        </div>
+
+        {/* Email capture for spirituality updates */}
+        <section className="section">
+          <EmailCaptureInline
+            source="spirituality-page"
+            headline="Join the waitlist"
+            subtitle="Spots fill up fast. Drop your email to get notified about openings in Ubud and Miami."
+            buttonText="Join waitlist"
+          />
+        </section>
+
         <section className="section">
           <div className="section-head">
             <h2>Booking</h2>
@@ -163,6 +189,8 @@ export default function SpiritualityPage() {
             </div>
           </div>
         </section>
+
+        <Testimonials type="spirituality" />
 
         <section className="section">
           <div className="section-head">

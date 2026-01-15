@@ -39,9 +39,10 @@ export default function AboutPage() {
             </div>
             <h1>Presence + Product</h1>
             <p>
-              I split my time between building products for creators/founders and
-              running a private atelier for somatic energy work in Ubud.
-              Different audiences, same intention: create calm, clear outcomes.
+              Max Petrusenko is a software developer and AI automation consultant
+              who builds production-grade systems for content, workflow, and
+              integration efficiency, with a secondary practice in somatic
+              bodywork.
             </p>
             <div className="hero-actions">
               <Link className="btn primary" href="/links">

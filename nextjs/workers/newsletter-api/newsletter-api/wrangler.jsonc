@@ -1,0 +1,22 @@
+/**
+ * For more details on how to configure Wrangler, refer to:
+ * https://developers.cloudflare.com/workers/wrangler/configuration/
+ */
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "newsletter-api",
+	"main": "src/index.ts",
+	"compatibility_date": "2025-07-18",
+	"compatibility_flags": [
+		"global_fetch_strictly_public"
+	],
+	"assets": {
+		"directory": "./public"
+	},
+	"observability": {
+		"enabled": true
+	},
+	"kv_namespaces": [
+		{ "binding": "EMAIL_SUBS", "id": "90a570d807f04bc4abb9b46282291e5b" }
+	]
+}

@@ -4,6 +4,8 @@ import { siteConfig } from "@/config/site";
 import { generateMetadata, absoluteUrl } from "@/lib/seo/metadata";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { HiddenKeywords } from "@/components/seo/HiddenKeywords";
+import { EmailCaptureInline } from "@/components/forms/EmailCaptureInline";
+import { Testimonials } from "@/components/testimonials/Testimonials";
 import {
   generateWebPageSchema,
   generateBreadcrumbSchema,
@@ -109,6 +111,16 @@ export default function TechPage() {
           </div>
         </section>
 
+        {/* Email capture for tech updates */}
+        <section className="section">
+          <EmailCaptureInline
+            source="tech-page"
+            headline="Get automation tips & updates"
+            subtitle="Drop your email for Claude Code guides, n8n workflows, and automation insights."
+            buttonText="Subscribe"
+          />
+        </section>
+
         <section className="section">
           <div className="section-head">
             <h2>AI & Automation Services</h2>
@@ -174,6 +186,8 @@ export default function TechPage() {
             </div>
           </div>
         </section>
+
+        <Testimonials type="tech" />
 
         <section className="section">
           <div className="section-head">

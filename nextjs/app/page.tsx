@@ -41,6 +41,13 @@ export default function HomePage() {
         </span>
       </div>
 
+      {/* Social proof bar */}
+      <div className="social-proof-bar">
+        <span className="proof-item">✓ 200+ sessions facilitated</span>
+        <span className="proof-item">✓ 500K+ views on X & Medium</span>
+        <span className="proof-item">✓ 4.9/5 client satisfaction</span>
+      </div>
+
       <div className="container">
         <section className="hero">
           <div className="hero-text">
