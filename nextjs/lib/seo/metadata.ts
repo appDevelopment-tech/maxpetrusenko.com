@@ -54,8 +54,8 @@ export function generateMetadata(metadata: PageMetadata): Metadata {
       creator: SEO_DEFAULTS.twitterHandle,
     },
     icons: {
-      icon: "/favicon.png",
-      apple: "/apple-touch-icon.png",
+      icon: "/favicon.svg",
+      apple: "/apple-touch-icon.svg",
     },
     robots: {
       index: !noindex,

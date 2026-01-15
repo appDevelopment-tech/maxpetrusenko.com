@@ -32,6 +32,11 @@ export const siteConfig: SiteConfig = {
     gumroad: "https://maxpetrusenko.gumroad.com/",
     patreon: "https://patreon.com/maxpetrusenko",
   },
+  googleBusinessProfile: {
+    // TODO: Replace with actual Google Business Profile CID after verification
+    // Find your CID at: https://business.google.com/edit/<YOUR_CID>
+    cid: null as string | null,
+  },
 };
 
 // Constants for Medium RSS
@@ -48,7 +53,7 @@ export const FEATURED_ARTICLE_IDS = [
 export const SEO_DEFAULTS = {
   title: siteConfig.name,
   description: siteConfig.description,
-  ogImage: "/images/og-default.jpg",
+  ogImage: "/images/og-default.svg",
   twitterHandle: siteConfig.author.twitter,
 };
 
