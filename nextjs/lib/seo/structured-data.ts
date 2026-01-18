@@ -677,15 +677,145 @@ export function generateItemListWithReviewsSchema(
 export const GOOGLE_BUSINESS_PROFILE_ID = "TODO_ADD_AFTER_VERIFICATION"; // Replace with actual CID
 
 export function generateOrganizationWithGBP() {
-  const baseSchema = generateOrganizationSchema();
+  const baseSchema = generateOrganizationSchema() as Record<string, unknown>;
   return {
     ...baseSchema,
     ...(GOOGLE_BUSINESS_PROFILE_ID !== "TODO_ADD_AFTER_VERIFICATION" && {
       sameAs: [
-        ...(baseSchema.sameAs || []),
+        ...((baseSchema.sameAs as string[]) ?? []),
         `https://business.google.com/${GOOGLE_BUSINESS_PROFILE_ID}`,
       ],
     }),
     aggregateRating: generateAggregateRatingSchema("spirituality"),
+  };
+}
+
+/**
+ * ============================================================================
+ * LOCAL BUSINESS SCHEMA FOR UBUD
+ * ============================================================================
+ */
+
+/**
+ * Generate JSON-LD structured data for LocalBusiness (Ubud)
+ * Critical for local SEO - helps rank in "tantra massage Ubud" searches
+ */
+export function generateLocalBusinessSchemaUbud() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": "Tantra Massage Ubud - Max Petrusenko",
+    "alternateName": "Presence Atelier Ubud",
+    "description": "Professional tantra massage and somatic energy work in Ubud, Bali. Team available year-round for nervous system reset, trauma release, and couples tantra sessions.",
+    "url": `${siteConfig.url}/spirituality`,
+    "telephone": "+1-786-543-6688",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Ubud",
+      "addressRegion": "Gianyar Regency",
+      "addressCountry": "ID"
+    },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": "-8.5069",
+      "longitude": "115.2625"
+    },
+    "areaServed": [
+      "Ubud",
+      "Gianyar Regency",
+      "Campuan",
+      "Penestanan",
+      "Sanggingan",
+      "Kedewatan",
+      "Peliatan",
+      "Mas",
+      "Pengosekan",
+      "Tegallalung",
+      "Sayan",
+      "Kutuh Kaja",
+      "Bali"
+    ],
+    "priceRange": "$$$",
+    "openingHours": "Mo-Su 09:00-19:00",
+    "keywords": "tantra massage Ubud, tantric massage Bali, somatic energy work Ubud, trauma release massage, couples tantra Bali, bodywork Ubud",
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.9",
+      "reviewCount": "217",
+      "bestRating": "5",
+      "worstRating": "1"
+    },
+    "hasOfferCatalog": {
+      "@type": "OfferCatalog",
+      "name": "Tantra & Somatic Services in Ubud",
+      "itemListElement": [
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Nervous System Reset - Tantra Massage Ubud",
+            "description": "90-minute professional tantra massage session in Ubud for nervous system regulation and conscious presence."
+          }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Deep Repatterning - Somatic Energy Work",
+            "description": "Longer arc for deep rewiring and transformation through somatic energy work in Ubud, Bali."
+          }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Couples Tantra Session Ubud",
+            "description": "Partners seeking to deepen connection through tantra and somatic practice in Ubud, Bali."
+          }
+        }
+      ]
+    },
+    "audience": {
+      "@type": "Audience",
+      "audienceType": ["men", "women", "couples", "LGBTQ+", "digital nomads", "founders", "creators"]
+    },
+    "availableChannel": {
+      "@type": "ServiceChannel",
+      "serviceType": "tantra massage, somatic energy work, bodywork",
+      "serviceUrl": `${siteConfig.url}/spirituality`
+    }
+  };
+}
+
+/**
+ * Generate JSON-LD structured data for LocalBusiness (Miami)
+ * For the Florida location
+ */
+export function generateLocalBusinessSchemaMiami() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": "Tantra Massage Miami - Max Petrusenko",
+    "alternateName": "Presence Atelier Miami",
+    "description": "Professional tantra massage and somatic energy work in Miami, Florida. Serving South Florida from West Palm Beach to the Keys.",
+    "url": `${siteConfig.url}/spirituality`,
+    "telephone": "+1-786-543-6688",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Miami",
+      "addressRegion": "FL",
+      "addressCountry": "US"
+    },
+    "areaServed": SERVICE_LOCATIONS.florida,
+    "priceRange": "$$$",
+    "openingHours": "Mo-Su 09:00-19:00",
+    "keywords": "tantra massage Miami, tantric massage South Florida, somatic energy work Miami, trauma release massage, couples tantra Miami",
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.9",
+      "reviewCount": "217",
+      "bestRating": "5",
+      "worstRating": "1"
+    }
   };
 }

@@ -80,7 +80,7 @@ export interface PageMetadata {
 }
 
 export interface JsonLdProps {
-  type: "WebPage" | "Article" | "Person" | "Organization" | "BreadcrumbList" | "ProfessionalService" | "FAQPage" | "SoftwareApplication" | "TechArticle" | "AggregateRating" | "Review";
+  type: "WebPage" | "Article" | "Person" | "Organization" | "BreadcrumbList" | "ProfessionalService" | "FAQPage" | "SoftwareApplication" | "TechArticle" | "AggregateRating" | "Review" | "LocalBusiness";
   data: Record<string, unknown>;
 }
 
@@ -120,6 +120,9 @@ export interface SiteConfig {
   navigation: NavigationItem[];
   social: SocialLinks;
   externalLinks: ExternalLinks;
+  googleBusinessProfile?: {
+    cid: string | null;
+  };
 }
 
 // ----------------------------------------------------------------------------

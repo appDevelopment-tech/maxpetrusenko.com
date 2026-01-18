@@ -32,12 +32,12 @@ export default function HomePage() {
       <div className="location-banner">
         <span className="location-item">
           <span className="location-icon">📍</span>
-          <span>Currently: <strong>Dubai</strong> (Jan-Feb) → <strong>Athens</strong> (Feb-Mar) → <strong>Lisbon</strong> (Mar)</span>
+          <span><strong>Tantra Massage Ubud, Bali</strong> • Available NOW • Fast response via WhatsApp</span>
         </span>
         <span className="location-divider">•</span>
         <span className="location-item">
-          <span className="location-icon">🔵</span>
-          <span>Regular bases: <strong>Miami</strong> (Mar-Jun) &amp; <strong>Ubud, Bali</strong> (Jun-Aug)</span>
+          <span className="location-icon">🔥</span>
+          <span>Year-round sessions • Professional team • Book today</span>
         </span>
       </div>
 
@@ -57,8 +57,7 @@ export default function HomePage() {
             <h1>Building calm products and embodied experiences</h1>
             <p>
               Two worlds I live in: shipping tech for creators and founders, and
-              running a private atelier for somatic energy work. Pick where you want
-              to go.
+              running a private atelier for somatic energy work in <strong>Ubud, Bali</strong>.
             </p>
             <div className="hero-actions">
               <Link className="btn primary" href="/spirituality">
@@ -72,7 +71,7 @@ export default function HomePage() {
               </Link>
             </div>
             <div className="hero-cta-note">
-              Availability is limited for sessions; tech projects by fit.
+              <strong>Available in Ubud today</strong> — Sessions 7 days a week • Fast WhatsApp response
             </div>
           </div>
 

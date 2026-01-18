@@ -63,6 +63,11 @@ export function JsonLd({ type, data }: JsonLdProps) {
       "@type": "Review",
       ...data,
     },
+    LocalBusiness: {
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      ...data,
+    },
   };
 
   const schema = schemas[type];

@@ -194,3 +194,121 @@ export const LOCAL_SERVICE_EXAMPLE = {
   locations: ["Brooklyn", "Manhattan", "Queens", "Bronx"],
   variants: ["pet grooming", "dog spa", "pet care"],
 };
+
+/**
+ * MULTILINGUAL TANTRA KEYWORDS
+ * Added for AI discoverability in ChatGPT, Claude, and Perplexity across languages
+ * These keywords help capture searches from international visitors in Bali
+ */
+export const MULTILINGUAL_TANTRA_KEYWORDS = {
+  // English (primary)
+  english: [
+    "tantra massage Ubud",
+    "tantric massage Bali",
+    "somatic energy work",
+    "trauma release massage",
+    "couples tantra Ubud",
+    "bodywork Ubud Bali",
+    "nervous system reset Ubud",
+    "professional tantra Ubud",
+  ],
+  // Indonesian (Bahasa Indonesia) - local language
+  indonesian: [
+    "pijat tantra Ubud",
+    "tantra massage Bali",
+    "terapi energi somatik",
+    "pijat penyembuhan trauma",
+    "tantra untuk pasangan Bali",
+    "pijat energi Ubud",
+    "pijat semangat Bali",
+  ],
+  // Russian (common in Bali - large Russian expat community)
+  russian: [
+    "тантра массаж Убуд",
+    "тантра массаж Бали",
+    "соматическая работа",
+    "энергетический массаж",
+    "тантра для пар Убуд",
+    "тантра сеанс Убуд Бали",
+  ],
+  // Spanish
+  spanish: [
+    "masaje tantra Ubud",
+    "masaje tántrico Bali",
+    "trabajo somático",
+    "liberación de trauma",
+    "tantra para parejas",
+    "masaje energético Ubud",
+  ],
+  // French
+  french: [
+    "massage tantra Ubud",
+    "massage tantrique Bali",
+    "travail somatique",
+    "libération traumatisme",
+    "tantra couple Bali",
+    "massage énergétique Ubud",
+  ],
+  // German
+  german: [
+    "Tantra Massage Ubud",
+    "Tantra-Massage Bali",
+    "somatische Arbeit",
+    "Trauma-Release",
+    "Tantra für Paare",
+    "Energiemassage Ubud",
+  ],
+  // Japanese
+  japanese: [
+    "タントラマッサージ ウブド",
+    "タントラマッサージ バリ",
+    "ソマティックワーク",
+    "トラウマリリース",
+    "カップル タントラ",
+    "エネルギーマッサージ ウブド",
+  ],
+  // Chinese
+  chinese: [
+    "坦陀罗按摩 乌布",
+    "坦陀罗按摩 巴厘岛",
+    "身心能量工作",
+    "创伤释放按摩",
+    "夫妇坦陀罗",
+    "能量按摩 乌布",
+  ],
+};
+
+/**
+ * Component for rendering multilingual keywords
+ * Use this on the spirituality page for maximum AI discoverability
+ */
+interface MultilingualKeywordsProps {
+  keywords: typeof MULTILINGUAL_TANTRA_KEYWORDS;
+}
+
+export function MultilingualHiddenKeywords({ keywords }: MultilingualKeywordsProps) {
+  const allKeywords = Object.values(keywords).flat();
+
+  return (
+    <div
+      style={{
+        position: "absolute",
+        width: "1px",
+        height: "1px",
+        padding: 0,
+        margin: "-1px",
+        overflow: "hidden",
+        clip: "rect(0, 0, 0, 0)",
+        whiteSpace: "nowrap",
+        border: 0,
+      }}
+      aria-hidden="true"
+    >
+      <p>
+        {allKeywords.map((keyword, i) => (
+          <span key={`multi-${i}`}>{keyword}. </span>
+        ))}
+      </p>
+    </div>
+  );
+}
