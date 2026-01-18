@@ -108,27 +108,13 @@ export default function SpiritualityPage() {
           </div>
         </section>
 
-        {/* Urgency CTA bar */}
-        <div className="urgent-cta-bar">
-          <span className="urgent-icon">🔥</span>
-          <span>Only 2 spots available this week in Ubud</span>
-          <a
-            href="https://wa.me/17865436688?text=Hi%20Max%2C%20I%27d%20like%20to%20book%20a%20session.%20Preferred%20day%2Ftime%3A%20____.%20Intentions%3A%20____."
-            className="btn primary sm"
-            target="_blank"
-            rel="noopener"
-          >
-            Book via WhatsApp →
-          </a>
-        </div>
-
         {/* Email capture for spirituality updates */}
         <section className="section">
           <EmailCaptureInline
             source="spirituality-page"
-            headline="Join the waitlist"
-            subtitle="Spots fill up fast. Drop your email to get notified about openings in Ubud and Miami."
-            buttonText="Join waitlist"
+            headline="Stay updated"
+            subtitle="Drop your email to get notified about session availability in your city."
+            buttonText="Get updates"
           />
         </section>
 
@@ -317,9 +303,8 @@ export default function SpiritualityPage() {
           <div className="card" style={{ marginTop: 14 }}>
             <h3>Global Availability</h3>
             <p>
-              I travel between bases and am available for sessions worldwide.
-              Current and upcoming locations are displayed on the homepage.
-              Message to arrange sessions in your city.
+              I travel internationally and am available for sessions worldwide.
+              Message to check availability in your city or arrange a visit.
             </p>
           </div>
         </section>
@@ -362,10 +347,10 @@ export default function SpiritualityPage() {
             <div className="card">
               <h4>Where are you currently located?</h4>
               <p>
-                I maintain regular bases in Ubud, Bali (Gianyar Regency) and
-                Miami, Florida. I also travel globally for sessions. Check the
-                homepage for my current location. I offer sessions at my private
-                temple space and can travel to yours.
+                I travel internationally and see clients in multiple cities.
+                Sessions are available worldwide—message to check availability
+                in your city. I offer sessions at my private space and can travel
+                to yours.
               </p>
             </div>
             <div className="card">

@@ -6,7 +6,7 @@ import { generateOrganizationSchema, generateWebPageSchema, generateBreadcrumbSc
 
 export const metadata = generateMetadata({
   title: "Somatic Practice - Nervous System Regulation & Energy Work",
-  description: "Private somatic sessions and tantra massage for founders, creators, and seekers. Nervous system reset, deep repatterning, and conscious presence. Currently in Dubai, traveling to Athens and Lisbon.",
+  description: "Private somatic sessions and tantra massage for founders, creators, and seekers. Nervous system reset, deep repatterning, and conscious presence. Book worldwide.",
   ogType: "website",
   canonical: absoluteUrl("/somatic"),
 });
@@ -53,38 +53,38 @@ export default function SomaticPage() {
                 Book via WhatsApp
               </a>
               <Link className="btn secondary" href="/spirituality">
-                Visit Atelier
+                Learn More
               </Link>
             </div>
           </div>
 
           <div className="hero-card">
-            <h3>Current Location</h3>
+            <h3>Session Types</h3>
             <div className="tiles">
               <div className="tile">
                 <div className="tile-meta">
-                  <span className="tile-title">Dubai</span>
-                  <span className="tile-desc">January - February 2026</span>
+                  <span className="tile-title">Nervous System Reset</span>
+                  <span className="tile-desc">60 minutes • Grounding & regulation</span>
                 </div>
-                <span className="badge spirit">Available</span>
+                <span className="badge spirit">Gentle</span>
               </div>
               <div className="tile">
                 <div className="tile-meta">
-                  <span className="tile-title">Athens</span>
-                  <span className="tile-desc">February - March 2026</span>
+                  <span className="tile-title">Tantra Massage</span>
+                  <span className="tile-desc">120 minutes • Energetic & somatic</span>
                 </div>
-                <span className="badge tech">Upcoming</span>
+                <span className="badge spirit">Deep</span>
               </div>
               <div className="tile">
                 <div className="tile-meta">
-                  <span className="tile-title">Lisbon</span>
-                  <span className="tile-desc">March 2026 onwards</span>
+                  <span className="tile-title">Kyo-tai Immersion</span>
+                  <span className="tile-desc">120 minutes • Forceful guidance</span>
                 </div>
-                <span className="badge tech">Upcoming</span>
+                <span className="badge spirit">Intense</span>
               </div>
             </div>
             <p style={{ marginTop: 12, fontSize: "0.9em" }}>
-              Regular bases: Miami (Mar-Jun) & Ubud, Bali (Jun-Aug)
+              Sessions available worldwide. Message to confirm availability in your city.
             </p>
           </div>
         </section>
@@ -317,9 +317,9 @@ export default function SomaticPage() {
             <div className="card">
               <h4>Where are you currently located?</h4>
               <p>
-                I'm currently in Dubai (Jan-Feb), moving to Athens (Feb-Mar),
-                then Lisbon (Mar onwards). I also maintain regular bases in
-                Miami and Ubud, Bali. Message to confirm current availability.
+                I travel internationally and see clients in multiple cities.
+                Sessions are available worldwide—I may be in your city already,
+                or we can coordinate a visit. Message to check availability.
               </p>
             </div>
             <div className="card">

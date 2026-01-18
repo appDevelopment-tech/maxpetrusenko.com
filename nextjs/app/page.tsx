@@ -31,85 +31,68 @@ export default function HomePage() {
 
       <div className="location-banner">
         <span className="location-item">
-          <span className="location-icon">📍</span>
-          <span><strong>Tantra Massage Ubud, Bali</strong> • Available NOW • Fast response via WhatsApp</span>
-        </span>
-        <span className="location-divider">•</span>
-        <span className="location-item">
-          <span className="location-icon">🔥</span>
-          <span>Year-round sessions • Professional team • Book today</span>
+          <span className="location-icon">🎯</span>
+          <span><strong>Two practices, one person</strong> • Tech products & somatic sessions</span>
         </span>
       </div>
 
       {/* Social proof bar */}
       <div className="social-proof-bar">
-        <span className="proof-item">✓ 200+ sessions facilitated</span>
-        <span className="proof-item">✓ 500K+ views on X & Medium</span>
+        <span className="proof-item">✓ Helped 200+ clients transform</span>
         <span className="proof-item">✓ 4.9/5 client satisfaction</span>
+        <span className="proof-item">✓ Bookings open worldwide</span>
       </div>
 
       <div className="container">
         <section className="hero">
           <div className="hero-text">
             <div className="eyebrow">
-              <span className="dot"></span> Presence & Product
+              <span className="dot"></span> Max Petrusenko
             </div>
-            <h1>Building calm products and embodied experiences</h1>
+            <h1>Two practices, built on the same principle</h1>
             <p>
-              Two worlds I live in: shipping tech for creators and founders, and
-              running a private atelier for somatic energy work in <strong>Ubud, Bali</strong>.
+              I build products that help creators ship, and I facilitate somatic sessions that help people feel again.
+              Both are about clarity, presence, and lasting results.
             </p>
             <div className="hero-actions">
-              <Link className="btn primary" href="/spirituality">
-                Explore Spirituality
+              <Link className="btn primary" href="/somatic">
+                Book a Session
               </Link>
               <Link className="btn secondary" href="/tech">
-                Explore Tech
+                See Tech Work
               </Link>
-              <Link className="btn secondary" href="/links">
-                All Links
-              </Link>
-            </div>
-            <div className="hero-cta-note">
-              <strong>Available in Ubud today</strong> — Sessions 7 days a week • Fast WhatsApp response
             </div>
           </div>
 
           <div className="hero-card quick-paths">
-            <h3>Quick paths</h3>
+            <h3>Choose your path</h3>
             <div className="tiles">
-              <a className="tile" href={siteConfig.externalLinks.atelier} target="_blank" rel="noopener">
+              <a className="tile" href="/somatic" rel="noopener">
                 <div className="tile-meta">
-                  <span className="tile-title">Atelier</span>
+                  <span className="tile-title">Somatic Sessions</span>
                   <span className="tile-desc">
-                    Private tantra & somatic sessions in Ubud.
+                    Tantra massage, nervous system reset, and energy work.
                   </span>
                 </div>
-                <span className="badge spirit">Visit</span>
-              </a>
-              <a
-                className="tile"
-                href="https://www.instagram.com/p/C9ivYB1u2-6/"
-                target="_blank"
-                rel="noopener"
-              >
-                <div className="tile-meta">
-                  <span className="tile-title">Mindfold live</span>
-                  <span className="tile-desc">
-                    See 100 people dancing blindfold together at Create Infinite
-                    Elements. Watch the clip.
-                  </span>
-                </div>
-                <span className="badge mindfold">Watch</span>
+                <span className="badge spirit">Book</span>
               </a>
               <Link className="tile" href="/tech">
                 <div className="tile-meta">
                   <span className="tile-title">Tech Portfolio</span>
                   <span className="tile-desc">
-                    Products, apps, and tools for creators.
+                    Products, apps, and automation for founders.
                   </span>
                 </div>
-                <span className="badge">View</span>
+                <span className="badge tech">View</span>
+              </Link>
+              <Link className="tile" href="/mindfold/events">
+                <div className="tile-meta">
+                  <span className="tile-title">Mindfold</span>
+                  <span className="tile-desc">
+                    Blindfolded presence journeys for groups.
+                  </span>
+                </div>
+                <span className="badge mindfold">Explore</span>
               </Link>
             </div>
           </div>
@@ -316,72 +299,50 @@ export default function HomePage() {
 
         <section className="section">
           <div className="section-head">
-            <h2>What I&apos;m focused on</h2>
-            <div className="pill-row">
-              <span className="pill">Tech: product + build</span>
-              <span className="pill">Spirituality: somatic + tantra</span>
-              <span className="pill">Mindfold: sensory journeys</span>
-            </div>
+            <h2>Two Practices, One Person</h2>
+            <span className="section-note">
+              I run two distinct businesses. Choose the one that serves you.
+            </span>
           </div>
           <div className="split">
             <div className="card">
-              <h3 className="text-accent-tech">Tech</h3>
+              <h3 className="text-accent-tech">Tech Consulting</h3>
               <p>
-                Shipping tools, automation, and products for creators and
-                founders. Calm UX, clear outcomes.
+                I help founders ship products faster. Product strategy, automation,
+                and build services for teams who need calm UX and clear outcomes.
               </p>
               <ul className="list">
-                <li>Product/UX and build</li>
+                <li>Product/UX strategy and execution</li>
                 <li>Workflow automation</li>
-                <li>Content visibility tools</li>
+                <li>AI tooling and systems</li>
               </ul>
               <div className="hero-actions" style={{ marginTop: 16 }}>
                 <Link className="btn secondary" href="/tech">
-                  See tech work
+                  View portfolio
                 </Link>
               </div>
             </div>
             <div className="card">
-              <h3 className="text-accent-spirit">Spirituality</h3>
+              <h3 className="text-accent-spirit">Somatic Sessions</h3>
               <p>
-                Presence Atelier: private tantra and somatic energy work in Ubud.
-                Deep rewiring and nervous system reset.
+                Private tantra and energy work for nervous system regulation.
+                Sessions are boundaries-first, consent-led, and tailored to your
+                system.
               </p>
               <ul className="list">
-                <li>1:1 sessions, limited weekly spots</li>
-                <li>Boundaries-first, regulated pace</li>
-                <li>WhatsApp to book</li>
+                <li>Nervous system reset (60 min)</li>
+                <li>Tantra massage (120 min)</li>
+                <li>Kyo-tai immersion (120 min)</li>
               </ul>
               <div className="hero-actions" style={{ marginTop: 16 }}>
-                <Link className="btn primary" href="/spirituality">
-                  See atelier focus
-                </Link>
-              </div>
-            </div>
-            <div className="card">
-              <h3 className="text-accent-mindfold">Mindfold</h3>
-              <p>
-                Blindfolded presence journeys to deepen awareness and trust.
-                Group or 1:1 formats.
-              </p>
-              <ul className="list">
-                <li>Sensory subtraction to expand perception</li>
-                <li>Facilitated safety and integration</li>
-                <li>Learn more on Mindfold Sanctuary</li>
-                <li>
-                  <a
-                    href="https://www.instagram.com/p/C9ivYB1u2-6/"
-                    target="_blank"
-                    rel="noopener"
-                  >
-                    See 100 people at a music festival learning how to feel
-                  </a>
-                </li>
-              </ul>
-              <div className="hero-actions" style={{ marginTop: 16 }}>
-                <Link className="btn secondary" href="/mindfold/events">
-                  Events & info
-                </Link>
+                <a
+                  className="btn primary"
+                  href="https://wa.me/17865436688?text=Hi%20Max%2C%20I%27d%20like%20to%20book%20a%20session.%20Preferred%20day%2Ftime%3A%20____.%20Intentions%3A%20____."
+                  target="_blank"
+                  rel="noopener"
+                >
+                  Book via WhatsApp
+                </a>
               </div>
             </div>
           </div>
