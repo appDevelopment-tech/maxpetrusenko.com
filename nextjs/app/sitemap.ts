@@ -2,6 +2,7 @@ import { MetadataRoute } from "next";
 import { siteConfig } from "@/config/site";
 import { fetchArticles } from "@/lib/cms/articles";
 import { getProjects } from "@/lib/cms/projects";
+import { getCaseStudies } from "@/lib/cms/case-studies";
 
 /**
  * Dynamic sitemap generation
@@ -144,12 +145,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // Dynamic: Articles from Medium RSS
   const articles = await fetchArticles();
-  const articlePages: MetadataRoute.Sitemap = articles.map((article) => ({
-    url: `${baseUrl}/blog/${article.slug}`,
-    lastModified: new Date(article.publishedAt),
-    changeFrequency: "monthly" as const,
-    priority: 0.6,
-  }));
+  const articlePages: MetadataRoute.Sitemap = articles
+    .filter((article) => article.slug)
+    .map((article) => ({
+      url: `${baseUrl}/blog/${article.slug}`,
+      lastModified: new Date(article.publishedAt),
+      changeFrequency: "monthly" as const,
+      priority: 0.6,
+    }));
 
   // Dynamic: Projects
   const projects = await getProjects();
@@ -160,5 +163,28 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }));
 
-  return [...staticPages, ...articlePages, ...projectPages];
+  // Dynamic: Case Studies (individual pages)
+  const caseStudies = getCaseStudies();
+  const caseStudyPages: MetadataRoute.Sitemap = caseStudies.map((cs) => ({
+    url: `${baseUrl}/tech/case-studies/${cs.id}`,
+    lastModified: new Date(),
+    changeFrequency: "monthly" as const,
+    priority: 0.7,
+  }));
+
+  const normalizeUrl = (url: string) =>
+    url.endsWith("/") && url !== baseUrl ? url.slice(0, -1) : url;
+
+  const seen = new Set<string>();
+  const allPages = [...staticPages, ...articlePages, ...projectPages, ...caseStudyPages];
+
+  return allPages.reduce<MetadataRoute.Sitemap>((acc, page) => {
+    const normalizedUrl = normalizeUrl(page.url);
+    if (seen.has(normalizedUrl)) {
+      return acc;
+    }
+    seen.add(normalizedUrl);
+    acc.push({ ...page, url: normalizedUrl });
+    return acc;
+  }, []);
 }

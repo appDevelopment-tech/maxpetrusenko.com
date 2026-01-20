@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://atelier.maxpetrusenko.com/sitemap.xml

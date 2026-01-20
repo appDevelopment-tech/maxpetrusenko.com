@@ -795,16 +795,24 @@ export function generateLocalBusinessSchemaMiami() {
   return {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
-    "name": "Tantra Massage Miami - Max Petrusenko",
-    "alternateName": "Presence Atelier Miami",
-    "description": "Professional tantra massage and somatic energy work in Miami, Florida. Serving South Florida from West Palm Beach to the Keys.",
+    "name": "Presence Atelier Miami - Somatic Education & Energy Work",
+    "alternateName": "Max Petrusenko - Somatic Education",
+    "description": "Somatic education and energy work teaching in Fort Lauderdale, Florida. Educational workshops, student teachings, and nervous system training serving South Florida from West Palm Beach to the Keys.",
     "url": `${siteConfig.url}/spirituality`,
     "telephone": "+1-786-543-6688",
+    "email": "hello@maxpetrusenko.com",
     "address": {
       "@type": "PostalAddress",
-      "addressLocality": "Miami",
+      "streetAddress": "917 SW 18th Ct",
+      "addressLocality": "Fort Lauderdale",
       "addressRegion": "FL",
+      "postalCode": "33315",
       "addressCountry": "US"
+    },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": "26.1055",
+      "longitude": "-80.1735"
     },
     "areaServed": SERVICE_LOCATIONS.florida,
     "priceRange": "$$$",

@@ -1,4 +1,5 @@
 import type { Article } from "@/types";
+import { slugify } from "@/lib/seo/metadata";
 
 /**
  * Parse Medium RSS feed and extract articles
@@ -73,8 +74,8 @@ function parseItems(xml: string): Article[] {
     const image = extractImage(content);
     const excerpt = extractExcerpt(content);
 
-    // Create slug from ID
-    const slug = id;
+    // Create slug from ID or title fallback
+    const slug = id || slugify(title);
 
     items.push({
       id,
@@ -99,8 +100,13 @@ function parseItems(xml: string): Article[] {
  * Extract article ID from Medium URL
  */
 function extractId(link: string): string {
-  const match = /\/p\/([a-f0-9]+)/.exec(link);
-  return match ? match[1] : "";
+  const pMatch = /\/p\/([a-f0-9]{6,})(?:[/?#]|$)/i.exec(link);
+  if (pMatch) return pMatch[1];
+
+  const slugMatch = /-([a-f0-9]{6,})(?:[/?#]|$)/i.exec(link);
+  if (slugMatch) return slugMatch[1];
+
+  return "";
 }
 
 /**

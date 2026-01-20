@@ -24,7 +24,7 @@ export function generateMetadata(metadata: PageMetadata): Metadata {
     : `${siteConfig.url}${SEO_DEFAULTS.ogImage}`;
 
   return {
-    title: fullTitle,
+    title,
     description,
     keywords: keywords.join(", "),
     authors: [{ name: siteConfig.author.name }],

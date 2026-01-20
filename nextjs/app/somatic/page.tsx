@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { siteConfig } from "@/config/site";
 import { generateMetadata, absoluteUrl } from "@/lib/seo/metadata";
 import { JsonLd } from "@/components/seo/JsonLd";
@@ -30,6 +31,24 @@ export default function SomaticPage() {
           { name: "Somatic", url: "/somatic" },
         ])}
       />
+
+      {/* Hero image section */}
+      <div className="hero-image-section somatic-hero">
+        <div className="hero-image-overlay"></div>
+        <Image
+          src="/images/bali/DSC04769.jpg"
+          alt="Professional somatic sessions in calming Bali environment"
+          fill
+          priority
+          sizes="100vw"
+          style={{ objectFit: "cover" }}
+          quality={85}
+        />
+        <div className="hero-image-content">
+          <h1>Somatic Practice</h1>
+          <p>Nervous system regulation for founders, creators, and seekers</p>
+        </div>
+      </div>
 
       <div className="container">
         <section className="hero">
@@ -317,9 +336,9 @@ export default function SomaticPage() {
             <div className="card">
               <h4>Where are you currently located?</h4>
               <p>
-                I travel internationally and see clients in multiple cities.
-                Sessions are available worldwide—I may be in your city already,
-                or we can coordinate a visit. Message to check availability.
+                I see clients in Bali (Ubud) and South Florida (Miami to West Palm Beach).
+                Sessions are also available worldwide—I can travel to your city.
+                Message to check availability.
               </p>
             </div>
             <div className="card">

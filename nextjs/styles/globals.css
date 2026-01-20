@@ -631,6 +631,56 @@
     @apply flex gap-2 mt-4;
   }
 
+  /* Entity Facts Section - AI-extractable compact information */
+  .entity-facts-section {
+    @apply w-full max-w-[1080px] mx-auto px-4 py-4 md:py-5;
+    background: linear-gradient(135deg, rgba(15, 126, 169, 0.06) 0%, rgba(14, 97, 93, 0.04) 100%);
+    border: 1px solid rgba(15, 126, 169, 0.12);
+    border-radius: 16px;
+    margin: 12px auto 0;
+  }
+
+  .entity-facts-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px 24px;
+  }
+
+  .entity-fact-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .fact-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--accent-tech);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .entity-fact-item span[itemProp="description"],
+  .entity-fact-item span[itemProp="jobTitle"],
+  .entity-fact-item span[itemProp="telephone"] {
+    font-size: 15px;
+    color: var(--ink-soft);
+    font-weight: 500;
+  }
+
+  .fact-location {
+    font-size: 13px;
+    color: var(--muted);
+    font-weight: 400;
+  }
+
+  @media (max-width: 640px) {
+    .entity-facts-grid {
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+  }
+
   /* Social Proof Bar */
   .social-proof-bar {
     @apply w-full max-w-[1080px] mx-auto px-4 py-3 md:py-3.5;
@@ -820,6 +870,60 @@
 
   .testimonial-role {
     @apply text-muted font-normal;
+  }
+
+  /* Hero Image Section */
+  .hero-image-section {
+    position: relative;
+    width: 100%;
+    height: 60vh;
+    min-height: 400px;
+    max-height: 600px;
+    overflow: hidden;
+  }
+
+  .hero-image-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, rgba(12, 17, 21, 0.4), rgba(12, 17, 21, 0.6));
+    z-index: 1;
+  }
+
+  .hero-image-content {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 2rem;
+    color: white;
+  }
+
+  .hero-image-content h1 {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    color: white;
+    margin-bottom: 0.75rem;
+    text-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+  }
+
+  .hero-image-content p {
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    color: rgba(255, 255, 255, 0.95);
+    max-width: 600px;
+  }
+
+  @media (max-width: 768px) {
+    .hero-image-section {
+      height: 50vh;
+      min-height: 350px;
+    }
+
+    .hero-image-content h1 {
+      font-size: clamp(1.75rem, 6vw, 2.5rem);
+    }
   }
 }
 

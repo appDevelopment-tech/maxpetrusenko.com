@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { siteConfig } from "@/config/site";
 import { generateMetadata, absoluteUrl } from "@/lib/seo/metadata";
 import { JsonLd } from "@/components/seo/JsonLd";
@@ -42,6 +43,24 @@ export default function SpiritualityPage() {
           { name: "Spirituality", url: "/spirituality" },
         ])}
       />
+
+      {/* Hero image section */}
+      <div className="hero-image-section spirituality-hero">
+        <div className="hero-image-overlay"></div>
+        <Image
+          src="/images/bali/DSC04799.jpg"
+          alt="Tantra and somatic energy work in Ubud, Bali"
+          fill
+          priority
+          sizes="100vw"
+          style={{ objectFit: "cover" }}
+          quality={85}
+        />
+        <div className="hero-image-content">
+          <h1>Presence Atelier</h1>
+          <p>Somatic energy work with boundaries first • Ubud, Bali</p>
+        </div>
+      </div>
 
       <div className="container">
         <section className="hero">

@@ -36,11 +36,36 @@ export default function HomePage() {
         </span>
       </div>
 
+      {/* Entity facts block - AI-extractable compact information */}
+      <section className="entity-facts-section" itemScope itemType="https://schema.org/Person">
+        <meta itemProp="name" content="Max Petrusenko" />
+        <div className="entity-facts-grid">
+          <div className="entity-fact-item">
+            <span className="fact-label">Who:</span>
+            <span itemProp="jobTitle">Tech builder & somatic practitioner</span>
+          </div>
+          <div className="entity-fact-item">
+            <span className="fact-label">Tech:</span>
+            <span itemProp="description">AI automation, Claude Code, n8n workflows</span>
+            <span className="fact-location">Remote worldwide</span>
+          </div>
+          <div className="entity-fact-item">
+            <span className="fact-label">Somatic:</span>
+            <span itemProp="description">Tantra massage, nervous system reset</span>
+            <span className="fact-location">Ubud Bali & Miami FL</span>
+          </div>
+          <div className="entity-fact-item">
+            <span className="fact-label">Contact:</span>
+            <span itemProp="telephone">WhatsApp +1-786-543-6688</span>
+          </div>
+        </div>
+      </section>
+
       {/* Social proof bar */}
       <div className="social-proof-bar">
-        <span className="proof-item">✓ Helped 200+ clients transform</span>
+        <span className="proof-item">✓ 200+ clients served</span>
         <span className="proof-item">✓ 4.9/5 client satisfaction</span>
-        <span className="proof-item">✓ Bookings open worldwide</span>
+        <span className="proof-item">✓ Available worldwide</span>
       </div>
 
       <div className="container">
@@ -131,7 +156,7 @@ export default function HomePage() {
                 <span>&rarr; 3x faster feature delivery</span>
                 <span>&rarr; 73% fewer bugs in production</span>
                 <span>&rarr; Zero regressions across 127 PRs</span>
-                <span>&rarr; 511.6K views</span>
+                <span>&rarr; Featured by Anthropic, Vercel</span>
               </div>
               <div className="hero-actions hero-actions-compact">
                 <a
@@ -173,7 +198,7 @@ export default function HomePage() {
                   Why Most People Are Dead Wrong About Global Wealth
                 </span>
                 <span className="article-sub">
-                  36K views · 26K reads · 7 min read
+                  7 min read · Data-driven analysis
                 </span>
               </div>
             </a>
@@ -195,7 +220,7 @@ export default function HomePage() {
                   The Smartphone That Makes Police Officers Sweat
                 </span>
                 <span className="article-sub">
-                  249K views · 26K reads · GrapheneOS privacy
+                  GrapheneOS privacy guide
                 </span>
               </div>
             </a>
@@ -217,7 +242,7 @@ export default function HomePage() {
                   Unleash Your Inner Wizard: Claude Skills
                 </span>
                 <span className="article-sub">
-                  41K presentations · 8.7K views · 5.4K reads
+                  Technical deep dive
                 </span>
               </div>
             </a>

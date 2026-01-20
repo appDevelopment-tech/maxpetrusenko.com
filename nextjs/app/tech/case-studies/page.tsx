@@ -146,16 +146,16 @@ export default function CaseStudiesPage() {
           <div className="section-head">
             <h2>All Case Studies</h2>
             <span className="section-note">
-              Click to jump or scroll to read details
+              Click to view detailed case study with metrics
             </span>
           </div>
 
           <div className="tiles">
             {studies.map((study) => (
-              <a
+              <Link
                 key={study.id}
                 className="tile"
-                href={`#${study.id}`}
+                href={`/tech/case-studies/${study.id}`}
                 style={{ textDecoration: "none" }}
               >
                 <div className="tile-meta">
@@ -165,7 +165,7 @@ export default function CaseStudiesPage() {
                   </span>
                 </div>
                 <span className="badge">View</span>
-              </a>
+              </Link>
             ))}
           </div>
         </section>
@@ -173,11 +173,43 @@ export default function CaseStudiesPage() {
         <section className="section">
           <div className="section-head">
             <h2>Detailed Breakdowns</h2>
+            <span className="section-note">
+              Click any case study to see the full details
+            </span>
           </div>
 
-          {studies.map((study) => (
-            <CaseStudyDetail key={study.id} study={study} />
-          ))}
+          <div className="cards-3 grid">
+            {studies.map((study) => (
+              <Link
+                key={study.id}
+                className="card card-with-actions"
+                href={`/tech/case-studies/${study.id}`}
+                style={{ textDecoration: "none", color: "inherit" }}
+              >
+                <h3>{study.title}</h3>
+                <p className="text-sm text-muted" style={{ marginBottom: 12 }}>
+                  {study.client} · {study.industry}
+                </p>
+                {study.metrics && study.metrics.length > 0 && (
+                  <div style={{ marginBottom: 12 }}>
+                    <div className="tags">
+                      {study.metrics.slice(0, 2).map((metric, idx) => (
+                        <span key={idx} className="badge" style={{ fontSize: "0.85em" }}>
+                          {metric.label}: {metric.value}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                <div className="card-actions-spacer"></div>
+                <div style={{ marginTop: "auto", paddingTop: 12 }}>
+                  <span className="btn sm secondary" style={{ fontSize: "0.9em" }}>
+                    View Details →
+                  </span>
+                </div>
+              </Link>
+            ))}
+          </div>
         </section>
 
         <section className="section">

@@ -122,6 +122,13 @@ export interface SiteConfig {
   externalLinks: ExternalLinks;
   googleBusinessProfile?: {
     cid: string | null;
+    address?: {
+      street: string;
+      city: string;
+      state: string;
+      zip: string;
+      country: string;
+    };
   };
 }
 

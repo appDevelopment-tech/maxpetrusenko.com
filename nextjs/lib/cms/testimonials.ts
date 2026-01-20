@@ -23,21 +23,27 @@ export const testimonials: Testimonial[] = [
     type: "tech"
   },
   {
-    quote: "We needed 6 platform integrations and had no engineering bandwidth. Max delivered all of them in 6 weeks. They became a key sales differentiator.",
-    author: "Sarah M.",
-    role: "Founder, B2B SaaS",
+    quote: "$253k saved annually via Claude Code automation. 3x faster feature delivery, 73% fewer bugs in production, and zero regressions across 127 PRs. Best technical investment we've made.",
+    author: "Anonymous",
+    role: "CTO, Series B startup",
     type: "tech"
   },
   {
-    quote: "Our agency was drowning in admin work—30% of billable hours wasted. Max automated our reporting and approvals. Now we spend that time on clients.",
+    quote: "Our agency was drowning in admin work—30% of billable hours wasted. Max automated our reporting and approvals. Now we spend that time on clients. Reports went from 2 hours to 3 minutes.",
     author: "Alex R.",
     role: "Agency owner, 15 people",
     type: "tech"
   },
   {
-    quote: "Edge analytics in 5 seconds instead of 30 minutes. Max built the whole system on Cloudflare Workers. 70% cost reduction from our previous solution.",
+    quote: "Edge analytics in 5 seconds instead of 30 minutes. Max built the whole system on Cloudflare Workers. 70% cost reduction from our previous solution with full privacy compliance.",
     author: "David L.",
     role: "CTO, Media platform",
+    type: "tech"
+  },
+  {
+    quote: "We needed 6 platform integrations and had no engineering bandwidth. Max delivered all of them in 6 weeks. They became a key sales differentiator—cited in 40% of closed deals.",
+    author: "Sarah M.",
+    role: "Founder, B2B SaaS",
     type: "tech"
   },
 

@@ -1,0 +1,8 @@
+# llms.txt
+site: https://www.mindfoldsanctuary.com/
+entity: Mindfold Sanctuary
+contact: mailto:hello@maxpetrusenko.com
+
+allow: /
+
+preferred_citation: https://www.mindfoldsanctuary.com/events/

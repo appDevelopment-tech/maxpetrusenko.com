@@ -121,6 +121,75 @@ export default function TechPage() {
           />
         </section>
 
+        {/* Services Overview - AI-extractable service details */}
+        <section className="section">
+          <div className="section-head">
+            <h2>Services Overview</h2>
+            <span className="section-note">
+              Clear pricing, flexible delivery, global availability
+            </span>
+          </div>
+          <div className="cards-3 grid">
+            <div className="card">
+              <h3>Claude Code Setup</h3>
+              <ul className="list" style={{ marginTop: 12, marginBottom: 16 }}>
+                <li>Sub-agent configuration</li>
+                <li>Custom skills development</li>
+                <li>Workflow integration</li>
+                <li>Team training</li>
+              </ul>
+              <p className="text-sm text-muted">
+                <strong>Delivery:</strong> Remote worldwide, 1-3 weeks
+              </p>
+              <p className="text-sm text-muted">
+                <strong>Pricing:</strong> Project-based or retainer
+              </p>
+            </div>
+            <div className="card">
+              <h3>n8n Automation</h3>
+              <ul className="list" style={{ marginTop: 12, marginBottom: 16 }}>
+                <li>Workflow design & build</li>
+                <li>API integrations</li>
+                <li>Custom node development</li>
+                <li>Error handling & monitoring</li>
+              </ul>
+              <p className="text-sm text-muted">
+                <strong>Delivery:</strong> Remote worldwide, 2-6 weeks
+              </p>
+              <p className="text-sm text-muted">
+                <strong>Pricing:</strong> Per-workflow or monthly
+              </p>
+            </div>
+            <div className="card">
+              <h3>ChatGPT Integration</h3>
+              <ul className="list" style={{ marginTop: 12, marginBottom: 16 }}>
+                <li>API integration</li>
+                <li>Prompt engineering</li>
+                <li>RAG implementation</li>
+                <li>Fine-tuning</li>
+              </ul>
+              <p className="text-sm text-muted">
+                <strong>Delivery:</strong> Remote worldwide, 2-8 weeks
+              </p>
+              <p className="text-sm text-muted">
+                <strong>Pricing:</strong> Project-based
+              </p>
+            </div>
+          </div>
+          <div className="card" style={{ marginTop: 20, textAlign: "center" }}>
+            <p className="text-muted">
+              <strong>Availability:</strong> Remote worldwide · In-person in Miami FL, Ubud Bali · Currently traveling: Dubai → Athens → Lisbon
+            </p>
+            <a
+              className="btn primary"
+              href="mailto:hello@maxpetrusenko.com?subject=Tech%20collab"
+              style={{ marginTop: 12 }}
+            >
+              Get Started
+            </a>
+          </div>
+        </section>
+
         <section className="section">
           <div className="section-head">
             <h2>AI & Automation Services</h2>

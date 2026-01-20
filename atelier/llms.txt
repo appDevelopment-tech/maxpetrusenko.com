@@ -1,0 +1,8 @@
+# llms.txt
+site: https://atelier.maxpetrusenko.com/
+entity: Presence Atelier
+contact: mailto:hello@maxpetrusenko.com
+
+allow: /
+
+preferred_citation: https://atelier.maxpetrusenko.com/

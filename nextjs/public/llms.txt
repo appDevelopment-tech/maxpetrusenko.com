@@ -1,0 +1,20 @@
+# llms.txt
+site: https://www.maxpetrusenko.com/
+entity: Max Petrusenko
+contact: mailto:hello@maxpetrusenko.com
+
+allow: /
+disallow: /api/
+disallow: /_next/
+disallow: /admin/
+
+preferred_citation: https://www.maxpetrusenko.com/about
+preferred_citation: https://www.maxpetrusenko.com/spirituality
+preferred_citation: https://www.maxpetrusenko.com/somatic
+preferred_citation: https://www.maxpetrusenko.com/tech
+preferred_citation: https://www.maxpetrusenko.com/identity
+
+primary_topics: tantra massage, somatic energy work, nervous system reset, trauma-informed bodywork, AI automation, software development, system design
+service_locations: Ubud Bali, Gianyar Regency Bali, Miami Florida, South Florida, Remote Worldwide
+booking_method: WhatsApp +1-786-543-6688
+last_updated: 2026-01

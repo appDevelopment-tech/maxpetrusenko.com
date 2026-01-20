@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /atelier/
+Disallow: /mindfold/
+Disallow: /nextjs/
+
+Sitemap: https://maxpetrusenko.com/sitemap.xml

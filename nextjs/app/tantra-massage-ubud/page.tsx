@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { siteConfig } from "@/config/site";
 import { generateMetadata, absoluteUrl } from "@/lib/seo/metadata";
 import { JsonLd } from "@/components/seo/JsonLd";
@@ -191,6 +192,41 @@ export default function TantraMassageUbudPage() {
               weekend training — it&apos;s years of embodied practice.
             </p>
           </div>
+        </section>
+
+        {/* Bali location showcase with images */}
+        <section className="section">
+          <div className="section-head">
+            <h2>The Space in Ubud</h2>
+            <span className="section-note">
+              Private temple space surrounded by Bali rice terraces and jungle
+            </span>
+          </div>
+          <div className="split" style={{ alignItems: "stretch" }}>
+            <div className="image-showcase-card" style={{ position: "relative", height: "400px", borderRadius: "var(--radius-md)", overflow: "hidden" }}>
+              <Image
+                src="/images/bali/DSC04819.jpg"
+                alt="Bali rice terraces near Ubud session space"
+                fill
+                sizes="(max-width: 768px) 100vw, 50vw"
+                style={{ objectFit: "cover" }}
+                quality={85}
+              />
+            </div>
+            <div className="image-showcase-card" style={{ position: "relative", height: "400px", borderRadius: "var(--radius-md)", overflow: "hidden" }}>
+              <Image
+                src="/images/bali/DSC04934.jpg"
+                alt="Natural surroundings for tantra sessions in Ubud"
+                fill
+                sizes="(max-width: 768px) 100vw, 50vw"
+                style={{ objectFit: "cover" }}
+                quality={85}
+              />
+            </div>
+          </div>
+          <p style={{ marginTop: 16, textAlign: "center", color: "var(--color-text-muted)" }}>
+            Sessions held in private Ubud temple space • Mobile sessions available to your villa
+          </p>
         </section>
 
         {/* Testimonials from Ubud clients */}

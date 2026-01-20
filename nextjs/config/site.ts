@@ -3,7 +3,7 @@ import type { SiteConfig } from "@/types";
 export const siteConfig: SiteConfig = {
   name: "Max Petrusenko",
   description: "Tech builder and somatic practitioner. Explore portfolio, atelier, and mindfold work.",
-  url: "https://maxpetrusenko.com",
+  url: "https://www.maxpetrusenko.com",
   author: {
     name: "Max Petrusenko",
     email: "hello@maxpetrusenko.com",
@@ -33,9 +33,19 @@ export const siteConfig: SiteConfig = {
     patreon: "https://patreon.com/maxpetrusenko",
   },
   googleBusinessProfile: {
-    // TODO: Replace with actual Google Business Profile CID after verification
-    // Find your CID at: https://business.google.com/edit/<YOUR_CID>
+    // Google Business Profile for Presence Atelier Miami
+    // Category: Somatic Education & Energy Work Teaching
+    // Address: 917 SW 18th Ct, Fort Lauderdale, FL 33315
+    // Verify at: https://business.google.com/
+    // Add CID here after verification completes
     cid: null as string | null,
+    address: {
+      street: "917 SW 18th Ct",
+      city: "Fort Lauderdale",
+      state: "FL",
+      zip: "33315",
+      country: "US",
+    },
   },
 };
 
