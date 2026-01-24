@@ -11,6 +11,7 @@ import {
   generateBreadcrumbSchema,
   generateTechServiceSchema,
   generateTechFAQSchema,
+  generateScheduleActionSchema,
 } from "@/lib/seo/structured-data";
 
 export const metadata = generateMetadata({
@@ -46,6 +47,7 @@ export default function TechPage() {
         type="FAQPage"
         data={generateTechFAQSchema()}
       />
+      <JsonLd type="ScheduleAction" data={generateScheduleActionSchema("tech")} />
 
       <div className="container">
         <section className="hero">

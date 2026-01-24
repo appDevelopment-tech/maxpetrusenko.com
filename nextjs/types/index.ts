@@ -80,7 +80,7 @@ export interface PageMetadata {
 }
 
 export interface JsonLdProps {
-  type: "WebPage" | "Article" | "Person" | "Organization" | "BreadcrumbList" | "ProfessionalService" | "FAQPage" | "SoftwareApplication" | "TechArticle" | "AggregateRating" | "Review" | "LocalBusiness";
+  type: "WebPage" | "Article" | "Person" | "Organization" | "BreadcrumbList" | "ProfessionalService" | "FAQPage" | "SoftwareApplication" | "TechArticle" | "AggregateRating" | "Review" | "LocalBusiness" | "Event" | "ScheduleAction";
   data: Record<string, unknown>;
 }
 

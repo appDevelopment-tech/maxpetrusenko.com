@@ -5,8 +5,13 @@ import { siteConfig } from "@/config/site";
  * Robots.txt generation
  *
  * Allows all crawlers including AI crawlers and provides sitemap location.
- * AI crawlers (GPTBot, Claude-Web, PerplexityBot) are explicitly allowed
- * for AI discovery in ChatGPT, Claude, and Perplexity search.
+ * AI crawlers are explicitly allowed for AI discovery in ChatGPT, Claude, Perplexity,
+ * Google AI, Apple, and other AI-powered search engines.
+ *
+ * AI guidance files available at:
+ * - /llm.txt - Extended AI usage guidance
+ * - /llms.txt - Machine-readable AI protocol
+ * - /.ai.txt - AI discovery protocol
  */
 export default function robots(): MetadataRoute.Robots {
   return {
@@ -62,6 +67,57 @@ export default function robots(): MetadataRoute.Robots {
         userAgent: "Amazonbot",
         allow: "/",
         disallow: ["/api/", "/_next/"],
+      },
+      // Additional AI crawlers
+      {
+        userAgent: "Applebot-Extended",
+        allow: "/",
+        disallow: ["/api/", "/_next/"],
+      },
+      {
+        userAgent: "Bytespider",
+        allow: "/",
+        disallow: ["/api/", "/_next/"],
+      },
+      {
+        userAgent: "Diffbot",
+        allow: "/",
+        disallow: ["/api/", "/_next/"],
+      },
+      {
+        userAgent: "YouBot",
+        allow: "/",
+        disallow: ["/api/", "/_next/"],
+      },
+      {
+        userAgent: "omgili",
+        allow: "/",
+        disallow: ["/api/", "/_next/"],
+      },
+      {
+        userAgent: "Webzio-Extended",
+        allow: "/",
+        disallow: ["/api/", "/_next/"],
+      },
+      {
+        userAgent: "Anthropic-ChatGPT",
+        allow: "/",
+        disallow: ["/api/", "/_next/"],
+      },
+      {
+        userAgent: "GoogleOther",
+        allow: "/",
+        disallow: ["/api/", "/_next/"],
+      },
+      {
+        userAgent: "GoogleOther-Inspection",
+        allow: "/",
+        disallow: ["/api/", "/_next/"],
+      },
+      // Allow AI guidance files specifically
+      {
+        userAgent: "*",
+        allow: ["/llm.txt", "/llms.txt", "/.ai.txt", "/sitemap.xml"],
       },
     ],
     sitemap: `${siteConfig.url}/sitemap.xml`,

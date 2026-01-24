@@ -4,7 +4,7 @@ import { Footer } from "@/components/layout/Footer";
 import { GoogleAnalytics } from "@/components/analytics/GoogleAnalytics";
 import { CloudflareAnalytics } from "@/components/analytics/CloudflareAnalytics";
 import { JsonLd } from "@/components/seo/JsonLd";
-import { generatePersonSchema } from "@/lib/seo/structured-data";
+import { generatePersonSchema, generateEnhancedPersonSchema, generateServiceSpeakableSchema } from "@/lib/seo/structured-data";
 import "@/styles/globals.css";
 
 import type { Viewport } from "next";
@@ -43,6 +43,7 @@ export default function RootLayout({
         <GoogleAnalytics />
         <CloudflareAnalytics />
         <JsonLd type="Person" data={generatePersonSchema()} />
+        <JsonLd type="Person" data={generateEnhancedPersonSchema()} />
         <Header />
         <main className="page">{children}</main>
         <Footer />

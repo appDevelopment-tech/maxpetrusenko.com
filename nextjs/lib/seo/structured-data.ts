@@ -596,9 +596,320 @@ export function generateTechArticleSchema(data: {
 
 /**
  * ============================================================================
+ * EVENT SCHEMA
+ * ============================================================================
+ */
+
+/**
+ * Generate JSON-LD structured data for Event
+ * Optimized for AI discoverability of Mindfold events
+ */
+export function generateEventSchema(data: {
+  name: string;
+  description: string;
+  url: string;
+  startDate?: string;
+  endDate?: string;
+  location?: string;
+  isAccessibleForFree?: boolean;
+  organizer?: string;
+  performer?: string;
+  eventStatus?: "EventScheduled" | "EventMovedOnline" | "EventPostponed" | "EventCancelled";
+  eventAttendanceMode?: "offlineEventAttendanceMode" | "onlineEventAttendanceMode" | "mixedEventAttendanceMode";
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Event",
+    name: data.name,
+    description: data.description,
+    url: data.url.startsWith("http") ? data.url : `${siteConfig.url}${data.url}`,
+    ...(data.startDate && { startDate: data.startDate }),
+    ...(data.endDate && { endDate: data.endDate }),
+    ...(data.location && {
+      location: {
+        "@type": "Place",
+        name: data.location,
+        address: {
+          "@type": "PostalAddress",
+          addressLocality: "Ubud",
+          addressRegion: "Gianyar Regency",
+          addressCountry: "ID",
+        },
+      },
+    }),
+    eventStatus: data.eventStatus || "https://schema.org/EventScheduled",
+    eventAttendanceMode: data.eventAttendanceMode || "https://schema.org/offlineEventAttendanceMode",
+    isAccessibleForFree: data.isAccessibleForFree ?? false,
+    organizer: {
+      "@type": "Person",
+      name: data.organizer || siteConfig.author.name,
+      url: siteConfig.url,
+    },
+    ...(data.performer && {
+      performer: {
+        "@type": "Person",
+        name: data.performer,
+      },
+    }),
+    audience: {
+      "@type": "Audience",
+      audienceType: ["adults", "groups", "corporate", "team building"],
+    },
+    keywords: "blindfold, sensory deprivation, presence journey, meditation, somatic work, consciousness, mindfulness, group event, workshop",
+    offers: {
+      "@type": "Offer",
+      url: `https://wa.me/17865436688`,
+      price: "0",
+      priceCurrency: "USD",
+      description: "Contact for pricing and availability. Private and corporate events available.",
+      availability: "https://schema.org/Preorder",
+    },
+  };
+}
+
+/**
+ * Generate Event schema for Mindfold Sanctuary events
+ * Recurring event with placeholder dates (updated via WhatsApp)
+ */
+export function generateMindfoldEventSchema() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Event",
+    name: "Mindfold Sanctuary - Blindfolded Presence Journey",
+    description: "Group sensory subtraction workshop to expand perception and deepen presence. Blindfolded movement and contact exercises in a safe, non-sexual container. Learn to feel without seeing. Join solo or with friends. Corporate and private sessions available.",
+    url: `${siteConfig.url}/mindfold/events`,
+    eventStatus: "https://schema.org/EventScheduled",
+    eventAttendanceMode: "https://schema.org/offlineEventAttendanceMode",
+    isAccessibleForFree: false,
+    location: {
+      "@type": "Place",
+      name: "Various locations in Ubud, Bali and Miami, Florida",
+      description: "Location shared after RSVP. Private events available at your venue.",
+      address: [
+        {
+          "@type": "PostalAddress",
+          addressLocality: "Ubud",
+          addressRegion: "Gianyar Regency",
+          addressCountry: "ID",
+        },
+        {
+          "@type": "PostalAddress",
+          addressLocality: "Miami",
+          addressRegion: "FL",
+          addressCountry: "US",
+        },
+      ],
+    },
+    organizer: {
+      "@type": "Person",
+      name: siteConfig.author.name,
+      url: siteConfig.url,
+      sameAs: [
+        siteConfig.social.instagram,
+        "https://www.instagram.com/blindfold.miami",
+        "https://patreon.com/mindfold",
+      ].filter(Boolean),
+    },
+    performer: {
+      "@type": "Person",
+      name: "Max Petrusenko",
+      jobTitle: "Mindfold Sanctuary Facilitator",
+    },
+    audience: {
+      "@type": "Audience",
+      audienceType: ["adults", "groups", "corporate teams", "digital nomads", "founders", "creators"],
+    },
+    keywords: "blindfold, sensory deprivation, presence journey, meditation, somatic work, consciousness, mindfulness, group event, workshop, Ubud Bali, Miami Florida, team building, corporate wellness",
+    offers: [
+      {
+        "@type": "Offer",
+        name: "Group Journey",
+        description: "Join a scheduled group Mindfold session. Dates announced via WhatsApp.",
+        url: "https://wa.me/17865436688?text=Hi%20Max%2C%20I%27m%20interested%20in%20the%20next%20Mindfold%20group%20journey.",
+        price: "0",
+        priceCurrency: "USD",
+        availability: "https://schema.org/Preorder",
+      },
+      {
+        "@type": "Offer",
+        name: "Private / Corporate Event",
+        description: "Custom Mindfold session for your team or small group. We align on setting and pacing together.",
+        url: "https://wa.me/17865436688?text=Hi%20Max%2C%20I%27d%20like%20to%20book%20a%20private%20Mindfold%20journey.",
+        price: "0",
+        priceCurrency: "USD",
+        availability: "https://schema.org/Preorder",
+      },
+    ],
+    // Additional properties
+    inLanguage: "en",
+    typicalAgeRange: "18+",
+    previousStartDate: "2024-01-01",
+    // Waiver requirement
+    doorTime: "PT10M", // Arrive 10 minutes early
+    // Code of conduct reference
+    potentialAction: [
+      {
+        "@type": "ReserveAction",
+        target: {
+          "@type": "EntryPoint",
+          urlTemplate: "https://wa.me/17865436688?text=Hi%20Max%2C%20I%27d%20like%20to%20join%20Mindfold.",
+          actionPlatform: ["http://schema.org/DesktopWebPlatform", "http://schema.org/MobileWebPlatform"],
+        },
+        result: {
+          "@type": "Reservation",
+          name: "Mindfold Sanctuary Reservation",
+        },
+      },
+      {
+        "@type": "InformAction",
+        target: {
+          "@type": "EntryPoint",
+          urlTemplate: "https://form.jotform.com/242798411650965",
+          actionPlatform: ["http://schema.org/DesktopWebPlatform", "http://schema.org/MobileWebPlatform"],
+        },
+        object: {
+          "@type": "Waiver",
+          name: "Mindfold Sanctuary Waiver",
+          description: "Required waiver before attending Mindfold events",
+        },
+      },
+    ],
+  };
+}
+
+/**
+ * ============================================================================
+ * SCHEDULE ACTION SCHEMA
+ * ============================================================================
+ */
+
+/**
+ * Generate ScheduleAction schema for WhatsApp booking
+ * Enables AI assistants to directly book sessions via structured actions
+ */
+export function generateScheduleActionSchema(serviceType: "tantra" | "tech" | "mindfold") {
+  const serviceConfig = {
+    tantra: {
+      name: "Tantra & Somatic Session",
+      url: "/spirituality",
+      phone: "+1-786-543-6688",
+      template: "Hi Max, I'd like to book a tantra/somatic session. Preferred day/time: ____. Intentions: ____.",
+    },
+    tech: {
+      name: "AI Automation Consultation",
+      url: "/tech",
+      phone: "+1-786-543-6688",
+      template: "Hi Max, I'd like to discuss AI automation. My project: ____. Timeline: ____.",
+    },
+    mindfold: {
+      name: "Mindfold Sanctuary Event",
+      url: "/mindfold/events",
+      phone: "+1-786-543-6688",
+      template: "Hi Max, I'm interested in the next Mindfold event. City: ____. Date: ____. Questions: ____. ",
+    },
+  };
+
+  const config = serviceConfig[serviceType];
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "ScheduleAction",
+    name: `Book ${config.name}`,
+    target: {
+      "@type": "EntryPoint",
+      urlTemplate: `https://wa.me/17865436688?text=${encodeURIComponent(config.template)}`,
+      actionPlatform: ["http://schema.org/DesktopWebPlatform", "http://schema.org/MobileWebPlatform", "http://schema.org/IOSPlatform", "http://schema.org/AndroidPlatform"],
+    },
+    object: {
+      "@type": "Reservation",
+      name: config.name,
+      url: `${siteConfig.url}${config.url}`,
+      description: config.template,
+      reservationFor: {
+        "@type": "Service",
+        name: config.name,
+        provider: {
+          "@type": "Person",
+          name: siteConfig.author.name,
+          telephone: config.phone,
+        },
+      },
+    },
+    result: {
+      "@type": "Reservation",
+      name: `${config.name} - WhatsApp Booking`,
+      description: "Reservation initiated via WhatsApp. Max will respond to confirm availability and timing.",
+    },
+  };
+}
+
+/**
+ * ============================================================================
  * REVIEW & RATING SCHEMA
  * ============================================================================
  */
+
+/**
+ * Generate individual Review schema from a testimonial
+ * Used alongside AggregateRating for comprehensive social proof
+ */
+export function generateReviewSchema(testimonial: {
+  quote: string;
+  author: string;
+  role?: string;
+  location?: string;
+  type: "tech" | "spirituality" | "mindfold";
+}, serviceName: string) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Review",
+    itemReviewed: {
+      "@type": serviceName === "tantra" ? "ProfessionalService" : "Service",
+      name: serviceName === "tantra" ? "Presence Atelier - Tantra & Somatic Energy Work" :
+           serviceName === "tech" ? "AI & Automation Services" :
+           "Mindfold Sanctuary - Sensory Journeys",
+      url: serviceName === "tantra" ? `${siteConfig.url}/spirituality` :
+           serviceName === "tech" ? `${siteConfig.url}/tech` :
+           `${siteConfig.url}/mindfold/events`,
+    },
+    reviewRating: {
+      "@type": "Rating",
+      ratingValue: "5",
+      bestRating: "5",
+      worstRating: "1",
+    },
+    author: {
+      "@type": "Person",
+      name: testimonial.author,
+      ...(testimonial.role && { description: testimonial.role }),
+      ...(testimonial.location && { address: {
+        "@type": "PostalAddress",
+        addressLocality: testimonial.location,
+      }}),
+    },
+    reviewBody: testimonial.quote,
+    publisher: {
+      "@type": "Organization",
+      name: siteConfig.name,
+    },
+    reviewAspect: testimonial.type === "spirituality" ? "tantra massage, somatic energy work, nervous system reset" :
+                  testimonial.type === "tech" ? "AI automation, Claude Code, n8n workflows" :
+                  "blindfold journey, sensory deprivation, presence work",
+  };
+}
+
+/**
+ * Generate all Review schemas for a service type
+ * Returns an array of individual review schemas
+ */
+export function generateAllReviewsSchema(serviceType: "tech" | "spirituality" | "mindfold") {
+  const { testimonials } = require("@/lib/cms/testimonials");
+  const filtered = testimonials.filter((t: { type: string }) => t.type === serviceType);
+
+  return filtered.map((t: { quote: string; author: string; role?: string; location?: string; type: string }) =>
+    generateReviewSchema(t as Parameters<typeof generateReviewSchema>[0], serviceType)
+  );
+}
 
 /**
  * Generate AggregateRating schema from testimonials
@@ -825,5 +1136,224 @@ export function generateLocalBusinessSchemaMiami() {
       "bestRating": "5",
       "worstRating": "1"
     }
+  };
+}
+
+/**
+ * ============================================================================
+ * ENHANCED PERSON SCHEMA (Knowledge Panel Optimization)
+ * ============================================================================
+ */
+
+/**
+ * Generate enhanced Person schema with extensive sameAs links
+ * Optimized for Google Knowledge Panel and entity recognition
+ */
+export function generateEnhancedPersonSchema() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name: siteConfig.author.name,
+    alternateName: ["Max", "Presence Atelier", "Max Petrusenko Tech"],
+    url: siteConfig.url,
+    description: "Tech builder and somatic practitioner specializing in AI automation, tantra massage, and somatic energy work. Available in Ubud, Bali and Miami, Florida.",
+    jobTitle: "Tech Builder & Somatic Practitioner",
+    worksFor: {
+      "@type": "Organization",
+      name: "Presence Atelier",
+      url: siteConfig.externalLinks.atelier,
+    },
+    birthPlace: {
+      "@type": "Place",
+      address: {
+        "@type": "PostalAddress",
+        addressCountry: "US",
+      },
+    },
+    // Enhanced sameAs for knowledge panel verification
+    sameAs: [
+      siteConfig.social.github,
+      siteConfig.social.linkedin,
+      siteConfig.social.medium,
+      siteConfig.social.instagram,
+      siteConfig.social.twitter,
+      // Additional platforms
+      "https://www.youtube.com/@maxpetrusenko",
+      "https://vimeo.com/maxpetrusenko",
+      "https://www.pinterest.com/maxpetrusenko",
+      // Business platforms
+      "https://www.crunchbase.com/organization/maxpetrusenko",
+      "https://angel.co/u/maxpetrusenko",
+      "https://www.gumroad.com/maxpetrusenko",
+      // Presence Atelier
+      siteConfig.externalLinks.atelier,
+      "https://www.instagram.com/blindfold.miami",
+      "https://patreon.com/mindfold",
+      // Writing
+      "https://medium.com/@maxpetrusenko",
+      "https://substack.com/@maxpetrusenko",
+      // AI/Developer platforms
+      "https://stackoverflow.com/users/0000000/max-petrusenko",
+      "https://dev.to/maxpetrusenko",
+      "https://codepen.io/maxpetrusenko",
+      // Location-specific
+      "https://about.me/maxpetrusenko",
+      "https://linktr.ee/maxpetrusenko",
+    ].filter(Boolean),
+    // KnowsAbout for expertise signaling
+    knowsAbout: [
+      "Tantra Massage",
+      "Somatic Energy Work",
+      "Nervous System Regulation",
+      "Trauma-Informed Bodywork",
+      "AI Automation",
+      "Claude Code",
+      "Anthropic Claude",
+      "ChatGPT",
+      "OpenAI API",
+      "n8n",
+      "Workflow Automation",
+      "API Development",
+      "TypeScript",
+      "Next.js",
+      "React",
+      "Node.js",
+      "Product Design",
+      "UX Design",
+      "System Design",
+      "Kriya Yoga",
+      "Shambhavi Mahamudra",
+      "Breathwork",
+      "Conscious Touch",
+    ],
+    // Awards and certifications
+    award: [
+      "Shambhavi Mahamudra - Isha Foundation",
+      "Kriya Yoga Initiation - Yoganada Lineage",
+      "Tantra Massage Certification - Satyarti",
+    ],
+    // MemberOf for community affiliations
+    memberOf: [
+      {
+        "@type": "Organization",
+        name: "Isha Foundation",
+        url: "https://www.ishafoundation.org",
+      },
+      {
+        "@type": "Organization",
+        name: "Mindfold Sanctuary",
+        url: `${siteConfig.url}/mindfold/events`,
+      },
+    ],
+    // Contact
+    telephone: "+1-786-543-6688",
+    email: "hello@maxpetrusenko.com",
+    // Availability
+    availableChannel: {
+      "@type": "ServiceChannel",
+      serviceType: ["tantra massage", "somatic energy work", "AI automation", "tech consulting"],
+      serviceUrl: siteConfig.url,
+    },
+    // Areas served
+    address: [
+      {
+        "@type": "PostalAddress",
+        addressLocality: "Ubud",
+        addressRegion: "Gianyar Regency",
+        addressCountry: "ID",
+      },
+      {
+        "@type": "PostalAddress",
+        addressLocality: "Miami",
+        addressRegion: "FL",
+        addressCountry: "US",
+      },
+    ],
+  };
+}
+
+/**
+ * ============================================================================
+ * SPEAKABLE SCHEMA (Voice AI Optimization)
+ * ============================================================================
+ */
+
+/**
+ * Generate Speakable schema for voice assistant answers
+ * Optimizes content for Google Assistant, Siri, Alexa voice responses
+ */
+export function generateSpeakableSchema(data: {
+  url: string;
+  speakableTexts: string[];
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "SpeakableSpecification",
+    url: `${siteConfig.url}${data.url}`,
+    xpath: [
+      "/html/head/meta[@name='description']",
+      "//h1",
+      "//h2",
+    ],
+    speakable: data.speakableTexts.map((text) => ({
+      "@type": "Speakable",
+      cssSelector: `[data-speakable="${text.slice(0, 20)}"]`,
+      text: text,
+      xPath: `//p[contains(text(),"${text.slice(0, 15)}")]`,
+    })),
+  };
+}
+
+/**
+ * Generate Speakable schema for common voice queries about services
+ */
+export function generateServiceSpeakableSchema() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "SpeakableSpecification",
+    url: `${siteConfig.url}/spirituality`,
+    speakable: [
+      {
+        "@type": "Speakable",
+        text: "Max Petrusenko offers professional tantra massage and somatic energy work in Ubud, Bali and Miami, Florida. Book via WhatsApp at +1-786-543-6688.",
+      },
+      {
+        "@type": "Speakable",
+        text: "Sessions are non-sexual, focused on nervous system regulation and conscious presence through breathwork and somatic awareness.",
+      },
+      {
+        "@type": "Speakable",
+        text: "Services include Nervous System Reset, Deep Repatterning, Kyo-tai Immersion, and Couples Tantra sessions.",
+      },
+      {
+        "@type": "Speakable",
+        text: "Max is certified in Shambhavi Mahamudra, Kriya Yoga, and Tantra Massage. Sessions are trauma-informed and consent-forward.",
+      },
+    ],
+  };
+}
+
+/**
+ * Generate Speakable schema for tech services
+ */
+export function generateTechSpeakableSchema() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "SpeakableSpecification",
+    url: `${siteConfig.url}/tech`,
+    speakable: [
+      {
+        "@type": "Speakable",
+        text: "Max Petrusenko is an AI automation consultant specializing in Claude Code, n8n workflows, and ChatGPT API integrations.",
+      },
+      {
+        "@type": "Speakable",
+        text: "Services include Claude Code setup and optimization, n8n workflow automation, and ChatGPT integrations for products.",
+      },
+      {
+        "@type": "Speakable",
+        text: "Available remotely worldwide. Contact hello@maxpetrusenko.com for AI automation consulting.",
+      },
+    ],
   };
 }

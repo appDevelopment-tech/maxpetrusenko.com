@@ -12,6 +12,7 @@ import {
   generateBreadcrumbSchema,
   generateProfessionalServiceSchema,
   generateFAQSchema,
+  generateScheduleActionSchema,
   SERVICE_LOCATIONS,
 } from "@/lib/seo/structured-data";
 
@@ -28,6 +29,7 @@ export default function SpiritualityPage() {
       <JsonLd type="Organization" data={generateOrganizationSchema()} />
       <JsonLd type="ProfessionalService" data={generateProfessionalServiceSchema()} />
       <JsonLd type="FAQPage" data={generateFAQSchema()} />
+      <JsonLd type="ScheduleAction" data={generateScheduleActionSchema("tantra")} />
       <JsonLd
         type="WebPage"
         data={generateWebPageSchema({

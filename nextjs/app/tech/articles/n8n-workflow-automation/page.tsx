@@ -233,7 +233,7 @@ export default function N8nWorkflowArticle() {
               <li>Build a recovery workflow for reprocessing</li>
             </ul>
 
-            <h2>Custom Node Development</h3>
+            <h2>Custom Node Development</h2>
             <p>
               When existing nodes don't meet your needs, build your own. n8n
               custom nodes are written in TypeScript/JavaScript.
