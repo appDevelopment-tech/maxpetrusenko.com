@@ -3,7 +3,17 @@ import Image from "next/image";
 import { siteConfig } from "@/config/site";
 import { generateMetadata, absoluteUrl } from "@/lib/seo/metadata";
 import { JsonLd } from "@/components/seo/JsonLd";
-import { generateWebPageSchema, generateBreadcrumbSchema } from "@/lib/seo/structured-data";
+import {
+  generateWebPageSchema,
+  generateBreadcrumbSchema,
+  generateProfessionalServiceSchema,
+  generateTechServiceSchema,
+  generateFAQSchema,
+  generateTechFAQSchema,
+  generateEnhancedPersonSchema,
+  generateScheduleActionSchema,
+  generateAggregateRatingSchema,
+} from "@/lib/seo/structured-data";
 import { EmailCapture } from "@/components/forms/EmailCapture";
 
 export const metadata = generateMetadata({
@@ -29,100 +39,114 @@ export default function HomePage() {
         data={generateBreadcrumbSchema([{ name: "Home", url: "/" }])}
       />
 
-      <div className="location-banner">
-        <span className="location-item">
-          <span className="location-icon">🎯</span>
-          <span><strong>Two practices, one person</strong> • Tech products & somatic sessions</span>
-        </span>
-      </div>
+      {/* ProfessionalService schema for somatic offerings */}
+      <JsonLd type="ProfessionalService" data={generateProfessionalServiceSchema()} />
 
-      {/* Entity facts block - AI-extractable compact information */}
-      <section className="entity-facts-section" itemScope itemType="https://schema.org/Person">
+      {/* ProfessionalService schema for tech offerings */}
+      <JsonLd type="ProfessionalService" data={generateTechServiceSchema()} />
+
+      {/* FAQ schema for somatic services */}
+      <JsonLd type="FAQPage" data={generateFAQSchema()} />
+
+      {/* FAQ schema for tech services */}
+      <JsonLd type="FAQPage" data={generateTechFAQSchema()} />
+
+      {/* Enhanced Person schema with social links */}
+      <JsonLd type="Person" data={generateEnhancedPersonSchema()} />
+
+      {/* AggregateRating for overall services */}
+      <JsonLd type="AggregateRating" data={generateAggregateRatingSchema("all")} />
+
+      {/* ScheduleAction for WhatsApp booking */}
+      <JsonLd type="ScheduleAction" data={generateScheduleActionSchema("tantra")} />
+      <JsonLd type="ScheduleAction" data={generateScheduleActionSchema("tech")} />
+      <JsonLd type="ScheduleAction" data={generateScheduleActionSchema("mindfold")} />
+
+      {/* Hidden schema.org metadata for AI */}
+      <section itemScope itemType="https://schema.org/Person" style={{ display: "none" }}>
         <meta itemProp="name" content="Max Petrusenko" />
-        <div className="entity-facts-grid">
-          <div className="entity-fact-item">
-            <span className="fact-label">Who:</span>
-            <span itemProp="jobTitle">Tech builder & somatic practitioner</span>
-          </div>
-          <div className="entity-fact-item">
-            <span className="fact-label">Tech:</span>
-            <span itemProp="description">AI automation, Claude Code, n8n workflows</span>
-            <span className="fact-location">Remote worldwide</span>
-          </div>
-          <div className="entity-fact-item">
-            <span className="fact-label">Somatic:</span>
-            <span itemProp="description">Tantra massage, nervous system reset</span>
-            <span className="fact-location">Ubud Bali & Miami FL</span>
-          </div>
-          <div className="entity-fact-item">
-            <span className="fact-label">Contact:</span>
-            <span itemProp="telephone">WhatsApp +1-786-543-6688</span>
-          </div>
-        </div>
+        <meta itemProp="jobTitle" content="Tech builder & somatic practitioner" />
+        <meta itemProp="description" content="AI automation, Claude Code, n8n workflows" />
+        <meta itemProp="telephone" content="+1-786-543-6688" />
       </section>
 
-      {/* Social proof bar */}
-      <div className="social-proof-bar">
-        <span className="proof-item">✓ 200+ clients served</span>
-        <span className="proof-item">✓ 4.9/5 client satisfaction</span>
-        <span className="proof-item">✓ Available worldwide</span>
+      {/* Section 2: Parallax hero image */}
+      <div style={{ position: "relative", width: "100%", height: "60vh", minHeight: "400px" }}>
+        <Image
+          src="/images/DSC05871.jpg"
+          alt="Max Petrusenko - Tech builder & somatic practitioner"
+          fill
+          sizes="100vw"
+          style={{ objectFit: "cover", objectPosition: "center" }}
+          quality={90}
+        />
+        <div style={{ position: "absolute", inset: 0, background: "rgba(255,255,255,0.3)" }}></div>
+        <div style={{ position: "relative", zIndex: 1, height: "100%", display: "flex", alignItems: "center", justifyContent: "center", padding: "40px 20px" }}>
+          <div className="container" style={{ display: "flex", justifyContent: "center" }}>
+            <div className="card" style={{ maxWidth: "880px", width: "100%" }}>
+              <div className="eyebrow">
+                <span className="dot"></span> Max Petrusenko
+              </div>
+              <h1>Two practices, built on the same principle</h1>
+              <p>
+                I build products that help creators ship, and I facilitate somatic sessions that help people feel again.
+                Both are about clarity, presence, and lasting results.
+              </p>
+              <div className="hero-actions">
+                <Link className="btn primary" href="/somatic">
+                  Book a Session
+                </Link>
+                <Link className="btn secondary" href="/tech">
+                  See Tech Work
+                </Link>
+              </div>
+
+              <div style={{ marginTop: "24px" }}>
+                <h3>Choose your path</h3>
+                <div className="tiles">
+                  <a className="tile" href="/somatic" rel="noopener">
+                    <div className="tile-meta">
+                      <span className="tile-title">Somatic Sessions</span>
+                      <span className="tile-desc">
+                        Tantra massage, nervous system reset, and energy work.
+                      </span>
+                    </div>
+                    <span className="badge spirit">Book</span>
+                  </a>
+                  <Link className="tile" href="/tech">
+                    <div className="tile-meta">
+                      <span className="tile-title">Tech Portfolio</span>
+                      <span className="tile-desc">
+                        Products, apps, and automation for founders.
+                      </span>
+                    </div>
+                    <span className="badge tech">View</span>
+                  </Link>
+                  <Link className="tile" href="/mindfold/events">
+                    <div className="tile-meta">
+                      <span className="tile-title">Mindfold</span>
+                      <span className="tile-desc">
+                        Blindfolded presence journeys for groups.
+                      </span>
+                    </div>
+                    <span className="badge mindfold">Explore</span>
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Section 4: Sandy separator for content sections */}
+      <div style={{ background: "var(--color-bg)", padding: "40px 20px", textAlign: "center" }}>
+        <div className="container">
+          <h2 style={{ marginBottom: "16px" }}>Featured Work & Insights</h2>
+          <p style={{ color: "var(--color-text-muted)" }}>Recent updates, articles, and live sessions</p>
+        </div>
       </div>
 
       <div className="container">
-        <section className="hero">
-          <div className="hero-text">
-            <div className="eyebrow">
-              <span className="dot"></span> Max Petrusenko
-            </div>
-            <h1>Two practices, built on the same principle</h1>
-            <p>
-              I build products that help creators ship, and I facilitate somatic sessions that help people feel again.
-              Both are about clarity, presence, and lasting results.
-            </p>
-            <div className="hero-actions">
-              <Link className="btn primary" href="/somatic">
-                Book a Session
-              </Link>
-              <Link className="btn secondary" href="/tech">
-                See Tech Work
-              </Link>
-            </div>
-          </div>
-
-          <div className="hero-card quick-paths">
-            <h3>Choose your path</h3>
-            <div className="tiles">
-              <a className="tile" href="/somatic" rel="noopener">
-                <div className="tile-meta">
-                  <span className="tile-title">Somatic Sessions</span>
-                  <span className="tile-desc">
-                    Tantra massage, nervous system reset, and energy work.
-                  </span>
-                </div>
-                <span className="badge spirit">Book</span>
-              </a>
-              <Link className="tile" href="/tech">
-                <div className="tile-meta">
-                  <span className="tile-title">Tech Portfolio</span>
-                  <span className="tile-desc">
-                    Products, apps, and automation for founders.
-                  </span>
-                </div>
-                <span className="badge tech">View</span>
-              </Link>
-              <Link className="tile" href="/mindfold/events">
-                <div className="tile-meta">
-                  <span className="tile-title">Mindfold</span>
-                  <span className="tile-desc">
-                    Blindfolded presence journeys for groups.
-                  </span>
-                </div>
-                <span className="badge mindfold">Explore</span>
-              </Link>
-            </div>
-          </div>
-        </section>
-
         <section className="section">
           <div className="section-head">
             <h2>On X</h2>
@@ -178,6 +202,17 @@ export default function HomePage() {
             <span className="section-note">
               Selected pieces on security, AI, and systems.
             </span>
+          </div>
+          {/* Atmospheric separator image */}
+          <div style={{ position: "relative", width: "100%", height: "200px", borderRadius: "var(--radius-md)", overflow: "hidden", marginBottom: "var(--space-6)" }}>
+            <Image
+              src="/images/DSC05764.jpg"
+              alt="Atmospheric tropical setting"
+              fill
+              sizes="(max-width: 768px) 100vw, 1200px"
+              style={{ objectFit: "cover" }}
+              quality={85}
+            />
           </div>
           <div className="article-list">
             <a

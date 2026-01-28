@@ -1,0 +1,89 @@
+# robots.txt - Max Petrusenko.com
+# Crawler guidance for traditional search and AI answer engines
+
+# ============================================
+# AI CRAWLERS - Explicitly Allow
+# ============================================
+
+# OpenAI / ChatGPT
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+# Google AI / Gemini / AI Overviews
+User-agent: Google-Extended
+Allow: /
+
+# Anthropic / Claude
+User-agent: anthropic-ai
+Allow: /
+User-agent: Claude-Web
+Allow: /
+
+# Perplexity AI
+User-agent: PerplexityBot
+Allow: /
+
+# Common AI Crawlers
+User-agent: anthropic-ai
+User-agent: Omgilibot
+User-agent: FacebookBot
+Allow: /
+
+# ============================================
+# TRADITIONAL SEARCH
+# ============================================
+
+User-agent: *
+Allow: /
+
+# Crawl-delay (optional, respectful crawling)
+# Crawl-delay: 1
+
+# ============================================
+# SITEMAPS
+# ============================================
+
+Sitemap: https://www.maxpetrusenko.com/sitemap.xml
+Sitemap: https://maxpetrusenko.com/sitemap.xml
+
+# ============================================
+# AI GUIDANCE FILES
+# ============================================
+# Direct AI crawlers to guidance files for proper citation
+# llm.txt - Primary AI guidance for LLMs
+# llms.txt - Alternative format
+# .ai.txt - Generic AI guidance
+
+# For AI crawlers, these files explain:
+# - How to cite this site's content
+# - What entity represents the site
+# - Which pages to cite for which queries
+# - Disallowed inferences
+# - Trust signals and verification
+
+# ============================================
+# DISALLOWED PATHS (if any)
+# ============================================
+
+# Disallow admin or private areas if they exist
+# Disallow: /admin/
+# Disallow: /private/
+# Disallow: /.well-known/
+
+# ============================================
+# ADDITIONAL NOTES
+# ============================================
+
+# This site uses AEO (Answer Engine Optimization) / GEO (Generative Engine Optimization)
+# Content is structured for AI extraction with:
+# - JSON-LD structured data (Person, ProfessionalService, FAQPage, Article, etc.)
+# - AI guidance files (llm.txt, llms.txt)
+# - Clear entity definitions and verifiable claims
+# - FAQ sections formatted for AI query answering
+
+# For questions about this site's AI guidance:
+# Email: hello@maxpetrusenko.com
+# WhatsApp: +1-786-543-6688

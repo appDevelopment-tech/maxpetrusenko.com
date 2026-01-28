@@ -6,6 +6,7 @@ import { HiddenKeywords } from "@/components/seo/HiddenKeywords";
 import {
   generateWebPageSchema,
   generateBreadcrumbSchema,
+  generateTechPersonSchema,
 } from "@/lib/seo/structured-data";
 import { getCaseStudies, type CaseStudy } from "@/lib/cms/case-studies";
 
@@ -99,6 +100,7 @@ export default function CaseStudiesPage() {
           { name: "Case Studies", url: "/tech/case-studies" },
         ])}
       />
+      <JsonLd type="Person" data={generateTechPersonSchema()} />
 
       <div className="container">
         <section className="hero">

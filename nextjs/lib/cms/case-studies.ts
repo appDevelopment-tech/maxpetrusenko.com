@@ -159,6 +159,53 @@ export const caseStudies: CaseStudy[] = [
       { label: "Privacy", value: "full compliance" },
     ],
   },
+  {
+    id: "claude-code-automation",
+    title: "Claude Code Automation - $253k Annual Savings",
+    client: "Series B B2B SaaS startup (anonymous per client request)",
+    industry: "B2B SaaS",
+    duration: "3 months",
+    context:
+      "A 40-person engineering team was spending 2.5 FTE equivalents on repetitive tasks: code reviews, test writing, documentation updates, incident response. They needed automation without sacrificing quality or safety.",
+    role:
+      "Led end-to-end Claude Code implementation: architecture, sub-agent configuration, custom skills development, team training.",
+    actions: [
+      "Configured Claude Code across team's development environments with project context",
+      "Built specialized sub-agents for Frontend (React/TypeScript), Backend (Node.js/APIs), DevOps (CI/CD/Docker), and Testing",
+      "Created custom skills for PR creation with automated testing, code review with security scanning, and documentation generation",
+      "Integrated with GitHub Actions, Linear, Notion, and Slack for seamless workflow",
+      "Implemented guardrails: required approval for production deployments, automatic secrets redaction, read-only database access",
+      "Conducted hands-on training workshops for all developers",
+      "Refined prompts and skills over 8 weeks based on real usage patterns",
+    ],
+    outcomes: [
+      "$253k annual savings (2.3 month payback period)",
+      "Code review time reduced 4-8x (2-4 hours → 15-30 minutes per PR)",
+      "Feature delivery 3x faster (2-3 weeks → 4-7 days)",
+      "Production bugs reduced 73% (15-20/month → 4-6/month)",
+      "Test coverage increased from 40-50% to 85-95%",
+      "Regression rate dropped from 8-12% to <1%",
+      "Zero regressions across 127 pull requests",
+      "Developer satisfaction: 87% reported feeling more fulfilled",
+      "Onboarding time reduced from 4 weeks to 2 weeks",
+    ],
+    stack: [
+      "Claude Code",
+      "Anthropic Claude API",
+      "GitHub Actions",
+      "Linear API",
+      "Notion API",
+      "Slack API",
+      "Sub-Agents",
+      "Custom Skills",
+    ],
+    metrics: [
+      { label: "Annual savings", value: "$253k" },
+      { label: "Payback period", value: "2.3 months" },
+      { label: "Code review speed", value: "4-8x faster" },
+      { label: "Bug reduction", value: "73%" },
+    ],
+  },
 ];
 
 export function getCaseStudies(): CaseStudy[] {

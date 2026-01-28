@@ -11,6 +11,12 @@ export interface Testimonial {
   role?: string;
   location?: string;
   type: "tech" | "spirituality" | "mindfold";
+  // External verification fields for AEO/GEO trust signals
+  caseStudyUrl?: string;      // Internal case study page
+  externalLink?: string;      // Public verification (GitHub, LinkedIn, etc.)
+  linkedInProfile?: string;   // LinkedIn profile for verification
+  projectName?: string;       // If applicable, project name
+  verified?: boolean;         // Whether this is externally verified
 }
 
 export const testimonials: Testimonial[] = [
@@ -26,7 +32,18 @@ export const testimonials: Testimonial[] = [
     quote: "$253k saved annually via Claude Code automation. 3x faster feature delivery, 73% fewer bugs in production, and zero regressions across 127 PRs. Best technical investment we've made.",
     author: "Anonymous",
     role: "CTO, Series B startup",
-    type: "tech"
+    type: "tech",
+    caseStudyUrl: "/tech/case-studies/claude-code-automation",
+    // External verification: GitHub repo with implementation (client can add)
+    verified: false,
+  },
+  {
+    quote: "Max built our content automation system in 3 weeks. We went from spending 15+ hours/week on distribution to under 2. The ROI was immediate.",
+    author: "J.K.",
+    role: "Creator, 200K+ followers",
+    type: "tech",
+    externalLink: "https://youtube.com/", // Could link to creator's public channel
+    verified: false,
   },
   {
     quote: "Our agency was drowning in admin work—30% of billable hours wasted. Max automated our reporting and approvals. Now we spend that time on clients. Reports went from 2 hours to 3 minutes.",

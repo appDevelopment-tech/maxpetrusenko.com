@@ -12,6 +12,7 @@ import {
   generateTechServiceSchema,
   generateTechFAQSchema,
   generateScheduleActionSchema,
+  generateTechPersonSchema,
 } from "@/lib/seo/structured-data";
 
 export const metadata = generateMetadata({
@@ -48,6 +49,25 @@ export default function TechPage() {
         data={generateTechFAQSchema()}
       />
       <JsonLd type="ScheduleAction" data={generateScheduleActionSchema("tech")} />
+      <JsonLd type="Person" data={generateTechPersonSchema()} />
+
+      {/* Hero image section */}
+      <div className="hero-image-section">
+        <div className="hero-image-overlay"></div>
+        <Image
+          src="/images/tech-portrait.jpg"
+          alt="Max Petrusenko in studio"
+          fill
+          priority
+          sizes="100vw"
+          style={{ objectFit: "cover", objectPosition: "50% 30%" }}
+          quality={92}
+        />
+        <div className="hero-image-content">
+          <h1>Calm, outcome-first products</h1>
+          <p>AI automation, product strategy, and systems for creators and founders.</p>
+        </div>
+      </div>
 
       <div className="container">
         <section className="hero">

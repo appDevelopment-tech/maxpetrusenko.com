@@ -7,6 +7,7 @@ import {
   generateWebPageSchema,
   generateBreadcrumbSchema,
   generateTechServiceSchema,
+  generateTechPersonSchema,
 } from "@/lib/seo/structured-data";
 
 export const metadata = generateMetadata({
@@ -40,6 +41,7 @@ export default function AIAutomationPage() {
         type="ProfessionalService"
         data={generateTechServiceSchema()}
       />
+      <JsonLd type="Person" data={generateTechPersonSchema()} />
 
       <div className="container">
         <section className="hero">

@@ -13,6 +13,7 @@ import {
   generateProfessionalServiceSchema,
   generateFAQSchema,
   generateScheduleActionSchema,
+  generateSpiritualityPersonSchema,
   SERVICE_LOCATIONS,
 } from "@/lib/seo/structured-data";
 
@@ -45,13 +46,14 @@ export default function SpiritualityPage() {
           { name: "Spirituality", url: "/spirituality" },
         ])}
       />
+      <JsonLd type="Person" data={generateSpiritualityPersonSchema()} />
 
       {/* Hero image section */}
       <div className="hero-image-section spirituality-hero">
         <div className="hero-image-overlay"></div>
         <Image
-          src="/images/bali/DSC04799.jpg"
-          alt="Tantra and somatic energy work in Ubud, Bali"
+          src="/images/DSC05764.jpg"
+          alt="Atmospheric tropical setting for somatic energy work"
           fill
           priority
           sizes="100vw"
@@ -198,6 +200,18 @@ export default function SpiritualityPage() {
         </section>
 
         <Testimonials type="spirituality" />
+
+        {/* Atmospheric detail image for visual separation */}
+        <div style={{ position: "relative", width: "100%", height: "160px", borderRadius: "var(--radius-md)", overflow: "hidden", marginBottom: "var(--space-8)" }}>
+          <Image
+            src="/images/DSC04778.jpg"
+            alt="Atmospheric detail - somatic practice ambiance"
+            fill
+            sizes="(max-width: 768px) 100vw, 1200px"
+            style={{ objectFit: "cover" }}
+            quality={85}
+          />
+        </div>
 
         <section className="section">
           <div className="section-head">

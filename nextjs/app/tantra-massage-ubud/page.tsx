@@ -215,14 +215,25 @@ export default function TantraMassageUbudPage() {
             </div>
             <div className="image-showcase-card" style={{ position: "relative", height: "400px", borderRadius: "var(--radius-md)", overflow: "hidden" }}>
               <Image
-                src="/images/bali/DSC04934.jpg"
-                alt="Natural surroundings for tantra sessions in Ubud"
+                src="/images/DSC05868.jpg"
+                alt="Practitioner presence for tantra sessions in Ubud"
                 fill
                 sizes="(max-width: 768px) 100vw, 50vw"
                 style={{ objectFit: "cover" }}
-                quality={85}
+                quality={90}
+                priority
               />
             </div>
+          </div>
+          <div className="card" style={{ marginTop: 14, position: "relative", height: "250px", borderRadius: "var(--radius-md)", overflow: "hidden" }}>
+            <Image
+              src="/images/bali/DSC04934.jpg"
+              alt="Natural surroundings for tantra sessions in Ubud"
+              fill
+              sizes="(max-width: 768px) 100vw, 1200px"
+              style={{ objectFit: "cover" }}
+              quality={85}
+            />
           </div>
           <p style={{ marginTop: 16, textAlign: "center", color: "var(--color-text-muted)" }}>
             Sessions held in private Ubud temple space • Mobile sessions available to your villa

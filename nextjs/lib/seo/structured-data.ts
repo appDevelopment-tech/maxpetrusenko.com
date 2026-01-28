@@ -66,6 +66,7 @@ export function generateArticleSchema(data: {
 
 /**
  * Generate JSON-LD structured data for Person
+ * Generic person schema for root use
  */
 export function generatePersonSchema() {
   return {
@@ -73,7 +74,8 @@ export function generatePersonSchema() {
     "@type": "Person",
     name: siteConfig.author.name,
     url: siteConfig.url,
-    jobTitle: "Tech Builder & Somatic Practitioner",
+    jobTitle: "Founder & Creator",
+    description: "Creator of tech automation resources, tantra education, and somatic practice offerings.",
     worksFor: {
       "@type": "Organization",
       name: "Presence Atelier",
@@ -86,6 +88,81 @@ export function generatePersonSchema() {
       siteConfig.social.instagram,
       siteConfig.social.twitter,
     ].filter(Boolean),
+  };
+}
+
+/**
+ * Generate JSON-LD structured data for Person - Tech focused
+ * Use on tech pages to avoid brand ambiguity with tantra services
+ */
+export function generateTechPersonSchema() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name: siteConfig.author.name,
+    url: siteConfig.url,
+    jobTitle: "AI Automation Consultant",
+    description: "AI automation consultant specializing in Claude Code, n8n workflows, ChatGPT integrations, and workflow automation for creators and founders.",
+    worksFor: {
+      "@type": "Organization",
+      name: "Max Petrusenko Tech",
+      url: `${siteConfig.url}/tech`,
+    },
+    sameAs: [
+      siteConfig.social.github,
+      siteConfig.social.linkedin,
+      siteConfig.social.medium,
+    ].filter(Boolean),
+    knowsAbout: [
+      "Claude Code",
+      "Anthropic Claude",
+      "ChatGPT",
+      "OpenAI API",
+      "n8n",
+      "workflow automation",
+      "API development",
+      "TypeScript",
+      "Next.js",
+      "React",
+      "Node.js",
+      "AI automation",
+      "Answer Engine Optimization",
+      "AEO",
+    ],
+  };
+}
+
+/**
+ * Generate JSON-LD structured data for Person - Spirituality focused
+ * Use on spirituality/tantra pages for clear brand separation
+ */
+export function generateSpiritualityPersonSchema() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name: siteConfig.author.name,
+    url: siteConfig.url,
+    jobTitle: "Tantra & Somatic Practitioner",
+    description: "Professional tantra massage and somatic energy work practitioner. Certified in tantric practices, nervous system regulation, and trauma-informed bodywork.",
+    worksFor: {
+      "@type": "Organization",
+      name: "Presence Atelier",
+      url: siteConfig.externalLinks.atelier,
+    },
+    sameAs: [
+      siteConfig.social.instagram,
+      siteConfig.externalLinks.atelier,
+    ].filter(Boolean),
+    knowsAbout: [
+      "Tantra Massage",
+      "Somatic Energy Work",
+      "Nervous System Regulation",
+      "Trauma-Informed Bodywork",
+      "Breathwork",
+      "Conscious Touch",
+      "Kriya Yoga",
+      "Shambhavi Mahamudra",
+    ],
   };
 }
 
