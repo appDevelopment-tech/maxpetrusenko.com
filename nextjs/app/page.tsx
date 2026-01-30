@@ -8,8 +8,7 @@ import {
   generateBreadcrumbSchema,
   generateProfessionalServiceSchema,
   generateTechServiceSchema,
-  generateFAQSchema,
-  generateTechFAQSchema,
+  generateHomeFAQSchema,
   generateEnhancedPersonSchema,
   generateScheduleActionSchema,
   generateAggregateRatingSchema,
@@ -45,11 +44,8 @@ export default function HomePage() {
       {/* ProfessionalService schema for tech offerings */}
       <JsonLd type="ProfessionalService" data={generateTechServiceSchema()} />
 
-      {/* FAQ schema for somatic services */}
-      <JsonLd type="FAQPage" data={generateFAQSchema()} />
-
-      {/* FAQ schema for tech services */}
-      <JsonLd type="FAQPage" data={generateTechFAQSchema()} />
+      {/* Combined FAQ schema for both somatic and tech services */}
+      <JsonLd type="FAQPage" data={generateHomeFAQSchema()} />
 
       {/* Enhanced Person schema with social links */}
       <JsonLd type="Person" data={generateEnhancedPersonSchema()} />

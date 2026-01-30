@@ -30,6 +30,22 @@ const nextConfig: NextConfig = {
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
   },
 
+  // Redirects for old URLs (404 fixes for Google Search Console)
+  async redirects() {
+    return [
+      {
+        source: "/home",
+        destination: "/",
+        permanent: true, // 301 redirect
+      },
+      {
+        source: "/blog/spiritual-practices",
+        destination: "/spirituality",
+        permanent: true, // 301 redirect
+      },
+    ];
+  },
+
   // Performance headers
   async headers() {
     return [

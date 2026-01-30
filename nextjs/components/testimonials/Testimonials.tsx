@@ -1,11 +1,8 @@
 import { testimonials, type Testimonial } from "@/lib/cms/testimonials";
-import { JsonLd } from "@/components/seo/JsonLd";
-import { generateReviewSchema } from "@/lib/seo/structured-data";
-
 /**
  * Testimonials component
  *
- * Displays testimonials filtered by type with individual Review schemas for AI/SEO.
+ * Displays testimonials filtered by type.
  * If no testimonials exist, shows nothing (no empty state).
  */
 
@@ -22,19 +19,8 @@ export function Testimonials({ type, limit }: TestimonialsProps) {
     return null;
   }
 
-  const serviceName = type === "spirituality" ? "tantra" : type;
-
   return (
     <>
-      {/* Individual Review schemas for each testimonial */}
-      {filtered.map((testimonial, index) => (
-        <JsonLd
-          key={`review-${index}`}
-          type="Review"
-          data={generateReviewSchema(testimonial, serviceName)}
-        />
-      ))}
-
       <section className="section">
         <div className="section-head">
           <h2>What people say</h2>

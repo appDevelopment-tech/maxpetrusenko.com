@@ -600,6 +600,24 @@ export function generateTechFAQSchema() {
 }
 
 /**
+ * Generate combined FAQPage schema for the homepage
+ * Avoid duplicate FAQPage objects in a single page
+ */
+export function generateHomeFAQSchema() {
+  const somatic = generateFAQSchema();
+  const tech = generateTechFAQSchema();
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: [
+      ...(somatic.mainEntity ?? []),
+      ...(tech.mainEntity ?? []),
+    ],
+  };
+}
+
+/**
  * Generate JSON-LD structured data for SoftwareApplication
  * For tools, products, and software projects
  */
@@ -685,14 +703,15 @@ export function generateEventSchema(data: {
   name: string;
   description: string;
   url: string;
-  startDate?: string;
+  startDate: string; // Required by Google
   endDate?: string;
+  image?: string;
   location?: string;
   isAccessibleForFree?: boolean;
   organizer?: string;
   performer?: string;
   eventStatus?: "EventScheduled" | "EventMovedOnline" | "EventPostponed" | "EventCancelled";
-  eventAttendanceMode?: "offlineEventAttendanceMode" | "onlineEventAttendanceMode" | "mixedEventAttendanceMode";
+  eventAttendanceMode?: "OfflineEventAttendanceMode" | "OnlineEventAttendanceMode" | "MixedEventAttendanceMode";
 }) {
   return {
     "@context": "https://schema.org",
@@ -700,8 +719,11 @@ export function generateEventSchema(data: {
     name: data.name,
     description: data.description,
     url: data.url.startsWith("http") ? data.url : `${siteConfig.url}${data.url}`,
-    ...(data.startDate && { startDate: data.startDate }),
+    startDate: data.startDate,
     ...(data.endDate && { endDate: data.endDate }),
+    ...(data.image && {
+      image: data.image.startsWith("http") ? data.image : `${siteConfig.url}${data.image}`,
+    }),
     ...(data.location && {
       location: {
         "@type": "Place",
@@ -714,8 +736,8 @@ export function generateEventSchema(data: {
         },
       },
     }),
-    eventStatus: data.eventStatus || "https://schema.org/EventScheduled",
-    eventAttendanceMode: data.eventAttendanceMode || "https://schema.org/offlineEventAttendanceMode",
+    eventStatus: data.eventStatus || "EventScheduled",
+    eventAttendanceMode: data.eventAttendanceMode || "OfflineEventAttendanceMode",
     isAccessibleForFree: data.isAccessibleForFree ?? false,
     organizer: {
       "@type": "Person",
@@ -740,23 +762,39 @@ export function generateEventSchema(data: {
       priceCurrency: "USD",
       description: "Contact for pricing and availability. Private and corporate events available.",
       availability: "https://schema.org/Preorder",
+      validFrom: new Date().toISOString().split("T")[0],
     },
   };
 }
 
 /**
  * Generate Event schema for Mindfold Sanctuary events
- * Recurring event with placeholder dates (updated via WhatsApp)
+ * Recurring event - dates updated quarterly. Contact for next scheduled date.
  */
 export function generateMindfoldEventSchema() {
+  // Set next event date to 3 months from now (recurring quarterly)
+  const nextEventDate = new Date();
+  nextEventDate.setMonth(nextEventDate.getMonth() + 3);
+  const startDate = nextEventDate.toISOString().split("T")[0];
+
+  // Event duration: 3 hours
+  const endDateObj = new Date(nextEventDate);
+  endDateObj.setHours(endDateObj.getHours() + 3);
+  const endDate = endDateObj.toISOString();
+
+  const validFrom = new Date().toISOString().split("T")[0];
+
   return {
     "@context": "https://schema.org",
     "@type": "Event",
     name: "Mindfold Sanctuary - Blindfolded Presence Journey",
     description: "Group sensory subtraction workshop to expand perception and deepen presence. Blindfolded movement and contact exercises in a safe, non-sexual container. Learn to feel without seeing. Join solo or with friends. Corporate and private sessions available.",
     url: `${siteConfig.url}/mindfold/events`,
-    eventStatus: "https://schema.org/EventScheduled",
-    eventAttendanceMode: "https://schema.org/offlineEventAttendanceMode",
+    image: `${siteConfig.url}/images/DSC05871.jpg`,
+    startDate,
+    endDate,
+    eventStatus: "EventScheduled",
+    eventAttendanceMode: "OfflineEventAttendanceMode",
     isAccessibleForFree: false,
     location: {
       "@type": "Place",
@@ -806,6 +844,7 @@ export function generateMindfoldEventSchema() {
         price: "0",
         priceCurrency: "USD",
         availability: "https://schema.org/Preorder",
+        validFrom,
       },
       {
         "@type": "Offer",
@@ -815,12 +854,12 @@ export function generateMindfoldEventSchema() {
         price: "0",
         priceCurrency: "USD",
         availability: "https://schema.org/Preorder",
+        validFrom,
       },
     ],
     // Additional properties
     inLanguage: "en",
     typicalAgeRange: "18+",
-    previousStartDate: "2024-01-01",
     // Waiver requirement
     doorTime: "PT10M", // Arrive 10 minutes early
     // Code of conduct reference
@@ -1430,6 +1469,107 @@ export function generateTechSpeakableSchema() {
       {
         "@type": "Speakable",
         text: "Available remotely worldwide. Contact hello@maxpetrusenko.com for AI automation consulting.",
+      },
+    ],
+  };
+}
+
+/**
+ * ============================================================================
+ * COMBINED FAQ SCHEMA
+ * ============================================================================
+ */
+
+/**
+ * Generate combined FAQPage schema for homepage
+ * Merges somatic and tech FAQs into single FAQPage to avoid duplicate field issues
+ */
+export function generateCombinedFAQSchema() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: [
+      // Somatic/Tantra FAQs
+      {
+        "@type": "Question",
+        name: "What is tantra massage?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "Tantra massage is a somatic energy work practice combining breathwork, conscious touch, and presence techniques for nervous system regulation and deep embodied awareness. Sessions are non-sexual, focused on energetic expansion, conscious presence, and somatic rewiring. You remain clothed or draped throughout, with clear boundaries established together.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "Do you offer tantra massage for men, women, and couples?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "Yes. I offer 1:1 tantra massage and somatic energy work sessions for individuals of all genders, plus couples sessions for partners seeking to deepen connection and communication through somatic practice. Sessions are LGBTQ+ inclusive and tailored to each individual or couple's intentions.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "What's the difference between Nervous System Reset and Deep Repatterning?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "Nervous System Reset is a 90-minute tantra massage session to arrive safely in your body through breathwork and somatic awareness. Deep Repatterning is a longer arc for deep rewiring and transformation across multiple sessions. Kyo-tai Immersion is intensive bodywork for those ready for forceful guidance through contact practice.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "Where are you currently located for tantra sessions?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "I maintain regular bases in Ubud, Bali (Gianyar Regency) and Miami, Florida, serving the greater South Florida area from West Palm Beach to the Keys. I also travel globally for sessions. Current location is displayed on my website. I offer sessions at my private temple space and can travel to yours.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "Is tantra massage sexual?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "No. Tantra massage in my practice is a somatic energy work and healing modality, not a sexual service. While tantra works with energy and sensation, sessions are non-sexual with clear boundaries. I do not initiate or respond to sexual behavior. The focus is on nervous system regulation, embodied awareness, and conscious presence.",
+        },
+      },
+      // Tech/AI FAQs
+      {
+        "@type": "Question",
+        name: "What AI automation services do you offer?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "I specialize in Claude Code setup and optimization, n8n workflow automation, ChatGPT API integrations, and general AI tool consulting. I help creators and founders build scalable systems with AI.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "Can you help me set up Claude Code for my development team?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "Yes. I configure Claude Code with custom sub-agents, skills, and workflows tailored to your codebase. From basic setup to advanced multi-agent systems.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "Do you work with n8n for workflow automation?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "n8n is my primary automation tool. I build workflows connecting APIs, databases, and AI services. From simple automations to complex multi-step processes with error handling and data transformation.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "What's the difference between Claude Code and GitHub Copilot?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "Claude Code is a CLI tool by Anthropic that can read, write, and execute code. Unlike Copilot's inline suggestions, Claude Code can make architectural decisions, run tests, and handle multi-file refactors autonomously.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "How do I book a session or consultation?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "For tantra/somatic sessions, WhatsApp +1-786-543-6688 is fastest. You can also email hello@maxpetrusenko.com. For tech consulting, email with your project details. I'll respond to align on timing and approach.",
+        },
       },
     ],
   };

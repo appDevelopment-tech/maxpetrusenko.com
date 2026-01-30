@@ -1,7 +1,7 @@
 # AI-First SEO & GEO Implementation Checklist
 
 For: maxpetrusenko.com (Next.js app in /nextjs)
-Last Updated: 2026-01-19
+Last Updated: 2026-01-30
 
 ---
 
@@ -44,7 +44,7 @@ Last Updated: 2026-01-19
 - [x] `LocalBusiness` for Presence Atelier (Ubud)
 - [x] `Organization` for Mindfold Sanctuary
 - [ ] `FAQPage` schema for spirituality + mindfold FAQ sections (spirituality done; mindfold pending)
-- [ ] `Event` schema for Mindfold once dates/locations are published
+- [x] `Event` schema for Mindfold (rolling quarterly dates; update when fixed dates are published)
 
 ---
 
