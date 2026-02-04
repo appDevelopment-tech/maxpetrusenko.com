@@ -1,11 +1,10 @@
 import Link from "next/link";
 import Image from "next/image";
-import { notFound } from "next/navigation";
-import { fetchArticlesByTag, getAllTags } from "@/lib/cms/articles";
-import { siteConfig } from "@/config/site";
+import { fetchArticlesByTag } from "@/lib/cms/articles";
 import { generateMetadata as createMetadata, absoluteUrl } from "@/lib/seo/metadata";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { generateWebPageSchema, generateBreadcrumbSchema } from "@/lib/seo/structured-data";
+import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 
 interface TagPageProps {
@@ -15,20 +14,17 @@ interface TagPageProps {
 }
 
 // Edge runtime for Cloudflare Pages compatibility
-export const runtime = 'edge';
+export const runtime = "edge";
 
-/**
- * Generate metadata for each tag page dynamically
- */
 export async function generateMetadata({ params }: TagPageProps): Promise<Metadata> {
   const { tag } = await params;
   const decodedTag = decodeURIComponent(tag).replace(/-/g, " ");
 
   return createMetadata({
     title: `Articles tagged "${decodedTag}"`,
-    description: `Browse all articles tagged with "${decodedTag}" on ${siteConfig.name}.`,
-    ogType: "website",
+    description: `Articles and essays tagged with "${decodedTag}".`,
     canonical: absoluteUrl(`/blog/tag/${tag}`),
+    noindex: false,
   });
 }
 
@@ -42,23 +38,24 @@ export default async function TagPage({ params }: TagPageProps) {
 
   const decodedTag = decodeURIComponent(tag).replace(/-/g, " ");
 
-  const breadcrumbSchema = generateBreadcrumbSchema([
-    { name: "Home", url: "/" },
-    { name: "Blog", url: "/blog" },
-    { name: `Tag: ${decodedTag}`, url: `/blog/tag/${tag}` },
-  ]);
-
   return (
     <>
       <JsonLd
         type="WebPage"
         data={generateWebPageSchema({
           title: `Articles tagged "${decodedTag}"`,
-          description: `Browse all articles tagged with "${decodedTag}".`,
+          description: `Articles and essays tagged with "${decodedTag}".`,
           url: `/blog/tag/${tag}`,
         })}
       />
-      <JsonLd type="BreadcrumbList" data={breadcrumbSchema} />
+      <JsonLd
+        type="BreadcrumbList"
+        data={generateBreadcrumbSchema([
+          { name: "Home", url: "/" },
+          { name: "Blog", url: "/blog" },
+          { name: decodedTag, url: `/blog/tag/${tag}` },
+        ])}
+      />
 
       <div className="container">
         <section className="hero" style={{ paddingBottom: 40 }}>
@@ -68,67 +65,94 @@ export default async function TagPage({ params }: TagPageProps) {
             </div>
             <h1>#{decodedTag}</h1>
             <p>
-              {articles.length} article{articles.length !== 1 ? "s" : ""} tagged
-              with &quot;{decodedTag}&quot;
+              {articles.length} article{articles.length !== 1 ? "s" : ""} tagged with "{decodedTag}"
             </p>
+            <Link href="/blog" className="btn sm secondary" style={{ marginTop: 16 }}>
+              ← Back to all articles
+            </Link>
           </div>
         </section>
 
         <section className="section">
           <div className="article-list">
-            {articles.map((article) => (
-              <a
-                key={article.id}
-                className="article-card"
-                href={article.link}
-                target="_blank"
-                rel="noopener"
-              >
-                <Image
-                  className="article-thumb"
-                  src={article.image}
-                  alt={article.title}
-                  width={400}
-                  height={225}
-                />
-                <div className="article-body">
-                  <span className="article-title">{article.title}</span>
-                  <span className="article-sub">{article.excerpt}</span>
-                  <div className="article-meta">
-                    <span className="stat">
-                      <svg
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="1.8"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
-                        <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"></path>
-                        <circle cx="12" cy="12" r="3"></circle>
-                      </svg>
-                      {article.publishedAt
-                        ? new Date(article.publishedAt).toLocaleDateString()
-                        : "Recently"}
-                    </span>
-                    {article.tags.length > 0 && (
-                      <span className="stat">{article.tags[0]}</span>
-                    )}
-                  </div>
-                </div>
-              </a>
-            ))}
-          </div>
-        </section>
+            {articles.map((article) => {
+              const isLocal = article.link.startsWith("/");
 
-        <section className="section">
-          <Link
-            href="/blog"
-            className="btn secondary"
-            style={{ display: "inline-flex" }}
-          >
-            ← Back to Blog
-          </Link>
+              const cardContent = (
+                <>
+                  <Image
+                    className="article-thumb"
+                    src={article.image || "/images/og-default.svg"}
+                    alt={article.title}
+                    width={400}
+                    height={225}
+                  />
+                  <div className="article-body">
+                    <span className="article-title">{article.title}</span>
+                    <span className="article-sub">{article.excerpt}</span>
+                    <div className="article-meta">
+                      <span className="stat">
+                        <svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="1.8"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"></path>
+                          <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                        {article.publishedAt
+                          ? new Date(article.publishedAt).toLocaleDateString()
+                          : "Recently"}
+                      </span>
+                      {article.tags.length > 0 && (
+                        <span className="stat">{article.tags[0]}</span>
+                      )}
+                      <span className={`platform-badge ${isLocal ? "internal" : "external"}`}>
+                        {isLocal ? (
+                          <>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                              <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            Full Article
+                          </>
+                        ) : (
+                          <>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                              <polyline points="15 3 21 3 21 9"></polyline>
+                              <line x1="10" y1="14" x2="21" y2="3"></line>
+                            </svg>
+                            Medium
+                          </>
+                        )}
+                      </span>
+                    </div>
+                  </div>
+                </>
+              );
+
+              return (
+                isLocal ? (
+                  <Link key={article.id} className="article-card" href={article.link}>
+                    {cardContent}
+                  </Link>
+                ) : (
+                  <a
+                    key={article.id}
+                    className="article-card article-card--external"
+                    href={article.link}
+                    target="_blank"
+                    rel="noopener"
+                  >
+                    {cardContent}
+                  </a>
+                )
+              );
+            })}
+          </div>
         </section>
       </div>
     </>

@@ -39,7 +39,7 @@ export default function RootLayout({
       className={`${dmSans.variable} ${cormorant.variable} ${epilogue.variable}`}
       lang="en"
     >
-      <body className={dmSans.className}>
+      <body className={dmSans.className} suppressHydrationWarning>
         <GoogleAnalytics />
         <CloudflareAnalytics />
         <JsonLd type="Person" data={generatePersonSchema()} />

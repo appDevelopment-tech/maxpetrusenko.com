@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { generateMetadata, absoluteUrl } from "@/lib/seo/metadata";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { generateWebPageSchema, generateTechArticleSchema, generateBreadcrumbSchema, generateScheduleActionSchema, generateTechPersonSchema } from "@/lib/seo/structured-data";
@@ -8,6 +9,7 @@ export const metadata = generateMetadata({
   description: "How AI answer engines like ChatGPT, Claude, and Perplexity evaluate and score websites. Learn the factors that influence AI citation, attribution, and recommendation in 2025.",
   ogType: "article",
   canonical: absoluteUrl("/tech/articles/generative-ai-score-websites"),
+  ogImage: "/images/article-covers/tech-generative-ai-score.svg",
   keywords: ["AI score", "website scoring", "AEO", "GEO", "AI evaluation", "answer engines", "ChatGPT", "Claude", "Perplexity"],
 });
 
@@ -19,7 +21,7 @@ export default function GenerativeAIScoreArticle() {
         data={generateTechArticleSchema({
           headline: "Generative AI Score for Websites - What AI Engines Value",
           description: "How AI answer engines like ChatGPT, Claude, and Perplexity evaluate and score websites. Learn the factors that influence AI citation, attribution, and recommendation in 2025.",
-          image: "/images/og-default.svg",
+          image: "/images/article-covers/tech-generative-ai-score.svg",
           url: "/tech/articles/generative-ai-score-websites",
           datePublished: "2025-01-28",
           author: "Max Petrusenko",
@@ -71,6 +73,17 @@ export default function GenerativeAIScoreArticle() {
               <span>By Max Petrusenko</span>
             </div>
           </header>
+
+          <div style={{ maxWidth: 900, margin: "26px auto 32px" }}>
+            <Image
+              src="/images/article-covers/tech-generative-ai-score.svg"
+              alt="Prompt-based cover for generative AI scoring article"
+              width={1344}
+              height={768}
+              style={{ borderRadius: "var(--radius)" }}
+              priority
+            />
+          </div>
 
           <div className="article-content">
             <p className="lead">

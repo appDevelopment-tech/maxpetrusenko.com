@@ -262,7 +262,7 @@ export function generateProfessionalServiceSchema() {
     "areaServed": [...SERVICE_LOCATIONS.bali, ...SERVICE_LOCATIONS.florida],
     "aggregateRating": {
       "@type": "AggregateRating",
-      "ratingValue:": "4.9",
+      "ratingValue": "4.9",
       "reviewCount": spiritualityTestimonials.length.toString(),
       "bestRating": "5",
       "worstRating": "1",
@@ -438,13 +438,15 @@ export function generateTechServiceSchema() {
     "@context": "https://schema.org",
     "@type": "ProfessionalService",
     name: "Max Petrusenko - AI & Automation Consultant",
-    aggregateRating: techTestimonials.length > 0 ? {
-      "@type": "AggregateRating",
-      ratingValue: "4.9",
-      reviewCount: techTestimonials.length.toString(),
-      bestRating: "5",
-      worstRating: "1",
-    } : undefined,
+    ...(techTestimonials.length > 0 ? {
+      aggregateRating: {
+        "@type": "AggregateRating",
+        ratingValue: "4.9",
+        reviewCount: techTestimonials.length.toString(),
+        bestRating: "5",
+        worstRating: "1",
+      }
+    } : {}),
     description: "AI automation consultant specializing in Claude Code, n8n workflows, ChatGPT integrations, and workflow automation for creators and founders. Available remotely worldwide and in-person in Miami, Ubud Bali, and while traveling.",
     url: `${siteConfig.url}/tech`,
     telephone: "+1-786-543-6688",

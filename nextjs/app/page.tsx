@@ -72,6 +72,7 @@ export default function HomePage() {
           src="/images/DSC05871.jpg"
           alt="Max Petrusenko - Tech builder & somatic practitioner"
           fill
+          priority
           sizes="100vw"
           style={{ objectFit: "cover", objectPosition: "center" }}
           quality={90}
@@ -159,10 +160,10 @@ export default function HomePage() {
           </div>
           <div className="tweet-card">
             <Image
-              src="https://pbs.twimg.com/media/GxxJBKwW4AAUxYs?format=jpg&name=900x900"
+              src="https://pbs.twimg.com/media/GxxJBKwW4AAUxYs?format=jpg&name=large"
               alt="Claude Code sub-agents overview"
-              width={400}
-              height={400}
+              width={1600}
+              height={900}
             />
             <div>
               <h3>Top post</h3>

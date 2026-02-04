@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { generateMetadata, absoluteUrl } from "@/lib/seo/metadata";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { generateTechArticleSchema, generateBreadcrumbSchema, generateScheduleActionSchema } from "@/lib/seo/structured-data";
@@ -8,6 +9,7 @@ export const metadata = generateMetadata({
   description: "Complete guide to building production-grade automations with n8n. Learn API integration patterns, error handling, retry logic, custom nodes, and monitoring for reliable business workflows.",
   ogType: "article",
   canonical: absoluteUrl("/tech/articles/n8n-workflow-automation"),
+  ogImage: "/images/article-covers/tech-n8n-workflow.svg",
   keywords: ["n8n", "workflow automation", "API integration", "no-code", "business automation", "webhooks"],
 });
 
@@ -19,7 +21,7 @@ export default function N8nWorkflowArticle() {
         data={generateTechArticleSchema({
           headline: "n8n Workflow Automation: From Zero to Production",
           description: "Complete guide to building production-grade automations with n8n. API integration patterns, error handling, retry logic, custom nodes.",
-          image: "/images/og-default.svg",
+          image: "/images/article-covers/tech-n8n-workflow.svg",
           url: "/tech/articles/n8n-workflow-automation",
           datePublished: "2026-01-24",
           author: "Max Petrusenko",
@@ -61,6 +63,17 @@ export default function N8nWorkflowArticle() {
               <span>By Max Petrusenko</span>
             </div>
           </header>
+
+          <div style={{ maxWidth: 900, margin: "26px auto 32px" }}>
+            <Image
+              src="/images/article-covers/tech-n8n-workflow.svg"
+              alt="Prompt-based cover for n8n workflow automation article"
+              width={1344}
+              height={768}
+              style={{ borderRadius: "var(--radius)" }}
+              priority
+            />
+          </div>
 
           <div className="article-content">
             <p className="lead">

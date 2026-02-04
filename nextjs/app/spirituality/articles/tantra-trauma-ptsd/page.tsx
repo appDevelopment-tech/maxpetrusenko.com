@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { siteConfig } from "@/config/site";
+import Image from "next/image";
 import { generateMetadata, absoluteUrl } from "@/lib/seo/metadata";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { generateArticleSchema, generateBreadcrumbSchema } from "@/lib/seo/structured-data";
@@ -9,6 +9,7 @@ export const metadata = generateMetadata({
   description: "Discover how tantra massage in Ubud, Bali helps release trauma and regulate the nervous system through somatic touch, breathwork, and conscious presence. Evidence-based approach to PTSD recovery.",
   ogType: "article",
   canonical: absoluteUrl("/spirituality/articles/tantra-trauma-ptsd"),
+  ogImage: "/images/article-covers/spirit-trauma-ptsd.svg",
 });
 
 export default function TantraTraumaArticle() {
@@ -19,7 +20,7 @@ export default function TantraTraumaArticle() {
         data={generateArticleSchema({
           title: "Tantra Massage for Trauma & PTSD: How Somatic Touch Rewires Your Nervous System",
           description: "Discover how tantra massage helps release trauma and regulate the nervous system through somatic touch and breathwork.",
-          image: "/images/og-default.svg",
+          image: "/images/article-covers/spirit-trauma-ptsd.svg",
           url: "/spirituality/articles/tantra-trauma-ptsd",
           datePublished: "2026-01-17",
           dateModified: "2026-01-17",
@@ -60,6 +61,17 @@ export default function TantraTraumaArticle() {
               <span>By Max Petrusenko</span>
             </div>
           </header>
+
+          <div style={{ maxWidth: 900, margin: "26px auto 32px" }}>
+            <Image
+              src="/images/article-covers/spirit-trauma-ptsd.svg"
+              alt="Mountain image representing grounded contemplative practice"
+              width={1344}
+              height={768}
+              style={{ borderRadius: "var(--radius)" }}
+              priority
+            />
+          </div>
 
           <div className="article-content">
             <p className="lead">

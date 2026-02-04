@@ -1,7 +1,7 @@
 # AI-First SEO & GEO Implementation Checklist
 
 For: maxpetrusenko.com (Next.js app in /nextjs)
-Last Updated: 2026-01-30
+Last Updated: 2026-02-02
 
 ---
 
@@ -22,6 +22,10 @@ Last Updated: 2026-01-30
 - [x] Mindfold canonical set to https://www.mindfoldsanctuary.com/ (subdomain will 301 later)
 - [x] Atelier canonical set to https://atelier.maxpetrusenko.com/
 - [x] Subdomain/site `robots.txt`, `sitemap.xml`, and `llms.txt` added for Mindfold + Atelier
+- [x] Blog now uses local authored routes as primary (`/tech/articles/*`, `/spirituality/blog/*`) with Medium archive fallback
+- [x] `/tech/articles` hub route added (resolves breadcrumb target and strengthens internal links)
+- [x] Sitemap mismatch fixed for missing `/tech/articles/seo-is-dead` and `/tech/articles/generative-engine-optimization-geo`
+- [x] `/spirituality/articles` hub added with linked long-form pages
 - [ ] Main `robots.txt` blocks `/atelier/` and `/mindfold/` path duplicates
 
 ---
@@ -52,6 +56,7 @@ Last Updated: 2026-01-30
 
 - [x] Add 3-5 tech case studies with explicit outcomes (metrics)
 - [x] Add 2-3 tech testimonials with names/roles (or anonymized)
+- [x] Add high-intent tech content pages (OpenClaw installs, GEO framework, SEO vs AEO)
 - [ ] Add a concise "services overview" section with bullet facts on `tech.html` and `spirituality.html`
 - [ ] Add an explicit GEO block for current location + service area
 
@@ -71,6 +76,7 @@ Monthly (1-2 hours):
 - [ ] Query: "Who is Max Petrusenko?"
 - [ ] Query: "Somatic practitioner in Ubud" and "Product builder for creators"
 - [ ] Capture citations and update the fact blocks accordingly
+- [x] Add pre-deploy verification command (`npm run verify:predeploy`)
 
 ---
 
@@ -78,26 +84,26 @@ Monthly (1-2 hours):
 
 | Area | Status |
 | --- | --- |
-| Crawlability | ✅ Complete (main + subdomains) |
+| Crawlability | ✅ Complete (main + subdomains; blog + spirituality hubs linked) |
 | Metadata | ✅ Complete |
 | Structured Data | ✅ Core schemas in place |
-| Content Depth | ✅ Outcomes/testimonials added |
+| Content Depth | ✅ Outcomes/testimonials + high-intent guides |
 | GEO | ⚠️ Basic only |
 
-**Overall: ~75% complete**
+**Overall: ~86% complete**
 
 ---
 
 ## Website Review & Rating (Current)
 
-Overall Rating: **7/10**
+Overall Rating: **8.5/10**
 
 Breakdown:
 - Technical discovery (robots/sitemap/llms): 9/10
 - Metadata & canonicalization: 8/10
-- Structured data: 7/10
-- Content depth & evidence: 5/10
-- GEO clarity: 6/10
+- Structured data: 8/10
+- Content depth & evidence: 8/10
+- GEO clarity: 7/10
 
 ---
 

@@ -229,9 +229,7 @@ export default function TechPage() {
               <div className="hero-actions" style={{ marginTop: 16 }}>
                 <a
                   className="btn secondary"
-                  href="https://medium.com/p/65b991356c25"
-                  target="_blank"
-                  rel="noopener"
+                  href="/tech/articles/claude-code-setup"
                 >
                   Read guide
                 </a>
@@ -445,6 +443,84 @@ export default function TechPage() {
             </div>
             <a
               className="article-card"
+              href="https://immigrateful.co"
+              target="_blank"
+              rel="noopener"
+            >
+              <Image
+                className="article-thumb"
+                src="https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&w=900&q=80"
+                alt="Immigrateful immigration platform"
+                width={400}
+                height={225}
+              />
+              <div className="article-body">
+                <span className="article-title">Immigrateful</span>
+                <span className="article-sub">
+                  Immigration news platform with Wix + Velo frontend, Node.js RSS automation,
+                  ChatGPT content rewriting, and WhatsApp approval workflows.
+                </span>
+                <div className="article-meta">
+                  <span className="stat">Live</span>
+                  <span className="stat">Wix + Velo</span>
+                  <span className="stat">AI automation</span>
+                </div>
+              </div>
+            </a>
+            <a
+              className="article-card"
+              href="https://geo-analyzer.com"
+              target="_blank"
+              rel="noopener"
+            >
+              <Image
+                className="article-thumb"
+                src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=900&q=80"
+                alt="GEO Analyzer dashboard"
+                width={400}
+                height={225}
+              />
+              <div className="article-body">
+                <span className="article-title">Geo-Analyzer</span>
+                <span className="article-sub">
+                  AI-powered GEO readiness scanner. Scores websites for AI recommendation
+                  visibility using OpenAI GPT-5.2, with real-time reports and email delivery.
+                </span>
+                <div className="article-meta">
+                  <span className="stat">Live</span>
+                  <span className="stat">Next.js</span>
+                  <span className="stat">OpenAI</span>
+                </div>
+              </div>
+            </a>
+            <a
+              className="article-card"
+              href="https://x.com/petrusenko_max/status/1953516625161834824"
+              target="_blank"
+              rel="noopener"
+            >
+              <Image
+                className="article-thumb"
+                src="https://pbs.twimg.com/media/GxxJBKwW4AAUxYs?format=jpg&name=900x900"
+                alt="Claude Code sub-agents results"
+                width={400}
+                height={225}
+              />
+              <div className="article-body">
+                <span className="article-title">Claude Code Sub-Agents in Production</span>
+                <span className="article-sub">
+                  Gave Claude AI write access to production code. $253k saved annually,
+                  3x faster delivery, 73% fewer bugs. Zero regressions across 127 PRs.
+                </span>
+                <div className="article-meta">
+                  <span className="stat">Featured</span>
+                  <span className="stat">Anthropic</span>
+                  <span className="stat">Vercel</span>
+                </div>
+              </div>
+            </a>
+            <a
+              className="article-card"
               href={siteConfig.social.github}
               target="_blank"
               rel="noopener"
@@ -498,7 +574,7 @@ export default function TechPage() {
         <section className="section">
           <div className="section-head">
             <h2>Recent articles</h2>
-            <span className="section-note">Security, automation, and systems.</span>
+            <span className="section-note">Security, automation, and systems. Also published on Medium.</span>
           </div>
           <div className="article-list">
             <a
@@ -630,6 +706,42 @@ export default function TechPage() {
                 </div>
               </div>
             </a>
+          </div>
+        </section>
+
+        <section className="section">
+          <div className="section-head">
+            <h2>Implementation playbooks</h2>
+            <span className="section-note">High-intent guides for teams shipping AI systems.</span>
+          </div>
+          <div className="cards-3 grid">
+            <div className="card">
+              <h3>OpenClaw installs</h3>
+              <p>
+                Secure setup sequence, environment hardening, and rollout guardrails.
+              </p>
+              <Link className="btn secondary" href="/tech/articles/openclaw-installation-playbook" style={{ marginTop: 12 }}>
+                Read playbook
+              </Link>
+            </div>
+            <div className="card">
+              <h3>Generative Engine Optimization</h3>
+              <p>
+                Practical GEO system: entity clarity, citation structure, conversion flow.
+              </p>
+              <Link className="btn secondary" href="/tech/articles/generative-engine-optimization-geo" style={{ marginTop: 12 }}>
+                Read framework
+              </Link>
+            </div>
+            <div className="card">
+              <h3>AEO + search strategy</h3>
+              <p>
+                How to combine classic SEO and answer-engine visibility without content bloat.
+              </p>
+              <Link className="btn secondary" href="/tech/articles/answer-engine-optimization-aeo" style={{ marginTop: 12 }}>
+                Read guide
+              </Link>
+            </div>
           </div>
         </section>
 

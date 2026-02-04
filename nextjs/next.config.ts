@@ -11,6 +11,14 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
+        hostname: "cdn-images-1.medium.com",
+      },
+      {
+        protocol: "https",
+        hostname: "medium.com",
+      },
+      {
+        protocol: "https",
         hostname: "pbs.twimg.com",
       },
       {
@@ -39,7 +47,22 @@ const nextConfig: NextConfig = {
         permanent: true, // 301 redirect
       },
       {
+        source: "/home/",
+        destination: "/",
+        permanent: true, // 301 redirect
+      },
+      {
         source: "/blog/spiritual-practices",
+        destination: "/spirituality",
+        permanent: true, // 301 redirect
+      },
+      {
+        source: "/blog/spiritual-practices/",
+        destination: "/spirituality",
+        permanent: true, // 301 redirect
+      },
+      {
+        source: "/blog/spiritual-practices/:path*",
         destination: "/spirituality",
         permanent: true, // 301 redirect
       },

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import { getProjectBySlug, getProjects, getProjectsByTag } from "@/lib/cms/projects";
+import { getProjectBySlug, getProjects } from "@/lib/cms/projects";
 import { siteConfig } from "@/config/site";
 import { generateMetadata as createMetadata, absoluteUrl } from "@/lib/seo/metadata";
 import { JsonLd } from "@/components/seo/JsonLd";

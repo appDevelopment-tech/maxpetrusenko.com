@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { siteConfig } from "@/config/site";
+import Image from "next/image";
 import { generateMetadata, absoluteUrl } from "@/lib/seo/metadata";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { generateArticleSchema, generateBreadcrumbSchema } from "@/lib/seo/structured-data";
@@ -9,6 +9,7 @@ export const metadata = generateMetadata({
   description: "Nervous about your first tantra session? This guide walks you through everything from arrival to integration. Learn what to expect, how to prepare, and why first-timers are welcome in Ubud, Bali.",
   ogType: "article",
   canonical: absoluteUrl("/spirituality/blog/what-to-expect-first-tantra-session"),
+  ogImage: "/images/article-covers/spirit-first-session.svg",
 });
 
 export default function FirstTantraSessionBlogPost() {
@@ -19,7 +20,7 @@ export default function FirstTantraSessionBlogPost() {
         data={generateArticleSchema({
           title: "What to Expect in Your First Tantra Massage Session",
           description: "A complete guide to your first tantra massage session in Ubud, Bali. Learn what to expect from arrival to integration.",
-          image: "/images/og-default.svg",
+          image: "/images/article-covers/spirit-first-session.svg",
           url: "/spirituality/blog/what-to-expect-first-tantra-session",
           datePublished: "2026-01-15",
           dateModified: "2026-01-15",
@@ -59,6 +60,17 @@ export default function FirstTantraSessionBlogPost() {
               <span>By Max Petrusenko</span>
             </div>
           </header>
+
+          <div style={{ maxWidth: 900, margin: "26px auto 32px" }}>
+            <Image
+              src="/images/article-covers/spirit-first-session.svg"
+              alt="Ubud landscape for first session context"
+              width={1600}
+              height={900}
+              style={{ borderRadius: "var(--radius)" }}
+              priority
+            />
+          </div>
 
           <div className="article-content">
             <p className="lead">

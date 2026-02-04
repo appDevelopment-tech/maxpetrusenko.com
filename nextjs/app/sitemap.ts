@@ -1,6 +1,6 @@
 import { MetadataRoute } from "next";
 import { siteConfig } from "@/config/site";
-import { fetchArticles } from "@/lib/cms/articles";
+import { fetchArticles, isLocalArticle, getAllTags } from "@/lib/cms/articles";
 import { getProjects } from "@/lib/cms/projects";
 import { getCaseStudies } from "@/lib/cms/case-studies";
 
@@ -9,7 +9,7 @@ import { getCaseStudies } from "@/lib/cms/case-studies";
  *
  * Generates a sitemap with all static pages plus dynamic content:
  * - Static pages (home, links, tech, spirituality, about, etc.)
- * - Blog articles from Medium RSS
+ * - Blog archive entries (Medium mirrors)
  * - Project pages
  * - Tag pages
  */
@@ -85,6 +85,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.7,
     },
     {
+      url: `${baseUrl}/tech/articles`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.8,
+    },
+    {
       url: `${baseUrl}/tech/case-studies/claude-code-automation`,
       lastModified: new Date(),
       changeFrequency: "monthly",
@@ -133,6 +139,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "monthly",
       priority: 0.9,
     },
+    {
+      url: `${baseUrl}/tech/articles/openclaw-installation-playbook`,
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.8,
+    },
     // Somatic cluster
     {
       url: `${baseUrl}/somatic`,
@@ -179,6 +191,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.7,
     },
     {
+      url: `${baseUrl}/spirituality/articles`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.8,
+    },
+    {
       url: `${baseUrl}/spirituality/blog`,
       lastModified: new Date(),
       changeFrequency: "weekly",
@@ -190,18 +208,45 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "monthly",
       priority: 0.7,
     },
+    {
+      url: `${baseUrl}/spirituality/blog/questions-to-ask-tantra-practitioner`,
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/spirituality/blog/tantra-vs-regular-massage`,
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/spirituality/blog/temple-space-preparation`,
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.7,
+    },
   ];
 
-  // Dynamic: Articles from Medium RSS
+  // Dynamic: Blog archive pages (exclude local route-first articles)
   const articles = await fetchArticles();
   const articlePages: MetadataRoute.Sitemap = articles
-    .filter((article) => article.slug)
+    .filter((article) => article.slug && !isLocalArticle(article))
     .map((article) => ({
       url: `${baseUrl}/blog/${article.slug}`,
       lastModified: new Date(article.publishedAt),
       changeFrequency: "monthly" as const,
       priority: 0.6,
     }));
+
+  // Dynamic: Tag pages for blog filtering
+  const tags = await getAllTags();
+  const tagPages: MetadataRoute.Sitemap = tags.map((tag) => ({
+    url: `${baseUrl}/blog/tag/${tag.slug}`,
+    lastModified: new Date(),
+    changeFrequency: "weekly" as const,
+    priority: 0.5,
+  }));
 
   // Dynamic: Projects
   const projects = await getProjects();
@@ -225,7 +270,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     url.endsWith("/") && url !== baseUrl ? url.slice(0, -1) : url;
 
   const seen = new Set<string>();
-  const allPages = [...staticPages, ...articlePages, ...projectPages, ...caseStudyPages];
+  const allPages = [...staticPages, ...articlePages, ...tagPages, ...projectPages, ...caseStudyPages];
 
   return allPages.reduce<MetadataRoute.Sitemap>((acc, page) => {
     const normalizedUrl = normalizeUrl(page.url);

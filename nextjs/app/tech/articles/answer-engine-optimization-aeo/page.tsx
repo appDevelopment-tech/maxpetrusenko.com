@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { generateMetadata, absoluteUrl } from "@/lib/seo/metadata";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { generateWebPageSchema, generateTechArticleSchema, generateBreadcrumbSchema, generateScheduleActionSchema, generateTechPersonSchema } from "@/lib/seo/structured-data";
@@ -8,6 +9,7 @@ export const metadata = generateMetadata({
   description: "Complete guide to Answer Engine Optimization (AEO) for ChatGPT, Claude, Perplexity, and AI search. Learn how to optimize your website for AI-powered answer engines with structured data, AI guidance files, and entity optimization.",
   ogType: "article",
   canonical: absoluteUrl("/tech/articles/answer-engine-optimization-aeo"),
+  ogImage: "/images/article-covers/tech-aeo-guide.svg",
   keywords: ["AEO", "Answer Engine Optimization", "GEO", "Generative Engine Optimization", "AI SEO", "ChatGPT optimization", "Claude optimization", "AI search"],
 });
 
@@ -19,7 +21,7 @@ export default function AEOArticle() {
         data={generateTechArticleSchema({
           headline: "Answer Engine Optimization (AEO) Guide for 2025",
           description: "Complete guide to Answer Engine Optimization (AEO) for ChatGPT, Claude, Perplexity, and AI search. Learn how to optimize your website for AI-powered answer engines with structured data, AI guidance files, and entity optimization.",
-          image: "/images/og-default.svg",
+          image: "/images/article-covers/tech-aeo-guide.svg",
           url: "/tech/articles/answer-engine-optimization-aeo",
           datePublished: "2025-01-28",
           author: "Max Petrusenko",
@@ -71,6 +73,17 @@ export default function AEOArticle() {
               <span>By Max Petrusenko</span>
             </div>
           </header>
+
+          <div style={{ maxWidth: 900, margin: "26px auto 32px" }}>
+            <Image
+              src="/images/article-covers/tech-aeo-guide.svg"
+              alt="AEO strategy hero image"
+              width={1344}
+              height={768}
+              style={{ borderRadius: "var(--radius)" }}
+              priority
+            />
+          </div>
 
           <div className="article-content">
             <p className="lead">

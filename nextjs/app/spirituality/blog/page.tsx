@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { siteConfig } from "@/config/site";
+import Image from "next/image";
 import { generateMetadata, absoluteUrl } from "@/lib/seo/metadata";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { generateWebPageSchema, generateBreadcrumbSchema } from "@/lib/seo/structured-data";
@@ -16,7 +16,8 @@ const BLOG_POSTS = [
     slug: "what-to-expect-first-tantra-session",
     title: "What to Expect in Your First Tantra Massage Session",
     excerpt: "Nervous about your first tantra session? This guide walks you through everything from arrival to integration, so you can feel prepared and at ease.",
-    date: "2026-01-15",
+    image: "/images/article-covers/spirit-first-session.svg",
+    date: "2026-02-02",
     readTime: "6 min read",
     category: "Beginner's Guide",
   },
@@ -24,24 +25,27 @@ const BLOG_POSTS = [
     slug: "questions-to-ask-tantra-practitioner",
     title: "5 Questions to Ask Before Booking a Tantra Massage",
     excerpt: "Not all tantra practitioners are the same. Here are the essential questions to ask to ensure safety, professionalism, and alignment.",
-    date: "2026-01-10",
-    readTime: "5 min read",
+    image: "/images/article-covers/spirit-questions-screening.svg",
+    date: "2026-02-02",
+    readTime: "7 min read",
     category: "Safety & Boundaries",
   },
   {
     slug: "tantra-vs-regular-massage",
     title: "Tantra vs. Regular Massage: What's the Difference?",
     excerpt: "Understanding the key differences between tantra massage and traditional spa massage. Learn about nervous system work, energy awareness, and conscious presence.",
-    date: "2026-01-05",
-    readTime: "7 min read",
+    image: "/images/article-covers/spirit-vs-massage.svg",
+    date: "2026-02-02",
+    readTime: "8 min read",
     category: "Educational",
   },
   {
     slug: "temple-space-preparation",
     title: "How I Prepare the Temple Space for Tantra Sessions",
     excerpt: "A behind-the-scenes look at how I create a sacred, safe container for tantra work in Ubud. From temperature to scent to energetic clearing.",
-    date: "2026-01-01",
-    readTime: "4 min read",
+    image: "/images/article-covers/spirit-temple-space.svg",
+    date: "2026-02-02",
+    readTime: "6 min read",
     category: "Behind the Scenes",
   },
 ];
@@ -94,6 +98,13 @@ export default function SpiritualityBlogPage() {
                 className="article-card"
                 href={`/spirituality/blog/${post.slug}`}
               >
+                <Image
+                  className="article-thumb"
+                  src={post.image}
+                  alt={post.title}
+                  width={400}
+                  height={225}
+                />
                 <div className="article-body">
                   <span className="article-category">{post.category}</span>
                   <span className="article-title">{post.title}</span>
@@ -106,6 +117,18 @@ export default function SpiritualityBlogPage() {
                 </div>
               </Link>
             ))}
+          </div>
+        </section>
+
+        <section className="section">
+          <div className="card" style={{ textAlign: "center", padding: "40px" }}>
+            <h3>Need deeper reading first?</h3>
+            <p style={{ marginBottom: 14 }}>
+              Browse the full spirituality article library before booking.
+            </p>
+            <Link className="btn secondary" href="/spirituality/articles" style={{ marginBottom: 18 }}>
+              Open Spirituality Articles
+            </Link>
           </div>
         </section>
 

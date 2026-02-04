@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
-import { parseMediumRSS } from "@/lib/api/medium";
-import { MEDIUM_RSS_URL, FEATURED_ARTICLE_IDS } from "@/config/site";
+import { fetchFeaturedArticles } from "@/lib/cms/articles";
 import type { ArticlesResponse } from "@/types";
 
 // Edge runtime for Cloudflare compatibility
@@ -10,8 +9,8 @@ export const dynamic = "force-dynamic";
 /**
  * GET /api/articles
  *
- * Fetches articles from Medium RSS feed.
- * Returns top 3 articles with caching.
+ * Fetches featured articles (local-first, then Medium archive).
+ * Returns top 3 entries with caching.
  */
 export async function GET() {
   try {
@@ -27,12 +26,7 @@ export async function GET() {
         });
       }
 
-      // Fetch and parse articles
-      const articles = await parseMediumRSS(
-        MEDIUM_RSS_URL,
-        FEATURED_ARTICLE_IDS,
-        3
-      );
+      const articles = await fetchFeaturedArticles();
 
       const response = NextResponse.json(
         { articles } as ArticlesResponse,
@@ -51,11 +45,7 @@ export async function GET() {
     }
 
     // Fallback without cache
-    const articles = await parseMediumRSS(
-      MEDIUM_RSS_URL,
-      FEATURED_ARTICLE_IDS,
-      3
-    );
+    const articles = await fetchFeaturedArticles();
 
     return NextResponse.json(
       { articles } as ArticlesResponse,

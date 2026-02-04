@@ -201,6 +201,50 @@ export default function SpiritualityPage() {
 
         <Testimonials type="spirituality" />
 
+        <section className="section">
+          <div className="section-head">
+            <h2>Read Before You Book</h2>
+            <span className="section-note">
+              Direct answers to first-timer questions, boundaries, and safety.
+            </span>
+          </div>
+          <div className="cards-3 grid">
+            <div className="card">
+              <h3>Spirituality Articles</h3>
+              <p>
+                Core guides on trauma-aware touch, preparation, and embodied integration.
+              </p>
+              <Link className="btn secondary" href="/spirituality/articles" style={{ marginTop: 12 }}>
+                View Articles
+              </Link>
+            </div>
+            <div className="card">
+              <h3>Spirituality Blog</h3>
+              <p>
+                Practical posts answering what clients usually ask before their first session.
+              </p>
+              <Link className="btn secondary" href="/spirituality/blog" style={{ marginTop: 12 }}>
+                Open Blog
+              </Link>
+            </div>
+            <div className="card">
+              <h3>Direct Q&A</h3>
+              <p>
+                If anything is unclear, ask directly and I&apos;ll answer before you commit.
+              </p>
+              <a
+                className="btn secondary"
+                href="https://wa.me/17865436688?text=Hi%20Max%2C%20I%20have%20a%20few%20questions%20before%20booking."
+                target="_blank"
+                rel="noopener"
+                style={{ marginTop: 12 }}
+              >
+                Ask on WhatsApp
+              </a>
+            </div>
+          </div>
+        </section>
+
         {/* Atmospheric detail image for visual separation */}
         <div style={{ position: "relative", width: "100%", height: "160px", borderRadius: "var(--radius-md)", overflow: "hidden", marginBottom: "var(--space-8)" }}>
           <Image

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { generateMetadata, absoluteUrl } from "@/lib/seo/metadata";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { generateTechArticleSchema, generateBreadcrumbSchema, generateScheduleActionSchema } from "@/lib/seo/structured-data";
@@ -8,6 +9,7 @@ export const metadata = generateMetadata({
   description: "Complete guide to integrating ChatGPT API into your products. Learn authentication, prompt engineering, function calling, RAG implementation, fine-tuning, and production considerations.",
   ogType: "article",
   canonical: absoluteUrl("/tech/articles/chatgpt-api-integration"),
+  ogImage: "/images/article-covers/tech-chatgpt-api.svg",
   keywords: ["ChatGPT", "OpenAI API", "prompt engineering", "RAG", "function calling", "fine-tuning"],
 });
 
@@ -19,7 +21,7 @@ export default function ChatGPTApiArticle() {
         data={generateTechArticleSchema({
           headline: "ChatGPT API Integration Best Practices",
           description: "Complete guide to integrating ChatGPT API into your products. Authentication, prompt engineering, function calling, RAG.",
-          image: "/images/og-default.svg",
+          image: "/images/article-covers/tech-chatgpt-api.svg",
           url: "/tech/articles/chatgpt-api-integration",
           datePublished: "2026-01-24",
           author: "Max Petrusenko",
@@ -61,6 +63,17 @@ export default function ChatGPTApiArticle() {
               <span>By Max Petrusenko</span>
             </div>
           </header>
+
+          <div style={{ maxWidth: 900, margin: "26px auto 32px" }}>
+            <Image
+              src="/images/article-covers/tech-chatgpt-api.svg"
+              alt="Prompt-based cover for ChatGPT API integration article"
+              width={1344}
+              height={768}
+              style={{ borderRadius: "var(--radius)" }}
+              priority
+            />
+          </div>
 
           <div className="article-content">
             <p className="lead">

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { generateMetadata, absoluteUrl } from "@/lib/seo/metadata";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { generateTechArticleSchema, generateBreadcrumbSchema, generateScheduleActionSchema } from "@/lib/seo/structured-data";
@@ -8,6 +9,7 @@ export const metadata = generateMetadata({
   description: "Complete guide to configuring Claude Code with custom sub-agents, skills, and workflows for development teams. Learn how to set up multi-agent systems, create custom skills, and train your team for maximum productivity.",
   ogType: "article",
   canonical: absoluteUrl("/tech/articles/claude-code-setup"),
+  ogImage: "/images/article-covers/tech-claude-code-setup.svg",
   keywords: ["Claude Code", "Anthropic", "AI development", "sub-agents", "custom skills", "multi-agent systems"],
 });
 
@@ -19,7 +21,7 @@ export default function ClaudeCodeSetupArticle() {
         data={generateTechArticleSchema({
           headline: "Claude Code Setup Guide for Development Teams",
           description: "Complete guide to configuring Claude Code with custom sub-agents, skills, and workflows for development teams.",
-          image: "/images/og-default.svg",
+          image: "/images/article-covers/tech-claude-code-setup.svg",
           url: "/tech/articles/claude-code-setup",
           datePublished: "2026-01-24",
           author: "Max Petrusenko",
@@ -61,6 +63,17 @@ export default function ClaudeCodeSetupArticle() {
               <span>By Max Petrusenko</span>
             </div>
           </header>
+
+          <div style={{ maxWidth: 900, margin: "26px auto 32px" }}>
+            <Image
+              src="/images/article-covers/tech-claude-code-setup.svg"
+              alt="Prompt-based cover for Claude Code setup article"
+              width={1344}
+              height={768}
+              style={{ borderRadius: "var(--radius)" }}
+              priority
+            />
+          </div>
 
           <div className="article-content">
             <p className="lead">

@@ -1,9 +1,9 @@
+import { notFound, redirect } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import { notFound } from "next/navigation";
-import { fetchArticleBySlug, fetchArticles, getRelatedArticles } from "@/lib/cms/articles";
-import { siteConfig } from "@/config/site";
 import { generateMetadata as createMetadata, absoluteUrl } from "@/lib/seo/metadata";
+import { fetchArticleBySlug } from "@/lib/cms/articles";
+import { sanitizeMediumHtml, estimateReadTimeMinutes } from "@/lib/api/medium";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { generateArticleSchema, generateBreadcrumbSchema } from "@/lib/seo/structured-data";
 import type { Metadata } from "next";
@@ -15,11 +15,8 @@ interface ArticlePageProps {
 }
 
 // Edge runtime for Cloudflare Pages compatibility
-export const runtime = 'edge';
+export const runtime = "edge";
 
-/**
- * Generate metadata for each article dynamically
- */
 export async function generateMetadata({ params }: ArticlePageProps): Promise<Metadata> {
   const { slug } = await params;
   const article = await fetchArticleBySlug(slug);
@@ -33,10 +30,13 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
   return createMetadata({
     title: article.title,
     description: article.excerpt,
-    ogImage: article.image,
     ogType: "article",
-    canonical: absoluteUrl(`/blog/${slug}`),
+    canonical: article.link.startsWith("/")
+      ? absoluteUrl(article.link)
+      : absoluteUrl(`/blog/${slug}`),
+    ogImage: article.image || "/images/og-default.svg",
     keywords: article.tags,
+    noindex: false,
   });
 }
 
@@ -48,150 +48,119 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
     notFound();
   }
 
-  // Get related articles based on tags
-  const relatedArticles = await getRelatedArticles(slug, article.tags, 3);
+  // If this is a local article (spirituality/tech), redirect to its canonical URL
+  if (article.link.startsWith("/") && !article.link.startsWith(`/blog/${slug}`)) {
+    redirect(article.link);
+  }
 
-  // Generate structured data
-  const articleSchema = generateArticleSchema({
-    title: article.title,
-    description: article.excerpt,
-    image: article.image,
-    url: `/blog/${slug}`,
-    datePublished: article.publishedAt,
-    dateModified: article.publishedAt,
-    author: siteConfig.author.name,
-  });
+  const readTime = estimateReadTimeMinutes(article.content || "");
+  const sanitizedContent = sanitizeMediumHtml(article.content || "");
+  const isLocalArticle = article.link.startsWith("/");
 
-  const breadcrumbSchema = generateBreadcrumbSchema([
-    { name: "Home", url: "/" },
-    { name: "Blog", url: "/blog" },
-    { name: article.title, url: `/blog/${slug}` },
-  ]);
+  // Determine canonical URL for structured data
+  const canonicalUrl = isLocalArticle
+    ? absoluteUrl(article.link)
+    : absoluteUrl(`/blog/${slug}`);
+
+  // Extract date for display
+  const publishDate = article.publishedAt
+    ? new Date(article.publishedAt).toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      })
+    : "Recently";
 
   return (
     <>
-      <JsonLd type="Article" data={articleSchema} />
-      <JsonLd type="BreadcrumbList" data={breadcrumbSchema} />
+      <JsonLd
+        type="Article"
+        data={generateArticleSchema({
+          title: article.title,
+          description: article.excerpt,
+          image: article.image || "/images/og-default.svg",
+          url: canonicalUrl,
+          datePublished: article.publishedAt || new Date().toISOString(),
+          dateModified: article.publishedAt || new Date().toISOString(),
+          author: article.author.name || "Max Petrusenko",
+        })}
+      />
+      <JsonLd
+        type="BreadcrumbList"
+        data={generateBreadcrumbSchema([
+          { name: "Home", url: "/" },
+          { name: "Blog", url: "/blog" },
+          { name: article.title, url: `/blog/${slug}` },
+        ])}
+      />
 
       <div className="container">
-        <article className="page">
-          <section className="section" style={{ marginTop: 0 }}>
-            <Link
-              href="/blog"
-              className="btn sm secondary"
-              style={{ marginBottom: 20, display: "inline-flex" }}
-            >
-              ← Back to Blog
-            </Link>
+        <article className="article">
+          <nav className="article-nav" style={{ marginBottom: 24 }}>
+            <Link href="/blog">← Back to Blog</Link>
+          </nav>
 
-            <header style={{ maxWidth: 800, margin: "0 auto" }}>
-              <div className="pill-row" style={{ marginBottom: 16 }}>
+          <header className="article-header">
+            <div className="eyebrow">
+              <span className="dot"></span>{" "}
+              {article.tags[0] || "Article"}
+            </div>
+            <h1>{article.title}</h1>
+            <p className="article-subtitle">{article.excerpt}</p>
+            <div className="article-meta">
+              <time>{publishDate}</time>
+              <span>•</span>
+              <span>{readTime} min read</span>
+              <span>•</span>
+              <span>By {article.author.name || "Max Petrusenko"}</span>
+            </div>
+          </header>
+
+          {article.image && (
+            <div style={{ maxWidth: 900, margin: "26px auto 32px" }}>
+              <Image
+                src={article.image}
+                alt={article.title}
+                width={1344}
+                height={768}
+                style={{ borderRadius: "var(--radius)" }}
+                priority
+              />
+            </div>
+          )}
+
+          {/* Article content with prose styling */}
+          <div
+            className="article-content"
+            dangerouslySetInnerHTML={{ __html: sanitizedContent }}
+          />
+
+          {!isLocalArticle && article.link && (
+            <footer className="article-footer" style={{ marginTop: 48, paddingTop: 24, borderTop: "1px solid var(--border)" }}>
+              <p className="text-muted" style={{ marginBottom: 16 }}>
+                This article was originally published on{" "}
+                <a
+                  href={article.link}
+                  target="_blank"
+                  rel="noopener"
+                  className="text-accent-spirit"
+                >
+                  Medium
+                </a>.
+              </p>
+              <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
                 {article.tags.map((tag) => (
                   <Link
                     key={tag}
-                    href={`/blog/tag/${encodeURIComponent(tag.toLowerCase())}`}
-                    className="pill"
+                    href={`/blog/tag/${encodeURIComponent(tag.toLowerCase().replace(/\s+/g, "-"))}`}
+                    className="tag"
                   >
-                    {tag}
+                    #{tag}
                   </Link>
                 ))}
               </div>
-
-              <h1 className="text-display" style={{ marginBottom: 16 }}>
-                {article.title}
-              </h1>
-
-              <p
-                className="text-xl text-muted"
-                style={{ marginBottom: 24, lineHeight: 1.6 }}
-              >
-                {article.excerpt}
-              </p>
-
-              <div
-                className="article-meta"
-                style={{ fontSize: 14, paddingBottom: 24, borderBottom: "1px solid var(--line)" }}
-              >
-                <span>By {siteConfig.author.name}</span>
-                <span>·</span>
-                <span>
-                  {article.publishedAt
-                    ? new Date(article.publishedAt).toLocaleDateString("en-US", {
-                        year: "numeric",
-                        month: "long",
-                        day: "numeric",
-                      })
-                    : "Recently"}
-                </span>
-              </div>
-            </header>
-
-            {article.image && (
-              <div style={{ maxWidth: 900, margin: "40px auto" }}>
-                <Image
-                  src={article.image}
-                  alt={article.title}
-                  width={900}
-                  height={500}
-                  style={{ borderRadius: "var(--radius)" }}
-                  priority
-                />
-              </div>
-            )}
-
-            <div
-              className="card"
-              style={{ maxWidth: 800, margin: "40px auto", padding: 32 }}
-            >
-              <p>
-                This article was originally published on Medium. Continue reading
-                there to access the full content.
-              </p>
-              <a
-                href={article.link}
-                target="_blank"
-                rel="noopener"
-                className="btn primary"
-                style={{ marginTop: 16, display: "inline-flex" }}
-              >
-                Read Full Article on Medium →
-              </a>
-            </div>
-
-            {relatedArticles.length > 0 && (
-              <section
-                className="section"
-                style={{ maxWidth: 900, margin: "60px auto 0" }}
-              >
-                <div className="section-head">
-                  <h2>Related Articles</h2>
-                </div>
-                <div className="article-list">
-                  {relatedArticles.map((related) => (
-                    <a
-                      key={related.id}
-                      className="article-card"
-                      href={related.link}
-                      target="_blank"
-                      rel="noopener"
-                    >
-                      <Image
-                        className="article-thumb"
-                        src={related.image}
-                        alt={related.title}
-                        width={400}
-                        height={225}
-                      />
-                      <div className="article-body">
-                        <span className="article-title">{related.title}</span>
-                        <span className="article-sub">{related.excerpt}</span>
-                      </div>
-                    </a>
-                  ))}
-                </div>
-              </section>
-            )}
-          </section>
+            </footer>
+          )}
         </article>
       </div>
     </>
