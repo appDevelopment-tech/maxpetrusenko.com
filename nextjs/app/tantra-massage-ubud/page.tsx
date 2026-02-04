@@ -3,7 +3,6 @@ import Image from "next/image";
 import { siteConfig } from "@/config/site";
 import { generateMetadata, absoluteUrl } from "@/lib/seo/metadata";
 import { JsonLd } from "@/components/seo/JsonLd";
-import { HiddenKeywords, MultilingualHiddenKeywords, MULTILINGUAL_TANTRA_KEYWORDS } from "@/components/seo/HiddenKeywords";
 import { Testimonials } from "@/components/testimonials/Testimonials";
 import {
   generateOrganizationSchema,
@@ -412,40 +411,6 @@ export default function TantraMassageUbudPage() {
             </p>
           </div>
         </section>
-
-        {/* Hidden keywords for AI search optimization */}
-        <HiddenKeywords
-          service="tantra massage"
-          locations={[
-            "Ubud, Bali",
-            "Gianyar Regency, Bali",
-            "Campuan, Bali",
-            "Penestanan, Bali",
-            "Sanggingan, Bali",
-            "Kedewatan, Bali",
-            "Peliatan, Bali",
-            "Mas, Bali",
-            "Pengosekan, Bali",
-            "Tegallalung, Bali",
-            "Sayan, Bali",
-            "Kutuh Kaja, Bali",
-            "Bali",
-          ]}
-          variants={[
-            "tantric massage",
-            "tantra spa",
-            "somatic energy work",
-            "bodywork",
-            "energy healing",
-            "trauma release",
-            "nervous system reset",
-            "couples tantra",
-          ]}
-          modifiers={["places", "reviews", "services", "near me", "best", "available now", "year round"]}
-        />
-
-        {/* Multilingual keywords for international visitors */}
-        <MultilingualHiddenKeywords keywords={MULTILINGUAL_TANTRA_KEYWORDS} />
       </div>
     </>
   );

@@ -144,7 +144,7 @@ certifications:
 
 social_proof:
   rating: 4.9/5
-  review_count: 217+
+  review_count: dynamic (derived from published testimonials)
   testimonial_types: spirituality, tech, mindfold
 
 # ============================================================================
@@ -172,6 +172,6 @@ rss_feed: https://medium.com/feed/@maxpetrusenko
 # ============================================================================
 # LAST UPDATED
 # ============================================================================
-last_updated: 2026-01-24
-version: 3.0
+last_updated: 2026-02-04
+version: 3.1
 protocol_version: 1.0

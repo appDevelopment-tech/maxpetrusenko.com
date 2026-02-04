@@ -1130,6 +1130,8 @@ export function generateOrganizationWithGBP() {
  * Critical for local SEO - helps rank in "tantra massage Ubud" searches
  */
 export function generateLocalBusinessSchemaUbud() {
+  const reviewCount = testimonials.filter((t) => t.type === "spirituality").length.toString();
+
   return {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
@@ -1170,7 +1172,7 @@ export function generateLocalBusinessSchemaUbud() {
     "aggregateRating": {
       "@type": "AggregateRating",
       "ratingValue": "4.9",
-      "reviewCount": "217",
+      "reviewCount": reviewCount,
       "bestRating": "5",
       "worstRating": "1"
     },
@@ -1221,6 +1223,8 @@ export function generateLocalBusinessSchemaUbud() {
  * For the Florida location
  */
 export function generateLocalBusinessSchemaMiami() {
+  const reviewCount = testimonials.filter((t) => t.type === "spirituality").length.toString();
+
   return {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
@@ -1250,7 +1254,7 @@ export function generateLocalBusinessSchemaMiami() {
     "aggregateRating": {
       "@type": "AggregateRating",
       "ratingValue": "4.9",
-      "reviewCount": "217",
+      "reviewCount": reviewCount,
       "bestRating": "5",
       "worstRating": "1"
     }

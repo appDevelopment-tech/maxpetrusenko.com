@@ -3,7 +3,6 @@ import Image from "next/image";
 import { siteConfig } from "@/config/site";
 import { generateMetadata, absoluteUrl } from "@/lib/seo/metadata";
 import { JsonLd } from "@/components/seo/JsonLd";
-import { HiddenKeywords } from "@/components/seo/HiddenKeywords";
 import { EmailCaptureInline } from "@/components/forms/EmailCaptureInline";
 import { Testimonials } from "@/components/testimonials/Testimonials";
 import {
@@ -482,95 +481,6 @@ export default function SpiritualityPage() {
             </div>
           </div>
         </section>
-
-        {/* Hidden keywords for AI search optimization */}
-        <HiddenKeywords
-          service="tantra massage"
-          locations={[
-            "Ubud, Bali",
-            "Gianyar Regency, Bali",
-            "Campuan, Bali",
-            "Penestanan, Bali",
-            "Sanggingan, Bali",
-            "Kedewatan, Bali",
-            "Peliatan, Bali",
-            "Mas, Bali",
-            "Pengosekan, Bali",
-            "Tegallalung, Bali",
-            "Sayan, Bali",
-            "Kutuh Kaja, Bali",
-            "Bali",
-            "Miami, Florida",
-            "Miami Beach, Florida",
-            "North Miami, Florida",
-            "North Miami Beach, Florida",
-            "Coral Gables, Florida",
-            "Aventura, Florida",
-            "Sunny Isles Beach, Florida",
-            "Hallandale Beach, Florida",
-            "Hollywood, Florida",
-            "Pembroke Pines, Florida",
-            "Miramar, Florida",
-            "Westchester, Florida",
-            "Tamiami, Florida",
-            "Fontainebleau, Florida",
-            "The Hammocks, Florida",
-            "Country Walk, Florida",
-            "Richmond West, Florida",
-            "South Miami Heights, Florida",
-            "Lakes by the Bay, Florida",
-            "West Park, Florida",
-            "Pembroke Park, Florida",
-            "Carver Ranches, Florida",
-            "Golden Glades, Florida",
-            "Ives Estates, Florida",
-            "Gladeview, Florida",
-            "Bunche Park, Florida",
-            "Hialeah, Florida",
-            "Miami Gardens, Florida",
-            "Miami Lakes, Florida",
-            "Palmetto Bay, Florida",
-            "Key Biscayne, Florida",
-            "Doral, Florida",
-            "Sweetwater, Florida",
-            "Fort Lauderdale, Florida",
-            "Lauderdale-by-the-Sea, Florida",
-            "Dania Beach, Florida",
-            "Oakland Park, Florida",
-            "Wilton Manors, Florida",
-            "Plantation, Florida",
-            "Sunrise, Florida",
-            "Weston, Florida",
-            "Davie, Florida",
-            "Lauderhill, Florida",
-            "Tamarac, Florida",
-            "Margate, Florida",
-            "North Lauderdale, Florida",
-            "Coconut Creek, Florida",
-            "Pompano Beach, Florida",
-            "Deerfield Beach, Florida",
-            "Boca Raton, Florida",
-            "Delray Beach, Florida",
-            "Boynton Beach, Florida",
-            "Lake Worth, Florida",
-            "West Palm Beach, Florida",
-            "Coral Springs, Florida",
-            "South Florida",
-            "Miami-Dade County",
-            "Broward County",
-            "Palm Beach County",
-          ]}
-          variants={[
-            "tantric massage",
-            "tantra spa",
-            "somatic energy work",
-            "bodywork",
-            "energy healing",
-            "tantra practitioner",
-            "somantic work",
-          ]}
-          modifiers={["places", "reviews", "services", "near me", "best"]}
-        />
       </div>
     </>
   );

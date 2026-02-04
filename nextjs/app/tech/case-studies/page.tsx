@@ -2,7 +2,6 @@ import Link from "next/link";
 import { siteConfig } from "@/config/site";
 import { generateMetadata, absoluteUrl } from "@/lib/seo/metadata";
 import { JsonLd } from "@/components/seo/JsonLd";
-import { HiddenKeywords } from "@/components/seo/HiddenKeywords";
 import {
   generateWebPageSchema,
   generateBreadcrumbSchema,
@@ -301,22 +300,6 @@ export default function CaseStudiesPage() {
             </a>
           </div>
         </section>
-
-        {/* Hidden keywords for SEO */}
-        <HiddenKeywords
-          service="AI automation case studies"
-          locations={["Remote", "Worldwide", "Global"]}
-          variants={[
-            "automation case studies",
-            "AI automation projects",
-            "API integration examples",
-            "workflow automation examples",
-            "Claude Code case study",
-            "n8n workflow examples",
-            "content automation case study",
-          ]}
-          modifiers={["examples", "projects", "portfolio", "work"]}
-        />
       </div>
     </>
   );

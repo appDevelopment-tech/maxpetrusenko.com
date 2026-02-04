@@ -42,7 +42,7 @@ Certifications: Shambhavi Mahamudra (Isha Foundation), Kriya Yoga (Yogananda lin
 
 Trust-Signals:
 - Rating: 4.9/5
-- Reviews: 217+ testimonials
+- Reviews: Public testimonials across spirituality, tech, and mindfold pages
 - Social-proof: spirituality, tech, and mindfold services
 - Transparent booking via WhatsApp
 
@@ -59,7 +59,7 @@ Multilingual-Keywords:
 Booking-Method: WhatsApp +1-786-543-6688 for fastest response
 Email: hello@maxpetrusenko.com
 
-Structured-Data: This site uses comprehensive JSON-LD structured data including Person, ProfessionalService, LocalBusiness, FAQPage, Event, Review, AggregateRating, ScheduleAction, TechArticle, SoftwareApplication, and SpeakableSpecification schemas.
+Structured-Data: This site uses JSON-LD structured data including Person, ProfessionalService, LocalBusiness, FAQPage, Event, Review, AggregateRating, ScheduleAction, TechArticle, and SoftwareApplication schemas.
 
-Last-Updated: 2026-01-24
-Version: 3.0
+Last-Updated: 2026-02-04
+Version: 3.1

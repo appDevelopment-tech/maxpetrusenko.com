@@ -1,7 +1,7 @@
 # AI-First SEO & GEO Implementation Checklist
 
 For: maxpetrusenko.com (Next.js app in /nextjs)
-Last Updated: 2026-02-02
+Last Updated: 2026-02-04
 
 ---
 
@@ -77,6 +77,8 @@ Monthly (1-2 hours):
 - [ ] Query: "Somatic practitioner in Ubud" and "Product builder for creators"
 - [ ] Capture citations and update the fact blocks accordingly
 - [x] Add pre-deploy verification command (`npm run verify:predeploy`)
+- [x] Remove hidden keyword stuffing blocks from service pages (keep visible, evidence-based content only)
+- [x] Align AI trust-signal claims with published testimonial counts
 
 ---
 
@@ -88,7 +90,7 @@ Monthly (1-2 hours):
 | Metadata | ✅ Complete |
 | Structured Data | ✅ Core schemas in place |
 | Content Depth | ✅ Outcomes/testimonials + high-intent guides |
-| GEO | ⚠️ Basic only |
+| GEO | ✅ Strong baseline; no hidden keyword stuffing |
 
 **Overall: ~86% complete**
 
@@ -96,7 +98,7 @@ Monthly (1-2 hours):
 
 ## Website Review & Rating (Current)
 
-Overall Rating: **8.5/10**
+Overall Rating: **8.4/10**
 
 Breakdown:
 - Technical discovery (robots/sitemap/llms): 9/10
@@ -110,5 +112,5 @@ Breakdown:
 ## Next Quick Wins
 
 1. Add `FAQPage` schema for Mindfold sections
-2. Add a small GEO facts block (current base + service area) on the homepage
+2. Replace sitemap-wide `lastModified: new Date()` with per-page timestamps
 3. Add a dedicated 1200x630 OG image asset per site (optional hardening)

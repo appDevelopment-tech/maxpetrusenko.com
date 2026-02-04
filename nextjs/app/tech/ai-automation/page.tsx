@@ -2,7 +2,6 @@ import Link from "next/link";
 import { siteConfig } from "@/config/site";
 import { generateMetadata, absoluteUrl } from "@/lib/seo/metadata";
 import { JsonLd } from "@/components/seo/JsonLd";
-import { HiddenKeywords } from "@/components/seo/HiddenKeywords";
 import {
   generateWebPageSchema,
   generateBreadcrumbSchema,
@@ -384,30 +383,6 @@ export default function AIAutomationPage() {
             </Link>
           </div>
         </section>
-
-        {/* Hidden keywords for SEO */}
-        <HiddenKeywords
-          service="AI automation"
-          locations={[
-            "Remote",
-            "Worldwide",
-            "Global",
-            "Miami, Florida",
-            "Ubud, Bali",
-          ]}
-          variants={[
-            "AI automation consultant",
-            "Claude Code expert",
-            "n8n workflow expert",
-            "ChatGPT API integration",
-            "OpenAI consultant",
-            "content automation",
-            "workflow automation",
-            "API integration specialist",
-            "AI implementation",
-          ]}
-          modifiers={["consulting", "services", "expert", "freelance"]}
-        />
       </div>
     </>
   );
