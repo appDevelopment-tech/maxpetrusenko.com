@@ -18,10 +18,15 @@ export async function parseMediumRSS(
   count = 3
 ): Promise<Article[]> {
   try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
+
     const response = await fetch(rssUrl, {
       headers: { Accept: "application/rss+xml" },
-      next: { revalidate: 1800 }, // 30 minutes
+      signal: controller.signal,
     });
+
+    clearTimeout(timeoutId);
 
     if (!response.ok) {
       throw new Error(`RSS fetch failed: ${response.status}`);
@@ -37,7 +42,7 @@ export async function parseMediumRSS(
 
     return selectTop(items, preferredIds, count);
   } catch (error) {
-    console.error("Error parsing Medium RSS:", error);
+    // Silently fail - edge runtime may not support external fetch
     return [];
   }
 }

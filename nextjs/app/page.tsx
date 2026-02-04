@@ -404,6 +404,53 @@ export default function HomePage() {
             </div>
           </div>
         </section>
+
+        <section className="section">
+          <div className="section-head">
+            <h2>More Resources</h2>
+            <span className="section-note">
+              Dive deeper into specific topics
+            </span>
+          </div>
+          <div className="tiles">
+            <Link className="tile" href="/tech/case-studies/claude-code-automation">
+              <div className="tile-meta">
+                <span className="tile-title">Claude Code Case Study</span>
+                <span className="tile-desc">
+                  $253k annual savings for a SaaS startup
+                </span>
+              </div>
+              <span className="badge tech">Read</span>
+            </Link>
+            <Link className="tile" href="/tech/case-studies">
+              <div className="tile-meta">
+                <span className="tile-title">All Case Studies</span>
+                <span className="tile-desc">
+                  API integrations, workflow automation, edge analytics
+                </span>
+              </div>
+              <span className="badge tech">View</span>
+            </Link>
+            <Link className="tile" href="/blog">
+              <div className="tile-meta">
+                <span className="tile-title">Blog Archive</span>
+                <span className="tile-desc">
+                  Articles on AI, automation, privacy, and more
+                </span>
+              </div>
+              <span className="badge tech">Browse</span>
+            </Link>
+            <Link className="tile" href="/spirituality/articles">
+              <div className="tile-meta">
+                <span className="tile-title">Somatic Articles</span>
+                <span className="tile-desc">
+                  Tantra education, nervous system regulation, presence
+                </span>
+              </div>
+              <span className="badge spirit">Explore</span>
+            </Link>
+          </div>
+        </section>
       </div>
 
       <EmailCapture />

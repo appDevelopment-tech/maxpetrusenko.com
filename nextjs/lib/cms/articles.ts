@@ -230,6 +230,133 @@ const FALLBACK_ARTICLES: Article[] = [
     tags: ["Economics", "Data", "Wealth"],
     author: { name: "Max Petrusenko" },
   },
+  // Additional Medium article fallbacks for Google Discovery
+  {
+    id: "05a1427581a3",
+    slug: "05a1427581a3",
+    title: "Building Calm Products: A Founder's Approach",
+    excerpt:
+      "How I build products that help creators ship without the noise. Focus on clarity, presence, and lasting results over vanity metrics.",
+    content:
+      "<p>In a world of endless notifications and distraction, I choose to build calm products. As a tech consultant and product builder, I help founders ship meaningful work without drowning in complexity.</p><p>My approach combines three principles: clarity over cleverness, presence in the development process, and lasting results over quick wins.</p><p>I work with Claude Code, n8n automation, and ChatGPT integrations to help teams move faster while maintaining sanity. Whether you need AI workflow automation, product strategy, or technical implementation—I focus on outcomes that matter.</p><p>Based in Ubud, Bali and Miami, Florida, I work with founders globally who want to build thoughtfully.</p>",
+    image: "/images/article-covers/medium-claude-code.svg",
+    link: "https://medium.com/p/05a1427581a3",
+    publishedAt: "2025-01-01T00:00:00.000Z",
+    tags: ["Tech", "Product", "Automation"],
+    author: { name: "Max Petrusenko" },
+  },
+  {
+    id: "12a98f036691",
+    slug: "12a98f036691",
+    title: "AI Automation That Actually Works",
+    excerpt:
+      "Practical AI automation for founders who need results, not hype. Claude Code, n8n workflows, and systems that scale.",
+    content:
+      "<p>Most AI automation fails because it's built for demos, not production. I help founders build systems that actually work—handling edge cases, failing gracefully, and providing real value.</p><p>My tech consulting focuses on three areas: Claude Code implementation for development teams, n8n workflow automation for business operations, and ChatGPT API integrations for customer-facing features.</p><p>I don't sell you a tool and disappear. I help you think through the architecture, implement it properly, and ensure your team can maintain it. Available remotely worldwide and in-person in Miami and Ubud.</p>",
+    image: "/images/article-covers/tech-claude-code-setup.svg",
+    link: "https://medium.com/p/12a98f036691",
+    publishedAt: "2025-01-01T00:00:00.000Z",
+    tags: ["AI", "Automation", "n8n"],
+    author: { name: "Max Petrusenko" },
+  },
+  {
+    id: "1e454d39553b",
+    slug: "1e454d39553b",
+    title: "Tantra Massage for nervous system regulation",
+    excerpt:
+      "How tantra massage works with your nervous system to release stored tension and return to calm presence.",
+    content:
+      "<p>Tantra massage is fundamentally nervous system work, not sexual service. Through breathwork, conscious touch, and somatic awareness, we help your body shift from fight-or-flight into rest-and-digest.</p><p>In my practice, I work with three modalities: Nervous System Reset (90 min) for arriving safely in your body, Deep Repatterning for ongoing transformational work, and Kyo-tai Immersion for those ready for intensive bodywork.</p><p>Sessions are boundaries-first, consent-led, and tailored to your system. I work with individuals of all genders and couples in Ubud, Bali and Miami, Florida.</p>",
+    image: "/images/article-covers/spirit-first-session.svg",
+    link: "https://medium.com/p/1e454d39553b",
+    publishedAt: "2025-01-01T00:00:00.000Z",
+    tags: ["Spirituality", "Tantra", "Nervous System"],
+    author: { name: "Max Petrusenko" },
+  },
+  {
+    id: "2fbbfd3d630c",
+    slug: "2fbbfd3d630c",
+    title: "Somatic Energy Work: Beyond Talk Therapy",
+    excerpt:
+      "Why somatic practices reach what talk therapy can't—working directly with the body's stored patterns and tension.",
+    content:
+      "<p>Talk therapy helps us understand our stories. Somatic energy work helps us release them from our tissues. When we experience trauma, chronic stress, or overwhelm, our bodies store these patterns physically.</p><p>Through tantra massage, breathwork, and conscious touch, I help clients access and release stored tension. The work is non-sexual, focused on nervous system regulation and embodied awareness.</p><p>Based in Ubud, Bali and Miami, Florida, I offer sessions for individuals and couples who are ready to feel again.</p>",
+    image: "/images/article-covers/spirit-vs-massage.svg",
+    link: "https://medium.com/p/2fbbfd3d630c",
+    publishedAt: "2025-01-01T00:00:00.000Z",
+    tags: ["Spirituality", "Somatic", "Bodywork"],
+    author: { name: "Max Petrusenko" },
+  },
+  {
+    id: "3749fc88b06d",
+    slug: "3749fc88b06d",
+    title: "Claude Code for Small Teams",
+    excerpt:
+      "How small teams can adopt Claude Code without drowning in complexity. Setup, workflows, and guardrails that work.",
+    content:
+      "<p>Claude Code isn't just for large engineering organizations. Small teams can benefit even more—from faster feature delivery to fewer bugs in production. The key is adopting it thoughtfully.</p><p>I help small teams implement Claude Code with custom sub-agents, project-specific skills, and workflows that match how you actually work. No generic prompts, no reinventing the wheel every time.</p><p>Whether you need help with initial setup, workflow design, or training your team, I offer consulting that meets you where you are.</p>",
+    image: "/images/article-covers/tech-claude-code-setup.svg",
+    link: "https://medium.com/p/3749fc88b06d",
+    publishedAt: "2025-01-01T00:00:00.000Z",
+    tags: ["Tech", "Claude Code", "Developer Tools"],
+    author: { name: "Max Petrusenko" },
+  },
+  {
+    id: "90216a191187",
+    slug: "90216a191187",
+    title: "What to Expect in Your First Tantra Session",
+    excerpt:
+      "Nervous about your first tantra session? This walkthrough covers arrival, boundaries, and what to expect from the experience.",
+    content:
+      "<p>It's normal to feel nervous before your first tantra session. Many clients arrive unsure what to expect. Here's what a typical session looks like.</p><p>We begin with intention-setting and boundary agreement. You'll share what brings you, what you hope to experience, and any areas to avoid. This establishes clear consent and creates safety.</p><p>The session itself combines breathwork, conscious touch, and somatic awareness techniques. You remain clothed or draped throughout. The focus is on nervous system regulation and embodied awareness.</p><p>I offer sessions in Ubud, Bali and Miami, Florida for individuals and couples of all genders.</p>",
+    image: "/images/article-covers/spirit-first-session.svg",
+    link: "https://medium.com/p/90216a191187",
+    publishedAt: "2025-01-01T00:00:00.000Z",
+    tags: ["Spirituality", "Tantra", "Beginner Guide"],
+    author: { name: "Max Petrusenko" },
+  },
+  {
+    id: "db8811dd5cbf",
+    slug: "db8811dd5cbf",
+    title: "n8n Workflow Automation for Founders",
+    excerpt:
+      "How founders use n8n to automate their businesses without engineering teams. Practical patterns and examples.",
+    content:
+      "<p>n8n is the secret weapon of founders who need automation but can't afford an engineering team. It connects your tools—Airtable, Notion, Google Workspace, Slack—into workflows that run while you sleep.</p><p>I help founders design and build n8n automations that handle lead capture, customer onboarding, content distribution, and more. The key is starting with high-impact, low-complexity workflows.</p><p>Whether you need help with architecture, implementation, or training your team to maintain what we build, I offer consulting that gets you unstuck.</p>",
+    image: "/images/article-covers/tech-n8n-workflow.svg",
+    link: "https://medium.com/p/db8811dd5cbf",
+    publishedAt: "2025-01-01T00:00:00.000Z",
+    tags: ["Tech", "n8n", "Automation"],
+    author: { name: "Max Petrusenko" },
+  },
+  {
+    id: "e5adcd3fa347",
+    slug: "e5adcd3fa347",
+    title: "Two Practices, One Person: Tech and Tantra",
+    excerpt:
+      "How I bridge two seemingly different worlds—AI automation consulting and tantra massage—through the same principle of presence.",
+    content:
+      "<p>People ask how I can be both a tech consultant and a tantra practitioner. To me, they're not different. Both require deep presence, reading what's actually happening (not what I wish was happening), and intervening skillfully.</p><p>As a tech consultant, I help founders build AI automation systems with Claude Code, n8n, and ChatGPT. As a somatic practitioner, I help clients regulate their nervous systems through tantra massage and energy work.</p><p>Both are about clarity, presence, and lasting results. I maintain bases in Ubud, Bali and Miami, Florida, and work with clients globally.</p>",
+    image: "/images/article-covers/tech-claude-code-setup.svg",
+    link: "https://medium.com/p/e5adcd3fa347",
+    publishedAt: "2025-01-01T00:00:00.000Z",
+    tags: ["Tech", "Spirituality", "Integration"],
+    author: { name: "Max Petrusenko" },
+  },
+  {
+    id: "f4d46013850c",
+    slug: "f4d46013850c",
+    title: "Kyo-tai Immersion: Intensive Bodywork for Pattern Release",
+    excerpt:
+      "Kyo-tai is intensive Japanese bodywork for those ready to move beyond gentle massage into deep pattern release.",
+    content:
+      "<p>Kyo-tai immersion is not gentle massage. It's intensive contact practice—bending, leveraging, and sustained pressure to purge old energy and break somatic patterns.</p><p>This work is for those who've done talk therapy, tried gentle approaches, and are ready for something more direct. We move as one system to 'jump' consciousness out of stuck states.</p><p>Sessions are non-sexual, boundaries-first, and require clear intention-setting beforehand. Limited spots. Message to align on readiness and intentions.</p><p>Available in Ubud, Bali and Miami, Florida by arrangement.</p>",
+    image: "/images/article-covers/spirit-vs-massage.svg",
+    link: "https://medium.com/p/f4d46013850c",
+    publishedAt: "2025-01-01T00:00:00.000Z",
+    tags: ["Spirituality", "Bodywork", "Kyo-tai"],
+    author: { name: "Max Petrusenko" },
+  },
 ];
 
 function sortArticlesByDateDesc(articles: Article[]): Article[] {
