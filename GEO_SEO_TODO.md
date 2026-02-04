@@ -25,6 +25,7 @@ Last Updated: 2026-02-04
 - [x] Blog now uses local authored routes as primary (`/tech/articles/*`, `/spirituality/blog/*`) with Medium archive fallback
 - [x] `/tech/articles` hub route added (resolves breadcrumb target and strengthens internal links)
 - [x] Sitemap mismatch fixed for missing `/tech/articles/seo-is-dead` and `/tech/articles/generative-engine-optimization-geo`
+- [x] Replaced sitemap-wide `lastModified: new Date()` with route/content-derived dates
 - [x] `/spirituality/articles` hub added with linked long-form pages
 - [ ] Main `robots.txt` blocks `/atelier/` and `/mindfold/` path duplicates
 
@@ -98,7 +99,7 @@ Monthly (1-2 hours):
 
 ## Website Review & Rating (Current)
 
-Overall Rating: **8.4/10**
+Overall Rating: **9.0/10**
 
 Breakdown:
 - Technical discovery (robots/sitemap/llms): 9/10
@@ -112,5 +113,5 @@ Breakdown:
 ## Next Quick Wins
 
 1. Add `FAQPage` schema for Mindfold sections
-2. Replace sitemap-wide `lastModified: new Date()` with per-page timestamps
-3. Add a dedicated 1200x630 OG image asset per site (optional hardening)
+2. Add a dedicated 1200x630 OG image asset per site (optional hardening)
+3. Align external bios (LinkedIn, GitHub, X) with the same positioning

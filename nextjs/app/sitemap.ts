@@ -1,8 +1,57 @@
 import { MetadataRoute } from "next";
+import { promises as fs } from "node:fs";
+import path from "node:path";
 import { siteConfig } from "@/config/site";
 import { fetchArticles, isLocalArticle, getAllTags } from "@/lib/cms/articles";
 import { getProjects } from "@/lib/cms/projects";
 import { getCaseStudies } from "@/lib/cms/case-studies";
+
+function getValidDate(value?: string | null): Date | null {
+  if (!value) return null;
+
+  const parsed = new Date(value);
+  return Number.isNaN(parsed.getTime()) ? null : parsed;
+}
+
+function getLatestDate(dates: Array<Date | null | undefined>, fallback: Date): Date {
+  const validDates = dates.filter((date): date is Date => date instanceof Date && !Number.isNaN(date.getTime()));
+
+  if (validDates.length === 0) return fallback;
+
+  return validDates.reduce((latest, current) => (current > latest ? current : latest));
+}
+
+async function getFileLastModified(filePath: string): Promise<Date | null> {
+  try {
+    const stats = await fs.stat(filePath);
+    return stats.mtime;
+  } catch {
+    return null;
+  }
+}
+
+function routeToPageFile(appDir: string, route: string): string {
+  if (route === "/") {
+    return path.join(appDir, "page.tsx");
+  }
+
+  return path.join(appDir, route.replace(/^\//, ""), "page.tsx");
+}
+
+async function getRouteLastModified(
+  appDir: string,
+  route: string,
+  fallback: Date,
+  extraFiles: string[] = []
+): Promise<Date> {
+  const routeFile = routeToPageFile(appDir, route);
+  const dates = await Promise.all([
+    getFileLastModified(routeFile),
+    ...extraFiles.map((file) => getFileLastModified(file)),
+  ]);
+
+  return getLatestDate(dates, fallback);
+}
 
 /**
  * Dynamic sitemap generation
@@ -15,253 +64,352 @@ import { getCaseStudies } from "@/lib/cms/case-studies";
  */
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = siteConfig.url;
+  const appDir = path.join(process.cwd(), "app");
+  const cmsDir = path.join(process.cwd(), "lib", "cms");
+
+  const fallbackLastModified =
+    (await getFileLastModified(path.join(appDir, "sitemap.ts"))) ??
+    new Date("2026-01-01T00:00:00.000Z");
+
+  // Dynamic: Blog archive pages (exclude local route-first articles)
+  const articles = await fetchArticles();
+  const latestArticleDate = getLatestDate(
+    articles.map((article) => getValidDate(article.publishedAt)),
+    fallbackLastModified
+  );
 
   // Static pages
   const staticPages: MetadataRoute.Sitemap = [
     {
       url: baseUrl,
-      lastModified: new Date(),
+      lastModified: await getRouteLastModified(appDir, "/", fallbackLastModified),
       changeFrequency: "weekly",
       priority: 1,
     },
     {
       url: `${baseUrl}/links`,
-      lastModified: new Date(),
+      lastModified: await getRouteLastModified(appDir, "/links", fallbackLastModified),
       changeFrequency: "monthly",
       priority: 0.9,
     },
     {
       url: `${baseUrl}/tech`,
-      lastModified: new Date(),
+      lastModified: await getRouteLastModified(appDir, "/tech", fallbackLastModified),
       changeFrequency: "weekly",
       priority: 0.8,
     },
     {
       url: `${baseUrl}/spirituality`,
-      lastModified: new Date(),
+      lastModified: await getRouteLastModified(appDir, "/spirituality", fallbackLastModified),
       changeFrequency: "weekly",
       priority: 0.8,
     },
     {
       url: `${baseUrl}/about`,
-      lastModified: new Date(),
+      lastModified: await getRouteLastModified(appDir, "/about", fallbackLastModified),
       changeFrequency: "monthly",
       priority: 0.7,
     },
     {
       url: `${baseUrl}/mindfold/events`,
-      lastModified: new Date(),
+      lastModified: await getRouteLastModified(appDir, "/mindfold/events", fallbackLastModified),
       changeFrequency: "weekly",
       priority: 0.8,
     },
     {
       url: `${baseUrl}/blog`,
-      lastModified: new Date(),
+      lastModified: getLatestDate(
+        [
+          await getRouteLastModified(appDir, "/blog", fallbackLastModified, [path.join(cmsDir, "articles.ts")]),
+          latestArticleDate,
+        ],
+        fallbackLastModified
+      ),
       changeFrequency: "daily",
       priority: 0.8,
     },
     {
       url: `${baseUrl}/proof`,
-      lastModified: new Date(),
+      lastModified: await getRouteLastModified(appDir, "/proof", fallbackLastModified),
       changeFrequency: "monthly",
       priority: 0.7,
     },
     {
       url: `${baseUrl}/identity`,
-      lastModified: new Date(),
+      lastModified: await getRouteLastModified(appDir, "/identity", fallbackLastModified),
       changeFrequency: "monthly",
       priority: 0.6,
     },
     {
       url: `${baseUrl}/tech/ai-automation`,
-      lastModified: new Date(),
+      lastModified: await getRouteLastModified(appDir, "/tech/ai-automation", fallbackLastModified),
       changeFrequency: "weekly",
       priority: 0.8,
     },
     {
       url: `${baseUrl}/tech/case-studies`,
-      lastModified: new Date(),
+      lastModified: await getRouteLastModified(appDir, "/tech/case-studies", fallbackLastModified, [
+        path.join(cmsDir, "case-studies.ts"),
+      ]),
       changeFrequency: "monthly",
       priority: 0.7,
     },
     {
       url: `${baseUrl}/tech/articles`,
-      lastModified: new Date(),
+      lastModified: await getRouteLastModified(appDir, "/tech/articles", fallbackLastModified),
       changeFrequency: "weekly",
       priority: 0.8,
     },
     {
       url: `${baseUrl}/tech/case-studies/claude-code-automation`,
-      lastModified: new Date(),
+      lastModified: await getRouteLastModified(
+        appDir,
+        "/tech/case-studies/claude-code-automation",
+        fallbackLastModified,
+        [path.join(cmsDir, "case-studies.ts")]
+      ),
       changeFrequency: "monthly",
       priority: 0.8,
     },
     // Tech articles
     {
       url: `${baseUrl}/tech/articles/claude-code-setup`,
-      lastModified: new Date(),
+      lastModified: await getRouteLastModified(appDir, "/tech/articles/claude-code-setup", fallbackLastModified),
       changeFrequency: "monthly",
       priority: 0.7,
     },
     {
       url: `${baseUrl}/tech/articles/n8n-workflow-automation`,
-      lastModified: new Date(),
+      lastModified: await getRouteLastModified(
+        appDir,
+        "/tech/articles/n8n-workflow-automation",
+        fallbackLastModified
+      ),
       changeFrequency: "monthly",
       priority: 0.7,
     },
     {
       url: `${baseUrl}/tech/articles/chatgpt-api-integration`,
-      lastModified: new Date(),
+      lastModified: await getRouteLastModified(
+        appDir,
+        "/tech/articles/chatgpt-api-integration",
+        fallbackLastModified
+      ),
       changeFrequency: "monthly",
       priority: 0.7,
     },
     {
       url: `${baseUrl}/tech/articles/answer-engine-optimization-aeo`,
-      lastModified: new Date(),
+      lastModified: await getRouteLastModified(
+        appDir,
+        "/tech/articles/answer-engine-optimization-aeo",
+        fallbackLastModified
+      ),
       changeFrequency: "monthly",
       priority: 0.9,
     },
     {
       url: `${baseUrl}/tech/articles/generative-ai-score-websites`,
-      lastModified: new Date(),
+      lastModified: await getRouteLastModified(
+        appDir,
+        "/tech/articles/generative-ai-score-websites",
+        fallbackLastModified
+      ),
       changeFrequency: "monthly",
       priority: 0.9,
     },
     {
       url: `${baseUrl}/tech/articles/seo-is-dead`,
-      lastModified: new Date(),
+      lastModified: await getRouteLastModified(appDir, "/tech/articles/seo-is-dead", fallbackLastModified),
       changeFrequency: "monthly",
       priority: 0.9,
     },
     {
       url: `${baseUrl}/tech/articles/generative-engine-optimization-geo`,
-      lastModified: new Date(),
+      lastModified: await getRouteLastModified(
+        appDir,
+        "/tech/articles/generative-engine-optimization-geo",
+        fallbackLastModified
+      ),
       changeFrequency: "monthly",
       priority: 0.9,
     },
     {
       url: `${baseUrl}/tech/articles/openclaw-installation-playbook`,
-      lastModified: new Date(),
+      lastModified: await getRouteLastModified(
+        appDir,
+        "/tech/articles/openclaw-installation-playbook",
+        fallbackLastModified
+      ),
       changeFrequency: "monthly",
       priority: 0.8,
     },
     // Somatic cluster
     {
       url: `${baseUrl}/somatic`,
-      lastModified: new Date(),
+      lastModified: await getRouteLastModified(appDir, "/somatic", fallbackLastModified),
       changeFrequency: "weekly",
       priority: 0.8,
     },
     {
       url: `${baseUrl}/somatic/approach`,
-      lastModified: new Date(),
+      lastModified: await getRouteLastModified(appDir, "/somatic/approach", fallbackLastModified),
       changeFrequency: "monthly",
       priority: 0.7,
     },
     {
       url: `${baseUrl}/somatic/modalities`,
-      lastModified: new Date(),
+      lastModified: await getRouteLastModified(appDir, "/somatic/modalities", fallbackLastModified),
       changeFrequency: "monthly",
       priority: 0.7,
     },
     {
       url: `${baseUrl}/somatic/training`,
-      lastModified: new Date(),
+      lastModified: await getRouteLastModified(appDir, "/somatic/training", fallbackLastModified),
       changeFrequency: "monthly",
       priority: 0.7,
     },
     // Performance bridge
     {
       url: `${baseUrl}/performance`,
-      lastModified: new Date(),
+      lastModified: await getRouteLastModified(appDir, "/performance", fallbackLastModified),
       changeFrequency: "weekly",
       priority: 0.8,
     },
     // Tantra & SEO pages
     {
       url: `${baseUrl}/tantra-massage-ubud`,
-      lastModified: new Date(),
+      lastModified: await getRouteLastModified(appDir, "/tantra-massage-ubud", fallbackLastModified),
       changeFrequency: "weekly",
       priority: 0.9,
     },
     {
       url: `${baseUrl}/spirituality/articles/tantra-trauma-ptsd`,
-      lastModified: new Date(),
+      lastModified: await getRouteLastModified(
+        appDir,
+        "/spirituality/articles/tantra-trauma-ptsd",
+        fallbackLastModified
+      ),
       changeFrequency: "monthly",
       priority: 0.7,
     },
     {
       url: `${baseUrl}/spirituality/articles`,
-      lastModified: new Date(),
+      lastModified: await getRouteLastModified(appDir, "/spirituality/articles", fallbackLastModified),
       changeFrequency: "weekly",
       priority: 0.8,
     },
     {
       url: `${baseUrl}/spirituality/blog`,
-      lastModified: new Date(),
+      lastModified: await getRouteLastModified(appDir, "/spirituality/blog", fallbackLastModified),
       changeFrequency: "weekly",
       priority: 0.8,
     },
     {
       url: `${baseUrl}/spirituality/blog/what-to-expect-first-tantra-session`,
-      lastModified: new Date(),
+      lastModified: await getRouteLastModified(
+        appDir,
+        "/spirituality/blog/what-to-expect-first-tantra-session",
+        fallbackLastModified
+      ),
       changeFrequency: "monthly",
       priority: 0.7,
     },
     {
       url: `${baseUrl}/spirituality/blog/questions-to-ask-tantra-practitioner`,
-      lastModified: new Date(),
+      lastModified: await getRouteLastModified(
+        appDir,
+        "/spirituality/blog/questions-to-ask-tantra-practitioner",
+        fallbackLastModified
+      ),
       changeFrequency: "monthly",
       priority: 0.7,
     },
     {
       url: `${baseUrl}/spirituality/blog/tantra-vs-regular-massage`,
-      lastModified: new Date(),
+      lastModified: await getRouteLastModified(
+        appDir,
+        "/spirituality/blog/tantra-vs-regular-massage",
+        fallbackLastModified
+      ),
       changeFrequency: "monthly",
       priority: 0.7,
     },
     {
       url: `${baseUrl}/spirituality/blog/temple-space-preparation`,
-      lastModified: new Date(),
+      lastModified: await getRouteLastModified(
+        appDir,
+        "/spirituality/blog/temple-space-preparation",
+        fallbackLastModified
+      ),
       changeFrequency: "monthly",
       priority: 0.7,
     },
   ];
 
-  // Dynamic: Blog archive pages (exclude local route-first articles)
-  const articles = await fetchArticles();
   const articlePages: MetadataRoute.Sitemap = articles
     .filter((article) => article.slug && !isLocalArticle(article))
     .map((article) => ({
       url: `${baseUrl}/blog/${article.slug}`,
-      lastModified: new Date(article.publishedAt),
+      lastModified: getValidDate(article.publishedAt) ?? fallbackLastModified,
       changeFrequency: "monthly" as const,
       priority: 0.6,
     }));
 
   // Dynamic: Tag pages for blog filtering
   const tags = await getAllTags();
+  const tagLastModified = new Map<string, Date>();
+
+  for (const article of articles) {
+    const articleDate = getValidDate(article.publishedAt) ?? fallbackLastModified;
+
+    for (const tag of article.tags) {
+      const slug = tag.toLowerCase().replace(/\s+/g, "-");
+      const existing = tagLastModified.get(slug);
+
+      if (!existing || articleDate > existing) {
+        tagLastModified.set(slug, articleDate);
+      }
+    }
+  }
+
   const tagPages: MetadataRoute.Sitemap = tags.map((tag) => ({
     url: `${baseUrl}/blog/tag/${tag.slug}`,
-    lastModified: new Date(),
+    lastModified: tagLastModified.get(tag.slug) ?? fallbackLastModified,
     changeFrequency: "weekly" as const,
     priority: 0.5,
   }));
 
   // Dynamic: Projects
   const projects = await getProjects();
+  const projectRouteLastModified = getLatestDate(
+    [
+      await getFileLastModified(path.join(appDir, "tech", "[slug]", "page.tsx")),
+      await getFileLastModified(path.join(cmsDir, "projects.ts")),
+    ],
+    fallbackLastModified
+  );
+
   const projectPages: MetadataRoute.Sitemap = projects.map((project) => ({
     url: `${baseUrl}/tech/${project.slug}`,
-    lastModified: new Date(),
+    lastModified: projectRouteLastModified,
     changeFrequency: "monthly" as const,
     priority: 0.7,
   }));
 
   // Dynamic: Case Studies (individual pages)
   const caseStudies = getCaseStudies();
+  const caseStudyRouteLastModified = getLatestDate(
+    [
+      await getFileLastModified(path.join(appDir, "tech", "case-studies", "[id]", "page.tsx")),
+      await getFileLastModified(path.join(cmsDir, "case-studies.ts")),
+    ],
+    fallbackLastModified
+  );
+
   const caseStudyPages: MetadataRoute.Sitemap = caseStudies.map((cs) => ({
     url: `${baseUrl}/tech/case-studies/${cs.id}`,
-    lastModified: new Date(),
+    lastModified: caseStudyRouteLastModified,
     changeFrequency: "monthly" as const,
     priority: 0.7,
   }));
