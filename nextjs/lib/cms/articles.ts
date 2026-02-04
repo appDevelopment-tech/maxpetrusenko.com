@@ -357,6 +357,20 @@ const FALLBACK_ARTICLES: Article[] = [
     tags: ["Spirituality", "Bodywork", "Kyo-tai"],
     author: { name: "Max Petrusenko" },
   },
+  {
+    id: "30ae4f586c74",
+    slug: "30ae4f586c74",
+    title: "Spiritual Practices for Founders and Creators",
+    excerpt:
+      "Why high-performing founders are turning to somatic practices, tantra, and nervous system regulation to sustain peak performance without burnout.",
+    content:
+      "<p>After years of building companies and products, I noticed a pattern: the founders who sustained high performance weren't just grinding harder—they were regulating their nervous systems differently.</p><p>Somatic practices like tantra massage, breathwork, and conscious presence aren't just 'wellness' trends. They're tools for staying in your body when your mind wants to check out.</p><p>I work with founders and creators in Ubud, Bali and Miami, Florida, teaching practices that help you:</p><ul><li>Stay present during high-stakes decisions</li><li>Recover faster from setbacks</li><li>Access intuition and clarity on demand</li><li>Build resilience without numbing out</li></ul><p>Whether through 1:1 sessions, intensives, or workshops, the goal is the same: stay in your body so you can build from a place of presence, not reactivity.</p>",
+    image: "/images/article-covers/spirit-first-session.svg",
+    link: "https://medium.com/p/30ae4f586c74",
+    publishedAt: "2025-01-01T00:00:00.000Z",
+    tags: ["Spirituality", "Founders", "Somatic", "Performance"],
+    author: { name: "Max Petrusenko" },
+  },
 ];
 
 function sortArticlesByDateDesc(articles: Article[]): Article[] {
