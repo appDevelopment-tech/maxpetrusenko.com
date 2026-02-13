@@ -1,0 +1,16 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f0f23;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1a1a3e;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#gradient)"/>
+  <circle cx="1100" cy="50" r="200" fill="#3b82f6" opacity="0.15"/>
+  <circle cx="100" cy="580" r="180" fill="#8b5cf6" opacity="0.1"/>
+  <text x="600" y="260" font-family="system-ui, -apple-system, sans-serif" font-size="72" font-weight="bold" fill="#ffffff" text-anchor="middle">Max Petrusenko</text>
+  <text x="600" y="330" font-family="system-ui, -apple-system, sans-serif" font-size="38" fill="#3b82f6" text-anchor="middle">AI Automation Consultant</text>
+  <text x="600" y="400" font-family="system-ui, -apple-system, sans-serif" font-size="26" fill="#a0a0a0" text-anchor="middle">Claude Code • n8n Workflows • ChatGPT Integrations</text>
+  <text x="600" y="460" font-family="system-ui, -apple-system, sans-serif" font-size="24" fill="#22c55e" text-anchor="middle">$253k saved annually • 3x faster delivery</text>
+  <text x="600" y="580" font-family="system-ui, -apple-system, sans-serif" font-size="20" fill="#666666" text-anchor="middle">maxpetrusenko.com/tech</text>
+</svg>
