@@ -17,9 +17,9 @@ import { EmailCapture } from "@/components/forms/EmailCapture";
 
 export const metadata = generateMetadata({
   title: "Presence & Product",
-  description: "AI automation consultant who saved clients $253k/year. Also offers tantra massage & somatic sessions in Ubud, Bali and Miami, FL. Tech + spirituality, separate paths.",
+  description: "Two practices. Choose your path. Tech automation and somatic energy work.",
   ogType: "website",
-  ogImage: "/images/og-home.svg",
+  ogImage: "/images/og-home.png",
   canonical: absoluteUrl("/"),
 });
 

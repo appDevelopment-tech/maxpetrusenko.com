@@ -17,12 +17,13 @@ export const viewport: Viewport = {
 };
 
 export const metadata = {
+  metadataBase: new URL("https://www.maxpetrusenko.com"),
   title: {
     default: "Max Petrusenko | Presence & Product",
     template: "%s | Max Petrusenko",
   },
   description:
-    "Tech builder and somatic practitioner. Explore portfolio, atelier, and mindfold work.",
+    "Two practices. Choose your path. Tech automation and somatic energy work.",
   icons: {
     icon: "/favicon.svg",
     apple: "/apple-touch-icon.svg",
