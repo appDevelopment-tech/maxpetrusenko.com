@@ -1,0 +1,16 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a1a1a;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2d1f3d;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#gradient)"/>
+  <circle cx="1050" cy="80" r="180" fill="#d4a574" opacity="0.12"/>
+  <circle cx="150" cy="550" r="200" fill="#c9a87c" opacity="0.1"/>
+  <text x="600" y="260" font-family="system-ui, -apple-system, sans-serif" font-size="72" font-weight="bold" fill="#ffffff" text-anchor="middle">Presence Atelier</text>
+  <text x="600" y="330" font-family="system-ui, -apple-system, sans-serif" font-size="38" fill="#d4a574" text-anchor="middle">Tantra & Somatic Energy Work</text>
+  <text x="600" y="400" font-family="system-ui, -apple-system, sans-serif" font-size="26" fill="#a0a0a0" text-anchor="middle">Nervous System Reset • Deep Repatterning • Boundaries First</text>
+  <text x="600" y="460" font-family="system-ui, -apple-system, sans-serif" font-size="24" fill="#c9a87c" text-anchor="middle">Ubud, Bali • Miami, Florida</text>
+  <text x="600" y="580" font-family="system-ui, -apple-system, sans-serif" font-size="20" fill="#666666" text-anchor="middle">maxpetrusenko.com/spirituality</text>
+</svg>

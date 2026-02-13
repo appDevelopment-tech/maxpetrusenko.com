@@ -18,6 +18,7 @@ export const metadata = generateMetadata({
   title: "Tech",
   description: "AI automation consultant specializing in Claude Code, n8n workflows, and ChatGPT integrations. Available remotely worldwide and in-person in Miami, Ubud Bali, and globally while traveling.",
   ogType: "website",
+  ogImage: "/images/og-tech.svg",
   canonical: absoluteUrl("/tech"),
 });
 

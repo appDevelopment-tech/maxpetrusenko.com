@@ -20,6 +20,7 @@ export const metadata = generateMetadata({
   title: "Spirituality - Tantra & Somatic Energy Work",
   description: "Professional tantra massage and somatic energy work for men, women, and couples in Ubud, Bali and Miami, Florida. Certified tantric practitioner with nervous system reset, deep repatterning, and conscious presence sessions. Available in South Florida from West Palm Beach to the Keys.",
   ogType: "website",
+  ogImage: "/images/og-spirituality.svg",
   canonical: absoluteUrl("/spirituality"),
 });
 

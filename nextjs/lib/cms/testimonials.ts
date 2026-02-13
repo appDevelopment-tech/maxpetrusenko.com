@@ -26,7 +26,7 @@ export const testimonials: Testimonial[] = [
     quote: "Max built our content automation system in 3 weeks. We went from spending 15+ hours/week on distribution to under 2. The ROI was immediate.",
     author: "J.K.",
     role: "Creator, 200K+ followers",
-    type: "tech"
+    type: "tech",
   },
   {
     quote: "$253k saved annually via Claude Code automation. 3x faster feature delivery, 73% fewer bugs in production, and zero regressions across 127 PRs. Best technical investment we've made.",
@@ -35,14 +35,6 @@ export const testimonials: Testimonial[] = [
     type: "tech",
     caseStudyUrl: "/tech/case-studies/claude-code-automation",
     // External verification: GitHub repo with implementation (client can add)
-    verified: false,
-  },
-  {
-    quote: "Max built our content automation system in 3 weeks. We went from spending 15+ hours/week on distribution to under 2. The ROI was immediate.",
-    author: "J.K.",
-    role: "Creator, 200K+ followers",
-    type: "tech",
-    externalLink: "https://youtube.com/", // Could link to creator's public channel
     verified: false,
   },
   {

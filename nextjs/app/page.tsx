@@ -17,8 +17,9 @@ import { EmailCapture } from "@/components/forms/EmailCapture";
 
 export const metadata = generateMetadata({
   title: "Presence & Product",
-  description: "Building calm products and embodied experiences. Two worlds I live in: shipping tech for creators and founders, and running a private atelier for somatic energy work.",
+  description: "AI automation consultant who saved clients $253k/year. Also offers tantra massage & somatic sessions in Ubud, Bali and Miami, FL. Tech + spirituality, separate paths.",
   ogType: "website",
+  ogImage: "/images/og-home.svg",
   canonical: absoluteUrl("/"),
 });
 
