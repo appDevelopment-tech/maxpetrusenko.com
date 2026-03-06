@@ -5,6 +5,7 @@ import { siteConfig } from "@/config/site";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { DirectAnswer } from "@/components/seo/DirectAnswer";
 import { generateMetadata, absoluteUrl } from "@/lib/seo/metadata";
+import { MouseTrackingGradient } from "@/components/motion/MouseTrackingGradient";
 import {
   generateWebPageSchema,
   generateBreadcrumbSchema,
@@ -102,6 +103,13 @@ export default async function HomePage() {
       <section className="px-4 pb-8 pt-2 md:px-6 md:pb-12">
         <div className="ui-fade-up delay-1 mx-auto max-w-6xl overflow-hidden rounded-[30px] border border-white/10 bg-[#070b12] text-white shadow-[0_36px_90px_rgba(4,10,24,0.42)]">
           <div className="relative">
+            {/* Mouse-tracking gradient overlay */}
+            <MouseTrackingGradient
+              color1="rgba(111, 170, 255, 0.12)"
+              color2="rgba(95, 227, 188, 0.08)"
+              color3="rgba(210, 163, 93, 0.06)"
+              intensity={80}
+            />
             <div className="hero-grid-motion absolute inset-0 bg-[radial-gradient(circle_at_12%_20%,rgba(111,170,255,0.26),transparent_45%),radial-gradient(circle_at_88%_4%,rgba(95,227,188,0.24),transparent_40%),linear-gradient(145deg,#070b12_0%,#0a1220_58%,#0b1623_100%)]" />
             <Image
               src="/images/generated/home-hero-generated.jpg"

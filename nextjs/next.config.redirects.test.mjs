@@ -24,3 +24,13 @@ test("includes permanent redirects for legacy homepage and mindfold aliases", as
     )
   );
 });
+
+test("allows instagram thumbnails for motion embeds", () => {
+  assert.ok(
+    nextConfig.images.remotePatterns.some(
+      (entry) =>
+        entry.protocol === "https" &&
+        entry.hostname === "instagram.com"
+    )
+  );
+});

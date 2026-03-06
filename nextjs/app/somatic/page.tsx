@@ -4,6 +4,10 @@ import { siteConfig } from "@/config/site";
 import { generateMetadata, absoluteUrl } from "@/lib/seo/metadata";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { generateOrganizationSchema, generateWebPageSchema, generateBreadcrumbSchema } from "@/lib/seo/structured-data";
+import { InstagramEmbed } from "@/components/motion/InstagramEmbed";
+import { LivingTestimonials } from "@/components/motion/LivingTestimonials";
+import { FloatingOrbs } from "@/components/motion/AmbientFloat";
+import { ScrollReveal } from "@/components/motion/ScrollReveal";
 
 export const metadata = generateMetadata({
   title: "Somatic Practice - Nervous System Regulation & Energy Work",
@@ -32,8 +36,9 @@ export default function SomaticPage() {
         ])}
       />
 
-      {/* Hero image section */}
-      <div className="hero-image-section somatic-hero">
+      {/* Hero image section with ambient motion */}
+      <div className="hero-image-section somatic-hero relative overflow-hidden">
+        <FloatingOrbs color="rgba(14, 97, 93, 0.06)" count={2} />
         <div className="hero-image-overlay"></div>
         <Image
           src="/images/bali/DSC04769.jpg"
@@ -295,6 +300,43 @@ export default function SomaticPage() {
             </div>
           </div>
         </section>
+
+        {/* Contact Improv - Instagram Reel Section */}
+        <ScrollReveal>
+          <section className="section">
+            <div className="section-head">
+              <h2>Contact Improv & Embodied Practice</h2>
+              <span className="section-note">
+                Movement. Connection. Presence. Sometimes bananas, sometimes pancakes.
+              </span>
+            </div>
+            <div className="max-w-md mx-auto">
+              <InstagramEmbed
+                url="https://www.instagram.com/reel/DVjMRgUDv0P/"
+                caption="We danced. We practiced. We rolled across the floor. Sometimes we were bananas. Sometimes we were pancakes. We laughed, we listened, we moved together. A beautiful night of contact improvisation."
+              />
+            </div>
+            <p className="text-center text-sm text-[var(--muted)] mt-4 italic">
+              Contact improv is about presence — listening through weight, momentum, and touch.
+              My somatic work draws from this practice: attuning to what emerges, moment by moment.
+            </p>
+          </section>
+        </ScrollReveal>
+
+        {/* Living Testimonials */}
+        <ScrollReveal delay={200}>
+          <section className="section">
+            <div className="section-head">
+              <h2>Client Experiences</h2>
+              <span className="section-note">
+                Real words from real sessions. No cherry-picking.
+              </span>
+            </div>
+            <div className="max-w-2xl mx-auto">
+              <LivingTestimonials />
+            </div>
+          </section>
+        </ScrollReveal>
 
         <section className="section">
           <div className="section-head">
