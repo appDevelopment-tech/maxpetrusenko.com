@@ -24,6 +24,10 @@ interface ExecutionContext {
 	waitUntil(promise: Promise<unknown>): void;
 }
 
+interface ExportedHandler<TEnv> {
+	fetch(request: Request, env: TEnv, ctx: ExecutionContext): Promise<Response>;
+}
+
 interface Env {
 	EMAIL_SUBS: KVNamespace;
 }
