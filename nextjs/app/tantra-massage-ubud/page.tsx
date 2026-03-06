@@ -13,8 +13,8 @@ import {
 } from "@/lib/seo/structured-data";
 
 export const metadata = generateMetadata({
-  title: "Tantra Massage Ubud, Bali | Professional Somatic Energy Work",
-  description: "Professional tantra massage in Ubud, Bali. Available year-round for nervous system reset, trauma release, and couples tantra sessions. Fast WhatsApp response. Certified practitioner serving Campuan, Penestanan, Sanggingan, and all of Gianyar Regency.",
+  title: "Tantric Massage Ubud, Bali | Tantra Sessions with Max Petrusenko",
+  description: "Tantric massage in Ubud, Bali for nervous system reset, trauma release, and couples tantra sessions. Certified practitioner serving Ubud and Gianyar Regency with fast WhatsApp booking.",
   ogType: "website",
   canonical: absoluteUrl("/tantra-massage-ubud"),
 });
@@ -33,8 +33,8 @@ export default function TantraMassageUbudPage() {
       <JsonLd
         type="WebPage"
         data={generateWebPageSchema({
-          title: "Tantra Massage Ubud, Bali | Professional Somatic Energy Work",
-          description: "Professional tantra massage in Ubud, Bali. Available year-round for nervous system reset, trauma release, and couples tantra sessions.",
+          title: "Tantric Massage Ubud, Bali | Tantra Sessions with Max Petrusenko",
+          description: "Tantric massage in Ubud, Bali for nervous system reset, trauma release, and couples tantra sessions.",
           url: "/tantra-massage-ubud",
         })}
       />
@@ -46,8 +46,25 @@ export default function TantraMassageUbudPage() {
         ])}
       />
 
+      <div className="hero-image-section ui-immersive-hero ui-fade-up delay-1">
+        <div className="hero-image-overlay"></div>
+        <Image
+          src="/images/bali/DSC04978.jpg"
+          alt="Ubud Bali temple and nature atmosphere"
+          fill
+          priority
+          sizes="100vw"
+          style={{ objectFit: "cover" }}
+          quality={88}
+        />
+        <div className="hero-image-content">
+          <h2>Tantra Massage Ubud</h2>
+          <p>Private sessions in Bali with boundaries-first somatic practice</p>
+        </div>
+      </div>
+
       <div className="container">
-        <section className="hero">
+        <section className="hero ui-fade-up delay-2">
           <div className="hero-text">
             <div className="eyebrow">
               <span className="dot"></span> Ubud, Bali
@@ -122,7 +139,7 @@ export default function TantraMassageUbudPage() {
         </div>
 
         {/* What to expect section */}
-        <section className="section">
+        <section className="section ui-fade-up delay-3">
           <div className="section-head">
             <h2>What to Expect</h2>
             <span className="section-note">
@@ -220,7 +237,6 @@ export default function TantraMassageUbudPage() {
                 sizes="(max-width: 768px) 100vw, 50vw"
                 style={{ objectFit: "cover" }}
                 quality={90}
-                priority
               />
             </div>
           </div>

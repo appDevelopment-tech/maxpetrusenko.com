@@ -3,6 +3,8 @@ import path from "node:path";
 
 const projectRoot = path.resolve(path.dirname(new URL(import.meta.url).pathname), "..");
 const appDir = path.join(projectRoot, "app");
+const repoRoot = path.resolve(projectRoot, "..");
+const envFile = path.join(repoRoot, ".env");
 
 const knownDynamicPrefixes = [
   "/blog/",
@@ -14,6 +16,7 @@ const knownDynamicPrefixes = [
 const criticalRoutes = [
   "/",
   "/blog",
+  "/blog/topics",
   "/spirituality",
   "/spirituality/articles",
   "/spirituality/blog",
@@ -143,6 +146,34 @@ function checkWeakContentPatterns() {
 
 function main() {
   const errors = [];
+
+  const tokenFromEnv =
+    process.env.CLOUDFLARE_API_TOKEN ||
+    process.env.CF_API_TOKEN ||
+    process.env.CLOUDFARE_USER_TOKEN;
+  let tokenFromFile = null;
+
+  if (!tokenFromEnv && fs.existsSync(envFile)) {
+    const rawEnv = fs.readFileSync(envFile, "utf8");
+    for (const line of rawEnv.split("\n")) {
+      const trimmed = line.trim();
+      if (!trimmed || trimmed.startsWith("#")) continue;
+      const eqIndex = trimmed.indexOf("=");
+      if (eqIndex === -1) continue;
+      const key = trimmed.slice(0, eqIndex).trim();
+      const value = trimmed.slice(eqIndex + 1).trim().replace(/^['"]|['"]$/g, "");
+      if (key === "CLOUDFLARE_API_TOKEN" || key === "CF_API_TOKEN" || key === "CLOUDFARE_USER_TOKEN") {
+        tokenFromFile = value;
+        break;
+      }
+    }
+  }
+
+  if (!tokenFromEnv && !tokenFromFile) {
+    errors.push(
+      "Missing CLOUDFLARE_API_TOKEN (or CF_API_TOKEN / CLOUDFARE_USER_TOKEN). Add it to your shell env or .env at repo root so deploy can run in CI/non-interactive mode."
+    );
+  }
 
   const missingCritical = criticalRoutes.filter((route) => !routeFileExists(route));
   if (missingCritical.length > 0) {

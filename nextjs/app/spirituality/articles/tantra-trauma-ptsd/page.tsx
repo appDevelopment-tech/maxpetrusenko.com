@@ -3,6 +3,7 @@ import Image from "next/image";
 import { generateMetadata, absoluteUrl } from "@/lib/seo/metadata";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { generateArticleSchema, generateBreadcrumbSchema } from "@/lib/seo/structured-data";
+import { RelatedReading } from "@/components/articles/RelatedReading";
 
 export const metadata = generateMetadata({
   title: "Tantra Massage for Trauma & PTSD: How Somatic Touch Rewires Your Nervous System",
@@ -312,7 +313,8 @@ export default function TantraTraumaArticle() {
               <strong>Location:</strong> Ubud, Bali (Gianyar Regency) • Available year-round
             </p>
           </footer>
-        </article>
+          <RelatedReading currentLink="/spirituality/articles/tantra-trauma-ptsd" />
+</article>
 
         {/* Related articles section */}
         <section className="section">

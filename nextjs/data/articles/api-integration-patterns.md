@@ -176,4 +176,4 @@ The patterns here solve the technical side. The rest is discipline.
 
 ---
 
-*Need help building reliable integrations? [Let&apos;s talk](https://maxpetrusenko.com/tech/ai-automation).*
+*Need help building reliable integrations? [Let&apos;s talk](https://www.maxpetrusenko.com/tech/ai-automation).*

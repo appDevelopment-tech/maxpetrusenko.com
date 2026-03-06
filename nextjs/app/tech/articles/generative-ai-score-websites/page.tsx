@@ -3,6 +3,7 @@ import Image from "next/image";
 import { generateMetadata, absoluteUrl } from "@/lib/seo/metadata";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { generateWebPageSchema, generateTechArticleSchema, generateBreadcrumbSchema, generateScheduleActionSchema, generateTechPersonSchema } from "@/lib/seo/structured-data";
+import { RelatedReading } from "@/components/articles/RelatedReading";
 
 export const metadata = generateMetadata({
   title: "Generative AI Score for Websites - What AI Engines Value",
@@ -399,7 +400,8 @@ export default function GenerativeAIScoreArticle() {
               <span>Claude</span>
             </div>
           </footer>
-        </article>
+          <RelatedReading currentLink="/tech/articles/generative-ai-score-websites" />
+</article>
       </div>
     </>
   );

@@ -3,6 +3,7 @@ import Image from "next/image";
 import { generateMetadata, absoluteUrl } from "@/lib/seo/metadata";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { generateTechArticleSchema, generateBreadcrumbSchema, generateScheduleActionSchema } from "@/lib/seo/structured-data";
+import { RelatedReading } from "@/components/articles/RelatedReading";
 
 export const metadata = generateMetadata({
   title: "ChatGPT API Integration Best Practices",
@@ -459,28 +460,8 @@ export default function ChatGPTApiArticle() {
               <strong>Availability:</strong> Remote worldwide · In-person in Miami FL, Ubud Bali
             </p>
           </footer>
-        </article>
-
-        {/* Related articles section */}
-        <section className="section">
-          <div className="section-head">
-            <h2>Related Articles</h2>
-          </div>
-          <div className="cards-3 grid">
-            <Link className="card" href="/tech/articles/claude-code-setup">
-              <h3>Claude Code Setup Guide</h3>
-              <p>Configure Claude Code with sub-agents, custom skills, and multi-agent systems for teams.</p>
-            </Link>
-            <Link className="card" href="/tech/articles/n8n-workflow-automation">
-              <h3>n8n Workflow Automation</h3>
-              <p>From zero to production with n8n. API integrations, error handling, and monitoring.</p>
-            </Link>
-            <Link className="card" href="/tech">
-              <h3>Tech Services</h3>
-              <p>AI automation consulting, ChatGPT integration, and workflow automation services.</p>
-            </Link>
-          </div>
-        </section>
+          <RelatedReading currentLink="/tech/articles/chatgpt-api-integration" />
+</article>
       </div>
     </>
   );

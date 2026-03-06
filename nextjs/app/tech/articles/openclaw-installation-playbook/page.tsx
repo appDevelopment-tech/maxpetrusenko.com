@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import { RelatedReading } from "@/components/articles/RelatedReading";
 import { generateMetadata, absoluteUrl } from "@/lib/seo/metadata";
 import { JsonLd } from "@/components/seo/JsonLd";
 import {
@@ -11,9 +12,9 @@ import {
 } from "@/lib/seo/structured-data";
 
 export const metadata = generateMetadata({
-  title: "OpenClaw Installation Playbook for Teams",
+  title: "OpenClaw Install Guide 2026 | Teams, Helm, Railway, Dokploy",
   description:
-    "Practical OpenClaw installation guide covering environment prep, secure deployment, rollout checklist, and post-install validation for teams.",
+    "OpenClaw setup guide for teams: Microsoft Teams integration, Helm and Kubernetes rollout, Railway and Dokploy deployment, permissions, and post-install validation.",
   ogType: "article",
   canonical: absoluteUrl("/tech/articles/openclaw-installation-playbook"),
   ogImage: "/images/article-covers/tech-openclaw-playbook.svg",
@@ -21,6 +22,12 @@ export const metadata = generateMetadata({
     "OpenClaw install",
     "OpenClaw setup",
     "OpenClaw deployment",
+    "OpenClaw Teams",
+    "OpenClaw Microsoft Teams",
+    "OpenClaw Kubernetes",
+    "OpenClaw Helm chart",
+    "Dokploy OpenClaw",
+    "Railway OpenClaw",
     "AI workflow installation",
     "agent infrastructure",
   ],
@@ -32,14 +39,14 @@ export default function OpenClawInstallArticle() {
       <JsonLd
         type="TechArticle"
         data={generateTechArticleSchema({
-          headline: "OpenClaw Installation Playbook for Teams",
+          headline: "OpenClaw Installation Guide 2026",
           description:
-            "Environment prep, secure deployment, and rollout guardrails for OpenClaw installations.",
+            "Environment prep, secure deployment, and rollout guardrails for OpenClaw installations across common deployment targets.",
           image: "/images/article-covers/tech-openclaw-playbook.svg",
           url: "/tech/articles/openclaw-installation-playbook",
           datePublished: "2026-02-02",
           author: "Max Petrusenko",
-          keywords: ["OpenClaw install", "OpenClaw setup", "deployment checklist"],
+          keywords: ["OpenClaw install", "OpenClaw setup", "OpenClaw Teams", "deployment checklist"],
         })}
       />
       <JsonLd
@@ -55,9 +62,9 @@ export default function OpenClawInstallArticle() {
       <JsonLd
         type="WebPage"
         data={generateWebPageSchema({
-          title: "OpenClaw Installation Playbook for Teams",
+          title: "OpenClaw Installation Guide 2026",
           description:
-            "A field-tested OpenClaw install sequence with technical and operational guardrails.",
+            "A field-tested OpenClaw install sequence with deployment targets and operational guardrails.",
           url: "/tech/articles/openclaw-installation-playbook",
           datePublished: "2026-02-02",
         })}
@@ -76,9 +83,9 @@ export default function OpenClawInstallArticle() {
             </div>
             <h1>OpenClaw Installation Playbook for Teams</h1>
             <p className="article-subtitle">
-              If you are searching for OpenClaw setup help, this is the deployment
-              sequence I use with teams to avoid fragile installs, broken permissions,
-              and unsafe production rollouts.
+              If you are searching for OpenClaw setup help, Microsoft Teams integration,
+              Helm deployment, or Dokploy and Railway rollout guidance, this is the
+              sequence I use to avoid fragile installs, broken permissions, and unsafe cutovers.
             </p>
             <div className="article-meta">
               <time>February 2, 2026</time>
@@ -137,6 +144,25 @@ export default function OpenClawInstallArticle() {
               <li>Post-deploy smoke tests written and automated</li>
             </ul>
 
+            <h2>Deployment targets this playbook supports</h2>
+            <p>
+              This guide is platform-agnostic. The same installation sequence
+              applies whether you deploy OpenClaw on a VPS or a managed platform.
+            </p>
+            <ul>
+              <li>Self-hosted servers (VPS, bare metal)</li>
+              <li>Kubernetes (including Helm chart-based installs)</li>
+              <li>Railway, Dokploy, or Coolify deployments</li>
+            </ul>
+
+            <h2>Teams integration notes</h2>
+            <p>
+              If you are deploying OpenClaw for Microsoft Teams or similar chat
+              integrations, include OAuth scopes, app permissions, and callback
+              URLs in your pre-install checklist. Treat chat integrations as
+              production-critical dependencies with their own rollback plan.
+            </p>
+
             <h2>Recommended install sequence</h2>
             <ol>
               <li>Install in a disposable staging environment.</li>
@@ -188,7 +214,8 @@ export default function OpenClawInstallArticle() {
               </a>
             </div>
           </div>
-        </article>
+          <RelatedReading currentLink="/tech/articles/openclaw-installation-playbook" />
+</article>
       </div>
     </>
   );

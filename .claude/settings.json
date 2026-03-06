@@ -1,0 +1,113 @@
+{
+  "env": {
+    "MAX_THINKING_TOKENS": "3000",
+    "ANTHROPIC_AUTH_TOKEN": "f16faccd21ba49f7994bb2f187e6e0ab.2FbJOMAbHc3djSUa",
+    "ANTHROPIC_BASE_URL": "https://api.z.ai/api/anthropic",
+    "API_TIMEOUT_MS": "3000000",
+      "ENABLE_TOOL_SEARCH": "true"
+  },
+  "permissions": {
+    "allow": [
+      "Read(**)",
+      "Edit(**)",
+      "MultiEdit(**)",
+      "Write(**)",
+      "Glob(**)",
+      "Grep(**)",
+      "LS(**)",
+      "TodoRead",
+      "TodoWrite(**)",
+      "Task(**)",
+      "Bash(git status:*)",
+      "Bash(git log:*)",
+      "Bash(git diff:*)",
+      "Bash(git show:*)",
+      "Bash(git blame:*)",
+      "Bash(git branch:*)",
+      "Bash(git remote -v:*)",
+      "Bash(git config --get:*)",
+      "Bash(ls:*)",
+      "Bash(cat :*)",
+      "Bash(less :*)",
+      "Bash(head:*)",
+      "Bash(tail:*)",
+      "Bash(grep:*)",
+      "Bash(find:*)",
+      "Bash(tree:*)",
+      "Bash(pwd:*)",
+      "Bash(wc:*)",
+      "Bash(diff :*)",
+      "Bash(sed -n:*)",
+      "Bash(awk:*)",
+      "Bash(cut:*)",
+      "Bash(sort:*)",
+      "Bash(uniq:*)",
+      "Bash(basename :*)",
+      "Bash(dirname :*)",
+      "Bash(realpath :*)",
+      "Bash(readlink :*)",
+      "Bash(curl:*)",
+      "Bash(jq:*)",
+      "Bash(yq eval:*)",
+      "Bash(python:*)",
+      "Bash(python3:*)",
+      "Bash(node:*)",
+      "Bash(npm list:*)",
+      "Bash(npm run:*)",
+      "Bash(npx:*)",
+      "Bash(black --check:*)",
+      "Bash(black --diff:*)",
+      "Bash(pylint:*)",
+      "Bash(flake8:*)",
+      "Bash(mypy:*)",
+      "Bash(eslint:*)",
+      "Bash(pytest:*)",
+      "Bash(make test:*)",
+      "Bash(npm test:*)",
+      "Bash(make -n:*)",
+      "Bash(man :*)",
+      "Bash(pydoc:*)",
+      "Bash(which :*)",
+      "Bash(type :*)",
+      "Bash(echo :*)",
+      "Bash(printf :*)",
+      "Bash(test :*)",
+      "Bash(true:*)",
+      "Bash(false:*)",
+      "Bash(:* | grep:*)",
+      "Bash(:* | jq:*)",
+      "Bash(:* | head:*)",
+      "Bash(:* | tail:*)",
+      "Bash(:* | wc:*)",
+      "Bash(:* | sort:*)",
+      "Bash(:* | uniq:*)",
+      "mcp__supabaseOfficial*",
+      "mcp__playwright__browser*"
+    ],
+    "deny": []
+  },
+  "model": "opus",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "you are not right",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "#!/bin/bash\nset -euo pipefail\ntrap 'echo \"at line $LINENO, exit code $? from $BASH_COMMAND\" >&2; exit 1' ERR\n\n# This is a Claude Code hook to stop it saying \"you are right\".\n#\n# Installation:\n# 1. Save this script and chmod +x it to make it executable.\n# 2. Within Claude Code, /hooks / UserPromptSubmit > Add a new hook (this file)\n#\n# How it works:\n# This script checks whether the assistant has recently told the user they are right.\n# If so, it appends a system-reminder to the following user prompt,\n# reminding the assistant not to do that, and giving it constructive\n# examples of how it should respond to the user instead.\n\nstdin=$(cat)\ntranscript_path=$(echo \"$stdin\" | jq -r \".transcript_path\")\n\n# We'll look through the last 5 items in the transcript.\n# Sometimes the final item will be assistant thinking,\n# and the previous one will be \"you're right\".\n# We'll look for any triggering phrase like \"You're right\"\n# or \"you are absolutely correct\".\nitems=$(grep '\"role\":\"assistant\"' \"$transcript_path\" | tail -n 5)\nneeds_reminder=false\nwhile IFS= read -r item; do\n    [[ \"$(jq -r '.type // empty' <<< \"$item\")\" == \"assistant\" ]] || continue\n    [[ \"$(jq -r '.message.content[0].type // empty' <<< \"$item\")\" == \"text\" ]] || continue\n    text=$(jq -r '.message.content[0].text' <<< \"$item\")\n    [[ \"${text:0:80}\" =~ .*[Yy]ou.*(right|correct) ]] && needs_reminder=true\n    [[ \"${text:0:80}\" =~ .*[Aa]bsolutely ]] && needs_reminder=true\n    [[ \"${text:0:80}\" =~ .*사용자가.*맞다 ]] && needs_reminder=true  # Korean\n    [[ \"${text:0:80}\" =~ .*맞습니다 ]] && needs_reminder=true  # Korean\ndone <<< \"$items\"\n[[ \"$needs_reminder\" == \"true\" ]] || exit 0\n\n# upon exit code 0, Claude Code will append stdout to the context\n# and proceed.\ncat <<'EOF'\n<system-reminder>\nYou MUST NEVER use the phrase 'you are right' or similar.\nAvoid reflexive agreement. Instead, provide substantive technical analysis.\nYou must always look for flaws, bugs, loopholes, counter-examples,\ninvalid assumptions in what the user writes. If you find none,\nand find that the user is correct, you must state that dispassionately\nand with a concrete specific reason for why you agree, before\ncontinuing with your work.\n<example>\nuser: It's failing on empty inputs, so we should add a null-check.\nassistant: That approach seems to avoid the immediate issue.\nHowever it's not idiomatic, and hasn't considered the edge case\nof an empty string. A more general approach would be to check\nfor falsy values.\n</example>\n<example>\nuser: I'm concerned that we haven't handled connection failure.\nassistant: [thinks hard] I do indeed spot a connection failure\nedge case: if the connection attempt on line 42 fails, then\nthe catch handler on line 49 won't catch it.\n[ultrathinks] The most elegant and rigorous solution would be\nto move failure handling up to the caller.\n</example>\n</system-reminder>\nEOF\n\nexit 0"
+          }
+        ]
+      }
+    ]
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "bash -c '. \"$HOME/.claude/statusLine.sh\""
+  },
+  "enabledPlugins": {
+    "frontend-design@claude-plugins-official": true,
+    "ralph-loop@claude-plugins-official": true,
+    "claude-mem@thedotmack": true
+  },
+  "alwaysThinkingEnabled": true
+}

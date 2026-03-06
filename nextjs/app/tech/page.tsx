@@ -3,8 +3,10 @@ import Image from "next/image";
 import { siteConfig } from "@/config/site";
 import { generateMetadata, absoluteUrl } from "@/lib/seo/metadata";
 import { JsonLd } from "@/components/seo/JsonLd";
+import { DirectAnswer } from "@/components/seo/DirectAnswer";
 import { EmailCaptureInline } from "@/components/forms/EmailCaptureInline";
 import { Testimonials } from "@/components/testimonials/Testimonials";
+import { fetchArticles, isLocalArticle } from "@/lib/cms/articles";
 import {
   generateWebPageSchema,
   generateBreadcrumbSchema,
@@ -21,7 +23,14 @@ export const metadata = generateMetadata({
   canonical: absoluteUrl("/tech"),
 });
 
-export default function TechPage() {
+export default async function TechPage() {
+  const articles = await fetchArticles();
+  const techArticles = articles.filter((article) =>
+    article.link.startsWith("/tech/") ||
+    article.tags.some((tag) => tag.toLowerCase() === "tech")
+  );
+  const recentArticles = (techArticles.length >= 3 ? techArticles : articles).slice(0, 3);
+
   return (
     <>
       <JsonLd
@@ -50,8 +59,15 @@ export default function TechPage() {
       <JsonLd type="ScheduleAction" data={generateScheduleActionSchema("tech")} />
       <JsonLd type="Person" data={generateTechPersonSchema()} />
 
+      {/* Direct Answer block for AI citation optimization */}
+      <DirectAnswer
+        schemaType="WebPage"
+        question="What AI automation services does Max Petrusenko offer?"
+        answer="Max Petrusenko helps founders and teams ship AI automations and internal tools in weeks, not months. His work focuses on Claude Code, n8n, and custom agent pipelines that reduce ops load, speed delivery, and replace fragile SaaS workflows. Engagements are hands-on, outcome-driven, and production-ready. A recent Claude Code implementation saved $253k annually with 3x faster feature delivery."
+      />
+
       {/* Hero image section */}
-      <div className="hero-image-section">
+      <div className="hero-image-section ui-immersive-hero ui-fade-up delay-1">
         <div className="hero-image-overlay"></div>
         <Image
           src="/images/tech-portrait.jpg"
@@ -63,13 +79,13 @@ export default function TechPage() {
           quality={92}
         />
         <div className="hero-image-content">
-          <h1>Calm, outcome-first products</h1>
+          <h2>Calm, outcome-first products</h2>
           <p>AI automation, product strategy, and systems for creators and founders.</p>
         </div>
       </div>
 
       <div className="container">
-        <section className="hero">
+        <section className="hero ui-fade-up delay-2">
           <div className="hero-text">
             <div className="eyebrow">
               <span className="dot"></span> Tech & Product
@@ -133,7 +149,7 @@ export default function TechPage() {
         </section>
 
         {/* Email capture for tech updates */}
-        <section className="section">
+        <section className="section ui-fade-up delay-3">
           <EmailCaptureInline
             source="tech-page"
             headline="Get automation tips & updates"
@@ -143,7 +159,7 @@ export default function TechPage() {
         </section>
 
         {/* Services Overview - AI-extractable service details */}
-        <section className="section">
+        <section className="section ui-fade-up delay-3">
           <div className="section-head">
             <h2>Services Overview</h2>
             <span className="section-note">
@@ -576,135 +592,61 @@ export default function TechPage() {
             <span className="section-note">Security, automation, and systems. Also published on Medium.</span>
           </div>
           <div className="article-list">
-            <a
-              className="article-card"
-              href="https://medium.com/p/65b991356c25"
-              target="_blank"
-              rel="noopener"
-            >
-              <Image
-                className="article-thumb"
-                src="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*uSx3Al0UcKOBhxpIey3hAw.png"
-                alt="Claude skills article cover"
-                width={400}
-                height={225}
-              />
-              <div className="article-body">
-                <span className="article-title">
-                  Unleash Your Inner Wizard: Claude Skills
-                </span>
-                <span className="article-sub">
-                  41K presentations · 8.7K views · 5.4K reads
-                </span>
-                <div className="article-meta">
-                  <span className="stat">
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="1.8"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"></path>
-                      <circle cx="12" cy="12" r="3"></circle>
-                    </svg>
-                    8.7K
-                  </span>
-                  <span className="stat">—</span>
-                  <span className="stat">8 min</span>
-                </div>
-              </div>
-            </a>
-            <a
-              className="article-card"
-              href="https://medium.com/p/0faac1248080"
-              target="_blank"
-              rel="noopener"
-            >
-              <Image
-                className="article-thumb"
-                src="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*uSx3Al0UcKOBhxpIey3hAw.png"
-                alt="Claude code article cover"
-                width={400}
-                height={225}
-              />
-              <div className="article-body">
-                <span className="article-title">
-                  Claude Code: The AI Developer&apos;s Secret Weapon
-                </span>
-                <span className="article-sub">47K views · AI-assisted dev</span>
-                <div className="article-meta">
-                  <span className="stat">
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="1.8"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"></path>
-                      <circle cx="12" cy="12" r="3"></circle>
-                    </svg>
-                    47K
-                  </span>
-                  <span className="stat">—</span>
-                  <span className="stat">6 min</span>
-                </div>
-              </div>
-            </a>
-            <a
-              className="article-card"
-              href="https://medium.com/p/99c594d458b5"
-              target="_blank"
-              rel="noopener"
-            >
-              <Image
-                className="article-thumb"
-                src="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*8Ggv_is-3TE87N5nLIMfhA.jpeg"
-                alt="GrapheneOS phone cover"
-                width={400}
-                height={225}
-              />
-              <div className="article-body">
-                <span className="article-title">
-                  The Smartphone That Makes Police Officers Sweat
-                </span>
-                <span className="article-sub">249K views · GrapheneOS privacy</span>
-                <div className="article-meta">
-                  <span className="stat">
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="1.8"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"></path>
-                      <circle cx="12" cy="12" r="3"></circle>
-                    </svg>
-                    249K
-                  </span>
-                  <span className="stat">
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="1.8"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <path d="M21 15V5a2 2 0 0 0-2-2H7l-4 4v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2z"></path>
-                      <path d="M3 7h2a2 2 0 0 0 2-2V3"></path>
-                    </svg>
-                    26K
-                  </span>
-                  <span className="stat">6 min</span>
-                </div>
-              </div>
-            </a>
+            {recentArticles.map((article) => {
+              const isLocal = isLocalArticle(article);
+              const card = (
+                <>
+                  <Image
+                    className="article-thumb"
+                    src={article.image || "/images/og-default.svg"}
+                    alt={article.title}
+                    width={400}
+                    height={225}
+                  />
+                  <div className="article-body">
+                    <span className="article-title">{article.title}</span>
+                    <span className="article-sub">{article.excerpt}</span>
+                    <div className="article-meta">
+                      <span className="stat">
+                        <svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="1.8"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"></path>
+                          <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                        {article.publishedAt
+                          ? new Date(article.publishedAt).toLocaleDateString()
+                          : "Recently"}
+                      </span>
+                      {article.tags.length > 0 && (
+                        <span className="stat">{article.tags[0]}</span>
+                      )}
+                    </div>
+                  </div>
+                </>
+              );
+
+              return isLocal ? (
+                <Link key={article.id} className="article-card" href={article.link}>
+                  {card}
+                </Link>
+              ) : (
+                <a
+                  key={article.id}
+                  className="article-card"
+                  href={article.link}
+                  target="_blank"
+                  rel="noopener"
+                >
+                  {card}
+                </a>
+              );
+            })}
           </div>
         </section>
 

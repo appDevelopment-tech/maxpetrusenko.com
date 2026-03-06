@@ -33,6 +33,11 @@ export function JsonLd({ type, data }: JsonLdProps) {
       "@type": "BreadcrumbList",
       ...data,
     },
+    ItemList: {
+      "@context": "https://schema.org",
+      "@type": "ItemList",
+      ...data,
+    },
     ProfessionalService: {
       "@context": "https://schema.org",
       "@type": "ProfessionalService",

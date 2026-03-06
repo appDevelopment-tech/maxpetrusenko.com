@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import { RelatedReading } from "@/components/articles/RelatedReading";
 import { generateMetadata, absoluteUrl } from "@/lib/seo/metadata";
 import { JsonLd } from "@/components/seo/JsonLd";
 import {
@@ -11,9 +12,9 @@ import {
 } from "@/lib/seo/structured-data";
 
 export const metadata = generateMetadata({
-  title: "Generative Engine Optimization (GEO): Practical Framework",
+  title: "GEO Framework and Roadmap for 2026",
   description:
-    "A practical GEO framework for founders and service businesses: entity clarity, citation-ready pages, internal linking, and conversion-focused architecture.",
+    "Practical GEO framework and roadmap for 2026: entity clarity, citation-ready pages, internal linking, and the implementation sequence that turns impressions into qualified leads.",
   ogType: "article",
   canonical: absoluteUrl("/tech/articles/generative-engine-optimization-geo"),
   ogImage: "/images/article-covers/tech-geo-framework.svg",
@@ -33,9 +34,9 @@ export default function GEOArticle() {
       <JsonLd
         type="TechArticle"
         data={generateTechArticleSchema({
-          headline: "Generative Engine Optimization (GEO): Practical Framework",
+          headline: "GEO Framework and Roadmap for 2026",
           description:
-            "A practical GEO framework for service businesses: entity clarity, citation-ready pages, and conversion architecture.",
+            "A practical GEO framework and roadmap for service businesses: entity clarity, citation-ready pages, and conversion architecture.",
           image: "/images/article-covers/tech-geo-framework.svg",
           url: "/tech/articles/generative-engine-optimization-geo",
           datePublished: "2026-02-02",
@@ -56,9 +57,9 @@ export default function GEOArticle() {
       <JsonLd
         type="WebPage"
         data={generateWebPageSchema({
-          title: "Generative Engine Optimization (GEO): Practical Framework",
+          title: "GEO Framework and Roadmap for 2026",
           description:
-            "How to build a GEO system that gets cited by AI assistants and turns attention into qualified leads.",
+            "How to build a GEO roadmap that gets cited by AI assistants and turns attention into qualified leads.",
           url: "/tech/articles/generative-engine-optimization-geo",
           datePublished: "2026-02-02",
         })}
@@ -75,11 +76,11 @@ export default function GEOArticle() {
             <div className="eyebrow">
               <span className="dot"></span> AI Visibility Strategy
             </div>
-            <h1>Generative Engine Optimization (GEO): A Practical Framework</h1>
+            <h1>GEO Framework and Roadmap for 2026</h1>
             <p className="article-subtitle">
-              GEO is not a trend label. It is operational SEO for how people now
+              GEO is not a trend label. It is operational search work for how people now
               discover answers in ChatGPT, Claude, Perplexity, and AI-enhanced search.
-              This guide breaks the work into concrete steps you can execute weekly.
+              If you need a GEO roadmap, this guide breaks the work into concrete steps you can execute weekly.
             </p>
             <div className="article-meta">
               <time>February 2, 2026</time>
@@ -204,7 +205,8 @@ export default function GEOArticle() {
               </a>
             </div>
           </div>
-        </article>
+          <RelatedReading currentLink="/tech/articles/generative-engine-optimization-geo" />
+</article>
       </div>
     </>
   );

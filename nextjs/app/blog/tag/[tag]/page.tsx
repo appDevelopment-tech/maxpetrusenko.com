@@ -1,10 +1,15 @@
 import Link from "next/link";
 import Image from "next/image";
 import { fetchArticlesByTag } from "@/lib/cms/articles";
+import {
+  resolveBlogTagRedirect,
+  resolveMissingBlogTagRedirect,
+  shouldIndexBlogTagPage,
+} from "@/lib/cms/legacy-blog-compat";
 import { generateMetadata as createMetadata, absoluteUrl } from "@/lib/seo/metadata";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { generateWebPageSchema, generateBreadcrumbSchema } from "@/lib/seo/structured-data";
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 import type { Metadata } from "next";
 
 interface TagPageProps {
@@ -18,13 +23,14 @@ export const runtime = "edge";
 
 export async function generateMetadata({ params }: TagPageProps): Promise<Metadata> {
   const { tag } = await params;
+  const articles = await fetchArticlesByTag(tag);
   const decodedTag = decodeURIComponent(tag).replace(/-/g, " ");
 
   return createMetadata({
     title: `Articles tagged "${decodedTag}"`,
     description: `Articles and essays tagged with "${decodedTag}".`,
     canonical: absoluteUrl(`/blog/tag/${tag}`),
-    noindex: false,
+    noindex: !shouldIndexBlogTagPage(articles.length),
   });
 }
 
@@ -33,7 +39,16 @@ export default async function TagPage({ params }: TagPageProps) {
   const articles = await fetchArticlesByTag(tag);
 
   if (articles.length === 0) {
+    const legacyRedirect = resolveMissingBlogTagRedirect(tag);
+    if (legacyRedirect) {
+      permanentRedirect(legacyRedirect);
+    }
     notFound();
+  }
+
+  const canonicalRedirect = resolveBlogTagRedirect(articles.map((article) => article.link));
+  if (canonicalRedirect) {
+    permanentRedirect(canonicalRedirect);
   }
 
   const decodedTag = decodeURIComponent(tag).replace(/-/g, " ");

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { siteConfig } from "@/config/site";
 import { generateMetadata, absoluteUrl } from "@/lib/seo/metadata";
 import { JsonLd } from "@/components/seo/JsonLd";
@@ -31,8 +32,25 @@ export default function IdentityPage() {
         ])}
       />
 
+      <div className="hero-image-section ui-immersive-hero ui-fade-up delay-1">
+        <div className="hero-image-overlay"></div>
+        <Image
+          src="/images/bali/DSC04934.jpg"
+          alt="Identity and authorship visual"
+          fill
+          priority
+          sizes="100vw"
+          style={{ objectFit: "cover" }}
+          quality={86}
+        />
+        <div className="hero-image-content">
+          <h1>Identity</h1>
+          <p>Authoritative profile and disambiguation</p>
+        </div>
+      </div>
+
       <div className="container">
-        <section className="hero">
+        <section className="hero ui-fade-up delay-2">
           <div className="hero-text">
             <div className="eyebrow">
               <span className="dot"></span> Identity
@@ -64,8 +82,19 @@ export default function IdentityPage() {
             </ul>
           </div>
         </section>
+        <section className="ui-fade-up delay-3">
+          <div className="ambient-band overflow-hidden rounded-[24px] border border-[rgba(12,17,21,0.09)]">
+            <Image
+              src="/images/generated/home-ambient-somatic.png"
+              alt="Ambient gradient"
+              width={1536}
+              height={1024}
+              className="h-[150px] w-full object-cover"
+            />
+          </div>
+        </section>
 
-        <section className="section">
+        <section className="section ui-fade-up delay-3">
           <div className="section-head">
             <h2>What I Do</h2>
           </div>

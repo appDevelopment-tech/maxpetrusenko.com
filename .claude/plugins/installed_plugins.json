@@ -1,0 +1,35 @@
+{
+  "version": 2,
+  "plugins": {
+    "frontend-design@claude-plugins-official": [
+      {
+        "scope": "user",
+        "installPath": "/Users/maxpetrusenko/.claude/plugins/cache/claude-plugins-official/frontend-design/e30768372b41",
+        "version": "e30768372b41",
+        "installedAt": "2026-01-24T14:24:22.857Z",
+        "lastUpdated": "2026-01-24T14:24:22.857Z",
+        "gitCommitSha": "e30768372b4150ca1bc0839d93283e8edc30d60d"
+      }
+    ],
+    "ralph-loop@claude-plugins-official": [
+      {
+        "scope": "user",
+        "installPath": "/Users/maxpetrusenko/.claude/plugins/cache/claude-plugins-official/ralph-loop/e30768372b41",
+        "version": "e30768372b41",
+        "installedAt": "2026-01-25T22:40:54.391Z",
+        "lastUpdated": "2026-01-25T22:40:54.391Z",
+        "gitCommitSha": "e30768372b4150ca1bc0839d93283e8edc30d60d"
+      }
+    ],
+    "claude-mem@thedotmack": [
+      {
+        "scope": "user",
+        "installPath": "/Users/maxpetrusenko/.claude/plugins/cache/thedotmack/claude-mem/9.0.12",
+        "version": "9.0.12",
+        "installedAt": "2026-01-31T20:51:52.756Z",
+        "lastUpdated": "2026-01-31T20:51:52.756Z",
+        "gitCommitSha": "1341e93fcab15b9caf48bc947d8521b4a97515d8"
+      }
+    ]
+  }
+}

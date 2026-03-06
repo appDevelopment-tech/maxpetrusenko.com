@@ -3,6 +3,7 @@ import Image from "next/image";
 import { siteConfig } from "@/config/site";
 import { generateMetadata, absoluteUrl } from "@/lib/seo/metadata";
 import { JsonLd } from "@/components/seo/JsonLd";
+import { DirectAnswer } from "@/components/seo/DirectAnswer";
 import { EmailCaptureInline } from "@/components/forms/EmailCaptureInline";
 import { Testimonials } from "@/components/testimonials/Testimonials";
 import {
@@ -18,12 +19,82 @@ import {
 
 export const metadata = generateMetadata({
   title: "Spirituality - Tantra & Somatic Energy Work",
-  description: "Professional tantra massage and somatic energy work for men, women, and couples in Ubud, Bali and Miami, Florida. Certified tantric practitioner with nervous system reset, deep repatterning, and conscious presence sessions. Available in South Florida from West Palm Beach to the Keys.",
+  description: "Intimate tantra massage and somatic energy work for men, women, and couples in Ubud, Bali and Miami, Florida. Certified tantric practitioner with nervous system reset, deep repatterning, and open-heart presence sessions. Available in South Florida from West Palm Beach to the Keys.",
   ogType: "website",
   canonical: absoluteUrl("/spirituality"),
 });
 
 export default function SpiritualityPage() {
+  const individualFaqs = [
+    {
+      question: "What is tantra massage?",
+      answer:
+        "Tantra massage is a somatic energy work practice combining breathwork, conscious touch, and presence techniques for nervous system regulation and embodied awareness. Sessions are intimate with clear boundaries and consent-led pacing.",
+    },
+    {
+      question: "Is this sexual?",
+      answer:
+        "This is intimate work with clear boundaries. There is no performance or expectation. The focus is presence, regulation, and connection, with consent checked throughout.",
+    },
+    {
+      question: "Do I have to be nude?",
+      answer:
+        "No. Sessions are clothed or draped based on your comfort and agreed boundaries.",
+    },
+    {
+      question: "What happens during a session?",
+      answer:
+        "We start with intentions and boundaries, then move into breathwork and guided somatic touch. We close with integration and space to land.",
+    },
+    {
+      question: "Do I need prior experience?",
+      answer:
+        "No. First-timers are welcome. I’ll guide you slowly and clearly based on your comfort.",
+    },
+    {
+      question: "How should I prepare?",
+      answer:
+        "Arrive clean, hydrated, and light on food. Bring a clear intention and a willingness to communicate boundaries.",
+    },
+    {
+      question: "Where are sessions available?",
+      answer:
+        "I maintain bases in Ubud, Bali and Miami, Florida, and travel globally. Message to confirm your city.",
+    },
+    {
+      question: "How do I book?",
+      answer:
+        "The fastest way is WhatsApp: +1-786-543-6688. Email works too at hello@maxpetrusenko.com.",
+    },
+  ];
+
+  const couplesFaqs = [
+    {
+      question: "Do you work with couples?",
+      answer:
+        "Yes. Couples sessions are available by alignment and are designed to deepen connection through somatic practice.",
+    },
+    {
+      question: "How do couples sessions work?",
+      answer:
+        "We start with a shared intake, agree on boundaries, then move into guided connection practices tailored to your relationship goals.",
+    },
+    {
+      question: "What if we want different boundaries?",
+      answer:
+        "Each partner sets their own boundaries. We only move forward with shared consent.",
+    },
+    {
+      question: "Are both partners touched?",
+      answer:
+        "This is agreed in advance. Options range from guided partner practices to direct facilitation, depending on your comfort.",
+    },
+    {
+      question: "Is this about sex?",
+      answer:
+        "No. The focus is presence, communication, and nervous system regulation. Intimacy is held inside clear boundaries.",
+    },
+  ];
   return (
     <>
       <JsonLd type="Organization" data={generateOrganizationSchema()} />
@@ -47,8 +118,15 @@ export default function SpiritualityPage() {
       />
       <JsonLd type="Person" data={generateSpiritualityPersonSchema()} />
 
+      {/* Direct Answer block for AI citation optimization */}
+      <DirectAnswer
+        schemaType="WebPage"
+        question="What tantra massage and somatic energy work services does Max Petrusenko offer?"
+        answer="Max Petrusenko is a certified tantra and somatic practitioner offering intimate tantra massage and somatic energy work in Ubud, Bali and Miami, Florida. Sessions include nervous system reset (90 min), deep repatterning arcs, and Kyo-tai immersion bodywork. All sessions are intimate with clear boundaries and open-heart presence. Available for men, women, and couples. WhatsApp +1-786-543-6688 to book."
+      />
+
       {/* Hero image section */}
-      <div className="hero-image-section spirituality-hero">
+      <div className="hero-image-section spirituality-hero ui-immersive-hero ui-fade-up delay-1">
         <div className="hero-image-overlay"></div>
         <Image
           src="/images/DSC05764.jpg"
@@ -60,13 +138,13 @@ export default function SpiritualityPage() {
           quality={85}
         />
         <div className="hero-image-content">
-          <h1>Presence Atelier</h1>
+          <h2>Presence Atelier</h2>
           <p>Somatic energy work with boundaries first • Ubud, Bali</p>
         </div>
       </div>
 
       <div className="container">
-        <section className="hero">
+        <section className="hero ui-fade-up delay-2">
           <div className="hero-text">
             <div className="eyebrow">
               <span className="dot"></span> Presence Atelier
@@ -131,13 +209,74 @@ export default function SpiritualityPage() {
         </section>
 
         {/* Email capture for spirituality updates */}
-        <section className="section">
+        <section className="section ui-fade-up delay-3">
           <EmailCaptureInline
             source="spirituality-page"
             headline="Stay updated"
             subtitle="Drop your email to get notified about session availability in your city."
             buttonText="Get updates"
           />
+        </section>
+
+        <section className="section ui-fade-up delay-3">
+          <div className="section-head">
+            <h2>Services Overview</h2>
+            <span className="section-note">
+              Clear formats, duration, and delivery
+            </span>
+          </div>
+          <div className="cards-3 grid">
+            <div className="card">
+              <h3>Nervous System Reset</h3>
+              <ul className="list" style={{ marginTop: 12, marginBottom: 16 }}>
+                <li>60-90 minutes</li>
+                <li>Breath + grounding touch</li>
+                <li>First-timers welcome</li>
+                <li>Intimate with clear boundaries</li>
+              </ul>
+              <p className="text-sm text-muted">
+                <strong>Best for:</strong> anxiety, overwhelm, shutdown
+              </p>
+            </div>
+            <div className="card">
+              <h3>Deep Repatterning</h3>
+              <ul className="list" style={{ marginTop: 12, marginBottom: 16 }}>
+                <li>120+ minutes</li>
+                <li>Somatic rewiring arc</li>
+                <li>Multiple session pathway</li>
+                <li>Trauma-aware pacing</li>
+              </ul>
+              <p className="text-sm text-muted">
+                <strong>Best for:</strong> long-term shifts, embodiment
+              </p>
+            </div>
+            <div className="card">
+              <h3>Kyo-tai Immersion</h3>
+              <ul className="list" style={{ marginTop: 12, marginBottom: 16 }}>
+                <li>120 minutes</li>
+                <li>Intensive contact practice</li>
+                <li>Strong boundaries & consent</li>
+                <li>For experienced clients</li>
+              </ul>
+              <p className="text-sm text-muted">
+                <strong>Best for:</strong> deep pattern release
+              </p>
+            </div>
+          </div>
+          <div className="card" style={{ marginTop: 20, textAlign: "center" }}>
+            <p className="text-muted">
+              <strong>Availability:</strong> Ubud, Bali and Miami, FL with travel on request
+            </p>
+            <a
+              className="btn primary"
+              href="https://wa.me/17865436688?text=Hi%20Max%2C%20I%27d%20like%20to%20book%20a%20session.%20Preferred%20day%2Ftime%3A%20____.%20Intentions%3A%20____."
+              style={{ marginTop: 12 }}
+              target="_blank"
+              rel="noopener"
+            >
+              Book a Session
+            </a>
+          </div>
         </section>
 
         <section className="section">
@@ -198,7 +337,12 @@ export default function SpiritualityPage() {
           </div>
         </section>
 
-        <Testimonials type="spirituality" />
+        <Testimonials
+          type="spirituality"
+          collapsible
+          note="Short, anonymized feedback. Tap to expand."
+          toggleLabel="Read testimonials"
+        />
 
         <section className="section">
           <div className="section-head">
@@ -391,93 +535,39 @@ export default function SpiritualityPage() {
           <div className="section-head">
             <h2>Frequently Asked Questions</h2>
             <span className="section-note">
-              Answers to common questions about tantra and somatic sessions.
+              Answers for individuals and couples. Tap to expand.
             </span>
           </div>
-          <div className="cards-3 grid">
+          <div className="split">
             <div className="card">
-              <h4>What is tantra massage?</h4>
-              <p>
-                Tantra massage is a somatic energy work practice combining
-                breathwork, conscious touch, and presence techniques for nervous
-                system regulation and deep embodied awareness. Sessions are
-                non-sexual, focused on energetic expansion and conscious presence.
-              </p>
+              <h3>For Individuals</h3>
+              <div style={{ display: "grid", gap: 12, marginTop: 12 }}>
+                {individualFaqs.map((item, index) => (
+                  <details key={item.question} open={index === 0}>
+                    <summary style={{ cursor: "pointer", fontWeight: 600 }}>
+                      {item.question}
+                    </summary>
+                    <p className="text-muted" style={{ marginTop: 8 }}>
+                      {item.answer}
+                    </p>
+                  </details>
+                ))}
+              </div>
             </div>
             <div className="card">
-              <h4>Do you work with men, women, and couples?</h4>
-              <p>
-                Yes. I offer 1:1 tantra massage and somatic energy work sessions
-                for individuals of all genders, plus couples sessions for partners
-                seeking to deepen connection through somatic practice. Sessions
-                are LGBTQ+ inclusive.
-              </p>
-            </div>
-            <div className="card">
-              <h4>What&apos;s the difference between session types?</h4>
-              <p>
-                <strong>Nervous System Reset</strong> is a 90-minute session to
-                arrive safely in your body. <strong>Deep Repatterning</strong> is
-                a longer arc for transformation. <strong>Kyo-tai Immersion</strong>{" "}
-                is intensive bodywork for those ready for forceful guidance.
-              </p>
-            </div>
-            <div className="card">
-              <h4>Where are you currently located?</h4>
-              <p>
-                I travel internationally and see clients in multiple cities.
-                Sessions are available worldwide—message to check availability
-                in your city. I offer sessions at my private space and can travel
-                to yours.
-              </p>
-            </div>
-            <div className="card">
-              <h4>Is tantra massage sexual?</h4>
-              <p>
-                No. Tantra massage in my practice is a somatic energy work and
-                healing modality, not a sexual service. Sessions are non-sexual
-                with clear boundaries. I do not initiate or respond to sexual
-                behavior. The focus is on nervous system regulation and conscious
-                presence.
-              </p>
-            </div>
-            <div className="card">
-              <h4>What can I expect during a session?</h4>
-              <p>
-                Sessions begin with intention-setting and boundary agreement. I
-                guide breathwork, somatic awareness, and conscious touch
-                techniques. You remain clothed or draped throughout. You can
-                pause or redirect at any moment. Consent is verbal, ongoing, and
-                respected.
-              </p>
-            </div>
-            <div className="card">
-              <h4>Do I need prior experience?</h4>
-              <p>
-                All experience levels are welcome. Sessions are tailored to where
-                you are. If you&apos;re new to somatic or tantra practices, I guide
-                you slowly with clear communication. If you have experience, we
-                can deepen into more intensive work.
-              </p>
-            </div>
-            <div className="card">
-              <h4>How do I book a session?</h4>
-              <p>
-                The fastest way is via WhatsApp: +1-786-543-6688. You can also
-                email hello@maxpetrusenko.com. Before your session, I&apos;ll ask
-                you to complete a brief questionnaire about your experience,
-                intentions, and boundaries.
-              </p>
-            </div>
-            <div className="card">
-              <h4>What cities do you serve in Florida?</h4>
-              <p>
-                I serve the greater Miami-Fort Lauderdale area including Miami,
-                Miami Beach, North Miami, Coral Gables, Aventura, Hollywood,
-                Pembroke Pines, Fort Lauderdale, Pompano Beach, Boca Raton,
-                Delray Beach, West Palm Beach, and surrounding cities in
-                Miami-Dade, Broward, and Palm Beach counties.
-              </p>
+              <h3>For Couples</h3>
+              <div style={{ display: "grid", gap: 12, marginTop: 12 }}>
+                {couplesFaqs.map((item, index) => (
+                  <details key={item.question} open={index === 0}>
+                    <summary style={{ cursor: "pointer", fontWeight: 600 }}>
+                      {item.question}
+                    </summary>
+                    <p className="text-muted" style={{ marginTop: 8 }}>
+                      {item.answer}
+                    </p>
+                  </details>
+                ))}
+              </div>
             </div>
           </div>
         </section>

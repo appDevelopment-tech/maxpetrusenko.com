@@ -1,6 +1,10 @@
 import { siteConfig } from "@/config/site";
 import { testimonials } from "@/lib/cms/testimonials";
 
+const BRAND_LOGO_URL = `${siteConfig.url}/images/brand-mark.svg`;
+const PERSON_IMAGE_URL = `${siteConfig.url}/images/DSC05871.jpg`;
+const TECH_PERSON_IMAGE_URL = `${siteConfig.url}/images/tech-portrait.jpg`;
+
 /**
  * Generate JSON-LD structured data for WebPage
  */
@@ -34,6 +38,10 @@ export function generateArticleSchema(data: {
   dateModified: string;
   author: string;
 }) {
+  const articleUrl = data.url.startsWith("http")
+    ? data.url
+    : `${siteConfig.url}${data.url}`;
+
   return {
     "@context": "https://schema.org",
     "@type": "Article",
@@ -42,7 +50,7 @@ export function generateArticleSchema(data: {
     image: data.image.startsWith("http")
       ? data.image
       : `${siteConfig.url}${data.image}`,
-    url: `${siteConfig.url}${data.url}`,
+    url: articleUrl,
     datePublished: data.datePublished,
     dateModified: data.dateModified,
     author: {
@@ -54,12 +62,12 @@ export function generateArticleSchema(data: {
       name: siteConfig.name,
       logo: {
         "@type": "ImageObject",
-        url: `${siteConfig.url}/logo.png`,
+        url: BRAND_LOGO_URL,
       },
     },
     mainEntityOfPage: {
       "@type": "WebPage",
-      "@id": `${siteConfig.url}${data.url}`,
+      "@id": articleUrl,
     },
   };
 }
@@ -74,6 +82,7 @@ export function generatePersonSchema() {
     "@type": "Person",
     name: siteConfig.author.name,
     url: siteConfig.url,
+    image: PERSON_IMAGE_URL,
     jobTitle: "Founder & Creator",
     description: "Creator of tech automation resources, tantra education, and somatic practice offerings.",
     worksFor: {
@@ -101,6 +110,7 @@ export function generateTechPersonSchema() {
     "@type": "Person",
     name: siteConfig.author.name,
     url: siteConfig.url,
+    image: TECH_PERSON_IMAGE_URL,
     jobTitle: "AI Automation Consultant",
     description: "AI automation consultant specializing in Claude Code, n8n workflows, ChatGPT integrations, and workflow automation for creators and founders.",
     worksFor: {
@@ -142,6 +152,7 @@ export function generateSpiritualityPersonSchema() {
     "@type": "Person",
     name: siteConfig.author.name,
     url: siteConfig.url,
+    image: PERSON_IMAGE_URL,
     jobTitle: "Tantra & Somatic Practitioner",
     description: "Professional tantra massage and somatic energy work practitioner. Certified in tantric practices, nervous system regulation, and trauma-informed bodywork.",
     worksFor: {
@@ -175,6 +186,11 @@ export function generateOrganizationSchema() {
     "@type": "Organization",
     name: "Presence Atelier",
     url: siteConfig.externalLinks.atelier,
+    logo: {
+      "@type": "ImageObject",
+      url: BRAND_LOGO_URL,
+    },
+    image: BRAND_LOGO_URL,
     founder: {
       "@type": "Person",
       name: siteConfig.author.name,
@@ -195,6 +211,28 @@ export function generateBreadcrumbSchema(items: Array<{ name: string; url: strin
       position: index + 1,
       name: item.name,
       item: `${siteConfig.url}${item.url}`,
+    })),
+  };
+}
+
+/**
+ * Generate JSON-LD structured data for ItemList
+ * Useful for topic hubs and index pages with many canonical links.
+ */
+export function generateItemListSchema(
+  items: Array<{ name: string; url: string }>,
+  options?: { name?: string; description?: string }
+) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    ...(options?.name && { name: options.name }),
+    ...(options?.description && { description: options.description }),
+    itemListElement: items.map((item, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: item.name,
+      url: `${siteConfig.url}${item.url}`,
     })),
   };
 }
@@ -244,6 +282,11 @@ export function generateProfessionalServiceSchema() {
     "name": "Presence Atelier - Tantra & Somatic Energy Work",
     "description": "Professional tantra massage and somatic energy work for men, women, and couples. Certified tantric practitioner serving Ubud, Bali and South Florida. Nervous system reset, deep repatterning, and conscious presence sessions.",
     "url": `${siteConfig.url}/spirituality`,
+    "logo": {
+      "@type": "ImageObject",
+      "url": BRAND_LOGO_URL,
+    },
+    "image": BRAND_LOGO_URL,
     "telephone": "+1-786-543-6688",
     "address": [
       {
@@ -294,7 +337,7 @@ export function generateProfessionalServiceSchema() {
           "itemOffered": {
             "@type": "Service",
             "name": "Kyo-tai Immersion",
-            "description": "Intensive bodywork and contact practice. Byōtōh-inspired non-sexual bodywork for deep pattern release.",
+            "description": "Intensive bodywork and contact practice. Byōtōh-inspired intimate bodywork with clear boundaries for deep pattern release.",
             "category": "Bodywork"
           }
         },
@@ -336,79 +379,155 @@ export function generateFAQSchema() {
         "name": "What is tantra massage?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Tantra massage is a somatic energy work practice combining breathwork, conscious touch, and presence techniques for nervous system regulation and deep embodied awareness. Sessions are non-sexual, focused on energetic expansion, conscious presence, and somatic rewiring. You remain clothed or draped throughout, with clear boundaries established together."
+          "text": "Tantra massage is a somatic energy work practice combining breathwork, conscious touch, and presence techniques for nervous system regulation and embodied awareness. Sessions are intimate with clear boundaries and consent-led pacing."
         }
       },
       {
         "@type": "Question",
-        "name": "Do you offer tantra massage for men, women, and couples?",
+        "name": "Is this sexual?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Yes. I offer 1:1 tantra massage and somatic energy work sessions for individuals of all genders, plus couples sessions for partners seeking to deepen connection and communication through somatic practice. Sessions are LGBTQ+ inclusive and tailored to each individual or couple's intentions."
+          "text": "This is intimate work with clear boundaries. There is no performance or expectation. The focus is presence, regulation, and connection, with consent checked throughout."
         }
       },
       {
         "@type": "Question",
-        "name": "What's the difference between Nervous System Reset and Deep Repatterning?",
+        "name": "Do I have to be nude?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Nervous System Reset is a 90-minute tantra massage session to arrive safely in your body through breathwork and somatic awareness. Deep Repatterning is a longer arc for deep rewiring and transformation across multiple sessions. Kyo-tai Immersion is intensive bodywork for those ready for forceful guidance through contact practice."
+          "text": "No. Sessions are clothed or draped based on your comfort and agreed boundaries."
         }
       },
       {
         "@type": "Question",
-        "name": "Where are you currently located for tantra sessions?",
+        "name": "What happens during a session?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "I maintain regular bases in Ubud, Bali (Gianyar Regency) and Miami, Florida, serving the greater South Florida area from West Palm Beach to the Keys. I also travel globally for sessions. Current location is displayed on my website. I offer sessions at my private temple space and can travel to yours."
+          "text": "We start with intentions and boundaries, then move into breathwork and guided somatic touch. We close with integration and space to land."
         }
       },
       {
         "@type": "Question",
-        "name": "What cities in South Florida do you serve?",
+        "name": "Do I need prior experience?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "I serve the greater Miami-Fort Lauderdale area including Miami, Miami Beach, North Miami, Coral Gables, Aventura, Hollywood, Pembroke Pines, Fort Lauderdale, Pompano Beach, Boca Raton, Delray Beach, West Palm Beach, and surrounding cities in Miami-Dade, Broward, and Palm Beach counties."
+          "text": "No. First-timers are welcome. Sessions are guided slowly and clearly based on your comfort."
         }
       },
       {
         "@type": "Question",
-        "name": "What areas around Ubud do you serve in Bali?",
+        "name": "How should I prepare?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Based in Ubud, Gianyar Regency, I serve the surrounding villages including Campuan, Penestanan, Sanggingan, Kedewatan, Peliatan, Mas, Pengosekan, Tegallalung, Sayan, and the greater Gianyar area of Bali."
+          "text": "Arrive clean, hydrated, and light on food. Bring a clear intention and a willingness to communicate boundaries."
         }
       },
       {
         "@type": "Question",
-        "name": "Is tantra massage sexual?",
+        "name": "Where are sessions available?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "No. Tantra massage in my practice is a somatic energy work and healing modality, not a sexual service. While tantra works with energy and sensation, sessions are non-sexual with clear boundaries. I do not initiate or respond to sexual behavior. The focus is on nervous system regulation, embodied awareness, and conscious presence."
+          "text": "I maintain bases in Ubud, Bali and Miami, Florida, and travel globally. Message to confirm your city."
         }
       },
       {
         "@type": "Question",
-        "name": "What can I expect during a tantra massage session?",
+        "name": "How do I book?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Sessions begin with intention-setting and boundary agreement. I guide breathwork, somatic awareness, and conscious touch techniques. You remain clothed or draped throughout. The session focuses on nervous system regulation, energetic awareness, and deep presence. You can pause or redirect at any moment. Consent is verbal, ongoing, and respected."
+          "text": "The fastest way is WhatsApp: +1-786-543-6688. Email works too at hello@maxpetrusenko.com."
         }
       },
       {
         "@type": "Question",
-        "name": "Do I need prior experience with tantra or somatic work?",
+        "name": "Do you work with couples?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "All experience levels are welcome. Sessions are tailored to where you are. If you're new to somatic or tantra practices, I guide you slowly with clear communication. If you have experience, we can deepen into more intensive work. The pre-session questionnaire helps me understand your background and intentions."
+          "text": "Yes. Couples sessions are available by alignment and are designed to deepen connection through somatic practice."
         }
       },
       {
         "@type": "Question",
-        "name": "How do I book a tantra or somatic session?",
+        "name": "How do couples sessions work?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "The fastest way is via WhatsApp: +1-786-543-6688. You can also email hello@maxpetrusenko.com. Before your session, I'll ask you to complete a brief questionnaire about your experience, intentions, and boundaries. This helps ensure we're aligned and creates a safe container for the work."
+          "text": "We start with a shared intake, agree on boundaries, then move into guided connection practices tailored to your relationship goals."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What if we want different boundaries?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Each partner sets their own boundaries. We only move forward with shared consent."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Are both partners touched?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "This is agreed in advance. Options range from guided partner practices to direct facilitation, depending on your comfort."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is this about sex?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. The focus is presence, communication, and nervous system regulation. Intimacy is held inside clear boundaries."
+        }
+      }
+    ]
+  };
+}
+
+/**
+ * Generate FAQPage schema for Mindfold Sanctuary
+ */
+export function generateMindfoldFAQSchema() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is a Mindfold journey?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Mindfold is a blindfolded presence journey for groups. With sensory subtraction, breathwork, and slow movement, participants drop into deep body awareness in a non-verbal container with clear boundaries."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is Mindfold safe for first-timers?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. First-timers are welcome. Sessions begin with clear safety instructions, consent agreements, and optional opt-outs. You can step out at any time."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What should I bring or wear?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Wear comfortable clothing and bring water. Arrive 10 minutes early. Avoid perfumes, jewelry, and intoxicants. Phones are off during the journey."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is Mindfold a sexual experience?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Mindfold is a presence practice focused on nervous system regulation and embodied awareness. Consent and boundaries are explicit throughout."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Where are events held?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Locations vary by city and are shared after RSVP. Events are hosted in calm, private spaces with safety staff and clear guidelines."
         }
       }
     ]
@@ -449,6 +568,11 @@ export function generateTechServiceSchema() {
     } : {}),
     description: "AI automation consultant specializing in Claude Code, n8n workflows, ChatGPT integrations, and workflow automation for creators and founders. Available remotely worldwide and in-person in Miami, Ubud Bali, and while traveling.",
     url: `${siteConfig.url}/tech`,
+    logo: {
+      "@type": "ImageObject",
+      url: BRAND_LOGO_URL,
+    },
+    image: BRAND_LOGO_URL,
     telephone: "+1-786-543-6688",
     email: "hello@maxpetrusenko.com",
     address: [
@@ -790,7 +914,7 @@ export function generateMindfoldEventSchema() {
     "@context": "https://schema.org",
     "@type": "Event",
     name: "Mindfold Sanctuary - Blindfolded Presence Journey",
-    description: "Group sensory subtraction workshop to expand perception and deepen presence. Blindfolded movement and contact exercises in a safe, non-sexual container. Learn to feel without seeing. Join solo or with friends. Corporate and private sessions available.",
+    description: "Group sensory subtraction workshop to expand perception and deepen presence. Blindfolded movement and contact exercises in a safe container with clear boundaries. Learn to feel without seeing. Join solo or with friends. Corporate and private sessions available.",
     url: `${siteConfig.url}/mindfold/events`,
     image: `${siteConfig.url}/images/DSC05871.jpg`,
     startDate,
@@ -1278,6 +1402,7 @@ export function generateEnhancedPersonSchema() {
     name: siteConfig.author.name,
     alternateName: ["Max", "Presence Atelier", "Max Petrusenko Tech"],
     url: siteConfig.url,
+    image: PERSON_IMAGE_URL,
     description: "Tech builder and somatic practitioner specializing in AI automation, tantra massage, and somatic energy work. Available in Ubud, Bali and Miami, Florida.",
     jobTitle: "Tech Builder & Somatic Practitioner",
     worksFor: {
@@ -1437,11 +1562,11 @@ export function generateServiceSpeakableSchema() {
     speakable: [
       {
         "@type": "Speakable",
-        text: "Max Petrusenko offers professional tantra massage and somatic energy work in Ubud, Bali and Miami, Florida. Book via WhatsApp at +1-786-543-6688.",
+        text: "Max Petrusenko offers intimate tantra massage and somatic energy work in Ubud, Bali and Miami, Florida. Book via WhatsApp at +1-786-543-6688.",
       },
       {
         "@type": "Speakable",
-        text: "Sessions are non-sexual, focused on nervous system regulation and conscious presence through breathwork and somatic awareness.",
+        text: "Sessions are intimate with clear boundaries, focused on nervous system regulation and open-heart presence through breathwork and somatic awareness.",
       },
       {
         "@type": "Speakable",
@@ -1501,7 +1626,7 @@ export function generateCombinedFAQSchema() {
         name: "What is tantra massage?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Tantra massage is a somatic energy work practice combining breathwork, conscious touch, and presence techniques for nervous system regulation and deep embodied awareness. Sessions are non-sexual, focused on energetic expansion, conscious presence, and somatic rewiring. You remain clothed or draped throughout, with clear boundaries established together.",
+          text: "Tantra massage is a somatic energy work practice combining breathwork, conscious touch, and presence techniques for nervous system regulation and deep embodied awareness. Sessions are intimate with clear boundaries, focused on energetic expansion, open-heart presence, and somatic rewiring. You remain clothed or draped throughout, with boundaries established together.",
         },
       },
       {
@@ -1533,7 +1658,7 @@ export function generateCombinedFAQSchema() {
         name: "Is tantra massage sexual?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "No. Tantra massage in my practice is a somatic energy work and healing modality, not a sexual service. While tantra works with energy and sensation, sessions are non-sexual with clear boundaries. I do not initiate or respond to sexual behavior. The focus is on nervous system regulation, embodied awareness, and conscious presence.",
+          text: "This is intimate work with clear boundaries. Tantra massage in my practice is a somatic energy work and healing modality focused on open-heart presence. Sessions are intimate with clear boundaries honored. The focus is on nervous system regulation, embodied awareness, and conscious connection.",
         },
       },
       // Tech/AI FAQs

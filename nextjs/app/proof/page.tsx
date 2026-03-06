@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { siteConfig } from "@/config/site";
 import { generateMetadata, absoluteUrl } from "@/lib/seo/metadata";
 import { JsonLd } from "@/components/seo/JsonLd";
@@ -84,8 +85,25 @@ export default function ProofPage() {
         ])}
       />
 
+      <div className="hero-image-section ui-immersive-hero ui-fade-up delay-1">
+        <div className="hero-image-overlay"></div>
+        <Image
+          src="/images/tech-portrait.jpg"
+          alt="Proof and case studies visual"
+          fill
+          priority
+          sizes="100vw"
+          style={{ objectFit: "cover", objectPosition: "50% 30%" }}
+          quality={88}
+        />
+        <div className="hero-image-content">
+          <h1>Proof</h1>
+          <p>Case studies and measurable outcomes</p>
+        </div>
+      </div>
+
       <div className="container">
-        <section className="hero">
+        <section className="hero ui-fade-up delay-2">
           <div className="hero-text">
             <div className="eyebrow">
               <span className="dot"></span> Proof
@@ -120,8 +138,19 @@ export default function ProofPage() {
             </ul>
           </div>
         </section>
+        <section className="ui-fade-up delay-3">
+          <div className="ambient-band overflow-hidden rounded-[24px] border border-[rgba(12,17,21,0.09)]">
+            <Image
+              src="/images/generated/home-automation-portrait.png"
+              alt="Proof and systems visual"
+              width={1024}
+              height={1536}
+              className="h-[180px] w-full object-cover object-[center_24%]"
+            />
+          </div>
+        </section>
 
-        <section className="section">
+        <section className="section ui-fade-up delay-3">
           <div className="section-head">
             <h2>Case Studies</h2>
             <span className="section-note">

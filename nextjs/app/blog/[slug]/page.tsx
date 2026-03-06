@@ -1,8 +1,17 @@
-import { notFound, redirect } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { generateMetadata as createMetadata, absoluteUrl } from "@/lib/seo/metadata";
-import { fetchArticleBySlug } from "@/lib/cms/articles";
+import {
+  detectTopicSlugFromArticleSlug,
+  fetchArticleBySlug,
+  fetchArticlesByTopicSlug,
+  getTopicGroupBySlug,
+} from "@/lib/cms/articles";
+import {
+  resolveBlogArticleRedirect,
+  resolveLegacyBlogSlugRedirect,
+} from "@/lib/cms/legacy-blog-compat";
 import { sanitizeMediumHtml, estimateReadTimeMinutes } from "@/lib/api/medium";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { generateArticleSchema, generateBreadcrumbSchema } from "@/lib/seo/structured-data";
@@ -27,16 +36,19 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
     };
   }
 
+  const isCanonicalOnBlog = article.link.startsWith(`/blog/${slug}`);
+  const canonicalUrl = article.link.startsWith("/")
+    ? absoluteUrl(article.link)
+    : article.link;
+
   return createMetadata({
     title: article.title,
     description: article.excerpt,
     ogType: "article",
-    canonical: article.link.startsWith("/")
-      ? absoluteUrl(article.link)
-      : absoluteUrl(`/blog/${slug}`),
+    canonical: canonicalUrl,
     ogImage: article.image || "/images/og-default.svg",
     keywords: article.tags,
-    noindex: false,
+    noindex: !isCanonicalOnBlog,
   });
 }
 
@@ -45,22 +57,34 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
   const article = await fetchArticleBySlug(slug);
 
   if (!article) {
+    const legacyRedirect = resolveLegacyBlogSlugRedirect(slug);
+    if (legacyRedirect) {
+      permanentRedirect(legacyRedirect);
+    }
     notFound();
   }
 
-  // If this is a local article (spirituality/tech), redirect to its canonical URL
-  if (article.link.startsWith("/") && !article.link.startsWith(`/blog/${slug}`)) {
-    redirect(article.link);
+  const canonicalRedirect = resolveBlogArticleRedirect(slug, article.link);
+  if (canonicalRedirect) {
+    permanentRedirect(canonicalRedirect);
   }
 
   const readTime = estimateReadTimeMinutes(article.content || "");
   const sanitizedContent = sanitizeMediumHtml(article.content || "");
   const isLocalArticle = article.link.startsWith("/");
+  const heroImage = article.image || "/images/og-default.svg";
+  const topicSlug = detectTopicSlugFromArticleSlug(article.slug);
+  const topicGroup = topicSlug ? getTopicGroupBySlug(topicSlug) : null;
+  const siblingArticles = topicSlug
+    ? (await fetchArticlesByTopicSlug(topicSlug))
+        .filter((item) => item.slug !== article.slug)
+        .slice(0, 8)
+    : [];
 
   // Determine canonical URL for structured data
   const canonicalUrl = isLocalArticle
     ? absoluteUrl(article.link)
-    : absoluteUrl(`/blog/${slug}`);
+    : article.link;
 
   // Extract date for display
   const publishDate = article.publishedAt
@@ -78,7 +102,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         data={generateArticleSchema({
           title: article.title,
           description: article.excerpt,
-          image: article.image || "/images/og-default.svg",
+          image: heroImage,
           url: canonicalUrl,
           datePublished: article.publishedAt || new Date().toISOString(),
           dateModified: article.publishedAt || new Date().toISOString(),
@@ -96,11 +120,11 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
 
       <div className="container">
         <article className="article">
-          <nav className="article-nav" style={{ marginBottom: 24 }}>
+          <nav className="article-nav ui-fade-up delay-1" style={{ marginBottom: 24 }}>
             <Link href="/blog">← Back to Blog</Link>
           </nav>
 
-          <header className="article-header">
+          <header className="article-header ui-fade-up delay-2">
             <div className="eyebrow">
               <span className="dot"></span>{" "}
               {article.tags[0] || "Article"}
@@ -116,24 +140,44 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
             </div>
           </header>
 
-          {article.image && (
-            <div style={{ maxWidth: 900, margin: "26px auto 32px" }}>
-              <Image
-                src={article.image}
-                alt={article.title}
-                width={1344}
-                height={768}
-                style={{ borderRadius: "var(--radius)" }}
-                priority
-              />
-            </div>
-          )}
+          <div className="ui-fade-up delay-3" style={{ maxWidth: 900, margin: "26px auto 32px" }}>
+            <Image
+              src={heroImage}
+              alt={article.title}
+              width={1344}
+              height={768}
+              style={{ borderRadius: "var(--radius)" }}
+              priority
+            />
+          </div>
 
           {/* Article content with prose styling */}
           <div
             className="article-content"
             dangerouslySetInnerHTML={{ __html: sanitizedContent }}
           />
+
+          {topicGroup && siblingArticles.length > 0 && (
+            <section
+              className="article-footer"
+              style={{ marginTop: 40, paddingTop: 20, borderTop: "1px solid var(--border)" }}
+            >
+              <h3 style={{ marginBottom: 8 }}>More in {topicGroup.label}</h3>
+              <p className="text-muted" style={{ marginBottom: 14 }}>
+                Related perspectives in this topic cluster:
+              </p>
+              <ul className="list" style={{ marginTop: 0 }}>
+                {siblingArticles.map((item) => (
+                  <li key={item.id}>
+                    <Link href={item.link}>{item.title}</Link>
+                  </li>
+                ))}
+              </ul>
+              <p style={{ marginTop: 12 }}>
+                <Link href={`/blog/topics#topic-${topicGroup.slug}`}>View full {topicGroup.label} index</Link>
+              </p>
+            </section>
+          )}
 
           {!isLocalArticle && article.link && (
             <footer className="article-footer" style={{ marginTop: 48, paddingTop: 24, borderTop: "1px solid var(--border)" }}>
@@ -150,13 +194,9 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
               </p>
               <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
                 {article.tags.map((tag) => (
-                  <Link
-                    key={tag}
-                    href={`/blog/tag/${encodeURIComponent(tag.toLowerCase().replace(/\s+/g, "-"))}`}
-                    className="tag"
-                  >
+                  <span key={tag} className="tag">
                     #{tag}
-                  </Link>
+                  </span>
                 ))}
               </div>
             </footer>

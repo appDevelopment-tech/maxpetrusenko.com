@@ -1,0 +1,87 @@
+{
+  "version": "1.0.0",
+  "last_updated": "2024-10-03T12:55:00Z",
+  "common_failures": {
+    "react-async-state": {
+      "pattern": "Cannot read property .* of undefined",
+      "cause": "Async state update race condition",
+      "solution": "Use useEffect cleanup or conditional rendering with optional chaining",
+      "code_example": "useEffect(() => { let mounted = true; fetchData().then(data => { if (mounted) setState(data); }); return () => { mounted = false; }; }, []);",
+      "frequency": 0,
+      "projects": [],
+      "first_seen": "2024-10-03",
+      "last_seen": null
+    },
+    "postgres-connection-timeout": {
+      "pattern": "Connection timeout|ETIMEDOUT",
+      "cause": "Missing DATABASE_URL or connection pool exhaustion",
+      "solution": "Check .env file, verify DATABASE_URL, implement connection pooling",
+      "code_example": "const pool = new Pool({ connectionString: process.env.DATABASE_URL, max: 20 });",
+      "frequency": 0,
+      "projects": [],
+      "first_seen": "2024-10-03",
+      "last_seen": null
+    },
+    "playwright-timeout": {
+      "pattern": "Test timeout|page.goto.*Timeout",
+      "cause": "Element not found or page load timeout",
+      "solution": "Increase timeout or use waitForSelector with proper selectors",
+      "code_example": "await page.waitForSelector('selector', { timeout: 10000 });",
+      "frequency": 0,
+      "projects": [],
+      "first_seen": "2024-10-03",
+      "last_seen": null
+    }
+  },
+  "best_practices_learned": [
+    {
+      "practice": "Always test auth flows first",
+      "reason": "Most features depend on auth context",
+      "adoption_date": "2024-10-03",
+      "projects_applied": [],
+      "success_rate": "N/A"
+    },
+    {
+      "practice": "Test consolidation workflow: test → add to suite → re-test",
+      "reason": "Ensures tests merge correctly and don't break existing suite",
+      "adoption_date": "2024-10-03",
+      "projects_applied": ["FitTrak-Pro"],
+      "success_rate": "N/A"
+    },
+    {
+      "practice": "Self-rating before coding (target 9/10)",
+      "reason": "Identifies gaps early, ensures bigger picture thinking",
+      "adoption_date": "2024-10-03",
+      "projects_applied": ["Universal Agent Framework"],
+      "success_rate": "N/A"
+    }
+  ],
+  "project_specific_patterns": {
+    "FitTrak-Pro": {
+      "test_framework": "playwright",
+      "common_issues": [],
+      "test_patterns": [
+        "Browser tests for student management",
+        "Integration tests for workout programs",
+        "Muscle groups dynamic management"
+      ]
+    },
+    "ai-company-genesis": {
+      "test_framework": "unknown",
+      "common_issues": [],
+      "test_patterns": []
+    }
+  },
+  "cross_project_insights": [
+    {
+      "insight": "Agent isolation is critical - each agent has NO CONTEXT",
+      "applies_to": "All agent-based projects",
+      "discovered_date": "2024-10-03"
+    },
+    {
+      "insight": "Variable passing is everything - all info must be in prompt",
+      "applies_to": "All agent-based projects",
+      "discovered_date": "2024-10-03"
+    }
+  ]
+}

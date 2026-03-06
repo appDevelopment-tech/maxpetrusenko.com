@@ -2,7 +2,8 @@ import { MetadataRoute } from "next";
 import { promises as fs } from "node:fs";
 import path from "node:path";
 import { siteConfig } from "@/config/site";
-import { fetchArticles, isLocalArticle, getAllTags } from "@/lib/cms/articles";
+import { fetchArticles } from "@/lib/cms/articles";
+import { shouldIndexBlogTagPage } from "@/lib/cms/legacy-blog-compat";
 import { getProjects } from "@/lib/cms/projects";
 import { getCaseStudies } from "@/lib/cms/case-studies";
 
@@ -19,6 +20,10 @@ function getLatestDate(dates: Array<Date | null | undefined>, fallback: Date): D
   if (validDates.length === 0) return fallback;
 
   return validDates.reduce((latest, current) => (current > latest ? current : latest));
+}
+
+function tagToSlug(tag: string): string {
+  return tag.trim().toLowerCase().replace(/\s+/g, "-");
 }
 
 async function getFileLastModified(filePath: string): Promise<Date | null> {
@@ -77,6 +82,31 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     articles.map((article) => getValidDate(article.publishedAt)),
     fallbackLastModified
   );
+  const canonicalBlogArticles = articles.filter((article) => article.link.startsWith("/blog/"));
+  const tagPagesBySlug = new Map<string, { count: number; lastModified: Date }>();
+
+  for (const article of articles) {
+    const articleLastModified = getValidDate(article.publishedAt) ?? latestArticleDate;
+
+    for (const tag of article.tags) {
+      const slug = tagToSlug(tag);
+      if (!slug) continue;
+
+      const existing = tagPagesBySlug.get(slug);
+      if (!existing) {
+        tagPagesBySlug.set(slug, {
+          count: 1,
+          lastModified: articleLastModified,
+        });
+        continue;
+      }
+
+      tagPagesBySlug.set(slug, {
+        count: existing.count + 1,
+        lastModified: getLatestDate([existing.lastModified, articleLastModified], articleLastModified),
+      });
+    }
+  }
 
   // Static pages
   const staticPages: MetadataRoute.Sitemap = [
@@ -121,6 +151,21 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: getLatestDate(
         [
           await getRouteLastModified(appDir, "/blog", fallbackLastModified, [path.join(cmsDir, "articles.ts")]),
+          latestArticleDate,
+        ],
+        fallbackLastModified
+      ),
+      changeFrequency: "daily",
+      priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/blog/topics`,
+      lastModified: getLatestDate(
+        [
+          await getRouteLastModified(appDir, "/blog/topics", fallbackLastModified, [
+            path.join(cmsDir, "articles.ts"),
+            path.join(cmsDir, "article-backlog.ts"),
+          ]),
           latestArticleDate,
         ],
         fallbackLastModified
@@ -347,39 +392,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   ];
 
-  const articlePages: MetadataRoute.Sitemap = articles
-    .filter((article) => article.slug && !isLocalArticle(article))
-    .map((article) => ({
-      url: `${baseUrl}/blog/${article.slug}`,
-      lastModified: getValidDate(article.publishedAt) ?? fallbackLastModified,
-      changeFrequency: "monthly" as const,
-      priority: 0.6,
-    }));
-
-  // Dynamic: Tag pages for blog filtering
-  const tags = await getAllTags();
-  const tagLastModified = new Map<string, Date>();
-
-  for (const article of articles) {
-    const articleDate = getValidDate(article.publishedAt) ?? fallbackLastModified;
-
-    for (const tag of article.tags) {
-      const slug = tag.toLowerCase().replace(/\s+/g, "-");
-      const existing = tagLastModified.get(slug);
-
-      if (!existing || articleDate > existing) {
-        tagLastModified.set(slug, articleDate);
-      }
-    }
-  }
-
-  const tagPages: MetadataRoute.Sitemap = tags.map((tag) => ({
-    url: `${baseUrl}/blog/tag/${tag.slug}`,
-    lastModified: tagLastModified.get(tag.slug) ?? fallbackLastModified,
-    changeFrequency: "weekly" as const,
-    priority: 0.5,
-  }));
-
   // Dynamic: Projects
   const projects = await getProjects();
   const projectRouteLastModified = getLatestDate(
@@ -414,11 +426,27 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }));
 
+  const blogArticlePages: MetadataRoute.Sitemap = canonicalBlogArticles.map((article) => ({
+    url: `${baseUrl}${article.link}`,
+    lastModified: getValidDate(article.publishedAt) ?? latestArticleDate,
+    changeFrequency: "monthly" as const,
+    priority: 0.7,
+  }));
+
+  const blogTagPages: MetadataRoute.Sitemap = Array.from(tagPagesBySlug.entries())
+    .filter(([, entry]) => shouldIndexBlogTagPage(entry.count))
+    .map(([tagSlug, entry]) => ({
+      url: `${baseUrl}/blog/tag/${tagSlug}`,
+      lastModified: entry.lastModified,
+      changeFrequency: "weekly" as const,
+      priority: 0.5,
+    }));
+
   const normalizeUrl = (url: string) =>
     url.endsWith("/") && url !== baseUrl ? url.slice(0, -1) : url;
 
   const seen = new Set<string>();
-  const allPages = [...staticPages, ...articlePages, ...tagPages, ...projectPages, ...caseStudyPages];
+  const allPages = [...staticPages, ...blogArticlePages, ...blogTagPages, ...projectPages, ...caseStudyPages];
 
   return allPages.reduce<MetadataRoute.Sitemap>((acc, page) => {
     const normalizedUrl = normalizeUrl(page.url);

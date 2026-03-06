@@ -3,7 +3,6 @@ import { slugify } from "@/lib/seo/metadata";
 
 const ALLOWED_MEDIUM_IMAGE_HOSTS = new Set([
   "miro.medium.com",
-  "cdn-images-1.medium.com",
   "images.unsplash.com",
   "i.imgur.com",
   "pbs.twimg.com",
@@ -204,7 +203,8 @@ function extractImage(html: string): string {
 function isSafeArticleImage(rawUrl: string): boolean {
   try {
     const url = new URL(rawUrl);
-    return url.protocol === "https:" && ALLOWED_MEDIUM_IMAGE_HOSTS.has(url.hostname);
+    const isMediumCdn = /^cdn-images-\d+\.medium\.com$/i.test(url.hostname);
+    return url.protocol === "https:" && (ALLOWED_MEDIUM_IMAGE_HOSTS.has(url.hostname) || isMediumCdn);
   } catch {
     return false;
   }

@@ -10,9 +10,24 @@ interface TestimonialsProps {
   type: "tech" | "spirituality" | "mindfold";
   /** Optional max to display */
   limit?: number;
+  /** Render testimonials inside a toggle */
+  collapsible?: boolean;
+  /** Whether the toggle starts open */
+  defaultOpen?: boolean;
+  /** Optional section note */
+  note?: string;
+  /** Optional toggle label */
+  toggleLabel?: string;
 }
 
-export function Testimonials({ type, limit }: TestimonialsProps) {
+export function Testimonials({
+  type,
+  limit,
+  collapsible = false,
+  defaultOpen = false,
+  note = "Short, anonymized feedback. Tap to expand.",
+  toggleLabel = "Show testimonials",
+}: TestimonialsProps) {
   const filtered = testimonials.filter((t) => t.type === type).slice(0, limit);
 
   if (filtered.length === 0) {
@@ -24,12 +39,26 @@ export function Testimonials({ type, limit }: TestimonialsProps) {
       <section className="section">
         <div className="section-head">
           <h2>What people say</h2>
+          {note ? <span className="section-note">{note}</span> : null}
         </div>
-        <div className="testimonials-grid">
-          {filtered.map((testimonial, index) => (
-            <TestimonialCard key={index} testimonial={testimonial} />
-          ))}
-        </div>
+        {collapsible ? (
+          <details open={defaultOpen} className="card">
+            <summary style={{ cursor: "pointer", fontWeight: 600 }}>
+              {toggleLabel}
+            </summary>
+            <div className="testimonials-grid" style={{ marginTop: 16 }}>
+              {filtered.map((testimonial, index) => (
+                <TestimonialCard key={index} testimonial={testimonial} />
+              ))}
+            </div>
+          </details>
+        ) : (
+          <div className="testimonials-grid">
+            {filtered.map((testimonial, index) => (
+              <TestimonialCard key={index} testimonial={testimonial} />
+            ))}
+          </div>
+        )}
       </section>
     </>
   );

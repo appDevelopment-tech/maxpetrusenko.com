@@ -104,4 +104,4 @@ Answer those first. Then bring in AI.
 
 ---
 
-*Max Petrusenko builds production-grade AI automation systems for creators, startups, and businesses. [Get in touch](https://maxpetrusenko.com/tech/ai-automation).*
+*Max Petrusenko builds production-grade AI automation systems for creators, startups, and businesses. [Get in touch](https://www.maxpetrusenko.com/tech/ai-automation).*

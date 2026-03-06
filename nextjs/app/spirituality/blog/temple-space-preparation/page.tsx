@@ -3,6 +3,7 @@ import Image from "next/image";
 import { generateMetadata, absoluteUrl } from "@/lib/seo/metadata";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { generateArticleSchema, generateBreadcrumbSchema } from "@/lib/seo/structured-data";
+import { RelatedReading } from "@/components/articles/RelatedReading";
 
 export const metadata = generateMetadata({
   title: "How I Prepare the Temple Space for Tantra Sessions",
@@ -12,10 +13,9 @@ export const metadata = generateMetadata({
   canonical: absoluteUrl("/spirituality/blog/temple-space-preparation"),
   ogImage: "/images/article-covers/spirit-temple-space.svg",
   keywords: [
-    "tantric massage ubud",
     "session preparation tantra",
     "somatic safety container",
-    "ubud tantra temple",
+    "tantra session environment",
   ],
 });
 
@@ -148,7 +148,8 @@ export default function TempleSpacePreparationPage() {
               </a>
             </div>
           </div>
-        </article>
+          <RelatedReading currentLink="/spirituality/blog/temple-space-preparation" />
+</article>
       </div>
     </>
   );

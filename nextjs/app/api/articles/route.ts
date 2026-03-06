@@ -17,7 +17,7 @@ export async function GET() {
     // Try to use edge cache (in Cloudflare Workers environment)
     const cache = (globalThis as any).caches?.default;
     if (cache) {
-      const cacheKey = new Request("https://maxpetrusenko.com/api/articles");
+      const cacheKey = new Request("https://www.maxpetrusenko.com/api/articles");
       const cached = await cache.match(cacheKey);
 
       if (cached) {

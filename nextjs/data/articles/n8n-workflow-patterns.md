@@ -161,4 +161,4 @@ Complex workflows grow from simple ones.
 
 ---
 
-*Want help building n8n automations? [I can help](https://maxpetrusenko.com/tech/ai-automation).*
+*Want help building n8n automations? [I can help](https://www.maxpetrusenko.com/tech/ai-automation).*

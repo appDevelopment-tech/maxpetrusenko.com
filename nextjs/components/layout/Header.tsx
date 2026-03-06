@@ -6,14 +6,15 @@ import { siteConfig } from "@/config/site";
 
 /**
  * Site header with navigation
+ * Features sticky positioning with backdrop blur on scroll
  */
 export function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const [isWide, setIsWide] = useState(true);
+  const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
     const handleResize = () => {
-      // Match CSS breakpoint: @media (max-width: 768px) for mobile menu
       const wide = window.innerWidth > 768;
       setIsWide(wide);
       if (wide) {
@@ -21,13 +22,22 @@ export function Header() {
       }
     };
 
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+    };
+
     handleResize();
+    handleScroll();
     window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      window.removeEventListener("scroll", handleScroll);
+    };
   }, []);
 
   return (
-    <header>
+    <header className={isScrolled ? "sticky" : ""}>
       <div className="container nav-bar">
         <Link href="/" className="brand">
           {siteConfig.name}

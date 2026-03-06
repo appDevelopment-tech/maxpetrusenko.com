@@ -88,7 +88,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
 
       <div className="container">
         <article className="page">
-          <section className="section" style={{ marginTop: 0 }}>
+          <section className="section ui-fade-up delay-2" style={{ marginTop: 0 }}>
             <Link
               href="/tech"
               className="btn sm secondary"
@@ -123,7 +123,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
             </header>
 
             {project.image && (
-              <div style={{ maxWidth: 900, margin: "40px auto" }}>
+              <div className="ui-fade-up delay-3" style={{ maxWidth: 900, margin: "40px auto" }}>
                 <Image
                   src={project.image}
                   alt={project.title}

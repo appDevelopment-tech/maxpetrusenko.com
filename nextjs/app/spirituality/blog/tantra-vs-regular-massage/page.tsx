@@ -3,6 +3,7 @@ import Image from "next/image";
 import { generateMetadata, absoluteUrl } from "@/lib/seo/metadata";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { generateArticleSchema, generateBreadcrumbSchema } from "@/lib/seo/structured-data";
+import { RelatedReading } from "@/components/articles/RelatedReading";
 
 export const metadata = generateMetadata({
   title: "Tantra vs Regular Massage: What Is Actually Different?",
@@ -13,9 +14,9 @@ export const metadata = generateMetadata({
   ogImage: "/images/article-covers/spirit-vs-massage.svg",
   keywords: [
     "tantra massage vs regular massage",
-    "tantra massage ubud",
     "somatic bodywork",
     "nervous system massage",
+    "difference between tantra and regular massage",
   ],
 });
 
@@ -173,7 +174,8 @@ export default function TantraVsRegularMassagePage() {
               </a>
             </div>
           </div>
-        </article>
+          <RelatedReading currentLink="/spirituality/blog/tantra-vs-regular-massage" />
+</article>
       </div>
     </>
   );

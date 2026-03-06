@@ -6,8 +6,8 @@ import { JsonLd } from "@/components/seo/JsonLd";
 import { generatePersonSchema, generateWebPageSchema, generateBreadcrumbSchema } from "@/lib/seo/structured-data";
 
 export const metadata = generateMetadata({
-  title: "About",
-  description: "About Max Petrusenko—tech builder and somatic practitioner.",
+  title: "About Max Petrusenko",
+  description: "About Max Petrusenko—tech builder and somatic practitioner based in Ubud, Bali and Miami.",
   ogType: "website",
   canonical: absoluteUrl("/about"),
 });
@@ -19,8 +19,8 @@ export default function AboutPage() {
       <JsonLd
         type="WebPage"
         data={generateWebPageSchema({
-          title: "About - Presence + Product",
-          description: "Tech builder and somatic practitioner based in Ubud, Bali.",
+          title: "About Max Petrusenko",
+          description: "Tech builder and somatic practitioner based in Ubud, Bali and Miami.",
           url: "/about",
         })}
       />
@@ -32,7 +32,7 @@ export default function AboutPage() {
         ])}
       />
 
-      <div className="hero-image-section">
+      <div className="hero-image-section ui-immersive-hero ui-fade-up delay-1">
         <div className="hero-image-overlay"></div>
         <Image
           src="/images/DSC04778.jpg"
@@ -50,7 +50,7 @@ export default function AboutPage() {
       </div>
 
       <div className="container">
-        <section className="hero">
+        <section className="hero ui-fade-up delay-2">
           <div className="hero-text">
             <div className="eyebrow">
               <span className="dot"></span> About
@@ -89,7 +89,7 @@ export default function AboutPage() {
           </div>
         </section>
 
-        <section className="section">
+        <section className="section ui-fade-up delay-3">
           <div className="section-head">
             <h2>Working together</h2>
           </div>

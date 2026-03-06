@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import { RelatedReading } from "@/components/articles/RelatedReading";
 import { generateMetadata, absoluteUrl } from "@/lib/seo/metadata";
 import { JsonLd } from "@/components/seo/JsonLd";
 import {
@@ -11,9 +12,9 @@ import {
 } from "@/lib/seo/structured-data";
 
 export const metadata = generateMetadata({
-  title: "SEO Is Dead? No - It Evolved",
+  title: "Is SEO Dead in 2026? No - It Split Into Search + Answers",
   description:
-    "SEO is not dead. It split into classic search optimization and answer-engine visibility. Learn a practical operating model for both.",
+    "SEO is not dead in 2026. It split into classic search optimization and answer-engine visibility. Learn the practical operating model for both.",
   ogType: "article",
   canonical: absoluteUrl("/tech/articles/seo-is-dead"),
   ogImage: "/images/article-covers/tech-seo-split.svg",
@@ -33,7 +34,7 @@ export default function SEOIsDeadArticle() {
       <JsonLd
         type="TechArticle"
         data={generateTechArticleSchema({
-          headline: "SEO Is Dead? No - It Evolved",
+          headline: "Is SEO Dead in 2026? No - It Split Into Search + Answers",
           description:
             "Why SEO still works, what changed with AI answers, and how to run a dual strategy.",
           image: "/images/article-covers/tech-seo-split.svg",
@@ -56,7 +57,7 @@ export default function SEOIsDeadArticle() {
       <JsonLd
         type="WebPage"
         data={generateWebPageSchema({
-          title: "SEO Is Dead? No - It Evolved",
+          title: "Is SEO Dead in 2026? No - It Split Into Search + Answers",
           description: "A practical model for balancing rankings, citations, and conversion.",
           url: "/tech/articles/seo-is-dead",
           datePublished: "2026-02-02",
@@ -74,7 +75,7 @@ export default function SEOIsDeadArticle() {
             <div className="eyebrow">
               <span className="dot"></span> Search Strategy
             </div>
-            <h1>SEO Is Dead? No. It Split Into Search + Answers.</h1>
+            <h1>Is SEO Dead in 2026? No. It Split Into Search + Answers.</h1>
             <p className="article-subtitle">
               The phrase "SEO is dead" trends every year. What is actually dead is
               relying on rankings alone. Today, visibility comes from both classical
@@ -195,7 +196,8 @@ export default function SEOIsDeadArticle() {
               </a>
             </div>
           </div>
-        </article>
+          <RelatedReading currentLink="/tech/articles/seo-is-dead" />
+</article>
       </div>
     </>
   );

@@ -3,6 +3,7 @@ import Image from "next/image";
 import { generateMetadata, absoluteUrl } from "@/lib/seo/metadata";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { generateArticleSchema, generateBreadcrumbSchema } from "@/lib/seo/structured-data";
+import { RelatedReading } from "@/components/articles/RelatedReading";
 
 export const metadata = generateMetadata({
   title: "5 Questions to Ask Before Booking a Tantra Practitioner",
@@ -12,11 +13,10 @@ export const metadata = generateMetadata({
   canonical: absoluteUrl("/spirituality/blog/questions-to-ask-tantra-practitioner"),
   ogImage: "/images/article-covers/spirit-questions-screening.svg",
   keywords: [
-    "tantric massage ubud",
     "how to choose tantra practitioner",
     "tantra boundaries",
     "trauma-informed tantra",
-    "ubud tantra safety",
+    "tantra practitioner safety",
   ],
 });
 
@@ -151,7 +151,8 @@ export default function QuestionsToAskTantraPractitionerPage() {
               </a>
             </div>
           </div>
-        </article>
+          <RelatedReading currentLink="/spirituality/blog/questions-to-ask-tantra-practitioner" />
+</article>
       </div>
     </>
   );

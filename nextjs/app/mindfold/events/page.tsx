@@ -8,6 +8,7 @@ import {
   generateBreadcrumbSchema,
   generateMindfoldEventSchema,
   generateScheduleActionSchema,
+  generateMindfoldFAQSchema,
 } from "@/lib/seo/structured-data";
 
 export const metadata = generateMetadata({
@@ -37,6 +38,24 @@ export default function MindfoldEventsPage() {
       />
       <JsonLd type="Event" data={generateMindfoldEventSchema()} />
       <JsonLd type="ScheduleAction" data={generateScheduleActionSchema("mindfold")} />
+      <JsonLd type="FAQPage" data={generateMindfoldFAQSchema()} />
+
+      <div className="hero-image-section ui-immersive-hero ui-fade-up delay-1">
+        <div className="hero-image-overlay"></div>
+        <Image
+          src="/images/bali/DSC05052.jpg"
+          alt="Mindfold immersive event atmosphere"
+          fill
+          priority
+          sizes="100vw"
+          style={{ objectFit: "cover" }}
+          quality={86}
+        />
+        <div className="hero-image-content">
+          <h1>Mindfold Sanctuary</h1>
+          <p>Blindfolded presence journeys and events</p>
+        </div>
+      </div>
 
       <div className="container">
         <section className="hero">
@@ -323,6 +342,60 @@ export default function MindfoldEventsPage() {
                 </li>
               </ul>
             </div>
+          </div>
+        </section>
+
+        <section className="section">
+          <div className="section-head">
+            <h2>Mindfold FAQ</h2>
+            <span className="section-note">
+              Clear expectations, boundaries, and what to bring.
+            </span>
+          </div>
+          <div className="cards-3 grid">
+            <details className="faq-item card">
+              <summary>What is a Mindfold journey?</summary>
+              <p>
+                A blindfolded presence practice for groups. With sensory subtraction
+                and slow movement, participants drop into embodied awareness in a
+                non-verbal, non-sexual container.
+              </p>
+            </details>
+            <details className="faq-item card">
+              <summary>Is it safe for first-timers?</summary>
+              <p>
+                Yes. We start with safety guidance, consent agreements, and clear
+                opt-outs. You can pause or step out at any time.
+              </p>
+            </details>
+            <details className="faq-item card">
+              <summary>What should I bring or wear?</summary>
+              <p>
+                Comfortable clothing and water. Arrive 10 minutes early. No perfumes,
+                jewelry, or intoxicants. Phones stay off.
+              </p>
+            </details>
+            <details className="faq-item card">
+              <summary>Is Mindfold sexual?</summary>
+              <p>
+                No. Mindfold is non-sexual. The focus is nervous system regulation,
+                embodied awareness, and respectful boundaries.
+              </p>
+            </details>
+            <details className="faq-item card">
+              <summary>Where are events held?</summary>
+              <p>
+                Locations vary by city and are shared after RSVP. Events are hosted
+                in calm, private spaces with clear guidelines.
+              </p>
+            </details>
+            <details className="faq-item card">
+              <summary>How do I get updates?</summary>
+              <p>
+                Join the text updates form below or message on WhatsApp to get the
+                next date and location.
+              </p>
+            </details>
           </div>
         </section>
 

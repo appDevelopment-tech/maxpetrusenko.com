@@ -3,6 +3,7 @@ import Image from "next/image";
 import { generateMetadata, absoluteUrl } from "@/lib/seo/metadata";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { generateTechArticleSchema, generateBreadcrumbSchema, generateScheduleActionSchema } from "@/lib/seo/structured-data";
+import { RelatedReading } from "@/components/articles/RelatedReading";
 
 export const metadata = generateMetadata({
   title: "Claude Code Setup Guide for Development Teams",
@@ -432,28 +433,8 @@ export default function ClaudeCodeSetupArticle() {
               <strong>Availability:</strong> Remote worldwide · In-person in Miami FL, Ubud Bali
             </p>
           </footer>
-        </article>
-
-        {/* Related articles section */}
-        <section className="section">
-          <div className="section-head">
-            <h2>Related Articles</h2>
-          </div>
-          <div className="cards-3 grid">
-            <Link className="card" href="/tech/articles/n8n-workflow-automation">
-              <h3>n8n Workflow Automation</h3>
-              <p>From zero to production with n8n. API integrations, error handling, and monitoring.</p>
-            </Link>
-            <Link className="card" href="/tech/articles/chatgpt-api-integration">
-              <h3>ChatGPT API Integration</h3>
-              <p>Best practices for integrating OpenAI's API. Prompt engineering, RAG, and function calling.</p>
-            </Link>
-            <Link className="card" href="/tech">
-              <h3>Tech Services</h3>
-              <p>AI automation consulting, Claude Code setup, and workflow automation services.</p>
-            </Link>
-          </div>
-        </section>
+          <RelatedReading currentLink="/tech/articles/claude-code-setup" />
+</article>
       </div>
     </>
   );

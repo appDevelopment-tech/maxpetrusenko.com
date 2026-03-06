@@ -3,10 +3,11 @@ import Image from "next/image";
 import { generateMetadata, absoluteUrl } from "@/lib/seo/metadata";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { generateWebPageSchema, generateTechArticleSchema, generateBreadcrumbSchema, generateScheduleActionSchema, generateTechPersonSchema } from "@/lib/seo/structured-data";
+import { RelatedReading } from "@/components/articles/RelatedReading";
 
 export const metadata = generateMetadata({
-  title: "Answer Engine Optimization (AEO) Guide for 2025",
-  description: "Complete guide to Answer Engine Optimization (AEO) for ChatGPT, Claude, Perplexity, and AI search. Learn how to optimize your website for AI-powered answer engines with structured data, AI guidance files, and entity optimization.",
+  title: "Answer Engine Optimization (AEO) Guide for 2026",
+  description: "Practical AEO guide for 2026: how to audit answer-engine readiness, structure pages for citation, and improve visibility in ChatGPT, Claude, Perplexity, and AI search.",
   ogType: "article",
   canonical: absoluteUrl("/tech/articles/answer-engine-optimization-aeo"),
   ogImage: "/images/article-covers/tech-aeo-guide.svg",
@@ -19,11 +20,11 @@ export default function AEOArticle() {
       <JsonLd
         type="TechArticle"
         data={generateTechArticleSchema({
-          headline: "Answer Engine Optimization (AEO) Guide for 2025",
-          description: "Complete guide to Answer Engine Optimization (AEO) for ChatGPT, Claude, Perplexity, and AI search. Learn how to optimize your website for AI-powered answer engines with structured data, AI guidance files, and entity optimization.",
+          headline: "Answer Engine Optimization (AEO) Guide for 2026",
+          description: "Practical AEO guide for 2026: audit answer-engine readiness, improve structured extraction, and increase citation visibility in AI search.",
           image: "/images/article-covers/tech-aeo-guide.svg",
           url: "/tech/articles/answer-engine-optimization-aeo",
-          datePublished: "2025-01-28",
+          datePublished: "2026-03-06",
           author: "Max Petrusenko",
           keywords: ["AEO", "Answer Engine Optimization", "GEO", "Generative Engine Optimization", "AI SEO", "ChatGPT optimization", "Claude optimization", "AI search"],
         })}
@@ -41,10 +42,10 @@ export default function AEOArticle() {
       <JsonLd
         type="WebPage"
         data={generateWebPageSchema({
-          title: "Answer Engine Optimization (AEO) Guide for 2025",
-          description: "Complete guide to Answer Engine Optimization (AEO) for ChatGPT, Claude, Perplexity, and AI search. Learn how to optimize your website for AI-powered answer engines.",
+          title: "Answer Engine Optimization (AEO) Guide for 2026",
+          description: "Practical AEO guide for 2026: audit answer-engine readiness and structure pages for AI citation.",
           url: "/tech/articles/answer-engine-optimization-aeo",
-          datePublished: "2025-01-28",
+          datePublished: "2026-03-06",
         })}
       />
       <JsonLd type="Person" data={generateTechPersonSchema()} />
@@ -59,14 +60,14 @@ export default function AEOArticle() {
             <div className="eyebrow">
               <span className="dot"></span> AI Search Optimization
             </div>
-            <h1>Answer Engine Optimization (AEO) Guide for 2025</h1>
+            <h1>Answer Engine Optimization (AEO) Guide for 2026</h1>
             <p className="article-subtitle">
-              How to optimize your website for AI-powered answer engines like ChatGPT,
-              Claude, Perplexity, and Google AI Overviews. The future of search is
-              conversational — here's how to show up in the answers.
+              How to audit and optimize your website for AI-powered answer engines like
+              ChatGPT, Claude, Perplexity, and Google AI Overviews. If you need an AEO
+              roadmap, this guide starts with structure, trust signals, and query intent.
             </p>
             <div className="article-meta">
-              <time>January 28, 2025</time>
+              <time>March 6, 2026</time>
               <span>•</span>
               <span>12 min read</span>
               <span>•</span>
@@ -576,27 +577,8 @@ Sitemap: https://example.com/sitemap.xml`}
               <strong>Availability:</strong> Remote worldwide · In-person in Miami FL, Ubud Bali
             </p>
           </footer>
-        </article>
-
-        <section className="section">
-          <div className="section-head">
-            <h2>Related Articles</h2>
-          </div>
-          <div className="cards-3 grid">
-            <Link className="card" href="/tech/articles/generative-ai-score-websites">
-              <h3>Generative AI Score for Websites</h3>
-              <p>How AI engines evaluate and score websites. Understanding the factors that influence AI citation and recommendation.</p>
-            </Link>
-            <Link className="card" href="/tech/articles/claude-code-setup">
-              <h3>Claude Code Setup Guide</h3>
-              <p>Configuring Claude Code with sub-agents, skills, and workflows for development teams.</p>
-            </Link>
-            <Link className="card" href="/tech">
-              <h3>Tech Services</h3>
-              <p>AI automation consulting, AEO implementation, and workflow automation services.</p>
-            </Link>
-          </div>
-        </section>
+          <RelatedReading currentLink="/tech/articles/answer-engine-optimization-aeo" />
+</article>
       </div>
     </>
   );

@@ -20,7 +20,7 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: "*",
         allow: "/",
-        disallow: ["/api/", "/_next/", "/_/", "/static/"],
+        disallow: ["/api/", "/_next/", "/static/", "/atelier/"],
       },
       // AI Crawlers - Explicitly allow for AI discovery
       {

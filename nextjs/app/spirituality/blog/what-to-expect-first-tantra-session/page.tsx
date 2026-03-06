@@ -3,6 +3,7 @@ import Image from "next/image";
 import { generateMetadata, absoluteUrl } from "@/lib/seo/metadata";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { generateArticleSchema, generateBreadcrumbSchema } from "@/lib/seo/structured-data";
+import { RelatedReading } from "@/components/articles/RelatedReading";
 
 export const metadata = generateMetadata({
   title: "What to Expect in Your First Tantra Massage Session | Ubud, Bali",
@@ -386,7 +387,8 @@ export default function FirstTantraSessionBlogPost() {
               </p>
             </div>
           </div>
-        </article>
+          <RelatedReading currentLink="/spirituality/blog/what-to-expect-first-tantra-session" />
+</article>
 
         <section className="section">
           <div className="section-head">

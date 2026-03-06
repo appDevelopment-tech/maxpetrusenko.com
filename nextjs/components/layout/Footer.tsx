@@ -6,14 +6,28 @@ import { siteConfig } from "@/config/site";
  */
 export function Footer() {
   return (
-    <footer className="container footer">
-      <div>© 2025 {siteConfig.name}</div>
-      <div className="footer-links">
-        {siteConfig.navigation.slice(1).map((item) => (
-          <Link key={item.href} href={item.href}>
-            {item.name}
-          </Link>
-        ))}
+    <footer>
+      <div className="location-banner" role="note">
+        <span className="location-item">
+          <strong>Ubud, Bali</strong> in-person
+        </span>
+        <span className="location-divider">|</span>
+        <span className="location-item">
+          <strong>Miami, FL</strong> in-person
+        </span>
+        <span className="location-divider">|</span>
+        <span className="location-item">Remote worldwide</span>
+      </div>
+      <div className="container footer">
+        <div>© 2025 {siteConfig.name}</div>
+        <div className="footer-links">
+          {siteConfig.navigation.slice(1).map((item) => (
+            <Link key={item.href} href={item.href}>
+              {item.name}
+            </Link>
+          ))}
+          <Link href="/blog/topics">Topics</Link>
+        </div>
       </div>
     </footer>
   );

@@ -19,6 +19,10 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
+        hostname: "**.medium.com",
+      },
+      {
+        protocol: "https",
         hostname: "pbs.twimg.com",
       },
       {
@@ -49,6 +53,16 @@ const nextConfig: NextConfig = {
       {
         source: "/home/",
         destination: "/",
+        permanent: true, // 301 redirect
+      },
+      {
+        source: "/mindfold",
+        destination: "/mindfold/events",
+        permanent: true, // 301 redirect
+      },
+      {
+        source: "/mindfold/",
+        destination: "/mindfold/events",
         permanent: true, // 301 redirect
       },
       {

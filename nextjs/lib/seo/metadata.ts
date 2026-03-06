@@ -16,7 +16,8 @@ export function generateMetadata(metadata: PageMetadata): Metadata {
     keywords = [],
   } = metadata;
 
-  const fullTitle = title === siteConfig.name ? title : `${title} | ${siteConfig.name}`;
+  const titleAlreadyHasBrand = title.toLowerCase().includes(siteConfig.name.toLowerCase());
+  const fullTitle = title === siteConfig.name || titleAlreadyHasBrand ? title : `${title} | ${siteConfig.name}`;
   const imageUrl = ogImage
     ? ogImage.startsWith("http")
       ? ogImage

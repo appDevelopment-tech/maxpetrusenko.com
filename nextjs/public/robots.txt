@@ -38,6 +38,10 @@ Allow: /
 
 User-agent: *
 Allow: /
+Disallow: /api/
+Disallow: /_next/
+Disallow: /static/
+Disallow: /atelier/
 
 # Crawl-delay (optional, respectful crawling)
 # Crawl-delay: 1
@@ -47,7 +51,6 @@ Allow: /
 # ============================================
 
 Sitemap: https://www.maxpetrusenko.com/sitemap.xml
-Sitemap: https://maxpetrusenko.com/sitemap.xml
 
 # ============================================
 # AI GUIDANCE FILES
