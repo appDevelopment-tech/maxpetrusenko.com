@@ -19,6 +19,7 @@ node_modules/
 .next/
 out/
 dist/
+nextjs/.next_stale_*/
 
 # IDE
 .vscode/
