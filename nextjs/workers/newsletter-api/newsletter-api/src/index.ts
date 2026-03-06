@@ -20,6 +20,10 @@ interface KVNamespace {
 	list(): Promise<{ keys: Array<{ name: string }> }>;
 }
 
+interface ExecutionContext {
+	waitUntil(promise: Promise<unknown>): void;
+}
+
 interface Env {
 	EMAIL_SUBS: KVNamespace;
 }
