@@ -1,5 +1,8 @@
 const LEGACY_MEDIUM_ID_SLUG = /^[a-f0-9]{10,}$/i;
 const ABSOLUTE_URL = /^https?:\/\//i;
+const LEGACY_ARTICLE_REDIRECTS: Record<string, string> = {
+  "2fbbfd3d630c": "/tech/articles/bitcoin-as-strong-money",
+};
 
 function normalizeSlug(value: string): string {
   return value.trim().toLowerCase();
@@ -14,6 +17,10 @@ export function resolveLegacyBlogSlugRedirect(slug: string): string | null {
 
   if (!normalizedSlug) {
     return null;
+  }
+
+  if (normalizedSlug in LEGACY_ARTICLE_REDIRECTS) {
+    return LEGACY_ARTICLE_REDIRECTS[normalizedSlug];
   }
 
   if (LEGACY_MEDIUM_ID_SLUG.test(normalizedSlug)) {
@@ -53,13 +60,9 @@ export function resolveMissingBlogTagRedirect(tag: string): string | null {
 }
 
 export function resolveBlogTagRedirect(articleLinks: string[]): string | null {
-  if (articleLinks.length !== 1) {
-    return null;
-  }
-
-  return normalizeArticleLink(articleLinks[0]) || null;
+  return null;
 }
 
 export function shouldIndexBlogTagPage(articleCount: number): boolean {
-  return articleCount > 1;
+  return articleCount > 0;
 }

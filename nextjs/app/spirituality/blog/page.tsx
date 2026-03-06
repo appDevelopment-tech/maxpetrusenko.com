@@ -13,6 +13,24 @@ export const metadata = generateMetadata({
 
 const BLOG_POSTS = [
   {
+    slug: "what-is-kyo-tai",
+    title: "What Is Kyo-tai? A Two-Body Somatic Practice",
+    excerpt: "Kyo-tai is my name for a two-body practice that blends contact, pressure, rhythm, and energetic transmission into one listening system.",
+    image: "/images/og-default.svg",
+    date: "2026-03-06",
+    readTime: "7 min read",
+    category: "Modality",
+  },
+  {
+    slug: "kyo-tai-session-what-happens",
+    title: "What Happens in a Kyo-tai Session",
+    excerpt: "A practical walkthrough of consent, pacing, pressure, energetic intensity, and integration inside a Kyo-tai session.",
+    image: "/images/og-default.svg",
+    date: "2026-03-06",
+    readTime: "6 min read",
+    category: "Session Guide",
+  },
+  {
     slug: "what-to-expect-first-tantra-session",
     title: "What to Expect in Your First Tantra Massage Session",
     excerpt: "Nervous about your first tantra session? This guide walks you through everything from arrival to integration, so you can feel prepared and at ease.",

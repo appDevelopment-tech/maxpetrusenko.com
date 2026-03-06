@@ -224,6 +224,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.7,
     },
     {
+      url: `${baseUrl}/tech/articles/bitcoin-as-strong-money`,
+      lastModified: await getRouteLastModified(
+        appDir,
+        "/tech/articles/bitcoin-as-strong-money",
+        fallbackLastModified
+      ),
+      changeFrequency: "monthly",
+      priority: 0.8,
+    },
+    {
       url: `${baseUrl}/tech/articles/n8n-workflow-automation`,
       lastModified: await getRouteLastModified(
         appDir,
@@ -355,6 +365,26 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: await getRouteLastModified(
         appDir,
         "/spirituality/blog/what-to-expect-first-tantra-session",
+        fallbackLastModified
+      ),
+      changeFrequency: "monthly",
+      priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/spirituality/blog/what-is-kyo-tai`,
+      lastModified: await getRouteLastModified(
+        appDir,
+        "/spirituality/blog/what-is-kyo-tai",
+        fallbackLastModified
+      ),
+      changeFrequency: "monthly",
+      priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/spirituality/blog/kyo-tai-session-what-happens`,
+      lastModified: await getRouteLastModified(
+        appDir,
+        "/spirituality/blog/kyo-tai-session-what-happens",
         fallbackLastModified
       ),
       changeFrequency: "monthly",

@@ -66,6 +66,34 @@ const LOCAL_ARTICLES: Article[] = [
     author: { name: "Max Petrusenko" },
   },
   {
+    id: "local-spirit-kyo-tai-intro",
+    slug: "what-is-kyo-tai",
+    title: "What Is Kyo-tai? A Two-Body Somatic Practice",
+    excerpt:
+      "Kyo-tai is my name for a two-body practice that blends contact, pressure, rhythm, and energetic transmission into one listening system.",
+    content:
+      "<p>This article is published on maxpetrusenko.com. Open the canonical route to read the full version.</p>",
+    image: "/images/og-default.svg",
+    link: "/spirituality/blog/what-is-kyo-tai",
+    publishedAt: "2026-03-06T00:00:00.000Z",
+    tags: ["Spirituality", "Kyo-tai", "Somatic", "Contact Improvisation"],
+    author: { name: "Max Petrusenko" },
+  },
+  {
+    id: "local-spirit-kyo-tai-session",
+    slug: "kyo-tai-session-what-happens",
+    title: "What Happens in a Kyo-tai Session",
+    excerpt:
+      "A practical walkthrough of consent, pacing, pressure, energetic intensity, and integration inside a Kyo-tai session.",
+    content:
+      "<p>This article is published on maxpetrusenko.com. Open the canonical route to read the full version.</p>",
+    image: "/images/og-default.svg",
+    link: "/spirituality/blog/kyo-tai-session-what-happens",
+    publishedAt: "2026-03-06T00:00:00.000Z",
+    tags: ["Spirituality", "Kyo-tai", "Session Guide", "Boundaries"],
+    author: { name: "Max Petrusenko" },
+  },
+  {
     id: "local-tech-openclaw",
     slug: "openclaw-installation-playbook",
     title: "OpenClaw Installation Playbook for Teams",
@@ -175,6 +203,20 @@ const LOCAL_ARTICLES: Article[] = [
     link: "/tech/articles/chatgpt-api-integration",
     publishedAt: "2026-01-29T00:00:00.000Z",
     tags: ["Tech", "ChatGPT", "API Integration", "AI"],
+    author: { name: "Max Petrusenko" },
+  },
+  {
+    id: "local-tech-bitcoin-strong-money",
+    slug: "bitcoin-as-strong-money",
+    title: "Bitcoin as Strong Money",
+    excerpt:
+      "Why Bitcoin is treated differently from generic crypto: scarcity, self-custody, neutral settlement, and the tradeoffs that still matter.",
+    content:
+      "<p>This article is published on maxpetrusenko.com. Open the canonical route to read the full version.</p>",
+    image: "/images/og-default.svg",
+    link: "/tech/articles/bitcoin-as-strong-money",
+    publishedAt: "2026-03-06T00:00:00.000Z",
+    tags: ["Tech", "Bitcoin", "Money", "Strategy"],
     author: { name: "Max Petrusenko" },
   },
   ...EXPANSION_ARTICLES,

@@ -8,6 +8,13 @@ import { getLocalArticles } from "@/lib/cms/articles";
 
 const technicalArticles = [
   {
+    href: "/tech/articles/bitcoin-as-strong-money",
+    title: "Bitcoin as Strong Money",
+    description:
+      "Why Bitcoin is treated differently from generic crypto: fixed supply, self-custody, neutral settlement, and the tradeoffs that still matter.",
+    category: "Money",
+  },
+  {
     href: "/tech/articles/openclaw-installation-playbook",
     title: "OpenClaw Installation Playbook for Teams",
     description:

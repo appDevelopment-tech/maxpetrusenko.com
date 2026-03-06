@@ -10,7 +10,10 @@ import {
 } from "./legacy-blog-compat.ts";
 
 test("redirects unknown legacy Medium ID slugs to the blog archive", () => {
-  assert.equal(resolveLegacyBlogSlugRedirect("2fbbfd3d630c"), "/blog");
+  assert.equal(
+    resolveLegacyBlogSlugRedirect("2fbbfd3d630c"),
+    "/tech/articles/bitcoin-as-strong-money"
+  );
   assert.equal(resolveLegacyBlogSlugRedirect("3749fc88b06d"), "/blog");
   assert.equal(resolveLegacyBlogSlugRedirect("05a1427581a3"), "/blog");
   assert.equal(resolveLegacyBlogSlugRedirect("1e454d39553b"), "/blog");
@@ -55,24 +58,12 @@ test("redirects missing legacy tag archives to the blog topic index", () => {
   assert.equal(resolveMissingBlogTagRedirect("data"), "/blog/topics");
 });
 
-test("redirects single-article tag pages to the article URL", () => {
-  assert.equal(
-    resolveBlogTagRedirect(["/tech/articles/openclaw-installation-playbook"]),
-    "/tech/articles/openclaw-installation-playbook"
-  );
-  assert.equal(
-    resolveBlogTagRedirect([
-      "https://medium.com/@max.petrusenko/claude-code-tasks-and-the-missing-primitive-of-ai-autonomy-10432c398a50",
-    ]),
-    "https://medium.com/@max.petrusenko/claude-code-tasks-and-the-missing-primitive-of-ai-autonomy-10432c398a50"
-  );
-});
-
-test("keeps multi-article tag pages indexable", () => {
+test("keeps tag pages renderable instead of redirecting to a single article", () => {
+  assert.equal(resolveBlogTagRedirect(["/tech/articles/openclaw-installation-playbook"]), null);
   assert.equal(resolveBlogTagRedirect(["/blog/one", "/blog/two"]), null);
   assert.equal(shouldIndexBlogTagPage(2), true);
   assert.equal(shouldIndexBlogTagPage(5), true);
-  assert.equal(shouldIndexBlogTagPage(1), false);
+  assert.equal(shouldIndexBlogTagPage(1), true);
 });
 
 test("ignores empty tag values", () => {

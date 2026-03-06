@@ -2,7 +2,6 @@ import Link from "next/link";
 import Image from "next/image";
 import { fetchArticlesByTag } from "@/lib/cms/articles";
 import {
-  resolveBlogTagRedirect,
   resolveMissingBlogTagRedirect,
   shouldIndexBlogTagPage,
 } from "@/lib/cms/legacy-blog-compat";
@@ -44,11 +43,6 @@ export default async function TagPage({ params }: TagPageProps) {
       permanentRedirect(legacyRedirect);
     }
     notFound();
-  }
-
-  const canonicalRedirect = resolveBlogTagRedirect(articles.map((article) => article.link));
-  if (canonicalRedirect) {
-    permanentRedirect(canonicalRedirect);
   }
 
   const decodedTag = decodeURIComponent(tag).replace(/-/g, " ");
