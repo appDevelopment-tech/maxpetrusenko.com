@@ -14,6 +14,12 @@ interface SubscriptionResponse {
 	error?: string;
 }
 
+interface KVNamespace {
+	get(key: string): Promise<string | null>;
+	put(key: string, value: string): Promise<void>;
+	list(): Promise<{ keys: Array<{ name: string }> }>;
+}
+
 interface Env {
 	EMAIL_SUBS: KVNamespace;
 }
