@@ -7,10 +7,11 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "guard:dev-server": "node scripts/guard-no-running-dev.mjs",
     "test": "node --test lib/cms/legacy-blog-compat.test.mjs next.config.redirects.test.mjs components/motion/utils.test.mjs && node scripts/verify-predeploy.mjs && node scripts/verify-topic-clusters.mjs && npm run ui:scan",
     "ui:scan": "node scripts/ui-scan.mjs",
-    "verify:predeploy": "npm run lint && npm run build && npm run test",
-    "pages:build": "npx @cloudflare/next-on-pages",
+    "verify:predeploy": "npm run guard:dev-server && npm run lint && npm run build && npm run test",
+    "pages:build": "npm run guard:dev-server && npx @cloudflare/next-on-pages",
     "preview": "npm run pages:build && wrangler pages dev",
     "deploy": "npm run verify:predeploy && npm run pages:build && node scripts/deploy.mjs"
   },
