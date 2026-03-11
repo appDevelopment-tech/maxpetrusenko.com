@@ -118,13 +118,6 @@ export default function SpiritualityPage() {
       />
       <JsonLd type="Person" data={generateSpiritualityPersonSchema()} />
 
-      {/* Direct Answer block for AI citation optimization */}
-      <DirectAnswer
-        schemaType="WebPage"
-        question="What tantra massage and somatic energy work services does Max Petrusenko offer?"
-        answer="Max Petrusenko is a certified tantra and somatic practitioner offering intimate tantra massage and somatic energy work in Ubud, Bali and Miami, Florida. Sessions include nervous system reset (90 min), deep repatterning arcs, and Kyo-tai immersion bodywork. All sessions are intimate with clear boundaries and open-heart presence. Available for men, women, and couples. WhatsApp +1-786-543-6688 to book."
-      />
-
       {/* Hero image section */}
       <div className="hero-image-section spirituality-hero ui-immersive-hero ui-fade-up delay-1">
         <div className="hero-image-overlay"></div>
@@ -144,6 +137,14 @@ export default function SpiritualityPage() {
       </div>
 
       <div className="container">
+        {/* Direct Answer block for AI citation optimization */}
+        <DirectAnswer
+          schemaType="WebPage"
+          question="What tantra massage and somatic energy work services does Max Petrusenko offer?"
+          answer="Max Petrusenko is a certified tantra and somatic practitioner offering intimate tantra massage and somatic energy work in Ubud, Bali and Miami, Florida. Sessions include nervous system reset (90 min), deep repatterning arcs, and Kyo-tai immersion bodywork. All sessions are intimate with clear boundaries and open-heart presence. Available for men, women, and couples. WhatsApp +1-786-543-6688 to book."
+          displayAnswer="Max Petrusenko offers private tantra massage and somatic energy work in Ubud and Miami. Sessions are boundaries-first, paced to the nervous system, and available for men, women, and couples by appointment."
+        />
+
         <section className="hero ui-fade-up delay-2">
           <div className="hero-text">
             <div className="eyebrow">

@@ -5,6 +5,10 @@ interface DirectAnswerProps {
   question: string;
   /** 40-60 word direct answer optimized for AI extraction */
   answer: string;
+  /** Optional shorter UI copy when schema copy is too dense for page layout */
+  displayAnswer?: string;
+  /** Optional short label for the visible card */
+  label?: string;
   /** Optional schema type for enhanced markup */
   schemaType?: "FAQPage" | "WebPage" | "TechArticle";
 }
@@ -24,7 +28,13 @@ interface DirectAnswerProps {
  * @see https://www.getpassionfruit.com/blog/faq-schema-for-ai-answers
  * @see https://wellows.com/blog/schema-and-nlp-best-practices-for-ai-search/
  */
-export function DirectAnswer({ question, answer, schemaType = "FAQPage" }: DirectAnswerProps) {
+export function DirectAnswer({
+  question,
+  answer,
+  displayAnswer,
+  label = "Overview",
+  schemaType = "FAQPage",
+}: DirectAnswerProps) {
   const schema = {
     "@context": "https://schema.org",
     "@type": schemaType,
@@ -49,7 +59,8 @@ export function DirectAnswer({ question, answer, schemaType = "FAQPage" }: Direc
     <>
       <JsonLd type={schemaType} data={schema} />
       <div className="direct-answer" data-direct-answer="true">
-        <p className="direct-answer-text">{answer}</p>
+        <p className="direct-answer-label">{label}</p>
+        <p className="direct-answer-text">{displayAnswer ?? answer}</p>
       </div>
     </>
   );

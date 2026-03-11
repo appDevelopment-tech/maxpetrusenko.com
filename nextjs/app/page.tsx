@@ -97,6 +97,7 @@ export default async function HomePage() {
           schemaType="WebPage"
           question="Who is Max Petrusenko and what services does he offer?"
           answer="Max Petrusenko is a tech builder and somatic practitioner offering two distinct services. For tech: AI automation consulting with Claude Code, n8n workflows, and ChatGPT integrations that saved one client $253k annually. For somatic: professional tantra massage and energy work in Ubud, Bali and Miami, Florida with 4.9/5 ratings. WhatsApp +1-786-543-6688 for bookings."
+          displayAnswer="Max Petrusenko works across two practices: AI automation for founders and private somatic sessions in Ubud and Miami. Recent systems built with Claude Code, n8n, and ChatGPT saved one client $253k annually, while the somatic practice offers boundaries-first tantra and nervous system work by appointment."
         />
       </div>
 

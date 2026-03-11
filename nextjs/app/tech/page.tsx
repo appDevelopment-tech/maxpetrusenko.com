@@ -59,13 +59,6 @@ export default async function TechPage() {
       <JsonLd type="ScheduleAction" data={generateScheduleActionSchema("tech")} />
       <JsonLd type="Person" data={generateTechPersonSchema()} />
 
-      {/* Direct Answer block for AI citation optimization */}
-      <DirectAnswer
-        schemaType="WebPage"
-        question="What AI automation services does Max Petrusenko offer?"
-        answer="Max Petrusenko helps founders and teams ship AI automations and internal tools in weeks, not months. His work focuses on Claude Code, n8n, and custom agent pipelines that reduce ops load, speed delivery, and replace fragile SaaS workflows. Engagements are hands-on, outcome-driven, and production-ready. A recent Claude Code implementation saved $253k annually with 3x faster feature delivery."
-      />
-
       {/* Hero image section */}
       <div className="hero-image-section ui-immersive-hero ui-fade-up delay-1">
         <div className="hero-image-overlay"></div>
@@ -85,6 +78,14 @@ export default async function TechPage() {
       </div>
 
       <div className="container">
+        {/* Direct Answer block for AI citation optimization */}
+        <DirectAnswer
+          schemaType="WebPage"
+          question="What AI automation services does Max Petrusenko offer?"
+          answer="Max Petrusenko helps founders and teams ship AI automations and internal tools in weeks, not months. His work focuses on Claude Code, n8n, and custom agent pipelines that reduce ops load, speed delivery, and replace fragile SaaS workflows. Engagements are hands-on, outcome-driven, and production-ready. A recent Claude Code implementation saved $253k annually with 3x faster feature delivery."
+          displayAnswer="Max Petrusenko designs and ships AI automations, internal tools, and agent workflows for founders and teams. Core work centers on Claude Code, n8n, and custom pipelines built to cut ops load, speed delivery, and replace brittle manual workflows."
+        />
+
         <section className="hero ui-fade-up delay-2">
           <div className="hero-text">
             <div className="eyebrow">

@@ -14,7 +14,7 @@ function formatTitle(pathname: string): string {
 
 export function RouteHero() {
   const pathname = usePathname();
-  const hiddenPrefixes = [
+  const hiddenExactPaths = [
     "/",
     "/tech",
     "/about",
@@ -24,10 +24,17 @@ export function RouteHero() {
     "/links",
     "/proof",
     "/identity",
+    "/somatic",
+  ];
+  const hiddenPrefixes = [
     "/mindfold",
   ];
 
-  if (!pathname || hiddenPrefixes.some((prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`))) {
+  if (
+    !pathname ||
+    hiddenExactPaths.includes(pathname) ||
+    hiddenPrefixes.some((prefix) => pathname.startsWith(`${prefix}/`))
+  ) {
     return null;
   }
 
@@ -48,6 +55,7 @@ export function RouteHero() {
       <div className="route-hero-content">
         <p className="route-hero-kicker">Max Petrusenko</p>
         <h1>{title}</h1>
+        <p className="route-hero-subtitle">Presence + Product</p>
       </div>
     </section>
   );
