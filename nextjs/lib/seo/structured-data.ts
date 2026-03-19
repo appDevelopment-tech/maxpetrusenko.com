@@ -1,5 +1,6 @@
 import { siteConfig } from "@/config/site";
 import { testimonials } from "@/lib/cms/testimonials";
+import { buildHomeFaqMainEntity } from "@/lib/seo/home-faq";
 
 const BRAND_LOGO_URL = `${siteConfig.url}/images/brand-mark.svg`;
 const PERSON_IMAGE_URL = `${siteConfig.url}/images/DSC05871.jpg`;
@@ -23,6 +24,22 @@ export function generateWebPageSchema(data: {
     url: `${siteConfig.url}${data.url}`,
     ...(data.datePublished && { datePublished: data.datePublished }),
     ...(data.dateModified && { dateModified: data.dateModified }),
+  };
+}
+
+export function generateWebSiteSchema() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: siteConfig.name,
+    description: siteConfig.description,
+    url: siteConfig.url,
+    inLanguage: "en-US",
+    publisher: {
+      "@type": "Person",
+      name: siteConfig.author.name,
+      url: siteConfig.url,
+    },
   };
 }
 
@@ -730,16 +747,10 @@ export function generateTechFAQSchema() {
  * Avoid duplicate FAQPage objects in a single page
  */
 export function generateHomeFAQSchema() {
-  const somatic = generateFAQSchema();
-  const tech = generateTechFAQSchema();
-
   return {
     "@context": "https://schema.org",
     "@type": "FAQPage",
-    mainEntity: [
-      ...(somatic.mainEntity ?? []),
-      ...(tech.mainEntity ?? []),
-    ],
+    mainEntity: buildHomeFaqMainEntity(),
   };
 }
 

@@ -59,6 +59,7 @@ Last Updated: 2026-03-06
 - [x] `Event` schema for Mindfold (rolling quarterly dates; update when fixed dates are published)
 - [x] Prevent duplicate `FAQPage` schema on pages that already publish a primary FAQ block (home/tech/spirituality direct-answer blocks switched to `WebPage` schema)
 - [x] Reduce homepage markup duplication by removing hidden person microdata and trimming redundant layout-level `Person` schema output (2026-03-06)
+- [x] Sync homepage `FAQPage` schema to a visible homepage FAQ section and add plain `WebSite` schema without fake `SearchAction` markup (2026-03-18)
 
 ---
 

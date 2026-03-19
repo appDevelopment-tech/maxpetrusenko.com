@@ -28,6 +28,11 @@ export function JsonLd({ type, data }: JsonLdProps) {
       "@type": "Organization",
       ...data,
     },
+    WebSite: {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      ...data,
+    },
     BreadcrumbList: {
       "@context": "https://schema.org",
       "@type": "BreadcrumbList",

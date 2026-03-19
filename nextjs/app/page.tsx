@@ -6,8 +6,10 @@ import { JsonLd } from "@/components/seo/JsonLd";
 import { DirectAnswer } from "@/components/seo/DirectAnswer";
 import { generateMetadata, absoluteUrl } from "@/lib/seo/metadata";
 import { MouseTrackingGradient } from "@/components/motion/MouseTrackingGradient";
+import { HomeFaqSection } from "@/components/home/HomeFaqSection";
 import {
   generateWebPageSchema,
+  generateWebSiteSchema,
   generateBreadcrumbSchema,
   generateProfessionalServiceSchema,
   generateTechServiceSchema,
@@ -17,6 +19,7 @@ import {
   generateAggregateRatingSchema,
 } from "@/lib/seo/structured-data";
 import { fetchArticles, isLocalArticle } from "@/lib/cms/articles";
+import { homeFaqEntries } from "@/lib/seo/home-faq";
 
 const StackAnalysisLeadMagnet = dynamic(
   () =>
@@ -62,6 +65,7 @@ export default async function HomePage() {
           url: "/",
         })}
       />
+      <JsonLd type="WebSite" data={generateWebSiteSchema()} />
       <JsonLd
         type="BreadcrumbList"
         data={generateBreadcrumbSchema([{ name: "Home", url: "/" }])}
@@ -301,6 +305,8 @@ export default async function HomePage() {
             </div>
           </div>
         </section>
+
+        <HomeFaqSection faqEntries={homeFaqEntries} />
       </div>
 
       <EmailCapture />
