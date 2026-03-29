@@ -6,6 +6,7 @@ import { JsonLd } from "@/components/seo/JsonLd";
 import { DirectAnswer } from "@/components/seo/DirectAnswer";
 import { EmailCaptureInline } from "@/components/forms/EmailCaptureInline";
 import { Testimonials } from "@/components/testimonials/Testimonials";
+import { FaqSection } from "@/components/shared/FaqSection";
 import {
   generateOrganizationSchema,
   generateWebPageSchema,
@@ -118,47 +119,36 @@ export default function SpiritualityPage() {
       />
       <JsonLd type="Person" data={generateSpiritualityPersonSchema()} />
 
-      {/* Hero image section */}
-      <div className="hero-image-section spirituality-hero ui-immersive-hero ui-fade-up delay-1">
-        <div className="hero-image-overlay"></div>
-        <Image
-          src="/images/DSC05764.jpg"
-          alt="Atmospheric tropical setting for somatic energy work"
-          fill
-          priority
-          sizes="100vw"
-          style={{ objectFit: "cover" }}
-          quality={85}
-        />
-        <div className="hero-image-content">
-          <h2>Presence Atelier</h2>
-          <p>Somatic energy work with boundaries first • Ubud, Bali</p>
+      {/* Hero portrait background */}
+      <div className="hero-portrait-wrap">
+        <div className="hero-portrait-bg">
+          <Image
+            src="/images/DSC05764.jpg"
+            alt="Atmospheric tropical setting for somatic energy work"
+            fill
+            priority
+            sizes="100vw"
+            style={{ objectFit: "cover" }}
+            quality={85}
+          />
+          <div className="hero-portrait-overlay" />
+          <div className="hero-portrait-bottom" />
         </div>
-      </div>
-
-      <div className="container">
-        {/* Direct Answer block for AI citation optimization */}
-        <DirectAnswer
-          schemaType="WebPage"
-          question="What tantra massage and somatic energy work services does Max Petrusenko offer?"
-          answer="Max Petrusenko is a certified tantra and somatic practitioner offering intimate tantra massage and somatic energy work in Ubud, Bali and Miami, Florida. Sessions include nervous system reset (90 min), deep repatterning arcs, and Kyo-tai immersion bodywork. All sessions are intimate with clear boundaries and open-heart presence. Available for men, women, and couples. WhatsApp +1-786-543-6688 to book."
-          displayAnswer="Max Petrusenko offers private tantra massage and somatic energy work in Ubud and Miami. Sessions are boundaries-first, paced to the nervous system, and available for men, women, and couples by appointment."
-        />
-
-        <section className="hero ui-fade-up delay-2">
-          <div className="hero-text">
-            <div className="eyebrow">
-              <span className="dot"></span> Presence Atelier
-            </div>
-            <h1>Somatic energy work with boundaries first</h1>
-            <p>
-              Private tantra and somatic sessions in Ubud. Nervous system
-              regulation, deep rewiring, and conscious presence. Limited weekly
-              spots.
+        <section className="relative z-[3] mx-auto w-full max-w-[1080px] px-4 py-28 md:px-6 md:py-32">
+          <div>
+            <p className="blur-in inline-flex items-center rounded-full border border-[rgba(14,97,93,0.2)] px-4 py-1 text-xs font-semibold text-[var(--accent-spirit)]">
+              Open for private sessions
             </p>
-            <div className="hero-actions">
+            <h1 className="clip-reveal clip-reveal-d1 mt-5 max-w-[12ch] font-serif text-[clamp(2.35rem,4.8vw,3.75rem)] font-bold leading-[1.06] tracking-tight text-[var(--ink)]">
+              Somatic energy work with boundaries first.
+            </h1>
+            <p className="blur-in blur-in-d2 mt-5 max-w-[460px] text-[1.05rem] leading-relaxed text-[var(--ink-soft)]">
+              Private tantra and somatic sessions in Ubud and Miami. Nervous
+              system regulation, deep rewiring, and conscious presence.
+            </p>
+            <div className="blur-in blur-in-d3 mt-8 flex flex-wrap gap-3">
               <a
-                className="btn primary"
+                className="inline-flex items-center gap-2 rounded-[10px] bg-[var(--ink)] px-7 py-3.5 text-[0.95rem] font-semibold text-[var(--sand)] shadow-[0_4px_16px_rgba(12,17,21,0.18)] transition hover:-translate-y-0.5 hover:shadow-[0_8px_28px_rgba(12,17,21,0.24)]"
                 href="https://wa.me/17865436688?text=Hi%20Max%2C%20I%27d%20like%20to%20book%20a%20session.%20Preferred%20day%2Ftime%3A%20____.%20Intentions%3A%20____."
                 target="_blank"
                 rel="noopener"
@@ -166,7 +156,7 @@ export default function SpiritualityPage() {
                 Book via WhatsApp
               </a>
               <a
-                className="btn secondary"
+                className="inline-flex items-center gap-2 rounded-[10px] border-[1.5px] border-[var(--line)] bg-transparent px-7 py-3.5 text-[0.95rem] font-semibold text-[var(--ink)] transition hover:-translate-y-0.5 hover:border-[var(--accent-spirit)]"
                 href={siteConfig.externalLinks.atelier}
                 target="_blank"
                 rel="noopener"
@@ -174,40 +164,66 @@ export default function SpiritualityPage() {
                 View Atelier Site
               </a>
             </div>
-            <div className="hero-cta-note">
-              First-timers welcome. Consent and pacing are set together.
-            </div>
-          </div>
-
-          <div className="hero-card">
-            <h3>Offerings</h3>
-            <div className="tiles">
-              <div className="tile">
-                <div className="tile-meta">
-                  <span className="tile-title">Nervous System Reset</span>
-                  <span className="tile-desc">90-minute session to arrive safely.</span>
-                </div>
-                <span className="badge spirit">Book</span>
-              </div>
-              <div className="tile">
-                <div className="tile-meta">
-                  <span className="tile-title">Deep Repatterning</span>
-                  <span className="tile-desc">Longer arc for deep rewiring.</span>
-                </div>
-                <span className="badge spirit">Inquire</span>
-              </div>
-              <Link className="tile" href="/mindfold/events">
-                <div className="tile-meta">
-                  <span className="tile-title">Mindfold Journeys</span>
-                  <span className="tile-desc">
-                    Sensory subtraction to expand perception.
-                  </span>
-                </div>
-                <span className="badge mindfold">Explore</span>
-              </Link>
-            </div>
           </div>
         </section>
+      </div>
+
+      <DirectAnswer
+        schemaType="WebPage"
+        showUi={false}
+        question="What tantra massage and somatic energy work services does Max Petrusenko offer?"
+        answer="Max Petrusenko is a certified tantra and somatic practitioner offering intimate tantra massage and somatic energy work in Ubud, Bali and Miami, Florida. Sessions include nervous system reset (90 min), deep repatterning arcs, and Kyo-tai immersion bodywork. All sessions are intimate with clear boundaries and open-heart presence. Available for men, women, and couples. WhatsApp +1-786-543-6688 to book."
+        displayAnswer="Private tantra massage and somatic energy work in Ubud and Miami. Boundaries first, nervous-system paced, and available for men, women, and couples by appointment."
+      />
+
+      <section className="dark-zone mt-8 py-16 px-4 md:py-20">
+        <div className="absolute inset-0 z-[1] bg-[radial-gradient(circle_at_20%_30%,rgba(14,97,93,0.16),transparent_35%),radial-gradient(circle_at_80%_70%,rgba(210,163,93,0.1),transparent_30%),linear-gradient(145deg,#0e1520_0%,#152126_58%,#1b2f34_100%)]" />
+        <div className="dark-zone-inner">
+          <p className="section-eyebrow text-[var(--accent-spirit)]">Session focus</p>
+          <h2 className="mt-2 font-serif text-[clamp(1.6rem,2.8vw,2.25rem)] font-semibold tracking-wide text-[#e2e8f0]">
+            Presence, pacing, and clear boundaries
+          </h2>
+          <p className="mt-2 max-w-[560px] text-[var(--dark-zone-muted)]">
+            Sessions are intimate, trauma-aware, and paced to your nervous system.
+            First-timers welcome. Men, women, and couples by appointment.
+          </p>
+
+          <div className="mt-10 grid gap-6 md:grid-cols-2">
+            <div className="dark-zone-card card-stripe-spirit">
+              <h3 className="font-serif text-[1.35rem] font-semibold text-[#e2e8f0]">Offerings</h3>
+              <div className="mt-4 grid gap-3">
+                <div className="rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3">
+                  <p className="text-sm font-semibold text-[#e2e8f0]">Nervous System Reset</p>
+                  <p className="mt-1 text-sm text-[var(--dark-zone-muted)]">90-minute session to arrive safely.</p>
+                </div>
+                <div className="rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3">
+                  <p className="text-sm font-semibold text-[#e2e8f0]">Deep Repatterning</p>
+                  <p className="mt-1 text-sm text-[var(--dark-zone-muted)]">Longer arc for deep rewiring.</p>
+                </div>
+                <Link className="rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3 transition hover:border-white/20" href="/mindfold/events">
+                  <p className="text-sm font-semibold text-[#e2e8f0]">Mindfold Journeys</p>
+                  <p className="mt-1 text-sm text-[var(--dark-zone-muted)]">Sensory subtraction to expand perception.</p>
+                </Link>
+              </div>
+            </div>
+
+            <div className="dark-zone-card card-stripe-spirit">
+              <h3 className="font-serif text-[1.35rem] font-semibold text-[#e2e8f0]">What to expect</h3>
+              <p className="mt-3 text-[0.9rem] leading-relaxed text-[var(--dark-zone-muted)]">
+                Consent-led intake, clear boundaries, guided pacing, and space to land.
+                No performance pressure. Just steady presence and embodied attention.
+              </p>
+              <div className="mt-4 flex flex-wrap gap-2">
+                <span className="rounded-md bg-[rgba(14,97,93,0.15)] px-2.5 py-1 text-[0.7rem] font-semibold text-[#2eb8a8]">Boundaries first</span>
+                <span className="rounded-md bg-[rgba(14,97,93,0.15)] px-2.5 py-1 text-[0.7rem] font-semibold text-[#2eb8a8]">Trauma-aware pacing</span>
+                <span className="rounded-md bg-[rgba(14,97,93,0.15)] px-2.5 py-1 text-[0.7rem] font-semibold text-[#2eb8a8]">Private sessions</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div className="container">
 
         {/* Email capture for spirituality updates */}
         <section className="section ui-fade-up delay-3">
@@ -539,38 +555,11 @@ export default function SpiritualityPage() {
               Answers for individuals and couples. Tap to expand.
             </span>
           </div>
-          <div className="split">
-            <div className="card">
-              <h3>For Individuals</h3>
-              <div style={{ display: "grid", gap: 12, marginTop: 12 }}>
-                {individualFaqs.map((item, index) => (
-                  <details key={item.question} open={index === 0}>
-                    <summary style={{ cursor: "pointer", fontWeight: 600 }}>
-                      {item.question}
-                    </summary>
-                    <p className="text-muted" style={{ marginTop: 8 }}>
-                      {item.answer}
-                    </p>
-                  </details>
-                ))}
-              </div>
-            </div>
-            <div className="card">
-              <h3>For Couples</h3>
-              <div style={{ display: "grid", gap: 12, marginTop: 12 }}>
-                {couplesFaqs.map((item, index) => (
-                  <details key={item.question} open={index === 0}>
-                    <summary style={{ cursor: "pointer", fontWeight: 600 }}>
-                      {item.question}
-                    </summary>
-                    <p className="text-muted" style={{ marginTop: 8 }}>
-                      {item.answer}
-                    </p>
-                  </details>
-                ))}
-              </div>
-            </div>
-          </div>
+          <h3>For Individuals</h3>
+          <FaqSection items={individualFaqs} columns={2} />
+
+          <h3 style={{ marginTop: "var(--space-6)" }}>For Couples</h3>
+          <FaqSection items={couplesFaqs} columns={2} />
         </section>
       </div>
     </>

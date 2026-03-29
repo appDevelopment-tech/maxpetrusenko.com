@@ -1,4 +1,6 @@
+import Image from "next/image";
 import Link from "next/link";
+import { CheckCircle2, CircleX } from "lucide-react";
 import { generateMetadata, absoluteUrl } from "@/lib/seo/metadata";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { DirectAnswer } from "@/components/seo/DirectAnswer";
@@ -17,6 +19,20 @@ export const metadata = generateMetadata({
 });
 
 export default function ClaudeCodeConsultantPage() {
+  const darkBandStyle = {
+    background: "linear-gradient(145deg, #0e1520 0%, #152438 100%)",
+    padding: "72px 20px",
+  } as const;
+
+  const darkBandHeadingStyle = {
+    marginBottom: "24px",
+    color: "#f3f6fa",
+  } as const;
+
+  const darkBandTextStyle = {
+    color: "var(--dark-zone-text)",
+  } as const;
+
   return (
     <>
       <JsonLd
@@ -38,54 +54,72 @@ export default function ClaudeCodeConsultantPage() {
       <JsonLd type="ProfessionalService" data={generateTechServiceSchema()} />
       <JsonLd type="Person" data={generateTechPersonSchema()} />
 
-      {/* Direct Answer for AI extraction */}
+      <div className="hero-portrait-wrap">
+        <div className="hero-portrait-bg">
+          <Image
+            src="/images/tech-portrait.jpg"
+            alt="Max Petrusenko with a technical studio portrait"
+            fill
+            priority
+            sizes="100vw"
+            style={{ objectFit: "cover", objectPosition: "50% 30%" }}
+            quality={90}
+          />
+          <div className="hero-portrait-overlay" />
+          <div className="hero-portrait-bottom" />
+        </div>
+
+        <section className="relative z-[3] mx-auto w-full max-w-[1080px] px-4 py-20 md:px-6 md:py-24">
+          <div className="max-w-[760px]">
+            <div className="blur-in section-eyebrow text-[var(--accent-tech)]">
+              Claude Code Consulting
+            </div>
+            <h1 className="clip-reveal clip-reveal-d1 mt-3 font-serif text-[clamp(2.4rem,5vw,4rem)] font-semibold leading-[0.98] tracking-tight text-[var(--ink)]">
+              Ship 3x Faster with Claude Code
+            </h1>
+            <p className="mt-4 max-w-[620px] text-[1.05rem] leading-relaxed text-[var(--ink-soft)]">
+              Your team is already using AI. Are they getting $253k in annual savings?
+              I configure Claude Code to actually deliver on the promise: fewer
+              bugs, faster PRs, autonomous multi-file refactors.
+            </p>
+            <div className="hero-actions mt-6">
+              <a
+                className="btn primary"
+                href="mailto:hello@maxpetrusenko.com?subject=Claude%20Code%20Consulting"
+                style={{ fontSize: "16px", padding: "16px 32px" }}
+              >
+                Get a Custom Setup Plan
+              </a>
+              <Link className="btn secondary" href="/tech/case-studies/claude-code-automation">
+                See the $253k Case Study
+              </Link>
+            </div>
+          </div>
+        </section>
+      </div>
+
       <DirectAnswer
+        showUi={false}
         question="What does a Claude Code consultant do?"
         answer="A Claude Code consultant helps development teams configure and optimize Anthropic's Claude Code CLI tool. Services include sub-agent setup, custom skill development, workflow integration, and team training. A recent implementation saved $253k annually with 3x faster feature delivery and 73% fewer production bugs. Available remote worldwide."
+        displayAnswer="Claude Code consulting turns the CLI into a team workflow: sub-agents, custom skills, testing guardrails, and rollout guidance. One recent implementation saved $253k annually with 3x faster feature delivery and 73% fewer production bugs."
       />
 
-      {/* Hero Section */}
-      <section style={{ padding: "80px 20px 60px", textAlign: "center" }}>
-        <div className="container" style={{ maxWidth: "720px" }}>
-          <div className="eyebrow" style={{ justifyContent: "center", marginBottom: "20px" }}>
-            <span className="dot"></span> Claude Code Consulting
-          </div>
-          <h1 style={{ fontSize: "clamp(32px, 5vw, 48px)", marginBottom: "20px" }}>
-            Ship 3x Faster with Claude Code
-          </h1>
-          <p style={{ fontSize: "18px", color: "var(--muted)", marginBottom: "32px", lineHeight: "1.6" }}>
-            Your team is already using AI. Are they getting $253k in annual savings? I configure Claude Code to actually deliver on the promise: fewer bugs, faster PRs, autonomous multi-file refactors.
-          </p>
-          <div style={{ display: "flex", gap: "16px", justifyContent: "center", flexWrap: "wrap" }}>
-            <a
-              className="btn primary"
-              href="mailto:hello@maxpetrusenko.com?subject=Claude%20Code%20Consulting"
-              style={{ fontSize: "16px", padding: "16px 32px" }}
-            >
-              Get a Custom Setup Plan
-            </a>
-            <Link className="btn secondary" href="/tech/case-studies/claude-code-automation">
-              See the $253k Case Study
-            </Link>
-          </div>
-        </div>
-      </section>
-
       {/* Problem Section */}
-      <section style={{ background: "var(--sand)", padding: "60px 20px" }}>
+      <section style={darkBandStyle}>
         <div className="container" style={{ maxWidth: "720px" }}>
-          <h2 style={{ marginBottom: "24px" }}>The Problem: Claude Code is Powerful, But Most Teams Underutilize It</h2>
+          <h2 style={darkBandHeadingStyle}>The Problem: Claude Code is Powerful, But Most Teams Underutilize It</h2>
           <div style={{ display: "grid", gap: "20px" }}>
             <div className="card" style={{ padding: "24px" }}>
-              <h3 style={{ color: "#dc2626", marginBottom: "8px" }}>✗ Default Configuration = Generic Output</h3>
+              <h3 style={{ color: "#dc2626", marginBottom: "8px", display: "flex", alignItems: "center", gap: "8px" }}><CircleX size={18} /> Default Configuration = Generic Output</h3>
               <p style={{ color: "var(--muted)" }}>Out of the box, Claude Code doesn't know your codebase patterns, coding standards, or architecture decisions. You get generic, safe code that doesn't leverage your team's expertise.</p>
             </div>
             <div className="card" style={{ padding: "24px" }}>
-              <h3 style={{ color: "#dc2626", marginBottom: "8px" }}>✗ No Sub-Agent Strategy</h3>
+              <h3 style={{ color: "#dc2626", marginBottom: "8px", display: "flex", alignItems: "center", gap: "8px" }}><CircleX size={18} /> No Sub-Agent Strategy</h3>
               <p style={{ color: "var(--muted)" }}>Most developers use Claude Code as a chat bot, missing the real power: specialized sub-agents for testing, refactoring, documentation, and review that work in parallel.</p>
             </div>
             <div className="card" style={{ padding: "24px" }}>
-              <h3 style={{ color: "#dc2626", marginBottom: "8px" }}>✗ Trust Issues Block Adoption</h3>
+              <h3 style={{ color: "#dc2626", marginBottom: "8px", display: "flex", alignItems: "center", gap: "8px" }}><CircleX size={18} /> Trust Issues Block Adoption</h3>
               <p style={{ color: "var(--muted)" }}>Teams resist AI write access because they've been burned by hallucinations and context loss. Proper guardrails and testing workflows unlock the real value.</p>
             </div>
           </div>
@@ -93,7 +127,7 @@ export default function ClaudeCodeConsultantPage() {
       </section>
 
       {/* Solution Section */}
-      <section style={{ padding: "60px 20px" }}>
+      <section className="py-16 md:py-20 px-4">
         <div className="container" style={{ maxWidth: "720px" }}>
           <h2 style={{ marginBottom: "24px" }}>The Solution: Production-Ready Claude Code Configuration</h2>
           <div style={{ display: "grid", gap: "20px" }}>
@@ -118,9 +152,9 @@ export default function ClaudeCodeConsultantPage() {
       </section>
 
       {/* Proof Section */}
-      <section style={{ background: "var(--sand)", padding: "60px 20px" }}>
+      <section style={darkBandStyle}>
         <div className="container" style={{ maxWidth: "720px" }}>
-          <h2 style={{ marginBottom: "24px" }}>Proven Results: $253k Annual Savings</h2>
+          <h2 style={darkBandHeadingStyle}>Proven Results: $253k Annual Savings</h2>
           <div className="card" style={{ padding: "32px", background: "linear-gradient(135deg, rgba(15, 126, 169, 0.08) 0%, rgba(15, 126, 169, 0.03) 100%)" }}>
             <div style={{ display: "grid", gap: "16px", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", marginBottom: "24px" }}>
               <div>
@@ -140,7 +174,7 @@ export default function ClaudeCodeConsultantPage() {
                 <div style={{ fontSize: "14px", color: "var(--muted)" }}>PRs with zero regressions</div>
               </div>
             </div>
-            <p style={{ color: "var(--muted)", fontSize: "14px" }}>
+            <p style={{ ...darkBandTextStyle, fontSize: "14px" }}>
               Results from a SaaS startup implementation. Claude Code sub-agents given write access to production codebase with proper guardrails and testing workflows.
             </p>
             <Link
@@ -155,19 +189,19 @@ export default function ClaudeCodeConsultantPage() {
       </section>
 
       {/* Offer Section */}
-      <section style={{ padding: "60px 20px" }}>
+      <section className="py-16 md:py-20 px-4">
         <div className="container" style={{ maxWidth: "720px" }}>
           <h2 style={{ marginBottom: "24px" }}>What You Get</h2>
           <div className="card" style={{ padding: "32px" }}>
             <h3 style={{ marginBottom: "16px" }}>Claude Code Starter Setup</h3>
             <div style={{ marginBottom: "24px" }}>
               <div className="list" style={{ marginLeft: 0 }}>
-                <li style={{ marginLeft: 0, marginBottom: "8px" }}>✓ Sub-agent configuration for your stack</li>
-                <li style={{ marginLeft: 0, marginBottom: "8px" }}>✓ 3-5 custom skills based on your codebase</li>
-                <li style={{ marginLeft: 0, marginBottom: "8px" }}>✓ GitHub Actions workflow integration</li>
-                <li style={{ marginLeft: 0, marginBottom: "8px" }}>✓ Team training session (60-90 min)</li>
-                <li style={{ marginLeft: 0, marginBottom: "8px" }}>✓ Custom documentation for your setup</li>
-                <li style={{ marginLeft: 0, marginBottom: "8px" }}>✓ 30-day followup support</li>
+                <li style={{ marginLeft: 0, marginBottom: "8px", display: "flex", alignItems: "center", gap: "8px" }}><CheckCircle2 size={16} /> Sub-agent configuration for your stack</li>
+                <li style={{ marginLeft: 0, marginBottom: "8px", display: "flex", alignItems: "center", gap: "8px" }}><CheckCircle2 size={16} /> 3-5 custom skills based on your codebase</li>
+                <li style={{ marginLeft: 0, marginBottom: "8px", display: "flex", alignItems: "center", gap: "8px" }}><CheckCircle2 size={16} /> GitHub Actions workflow integration</li>
+                <li style={{ marginLeft: 0, marginBottom: "8px", display: "flex", alignItems: "center", gap: "8px" }}><CheckCircle2 size={16} /> Team training session (60-90 min)</li>
+                <li style={{ marginLeft: 0, marginBottom: "8px", display: "flex", alignItems: "center", gap: "8px" }}><CheckCircle2 size={16} /> Custom documentation for your setup</li>
+                <li style={{ marginLeft: 0, marginBottom: "8px", display: "flex", alignItems: "center", gap: "8px" }}><CheckCircle2 size={16} /> 30-day followup support</li>
               </div>
             </div>
             <div style={{ borderTop: "1px solid var(--line)", paddingTop: "20px", marginBottom: "20px" }}>
@@ -186,9 +220,9 @@ export default function ClaudeCodeConsultantPage() {
       </section>
 
       {/* FAQ Section */}
-      <section style={{ background: "var(--sand)", padding: "60px 20px" }}>
+      <section style={darkBandStyle}>
         <div className="container" style={{ maxWidth: "720px" }}>
-          <h2 style={{ marginBottom: "24px" }}>Frequently Asked Questions</h2>
+          <h2 style={darkBandHeadingStyle}>Frequently Asked Questions</h2>
           <div style={{ display: "grid", gap: "16px" }}>
             <div className="card" style={{ padding: "20px" }}>
               <h3 style={{ marginBottom: "8px", fontSize: "18px" }}>How is this different from GitHub Copilot?</h3>
@@ -225,10 +259,10 @@ export default function ClaudeCodeConsultantPage() {
       </section>
 
       {/* Final CTA */}
-      <section style={{ padding: "60px 20px", textAlign: "center" }}>
+      <section className="py-16 md:py-20 px-4" style={{ ...darkBandStyle, textAlign: "center" }}>
         <div className="container" style={{ maxWidth: "560px" }}>
-          <h2 style={{ marginBottom: "16px" }}>Ready to Ship 3x Faster?</h2>
-          <p style={{ color: "var(--muted)", marginBottom: "24px" }}>
+          <h2 style={{ marginBottom: "16px", color: "#f3f6fa" }}>Ready to Ship 3x Faster?</h2>
+          <p style={{ ...darkBandTextStyle, marginBottom: "24px" }}>
             Get a custom Claude Code setup plan for your team. No commitment, free discovery call.
           </p>
           <a

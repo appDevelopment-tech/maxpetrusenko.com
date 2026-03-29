@@ -35,7 +35,7 @@ export default function PerformancePage() {
             <div className="eyebrow">
               <span className="dot"></span> The Bridge
             </div>
-            <h1>Performance without Burnout</h1>
+            <h1 className="clip-reveal clip-reveal-d1">Performance without Burnout</h1>
             <p>
               Where tech and somatic practice meet. Regulation, energy
               management, and sustainable performance for founders, creators,

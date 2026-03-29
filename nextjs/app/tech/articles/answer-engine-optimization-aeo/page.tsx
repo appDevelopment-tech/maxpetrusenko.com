@@ -429,59 +429,59 @@ Sitemap: https://example.com/sitemap.xml`}
               <details className="faq-item">
                 <summary>AI Guidance Files</summary>
                 <ul>
-                  <li>✓ Created llm.txt with site identity and topics</li>
-                  <li>✓ Added preferred citation URLs</li>
-                  <li>✓ Defined disallowed inferences</li>
-                  <li>✓ Included trust signals and verification</li>
-                  <li>✓ Listed booking/contact methods</li>
+                  <li>Created llm.txt with site identity and topics</li>
+                  <li>Added preferred citation URLs</li>
+                  <li>Defined disallowed inferences</li>
+                  <li>Included trust signals and verification</li>
+                  <li>Listed booking/contact methods</li>
                 </ul>
               </details>
 
               <details className="faq-item">
                 <summary>Structured Data</summary>
                 <ul>
-                  <li>✓ Person/Organization schema on main pages</li>
-                  <li>✓ ProfessionalService schema for services</li>
-                  <li>✓ Article schema for blog posts</li>
-                  <li>✓ FAQPage schema for common questions</li>
-                  <li>✓ AggregateRating with external verification</li>
-                  <li>✓ BreadcrumbList on key pages</li>
+                  <li>Person/Organization schema on main pages</li>
+                  <li>ProfessionalService schema for services</li>
+                  <li>Article schema for blog posts</li>
+                  <li>FAQPage schema for common questions</li>
+                  <li>AggregateRating with external verification</li>
+                  <li>BreadcrumbList on key pages</li>
                 </ul>
               </details>
 
               <details className="faq-item">
                 <summary>Content Optimization</summary>
                 <ul>
-                  <li>✓ Clear H1/H2/H3 heading structure</li>
-                  <li>✓ Direct answer paragraphs lead sections</li>
-                  <li>✓ FAQ sections with explicit Q&A</li>
-                  <li>✓ Lists and tables for structured data</li>
-                  <li>✓ Internal linking to related content</li>
-                  <li>✓ External links to verification sources</li>
+                  <li>Clear H1/H2/H3 heading structure</li>
+                  <li>Direct answer paragraphs lead sections</li>
+                  <li>FAQ sections with explicit Q&A</li>
+                  <li>Lists and tables for structured data</li>
+                  <li>Internal linking to related content</li>
+                  <li>External links to verification sources</li>
                 </ul>
               </details>
 
               <details className="faq-item">
                 <summary>Technical Setup</summary>
                 <ul>
-                  <li>✓ robots.txt allows AI crawlers</li>
-                  <li>✓ sitemap.xml includes all important pages</li>
-                  <li>✓ HTTPS enabled site-wide</li>
-                  <li>✓ Fast page load times (&lt;3s)</li>
-                  <li>✓ Mobile-responsive design</li>
-                  <li>✓ Clean URL structure</li>
+                  <li>robots.txt allows AI crawlers</li>
+                  <li>sitemap.xml includes all important pages</li>
+                  <li>HTTPS enabled site-wide</li>
+                  <li>Fast page load times (&lt;3s)</li>
+                  <li>Mobile-responsive design</li>
+                  <li>Clean URL structure</li>
                 </ul>
               </details>
 
               <details className="faq-item">
                 <summary>Entity Authority</summary>
                 <ul>
-                  <li>✓ Consistent branding across platforms</li>
-                  <li>✓ External profiles (LinkedIn, GitHub, etc.)</li>
-                  <li>✓ Third-party mentions and features</li>
-                  <li>✓ Reviews on external platforms</li>
-                  <li>✓ Published work or portfolio</li>
-                  <li>✓ Active social media presence</li>
+                  <li>Consistent branding across platforms</li>
+                  <li>External profiles (LinkedIn, GitHub, etc.)</li>
+                  <li>Third-party mentions and features</li>
+                  <li>Reviews on external platforms</li>
+                  <li>Published work or portfolio</li>
+                  <li>Active social media presence</li>
                 </ul>
               </details>
             </div>

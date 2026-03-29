@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { CheckCircle2 } from "lucide-react";
 
 /**
  * Inline email capture component
@@ -74,7 +75,7 @@ export function EmailCaptureInline({
   if (isSuccess) {
     return (
       <div className="email-inline-success">
-        <p>✓ You're in! Check your inbox soon.</p>
+        <p className="flex items-center justify-center gap-2"><CheckCircle2 size={18} /> You&apos;re in! Check your inbox soon.</p>
       </div>
     );
   }

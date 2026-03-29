@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import { Flame, Leaf, MapPin, Shield, Zap } from "lucide-react";
 import { siteConfig } from "@/config/site";
 import { generateMetadata, absoluteUrl } from "@/lib/seo/metadata";
 import { JsonLd } from "@/components/seo/JsonLd";
@@ -46,30 +47,29 @@ export default function TantraMassageUbudPage() {
         ])}
       />
 
-      <div className="hero-image-section ui-immersive-hero ui-fade-up delay-1">
-        <div className="hero-image-overlay"></div>
-        <Image
-          src="/images/bali/DSC04978.jpg"
-          alt="Ubud Bali temple and nature atmosphere"
-          fill
-          priority
-          sizes="100vw"
-          style={{ objectFit: "cover" }}
-          quality={88}
-        />
-        <div className="hero-image-content">
-          <h2>Tantra Massage Ubud</h2>
-          <p>Private sessions in Bali with boundaries-first somatic practice</p>
+      <div className="hero-portrait-wrap">
+        <div className="hero-portrait-bg">
+          <Image
+            src="/images/bali/DSC04978.jpg"
+            alt="Ubud Bali temple and nature atmosphere"
+            fill
+            priority
+            sizes="100vw"
+            style={{ objectFit: "cover" }}
+            quality={88}
+          />
+          <div className="hero-portrait-overlay" />
+          <div className="hero-portrait-bottom" />
         </div>
       </div>
 
       <div className="container">
         <section className="hero ui-fade-up delay-2">
           <div className="hero-text">
-            <div className="eyebrow">
-              <span className="dot"></span> Ubud, Bali
+            <div className="blur-in section-eyebrow text-[var(--muted)]">
+              Ubud, Bali
             </div>
-            <h1>Tantra Massage Ubud — Available Now</h1>
+            <h1 className="clip-reveal clip-reveal-d1">Tantra Massage Ubud — Available Now</h1>
             <p>
               Professional tantra massage and somatic energy work in Ubud, Bali.
               Available <strong>year-round</strong> with fast WhatsApp response.
@@ -89,7 +89,7 @@ export default function TantraMassageUbudPage() {
               </Link>
             </div>
             <div className="hero-cta-note">
-              <strong>🔥 Available in Ubud today</strong> • Sessions 7 days a week • Professional team
+              <strong className="inline-flex items-center gap-2"><Flame size={16} /> Available in Ubud today</strong> • Sessions 7 days a week • Professional team
             </div>
           </div>
 
@@ -126,7 +126,7 @@ export default function TantraMassageUbudPage() {
 
         {/* Availability banner */}
         <div className="urgent-cta-bar">
-          <span className="urgent-icon">📍</span>
+          <span className="urgent-icon"><MapPin size={18} /></span>
           <span><strong>Based in Ubud year-round</strong> — Professional team available 7 days a week</span>
           <a
             href="https://wa.me/17865436688?text=Hi%20Max%2C%20I%27m%20in%20Ubud%20and%20interested%20in%20booking%20a%20tantra%20session.%20When%20are%20you%20available%3F"
@@ -148,7 +148,7 @@ export default function TantraMassageUbudPage() {
           </div>
           <div className="cards-3 grid">
             <div className="card">
-              <h3>🙏 Safe Container</h3>
+              <h3 className="flex items-center gap-2"><Shield size={18} /> Safe Container</h3>
               <p>
                 Consent-first approach with clear boundaries. You remain clothed
                 or draped throughout. Every session begins with intention-setting
@@ -156,7 +156,7 @@ export default function TantraMassageUbudPage() {
               </p>
             </div>
             <div className="card">
-              <h3>🌿 Nervous System Focus</h3>
+              <h3 className="flex items-center gap-2"><Leaf size={18} /> Nervous System Focus</h3>
               <p>
                 Unlike spa massage, tantra works with your nervous system directly.
                 Breathwork, conscious touch, and energy awareness create lasting
@@ -164,7 +164,7 @@ export default function TantraMassageUbudPage() {
               </p>
             </div>
             <div className="card">
-              <h3>⚡ Fast Response</h3>
+              <h3 className="flex items-center gap-2"><Zap size={18} /> Fast Response</h3>
               <p>
                 Located in Ubud with WhatsApp booking. Most inquiries answered
                 within 30 minutes during business hours. Same-day sessions often

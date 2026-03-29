@@ -31,81 +31,84 @@ export default function LinksPage() {
         ])}
       />
 
-      <div className="hero-image-section ui-immersive-hero ui-fade-up delay-1">
-        <div className="hero-image-overlay"></div>
-        <Image
-          src="/images/DSC05868.jpg"
-          alt="Links and network atmosphere"
-          fill
-          priority
-          sizes="100vw"
-          style={{ objectFit: "cover" }}
-          quality={86}
-        />
-        <div className="hero-image-content">
-          <h1>Links</h1>
-          <p>All channels in one place</p>
+      <div className="hero-portrait-wrap">
+        <div className="hero-portrait-bg">
+          <Image
+            src="/images/DSC05868.jpg"
+            alt="Links and network atmosphere"
+            fill
+            priority
+            sizes="100vw"
+            style={{ objectFit: "cover" }}
+            quality={86}
+          />
+          <div className="hero-portrait-overlay" />
+          <div className="hero-portrait-bottom" />
         </div>
-      </div>
-
-      <div className="container">
-        <section className="hero ui-fade-up delay-2">
-          <div className="hero-text">
-            <div className="eyebrow">
-              <span className="dot"></span> Link Hub
-            </div>
-            <h1>All my links in one place</h1>
-            <p>
-              Tech work, atelier, and mindfold—choose where you want to go. Top
-              two are current focus.
+        <section className="relative z-[3] mx-auto w-full max-w-[1080px] px-4 py-28 md:px-6 md:py-32">
+          <div>
+            <p className="blur-in inline-flex items-center rounded-full border border-[rgba(210,163,93,0.24)] px-4 py-1 text-xs font-semibold text-[var(--accent-mindfold)]">
+              Link hub
             </p>
-            <div className="hero-actions">
-              <Link className="btn primary" href="/spirituality">
-                Spirituality
+            <h1 className="clip-reveal clip-reveal-d1 mt-5 max-w-[12ch] font-serif text-[clamp(2.35rem,4.8vw,3.75rem)] font-bold leading-[1.06] tracking-tight text-[var(--ink)]">
+              Everything worth opening. One page.
+            </h1>
+            <p className="blur-in blur-in-d2 mt-5 max-w-[500px] text-[1.05rem] leading-relaxed text-[var(--ink-soft)]">
+              Tech work, Presence Atelier, and Mindfold routes. Start with the
+              active offers, then branch into the rest.
+            </p>
+            <div className="blur-in blur-in-d3 mt-8 flex flex-wrap gap-3">
+              <Link className="inline-flex items-center gap-2 rounded-[10px] bg-[var(--ink)] px-7 py-3.5 text-[0.95rem] font-semibold text-[var(--sand)] shadow-[0_4px_16px_rgba(12,17,21,0.18)] transition hover:-translate-y-0.5 hover:shadow-[0_8px_28px_rgba(12,17,21,0.24)]" href="/spirituality">
+                Open spirituality
               </Link>
-              <Link className="btn secondary" href="/tech">
-                Tech
+              <Link className="inline-flex items-center gap-2 rounded-[10px] border-[1.5px] border-[var(--line)] bg-transparent px-7 py-3.5 text-[0.95rem] font-semibold text-[var(--ink)] transition hover:-translate-y-0.5 hover:border-[var(--accent-tech)]" href="/tech">
+                Open tech
               </Link>
-            </div>
-          </div>
-
-          <div className="hero-card">
-            <h3>Featured</h3>
-            <div className="tiles">
-              <a
-                className="tile"
-                href={siteConfig.externalLinks.atelier}
-                target="_blank"
-                rel="noopener"
-              >
-                <div className="tile-meta">
-                  <span className="tile-title">Atelier Sessions</span>
-                  <span className="tile-desc">
-                    Private tantra & somatic work in Ubud.
-                  </span>
-                </div>
-                <span className="badge spirit">Book</span>
-              </a>
-              <a
-                className="tile"
-                href="https://wa.me/17865436688?text=Hi%20Max%2C%20I%27d%20like%20to%20book%20a%20session.%20Preferred%20day%2Ftime%3A%20____.%20Intentions%3A%20____."
-                target="_blank"
-                rel="noopener"
-              >
-                <div className="tile-meta">
-                  <span className="tile-title">WhatsApp</span>
-                  <span className="tile-desc">Fastest way to book.</span>
-                </div>
-                <span className="badge spirit">Message</span>
-              </a>
             </div>
           </div>
         </section>
+      </div>
+
+      <section className="dark-zone mt-8 px-4 py-16 md:py-20">
+        <div className="absolute inset-0 z-[1] bg-[radial-gradient(circle_at_20%_30%,rgba(210,163,93,0.14),transparent_35%),radial-gradient(circle_at_80%_70%,rgba(14,97,93,0.12),transparent_30%),linear-gradient(145deg,#111826_0%,#191f2a_58%,#241e16_100%)]" />
+        <div className="dark-zone-inner">
+          <p className="section-eyebrow text-[var(--accent-mindfold)]">Current focus</p>
+          <h2 className="mt-2 font-serif text-[clamp(1.6rem,2.8vw,2.25rem)] font-semibold tracking-wide text-[#e2e8f0]">
+            Start with the live paths.
+          </h2>
+          <p className="mt-2 max-w-[560px] text-[var(--dark-zone-muted)]">
+            The fastest routes into current work, booking, and immersive events.
+          </p>
+
+          <div className="mt-10 grid gap-6 md:grid-cols-3">
+            <a className="dark-zone-card card-stripe-spirit" href={siteConfig.externalLinks.atelier} target="_blank" rel="noopener">
+              <h3 className="font-serif text-[1.2rem] font-semibold text-[#e2e8f0]">Atelier sessions</h3>
+              <p className="mt-3 text-sm leading-relaxed text-[var(--dark-zone-muted)]">
+                Private tantra and somatic sessions in Ubud through Presence Atelier.
+              </p>
+            </a>
+            <a className="dark-zone-card card-stripe-spirit" href="https://wa.me/17865436688?text=Hi%20Max%2C%20I%27d%20like%20to%20book%20a%20session.%20Preferred%20day%2Ftime%3A%20____.%20Intentions%3A%20____." target="_blank" rel="noopener">
+              <h3 className="font-serif text-[1.2rem] font-semibold text-[#e2e8f0]">WhatsApp</h3>
+              <p className="mt-3 text-sm leading-relaxed text-[var(--dark-zone-muted)]">
+                Fastest path for bookings, availability, and direct questions.
+              </p>
+            </a>
+            <Link className="dark-zone-card card-stripe-mindfold" href="/mindfold/events">
+              <h3 className="font-serif text-[1.2rem] font-semibold text-[#e2e8f0]">Mindfold events</h3>
+              <p className="mt-3 text-sm leading-relaxed text-[var(--dark-zone-muted)]">
+                Live sensory-subtraction journeys, dates, waivers, and updates.
+              </p>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      <div className="container">
         <section className="section ui-fade-up delay-3">
           <div className="section-head">
             <h2>Tech & Work</h2>
             <span className="section-note">
-              Replace placeholders with your actual profiles.
+              Open the routes you need most.
             </span>
           </div>
           <div className="tiles">

@@ -48,8 +48,9 @@ export function ScrollReveal({
 
   const style: React.CSSProperties = {
     opacity: isVisible ? 1 : 0,
+    filter: isVisible ? "blur(0)" : "blur(4px)",
     transform: isVisible ? "none" : transform,
-    transition: `opacity ${duration}ms cubic-bezier(0.2, 0.8, 0.2, 1), transform ${duration}ms cubic-bezier(0.2, 0.8, 0.2, 1)`,
+    transition: `opacity ${duration}ms cubic-bezier(0.2, 0.8, 0.2, 1), transform ${duration}ms cubic-bezier(0.2, 0.8, 0.2, 1), filter ${duration}ms cubic-bezier(0.2, 0.8, 0.2, 1)`,
     transitionDelay: `${delay}ms`,
   };
 

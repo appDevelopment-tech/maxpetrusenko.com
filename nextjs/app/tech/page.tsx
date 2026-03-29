@@ -1,10 +1,12 @@
 import Link from "next/link";
 import Image from "next/image";
+import { Globe, MapPin, Trees } from "lucide-react";
 import { siteConfig } from "@/config/site";
 import { generateMetadata, absoluteUrl } from "@/lib/seo/metadata";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { DirectAnswer } from "@/components/seo/DirectAnswer";
 import { EmailCaptureInline } from "@/components/forms/EmailCaptureInline";
+import { FaqSection } from "@/components/shared/FaqSection";
 import { Testimonials } from "@/components/testimonials/Testimonials";
 import { fetchArticles, isLocalArticle } from "@/lib/cms/articles";
 import {
@@ -59,108 +61,137 @@ export default async function TechPage() {
       <JsonLd type="ScheduleAction" data={generateScheduleActionSchema("tech")} />
       <JsonLd type="Person" data={generateTechPersonSchema()} />
 
-      {/* Hero image section */}
-      <div className="hero-image-section ui-immersive-hero ui-fade-up delay-1">
-        <div className="hero-image-overlay"></div>
-        <Image
-          src="/images/tech-portrait.jpg"
-          alt="Max Petrusenko in studio"
-          fill
-          priority
-          sizes="100vw"
-          style={{ objectFit: "cover", objectPosition: "50% 30%" }}
-          quality={92}
-        />
-        <div className="hero-image-content">
-          <h2>Calm, outcome-first products</h2>
-          <p>AI automation, product strategy, and systems for creators and founders.</p>
+      {/* Hero portrait background */}
+      <div className="hero-portrait-wrap">
+        <div className="hero-portrait-bg">
+          <Image
+            src="/images/tech-portrait.jpg"
+            alt="Max Petrusenko in studio"
+            fill
+            priority
+            sizes="100vw"
+            style={{ objectFit: "cover", objectPosition: "50% 30%" }}
+            quality={92}
+          />
+          <div className="hero-portrait-overlay" />
+          <div className="hero-portrait-bottom" />
         </div>
+        <section className="relative z-[3] mx-auto w-full max-w-[1080px] px-4 py-28 md:px-6 md:py-32">
+          <div>
+            <p className="blur-in inline-flex items-center rounded-full border border-[rgba(15,126,169,0.2)] px-4 py-1 text-xs font-semibold text-[var(--accent-tech)]">
+              Open for automation builds
+            </p>
+            <h1 className="clip-reveal clip-reveal-d1 mt-5 max-w-[12ch] font-serif text-[clamp(2.35rem,4.8vw,3.75rem)] font-bold leading-[1.06] tracking-tight text-[var(--ink)]">
+              Calm systems for faster delivery.
+            </h1>
+            <p className="blur-in blur-in-d2 mt-5 max-w-[460px] text-[1.05rem] leading-relaxed text-[var(--ink-soft)]">
+              I build AI automation, internal tools, and operator workflows for
+              founders and teams who want less drag and more momentum.
+            </p>
+            <div className="blur-in blur-in-d3 mt-8 flex flex-wrap gap-3">
+              <a
+                className="inline-flex items-center gap-2 rounded-[10px] bg-[var(--ink)] px-7 py-3.5 text-[0.95rem] font-semibold text-[var(--sand)] shadow-[0_4px_16px_rgba(12,17,21,0.18)] transition hover:-translate-y-0.5 hover:shadow-[0_8px_28px_rgba(12,17,21,0.24)]"
+                href="mailto:hello@maxpetrusenko.com?subject=Tech%20collab"
+              >
+                Book a strategy call &rarr;
+              </a>
+              <Link className="inline-flex items-center gap-2 rounded-[10px] border-[1.5px] border-[var(--line)] bg-transparent px-7 py-3.5 text-[0.95rem] font-semibold text-[var(--ink)] transition hover:-translate-y-0.5 hover:border-[var(--accent-tech)]" href="/proof">
+                Explore my work
+              </Link>
+            </div>
+          </div>
+        </section>
       </div>
 
-      <div className="container">
-        {/* Direct Answer block for AI citation optimization */}
-        <DirectAnswer
-          schemaType="WebPage"
-          question="What AI automation services does Max Petrusenko offer?"
-          answer="Max Petrusenko helps founders and teams ship AI automations and internal tools in weeks, not months. His work focuses on Claude Code, n8n, and custom agent pipelines that reduce ops load, speed delivery, and replace fragile SaaS workflows. Engagements are hands-on, outcome-driven, and production-ready. A recent Claude Code implementation saved $253k annually with 3x faster feature delivery."
-          displayAnswer="Max Petrusenko designs and ships AI automations, internal tools, and agent workflows for founders and teams. Core work centers on Claude Code, n8n, and custom pipelines built to cut ops load, speed delivery, and replace brittle manual workflows."
-        />
+      <DirectAnswer
+        schemaType="WebPage"
+        showUi={false}
+        question="What AI automation services does Max Petrusenko offer?"
+        answer="Max Petrusenko helps founders and teams ship AI automations and internal tools in weeks, not months. His work focuses on Claude Code, n8n, and custom agent pipelines that reduce ops load, speed delivery, and replace fragile SaaS workflows. Engagements are hands-on, outcome-driven, and production-ready. A recent Claude Code implementation saved $253k annually with 3x faster feature delivery."
+        displayAnswer="Max Petrusenko designs and ships AI automations, internal tools, and agent workflows for founders and teams. Core work centers on Claude Code, n8n, and custom pipelines built to cut ops load, speed delivery, and replace brittle manual workflows."
+      />
 
-        <section className="hero ui-fade-up delay-2">
-          <div className="hero-text">
-            <div className="eyebrow">
-              <span className="dot"></span> Tech & Product
-            </div>
-            <h1>Calm, outcome-first products</h1>
-            <p>
-              I build tools and experiences for creators and founders: visibility,
-              automation, and clear UX that feels calm.
-            </p>
-            <div className="hero-actions">
-              <Link className="btn primary" href="/links">
-                All links
-              </Link>
-              <a
-                className="btn secondary"
-                href="mailto:hello@maxpetrusenko.com?subject=Tech%20collab"
-                target="_blank"
-                rel="noopener"
-              >
-                Contact
-              </a>
-            </div>
-            <div className="hero-cta-note">
-              Best for: product shaping, design/dev, and workflow automation.
-            </div>
-          </div>
+      <section className="dark-zone mt-8 py-16 px-4 md:py-20">
+        <div className="absolute inset-0 z-[1] bg-[radial-gradient(circle_at_20%_30%,rgba(15,126,169,0.14),transparent_35%),radial-gradient(circle_at_80%_70%,rgba(210,163,93,0.1),transparent_30%),linear-gradient(145deg,#0e1520_0%,#121d2e_58%,#152438_100%)]" />
+        <div className="dark-zone-inner">
+          <p className="section-eyebrow text-[var(--accent-tech)]">Tech focus</p>
+          <h2 className="mt-2 font-serif text-[clamp(1.6rem,2.8vw,2.25rem)] font-semibold tracking-wide text-[#e2e8f0]">
+            Build the system, not another bottleneck
+          </h2>
+          <p className="mt-2 max-w-[560px] text-[var(--dark-zone-muted)]">
+            Product shaping, automation delivery, and workflow design for teams that
+            want cleaner ops and faster shipping.
+          </p>
 
-          <div className="hero-card">
-            <h3>Current highlights</h3>
-            <div className="tiles">
-              <a
-                className="tile"
-                href="https://maxpetrusenko.gumroad.com/l/zrsxj"
-                target="_blank"
-                rel="noopener"
-              >
-                <div className="tile-meta">
-                  <span className="tile-title">Make Your Content Visible on X</span>
-                  <span className="tile-desc">
-                    Visibility tooling for creators.
-                  </span>
-                </div>
-                <span className="badge">Open</span>
-              </a>
-              <a
-                className="tile"
-                href="https://maxpetrusenko.notion.site/Portfolio-e521a73ef4bf41ccaf2e0098edd72c25"
-                target="_blank"
-                rel="noopener"
-              >
-                <div className="tile-meta">
-                  <span className="tile-title">FileMaker Builds</span>
-                  <span className="tile-desc">
-                    Custom systems for ops and media.
-                  </span>
-                </div>
-                <span className="badge">View</span>
-              </a>
+          <div className="mt-10 grid gap-6 md:grid-cols-2">
+            <div className="dark-zone-card card-stripe-tech">
+              <h3 className="font-serif text-[1.35rem] font-semibold text-[#e2e8f0]">Current highlights</h3>
+              <p className="mt-3 text-[0.9rem] leading-relaxed text-[var(--dark-zone-muted)]">
+                Operator-focused products and delivery systems already in use.
+              </p>
+              <div className="mt-4 grid gap-3">
+                <a
+                  className="rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3 transition hover:border-white/20"
+                  href="https://maxpetrusenko.gumroad.com/l/zrsxj"
+                  target="_blank"
+                  rel="noopener"
+                >
+                  <p className="text-sm font-semibold text-[#e2e8f0]">Make Your Content Visible on X</p>
+                  <p className="mt-1 text-sm text-[var(--dark-zone-muted)]">Visibility tooling for creators.</p>
+                </a>
+                <a
+                  className="rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3 transition hover:border-white/20"
+                  href="https://maxpetrusenko.notion.site/Portfolio-e521a73ef4bf41ccaf2e0098edd72c25"
+                  target="_blank"
+                  rel="noopener"
+                >
+                  <p className="text-sm font-semibold text-[#e2e8f0]">FileMaker Builds</p>
+                  <p className="mt-1 text-sm text-[var(--dark-zone-muted)]">Custom systems for ops and media.</p>
+                </a>
+              </div>
+            </div>
+
+            <div className="dark-zone-card card-stripe-tech">
+              <h3 className="font-serif text-[1.35rem] font-semibold text-[#e2e8f0]">Core services</h3>
+              <p className="mt-3 text-[0.9rem] leading-relaxed text-[var(--dark-zone-muted)]">
+                Hands-on implementation across product, automation, and delivery.
+              </p>
+              <div className="mt-4 flex flex-wrap gap-2">
+                <span className="rounded-md bg-[rgba(15,126,169,0.15)] px-2.5 py-1 text-[0.7rem] font-semibold text-[var(--accent-tech)]">Claude Code</span>
+                <span className="rounded-md bg-[rgba(15,126,169,0.15)] px-2.5 py-1 text-[0.7rem] font-semibold text-[var(--accent-tech)]">n8n</span>
+                <span className="rounded-md bg-[rgba(15,126,169,0.15)] px-2.5 py-1 text-[0.7rem] font-semibold text-[var(--accent-tech)]">ChatGPT API</span>
+                <span className="rounded-md bg-[rgba(15,126,169,0.15)] px-2.5 py-1 text-[0.7rem] font-semibold text-[var(--accent-tech)]">Internal Tools</span>
+              </div>
+              <p className="mt-4 text-sm text-[var(--dark-zone-muted)]">
+                Best for: product shaping, workflow automation, and calm execution.
+              </p>
             </div>
           </div>
-        </section>
 
-        {/* Email capture for tech updates */}
-        <section className="section ui-fade-up delay-3">
-          <EmailCaptureInline
-            source="tech-page"
-            headline="Get automation tips & updates"
-            subtitle="Drop your email for Claude Code guides, n8n workflows, and automation insights."
-            buttonText="Subscribe"
-          />
-        </section>
+          <div className="mt-8 grid gap-4 sm:grid-cols-3">
+            {["$253k annual savings", "3x faster delivery", "73% fewer production bugs"].map((metric) => (
+              <div key={metric} className="rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-center text-sm font-medium text-[var(--dark-zone-text)]">
+                {metric}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
-        {/* Services Overview - AI-extractable service details */}
-        <section className="section ui-fade-up delay-3">
+      <section className="px-4 py-16 md:py-20">
+        <div className="container space-y-8">
+          {/* Email capture for tech updates */}
+          <section className="section ui-fade-up delay-3">
+            <EmailCaptureInline
+              source="tech-page"
+              headline="Get automation tips & updates"
+              subtitle="Drop your email for Claude Code guides, n8n workflows, and automation insights."
+              buttonText="Subscribe"
+            />
+          </section>
+
+          {/* Services Overview - AI-extractable service details */}
+          <section className="section ui-fade-up delay-3">
           <div className="section-head">
             <h2>Services Overview</h2>
             <span className="section-note">
@@ -226,12 +257,16 @@ export default async function TechPage() {
               Get Started
             </a>
           </div>
-        </section>
+          </section>
+        </div>
+      </section>
 
-        <section className="section">
+      <section className="px-4 py-16 md:py-20" style={{ background: "linear-gradient(145deg, #0e1520 0%, #152438 100%)" }}>
+        <div className="container space-y-8">
+          <section className="section">
           <div className="section-head">
-            <h2>AI & Automation Services</h2>
-            <span className="section-note">Specialized expertise for modern builders.</span>
+            <h2 className="!text-[#e2e8f0]">AI & Automation Services</h2>
+            <span className="section-note !text-[var(--dark-zone-muted)]">Specialized expertise for modern builders.</span>
           </div>
           <div className="cards-3 grid">
             <div className="card card-with-actions">
@@ -290,18 +325,16 @@ export default async function TechPage() {
               </div>
             </div>
           </div>
-        </section>
+          </section>
 
-        <Testimonials type="tech" />
-
-        <section className="section">
+          <section className="section">
           <div className="section-head">
-            <h2>Location & Availability</h2>
-            <span className="section-note">Remote-first with in-person options.</span>
+            <h2 className="!text-[#e2e8f0]">Location & Availability</h2>
+            <span className="section-note !text-[var(--dark-zone-muted)]">Remote-first with in-person options.</span>
           </div>
           <div className="cards-3 grid">
             <div className="card">
-              <h3>🌍 Remote / Global</h3>
+              <h3 className="flex items-center gap-2"><Globe size={18} /> Remote / Global</h3>
               <p>
                 I work with clients worldwide via remote collaboration. Claude
                 Code setup, n8n workflows, and automation consulting can all be
@@ -309,7 +342,7 @@ export default async function TechPage() {
               </p>
             </div>
             <div className="card">
-              <h3>📍 Miami, Florida</h3>
+              <h3 className="flex items-center gap-2"><MapPin size={18} /> Miami, Florida</h3>
               <p>
                 Seasonal base (March-June, August-December). Available for
                 in-person consulting, team training, and onsite automation setup
@@ -317,14 +350,14 @@ export default async function TechPage() {
               </p>
             </div>
             <div className="card">
-              <h3>🏝️ Ubud, Bali</h3>
+              <h3 className="flex items-center gap-2"><Trees size={18} /> Ubud, Bali</h3>
               <p>
                 Seasonal base (June-August). Combine automation work with a trip
                 to Bali. In-person consulting available on the island.
               </p>
             </div>
           </div>
-          <p className="text-muted text-sm mt-4 text-center">
+          <p className="mt-4 text-center text-sm text-[var(--dark-zone-muted)]">
             Currently traveling: Dubai → Athens → Lisbon.{" "}
             <a
               href="mailto:hello@maxpetrusenko.com?subject=Location%20check"
@@ -332,9 +365,15 @@ export default async function TechPage() {
               Contact for current location.
             </a>
           </p>
-        </section>
+          </section>
+        </div>
+      </section>
 
-        <section className="section">
+      <section className="px-4 py-16 md:py-20">
+        <div className="container space-y-8">
+          <Testimonials type="tech" />
+
+          <section className="section">
           <div className="section-head">
             <h2>Recent work</h2>
             <span className="section-note">Product + build shipped recently.</span>
@@ -557,9 +596,9 @@ export default async function TechPage() {
               </div>
             </a>
           </div>
-        </section>
+          </section>
 
-        <section className="section">
+          <section className="section">
           <div className="section-head">
             <h2>Ways to collaborate</h2>
           </div>
@@ -585,12 +624,16 @@ export default async function TechPage() {
               </p>
             </div>
           </div>
-        </section>
+          </section>
+        </div>
+      </section>
 
-        <section className="section">
+      <section className="px-4 py-16 md:py-20" style={{ background: "linear-gradient(145deg, #0e1520 0%, #152438 100%)" }}>
+        <div className="container space-y-8">
+          <section className="section">
           <div className="section-head">
-            <h2>Recent articles</h2>
-            <span className="section-note">Security, automation, and systems. Also published on Medium.</span>
+            <h2 className="!text-[#e2e8f0]">Recent articles</h2>
+            <span className="section-note !text-[var(--dark-zone-muted)]">Security, automation, and systems. Also published on Medium.</span>
           </div>
           <div className="article-list">
             {recentArticles.map((article) => {
@@ -649,12 +692,12 @@ export default async function TechPage() {
               );
             })}
           </div>
-        </section>
+          </section>
 
-        <section className="section">
+          <section className="section">
           <div className="section-head">
-            <h2>Implementation playbooks</h2>
-            <span className="section-note">High-intent guides for teams shipping AI systems.</span>
+            <h2 className="!text-[#e2e8f0]">Implementation playbooks</h2>
+            <span className="section-note !text-[var(--dark-zone-muted)]">High-intent guides for teams shipping AI systems.</span>
           </div>
           <div className="cards-3 grid">
             <div className="card">
@@ -685,67 +728,54 @@ export default async function TechPage() {
               </Link>
             </div>
           </div>
-        </section>
+          </section>
+        </div>
+      </section>
 
-        <section className="section">
+      <section className="px-4 py-16 md:py-20">
+        <div className="container">
+          <section className="section">
           <div className="section-head">
             <h2>Frequently Asked Questions</h2>
           </div>
-          <div className="cards-3 grid">
-            <div className="card">
-              <h3>What AI tools do you specialize in?</h3>
-              <p>
-                Claude Code for development automation, n8n for workflow
-                orchestration, ChatGPT API for product integrations. I also
-                work with complementary tools like vector databases and automation
-                platforms.
-              </p>
-            </div>
-            <div className="card">
-              <h3>How does Claude Code compare to GitHub Copilot?</h3>
-              <p>
-                Claude Code is a CLI agent that can read your entire codebase,
-                run commands, execute tests, and make architectural decisions.
-                Copilot provides inline suggestions. Claude Code is more
-                autonomous and capable of multi-step reasoning.
-              </p>
-            </div>
-            <div className="card">
-              <h3>What can I automate with n8n?</h3>
-              <p>
-                Almost anything: content scheduling, lead management, data sync
-                between tools, AI-powered workflows, document processing, custom
-                API integrations. If it has an API, n8n can connect it.
-              </p>
-            </div>
-            <div className="card">
-              <h3>Do you offer training for teams?</h3>
-              <p>
-                Yes. I can train your team on AI tooling best practices, set up
-                workflows, and create documentation. Training is customized to
-                your stack and use cases.
-              </p>
-            </div>
-            <div className="card">
-              <h3>What's your pricing model?</h3>
-              <p>
-                One-time setups (Claude Code configuration, simple automations)
-                start at project-based pricing. Ongoing retainers for complex
-                systems and team support. Contact hello@maxpetrusenko.com with
-                your requirements.
-              </p>
-            </div>
-            <div className="card">
-              <h3>Can you help with product strategy too?</h3>
-              <p>
-                Yes. I offer product & UX consulting to shape what to build, not
-                just how. Calm, outcome-first product definition before a line
-                of code is written.
-              </p>
-            </div>
-          </div>
-        </section>
-      </div>
+          <FaqSection
+            columns={3}
+            items={[
+              {
+                question: "What AI tools do you specialize in?",
+                answer:
+                  "Claude Code for development automation, n8n for workflow orchestration, ChatGPT API for product integrations. I also work with complementary tools like vector databases and automation platforms.",
+              },
+              {
+                question: "How does Claude Code compare to GitHub Copilot?",
+                answer:
+                  "Claude Code is a CLI agent that can read your entire codebase, run commands, execute tests, and make architectural decisions. Copilot provides inline suggestions. Claude Code is more autonomous and capable of multi-step reasoning.",
+              },
+              {
+                question: "What can I automate with n8n?",
+                answer:
+                  "Almost anything: content scheduling, lead management, data sync between tools, AI-powered workflows, document processing, custom API integrations. If it has an API, n8n can connect it.",
+              },
+              {
+                question: "Do you offer training for teams?",
+                answer:
+                  "Yes. I can train your team on AI tooling best practices, set up workflows, and create documentation. Training is customized to your stack and use cases.",
+              },
+              {
+                question: "What's your pricing model?",
+                answer:
+                  "One-time setups (Claude Code configuration, simple automations) start at project-based pricing. Ongoing retainers for complex systems and team support. Contact hello@maxpetrusenko.com with your requirements.",
+              },
+              {
+                question: "Can you help with product strategy too?",
+                answer:
+                  "Yes. I offer product & UX consulting to shape what to build, not just how. Calm, outcome-first product definition before a line of code is written.",
+              },
+            ]}
+          />
+          </section>
+        </div>
+      </section>
     </>
   );
 }

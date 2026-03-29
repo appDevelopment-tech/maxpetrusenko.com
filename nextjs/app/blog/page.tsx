@@ -39,58 +39,85 @@ export default async function BlogPage() {
         ])}
       />
 
-      <div className="hero-image-section ui-immersive-hero ui-fade-up delay-1">
-        <div className="hero-image-overlay"></div>
-        <Image
-          src="/images/DSC05764.jpg"
-          alt="Editorial blog atmosphere"
-          fill
-          priority
-          sizes="100vw"
-          style={{ objectFit: "cover" }}
-          quality={86}
-        />
-        <div className="hero-image-content">
-          <h2>Blog</h2>
-          <p>Articles, essays, and field notes</p>
+      <div className="hero-portrait-wrap">
+        <div className="hero-portrait-bg">
+          <Image
+            src="/images/DSC05764.jpg"
+            alt="Editorial blog atmosphere"
+            fill
+            priority
+            sizes="100vw"
+            style={{ objectFit: "cover" }}
+            quality={86}
+          />
+          <div className="hero-portrait-overlay" />
+          <div className="hero-portrait-bottom" />
         </div>
-      </div>
-
-      <div className="container">
-        <section className="hero ui-fade-up delay-2" style={{ paddingBottom: 40 }}>
-          <div className="hero-text" style={{ maxWidth: 700 }}>
-            <div className="eyebrow">
-              <span className="dot"></span> Blog
-            </div>
-            <h1>Articles & Essays by Max Petrusenko</h1>
-            <p>
-              Writing on security, AI, automation, and systems. Articles are
-              published directly on this site for fast loading and easy citation.
+        <section className="relative z-[3] mx-auto w-full max-w-[1080px] px-4 py-28 md:px-6 md:py-32">
+          <div>
+            <p className="blur-in inline-flex items-center rounded-full border border-[rgba(210,163,93,0.24)] px-4 py-1 text-xs font-semibold text-[var(--accent-mindfold)]">
+              Writing archive
             </p>
-            <p className="text-muted" style={{ marginTop: 10 }}>
-              Archive also on{" "}
-              <a href={mediumUrl} target="_blank" rel="noopener" className="text-accent-tech">
+            <h1 className="clip-reveal clip-reveal-d1 mt-5 max-w-[12ch] font-serif text-[clamp(2.35rem,4.8vw,3.75rem)] font-bold leading-[1.06] tracking-tight text-[var(--ink)]">
+              Articles, essays, and usable systems thinking.
+            </h1>
+            <p className="blur-in blur-in-d2 mt-5 max-w-[520px] text-[1.05rem] leading-relaxed text-[var(--ink-soft)]">
+              Writing on security, AI, automation, and architecture. Published here
+              for fast loading, clean citation, and durable access.
+            </p>
+            <div className="blur-in blur-in-d3 mt-8 flex flex-wrap gap-3">
+              <Link className="inline-flex items-center gap-2 rounded-[10px] bg-[var(--ink)] px-7 py-3.5 text-[0.95rem] font-semibold text-[var(--sand)] shadow-[0_4px_16px_rgba(12,17,21,0.18)] transition hover:-translate-y-0.5 hover:shadow-[0_8px_28px_rgba(12,17,21,0.24)]" href="/blog/topics">
+                Open topic index
+              </Link>
+              <a
+                className="inline-flex items-center gap-2 rounded-[10px] border-[1.5px] border-[var(--line)] bg-transparent px-7 py-3.5 text-[0.95rem] font-semibold text-[var(--ink)] transition hover:-translate-y-0.5 hover:border-[var(--accent-tech)]"
+                href={mediumUrl}
+                target="_blank"
+                rel="noopener"
+              >
                 Medium @{mediumHandle}
               </a>
-            </p>
-            <div style={{ marginTop: 14 }}>
-              <Link className="btn sm secondary" href="/blog/topics">
-                Open Topic Index
-              </Link>
             </div>
           </div>
         </section>
-        <section className="ui-fade-up delay-3">
-          <div className="ambient-band overflow-hidden rounded-[24px] border border-[rgba(12,17,21,0.09)]">
-            <Image
-              src="/images/generated/home-ambient-somatic.jpg"
-              alt="Editorial ambient texture"
-              width={1536}
-              height={1024}
-              className="h-[180px] w-full object-cover"
-            />
+      </div>
+
+      <section className="dark-zone mt-8 px-4 py-16 md:py-20">
+        <div className="absolute inset-0 z-[1] bg-[radial-gradient(circle_at_20%_30%,rgba(210,163,93,0.14),transparent_35%),radial-gradient(circle_at_80%_70%,rgba(15,126,169,0.1),transparent_30%),linear-gradient(145deg,#111826_0%,#181f2b_58%,#241f17_100%)]" />
+        <div className="dark-zone-inner">
+          <p className="section-eyebrow text-[var(--accent-mindfold)]">Editorial focus</p>
+          <h2 className="mt-2 font-serif text-[clamp(1.6rem,2.8vw,2.25rem)] font-semibold tracking-wide text-[#e2e8f0]">
+            Built for citation, not scrollbait.
+          </h2>
+          <p className="mt-2 max-w-[560px] text-[var(--dark-zone-muted)]">
+            On-site articles for speed and attribution, plus external essays where the
+            context fits better.
+          </p>
+
+          <div className="mt-10 grid gap-6 md:grid-cols-3">
+            <div className="dark-zone-card card-stripe-tech">
+              <h3 className="font-serif text-[1.2rem] font-semibold text-[#e2e8f0]">On site</h3>
+              <p className="mt-3 text-sm leading-relaxed text-[var(--dark-zone-muted)]">
+                {localArticles.length} article{localArticles.length !== 1 ? "s" : ""} published directly here for fast access and clean quoting.
+              </p>
+            </div>
+            <div className="dark-zone-card card-stripe-mindfold">
+              <h3 className="font-serif text-[1.2rem] font-semibold text-[#e2e8f0]">External archive</h3>
+              <p className="mt-3 text-sm leading-relaxed text-[var(--dark-zone-muted)]">
+                {externalArticles.length} piece{externalArticles.length !== 1 ? "s" : ""} published off-site when platform reach or format matters.
+              </p>
+            </div>
+            <div className="dark-zone-card card-stripe-tech">
+              <h3 className="font-serif text-[1.2rem] font-semibold text-[#e2e8f0]">Core topics</h3>
+              <p className="mt-3 text-sm leading-relaxed text-[var(--dark-zone-muted)]">
+                Security, AI, automation, systems design, and practical operating notes.
+              </p>
+            </div>
           </div>
-        </section>
+        </div>
+      </section>
+
+      <div className="container">
 
         {articles.length > 0 ? (
           <>

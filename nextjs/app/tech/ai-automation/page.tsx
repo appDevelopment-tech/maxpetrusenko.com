@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { CircleCheckBig, CircleX } from "lucide-react";
 import { siteConfig } from "@/config/site";
 import { generateMetadata, absoluteUrl } from "@/lib/seo/metadata";
 import { JsonLd } from "@/components/seo/JsonLd";
@@ -48,7 +49,7 @@ export default function AIAutomationPage() {
             <div className="eyebrow">
               <span className="dot"></span> AI Automation
             </div>
-            <h1>Production-Grade AI Automation</h1>
+            <h1 className="clip-reveal clip-reveal-d1">Production-Grade AI Automation</h1>
             <p>
               I build AI-powered systems that reduce manual work, increase
               reliability, and scale without adding headcount. No hype—just
@@ -221,7 +222,7 @@ export default function AIAutomationPage() {
 
           <div className="cards-2 grid">
             <div className="card">
-              <h3>✓ Good fit</h3>
+              <h3 className="flex items-center gap-2"><CircleCheckBig size={18} /> Good fit</h3>
               <ul className="list">
                 <li>Creators drowning in manual content work</li>
                 <li>Startups needing integrations but no engineering bandwidth</li>
@@ -232,7 +233,7 @@ export default function AIAutomationPage() {
             </div>
 
             <div className="card">
-              <h3>✗ Not a fit</h3>
+              <h3 className="flex items-center gap-2"><CircleX size={18} /> Not a fit</h3>
               <ul className="list">
                 <li>Looking for &quot;get rich quick&quot; AI schemes</li>
                 <li>Want to automate spam or gray-hat tactics</li>

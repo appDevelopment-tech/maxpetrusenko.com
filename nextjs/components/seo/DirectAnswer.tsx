@@ -11,6 +11,12 @@ interface DirectAnswerProps {
   label?: string;
   /** Optional schema type for enhanced markup */
   schemaType?: "FAQPage" | "WebPage" | "TechArticle";
+  /** Visual treatment for the visible card */
+  variant?: "default" | "overlay" | "embedded" | "spotlight";
+  /** Optional additional class name */
+  className?: string;
+  /** Render JSON-LD only, no visible UI */
+  showUi?: boolean;
 }
 
 /**
@@ -34,6 +40,9 @@ export function DirectAnswer({
   displayAnswer,
   label = "Overview",
   schemaType = "FAQPage",
+  variant = "default",
+  className,
+  showUi = true,
 }: DirectAnswerProps) {
   const schema = {
     "@context": "https://schema.org",
@@ -58,10 +67,16 @@ export function DirectAnswer({
   return (
     <>
       <JsonLd type={schemaType} data={schema} />
-      <div className="direct-answer" data-direct-answer="true">
-        <p className="direct-answer-label">{label}</p>
-        <p className="direct-answer-text">{displayAnswer ?? answer}</p>
-      </div>
+      {showUi ? (
+        <div
+          className={["direct-answer", className].filter(Boolean).join(" ")}
+          data-direct-answer="true"
+          data-variant={variant}
+        >
+          <p className="direct-answer-label">{label}</p>
+          <p className="direct-answer-text">{displayAnswer ?? answer}</p>
+        </div>
+      ) : null}
     </>
   );
 }

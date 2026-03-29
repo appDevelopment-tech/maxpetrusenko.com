@@ -25,6 +25,9 @@ export function RouteHero() {
     "/proof",
     "/identity",
     "/somatic",
+    "/claude-code-consultant",
+    "/ai-workflow-automation",
+    "/n8n-automation",
   ];
   const hiddenPrefixes = [
     "/mindfold",
@@ -41,21 +44,25 @@ export function RouteHero() {
   const title = formatTitle(pathname);
 
   return (
-    <section className="route-hero ui-fade-up delay-1" aria-label="Page hero">
-      <Image
-        src="/images/DSC05871.jpg"
-        alt="Max Petrusenko portrait"
-        fill
-        sizes="100vw"
-        className="route-hero-image"
-        priority={false}
-        quality={82}
-      />
-      <div className="route-hero-overlay" />
-      <div className="route-hero-content">
-        <p className="route-hero-kicker">Max Petrusenko</p>
-        <h1>{title}</h1>
-        <p className="route-hero-subtitle">Presence + Product</p>
+    <section className="hero-portrait-wrap" style={{ minHeight: "50vh" }} aria-label="Page hero">
+      <div className="hero-portrait-bg">
+        <Image
+          src="/images/DSC05871.jpg"
+          alt="Max Petrusenko portrait"
+          fill
+          sizes="100vw"
+          style={{ objectFit: "cover", objectPosition: "center 36%" }}
+          priority={false}
+          quality={82}
+        />
+        <div className="hero-portrait-overlay" />
+        <div className="hero-portrait-bottom" />
+      </div>
+      <div className="relative z-[3] mx-auto w-full max-w-[1080px] px-4 py-20 md:px-6">
+        <p className="blur-in section-eyebrow text-[var(--muted)]">Max Petrusenko</p>
+        <h1 className="clip-reveal clip-reveal-d1 mt-3 font-serif text-[clamp(2rem,4vw,3rem)] font-semibold leading-tight text-[var(--ink)]">
+          {title}
+        </h1>
       </div>
     </section>
   );

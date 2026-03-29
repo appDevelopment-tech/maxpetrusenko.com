@@ -85,71 +85,71 @@ export default function ProofPage() {
         ])}
       />
 
-      <div className="hero-image-section ui-immersive-hero ui-fade-up delay-1">
-        <div className="hero-image-overlay"></div>
-        <Image
-          src="/images/tech-portrait.jpg"
-          alt="Proof and case studies visual"
-          fill
-          priority
-          sizes="100vw"
-          style={{ objectFit: "cover", objectPosition: "50% 30%" }}
-          quality={88}
-        />
-        <div className="hero-image-content">
-          <h1>Proof</h1>
-          <p>Case studies and measurable outcomes</p>
+      <div className="hero-portrait-wrap">
+        <div className="hero-portrait-bg">
+          <Image
+            src="/images/tech-portrait.jpg"
+            alt="Proof and case studies visual"
+            fill
+            priority
+            sizes="100vw"
+            style={{ objectFit: "cover", objectPosition: "50% 30%" }}
+            quality={88}
+          />
+          <div className="hero-portrait-overlay" />
+          <div className="hero-portrait-bottom" />
         </div>
-      </div>
-
-      <div className="container">
-        <section className="hero ui-fade-up delay-2">
-          <div className="hero-text">
-            <div className="eyebrow">
-              <span className="dot"></span> Proof
-            </div>
-            <h1>Evidence of Outcomes</h1>
-            <p>
-              Case studies, public work, and validation. No marketing
-              fluff—just what was built, how it was built, and what changed.
+        <section className="relative z-[3] mx-auto w-full max-w-[1080px] px-4 py-28 md:px-6 md:py-32">
+          <div>
+            <p className="blur-in inline-flex items-center rounded-full border border-[rgba(15,126,169,0.2)] px-4 py-1 text-xs font-semibold text-[var(--accent-tech)]">
+              Proof and validation
             </p>
-            <div className="hero-actions">
-              <Link className="btn primary" href="/tech/case-studies">
-                All Case Studies
+            <h1 className="clip-reveal clip-reveal-d1 mt-5 max-w-[12ch] font-serif text-[clamp(2.35rem,4.8vw,3.75rem)] font-bold leading-[1.06] tracking-tight text-[var(--ink)]">
+              Public evidence. Not vague claims.
+            </h1>
+            <p className="blur-in blur-in-d2 mt-5 max-w-[500px] text-[1.05rem] leading-relaxed text-[var(--ink-soft)]">
+              Case studies, shipped systems, and public artifacts that show what was
+              built, how it worked, and what changed.
+            </p>
+            <div className="blur-in blur-in-d3 mt-8 flex flex-wrap gap-3">
+              <Link className="inline-flex items-center gap-2 rounded-[10px] bg-[var(--ink)] px-7 py-3.5 text-[0.95rem] font-semibold text-[var(--sand)] shadow-[0_4px_16px_rgba(12,17,21,0.18)] transition hover:-translate-y-0.5 hover:shadow-[0_8px_28px_rgba(12,17,21,0.24)]" href="/tech/case-studies">
+                Browse case studies
               </Link>
               <a
-                className="btn secondary"
+                className="inline-flex items-center gap-2 rounded-[10px] border-[1.5px] border-[var(--line)] bg-transparent px-7 py-3.5 text-[0.95rem] font-semibold text-[var(--ink)] transition hover:-translate-y-0.5 hover:border-[var(--accent-tech)]"
                 href={siteConfig.social.github}
                 target="_blank"
                 rel="noopener"
               >
-                GitHub
+                Open GitHub
               </a>
             </div>
           </div>
-
-          <div className="hero-card">
-            <h3>Quick stats</h3>
-            <ul className="list">
-              <li>{studies.length} detailed case studies</li>
-              <li>Production systems deployed</li>
-              <li>Remote-first, global client base</li>
-              <li>Focus: measurable outcomes</li>
-            </ul>
-          </div>
         </section>
-        <section className="ui-fade-up delay-3">
-          <div className="ambient-band overflow-hidden rounded-[24px] border border-[rgba(12,17,21,0.09)]">
-            <Image
-              src="/images/generated/home-automation-portrait.png"
-              alt="Proof and systems visual"
-              width={1024}
-              height={1536}
-              className="h-[180px] w-full object-cover object-[center_24%]"
-            />
-          </div>
-        </section>
+      </div>
 
+      <section className="dark-zone mt-8 px-4 py-16 md:py-20">
+        <div className="absolute inset-0 z-[1] bg-[radial-gradient(circle_at_20%_30%,rgba(15,126,169,0.14),transparent_35%),radial-gradient(circle_at_80%_70%,rgba(210,163,93,0.1),transparent_30%),linear-gradient(145deg,#0e1520_0%,#121d2e_58%,#152438_100%)]" />
+        <div className="dark-zone-inner">
+          <p className="section-eyebrow text-[var(--accent-tech)]">Validation</p>
+          <h2 className="mt-2 font-serif text-[clamp(1.6rem,2.8vw,2.25rem)] font-semibold tracking-wide text-[#e2e8f0]">
+            What changed matters more than what shipped.
+          </h2>
+          <p className="mt-2 max-w-[560px] text-[var(--dark-zone-muted)]">
+            A compact index of outcomes, public work, and references you can audit.
+          </p>
+
+          <div className="mt-8 grid gap-4 sm:grid-cols-4">
+            {[`${studies.length} case studies`, "Production systems", "Public GitHub work", "Outcome-first delivery"].map((metric) => (
+              <div key={metric} className="rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-center text-sm font-medium text-[var(--dark-zone-text)]">
+                {metric}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <div className="container">
         <section className="section ui-fade-up delay-3">
           <div className="section-head">
             <h2>Case Studies</h2>

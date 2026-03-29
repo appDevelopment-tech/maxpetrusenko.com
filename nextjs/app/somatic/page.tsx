@@ -8,6 +8,7 @@ import { InstagramEmbed } from "@/components/motion/InstagramEmbed";
 import { LivingTestimonials } from "@/components/motion/LivingTestimonials";
 import { FloatingOrbs } from "@/components/motion/AmbientFloat";
 import { ScrollReveal } from "@/components/motion/ScrollReveal";
+import { FaqSection } from "@/components/shared/FaqSection";
 
 export const metadata = generateMetadata({
   title: "Somatic Practice - Nervous System Regulation & Energy Work",
@@ -36,32 +37,31 @@ export default function SomaticPage() {
         ])}
       />
 
-      {/* Hero image section with ambient motion */}
-      <div className="hero-image-section somatic-hero relative overflow-hidden">
-        <FloatingOrbs color="rgba(14, 97, 93, 0.06)" count={2} />
-        <div className="hero-image-overlay"></div>
-        <Image
-          src="/images/bali/DSC04769.jpg"
-          alt="Professional somatic sessions in calming Bali environment"
-          fill
-          priority
-          sizes="100vw"
-          style={{ objectFit: "cover" }}
-          quality={85}
-        />
-        <div className="hero-image-content">
-          <h1>Somatic Practice</h1>
-          <p>Nervous system regulation for founders, creators, and seekers</p>
+      {/* Hero portrait background */}
+      <div className="hero-portrait-wrap">
+        <div className="hero-portrait-bg">
+          <FloatingOrbs color="rgba(14, 97, 93, 0.06)" count={2} />
+          <Image
+            src="/images/bali/DSC04769.jpg"
+            alt="Professional somatic sessions in calming Bali environment"
+            fill
+            priority
+            sizes="100vw"
+            style={{ objectFit: "cover" }}
+            quality={85}
+          />
+          <div className="hero-portrait-overlay" />
+          <div className="hero-portrait-bottom" />
         </div>
       </div>
 
       <div className="container">
-        <section className="hero">
+        <section className="hero ui-fade-up delay-1">
           <div className="hero-text">
-            <div className="eyebrow">
-              <span className="dot"></span> Somatic Practice
+            <div className="blur-in section-eyebrow text-[var(--accent-spirit)]">
+              Somatic Practice
             </div>
-            <h1>Nervous system regulation for people who lead, create, and need to feel again</h1>
+            <h1 className="clip-reveal clip-reveal-d1">Nervous system regulation for people who lead, create, and need to feel again</h1>
             <p>
               Private tantra and somatic sessions for founders, artists, and seekers.
               Expect focused touch, energetic attunement, and a space built for deep
@@ -342,56 +342,41 @@ export default function SomaticPage() {
           <div className="section-head">
             <h2>Frequently Asked Questions</h2>
           </div>
-          <div className="cards-3 grid">
-            <div className="card">
-              <h4>Is this suitable for first-timers?</h4>
-              <p>
-                Absolutely. We begin with breath, boundaries, and intention. The
-                60-minute Reset is perfect to arrive in your body without
-                overwhelm if you're new to somatic or tantra practices.
-              </p>
-            </div>
-            <div className="card">
-              <h4>How do you handle boundaries and consent?</h4>
-              <p>
-                We map what is welcomed and what is not before any touch. Consent
-                is verbal, ongoing, and respected in every moment. You can pause
-                or redirect anytime.
-              </p>
-            </div>
-            <div className="card">
-              <h4>What should I bring or prepare?</h4>
-              <p>
-                Wear loose clothing, arrive hydrated, and avoid heavy meals for
-                2 hours beforehand. The studio is stocked with linens, oils, tea,
-                and a private shower.
-              </p>
-            </div>
-            <div className="card">
-              <h4>Do you work with couples?</h4>
-              <p>
-                Yes, I facilitate couple tantra and energy sessions when
-                intentions are aligned. We run a 15-minute pre-call to set
-                agreements and comfort levels.
-              </p>
-            </div>
-            <div className="card">
-              <h4>Where are you currently located?</h4>
-              <p>
-                I see clients in Bali (Ubud) and South Florida (Miami to West Palm Beach).
-                Sessions are also available worldwide—I can travel to your city.
-                Message to check availability.
-              </p>
-            </div>
-            <div className="card">
-              <h4>Is tantra massage sexual?</h4>
-              <p>
-                No. Tantra massage in my practice is a somatic energy work and
-                healing modality, not a sexual service. Sessions are non-sexual
-                with clear boundaries.
-              </p>
-            </div>
-          </div>
+          <FaqSection
+            columns={3}
+            items={[
+              {
+                question: "Is this suitable for first-timers?",
+                answer:
+                  "Absolutely. We begin with breath, boundaries, and intention. The 60-minute Reset is perfect to arrive in your body without overwhelm if you're new to somatic or tantra practices.",
+              },
+              {
+                question: "How do you handle boundaries and consent?",
+                answer:
+                  "We map what is welcomed and what is not before any touch. Consent is verbal, ongoing, and respected in every moment. You can pause or redirect anytime.",
+              },
+              {
+                question: "What should I bring or prepare?",
+                answer:
+                  "Wear loose clothing, arrive hydrated, and avoid heavy meals for 2 hours beforehand. The studio is stocked with linens, oils, tea, and a private shower.",
+              },
+              {
+                question: "Do you work with couples?",
+                answer:
+                  "Yes, I facilitate couple tantra and energy sessions when intentions are aligned. We run a 15-minute pre-call to set agreements and comfort levels.",
+              },
+              {
+                question: "Where are you currently located?",
+                answer:
+                  "I see clients in Bali (Ubud) and South Florida (Miami to West Palm Beach). Sessions are also available worldwide. I can travel to your city. Message to check availability.",
+              },
+              {
+                question: "Is tantra massage sexual?",
+                answer:
+                  "No. Tantra massage in my practice is a somatic energy work and healing modality, not a sexual service. Sessions are non-sexual with clear boundaries.",
+              },
+            ]}
+          />
         </section>
       </div>
     </>

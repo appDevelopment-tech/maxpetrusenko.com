@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { CheckCircle2 } from "lucide-react";
 import { trackEvent } from "@/components/analytics/GoogleAnalytics";
 
 interface StackAnalysisLeadMagnetProps {
@@ -102,7 +103,9 @@ export function StackAnalysisLeadMagnet({ source = "unknown" }: StackAnalysisLea
   if (isSuccess) {
     return (
       <div className="card" style={{ padding: "32px", textAlign: "center", background: "linear-gradient(135deg, rgba(14, 97, 93, 0.08) 0%, rgba(210, 163, 93, 0.06) 100%)" }}>
-        <div style={{ fontSize: "48px", marginBottom: "16px" }}>✓</div>
+        <div style={{ marginBottom: "16px", display: "flex", justifyContent: "center" }}>
+          <CheckCircle2 size={42} color="var(--accent-spirit)" strokeWidth={1.8} />
+        </div>
         <h3 style={{ marginBottom: "8px" }}>Check Your Inbox</h3>
         <p style={{ color: "var(--muted)", fontSize: "15px" }}>
           I&apos;ll review your stack and send 3 automation opportunities personalized for your tools.

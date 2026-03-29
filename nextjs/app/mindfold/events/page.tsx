@@ -40,37 +40,35 @@ export default function MindfoldEventsPage() {
       <JsonLd type="ScheduleAction" data={generateScheduleActionSchema("mindfold")} />
       <JsonLd type="FAQPage" data={generateMindfoldFAQSchema()} />
 
-      <div className="hero-image-section ui-immersive-hero ui-fade-up delay-1">
-        <div className="hero-image-overlay"></div>
-        <Image
-          src="/images/bali/DSC05052.jpg"
-          alt="Mindfold immersive event atmosphere"
-          fill
-          priority
-          sizes="100vw"
-          style={{ objectFit: "cover" }}
-          quality={86}
-        />
-        <div className="hero-image-content">
-          <h1>Mindfold Sanctuary</h1>
-          <p>Blindfolded presence journeys and events</p>
+      <div className="hero-portrait-wrap">
+        <div className="hero-portrait-bg">
+          <Image
+            src="/images/bali/DSC05052.jpg"
+            alt="Mindfold immersive event atmosphere"
+            fill
+            priority
+            sizes="100vw"
+            style={{ objectFit: "cover" }}
+            quality={86}
+          />
+          <div className="hero-portrait-overlay" />
+          <div className="hero-portrait-bottom" />
         </div>
-      </div>
-
-      <div className="container">
-        <section className="hero">
-          <div className="hero-text">
-            <div className="eyebrow">
-              <span className="dot"></span> Mindfold Sanctuary
-            </div>
-            <h1>Blindfolded presence journeys & events</h1>
-            <p>
-              All links for upcoming Mindfold experiences: dates, waivers, code of
-              conduct, and how to get updates. Reach out to reserve your spot.
+        <section className="relative z-[3] mx-auto w-full max-w-[1080px] px-4 py-28 md:px-6 md:py-32">
+          <div>
+            <p className="blur-in inline-flex items-center rounded-full border border-[rgba(210,163,93,0.24)] px-4 py-1 text-xs font-semibold text-[var(--accent-mindfold)]">
+              Mindfold Sanctuary
             </p>
-            <div className="hero-actions">
+            <h1 className="clip-reveal clip-reveal-d1 mt-5 max-w-[12ch] font-serif text-[clamp(2.35rem,4.8vw,3.75rem)] font-bold leading-[1.06] tracking-tight text-[var(--ink)]">
+              Blindfolded presence journeys, live.
+            </h1>
+            <p className="blur-in blur-in-d2 mt-5 max-w-[520px] text-[1.05rem] leading-relaxed text-[var(--ink-soft)]">
+              Dates, waivers, code of conduct, and the fastest way to reserve your
+              spot for the next Mindfold experience.
+            </p>
+            <div className="blur-in blur-in-d3 mt-8 flex flex-wrap gap-3">
               <a
-                className="btn primary"
+                className="inline-flex items-center gap-2 rounded-[10px] bg-[var(--ink)] px-7 py-3.5 text-[0.95rem] font-semibold text-[var(--sand)] shadow-[0_4px_16px_rgba(12,17,21,0.18)] transition hover:-translate-y-0.5 hover:shadow-[0_8px_28px_rgba(12,17,21,0.24)]"
                 href="https://wa.me/17865436688?text=Hi%20Max%2C%20I%27d%20like%20to%20join%20the%20next%20Mindfold%20event.%20City%3A%20____.%20Date%3A%20____.%20Questions%3A%20____."
                 target="_blank"
                 rel="noopener"
@@ -78,82 +76,52 @@ export default function MindfoldEventsPage() {
                 Join via WhatsApp
               </a>
               <a
-                className="btn secondary"
+                className="inline-flex items-center gap-2 rounded-[10px] border-[1.5px] border-[var(--line)] bg-transparent px-7 py-3.5 text-[0.95rem] font-semibold text-[var(--ink)] transition hover:-translate-y-0.5 hover:border-[var(--accent-mindfold)]"
                 href="https://form.jotform.com/242798411650965"
                 target="_blank"
                 rel="noopener"
               >
-                Fill Waiver
-              </a>
-            </div>
-            <div className="hero-cta-note">
-              Upcoming dates announced through WhatsApp and text updates.
-            </div>
-          </div>
-
-          <div className="hero-card">
-            <h3>Quick links</h3>
-            <div className="tiles">
-              <a
-                className="tile"
-                href="https://form.jotform.com/242798411650965"
-                target="_blank"
-                rel="noopener"
-              >
-                <div className="tile-meta">
-                  <span className="tile-title">Waiver</span>
-                  <span className="tile-desc">Required before attending.</span>
-                </div>
-                <span className="badge mindfold">Complete</span>
-              </a>
-              <a className="tile" href="#updates">
-                <div className="tile-meta">
-                  <span className="tile-title">Text Updates</span>
-                  <span className="tile-desc">Be first to know dates.</span>
-                </div>
-                <span className="badge mindfold">Join</span>
-              </a>
-              <a
-                className="tile"
-                href="https://patreon.com/mindfold"
-                target="_blank"
-                rel="noopener"
-              >
-                <div className="tile-meta">
-                  <span className="tile-title">Memberships</span>
-                  <span className="tile-desc">Support & member perks.</span>
-                </div>
-                <span className="badge mindfold">Patreon</span>
-              </a>
-              <a
-                className="tile"
-                href="https://mindfold.canny.io/feedback"
-                target="_blank"
-                rel="noopener"
-              >
-                <div className="tile-meta">
-                  <span className="tile-title">Feedback</span>
-                  <span className="tile-desc">Share requests or ideas.</span>
-                </div>
-                <span className="badge mindfold">Add</span>
-              </a>
-              <a
-                className="tile"
-                href="https://www.instagram.com/p/C9ivYB1u2-6/"
-                target="_blank"
-                rel="noopener"
-              >
-                <div className="tile-meta">
-                  <span className="tile-title">Mindfold live</span>
-                  <span className="tile-desc">
-                    100 people at a music festival learning how to feel.
-                  </span>
-                </div>
-                <span className="badge mindfold">Watch</span>
+                Fill waiver
               </a>
             </div>
           </div>
         </section>
+      </div>
+
+      <section className="dark-zone mt-8 px-4 py-16 md:py-20">
+        <div className="absolute inset-0 z-[1] bg-[radial-gradient(circle_at_20%_30%,rgba(210,163,93,0.18),transparent_35%),radial-gradient(circle_at_80%_70%,rgba(15,126,169,0.08),transparent_30%),linear-gradient(145deg,#111826_0%,#1b1f28_58%,#2a2014_100%)]" />
+        <div className="dark-zone-inner">
+          <p className="section-eyebrow text-[var(--accent-mindfold)]">Before you join</p>
+          <h2 className="mt-2 font-serif text-[clamp(1.6rem,2.8vw,2.25rem)] font-semibold tracking-wide text-[#e2e8f0]">
+            Reserve, sign, arrive ready.
+          </h2>
+          <p className="mt-2 max-w-[560px] text-[var(--dark-zone-muted)]">
+            Everything needed before the next journey: waiver, updates, memberships,
+            and where to send requests.
+          </p>
+
+          <div className="mt-10 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+            <a className="dark-zone-card card-stripe-mindfold" href="https://form.jotform.com/242798411650965" target="_blank" rel="noopener">
+              <h3 className="font-serif text-[1.2rem] font-semibold text-[#e2e8f0]">Waiver</h3>
+              <p className="mt-3 text-sm leading-relaxed text-[var(--dark-zone-muted)]">Required before attending any live experience.</p>
+            </a>
+            <a className="dark-zone-card card-stripe-mindfold" href="#updates">
+              <h3 className="font-serif text-[1.2rem] font-semibold text-[#e2e8f0]">Text updates</h3>
+              <p className="mt-3 text-sm leading-relaxed text-[var(--dark-zone-muted)]">Get new dates first and reply when a city matches.</p>
+            </a>
+            <a className="dark-zone-card card-stripe-mindfold" href="https://patreon.com/mindfold" target="_blank" rel="noopener">
+              <h3 className="font-serif text-[1.2rem] font-semibold text-[#e2e8f0]">Memberships</h3>
+              <p className="mt-3 text-sm leading-relaxed text-[var(--dark-zone-muted)]">Support the project and unlock member perks.</p>
+            </a>
+            <a className="dark-zone-card card-stripe-mindfold" href="https://mindfold.canny.io/feedback" target="_blank" rel="noopener">
+              <h3 className="font-serif text-[1.2rem] font-semibold text-[#e2e8f0]">Feedback</h3>
+              <p className="mt-3 text-sm leading-relaxed text-[var(--dark-zone-muted)]">Share ideas, requests, and venue leads.</p>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <div className="container">
 
         <section className="section">
           <div className="section-head">
@@ -430,9 +398,8 @@ export default function MindfoldEventsPage() {
             </span>
           </div>
           <div
+            className="bg-[var(--dark-zone)] card-stripe-mindfold"
             style={{
-              background:
-                "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
               padding: 18,
               borderRadius: 15,
               color: "white",
@@ -500,7 +467,7 @@ export default function MindfoldEventsPage() {
                 type="submit"
                 style={{
                   width: "100%",
-                  background: "#ff6b6b",
+                  background: "var(--accent-mindfold, #f59e0b)",
                   color: "white",
                   padding: 12,
                   border: "none",
@@ -510,7 +477,7 @@ export default function MindfoldEventsPage() {
                   fontSize: 16,
                   margin: "15px 0 8px 0",
                   transition: "all 0.3s",
-                  boxShadow: "0 4px 15px rgba(255,107,107,0.3)",
+                  boxShadow: "0 4px 15px rgba(245,158,11,0.3)",
                 }}
               >
                 Join the Journey

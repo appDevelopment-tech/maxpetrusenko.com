@@ -32,68 +32,86 @@ export default function IdentityPage() {
         ])}
       />
 
-      <div className="hero-image-section ui-immersive-hero ui-fade-up delay-1">
-        <div className="hero-image-overlay"></div>
-        <Image
-          src="/images/bali/DSC04934.jpg"
-          alt="Identity and authorship visual"
-          fill
-          priority
-          sizes="100vw"
-          style={{ objectFit: "cover" }}
-          quality={86}
-        />
-        <div className="hero-image-content">
-          <h1>Identity</h1>
-          <p>Authoritative profile and disambiguation</p>
+      <div className="hero-portrait-wrap">
+        <div className="hero-portrait-bg">
+          <Image
+            src="/images/bali/DSC04934.jpg"
+            alt="Identity and authorship visual"
+            fill
+            priority
+            sizes="100vw"
+            style={{ objectFit: "cover" }}
+            quality={86}
+          />
+          <div className="hero-portrait-overlay" />
+          <div className="hero-portrait-bottom" />
         </div>
+        <section className="relative z-[3] mx-auto w-full max-w-[1080px] px-4 py-28 md:px-6 md:py-32">
+          <div>
+            <p className="blur-in inline-flex items-center rounded-full border border-[rgba(15,126,169,0.22)] px-4 py-1 text-xs font-semibold text-[var(--accent-tech)]">
+              Identity and authorship
+            </p>
+            <h1 className="clip-reveal clip-reveal-d1 mt-5 max-w-[12ch] font-serif text-[clamp(2.35rem,4.8vw,3.75rem)] font-bold leading-[1.06] tracking-tight text-[var(--ink)]">
+              One person. Clear lanes. No ambiguity.
+            </h1>
+            <p className="blur-in blur-in-d2 mt-5 max-w-[520px] text-[1.05rem] leading-relaxed text-[var(--ink-soft)]">
+              This page defines the authoritative identity for Max Petrusenko:
+              software systems on one side, private somatic work on the other.
+            </p>
+            <div className="blur-in blur-in-d3 mt-8 flex flex-wrap gap-3">
+              <Link className="inline-flex items-center gap-2 rounded-[10px] bg-[var(--ink)] px-7 py-3.5 text-[0.95rem] font-semibold text-[var(--sand)] shadow-[0_4px_16px_rgba(12,17,21,0.18)] transition hover:-translate-y-0.5 hover:shadow-[0_8px_28px_rgba(12,17,21,0.24)]" href="/tech">
+                See tech work
+              </Link>
+              <Link className="inline-flex items-center gap-2 rounded-[10px] border-[1.5px] border-[var(--line)] bg-transparent px-7 py-3.5 text-[0.95rem] font-semibold text-[var(--ink)] transition hover:-translate-y-0.5 hover:border-[var(--accent-spirit)]" href="/spirituality">
+                See somatic practice
+              </Link>
+            </div>
+          </div>
+        </section>
       </div>
 
+      <section className="dark-zone mt-8 px-4 py-16 md:py-20">
+        <div className="absolute inset-0 z-[1] bg-[radial-gradient(circle_at_20%_30%,rgba(15,126,169,0.14),transparent_35%),radial-gradient(circle_at_80%_70%,rgba(14,97,93,0.12),transparent_30%),linear-gradient(145deg,#0e1520_0%,#132030_58%,#16252a_100%)]" />
+        <div className="dark-zone-inner">
+          <p className="section-eyebrow text-[var(--accent-tech)]">Disambiguation</p>
+          <h2 className="mt-2 font-serif text-[clamp(1.6rem,2.8vw,2.25rem)] font-semibold tracking-wide text-[#e2e8f0]">
+            Separate practices. Shared authorship.
+          </h2>
+          <p className="mt-2 max-w-[560px] text-[var(--dark-zone-muted)]">
+            Search, citations, and readers should land on the right context fast:
+            tech delivery, somatic practice, and where each one lives.
+          </p>
+
+          <div className="mt-10 grid gap-6 md:grid-cols-2">
+            <div className="dark-zone-card card-stripe-tech">
+              <h3 className="font-serif text-[1.25rem] font-semibold text-[#e2e8f0]">Primary practice</h3>
+              <p className="mt-3 text-sm leading-relaxed text-[var(--dark-zone-muted)]">
+                AI automation, software development, product systems, and workflow
+                delivery for teams working remotely worldwide.
+              </p>
+              <div className="mt-4 flex flex-wrap gap-2">
+                <span className="rounded-md bg-[rgba(15,126,169,0.15)] px-2.5 py-1 text-[0.7rem] font-semibold text-[var(--accent-tech)]">Automation</span>
+                <span className="rounded-md bg-[rgba(15,126,169,0.15)] px-2.5 py-1 text-[0.7rem] font-semibold text-[var(--accent-tech)]">Software</span>
+                <span className="rounded-md bg-[rgba(15,126,169,0.15)] px-2.5 py-1 text-[0.7rem] font-semibold text-[var(--accent-tech)]">Remote</span>
+              </div>
+            </div>
+            <div className="dark-zone-card card-stripe-spirit">
+              <h3 className="font-serif text-[1.25rem] font-semibold text-[#e2e8f0]">Secondary practice</h3>
+              <p className="mt-3 text-sm leading-relaxed text-[var(--dark-zone-muted)]">
+                Private somatic bodywork through Presence Atelier, with in-person
+                sessions in Ubud by arrangement and boundaries-first framing.
+              </p>
+              <div className="mt-4 flex flex-wrap gap-2">
+                <span className="rounded-md bg-[rgba(14,97,93,0.15)] px-2.5 py-1 text-[0.7rem] font-semibold text-[#2eb8a8]">Atelier</span>
+                <span className="rounded-md bg-[rgba(14,97,93,0.15)] px-2.5 py-1 text-[0.7rem] font-semibold text-[#2eb8a8]">Ubud</span>
+                <span className="rounded-md bg-[rgba(14,97,93,0.15)] px-2.5 py-1 text-[0.7rem] font-semibold text-[#2eb8a8]">Private sessions</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <div className="container">
-        <section className="hero ui-fade-up delay-2">
-          <div className="hero-text">
-            <div className="eyebrow">
-              <span className="dot"></span> Identity
-            </div>
-            <h1>Who I Am</h1>
-            <p>
-              <strong>Max Petrusenko</strong> is a software developer and AI
-              automation consultant who builds production-grade systems for
-              content, workflow, and integration efficiency, with a secondary
-              practice in somatic bodywork.
-            </p>
-            <div className="hero-actions">
-              <Link className="btn primary" href="/tech">
-                Tech Work
-              </Link>
-              <Link className="btn secondary" href="/spirituality">
-                Somatic Practice
-              </Link>
-            </div>
-          </div>
-
-          <div className="hero-card">
-            <h3>At a glance</h3>
-            <ul className="list">
-              <li><strong>Primary:</strong> AI automation & software development</li>
-              <li><strong>Secondary:</strong> Somatic bodywork (Presence Atelier)</li>
-              <li><strong>Base:</strong> Remote / Global ( timezone flexible )</li>
-              <li><strong>In-person:</strong> Ubud, Bali (by arrangement)</li>
-            </ul>
-          </div>
-        </section>
-        <section className="ui-fade-up delay-3">
-          <div className="ambient-band overflow-hidden rounded-[24px] border border-[rgba(12,17,21,0.09)]">
-            <Image
-              src="/images/generated/home-ambient-somatic.png"
-              alt="Ambient gradient"
-              width={1536}
-              height={1024}
-              className="h-[150px] w-full object-cover"
-            />
-          </div>
-        </section>
-
         <section className="section ui-fade-up delay-3">
           <div className="section-head">
             <h2>What I Do</h2>

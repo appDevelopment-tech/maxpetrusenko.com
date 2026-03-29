@@ -107,7 +107,7 @@ export default function CaseStudiesPage() {
             <div className="eyebrow">
               <span className="dot"></span> Case Studies
             </div>
-            <h1>Real Projects, Real Outcomes</h1>
+            <h1 className="clip-reveal clip-reveal-d1">Real Projects, Real Outcomes</h1>
             <p>
               Detailed case studies from my work in AI automation and software
               development. No marketing fluff—just context, actions, and results.

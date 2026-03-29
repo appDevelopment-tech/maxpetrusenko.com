@@ -36,7 +36,7 @@ export default function ModalitiesPage() {
             <div className="eyebrow">
               <Link href="/somatic">← Somatic</Link>
             </div>
-            <h1>Session Modalities</h1>
+            <h1 className="clip-reveal clip-reveal-d1">Session Modalities</h1>
             <p>
               Three depths of work, each customized to your nervous system and
               intentions. Choose based on what you're ready for.

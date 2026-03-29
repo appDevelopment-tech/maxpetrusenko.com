@@ -1,4 +1,6 @@
+import Image from "next/image";
 import Link from "next/link";
+import { CheckCircle2, CircleX } from "lucide-react";
 import { generateMetadata, absoluteUrl } from "@/lib/seo/metadata";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { DirectAnswer } from "@/components/seo/DirectAnswer";
@@ -38,35 +40,65 @@ export default function N8nAutomationPage() {
       <JsonLd type="ProfessionalService" data={generateTechServiceSchema()} />
       <JsonLd type="Person" data={generateTechPersonSchema()} />
 
-      {/* Direct Answer for AI extraction */}
+      <div className="hero-portrait-wrap">
+        <div className="hero-portrait-bg">
+          <Image
+            src="/images/tech-portrait.jpg"
+            alt="Max Petrusenko in studio"
+            fill
+            priority
+            sizes="100vw"
+            style={{ objectFit: "cover", objectPosition: "50% 30%" }}
+            quality={90}
+          />
+          <div className="hero-portrait-overlay" />
+          <div className="hero-portrait-bottom" />
+        </div>
+        <section className="relative z-[3] mx-auto w-full max-w-[1080px] px-4 py-28 md:px-6 md:py-32">
+          <div>
+            <p className="blur-in inline-flex items-center rounded-full border border-[rgba(15,126,169,0.2)] px-4 py-1 text-xs font-semibold text-[var(--accent-tech)]">
+              Open for n8n automation work
+            </p>
+            <h1 className="clip-reveal clip-reveal-d1 mt-5 max-w-[12ch] font-serif text-[clamp(2.35rem,4.8vw,3.75rem)] font-bold leading-[1.06] tracking-tight text-[var(--ink)]">
+              Connect every tool. Remove repetitive work.
+            </h1>
+            <p className="blur-in blur-in-d2 mt-5 max-w-[460px] text-[1.05rem] leading-relaxed text-[var(--ink-soft)]">
+              Your tools already have APIs. n8n connects them into reliable workflows for lead capture, content distribution, AI steps, and ops automation.
+            </p>
+            <div className="blur-in blur-in-d3 mt-8 flex flex-wrap gap-3">
+              <a className="inline-flex items-center gap-2 rounded-[10px] bg-[var(--ink)] px-7 py-3.5 text-[0.95rem] font-semibold text-[var(--sand)] shadow-[0_4px_16px_rgba(12,17,21,0.18)] transition hover:-translate-y-0.5 hover:shadow-[0_8px_28px_rgba(12,17,21,0.24)]" href="mailto:hello@maxpetrusenko.com?subject=n8n%20Automation&body=Hi%20Max%2C%20I%20want%20to%20automate%20____.%20Current%20tools%3A%20____.">
+                Tell Me What to Automate
+              </a>
+              <Link className="inline-flex items-center gap-2 rounded-[10px] border-[1.5px] border-[var(--line)] bg-transparent px-7 py-3.5 text-[0.95rem] font-semibold text-[var(--ink)] transition hover:-translate-y-0.5 hover:border-[var(--accent-tech)]" href="/tech/articles/n8n-workflow-automation">
+                See n8n Examples
+              </Link>
+            </div>
+          </div>
+        </section>
+      </div>
+
       <DirectAnswer
+        showUi={false}
         question="What does an n8n automation consultant do?"
         answer="An n8n automation consultant designs and builds custom workflow automations using n8n, connecting your tools and APIs to eliminate manual work. Services include workflow design, API integrations, custom node development, error handling, and monitoring. Typical automations save 10-20 hours per week on repetitive tasks. Available remote worldwide."
       />
 
-      {/* Hero Section */}
-      <section style={{ padding: "80px 20px 60px", textAlign: "center" }}>
-        <div className="container" style={{ maxWidth: "720px" }}>
-          <div className="eyebrow" style={{ justifyContent: "center", marginBottom: "20px" }}>
-            <span className="dot"></span> n8n Automation Consulting
-          </div>
-          <h1 style={{ fontSize: "clamp(32px, 5vw, 48px)", marginBottom: "20px" }}>
-            Automate Everything. Connect Anything.
-          </h1>
-          <p style={{ fontSize: "18px", color: "var(--muted)", marginBottom: "32px", lineHeight: "1.6" }}>
-            Your tools have APIs. n8n connects them. I design and build custom automations that eliminate manual work: lead capture, data sync, content scheduling, AI workflows, document processing.
+      <section className="dark-zone mt-8 py-16 px-4 md:py-20">
+        <div className="absolute inset-0 z-[1] bg-[radial-gradient(circle_at_20%_30%,rgba(15,126,169,0.14),transparent_35%),radial-gradient(circle_at_80%_70%,rgba(210,163,93,0.1),transparent_30%),linear-gradient(145deg,#0e1520_0%,#121d2e_58%,#152438_100%)]" />
+        <div className="dark-zone-inner">
+          <p className="section-eyebrow text-[var(--accent-tech)]">n8n focus</p>
+          <h2 className="mt-2 font-serif text-[clamp(1.6rem,2.8vw,2.25rem)] font-semibold tracking-wide text-[#e2e8f0]">
+            Reliable workflows wired into the tools you already use
+          </h2>
+          <p className="mt-2 max-w-[560px] text-[var(--dark-zone-muted)]">
+            Lead routing, content distribution, document handling, and AI-powered automations with monitoring and error recovery.
           </p>
-          <div style={{ display: "flex", gap: "16px", justifyContent: "center", flexWrap: "wrap" }}>
-            <a
-              className="btn primary"
-              href="mailto:hello@maxpetrusenko.com?subject=n8n%20Automation&body=Hi%20Max%2C%20I%20want%20to%20automate%20____.%20Current%20tools%3A%20____."
-              style={{ fontSize: "16px", padding: "16px 32px" }}
-            >
-              Tell Me What to Automate
-            </a>
-            <Link className="btn secondary" href="/tech/articles/n8n-workflow-automation">
-              See n8n Examples
-            </Link>
+          <div className="mt-8 grid gap-4 sm:grid-cols-3">
+            {["Any API or webhook", "10 to 20 hours saved weekly", "Monitoring and handoff included"].map((metric) => (
+              <div key={metric} className="rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-center text-sm font-medium text-[var(--dark-zone-text)]">
+                {metric}
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -77,15 +109,15 @@ export default function N8nAutomationPage() {
           <h2 style={{ marginBottom: "24px" }}>The Problem: Your Team is Drowning in Repetitive Work</h2>
           <div style={{ display: "grid", gap: "20px" }}>
             <div className="card" style={{ padding: "24px" }}>
-              <h3 style={{ color: "#dc2626", marginBottom: "8px" }}>✗ Manual Data Entry Between Tools</h3>
+              <h3 style={{ color: "#dc2626", marginBottom: "8px", display: "flex", alignItems: "center", gap: "8px" }}><CircleX size={18} /> Manual Data Entry Between Tools</h3>
               <p style={{ color: "var(--muted)" }}>Leads from your form need to go to CRM, Slack, and a spreadsheet. Someone copy-pastes every time. Errors happen. Opportunities are lost.</p>
             </div>
             <div className="card" style={{ padding: "24px" }}>
-              <h3 style={{ color: "#dc2626", marginBottom: "8px" }}>✗ Content Scheduling is a Full-Time Job</h3>
+              <h3 style={{ color: "#dc2626", marginBottom: "8px", display: "flex", alignItems: "center", gap: "8px" }}><CircleX size={18} /> Content Scheduling is a Full-Time Job</h3>
               <p style={{ color: "var(--muted)" }}>You have great content but posting across LinkedIn, X, Instagram, and your blog takes hours. Formatting, scheduling, analytics—each platform separately.</p>
             </div>
             <div className="card" style={{ padding: "24px" }}>
-              <h3 style={{ color: "#dc2626", marginBottom: "8px" }}>✗ AI Workflows Aren't Connected</h3>
+              <h3 style={{ color: "#dc2626", marginBottom: "8px", display: "flex", alignItems: "center", gap: "8px" }}><CircleX size={18} /> AI Workflows Aren&apos;t Connected</h3>
               <p style={{ color: "var(--muted)" }}>You use ChatGPT or Claude for content, but there's no pipeline: draft → review → optimize → schedule → post. Each step is manual.</p>
             </div>
           </div>
@@ -93,7 +125,7 @@ export default function N8nAutomationPage() {
       </section>
 
       {/* Solution Section */}
-      <section style={{ padding: "60px 20px" }}>
+      <section className="py-16 md:py-20 px-4">
         <div className="container" style={{ maxWidth: "720px" }}>
           <h2 style={{ marginBottom: "24px" }}>The Solution: Custom n8n Workflows That Run 24/7</h2>
           <div style={{ display: "grid", gap: "20px" }}>
@@ -163,19 +195,19 @@ export default function N8nAutomationPage() {
       </section>
 
       {/* Offer Section */}
-      <section style={{ padding: "60px 20px" }}>
+      <section className="py-16 md:py-20 px-4">
         <div className="container" style={{ maxWidth: "720px" }}>
           <h2 style={{ marginBottom: "24px" }}>What You Get</h2>
           <div className="card" style={{ padding: "32px" }}>
             <h3 style={{ marginBottom: "16px" }}>n8n Automation Package</h3>
             <div style={{ marginBottom: "24px" }}>
               <div className="list" style={{ marginLeft: 0 }}>
-                <li style={{ marginLeft: 0, marginBottom: "8px" }}>✓ Process mapping and automation audit</li>
-                <li style={{ marginLeft: 0, marginBottom: "8px" }}>✓ Custom workflow design (1-3 workflows)</li>
-                <li style={{ marginLeft: 0, marginBottom: "8px" }}>✓ API integration setup</li>
-                <li style={{ marginLeft: 0, marginBottom: "8px" }}>✓ Error handling and monitoring</li>
-                <li style={{ marginLeft: 0, marginBottom: "8px" }}>✓ Documentation and handoff</li>
-                <li style={{ marginLeft: 0, marginBottom: "8px" }}>✓ 30-day support and tweaks</li>
+                <li style={{ marginLeft: 0, marginBottom: "8px", display: "flex", alignItems: "center", gap: "8px" }}><CheckCircle2 size={16} /> Process mapping and automation audit</li>
+                <li style={{ marginLeft: 0, marginBottom: "8px", display: "flex", alignItems: "center", gap: "8px" }}><CheckCircle2 size={16} /> Custom workflow design (1-3 workflows)</li>
+                <li style={{ marginLeft: 0, marginBottom: "8px", display: "flex", alignItems: "center", gap: "8px" }}><CheckCircle2 size={16} /> API integration setup</li>
+                <li style={{ marginLeft: 0, marginBottom: "8px", display: "flex", alignItems: "center", gap: "8px" }}><CheckCircle2 size={16} /> Error handling and monitoring</li>
+                <li style={{ marginLeft: 0, marginBottom: "8px", display: "flex", alignItems: "center", gap: "8px" }}><CheckCircle2 size={16} /> Documentation and handoff</li>
+                <li style={{ marginLeft: 0, marginBottom: "8px", display: "flex", alignItems: "center", gap: "8px" }}><CheckCircle2 size={16} /> 30-day support and tweaks</li>
               </div>
             </div>
             <div style={{ borderTop: "1px solid var(--line)", paddingTop: "20px", marginBottom: "20px" }}>
@@ -233,7 +265,7 @@ export default function N8nAutomationPage() {
       </section>
 
       {/* Final CTA */}
-      <section style={{ padding: "60px 20px", textAlign: "center" }}>
+      <section className="py-16 md:py-20 px-4" style={{ textAlign: "center" }}>
         <div className="container" style={{ maxWidth: "560px" }}>
           <h2 style={{ marginBottom: "16px" }}>What Repetitive Task Do You Hate?</h2>
           <p style={{ color: "var(--muted)", marginBottom: "24px" }}>

@@ -36,7 +36,7 @@ export default function TrainingPage() {
             <div className="eyebrow">
               <Link href="/somatic">← Somatic</Link>
             </div>
-            <h1>Lineage & Training</h1>
+            <h1 className="clip-reveal clip-reveal-d1">Lineage & Training</h1>
             <p>
               How I ground the work: formal initiations, embodied practice, and
               ongoing study. The somatic work I offer is informed by years of

@@ -28,6 +28,9 @@ const config: Config = {
         "accent-mindfold": "#d2a35d",
         muted: "#4b535c",
         line: "#e6e0d8",
+        "dark-zone": "#0e1520",
+        "dark-zone-text": "#c8d4e0",
+        "dark-zone-muted": "#7a8da0",
       },
       fontFamily: {
         sans: ["var(--font-sans)", "system-ui", "sans-serif"],

@@ -36,7 +36,7 @@ export default function ApproachPage() {
             <div className="eyebrow">
               <Link href="/somatic">← Somatic</Link>
             </div>
-            <h1>Boundaries-First Approach</h1>
+            <h1 className="clip-reveal clip-reveal-d1">Boundaries-First Approach</h1>
             <p>
               Consent-led somatic work. Every session begins with clarity about
               what is welcomed and what is not. Your nervous system sets the
