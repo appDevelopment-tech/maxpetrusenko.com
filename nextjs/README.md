@@ -109,6 +109,10 @@ npm run preview
 npm run deploy
 ```
 
+GitHub also has a manual fallback workflow named `Cloudflare Pages Fallback Deploy`.
+Use it from the Actions tab when Cloudflare's Git-triggered production deploy misses a commit.
+It is intentionally `workflow_dispatch` only so it does not create duplicate production deploys while Git integration remains enabled.
+
 #### Setup Steps:
 
 1. **Create KV Namespaces**:
@@ -122,6 +126,8 @@ npm run deploy
    - Add KV binding: `EMAIL_SUBS` → your namespace ID
    - Add KV binding: `CONCIERGE_THREADS` → your namespace ID
    - Add secrets: `CONCIERGE_ADMIN_PASSWORD`, `CONCIERGE_SESSION_SECRET`
+   - Add social dashboard secret: `SOCIAL_POSTS_PRIMARY_API_KEY`
+     - fallback alias also supported in code: `GETLATE_DEV_API_KEY_FREE`
    - Add KV binding: `CONCIERGE_THREADS` → a namespace for Message Max threads
    - Add optional KV binding: `AI_RATE_LIMITS` → a namespace for public endpoint throttling
    - Add environment variables: `CONCIERGE_ADMIN_PASSWORD`, `CONCIERGE_SESSION_SECRET`, `NEXT_PUBLIC_TURNSTILE_SITE_KEY`, `TURNSTILE_SECRET_KEY`
