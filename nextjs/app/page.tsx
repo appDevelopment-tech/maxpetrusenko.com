@@ -21,6 +21,8 @@ import {
 import { fetchArticles, isLocalArticle } from "@/lib/cms/articles";
 import { homeFaqEntries } from "@/lib/seo/home-faq";
 
+export const runtime = "edge";
+
 const StackAnalysisLeadMagnet = dynamic(
   () =>
     import("@/components/forms/StackAnalysisLeadMagnet").then(

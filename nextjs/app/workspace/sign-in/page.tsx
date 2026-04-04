@@ -5,6 +5,8 @@ import { isSupabaseConfigured } from "@/lib/supabase/config";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { getWorkspaceAccessCheck } from "@/lib/workspace/access";
 
+export const runtime = "edge";
+
 export const metadata = {
   title: "Workspace Sign In",
   robots: {

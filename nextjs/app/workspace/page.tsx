@@ -2,6 +2,8 @@ import { redirect } from "next/navigation";
 import { WorkspaceDashboard } from "@/components/workspace/WorkspaceDashboard";
 import { loadWorkspaceDashboard } from "@/lib/workspace/data";
 
+export const runtime = "edge";
+
 export const metadata = {
   title: "Workspace",
   robots: {

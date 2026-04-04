@@ -3,6 +3,8 @@ import { createServerClient } from "@supabase/ssr";
 import { getSupabasePublicEnv, isSupabaseConfigured } from "@/lib/supabase/config";
 import { getWorkspaceAccessCheck } from "@/lib/workspace/access";
 
+export const runtime = "edge";
+
 function sanitizeNextPath(candidate: string | null): string {
   if (!candidate || !candidate.startsWith("/")) {
     return "/workspace";
