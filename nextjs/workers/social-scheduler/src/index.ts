@@ -30,6 +30,17 @@ interface KVNamespace {
   delete(key: string): Promise<void>;
 }
 
+interface ScheduledController {
+  cron: string;
+  scheduledTime: number;
+  noRetry(): void;
+}
+
+interface ExecutionContext {
+  waitUntil(promise: Promise<unknown>): void;
+  passThroughOnException?(): void;
+}
+
 interface Env {
   SOCIAL_STATE: KVNamespace;
   SOCIAL_POSTS_PRIMARY_API_KEY: string;
