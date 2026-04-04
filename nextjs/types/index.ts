@@ -77,6 +77,7 @@ export interface PageMetadata {
   canonical?: string;
   noindex?: boolean;
   keywords?: string[];
+  dateModified?: string;
 }
 
 export interface JsonLdProps {

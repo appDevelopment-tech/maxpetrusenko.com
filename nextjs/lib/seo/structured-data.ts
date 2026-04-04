@@ -16,6 +16,7 @@ export function generateWebPageSchema(data: {
   datePublished?: string;
   dateModified?: string;
 }) {
+  const modified = data.dateModified || new Date().toISOString();
   return {
     "@context": "https://schema.org",
     "@type": "WebPage",
@@ -23,7 +24,7 @@ export function generateWebPageSchema(data: {
     description: data.description,
     url: `${siteConfig.url}${data.url}`,
     ...(data.datePublished && { datePublished: data.datePublished }),
-    ...(data.dateModified && { dateModified: data.dateModified }),
+    dateModified: modified,
   };
 }
 
@@ -34,6 +35,7 @@ export function generateWebSiteSchema() {
     name: siteConfig.name,
     description: siteConfig.description,
     url: siteConfig.url,
+    dateModified: new Date().toISOString(),
     inLanguage: "en-US",
     publisher: {
       "@type": "Person",

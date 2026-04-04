@@ -19,7 +19,7 @@ export function Footer() {
         <span className="location-item">Remote worldwide</span>
       </div>
       <div className="container footer">
-        <div>© 2025 {siteConfig.name}</div>
+        <div>© 2024–{new Date().getFullYear()} {siteConfig.name}</div>
         <div className="footer-links">
           {siteConfig.navigation.slice(1).map((item) => (
             <Link key={item.href} href={item.href}>

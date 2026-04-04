@@ -14,6 +14,7 @@ export function generateMetadata(metadata: PageMetadata): Metadata {
     canonical,
     noindex = false,
     keywords = [],
+    dateModified,
   } = metadata;
 
   const titleAlreadyHasBrand = title.toLowerCase().includes(siteConfig.name.toLowerCase());
@@ -46,6 +47,7 @@ export function generateMetadata(metadata: PageMetadata): Metadata {
         },
       ],
       siteName: siteConfig.name,
+      ...(dateModified && { modifiedTime: dateModified }),
     },
     twitter: {
       card: "summary_large_image",
