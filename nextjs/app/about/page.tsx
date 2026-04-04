@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { siteConfig } from "@/config/site";
+import { brandedReferenceLinkCards } from "@/lib/brand/reference-pages";
 import { generateMetadata, absoluteUrl } from "@/lib/seo/metadata";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { generatePersonSchema, generateWebPageSchema, generateBreadcrumbSchema } from "@/lib/seo/structured-data";
@@ -151,6 +152,24 @@ export default function AboutPage() {
                 </Link>
               </div>
             </div>
+          </div>
+        </section>
+
+        <section className="section">
+          <div className="section-head">
+            <h2>Branded reference pages</h2>
+            <span className="section-note">Direct routes for name-based search queries</span>
+          </div>
+          <div className="tiles">
+            {brandedReferenceLinkCards.map((card) => (
+              <Link key={card.href} className="tile" href={card.href}>
+                <div className="tile-meta">
+                  <span className="tile-title">{card.title}</span>
+                  <span className="tile-desc">{card.description}</span>
+                </div>
+                <span className="badge">{card.badge}</span>
+              </Link>
+            ))}
           </div>
         </section>
       </div>

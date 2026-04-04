@@ -1,7 +1,7 @@
 # AI-First SEO & GEO Implementation Checklist
 
 For: maxpetrusenko.com (Next.js app in /nextjs)
-Last Updated: 2026-03-06
+Last Updated: 2026-04-04
 
 ---
 
@@ -76,6 +76,7 @@ Last Updated: 2026-03-06
 - [x] Add `/blog/topics` crawl hub and intra-cluster article links for deeper discovery paths
 - [x] Add thread-driven GEO content cluster for SSR/crawler/citation strategy experiments
 - [x] Add `ItemList` schema to `/blog/topics` and automate cluster integrity checks in CI-style predeploy testing
+- [x] Add six branded reference routes for name-based AEO queries (`/who-is-max-petrusenko`, `/max-petrusenko-ai-automation`, `/max-petrusenko-aeo-geo`, `/max-petrusenko-somatic`, `/max-petrusenko-mindfold`, `/max-petrusenko-reviews`) and link them from `/about`, `/identity`, `/blog`, sitemap, and AI guidance files (2026-04-04)
 
 ---
 

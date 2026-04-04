@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { fetchArticles, isLocalArticle } from "@/lib/cms/articles";
+import { brandedReferenceLinkCards } from "@/lib/brand/reference-pages";
 import { siteConfig } from "@/config/site";
 import { generateMetadata, absoluteUrl } from "@/lib/seo/metadata";
 import { JsonLd } from "@/components/seo/JsonLd";
@@ -118,6 +119,25 @@ export default async function BlogPage() {
       </section>
 
       <div className="container">
+        <section className="section ui-fade-up delay-3">
+          <div className="section-head">
+            <h2>Branded reference routes</h2>
+            <span className="section-note">Direct pages for name + service intent</span>
+          </div>
+          <div className="cards-3 grid">
+            {brandedReferenceLinkCards.map((card) => (
+              <Link key={card.href} className="card card-with-actions" href={card.href}>
+                <div className="eyebrow">{card.badge}</div>
+                <h3>{card.title}</h3>
+                <p>{card.description}</p>
+                <div className="card-actions-spacer"></div>
+                <div className="hero-actions" style={{ marginTop: 12 }}>
+                  <span className="btn secondary sm">Open</span>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </section>
 
         {articles.length > 0 ? (
           <>
