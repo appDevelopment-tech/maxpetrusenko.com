@@ -24,6 +24,12 @@ import schedule from "../schedule.json";
 
 /* ── Types ── */
 
+interface KVNamespace {
+  get(key: string): Promise<string | null>;
+  put(key: string, value: string, options?: { expirationTtl?: number }): Promise<void>;
+  delete(key: string): Promise<void>;
+}
+
 interface Env {
   SOCIAL_STATE: KVNamespace;
   SOCIAL_POSTS_PRIMARY_API_KEY: string;
