@@ -156,6 +156,7 @@ declare global {
     SOCIAL_POSTS_LIFETIME_API_KEY?: string;
     GETLATE_DEV_API_KEY_FREE?: string;
     SOCIAL_AGENT_BASE_URL?: string;
+    SOCIAL_AGENT_RESOLVE_OVERRIDE?: string;
     TURNSTILE_SECRET_KEY?: string;
     NEXT_PUBLIC_TURNSTILE_SITE_KEY?: string;
     RESEND_API_KEY?: string;

@@ -130,6 +130,8 @@ It is intentionally `workflow_dispatch` only so it does not create duplicate pro
      - fallback alias also supported in code: `GETLATE_DEV_API_KEY_FREE`
    - Optional external social service URL: `SOCIAL_AGENT_BASE_URL`
      - when set, `/api/social-posts` will read from the Coolify/VPS service first
+   - Optional Cloudflare edge DNS override: `SOCIAL_AGENT_RESOLVE_OVERRIDE`
+     - use this if the Pages runtime needs a stable origin hostname while keeping the public agent URL on `SOCIAL_AGENT_BASE_URL`
    - Add KV binding: `CONCIERGE_THREADS` → a namespace for Message Max threads
    - Add optional KV binding: `AI_RATE_LIMITS` → a namespace for public endpoint throttling
    - Add environment variables: `CONCIERGE_ADMIN_PASSWORD`, `CONCIERGE_SESSION_SECRET`, `NEXT_PUBLIC_TURNSTILE_SITE_KEY`, `TURNSTILE_SECRET_KEY`

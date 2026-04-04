@@ -24,10 +24,22 @@ interface LatePost {
 
 const LATE_API = "https://zernio.com/api/v1/posts";
 
+type CloudflareFetchInit = RequestInit & {
+  cf?: {
+    resolveOverride?: string;
+  };
+};
+
 function getSocialAgentBaseUrl(): string | null {
   const env = getCloudflareEnv();
   const value = env?.SOCIAL_AGENT_BASE_URL ?? process.env.SOCIAL_AGENT_BASE_URL;
   return value?.trim() ? value.trim().replace(/\/$/, "") : null;
+}
+
+function getSocialAgentResolveOverride(): string | null {
+  const env = getCloudflareEnv();
+  const value = env?.SOCIAL_AGENT_RESOLVE_OVERRIDE ?? process.env.SOCIAL_AGENT_RESOLVE_OVERRIDE;
+  return value?.trim() ? value.trim() : null;
 }
 
 function isPublishedStatus(status: string | undefined): boolean {
@@ -107,10 +119,16 @@ async function fetchPosts(apiKey: string, limit = 30): Promise<LatePost[]> {
   return (Array.isArray(data) ? data : (data.data ?? data.posts ?? [])) as LatePost[];
 }
 
-async function fetchPostsFromSocialAgent(baseUrl: string) {
-  const response = await fetch(`${baseUrl}/posts?limit=50`, {
+async function fetchPostsFromSocialAgent(baseUrl: string, resolveOverride: string | null) {
+  const init: CloudflareFetchInit = {
     headers: { Accept: "application/json" },
-  });
+  };
+
+  if (resolveOverride) {
+    init.cf = { resolveOverride };
+  }
+
+  const response = await fetch(`${baseUrl}/posts?limit=50`, init);
 
   if (!response.ok) {
     throw new Error(`Social agent returned HTTP ${response.status}`);
@@ -128,9 +146,13 @@ async function fetchPostsFromSocialAgent(baseUrl: string) {
 export async function GET() {
   try {
     const socialAgentBaseUrl = getSocialAgentBaseUrl();
+    const socialAgentResolveOverride = getSocialAgentResolveOverride();
     if (socialAgentBaseUrl) {
       try {
-        const payload = await fetchPostsFromSocialAgent(socialAgentBaseUrl);
+        const payload = await fetchPostsFromSocialAgent(
+          socialAgentBaseUrl,
+          socialAgentResolveOverride
+        );
         return NextResponse.json(payload, {
           status: 200,
           headers: { "Cache-Control": "public, s-maxage=60, stale-while-revalidate=300" },
