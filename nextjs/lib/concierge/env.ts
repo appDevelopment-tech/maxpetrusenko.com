@@ -1,4 +1,5 @@
 import { getRequestContext } from "@cloudflare/next-on-pages";
+import type { KVNamespace } from "@/types";
 
 export function getCloudflareEnv(): CloudflareEnv | null {
   try {
