@@ -1,15 +1,25 @@
-FROM node:22-bookworm-slim
+FROM node:22-bookworm-slim AS build
 
 WORKDIR /app
 
 COPY social-agent/package*.json ./
-RUN npm ci
+RUN npm ci --include=dev
 
 COPY social-agent/tsconfig.json ./tsconfig.json
 COPY social-agent/src ./src
 COPY nextjs/workers/social-scheduler/schedule.json ./config/schedule.json
 
-RUN npm run build && npm prune --omit=dev
+RUN npm run build
+
+FROM node:22-bookworm-slim AS runtime
+
+WORKDIR /app
+
+COPY social-agent/package*.json ./
+RUN npm ci --omit=dev
+
+COPY --from=build /app/dist ./dist
+COPY --from=build /app/config ./config
 
 ENV NODE_ENV=production
 ENV PORT=3333

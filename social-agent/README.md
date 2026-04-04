@@ -45,6 +45,7 @@ Keep renders and temp media short-lived. Do not treat the container filesystem a
 4. Mount the persistent volume.
 5. Set env vars from `.env.example` in Coolify or Doppler.
    Include the Zernio account IDs for each platform you actually plan to publish from.
+   Mark secrets and runtime config as runtime-only in Coolify so they are not injected as build args.
 6. Bind the public hostname, usually `social.maxpetrusenko.com`.
 7. Verify `GET /health`.
 8. Run one manual job.
