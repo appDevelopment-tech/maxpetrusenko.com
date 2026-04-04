@@ -150,5 +150,14 @@ export interface KVNamespace {
 declare global {
   interface CloudflareEnv {
     EMAIL_SUBS: KVNamespace;
+    AI_RATE_LIMITS?: KVNamespace;
+    CONCIERGE_THREADS?: KVNamespace;
+    SOCIAL_POSTS_PRIMARY_API_KEY?: string;
+    SOCIAL_POSTS_LIFETIME_API_KEY?: string;
+    TURNSTILE_SECRET_KEY?: string;
+    NEXT_PUBLIC_TURNSTILE_SITE_KEY?: string;
+    RESEND_API_KEY?: string;
+    CONCIERGE_ADMIN_PASSWORD?: string;
+    CONCIERGE_SESSION_SECRET?: string;
   }
 }

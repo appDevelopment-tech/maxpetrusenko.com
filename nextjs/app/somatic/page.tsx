@@ -42,7 +42,7 @@ export default function SomaticPage() {
         <div className="hero-portrait-bg">
           <FloatingOrbs color="rgba(14, 97, 93, 0.06)" count={2} />
           <Image
-            src="/images/bali/DSC04769.jpg"
+            src="/images/bali/DSC04799.jpg"
             alt="Professional somatic sessions in calming Bali environment"
             fill
             priority

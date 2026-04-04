@@ -1,5 +1,6 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
+import { updateSupabaseSession } from "@/lib/supabase/middleware";
 
 const PRIMARY_HOST = "www.maxpetrusenko.com";
 const BARE_HOST = "maxpetrusenko.com";
@@ -27,9 +28,9 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(url, 301);
   }
 
-  return NextResponse.next();
+  return updateSupabaseSession(request);
 }
 
 export const config = {
-  matcher: ["/_/view"],
+  matcher: ["/((?!_next/static|_next/image|favicon.ico).*)"],
 };

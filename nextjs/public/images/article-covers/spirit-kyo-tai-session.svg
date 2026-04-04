@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title>Kyo-tai Session</title>
+  <desc>A practical walkthrough of a Kyo-tai session.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#5d4635"/>
+      <stop offset="100%" stop-color="#1f1711"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.74" cy="0.22" r="0.8">
+      <stop offset="0%" stop-color="#f4cc9c" stop-opacity="0.42"/>
+      <stop offset="100%" stop-color="#f4cc9c" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1600" height="900" fill="url(#bg)"/>
+  <rect width="1600" height="900" fill="url(#glow)"/>
+  <g opacity="0.22" fill="none" stroke="#f6dcb8" stroke-width="3">
+    <circle cx="1266" cy="180" r="140"/>
+    <circle cx="1266" cy="180" r="220"/>
+    <path d="M110 746 C352 540, 650 530, 860 624 S1240 820, 1482 610"/>
+    <path d="M92 680 C296 530, 612 500, 864 572 S1242 760, 1496 560"/>
+  </g>
+  <g transform="translate(116 158)">
+    <rect x="0" y="0" width="1030" height="430" rx="28" fill="#0b1016" fill-opacity="0.28"/>
+    <text x="56" y="140" font-size="74" font-family="Georgia, 'Times New Roman', serif" fill="#f6f2ea">
+      What Happens in a
+    </text>
+    <text x="56" y="224" font-size="74" font-family="Georgia, 'Times New Roman', serif" fill="#f6f2ea">
+      Kyo-tai Session
+    </text>
+    <text x="56" y="312" font-size="30" font-family="'Trebuchet MS', Verdana, sans-serif" fill="#e7dfd1">
+      Consent, pacing, pressure, intensity, and integration.
+    </text>
+    <text x="56" y="382" font-size="26" font-family="'Trebuchet MS', Verdana, sans-serif" fill="#d4dccf">
+      spirituality blog
+    </text>
+  </g>
+</svg>

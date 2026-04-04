@@ -1,8 +1,6 @@
 {
   "env": {
     "MAX_THINKING_TOKENS": "3000",
-    "ANTHROPIC_AUTH_TOKEN": "f16faccd21ba49f7994bb2f187e6e0ab.2FbJOMAbHc3djSUa",
-    "ANTHROPIC_BASE_URL": "https://api.z.ai/api/anthropic",
     "API_TIMEOUT_MS": "3000000",
       "ENABLE_TOOL_SEARCH": "true"
   },

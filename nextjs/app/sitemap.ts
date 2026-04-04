@@ -174,6 +174,31 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.8,
     },
     {
+      url: `${baseUrl}/blog/consciousness-tech`,
+      lastModified: await getRouteLastModified(appDir, "/blog/consciousness-tech", fallbackLastModified, [
+        path.join(cmsDir, "articles.ts"),
+        path.join(cmsDir, "article-backlog.ts"),
+      ]),
+      changeFrequency: "weekly",
+      priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/consciousness-assistant`,
+      lastModified: await getRouteLastModified(appDir, "/consciousness-assistant", fallbackLastModified, [
+        path.join(appDir, "api", "consciousness", "route.ts"),
+      ]),
+      changeFrequency: "weekly",
+      priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/socialmedia`,
+      lastModified: await getRouteLastModified(appDir, "/socialmedia", fallbackLastModified, [
+        path.join(appDir, "api", "social-posts", "route.ts"),
+      ]),
+      changeFrequency: "daily",
+      priority: 0.5,
+    },
+    {
       url: `${baseUrl}/proof`,
       lastModified: await getRouteLastModified(appDir, "/proof", fallbackLastModified),
       changeFrequency: "monthly",

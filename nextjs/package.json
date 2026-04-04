@@ -10,12 +10,15 @@
     "guard:dev-server": "node scripts/guard-no-running-dev.mjs",
     "test": "node --test lib/cms/legacy-blog-compat.test.mjs lib/seo/home-faq.test.mjs next.config.redirects.test.mjs components/motion/utils.test.mjs && node scripts/verify-predeploy.mjs && node scripts/verify-topic-clusters.mjs && npm run ui:scan",
     "ui:scan": "node scripts/ui-scan.mjs",
+    "crm:import:whatsapp": "node scripts/import-whatsapp-contacts.mjs",
     "verify:predeploy": "npm run guard:dev-server && npm run lint && npm run build && npm run test",
     "pages:build": "npm run guard:dev-server && npx @cloudflare/next-on-pages",
     "preview": "npm run pages:build && wrangler pages dev",
     "deploy": "npm run verify:predeploy && npm run pages:build && node scripts/deploy.mjs"
   },
   "dependencies": {
+    "@supabase/ssr": "^0.10.0",
+    "@supabase/supabase-js": "^2.101.1",
     "lucide-react": "^0.468.0",
     "next": "^15.0.0",
     "react": "^18.3.0",

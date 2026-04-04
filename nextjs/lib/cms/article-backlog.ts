@@ -28,7 +28,7 @@ const SEEDS: BacklogSeed[] = [
     title: "Tantra Massage Benefits for Men",
     excerpt:
       "How tantra work supports regulation, emotional range, and healthier intimacy patterns for men.",
-    tags: ["Spirituality", "Tantra", "Mens Health", "Nervous System"],
+    tags: ["Spirituality", "Tantra", "Men's Health", "Nervous System"],
     series: "Tantra",
     checklist: [
       "Start from regulation, not performance goals.",
@@ -41,7 +41,7 @@ const SEEDS: BacklogSeed[] = [
     title: "Tantra Massage Benefits for Women",
     excerpt:
       "A boundaries-first guide to safety, pacing, and therapeutic outcomes in tantra sessions for women.",
-    tags: ["Spirituality", "Tantra", "Womens Health", "Safety"],
+    tags: ["Spirituality", "Tantra", "Women's Health", "Safety"],
     series: "Tantra",
     checklist: [
       "Screen practitioner ethics and boundary language in advance.",
@@ -1154,6 +1154,93 @@ const USER_REQUEST_TOPICS: TopicSpec[] = [
     tags: ["Tech", "Singularity", "AI Strategy", "Future"],
     description: "Critical perspectives on singularity narratives and practical planning horizons.",
   },
+  // ── Bridge: Neuroscience + Code ──────────────────────────────────
+  {
+    slug: "meditation-neuroscience",
+    label: "Meditation and Neuroscience",
+    series: "Bridge",
+    tags: ["Bridge", "Meditation", "Neuroscience", "Consciousness"],
+    description: "What changes in your brain when you meditate, explained for engineers who want evidence before committing to a practice.",
+  },
+  {
+    slug: "flow-state-developers",
+    label: "Flow State for Developers",
+    series: "Bridge",
+    tags: ["Bridge", "Flow State", "Productivity", "Neuroscience"],
+    description: "The neuroscience of deep work and how developers can engineer reliable flow state entry.",
+  },
+  {
+    slug: "nsdr-non-sleep-deep-rest",
+    label: "NSDR (Non-Sleep Deep Rest)",
+    series: "Bridge",
+    tags: ["Bridge", "NSDR", "Recovery", "Neuroscience"],
+    description: "A developer's guide to non-sleep deep rest for cognitive recovery between deep-work blocks.",
+  },
+  {
+    slug: "breathwork-nervous-system",
+    label: "Breathwork for Nervous System Regulation",
+    series: "Bridge",
+    tags: ["Bridge", "Breathwork", "Nervous System", "Regulation"],
+    description: "Technical guide to breathwork protocols for nervous system regulation, with measurable HRV outcomes.",
+  },
+  {
+    slug: "default-mode-network",
+    label: "The Default Mode Network",
+    series: "Bridge",
+    tags: ["Bridge", "Default Mode Network", "Neuroscience", "Meditation"],
+    description: "Why meditation rewires the default mode network and what that means for creative problem-solving in engineering.",
+  },
+  // ── Bridge: Eastern Philosophy + Engineering ─────────────────────
+  {
+    slug: "zen-and-engineering",
+    label: "Zen and Engineering",
+    series: "Bridge",
+    tags: ["Bridge", "Zen", "Engineering", "Philosophy"],
+    description: "Why beginner's mind from Zen practice makes better code and sharper architectural decisions.",
+  },
+  {
+    slug: "dao-of-programming",
+    label: "The Dao of Programming",
+    series: "Bridge",
+    tags: ["Bridge", "Dao", "Programming", "Philosophy"],
+    description: "Dao principles applied to software design: yielding, simplicity, and wu wei in system architecture.",
+  },
+  {
+    slug: "buddhist-impermanence-software",
+    label: "Impermanence and Software",
+    series: "Bridge",
+    tags: ["Bridge", "Buddhism", "Software", "Philosophy"],
+    description: "What Buddhism teaches about building systems that embrace change instead of resisting it.",
+  },
+  {
+    slug: "stoic-philosophy-engineers",
+    label: "Stoic Philosophy for Engineers",
+    series: "Bridge",
+    tags: ["Bridge", "Stoicism", "Engineering", "Philosophy"],
+    description: "Marcus Aurelius, Seneca, and Epictetus applied to incident response, burnout, and engineering leadership.",
+  },
+  // ── Bridge: Consciousness x Technology Intersection ──────────────
+  {
+    slug: "consciousness-meets-technology",
+    label: "Consciousness Meets Technology",
+    series: "Bridge",
+    tags: ["Bridge", "Consciousness", "Technology", "Intersection"],
+    description: "A practitioner-engineer's map of where consciousness science, Eastern philosophy, and software engineering converge.",
+  },
+  {
+    slug: "contemplative-technology-design",
+    label: "Contemplative Technology Design",
+    series: "Bridge",
+    tags: ["Bridge", "Contemplative", "Technology", "Design"],
+    description: "Designing software that supports awareness and presence instead of fragmenting attention.",
+  },
+  {
+    slug: "ai-consciousness-hard-problem",
+    label: "AI and the Hard Problem of Consciousness",
+    series: "Bridge",
+    tags: ["Bridge", "AI", "Consciousness", "Philosophy"],
+    description: "What AI engineers should understand about the hard problem of consciousness and why it matters for agent design.",
+  },
 ];
 
 const EXTRA_TANTRA_TOPIC: TopicSpec = {
@@ -1461,6 +1548,40 @@ function getSeriesProfile(series: string): SeriesProfile {
           },
         ],
       };
+    case "Bridge":
+      return {
+        reader: "engineers who meditate, meditators who code, and anyone exploring the intersection of consciousness and technology",
+        misconception: "Most people treat inner work and engineering as separate domains, but the deepest advances in both come from the same capacity: sustained, disciplined attention.",
+        tension: "You want peak cognitive performance and deep inner clarity, but optimizing one without the other leads to burnout or disengagement.",
+        definition:
+          "Consciousness technology is the practice of applying contemplative methods (meditation, breathwork, somatic awareness, philosophical inquiry) to engineering work, and using engineering rigor (measurement, iteration, architecture) to deepen contemplative practice.",
+        oldWay: "Treat meditation as a productivity hack, bolt on mindfulness apps, never integrate practice with actual work.",
+        newWay: "Build a daily practice informed by neuroscience, ground it in a philosophical tradition, and use engineering discipline to measure and refine its impact on your work and life.",
+        failure:
+          "Common pattern: an engineer adopts meditation for productivity, drops it after three weeks because the ROI feels unclear, and never discovers the deeper cognitive and creative benefits that emerge after sustained practice.",
+        primaryAction: "Choose one practice (breathwork, sitting meditation, or body scan) and run it for 30 days with a simple log of pre/post cognitive state.",
+        secondaryActions: [
+          "Read one primary source from a tradition that resonates (Zen, Stoic, Vedanta, or neuroscience).",
+          "Pair your practice with one work ritual (pre-coding sit, post-incident debrief scan).",
+          "Track one metric: attention quality, recovery speed, or creative output frequency.",
+        ],
+        uncomfortableLine:
+          "If your inner practice cannot survive a production incident week, it is decoration, not infrastructure.",
+        sources: [
+          {
+            label: "Huberman Lab - Meditation Neuroscience",
+            url: "https://www.hubermanlab.com/newsletter/a-neurobiological-framework-for-meditation",
+          },
+          {
+            label: "Integrated Information Theory (IIT) - Overview",
+            url: "https://www.scholarpedia.org/article/Integrated_information_theory",
+          },
+          {
+            label: "Global Workspace Theory",
+            url: "https://www.scholarpedia.org/article/Global_workspace_theory",
+          },
+        ],
+      };
     case "SEO":
       return {
         reader: "publishers and operators improving discoverability across search and answer engines",
@@ -1568,6 +1689,56 @@ function buildFaqBlockquotes(seed: BacklogSeed): string {
     .join("");
 }
 
+function getQuantifiedExampleContext(series: string): string {
+  switch (series) {
+    case "Tantra":
+      return "tantra practice";
+    case "Somatic":
+      return "somatic regulation work";
+    case "AI Infra":
+      return "AI infrastructure rollout";
+    case "LLM Evals":
+      return "evaluation pipeline";
+    case "Hybrid":
+      return "retrieval stack";
+    case "RAG":
+      return "RAG pipeline";
+    case "OpenClaw":
+      return "OpenClaw rollout";
+    case "Bridge":
+      return "consciousness engineering practice";
+    case "SEO":
+      return "content system";
+    default:
+      return "workflow";
+  }
+}
+
+function getTopicLabel(seed: BacklogSeed): string {
+  return seed.title.split(":")[0];
+}
+
+function buildQuantifiedExample(seed: BacklogSeed): string {
+  const context = getQuantifiedExampleContext(seed.series);
+  const topicLabel = getTopicLabel(seed);
+
+  switch (seed.series) {
+    case "Tantra":
+      return `For ${topicLabel}, if a tantra practice shows nervous system dysregulation in 4 of every 10 sessions, adding structured grounding can cut that to 1 of 10 within 30 days. The exact ratio depends on the practitioner and client context, but the pattern holds: deliberate checkpoints reduce avoidable setbacks.`;
+    case "Bridge":
+      return `For ${topicLabel}, a ${context} that ships misaligned outcomes in 5 of every 15 cycles can often be pulled down to 2 of 15 over a quarter once reflective checkpoints are in place. The numbers shift by context, but the mechanism is consistent: structured review surfaces blind spots earlier.`;
+    case "AI Infra":
+    case "LLM Evals":
+    case "Hybrid":
+    case "RAG":
+    case "OpenClaw":
+    case "SEO":
+      return `For ${topicLabel}, a ${context} that fails 3 of every 20 runs can usually be pushed to 1 of 20 in 30 days. The exact numbers vary, but the mechanism is consistent: clear checkpoints plus rollback discipline reduce avoidable rework.`;
+    default:
+      return `For ${topicLabel}, a ${context} that currently underperforms in 3 of every 20 cycles can often be cut to 1 of 20 within 30 days. The exact figures depend on context, but structured checkpoints consistently reduce avoidable rework.`;
+  }
+}
+
 function buildArticleContent(seed: BacklogSeed): string {
   const profile = getSeriesProfile(seed.series);
   const checklistHtml = seed.checklist.map((item) => `<li>${item}</li>`).join("");
@@ -1587,24 +1758,31 @@ function buildArticleContent(seed: BacklogSeed): string {
     `<h2>Reality Contact: Failure, Limitation, and Rollback</h2><p>${profile.failure}</p><ul><li>Limitation: the first version will be incomplete, so start with one workflow.</li><li>Counterexample: broad rollout without ownership usually increases defect rate.</li><li>Rollback rule: define revert conditions before shipping changes.</li></ul>`,
     `<h2>Old Way vs New Way</h2><table><thead><tr><th>Old Way</th><th>New Way</th></tr></thead><tbody><tr><td>${profile.oldWay}</td><td>${profile.newWay}</td></tr></tbody></table>`,
     `<h2>Implementation Map</h2><ol>${checklistHtml}</ol>`,
-    `<h2>Quantified Example (Hypothetical)</h2><p>If this workflow currently fails 3 of every 20 runs, cutting failures to 1 of 20 in 30 days improves reliability by 66%. The exact numbers vary, but the mechanism is consistent: clear checkpoints plus rollback discipline reduces avoidable rework.</p>`,
+    `<h2>Quantified Example (Hypothetical)</h2><p>${buildQuantifiedExample(seed)}</p>`,
     `<h2>Objections and FAQs</h2>${buildFaqBlockquotes(seed)}`,
     `<h2>Action Plan: 7, 14, and 30 Days</h2><p><strong>Primary action:</strong> ${profile.primaryAction}</p><p><strong>Secondary actions:</strong></p><ul>${secondaryActionsHtml}</ul><ol><li><strong>Day 1-7:</strong> Define scope, owner, and baseline metrics.</li><li><strong>Day 8-14:</strong> Run controlled implementation and collect failure logs.</li><li><strong>Day 15-30:</strong> Tune based on evidence, document runbook, and expand one step.</li></ol>`,
     `<h2>Conclusion Loop</h2><p>The initial tension was speed versus reliability. The resolution is not slower execution; it is structured execution. Keep evidence close, keep scope tight, and keep rollback ready. ${profile.uncomfortableLine}</p>`,
   ].join("");
 }
 
-const BASE_DATE = new Date("2026-02-23T08:00:00.000Z");
+/**
+ * Keep publication dates honest and in the past.
+ * If we want freshness, ship real edits and real publishes,
+ * not future-dated placeholders.
+ */
+const BASE_PUBLICATION_DATE = new Date("2026-04-04T08:00:00.000Z");
 
 function getBacklogCoverImage(seed: BacklogSeed): string {
-  const isSpirituality = seed.tags.some((tag) => tag.toLowerCase() === "spirituality");
-  return isSpirituality
+  const isSpiritualityOrBridge = seed.tags.some(
+    (tag) => tag.toLowerCase() === "spirituality" || tag.toLowerCase() === "bridge",
+  );
+  return isSpiritualityOrBridge
     ? "/images/generated/home-ambient-somatic.jpg"
     : "/images/generated/home-automation-portrait.jpg";
 }
 
 export const EXPANSION_ARTICLES: Article[] = ALL_SEEDS.map((seed, index) => {
-  const date = new Date(BASE_DATE);
+  const date = new Date(BASE_PUBLICATION_DATE);
   date.setDate(date.getDate() - index);
 
   return {

@@ -10,6 +10,7 @@ This is a Next.js 14 website with programmatic SEO, built with TypeScript, Tailw
 - **TypeScript**: Full type safety across the codebase
 - **Tailwind CSS**: Utility-first styling with custom design tokens
 - **API Routes**: Cloudflare Workers-compatible edge functions
+- **Private Workspace**: Google sign-in via Supabase for people/team dashboard access
 - **Sitemap & Robots**: Auto-generated based on content
 
 ## Getting Started
@@ -110,14 +111,33 @@ npm run deploy
 
 #### Setup Steps:
 
-1. **Create KV Namespace**:
+1. **Create KV Namespaces**:
    - Go to Cloudflare Dashboard > Workers & Pages > KV
    - Create a new namespace called `EMAIL_SUBS`
+   - Create a new namespace called `CONCIERGE_THREADS`
    - Copy the namespace ID
 
 2. **Configure Environment Variables**:
    - In Cloudflare Pages > Settings > Environment Variables
    - Add KV binding: `EMAIL_SUBS` → your namespace ID
+   - Add KV binding: `CONCIERGE_THREADS` → your namespace ID
+   - Add secrets: `CONCIERGE_ADMIN_PASSWORD`, `CONCIERGE_SESSION_SECRET`
+   - Add KV binding: `CONCIERGE_THREADS` → a namespace for Message Max threads
+   - Add optional KV binding: `AI_RATE_LIMITS` → a namespace for public endpoint throttling
+   - Add environment variables: `CONCIERGE_ADMIN_PASSWORD`, `CONCIERGE_SESSION_SECRET`, `NEXT_PUBLIC_TURNSTILE_SITE_KEY`, `TURNSTILE_SECRET_KEY`
+  - Add workspace auth variables: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `WORKSPACE_ALLOWED_EMAILS`, `WORKSPACE_ALLOWED_DOMAINS`
+
+   Concierge threads persist more than transcripts. The same KV store now keeps:
+   - volunteered contact details
+   - inferred intent, stage, score, urgency, and next step
+   - manual CRM controls from the inbox: stage override, owner, notes, and follow-up timestamps
+   - route and visit context for follow-up inside `/inbox` and `/workspace`
+
+3. **Workspace CRM Data**:
+   - `/workspace` is the main CRM dashboard
+   - concierge threads sync into Supabase `people` and `touchpoints`
+   - import WhatsApp history into the same tables with `npm run crm:import:whatsapp`
+   - set `SUPABASE_SERVICE_ROLE_KEY` for local imports and `WHATSAPP_DB_PATH` if the SQLite file is not in the default NanoClaw path
 
 3. **Connect Repository**:
    - Connect your Git repository to Cloudflare Pages
@@ -194,6 +214,34 @@ Articles are automatically fetched from your Medium RSS feed. To add new article
 |----------|-------------|---------|
 | `NEXT_PUBLIC_GA_ID` | Google Analytics Measurement ID | `G-XXXXXXXXXX` |
 | `NEXT_PUBLIC_GA_ENABLED` | Enable Google Analytics | `false` |
+| `CONCIERGE_ADMIN_PASSWORD` | Password for the admin concierge inbox | `change-me` |
+| `CONCIERGE_SESSION_SECRET` | Secret used to sign admin session cookies | unset |
+| `CONCIERGE_ADMIN_PASSWORD` | Password for `/inbox/sign-in` | unset |
+| `CONCIERGE_SESSION_SECRET` | Secret used to sign inbox admin cookies | unset |
+| `NEXT_PUBLIC_TURNSTILE_SITE_KEY` | Public Turnstile site key | unset |
+| `TURNSTILE_SECRET_KEY` | Private Turnstile secret | unset |
+| `NEXT_PUBLIC_SUPABASE_URL` | Supabase project URL for Google auth | unset |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase anon key for browser/server auth client | unset |
+| `WORKSPACE_ALLOWED_EMAILS` | Comma-separated Google accounts allowed into `/workspace` | unset |
+| `WORKSPACE_ALLOWED_DOMAINS` | Optional comma-separated Google domains allowed into `/workspace` before DB membership check | unset |
+
+## Private Workspace
+
+The private workspace now lives at `/workspace` and is intentionally separate from the concierge widget.
+
+Setup:
+
+1. Create a Supabase project.
+2. Enable Google as an Auth provider in Supabase.
+3. Add your site callback URL: `/auth/callback`.
+4. Set `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `WORKSPACE_ALLOWED_EMAILS`, and optionally `WORKSPACE_ALLOWED_DOMAINS`.
+5. Run the starter SQL in [supabase/workspace-schema.sql](./supabase/workspace-schema.sql).
+
+The dashboard reads:
+
+- `maxpetrusenko_workspace_people`
+- `maxpetrusenko_workspace_teams`
+- recent concierge threads as signal cards
 
 ## License
 

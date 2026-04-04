@@ -3,6 +3,7 @@ import Image from "next/image";
 import { generateMetadata, absoluteUrl } from "@/lib/seo/metadata";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { generateWebPageSchema, generateBreadcrumbSchema } from "@/lib/seo/structured-data";
+import { getLocalArticles, getLocalArticlesByTag, sortArticlesByDateDesc } from "@/lib/cms/articles";
 
 export const metadata = generateMetadata({
   title: "Spirituality Blog | Tantra & Somatic Articles",
@@ -11,64 +12,12 @@ export const metadata = generateMetadata({
   canonical: absoluteUrl("/spirituality/blog"),
 });
 
-const BLOG_POSTS = [
-  {
-    slug: "what-is-kyo-tai",
-    title: "What Is Kyo-tai? A Two-Body Somatic Practice",
-    excerpt: "Kyo-tai is my name for a two-body practice that blends contact, pressure, rhythm, and energetic transmission into one listening system.",
-    image: "/images/og-default.svg",
-    date: "2026-03-06",
-    readTime: "7 min read",
-    category: "Modality",
-  },
-  {
-    slug: "kyo-tai-session-what-happens",
-    title: "What Happens in a Kyo-tai Session",
-    excerpt: "A practical walkthrough of consent, pacing, pressure, energetic intensity, and integration inside a Kyo-tai session.",
-    image: "/images/og-default.svg",
-    date: "2026-03-06",
-    readTime: "6 min read",
-    category: "Session Guide",
-  },
-  {
-    slug: "what-to-expect-first-tantra-session",
-    title: "What to Expect in Your First Tantra Massage Session",
-    excerpt: "Nervous about your first tantra session? This guide walks you through everything from arrival to integration, so you can feel prepared and at ease.",
-    image: "/images/article-covers/spirit-first-session.svg",
-    date: "2026-02-02",
-    readTime: "6 min read",
-    category: "Beginner's Guide",
-  },
-  {
-    slug: "questions-to-ask-tantra-practitioner",
-    title: "5 Questions to Ask Before Booking a Tantra Massage",
-    excerpt: "Not all tantra practitioners are the same. Here are the essential questions to ask to ensure safety, professionalism, and alignment.",
-    image: "/images/article-covers/spirit-questions-screening.svg",
-    date: "2026-02-02",
-    readTime: "7 min read",
-    category: "Safety & Boundaries",
-  },
-  {
-    slug: "tantra-vs-regular-massage",
-    title: "Tantra vs. Regular Massage: What's the Difference?",
-    excerpt: "Understanding the key differences between tantra massage and traditional spa massage. Learn about nervous system work, energy awareness, and conscious presence.",
-    image: "/images/article-covers/spirit-vs-massage.svg",
-    date: "2026-02-02",
-    readTime: "8 min read",
-    category: "Educational",
-  },
-  {
-    slug: "temple-space-preparation",
-    title: "How I Prepare the Temple Space for Tantra Sessions",
-    excerpt: "A behind-the-scenes look at how I create a sacred, safe container for tantra work in Ubud. From temperature to scent to energetic clearing.",
-    image: "/images/article-covers/spirit-temple-space.svg",
-    date: "2026-02-02",
-    readTime: "6 min read",
-    category: "Behind the Scenes",
-  },
-];
-
 export default function SpiritualityBlogPage() {
+  const canonicalPosts = sortArticlesByDateDesc(
+    getLocalArticles().filter((a) => a.link.startsWith("/spirituality/blog/"))
+  );
+  const clusterPosts = getLocalArticlesByTag("Spirituality", 24);
+
   return (
     <>
       <JsonLd
@@ -104,39 +53,79 @@ export default function SpiritualityBlogPage() {
 
         <section className="section">
           <div className="section-head">
-            <h2>Latest Articles</h2>
+            <h2>Featured Articles</h2>
             <span className="section-note">
-              {BLOG_POSTS.length} article{BLOG_POSTS.length !== 1 ? "s" : ""}
+              {canonicalPosts.length} canonical article{canonicalPosts.length !== 1 ? "s" : ""}
             </span>
           </div>
           <div className="article-list">
-            {BLOG_POSTS.map((post) => (
+            {canonicalPosts.map((post) => (
               <Link
-                key={post.slug}
+                key={post.id}
                 className="article-card"
-                href={`/spirituality/blog/${post.slug}`}
+                href={post.link}
               >
                 <Image
                   className="article-thumb"
-                  src={post.image}
+                  src={post.image || "/images/og-default.svg"}
                   alt={post.title}
                   width={400}
                   height={225}
                 />
                 <div className="article-body">
-                  <span className="article-category">{post.category}</span>
+                  {post.tags.length > 0 && (
+                    <span className="article-category">{post.tags[0]}</span>
+                  )}
                   <span className="article-title">{post.title}</span>
                   <span className="article-sub">{post.excerpt}</span>
                   <div className="article-meta">
-                    <span>{post.date}</span>
-                    <span>•</span>
-                    <span>{post.readTime}</span>
+                    <span>
+                      {post.publishedAt
+                        ? new Date(post.publishedAt).toLocaleDateString()
+                        : "Recently"}
+                    </span>
                   </div>
                 </div>
               </Link>
             ))}
           </div>
         </section>
+
+        {clusterPosts.length > 0 && (
+          <section className="section">
+            <div className="section-head">
+              <h2>All Spirituality Topics</h2>
+              <span className="section-note">
+                {clusterPosts.length} articles across tantra, somatic work, and more.
+              </span>
+            </div>
+            <div className="article-list">
+              {clusterPosts.map((article) => (
+                <Link
+                  key={article.id}
+                  href={article.link}
+                  className="article-card"
+                  style={{ gridTemplateColumns: "1fr" }}
+                >
+                  <div className="article-body">
+                    <span className="article-title">{article.title}</span>
+                    <span className="article-sub">{article.excerpt}</span>
+                    <div className="article-meta">
+                      <span className="stat">
+                        {article.publishedAt
+                          ? new Date(article.publishedAt).toLocaleDateString()
+                          : "Recently"}
+                      </span>
+                      {article.tags.length > 0 && (
+                        <span className="stat">{article.tags[0]}</span>
+                      )}
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </section>
+        )}
 
         <section className="section">
           <div className="card" style={{ textAlign: "center", padding: "40px" }}>

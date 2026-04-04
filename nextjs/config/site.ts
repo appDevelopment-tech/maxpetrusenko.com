@@ -2,7 +2,7 @@ import type { SiteConfig } from "@/types";
 
 export const siteConfig: SiteConfig = {
   name: "Max Petrusenko",
-  description: "Tech builder and somatic practitioner. Explore portfolio, atelier, and mindfold work.",
+  description: "AI engineer, somatic practitioner, and consciousness technology writer. Bridging agentic coding, contemplative neuroscience, and eastern philosophy.",
   url: "https://www.maxpetrusenko.com",
   author: {
     name: "Max Petrusenko",

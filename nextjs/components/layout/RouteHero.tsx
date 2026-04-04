@@ -31,6 +31,8 @@ export function RouteHero() {
   ];
   const hiddenPrefixes = [
     "/mindfold",
+    "/admin",
+    "/workspace",
   ];
 
   if (

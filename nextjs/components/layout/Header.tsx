@@ -10,28 +10,16 @@ import { siteConfig } from "@/config/site";
  */
 export function Header() {
   const [isOpen, setIsOpen] = useState(false);
-  const [isWide, setIsWide] = useState(true);
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
-    const handleResize = () => {
-      const wide = window.innerWidth > 768;
-      setIsWide(wide);
-      if (wide) {
-        setIsOpen(false);
-      }
-    };
-
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
     };
 
-    handleResize();
     handleScroll();
-    window.addEventListener("resize", handleResize);
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => {
-      window.removeEventListener("resize", handleResize);
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
@@ -42,7 +30,7 @@ export function Header() {
         <Link href="/" className="brand">
           {siteConfig.name}
         </Link>
-        {isWide || (
+        <div className="nav-right">
           <button
             className="menu-toggle"
             aria-expanded={isOpen}
@@ -50,18 +38,27 @@ export function Header() {
           >
             Menu
           </button>
-        )}
-        <nav className={`nav-links ${!isWide && !isOpen ? "collapsed" : ""} ${isOpen ? "open" : ""}`}>
-          {siteConfig.navigation.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              onClick={() => setIsOpen(false)}
-            >
-              {item.name}
+          <nav
+            className={`nav-links ${!isOpen ? "collapsed" : ""} ${
+              isOpen ? "open" : ""
+            }`}
+          >
+            {siteConfig.navigation.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                onClick={() => setIsOpen(false)}
+              >
+                {item.name}
+              </Link>
+            ))}
+          </nav>
+          <div className="nav-actions">
+            <Link href="/workspace/sign-in" onClick={() => setIsOpen(false)}>
+              Sign in
             </Link>
-          ))}
-        </nav>
+          </div>
+        </div>
       </div>
     </header>
   );

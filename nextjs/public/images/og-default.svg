@@ -1,15 +1,46 @@
-<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title>Max Petrusenko</title>
+  <desc>Editorial fallback cover for articles on AI systems, somatic work, and consciousness technology.</desc>
   <defs>
-    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#1a1a2e;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#16213e;stop-opacity:1" />
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#121a24"/>
+      <stop offset="55%" stop-color="#1e2a39"/>
+      <stop offset="100%" stop-color="#3d2a18"/>
     </linearGradient>
+    <radialGradient id="glowTech" cx="0.18" cy="0.18" r="0.65">
+      <stop offset="0%" stop-color="#0f7ea9" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#0f7ea9" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glowSpirit" cx="0.82" cy="0.24" r="0.72">
+      <stop offset="0%" stop-color="#d2a35d" stop-opacity="0.26"/>
+      <stop offset="100%" stop-color="#d2a35d" stop-opacity="0"/>
+    </radialGradient>
   </defs>
-  <rect width="1200" height="630" fill="url(#gradient)"/>
-  <circle cx="1000" cy="100" r="150" fill="#e94560" opacity="0.1"/>
-  <circle cx="200" cy="530" r="200" fill="#e94560" opacity="0.1"/>
-  <text x="600" y="280" font-family="system-ui, -apple-system, sans-serif" font-size="72" font-weight="bold" fill="#ffffff" text-anchor="middle">Max Petrusenko</text>
-  <text x="600" y="350" font-family="system-ui, -apple-system, sans-serif" font-size="36" fill="#a0a0a0" text-anchor="middle">Presence & Product</text>
-  <text x="600" y="410" font-family="system-ui, -apple-system, sans-serif" font-size="28" fill="#e94560" text-anchor="middle">AI Automation • Somatic Energy Work • Mindfold</text>
-  <text x="600" y="580" font-family="system-ui, -apple-system, sans-serif" font-size="20" fill="#666666" text-anchor="middle">maxpetrusenko.com</text>
+
+  <rect width="1600" height="900" fill="url(#bg)"/>
+  <rect width="1600" height="900" fill="url(#glowTech)"/>
+  <rect width="1600" height="900" fill="url(#glowSpirit)"/>
+
+  <g opacity="0.22" fill="none" stroke="#f4e8d2" stroke-width="3">
+    <path d="M112 714 C304 540, 566 518, 774 626 S1214 812, 1488 628"/>
+    <path d="M112 768 C348 604, 650 592, 874 694 S1268 846, 1492 708"/>
+    <circle cx="1294" cy="188" r="138"/>
+    <circle cx="1294" cy="188" r="218"/>
+  </g>
+
+  <g transform="translate(116 152)">
+    <rect x="0" y="0" width="986" height="434" rx="28" fill="#0b1016" fill-opacity="0.28"/>
+    <text x="56" y="138" font-size="76" font-family="Georgia, 'Times New Roman', serif" fill="#f5f1e9">
+      Max Petrusenko
+    </text>
+    <text x="56" y="222" font-size="38" font-family="'Trebuchet MS', Verdana, sans-serif" fill="#d6dce6">
+      AI systems. Somatic practice. Consciousness technology.
+    </text>
+    <text x="56" y="320" font-size="27" font-family="'Trebuchet MS', Verdana, sans-serif" fill="#f0c27a">
+      Essays, operating notes, and route-first article covers
+    </text>
+    <text x="56" y="398" font-size="24" font-family="'Trebuchet MS', Verdana, sans-serif" fill="#c9d2dd">
+      maxpetrusenko.com
+    </text>
+  </g>
 </svg>

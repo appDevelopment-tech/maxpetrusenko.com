@@ -1,0 +1,110 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "_description": "Social media posting schedule — source of truth. Persisted in repo so schedule survives tool resets.",
+  "_updated": "2026-04-04",
+  "_tools": {
+    "zernio": "https://zernio.com/api/v1 — unified social posting API (late.dev). Keys: SOCIAL_POSTS_PRIMARY_API_KEY, SOCIAL_POSTS_LIFETIME_API_KEY",
+    "bird": "~/Projects/bird/bird — X/Twitter CLI using Firefox cookies",
+    "simli": "https://api.simli.com — AI avatar video generation (<300ms speech-to-video)",
+    "remotion": "https://remotion.dev — React-based programmatic video rendering (batch MP4)"
+  },
+  "_platforms": {
+    "x": { "handle": "@petrusenko_max", "tool": "bird + zernio" },
+    "linkedin": { "handle": "max-petrusenko-40574b4a", "tool": "zernio" },
+    "instagram": { "handle": "blindfold.miami", "tool": "zernio" },
+    "tiktok": { "tool": "zernio" },
+    "facebook": { "tool": "zernio" },
+    "reddit": { "tool": "zernio" },
+    "pinterest": { "tool": "zernio" },
+    "youtube": { "tool": "zernio" }
+  },
+  "_imageFormats": {
+    "x": { "width": 1200, "height": 675, "aspect": "16:9", "format": "png" },
+    "linkedin": { "width": 1200, "height": 627, "aspect": "1.91:1", "format": "png" },
+    "instagram": { "width": 1080, "height": 1080, "aspect": "1:1", "format": "jpg" },
+    "tiktok": { "width": 1080, "height": 1920, "aspect": "9:16", "format": "mp4" },
+    "facebook": { "width": 1200, "height": 630, "aspect": "1.91:1", "format": "png" },
+    "pinterest": { "width": 1000, "height": 1500, "aspect": "2:3", "format": "png" }
+  },
+  "jobs": [
+    {
+      "id": "news-dedup-morning",
+      "name": "Morning news dedup + video generation",
+      "cron": "0 13 * * *",
+      "cronHuman": "9:00 AM ET (13:00 UTC)",
+      "description": "Fetch top AI/tech news, deduplicate against recent posts, generate 2 video posts (Simli avatar + Remotion branded clips) for LinkedIn + IG + TikTok",
+      "actions": [
+        "fetch_ai_tech_news",
+        "dedup_against_recent",
+        "generate_simli_avatar_video",
+        "generate_remotion_branded_clip",
+        "queue_video_posts"
+      ],
+      "targets": ["linkedin", "instagram", "tiktok"],
+      "contentType": "video",
+      "count": 2
+    },
+    {
+      "id": "news-dedup-evening",
+      "name": "Evening news dedup + video generation",
+      "cron": "0 22 * * *",
+      "cronHuman": "6:00 PM ET (22:00 UTC)",
+      "description": "Second daily news sweep — same pipeline as morning, fresh dedup window",
+      "actions": [
+        "fetch_ai_tech_news",
+        "dedup_against_recent",
+        "generate_simli_avatar_video",
+        "generate_remotion_branded_clip",
+        "queue_video_posts"
+      ],
+      "targets": ["linkedin", "instagram", "tiktok"],
+      "contentType": "video",
+      "count": 2
+    },
+    {
+      "id": "post-x-linkedin-11am",
+      "name": "11 AM post — X + LinkedIn with image",
+      "cron": "0 15 * * *",
+      "cronHuman": "11:00 AM ET (15:00 UTC)",
+      "description": "Post top AI/tech story rated by popularity with platform-specific image. X via bird + zernio, LinkedIn via zernio.",
+      "actions": [
+        "select_top_story_by_popularity",
+        "generate_platform_images",
+        "post_to_x_with_bird",
+        "post_to_linkedin_with_zernio"
+      ],
+      "targets": ["x", "linkedin"],
+      "contentType": "image+text"
+    },
+    {
+      "id": "post-x-linkedin-1pm",
+      "name": "1 PM post — X + LinkedIn with image",
+      "cron": "0 17 * * *",
+      "cronHuman": "1:00 PM ET (17:00 UTC)",
+      "description": "Second daily image post — different story from 11am, same pipeline",
+      "actions": [
+        "select_top_story_by_popularity",
+        "generate_platform_images",
+        "post_to_x_with_bird",
+        "post_to_linkedin_with_zernio"
+      ],
+      "targets": ["x", "linkedin"],
+      "contentType": "image+text"
+    },
+    {
+      "id": "post-x-linkedin-3pm",
+      "name": "3 PM post — X + LinkedIn with image",
+      "cron": "0 19 * * *",
+      "cronHuman": "3:00 PM ET (19:00 UTC)",
+      "description": "Third daily image post — different story, same pipeline",
+      "actions": [
+        "select_top_story_by_popularity",
+        "generate_platform_images",
+        "post_to_x_with_bird",
+        "post_to_linkedin_with_zernio"
+      ],
+      "targets": ["x", "linkedin"],
+      "contentType": "image+text"
+    }
+  ]
+}

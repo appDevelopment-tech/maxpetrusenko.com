@@ -4,73 +4,7 @@ import { generateMetadata, absoluteUrl } from "@/lib/seo/metadata";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { generateWebPageSchema, generateBreadcrumbSchema } from "@/lib/seo/structured-data";
 import { siteConfig } from "@/config/site";
-import { getLocalArticles } from "@/lib/cms/articles";
-
-const technicalArticles = [
-  {
-    href: "/tech/articles/bitcoin-as-strong-money",
-    title: "Bitcoin as Strong Money",
-    description:
-      "Why Bitcoin is treated differently from generic crypto: fixed supply, self-custody, neutral settlement, and the tradeoffs that still matter.",
-    category: "Money",
-  },
-  {
-    href: "/tech/articles/openclaw-installation-playbook",
-    title: "OpenClaw Installation Playbook for Teams",
-    description:
-      "Deployment checklist, security guardrails, and rollout sequence for OpenClaw installations in real client environments.",
-    category: "Deployment",
-  },
-  {
-    href: "/tech/articles/answer-engine-optimization-aeo",
-    title: "Answer Engine Optimization (AEO) Guide",
-    description:
-      "How to structure content so AI answer engines can discover, extract, and cite your expertise.",
-    category: "AEO",
-  },
-  {
-    href: "/tech/articles/generative-engine-optimization-geo",
-    title: "Generative Engine Optimization (GEO) Framework",
-    description:
-      "A practical GEO operating model for service businesses that want citations and qualified leads.",
-    category: "GEO",
-  },
-  {
-    href: "/tech/articles/generative-ai-score-websites",
-    title: "Generative AI Score for Websites",
-    description:
-      "What AI engines evaluate before citing or recommending a website.",
-    category: "AI Visibility",
-  },
-  {
-    href: "/tech/articles/seo-is-dead",
-    title: "SEO Is Not Dead - It Split Into Search + Answers",
-    description:
-      "Why classic SEO still matters and how to adapt content strategy for AI-assisted discovery.",
-    category: "Strategy",
-  },
-  {
-    href: "/tech/articles/claude-code-setup",
-    title: "Claude Code Setup Guide",
-    description:
-      "Step-by-step setup and workflow recommendations for teams implementing Claude Code.",
-    category: "Claude Code",
-  },
-  {
-    href: "/tech/articles/n8n-workflow-automation",
-    title: "n8n Workflow Automation Patterns",
-    description:
-      "Workflow architecture patterns for stable, debuggable, production n8n systems.",
-    category: "Automation",
-  },
-  {
-    href: "/tech/articles/chatgpt-api-integration",
-    title: "ChatGPT API Integration Best Practices",
-    description:
-      "Production architecture, prompt strategy, and reliability practices for ChatGPT integrations.",
-    category: "API Integration",
-  },
-];
+import { getLocalArticles, getLocalArticlesByTag, sortArticlesByDateDesc } from "@/lib/cms/articles";
 
 export const metadata = generateMetadata({
   title: "Tech Articles",
@@ -91,10 +25,10 @@ export const metadata = generateMetadata({
 
 export default function TechArticlesIndexPage() {
   const mediumUrl = siteConfig.social.medium ?? "https://medium.com/@max.petrusenko";
-  const localTechArticles = getLocalArticles()
-    .filter((article) => article.link.startsWith("/tech/articles/"))
-    .sort((a, b) => Date.parse(b.publishedAt) - Date.parse(a.publishedAt))
-    .slice(0, 3);
+  const localTechArticles = sortArticlesByDateDesc(
+    getLocalArticles().filter((article) => article.link.startsWith("/tech/articles/"))
+  ).slice(0, 3);
+  const techClusterArticles = getLocalArticlesByTag("Tech", 24);
 
   return (
     <>
@@ -103,7 +37,7 @@ export default function TechArticlesIndexPage() {
         data={generateWebPageSchema({
           title: "Tech Articles",
           description:
-            "Technical guides by Max Petrusenko on OpenClaw installs, AEO, GEO, and AI product execution.",
+            "Technical guides by Max Petrusenko on AI agents, RAG, agentic coding, AEO, GEO, and production AI systems.",
           url: "/tech/articles",
         })}
       />
@@ -131,8 +65,8 @@ export default function TechArticlesIndexPage() {
                 Tech Articles
               </h1>
               <p className="text-xl text-muted" style={{ marginBottom: 18 }}>
-                Practical implementation notes from client work: OpenClaw installs,
-                AI workflow architecture, AEO, and Generative Engine Optimization.
+                Practical implementation notes from client work: AI agents, RAG pipelines,
+                agentic coding, AEO, GEO, and production AI systems.
               </p>
               <p className="text-muted" style={{ marginBottom: 0 }}>
                 Medium archive: <a href={mediumUrl} target="_blank" rel="noopener">{mediumUrl}</a>
@@ -184,18 +118,32 @@ export default function TechArticlesIndexPage() {
                   </div>
                 </div>
               )}
-              {technicalArticles.map((article) => (
+
+              <div style={{ gridColumn: "1 / -1" }}>
+                <div className="section-head" style={{ marginBottom: 16 }}>
+                  <h2>All Tech Topics</h2>
+                  <span className="section-note">{techClusterArticles.length} articles across AI, RAG, agents, and more.</span>
+                </div>
+              </div>
+              {techClusterArticles.map((article) => (
                 <Link
-                  key={article.href}
-                  href={article.href}
+                  key={article.id}
+                  href={article.link}
                   className="article-card"
                   style={{ gridTemplateColumns: "1fr" }}
                 >
                   <div className="article-body">
                     <span className="article-title">{article.title}</span>
-                    <span className="article-sub">{article.description}</span>
+                    <span className="article-sub">{article.excerpt}</span>
                     <div className="article-meta">
-                      <span className="stat">{article.category}</span>
+                      <span className="stat">
+                        {article.publishedAt
+                          ? new Date(article.publishedAt).toLocaleDateString()
+                          : "Recently"}
+                      </span>
+                      {article.tags.length > 0 && (
+                        <span className="stat">{article.tags[0]}</span>
+                      )}
                     </div>
                   </div>
                 </Link>

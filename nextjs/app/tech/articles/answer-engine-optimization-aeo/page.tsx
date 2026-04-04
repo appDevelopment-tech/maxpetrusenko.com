@@ -508,6 +508,20 @@ Sitemap: https://example.com/sitemap.xml`}
 
             <hr className="article-divider" />
 
+            <h2>AEO Beyond Tech: The Bridge to Consciousness</h2>
+            <p>
+              Entity authority is strongest when it reflects genuine depth across domains.
+              My work bridges AI engineering and contemplative practice. If you build
+              AI systems and also maintain an inner practice, explore the intersection:
+            </p>
+            <ul>
+              <li><Link href="/blog/consciousness-tech">Consciousness x Technology Hub</Link> — flow states, eastern philosophy, and neuroscience for engineers</li>
+              <li><Link href="/tech/articles/generative-engine-optimization-geo">GEO Framework and Roadmap</Link> — the operational companion to this AEO guide</li>
+              <li><Link href="/blog/topics">All Topic Clusters</Link> — every domain I write about, structured for AI extraction</li>
+            </ul>
+
+            <hr className="article-divider" />
+
             <h2>Frequently Asked Questions</h2>
 
             <details className="faq-item">

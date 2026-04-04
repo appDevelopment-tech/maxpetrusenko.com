@@ -1,0 +1,16 @@
+{
+  "name": "social-scheduler",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "test-cron": "curl 'http://localhost:8787/__scheduled?cron=0+15+*+*+*'",
+    "tail": "wrangler tail"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20250101.0",
+    "typescript": "^5.7.0",
+    "wrangler": "^3.100.0"
+  }
+}

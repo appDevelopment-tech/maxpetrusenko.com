@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Private Workspace UI Mock</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #091523;
+    --ink-soft: #516376;
+    --paper: #f4efe6;
+    --cream: #fffdfa;
+    --line: rgba(9,21,35,0.1);
+    --teal: #0f756d;
+    --cyan: #148bb1;
+    --gold: #d49a41;
+    --navy: #0c2038;
+    --moss: #dce7df;
+    --font-sans: "IBM Plex Sans", system-ui, sans-serif;
+    --font-serif: "Cormorant Garamond", Georgia, serif;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: var(--font-sans);
+    color: var(--ink);
+    background:
+      radial-gradient(circle at 10% 15%, rgba(20,139,177,0.12), transparent 22%),
+      radial-gradient(circle at 85% 10%, rgba(212,154,65,0.14), transparent 24%),
+      linear-gradient(180deg, #f9f5ee 0%, var(--paper) 100%);
+  }
+
+  .shell {
+    width: min(1260px, calc(100% - 32px));
+    margin: 18px auto 28px;
+    border: 1px solid var(--line);
+    border-radius: 30px;
+    overflow: hidden;
+    background: rgba(255,255,255,0.78);
+    box-shadow: 0 30px 80px rgba(9,21,35,0.12);
+    backdrop-filter: blur(16px);
+  }
+
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    padding: 18px 24px;
+    background: rgba(255,255,255,0.6);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .mark {
+    width: 42px;
+    height: 42px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, var(--teal), var(--cyan), var(--gold));
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.35);
+  }
+
+  .eyebrow {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--teal);
+  }
+
+  h1, h2, h3 {
+    margin: 0;
+    font-family: var(--font-serif);
+    letter-spacing: 0.02em;
+  }
+
+  h1 {
+    font-size: 34px;
+  }
+
+  .top-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .pill {
+    padding: 10px 14px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: var(--cream);
+    font-size: 12px;
+    color: var(--ink-soft);
+  }
+
+  .workspace {
+    display: grid;
+    grid-template-columns: 250px 1fr 330px;
+    min-height: 980px;
+  }
+
+  .sidebar {
+    padding: 24px 18px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.86), rgba(248,244,237,0.92));
+    border-right: 1px solid var(--line);
+  }
+
+  .nav-group {
+    margin-top: 24px;
+  }
+
+  .nav-label {
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 10px;
+  }
+
+  .nav-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 12px 14px;
+    border: 0;
+    border-radius: 16px;
+    background: transparent;
+    text-align: left;
+    font: inherit;
+    color: var(--ink);
+    cursor: pointer;
+  }
+
+  .nav-item.active {
+    background: linear-gradient(135deg, rgba(15,117,109,0.12), rgba(20,139,177,0.12));
+    color: var(--navy);
+    font-weight: 600;
+  }
+
+  .nav-item span:last-child {
+    color: var(--ink-soft);
+    font-size: 12px;
+  }
+
+  .main {
+    padding: 24px;
+    background:
+      radial-gradient(circle at 85% 10%, rgba(20,139,177,0.08), transparent 20%),
+      transparent;
+  }
+
+  .hero {
+    position: relative;
+    overflow: hidden;
+    border-radius: 28px;
+    padding: 26px;
+    background: linear-gradient(135deg, #0b1c30, #0d2740 60%, #123a58);
+    color: #f7f2e9;
+  }
+
+  .hero::after {
+    content: "";
+    position: absolute;
+    right: -30px;
+    bottom: -50px;
+    width: 180px;
+    height: 180px;
+    border-radius: 999px;
+    background: radial-gradient(circle, rgba(212,154,65,0.48), transparent 62%);
+  }
+
+  .hero p {
+    max-width: 700px;
+    margin: 12px 0 0;
+    color: rgba(247,242,233,0.8);
+    line-height: 1.7;
+  }
+
+  .hero-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-top: 20px;
+  }
+
+  .hero-stat {
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 18px;
+    padding: 14px;
+    background: rgba(255,255,255,0.04);
+  }
+
+  .hero-stat strong {
+    display: block;
+    font-size: 26px;
+    line-height: 1;
+  }
+
+  .hero-stat span {
+    display: block;
+    margin-top: 7px;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(247,242,233,0.7);
+  }
+
+  .content-grid {
+    display: grid;
+    grid-template-columns: 1.05fr 0.95fr;
+    gap: 18px;
+    margin-top: 18px;
+  }
+
+  .card {
+    border: 1px solid var(--line);
+    border-radius: 24px;
+    padding: 20px;
+    background: rgba(255,255,255,0.84);
+  }
+
+  .card h2 {
+    font-size: 30px;
+  }
+
+  .card .sub {
+    margin-top: 6px;
+    color: var(--ink-soft);
+    line-height: 1.7;
+  }
+
+  .list {
+    display: grid;
+    gap: 12px;
+    margin-top: 18px;
+  }
+
+  .row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 16px;
+    align-items: start;
+    padding: 16px;
+    border-radius: 18px;
+    background: var(--cream);
+    border: 1px solid rgba(9,21,35,0.08);
+  }
+
+  .row h3 {
+    font-size: 22px;
+  }
+
+  .meta {
+    margin-top: 5px;
+    color: var(--ink-soft);
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 7px 10px;
+    border-radius: 999px;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+
+  .badge.active { background: rgba(15,117,109,0.1); color: var(--teal); }
+  .badge.pending { background: rgba(212,154,65,0.12); color: #996b20; }
+  .badge.paid { background: rgba(20,139,177,0.1); color: var(--cyan); }
+
+  .timeline {
+    display: grid;
+    gap: 12px;
+    margin-top: 18px;
+  }
+
+  .event {
+    border-left: 3px solid rgba(20,139,177,0.2);
+    padding: 8px 0 8px 14px;
+  }
+
+  .event strong {
+    display: block;
+    font-size: 16px;
+  }
+
+  .aside {
+    padding: 24px 18px;
+    background: linear-gradient(180deg, rgba(246,242,234,0.96), rgba(255,255,255,0.9));
+    border-left: 1px solid var(--line);
+  }
+
+  .mini {
+    border: 1px solid var(--line);
+    border-radius: 22px;
+    padding: 16px;
+    background: rgba(255,255,255,0.88);
+    margin-bottom: 16px;
+  }
+
+  .mini h3 {
+    font-size: 22px;
+  }
+
+  .mini-list {
+    display: grid;
+    gap: 10px;
+    margin-top: 14px;
+  }
+
+  .mini-row {
+    padding: 12px;
+    border-radius: 16px;
+    background: var(--cream);
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .calendar {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 6px;
+    margin-top: 14px;
+  }
+
+  .day {
+    border-radius: 12px;
+    min-height: 58px;
+    padding: 8px;
+    background: white;
+    border: 1px solid rgba(9,21,35,0.08);
+    font-size: 12px;
+  }
+
+  .day.busy {
+    background: linear-gradient(180deg, rgba(20,139,177,0.12), rgba(20,139,177,0.04));
+  }
+
+  .day.paid {
+    background: linear-gradient(180deg, rgba(212,154,65,0.18), rgba(212,154,65,0.05));
+  }
+
+  .future-bar {
+    margin-top: 18px;
+    border-radius: 20px;
+    padding: 16px;
+    background: linear-gradient(135deg, rgba(15,117,109,0.1), rgba(20,139,177,0.1));
+  }
+
+  .future-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-top: 14px;
+  }
+
+  .future-cell {
+    border-radius: 16px;
+    padding: 12px;
+    background: rgba(255,255,255,0.7);
+    border: 1px solid rgba(9,21,35,0.07);
+    font-size: 13px;
+    line-height: 1.55;
+  }
+
+  @media (max-width: 1180px) {
+    .workspace, .content-grid, .hero-stats, .future-grid {
+      grid-template-columns: 1fr;
+    }
+    .aside, .sidebar {
+      border: 0;
+      border-top: 1px solid var(--line);
+    }
+  }
+</style>
+</head>
+<body>
+  <div class="shell">
+    <div class="topbar">
+      <div class="brand">
+        <div class="mark"></div>
+        <div>
+          <div class="eyebrow">End-state operator view</div>
+          <h1>Max Workspace</h1>
+        </div>
+      </div>
+      <div class="top-actions">
+        <div class="pill">Google auth</div>
+        <div class="pill">Supabase data</div>
+        <div class="pill">Cal.com booking</div>
+        <div class="pill">Stripe payments</div>
+      </div>
+    </div>
+
+    <div class="workspace">
+      <aside class="sidebar">
+        <div class="eyebrow">Navigation</div>
+        <div class="nav-group">
+          <div class="nav-label">Core</div>
+          <button class="nav-item active"><span>Overview</span><span>now</span></button>
+          <button class="nav-item"><span>People</span><span>74</span></button>
+          <button class="nav-item"><span>Teams</span><span>12</span></button>
+          <button class="nav-item"><span>Notes</span><span>318</span></button>
+        </div>
+        <div class="nav-group">
+          <div class="nav-label">Operations</div>
+          <button class="nav-item"><span>Bookings</span><span>21</span></button>
+          <button class="nav-item"><span>Calendar</span><span>live</span></button>
+          <button class="nav-item"><span>Payments</span><span>9 due</span></button>
+          <button class="nav-item"><span>Tasks</span><span>14</span></button>
+        </div>
+        <div class="nav-group">
+          <div class="nav-label">Future</div>
+          <button class="nav-item"><span>Team roles</span><span>later</span></button>
+          <button class="nav-item"><span>Reporting</span><span>later</span></button>
+          <button class="nav-item"><span>Automations</span><span>later</span></button>
+        </div>
+      </aside>
+
+      <main class="main">
+        <section class="hero">
+          <div class="eyebrow" style="color:#8fd8d2;">Today</div>
+          <h1 style="font-size:42px;margin-top:10px;">One calm command center for people, bookings, and money.</h1>
+          <p>Solo-first now. Ready for assistant access, team routing, calendar control, and payment visibility later. The point is not more admin. The point is fewer tabs and one trustworthy operating picture.</p>
+          <div class="hero-stats">
+            <div class="hero-stat"><strong>74</strong><span>people tracked</span></div>
+            <div class="hero-stat"><strong>12</strong><span>teams / accounts</span></div>
+            <div class="hero-stat"><strong>21</strong><span>upcoming bookings</span></div>
+            <div class="hero-stat"><strong>$8.4k</strong><span>expected this month</span></div>
+          </div>
+        </section>
+
+        <div class="content-grid">
+          <section class="card">
+            <h2>People in motion</h2>
+            <p class="sub">Relationship layer first. Every later feature hangs off this.</p>
+            <div class="list">
+              <article class="row">
+                <div>
+                  <h3>Alex Rivera</h3>
+                  <div class="meta">Founder · Agency OS rebuild · Team Atlas<br>Last touch: strategy call yesterday · Next: booking deposit</div>
+                </div>
+                <div class="badge active">active</div>
+              </article>
+              <article class="row">
+                <div>
+                  <h3>Julia Chen</h3>
+                  <div class="meta">Private somatic client · Miami · Rebook requested<br>Last touch: follow-up note sent · Next: calendar hold</div>
+                </div>
+                <div class="badge pending">pending</div>
+              </article>
+              <article class="row">
+                <div>
+                  <h3>Marcus Doyle</h3>
+                  <div class="meta">Product lead · GEO advisory · Team Northstar<br>Last touch: payment completed · Next: monthly review</div>
+                </div>
+                <div class="badge paid">paid</div>
+              </article>
+            </div>
+          </section>
+
+          <section class="card">
+            <h2>Booking pipeline</h2>
+            <p class="sub">What later lands here once Cal.com and Stripe are wired.</p>
+            <div class="timeline">
+              <div class="event"><strong>Inquiry received</strong><span>Website form or direct link creates person record.</span></div>
+              <div class="event"><strong>Booking confirmed</strong><span>Cal.com owns availability, event type, timezone, reminders.</span></div>
+              <div class="event"><strong>Deposit captured</strong><span>Stripe Checkout updates payment status by webhook.</span></div>
+              <div class="event"><strong>Session complete</strong><span>Workspace closes the loop with note, follow-up, and next step.</span></div>
+            </div>
+          </section>
+        </div>
+
+        <section class="card" style="margin-top:18px;">
+          <h2>Future expansion strip</h2>
+          <p class="sub">The dashboard should grow like an operations system, not like scattered admin screens.</p>
+          <div class="future-bar">
+            <div class="future-grid">
+              <div class="future-cell"><strong>Team</strong><br>owner, ops, assistant, practitioner, finance</div>
+              <div class="future-cell"><strong>Calendar</strong><br>buffers, holds, reschedule, conflicts, routing</div>
+              <div class="future-cell"><strong>Payments</strong><br>deposits, subscriptions, invoices, refunds</div>
+              <div class="future-cell"><strong>Management</strong><br>forecast, workload, priorities, follow-ups</div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <aside class="aside">
+        <section class="mini">
+          <div class="eyebrow">Right rail</div>
+          <h3>Calendar pulse</h3>
+          <div class="calendar">
+            <div class="day">1</div><div class="day busy">2</div><div class="day">3</div><div class="day paid">4</div><div class="day busy">5</div><div class="day">6</div><div class="day">7</div>
+            <div class="day">8</div><div class="day">9</div><div class="day busy">10</div><div class="day">11</div><div class="day paid">12</div><div class="day">13</div><div class="day">14</div>
+          </div>
+        </section>
+
+        <section class="mini">
+          <div class="eyebrow">Today</div>
+          <h3>Priority queue</h3>
+          <div class="mini-list">
+            <div class="mini-row">Send intake follow-up to Julia before 3pm</div>
+            <div class="mini-row">Approve Atlas phase-two scope and invoice link</div>
+            <div class="mini-row">Review two unpaid bookings before calendar release</div>
+          </div>
+        </section>
+
+        <section class="mini">
+          <div class="eyebrow">Signals</div>
+          <h3>Concierge feed</h3>
+          <div class="mini-list">
+            <div class="mini-row">Tech lane spike around GEO and Claude Code onboarding</div>
+            <div class="mini-row">Somatic lane asks concentrated on first-session expectations</div>
+            <div class="mini-row">Bridge lane interest rising around identity + performance</div>
+          </div>
+        </section>
+
+        <section class="mini">
+          <div class="eyebrow">Principle</div>
+          <h3>Not another chat admin</h3>
+          <div class="mini-list">
+            <div class="mini-row">This workspace stands outside concierge.</div>
+            <div class="mini-row">Chat signals are inputs, not the frame.</div>
+            <div class="mini-row">The frame is relationships, time, and money.</div>
+          </div>
+        </section>
+      </aside>
+    </div>
+  </div>
+</body>
+</html>

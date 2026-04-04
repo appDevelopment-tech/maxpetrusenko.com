@@ -20,6 +20,7 @@ node_modules/
 out/
 dist/
 nextjs/.next_stale_*/
+.playwright-cli/
 
 # IDE
 .vscode/

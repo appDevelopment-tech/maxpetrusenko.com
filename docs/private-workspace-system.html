@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Private Workspace System Design</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0a1322;
+    --ink-soft: #304154;
+    --paper: #fbf7ef;
+    --card: rgba(255,255,255,0.82);
+    --line: rgba(10,19,34,0.1);
+    --teal: #117a72;
+    --cyan: #178fb7;
+    --gold: #d29b47;
+    --rose: #c85f58;
+    --navy: #0f2139;
+    --font-sans: "IBM Plex Sans", system-ui, sans-serif;
+    --font-serif: "Cormorant Garamond", Georgia, serif;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: var(--font-sans);
+    color: var(--ink);
+    background:
+      radial-gradient(circle at 12% 12%, rgba(17,122,114,0.18), transparent 26%),
+      radial-gradient(circle at 88% 14%, rgba(23,143,183,0.16), transparent 24%),
+      radial-gradient(circle at 50% 100%, rgba(210,155,71,0.14), transparent 30%),
+      var(--paper);
+  }
+
+  .wrap {
+    width: min(1180px, calc(100% - 40px));
+    margin: 0 auto;
+    padding: 36px 0 60px;
+  }
+
+  .hero {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: 30px;
+    padding: 36px;
+    background:
+      linear-gradient(135deg, rgba(10,19,34,0.96), rgba(15,33,57,0.92)),
+      var(--navy);
+    color: #f4efe5;
+    box-shadow: 0 24px 70px rgba(10,19,34,0.18);
+  }
+
+  .hero::after {
+    content: "";
+    position: absolute;
+    inset: auto -40px -70px auto;
+    width: 240px;
+    height: 240px;
+    border-radius: 999px;
+    background: radial-gradient(circle, rgba(210,155,71,0.42), transparent 65%);
+    filter: blur(12px);
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 11px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: #8ddbd4;
+    font-weight: 700;
+  }
+
+  .eyebrow::before {
+    content: "";
+    width: 34px;
+    height: 1px;
+    background: currentColor;
+  }
+
+  h1, h2, h3 {
+    margin: 0;
+    font-family: var(--font-serif);
+    letter-spacing: 0.02em;
+  }
+
+  h1 {
+    margin-top: 14px;
+    font-size: clamp(2.5rem, 5vw, 4.4rem);
+    line-height: 0.98;
+  }
+
+  .hero p {
+    max-width: 720px;
+    margin: 18px 0 0;
+    color: rgba(244,239,229,0.84);
+    font-size: 17px;
+    line-height: 1.75;
+  }
+
+  .metrics {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin-top: 28px;
+  }
+
+  .metric {
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 20px;
+    padding: 18px;
+    background: rgba(255,255,255,0.04);
+    backdrop-filter: blur(10px);
+  }
+
+  .metric .k {
+    font-size: 34px;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  .metric .l {
+    margin-top: 8px;
+    font-size: 12px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(244,239,229,0.68);
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 1.12fr 0.88fr;
+    gap: 22px;
+    margin-top: 24px;
+  }
+
+  .card {
+    border: 1px solid var(--line);
+    border-radius: 28px;
+    padding: 24px;
+    background: var(--card);
+    box-shadow: 0 18px 44px rgba(10,19,34,0.06);
+    backdrop-filter: blur(10px);
+  }
+
+  .card h2 {
+    font-size: 34px;
+    line-height: 1;
+  }
+
+  .sub {
+    margin-top: 8px;
+    color: var(--ink-soft);
+    line-height: 1.7;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 18px;
+    font-size: 14px;
+  }
+
+  th, td {
+    text-align: left;
+    padding: 14px 10px;
+    border-top: 1px solid rgba(10,19,34,0.09);
+    vertical-align: top;
+  }
+
+  th {
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  .winner {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 12px;
+    border-radius: 999px;
+    background: rgba(17,122,114,0.1);
+    color: var(--teal);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .stack {
+    display: grid;
+    gap: 14px;
+    margin-top: 18px;
+  }
+
+  .layer {
+    position: relative;
+    border-radius: 22px;
+    padding: 18px 18px 18px 54px;
+    background: white;
+    border: 1px solid rgba(10,19,34,0.09);
+  }
+
+  .layer::before {
+    content: attr(data-step);
+    position: absolute;
+    left: 18px;
+    top: 18px;
+    width: 24px;
+    height: 24px;
+    border-radius: 999px;
+    display: grid;
+    place-items: center;
+    font-size: 12px;
+    font-weight: 700;
+    color: white;
+    background: linear-gradient(135deg, var(--cyan), var(--teal));
+  }
+
+  .layer h3 {
+    font-size: 24px;
+  }
+
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 12px;
+  }
+
+  .chip {
+    padding: 8px 11px;
+    border-radius: 999px;
+    background: rgba(15,33,57,0.06);
+    font-size: 12px;
+    color: var(--ink-soft);
+  }
+
+  .flow {
+    display: grid;
+    gap: 12px;
+    margin-top: 18px;
+  }
+
+  .flow-step {
+    display: grid;
+    grid-template-columns: 110px 1fr;
+    gap: 12px;
+    align-items: start;
+    padding: 14px;
+    border-radius: 18px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.92), rgba(247,247,247,0.78));
+    border: 1px solid rgba(10,19,34,0.07);
+  }
+
+  .flow-step .tag {
+    display: inline-block;
+    padding: 7px 10px;
+    border-radius: 999px;
+    background: rgba(23,143,183,0.1);
+    color: var(--cyan);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+
+  .tree {
+    display: grid;
+    gap: 12px;
+    margin-top: 18px;
+  }
+
+  .branch {
+    border-left: 3px solid rgba(17,122,114,0.2);
+    padding-left: 16px;
+  }
+
+  .branch strong {
+    display: block;
+    font-size: 18px;
+    color: var(--navy);
+  }
+
+  .sources {
+    margin-top: 24px;
+    border-radius: 28px;
+    padding: 24px;
+    background: rgba(10,19,34,0.92);
+    color: #f4efe5;
+  }
+
+  .sources ul {
+    margin: 16px 0 0;
+    padding-left: 18px;
+  }
+
+  .sources li { margin: 9px 0; }
+  .sources a { color: #8ddbd4; }
+
+  @media (max-width: 980px) {
+    .metrics, .grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="hero">
+      <div class="eyebrow">Private workspace presearch</div>
+      <h1>Build a calm operator system now. Not a tangled product stack.</h1>
+      <p>The winning path is a dedicated Supabase project for identity and data, Cal.com for scheduling when bookings start, and Stripe Checkout for payment flows. Fast to ship now. Clean to extend into team, management, and finance later.</p>
+      <div class="metrics">
+        <div class="metric"><div class="k">1</div><div class="l">Recommended path</div></div>
+        <div class="metric"><div class="k">3</div><div class="l">Core vendors</div></div>
+        <div class="metric"><div class="k">4</div><div class="l">Growth phases</div></div>
+        <div class="metric"><div class="k">0</div><div class="l">Need to reuse TellMe</div></div>
+      </div>
+    </section>
+
+    <div class="grid">
+      <section class="card">
+        <div class="winner">Winner: dedicated project + Cal + Stripe</div>
+        <h2 style="margin-top:14px;">Decision matrix</h2>
+        <p class="sub">The solo-first requirement matters. The right system is the one that gets you a clean operator shell now without poisoning future auth, bookings, or payment boundaries.</p>
+        <table>
+          <thead>
+            <tr>
+              <th>Option</th>
+              <th>Speed now</th>
+              <th>Later scale</th>
+              <th>Main problem</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Reuse TellMe</strong></td>
+              <td>Medium</td>
+              <td>Low</td>
+              <td>Shared auth, shared redirect URLs, mixed product concerns</td>
+            </tr>
+            <tr>
+              <td><strong>Custom everything</strong></td>
+              <td>Low</td>
+              <td>High</td>
+              <td>Too much calendar and billing logic before demand is proven</td>
+            </tr>
+            <tr>
+              <td><strong>Dedicated Supabase + Cal.com + Stripe</strong></td>
+              <td>High</td>
+              <td>High</td>
+              <td>One extra vendor to manage, but clean boundaries</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="card">
+        <h2>Why this wins</h2>
+        <div class="stack">
+          <div class="layer" data-step="1">
+            <h3>Identity stays boring</h3>
+            <p>Supabase Auth with Google sign-in. Cookie SSR. RLS-backed membership. No homegrown auth surface.</p>
+          </div>
+          <div class="layer" data-step="2">
+            <h3>Scheduling stays specialized</h3>
+            <p>Cal.com owns availability, slots, calendars, teams, routing, reminders, and future operator delegation.</p>
+          </div>
+          <div class="layer" data-step="3">
+            <h3>Payments stay compliant</h3>
+            <p>Stripe Checkout handles deposits, packages, subscriptions, and later customer portal flows.</p>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div class="grid">
+      <section class="card">
+        <h2>System stack</h2>
+        <p class="sub">Own the relationship layer. Buy the hard lifecycle surfaces.</p>
+        <div class="stack">
+          <div class="layer" data-step="A">
+            <h3>Presentation</h3>
+            <div class="chips">
+              <span class="chip">Next.js workspace route</span>
+              <span class="chip">operator dashboard</span>
+              <span class="chip">role-aware UI later</span>
+            </div>
+          </div>
+          <div class="layer" data-step="B">
+            <h3>Identity + data</h3>
+            <div class="chips">
+              <span class="chip">Supabase Auth</span>
+              <span class="chip">workspace_members</span>
+              <span class="chip">workspace_people</span>
+              <span class="chip">workspace_teams</span>
+              <span class="chip">RLS</span>
+            </div>
+          </div>
+          <div class="layer" data-step="C">
+            <h3>Scheduling</h3>
+            <div class="chips">
+              <span class="chip">Cal.com event types</span>
+              <span class="chip">Google Calendar sync</span>
+              <span class="chip">bookings</span>
+              <span class="chip">webhooks</span>
+            </div>
+          </div>
+          <div class="layer" data-step="D">
+            <h3>Revenue</h3>
+            <div class="chips">
+              <span class="chip">Stripe Checkout</span>
+              <span class="chip">subscriptions</span>
+              <span class="chip">deposits</span>
+              <span class="chip">portal later</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>Signal chain</h2>
+        <div class="flow">
+          <div class="flow-step">
+            <div class="tag">Auth</div>
+            <div>Max signs in with Google. Supabase callback exchanges code for a cookie session and membership is checked with RLS.</div>
+          </div>
+          <div class="flow-step">
+            <div class="tag">CRM</div>
+            <div>Workspace loads people, teams, notes, and current status from Supabase.</div>
+          </div>
+          <div class="flow-step">
+            <div class="tag">Book</div>
+            <div>Visitor books via Cal.com. Availability, event type rules, and calendar conflicts are handled there.</div>
+          </div>
+          <div class="flow-step">
+            <div class="tag">Pay</div>
+            <div>Payment runs through Stripe Checkout. Webhooks sync final state into the workspace record.</div>
+          </div>
+          <div class="flow-step">
+            <div class="tag">Ops</div>
+            <div>Later, assistants or practitioners get role-based slices of the same system rather than a second admin app.</div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div class="grid">
+      <section class="card">
+        <h2>Living tree</h2>
+        <p class="sub">Build one trunk. Add branches when they justify themselves.</p>
+        <div class="tree">
+          <div class="branch"><strong>Trunk</strong> Dedicated `maxpetrusenko.com` workspace project</div>
+          <div class="branch"><strong>Branch 1</strong> Google auth, membership, operator shell</div>
+          <div class="branch"><strong>Branch 2</strong> People, teams, notes, tasks, touchpoints</div>
+          <div class="branch"><strong>Branch 3</strong> Booking, availability, reschedule, reminders</div>
+          <div class="branch"><strong>Branch 4</strong> Deposits, subscriptions, invoices, reconciliation</div>
+          <div class="branch"><strong>Branch 5</strong> Team roles, assistants, reporting, operations</div>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>Red flags</h2>
+        <div class="flow">
+          <div class="flow-step">
+            <div class="tag" style="background:rgba(200,95,88,0.1);color:var(--rose);">Risk</div>
+            <div>Do not make TellMe the auth or data home for this workspace unless you intentionally want one shared operator platform across products.</div>
+          </div>
+          <div class="flow-step">
+            <div class="tag" style="background:rgba(200,95,88,0.1);color:var(--rose);">Risk</div>
+            <div>Do not custom-build booking before you know Cal.com blocks a real requirement.</div>
+          </div>
+          <div class="flow-step">
+            <div class="tag" style="background:rgba(200,95,88,0.1);color:var(--rose);">Risk</div>
+            <div>Do not split access control between an env allowlist and database membership long term.</div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <section class="sources">
+      <div class="eyebrow" style="color:#8ddbd4;">Official sources</div>
+      <ul>
+        <li><a href="https://supabase.com/docs/guides/auth/server-side/nextjs">Supabase: Next.js SSR auth</a></li>
+        <li><a href="https://supabase.com/docs/guides/auth/social-login/auth-google">Supabase: Google auth setup</a></li>
+        <li><a href="https://supabase.com/docs/guides/auth/redirect-urls">Supabase: redirect URL rules</a></li>
+        <li><a href="https://supabase.com/docs/guides/troubleshooting/how-to-migrate-from-supabase-auth-helpers-to-ssr-package-5NRunM">Supabase: auth helpers deprecated in favor of SSR package</a></li>
+        <li><a href="https://docs.stripe.com/payments/checkout">Stripe: Checkout overview</a></li>
+        <li><a href="https://docs.stripe.com/payments/checkout-sessions">Stripe: Checkout Sessions API</a></li>
+        <li><a href="https://docs.stripe.com/subscriptions">Stripe: subscriptions</a></li>
+        <li><a href="https://docs.stripe.com/connect/oauth-standard-accounts">Stripe: OAuth not recommended for new Connect platforms</a></li>
+        <li><a href="https://cal.com/docs/platform/introduction">Cal.com Platform introduction</a></li>
+        <li><a href="https://cal.com/docs/self-hosting/apps/install-apps/introduction">Cal.com Google + Stripe integrations</a></li>
+      </ul>
+    </section>
+  </div>
+</body>
+</html>

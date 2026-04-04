@@ -25,7 +25,7 @@ export const projects: Project[] = [
     title: "Presence Atelier",
     description:
       "Private tantra and somatic energy work practice in Ubud, Bali. Deep rewiring and nervous system reset through embodied presence.",
-    image: "/images/atelier.jpg",
+    image: "/images/atelier.svg",
     link: "https://atelier.maxpetrusenko.com",
     status: "live",
     category: "product",
@@ -37,7 +37,7 @@ export const projects: Project[] = [
     title: "Mindfold",
     description:
       "Blindfolded presence journeys to deepen awareness and trust. Group or 1:1 formats for sensory subtraction and expanded perception.",
-    image: "/images/mindfold.jpg",
+    image: "/images/mindfold.svg",
     link: "/mindfold/events",
     status: "live",
     category: "product",

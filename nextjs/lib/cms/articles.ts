@@ -8,7 +8,13 @@ import {
 } from "@/lib/cms/article-backlog";
 import type { Article } from "@/types";
 
-const LOCAL_ARTICLES: Article[] = [
+/** Gate: expansion articles with future publishedAt are hidden until their date arrives. */
+function filterByPublishDate(articles: Article[]): Article[] {
+  const now = new Date().toISOString();
+  return articles.filter((a) => a.publishedAt <= now);
+}
+
+const LOCAL_ARTICLES_RAW: Article[] = [
   {
     id: "local-spirit-first-session",
     slug: "what-to-expect-first-tantra-session",
@@ -73,7 +79,7 @@ const LOCAL_ARTICLES: Article[] = [
       "Kyo-tai is my name for a two-body practice that blends contact, pressure, rhythm, and energetic transmission into one listening system.",
     content:
       "<p>This article is published on maxpetrusenko.com. Open the canonical route to read the full version.</p>",
-    image: "/images/og-default.svg",
+    image: "/images/article-covers/spirit-kyo-tai.svg",
     link: "/spirituality/blog/what-is-kyo-tai",
     publishedAt: "2026-03-06T00:00:00.000Z",
     tags: ["Spirituality", "Kyo-tai", "Somatic", "Contact Improvisation"],
@@ -87,7 +93,7 @@ const LOCAL_ARTICLES: Article[] = [
       "A practical walkthrough of consent, pacing, pressure, energetic intensity, and integration inside a Kyo-tai session.",
     content:
       "<p>This article is published on maxpetrusenko.com. Open the canonical route to read the full version.</p>",
-    image: "/images/og-default.svg",
+    image: "/images/article-covers/spirit-kyo-tai-session.svg",
     link: "/spirituality/blog/kyo-tai-session-what-happens",
     publishedAt: "2026-03-06T00:00:00.000Z",
     tags: ["Spirituality", "Kyo-tai", "Session Guide", "Boundaries"],
@@ -213,7 +219,7 @@ const LOCAL_ARTICLES: Article[] = [
       "Why Bitcoin is treated differently from generic crypto: scarcity, self-custody, neutral settlement, and the tradeoffs that still matter.",
     content:
       "<p>This article is published on maxpetrusenko.com. Open the canonical route to read the full version.</p>",
-    image: "/images/og-default.svg",
+    image: "/images/article-covers/tech-bitcoin-strong-money.svg",
     link: "/tech/articles/bitcoin-as-strong-money",
     publishedAt: "2026-03-06T00:00:00.000Z",
     tags: ["Tech", "Bitcoin", "Money", "Strategy"],
@@ -221,6 +227,8 @@ const LOCAL_ARTICLES: Article[] = [
   },
   ...EXPANSION_ARTICLES,
 ];
+
+const LOCAL_ARTICLES: Article[] = filterByPublishDate(LOCAL_ARTICLES_RAW);
 
 export function getLocalArticles(): Article[] {
   return LOCAL_ARTICLES;
@@ -242,18 +250,22 @@ export function getRelatedLocalArticles(currentLink: string, limit = 3): Article
   return sortArticlesByDateDesc(pool).slice(0, limit);
 }
 
-
-function sortArticlesByDateDesc(articles: Article[]): Article[] {
+export function sortArticlesByDateDesc(articles: Article[]): Article[] {
   return [...articles].sort((a, b) => {
-    const left = Date.parse(a.publishedAt);
-    const right = Date.parse(b.publishedAt);
+    const left = toSortTimestamp(a.publishedAt);
+    const right = toSortTimestamp(b.publishedAt);
 
-    if (Number.isNaN(left) || Number.isNaN(right)) {
-      return a.title.localeCompare(b.title);
+    if (left !== right) {
+      return right - left;
     }
 
-    return right - left;
+    return a.title.localeCompare(b.title);
   });
+}
+
+function toSortTimestamp(publishedAt: string): number {
+  const timestamp = Date.parse(publishedAt);
+  return Number.isNaN(timestamp) ? Number.NEGATIVE_INFINITY : timestamp;
 }
 
 function mergeUniqueArticles(...groups: Article[][]): Article[] {
@@ -337,29 +349,46 @@ export async function fetchArticles(): Promise<Article[]> {
 export async function fetchArticlesByTopicSlug(topicSlug: string): Promise<Article[]> {
   const articles = await fetchArticles();
 
+  return getTopicClusterArticles(articles, topicSlug);
+}
+
+export function getLocalArticlesByTag(tag: string, limit = 50): Article[] {
+  const normalized = normalizeTagValue(tag);
+  return sortArticlesByDateDesc(
+    LOCAL_ARTICLES.filter(
+      (article) =>
+        article.tags.some((t) => normalizeTagValue(t) === normalized)
+    )
+  ).slice(0, limit);
+}
+
+export function getLocalArticlesBySeries(series: string, limit = 50): Article[] {
+  const normalizedSeries = series.toLowerCase();
+  return sortArticlesByDateDesc(
+    LOCAL_ARTICLES.filter((article) => {
+      const topicSlug = detectTopicSlugFromArticleSlug(article.slug);
+      if (!topicSlug) return false;
+      const group = getTopicGroupBySlug(topicSlug);
+      return group?.series.toLowerCase() === normalizedSeries;
+    })
+  ).slice(0, limit);
+}
+
+export function getTopicClusterArticles(articles: Article[], topicSlug: string): Article[] {
   return sortArticlesByDateDesc(
     articles.filter(
-      (article) =>
-        isLocalArticle(article) &&
-        article.link.startsWith("/blog/") &&
-        isTopicClusterSlug(article.slug, topicSlug)
+      (article) => isLocalArticle(article) && isTopicClusterSlug(article.slug, topicSlug)
     )
   );
 }
 
 export async function fetchTopicClusters(): Promise<TopicClusterSummary[]> {
   const articles = await fetchArticles();
-  const localBlogArticles = articles.filter(
-    (article) => isLocalArticle(article) && article.link.startsWith("/blog/")
-  );
+  const localArticles = articles.filter(isLocalArticle);
 
   return EXPANSION_TOPIC_GROUPS.map((topic) => ({
     topic,
-    articles: sortArticlesByDateDesc(
-      localBlogArticles.filter((article) =>
-        isTopicClusterSlug(article.slug, topic.slug)
-      )
-    ),
+    articles: getTopicClusterArticles(localArticles, topic.slug),
   })).filter((entry) => entry.articles.length > 0);
 }
 

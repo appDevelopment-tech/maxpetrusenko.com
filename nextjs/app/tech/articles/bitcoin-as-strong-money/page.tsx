@@ -17,7 +17,7 @@ export const metadata = generateMetadata({
     "Why Bitcoin is treated differently from generic crypto: fixed supply, self-custody, neutral settlement, and the tradeoffs that still matter.",
   ogType: "article",
   canonical: absoluteUrl("/tech/articles/bitcoin-as-strong-money"),
-  ogImage: "/images/og-default.svg",
+  ogImage: "/images/article-covers/tech-bitcoin-strong-money.svg",
   keywords: [
     "Bitcoin",
     "strong money",
@@ -37,7 +37,7 @@ export default function BitcoinStrongMoneyArticle() {
           headline: "Bitcoin as Strong Money",
           description:
             "A practical case for why people treat Bitcoin as strong money rather than generic crypto speculation.",
-          image: "/images/og-default.svg",
+          image: "/images/article-covers/tech-bitcoin-strong-money.svg",
           url: "/tech/articles/bitcoin-as-strong-money",
           datePublished: "2026-03-06",
           author: "Max Petrusenko",
@@ -93,7 +93,7 @@ export default function BitcoinStrongMoneyArticle() {
 
           <div style={{ maxWidth: 900, margin: "26px auto 32px" }}>
             <Image
-              src="/images/og-default.svg"
+              src="/images/article-covers/tech-bitcoin-strong-money.svg"
               alt="Abstract visual for Bitcoin as strong money"
               width={1200}
               height={630}

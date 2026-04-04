@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hero Exploration 3: Kinetic Precision</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  /* === DESIGN THESIS ===
+     "Kinetic Precision"
+     One high-impact animated border (StarBorder from shipyard-agent) on the hero CTA card.
+     ShinyText shimmer on the availability badge (exactly 1 use).
+     Tighter spacing, bolder typography, more aggressive contrast zones.
+     Motion: 1) StarBorder spin on featured card, 2) staggered blur-in on load.
+     Mobile: single column, StarBorder still works, full bleed dark zone.
+  */
+
+  :root {
+    --ink: #0c1115;
+    --ink-soft: #1c242c;
+    --sand: #f7f1e6;
+    --paper: #ffffff;
+    --accent-tech: #0f7ea9;
+    --accent-spirit: #0e615d;
+    --accent-mindfold: #d2a35d;
+    --muted: #4b535c;
+    --line: #e6e0d8;
+    --font-sans: "DM Sans", system-ui, sans-serif;
+    --font-serif: "Cormorant Garamond", Georgia, serif;
+  }
+
+  @property --star-angle {
+    syntax: '<angle>';
+    initial-value: 0deg;
+    inherits: false;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--font-sans);
+    color: var(--ink);
+    background:
+      radial-gradient(circle at 20% 15%, rgba(210,163,93,0.14), transparent 30%),
+      radial-gradient(circle at 80% 5%, rgba(14,97,93,0.16), transparent 25%),
+      var(--sand);
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* --- NAV --- */
+  .nav-wrap {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    background: rgba(247,241,230,0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 0 1rem;
+    height: 64px;
+  }
+  .nav-logo {
+    font-family: var(--font-serif);
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--ink);
+    letter-spacing: 0.02em;
+  }
+  .nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+  }
+  .nav-links a {
+    text-decoration: none;
+    color: var(--muted);
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--ink); }
+  .nav-cta {
+    padding: 0.5rem 1.25rem;
+    background: var(--ink);
+    color: var(--sand) !important;
+    border-radius: 8px;
+    font-weight: 600 !important;
+    transition: transform 0.2s, opacity 0.2s !important;
+  }
+  .nav-cta:hover { opacity: 0.85; transform: translateY(-1px); }
+
+  /* --- HERO --- */
+  .hero {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 6.5rem 1rem 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: start;
+  }
+  .hero-content {
+    padding-top: 1.5rem;
+  }
+
+  /* ShinyText badge (exactly 1 use) */
+  .shiny-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.4rem 1rem;
+    border: 1px solid rgba(14,97,93,0.2);
+    border-radius: 999px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    margin-bottom: 1.25rem;
+    background-image: linear-gradient(120deg,
+      var(--accent-spirit) 0%, var(--accent-spirit) 35%,
+      var(--sand) 50%,
+      var(--accent-spirit) 65%, var(--accent-spirit) 100%);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shinyTextSweep 3.5s linear infinite;
+  }
+  @keyframes shinyTextSweep {
+    0% { background-position: 150% center; }
+    100% { background-position: -50% center; }
+  }
+
+  .hero-title {
+    font-family: var(--font-serif);
+    font-size: clamp(2.4rem, 4.8vw, 3.75rem);
+    font-weight: 700;
+    line-height: 1.06;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    margin-bottom: 1.25rem;
+  }
+  .hero-title .accent-word {
+    color: var(--accent-spirit);
+  }
+  .hero-sub {
+    font-size: 1.05rem;
+    color: var(--ink-soft);
+    line-height: 1.65;
+    max-width: 440px;
+    margin-bottom: 2rem;
+  }
+  .hero-buttons {
+    display: flex;
+    gap: 0.875rem;
+    flex-wrap: wrap;
+  }
+  .btn-dark {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.875rem 1.75rem;
+    background: var(--ink);
+    color: var(--sand);
+    font-weight: 600;
+    font-size: 0.95rem;
+    border-radius: 10px;
+    text-decoration: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 16px rgba(12,17,21,0.18);
+  }
+  .btn-dark:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 28px rgba(12,17,21,0.24);
+  }
+  .btn-outline {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.875rem 1.75rem;
+    background: transparent;
+    color: var(--ink);
+    font-weight: 600;
+    font-size: 0.95rem;
+    border-radius: 10px;
+    border: 1.5px solid var(--line);
+    text-decoration: none;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .btn-outline:hover {
+    border-color: var(--accent-tech);
+    transform: translateY(-1px);
+  }
+
+  /* --- STAR BORDER CARD (exactly 1 use) --- */
+  .hero-featured {
+    position: relative;
+    border-radius: 24px;
+    overflow: visible;
+  }
+  .hero-featured::before {
+    content: '';
+    position: absolute;
+    inset: -1.5px;
+    border-radius: 25.5px;
+    background: conic-gradient(
+      from var(--star-angle, 0deg),
+      transparent 0%,
+      var(--accent-tech) 8%,
+      transparent 16%,
+      transparent 42%,
+      var(--accent-mindfold) 50%,
+      transparent 58%,
+      transparent 84%,
+      var(--accent-spirit) 92%,
+      transparent 100%
+    );
+    z-index: 0;
+    animation: starBorderSpin 6s linear infinite;
+  }
+  .hero-featured::after {
+    content: '';
+    position: absolute;
+    inset: 1.5px;
+    border-radius: 22.5px;
+    background: var(--paper);
+    z-index: 0;
+  }
+  @keyframes starBorderSpin {
+    0% { --star-angle: 0deg; }
+    100% { --star-angle: 360deg; }
+  }
+  .hero-featured-inner {
+    position: relative;
+    z-index: 1;
+    background: var(--paper);
+    border-radius: 24px;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  .featured-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .featured-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, var(--accent-spirit), var(--accent-tech));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 700;
+    font-size: 0.9rem;
+  }
+  .featured-meta {
+    flex: 1;
+  }
+  .featured-name {
+    font-weight: 600;
+    font-size: 0.9rem;
+  }
+  .featured-role {
+    font-size: 0.78rem;
+    color: var(--muted);
+  }
+  .featured-quote {
+    font-family: var(--font-serif);
+    font-size: 1.15rem;
+    font-weight: 500;
+    line-height: 1.55;
+    color: var(--ink-soft);
+    font-style: italic;
+    letter-spacing: 0.01em;
+  }
+  .featured-result {
+    display: flex;
+    gap: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--line);
+  }
+  .result-item {
+    flex: 1;
+  }
+  .result-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--accent-tech);
+    letter-spacing: -0.03em;
+  }
+  .result-label {
+    font-size: 0.75rem;
+    color: var(--muted);
+    margin-top: 0.125rem;
+  }
+
+  /* --- DARK CONTRAST ZONE --- */
+  .dark-zone {
+    background: #070b12;
+    margin-top: 5rem;
+    padding: 5rem 1rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .dark-zone::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle at 20% 30%, rgba(15,126,169,0.12), transparent 35%),
+      radial-gradient(circle at 80% 70%, rgba(210,163,93,0.08), transparent 30%);
+    pointer-events: none;
+  }
+  .dark-zone-inner {
+    position: relative;
+    z-index: 1;
+    max-width: 1080px;
+    margin: 0 auto;
+  }
+  .dark-zone .section-eyebrow {
+    color: var(--accent-mindfold);
+  }
+  .dark-zone .section-title {
+    color: #e2e8f0;
+  }
+  .dark-zone .section-sub {
+    color: #8899aa;
+  }
+
+  .path-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-top: 2.5rem;
+  }
+  .path-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 20px;
+    padding: 2rem;
+    backdrop-filter: blur(8px);
+    transition: border-color 0.3s, transform 0.3s;
+    border-left: 3px solid transparent;
+  }
+  .path-card:hover {
+    border-color: rgba(255,255,255,0.15);
+    transform: translateY(-3px);
+  }
+  .path-card.tech-path {
+    border-left-color: var(--accent-tech);
+  }
+  .path-card.spirit-path {
+    border-left-color: var(--accent-spirit);
+  }
+  .path-card h3 {
+    font-family: var(--font-serif);
+    font-size: 1.35rem;
+    font-weight: 600;
+    color: #e2e8f0;
+    letter-spacing: 0.02em;
+    margin-bottom: 0.75rem;
+  }
+  .path-card p {
+    color: #8899aa;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    margin-bottom: 1.25rem;
+  }
+  .path-card-tags {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+  .path-tag {
+    padding: 0.25rem 0.6rem;
+    border-radius: 6px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+  }
+  .path-tag.tech {
+    background: rgba(15,126,169,0.15);
+    color: var(--accent-tech);
+  }
+  .path-tag.spirit {
+    background: rgba(14,97,93,0.15);
+    color: #2eb8a8;
+  }
+
+  /* --- SECTION PRIMITIVES --- */
+  .section-eyebrow {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent-mindfold);
+    margin-bottom: 0.5rem;
+  }
+  .section-title {
+    font-family: var(--font-serif);
+    font-size: clamp(1.6rem, 2.8vw, 2.25rem);
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: var(--ink);
+    margin-bottom: 0.5rem;
+  }
+  .section-sub {
+    color: var(--muted);
+    font-size: 1rem;
+    max-width: 520px;
+  }
+
+  /* --- BLUR IN --- */
+  .blur-in {
+    opacity: 0;
+    filter: blur(10px);
+    transform: translateY(16px);
+    animation: blurIn 0.75s ease-out forwards;
+  }
+  .blur-in-d1 { animation-delay: 0.12s; }
+  .blur-in-d2 { animation-delay: 0.24s; }
+  .blur-in-d3 { animation-delay: 0.36s; }
+  .blur-in-d4 { animation-delay: 0.5s; }
+
+  @keyframes blurIn {
+    0%   { opacity: 0; filter: blur(10px); transform: translateY(16px); }
+    60%  { opacity: 0.7; filter: blur(3px); transform: translateY(3px); }
+    100% { opacity: 1; filter: blur(0); transform: translateY(0); }
+  }
+
+  /* --- REVEAL --- */
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    filter: blur(3px);
+    transition: opacity 0.65s cubic-bezier(0.16,1,0.3,1),
+                transform 0.65s cubic-bezier(0.16,1,0.3,1),
+                filter 0.65s cubic-bezier(0.16,1,0.3,1);
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+  .stagger-1 { transition-delay: 100ms; }
+  .stagger-2 { transition-delay: 200ms; }
+
+  /* --- RESPONSIVE --- */
+  @media (max-width: 768px) {
+    .hero {
+      grid-template-columns: 1fr;
+      padding: 5.5rem 1rem 0;
+      gap: 2rem;
+    }
+    .hero-content { padding-top: 0; }
+    .hero-featured { margin: 0 -0.5rem; }
+    .path-grid { grid-template-columns: 1fr; }
+    .nav-links { display: none; }
+    .hero-buttons { flex-direction: column; }
+    .hero-buttons a { text-align: center; justify-content: center; }
+    .featured-result { flex-direction: column; gap: 0.75rem; }
+    .dark-zone { margin-top: 3rem; padding: 3.5rem 1rem; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .blur-in { animation: none; opacity: 1; filter: none; transform: none; }
+    .reveal { transition: none; opacity: 1; filter: none; transform: none; }
+    .hero-featured::before { animation: none; }
+    .shiny-badge { animation: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="nav-wrap">
+  <nav class="nav">
+    <div class="nav-logo">Max Petrusenko</div>
+    <ul class="nav-links">
+      <li><a href="#">Tech</a></li>
+      <li><a href="#">Somatic</a></li>
+      <li><a href="#">Writing</a></li>
+      <li><a class="nav-cta" href="#">Let's talk</a></li>
+    </ul>
+  </nav>
+</div>
+
+<section class="hero">
+  <div class="hero-content">
+    <div class="shiny-badge blur-in">Open for Q2 projects</div>
+    <h1 class="hero-title blur-in blur-in-d1">
+      Systems for <span class="accent-word">scale</span>.<br>
+      Presence for depth.
+    </h1>
+    <p class="hero-sub blur-in blur-in-d2">I build AI automation for SaaS founders and hold somatic space for people ready to feel more. Two crafts, one practitioner.</p>
+    <div class="hero-buttons blur-in blur-in-d3">
+      <a href="#" class="btn-dark">Book a strategy call &rarr;</a>
+      <a href="#" class="btn-outline">Explore my work</a>
+    </div>
+  </div>
+
+  <div class="hero-featured blur-in blur-in-d4">
+    <div class="hero-featured-inner">
+      <div class="featured-header">
+        <div class="featured-avatar">JR</div>
+        <div class="featured-meta">
+          <div class="featured-name">Jake R.</div>
+          <div class="featured-role">CEO, Series A SaaS</div>
+        </div>
+      </div>
+      <div class="featured-quote">"Max automated our entire onboarding pipeline. What took 6 hours now runs in 12 minutes with zero manual steps."</div>
+      <div class="featured-result">
+        <div class="result-item">
+          <div class="result-value">6h &rarr; 12m</div>
+          <div class="result-label">Onboarding time</div>
+        </div>
+        <div class="result-item">
+          <div class="result-value">$48k</div>
+          <div class="result-label">Annual savings</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="dark-zone">
+  <div class="dark-zone-inner">
+    <div class="section-eyebrow reveal">Two Paths</div>
+    <h2 class="section-title reveal">Choose your entry point</h2>
+    <p class="section-sub reveal">Both paths share the same foundation: clarity, precision, and deep attention to how systems actually work.</p>
+
+    <div class="path-grid">
+      <div class="path-card tech-path reveal stagger-1">
+        <h3>AI Workflow Automation</h3>
+        <p>Custom pipelines that eliminate repetitive ops. I audit your stack, identify bottlenecks, and build automations that save real hours every week.</p>
+        <div class="path-card-tags">
+          <span class="path-tag tech">Zapier</span>
+          <span class="path-tag tech">n8n</span>
+          <span class="path-tag tech">Make</span>
+          <span class="path-tag tech">Custom Code</span>
+        </div>
+      </div>
+      <div class="path-card spirit-path reveal stagger-2">
+        <h3>Somatic Bodywork</h3>
+        <p>Breathwork, movement, and hands-on sessions that restore nervous system capacity. For founders who build fast and want to feel whole doing it.</p>
+        <div class="path-card-tags">
+          <span class="path-tag spirit">Breathwork</span>
+          <span class="path-tag spirit">Movement</span>
+          <span class="path-tag spirit">Mindfold</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Scroll reveal
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        obs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
+
+</body>
+</html>

@@ -1,6 +1,11 @@
 import Link from "next/link";
 import Image from "next/image";
-import { getRelatedLocalArticles } from "@/lib/cms/articles";
+import {
+  detectTopicSlugFromArticleSlug,
+  getLocalArticlesByTag,
+  getRelatedLocalArticles,
+  getTopicGroupBySlug,
+} from "@/lib/cms/articles";
 
 interface RelatedReadingProps {
   currentLink: string;
@@ -13,7 +18,25 @@ export function RelatedReading({
   title = "Related Reading",
   note,
 }: RelatedReadingProps) {
-  const related = getRelatedLocalArticles(currentLink);
+  // Check if this article is in the Bridge cluster
+  const slug = currentLink.split("/").pop() ?? "";
+  const topicSlug = detectTopicSlugFromArticleSlug(slug);
+  const topicGroup = topicSlug ? getTopicGroupBySlug(topicSlug) : null;
+  const isBridge = topicGroup?.series === "Bridge";
+
+  // Bridge articles get cross-cluster recommendations (tech + spirituality + bridge)
+  const related = isBridge
+    ? [
+        ...getLocalArticlesByTag("Bridge", 3),
+        ...getLocalArticlesByTag("Tech", 2),
+        ...getLocalArticlesByTag("Spirituality", 2),
+      ]
+        .filter(
+          (a, idx, arr) =>
+            a.link !== currentLink && arr.findIndex((b) => b.id === a.id) === idx
+        )
+        .slice(0, 3)
+    : getRelatedLocalArticles(currentLink);
 
   if (related.length === 0) {
     return null;

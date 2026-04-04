@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import dynamic from "next/dynamic";
+import { redirect } from "next/navigation";
 import { siteConfig } from "@/config/site";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { DirectAnswer } from "@/components/seo/DirectAnswer";
@@ -49,7 +50,25 @@ export const metadata = generateMetadata({
   canonical: absoluteUrl("/"),
 });
 
-export default async function HomePage() {
+interface HomePageProps {
+  searchParams?: Promise<{
+    error?: string;
+    error_code?: string;
+  }>;
+}
+
+export default async function HomePage({ searchParams }: HomePageProps) {
+  const params = searchParams ? await searchParams : undefined;
+  const oauthError = params?.error;
+  const oauthErrorCode = params?.error_code;
+
+  if (
+    oauthError &&
+    (oauthError === "invalid_request" || oauthError === "access_denied" || oauthErrorCode === "bad_oauth_state")
+  ) {
+    redirect("/workspace/sign-in?error=oauth");
+  }
+
   const articles = await fetchArticles();
   const localArticles = articles.filter((article) => isLocalArticle(article));
   const featuredArticles = (localArticles.length >= 3 ? localArticles : articles).slice(0, 3);

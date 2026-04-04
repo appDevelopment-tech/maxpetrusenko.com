@@ -4,6 +4,7 @@ import { Footer } from "@/components/layout/Footer";
 import { RouteHero } from "@/components/layout/RouteHero";
 import { GoogleAnalytics } from "@/components/analytics/GoogleAnalytics";
 import { CloudflareAnalytics } from "@/components/analytics/CloudflareAnalytics";
+import { ConciergeWidget } from "@/components/concierge/ConciergeWidget";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { generatePersonSchema } from "@/lib/seo/structured-data";
 import "@/styles/globals.css";
@@ -48,6 +49,7 @@ export default function RootLayout({
         <RouteHero />
         <main className="page">{children}</main>
         <Footer />
+        <ConciergeWidget />
       </body>
     </html>
   );
