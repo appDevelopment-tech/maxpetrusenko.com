@@ -25,7 +25,7 @@ interface ApiResponse {
   count: number;
   fetchedAt: string;
   dailyCounts: Record<string, number>;
-  platformCounts: Record<string, { published: number; failed: number }>;
+  platformCounts: Record<string, { published: number; failed: number; pending: number }>;
 }
 
 /* ─── Constants ─── */
@@ -39,6 +39,46 @@ const PLATFORM_META: Record<string, { label: string; color: string; icon: string
   pinterest: { label: "Pinterest", color: "#E60023", icon: "P" },
   youtube:   { label: "YouTube",   color: "#FF0000", icon: "▶" },
 };
+
+function isPublishedStatus(status: string): boolean {
+  return status === "published";
+}
+
+function isFailedStatus(status: string): boolean {
+  return ["failed", "error", "cancelled"].includes(status.toLowerCase());
+}
+
+function getPlatformStatusTone(platform: Platform) {
+  const meta = PLATFORM_META[platform.platform] ?? { label: platform.platform, color: "#888", icon: "?" };
+
+  if (isPublishedStatus(platform.status)) {
+    return {
+      label: meta.label,
+      color: meta.color,
+      background: `${meta.color}14`,
+      border: `${meta.color}30`,
+      dot: meta.color,
+    };
+  }
+
+  if (isFailedStatus(platform.status)) {
+    return {
+      label: `${meta.label} failed`,
+      color: "#ef4444",
+      background: "rgba(239,68,68,0.08)",
+      border: "rgba(239,68,68,0.2)",
+      dot: "#ef4444",
+    };
+  }
+
+  return {
+    label: `${meta.label} pending`,
+    color: "#b45309",
+    background: "rgba(245,158,11,0.12)",
+    border: "rgba(245,158,11,0.24)",
+    dot: "#d97706",
+  };
+}
 
 /* ─── Stat Card ─── */
 function StatCard({
@@ -115,11 +155,11 @@ function PostsPerDayChart({ dailyCounts }: { dailyCounts: Record<string, number>
 }
 
 /* ─── Platform Breakdown ─── */
-function PlatformBreakdown({ platformCounts }: { platformCounts: Record<string, { published: number; failed: number }> }) {
+function PlatformBreakdown({ platformCounts }: { platformCounts: Record<string, { published: number; failed: number; pending: number }> }) {
   const entries = Object.entries(platformCounts).sort(
-    ([, a], [, b]) => b.published + b.failed - (a.published + a.failed)
+    ([, a], [, b]) => b.published + b.failed + b.pending - (a.published + a.failed + a.pending)
   );
-  const total = entries.reduce((s, [, v]) => s + v.published + v.failed, 0);
+  const total = entries.reduce((s, [, v]) => s + v.published + v.failed + v.pending, 0);
   if (total === 0) return null;
 
   return (
@@ -130,7 +170,7 @@ function PlatformBreakdown({ platformCounts }: { platformCounts: Record<string, 
       <div className="space-y-3">
         {entries.map(([platform, counts]) => {
           const meta = PLATFORM_META[platform] ?? { label: platform, color: "#888", icon: "?" };
-          const pct = Math.round(((counts.published + counts.failed) / total) * 100);
+          const pct = Math.round(((counts.published + counts.failed + counts.pending) / total) * 100);
           return (
             <div key={platform}>
               <div className="flex items-center justify-between text-sm">
@@ -144,7 +184,9 @@ function PlatformBreakdown({ platformCounts }: { platformCounts: Record<string, 
                   <span className="font-medium text-[var(--ink)]">{meta.label}</span>
                 </div>
                 <span className="text-xs text-[var(--muted)]">
-                  {counts.published} posted{counts.failed > 0 ? ` · ${counts.failed} failed` : ""}
+                  {counts.published} posted
+                  {counts.pending > 0 ? ` · ${counts.pending} pending` : ""}
+                  {counts.failed > 0 ? ` · ${counts.failed} failed` : ""}
                 </span>
               </div>
               <div className="mt-1 h-1.5 overflow-hidden rounded-full bg-[var(--line)]">
@@ -209,23 +251,23 @@ function GrowthIndicator({ posts }: { posts: Post[] }) {
 /* ─── Platform Link Badge ─── */
 function PlatformBadge({ platform }: { platform: Platform }) {
   const meta = PLATFORM_META[platform.platform] ?? { label: platform.platform, color: "#888", icon: "?" };
-  const ok = platform.status === "published";
+  const tone = getPlatformStatusTone(platform);
   const hasUrl = !!platform.url;
 
   const inner = (
     <span
       className="inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-semibold transition-all"
       style={{
-        background: ok ? `${meta.color}14` : "rgba(239,68,68,0.08)",
-        color: ok ? meta.color : "#ef4444",
-        border: `1px solid ${ok ? `${meta.color}30` : "rgba(239,68,68,0.2)"}`,
+        background: tone.background,
+        color: tone.color,
+        border: `1px solid ${tone.border}`,
       }}
     >
       <span
         className="inline-block h-1.5 w-1.5 rounded-full"
-        style={{ background: ok ? meta.color : "#ef4444" }}
+        style={{ background: tone.dot }}
       />
-      {meta.label}
+      {tone.label}
       {hasUrl && (
         <svg width="10" height="10" viewBox="0 0 12 12" fill="none" className="ml-0.5 opacity-50">
           <path d="M3.5 2H10V8.5M10 2L2 10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -451,10 +493,13 @@ export function SocialDashboard() {
   const totalPosts = data.posts.length;
   const totalPublished = data.posts
     .flatMap((p) => p.platforms)
-    .filter((p) => p.status === "published").length;
+    .filter((p) => isPublishedStatus(p.status)).length;
   const totalFailed = data.posts
     .flatMap((p) => p.platforms)
-    .filter((p) => p.status !== "published").length;
+    .filter((p) => isFailedStatus(p.status)).length;
+  const totalPending = data.posts
+    .flatMap((p) => p.platforms)
+    .filter((p) => !isPublishedStatus(p.status) && !isFailedStatus(p.status)).length;
   const successRate = totalPublished + totalFailed > 0
     ? Math.round((totalPublished / (totalPublished + totalFailed)) * 100)
     : 0;
@@ -462,9 +507,10 @@ export function SocialDashboard() {
   return (
     <div className="space-y-8">
       {/* Top stats */}
-      <div className="grid gap-4 sm:grid-cols-4">
+      <div className="grid gap-4 sm:grid-cols-5">
         <StatCard label="Total posts" value={totalPosts} accent="var(--accent-tech)" />
         <StatCard label="Published" value={totalPublished} sub={`${successRate}% success`} accent="var(--accent-spirit)" />
+        <StatCard label="Pending" value={totalPending} accent="#d97706" />
         <StatCard label="Failed" value={totalFailed} accent={totalFailed > 0 ? "#ef4444" : "var(--line)"} />
         <StatCard
           label="Platforms"

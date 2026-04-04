@@ -1,0 +1,16 @@
+services:
+  social-agent:
+    build:
+      context: ..
+      dockerfile: social-agent/Dockerfile
+    container_name: social-agent
+    restart: unless-stopped
+    ports:
+      - "3333:3333"
+    env_file:
+      - .env
+    volumes:
+      - social-agent-data:/data
+
+volumes:
+  social-agent-data:

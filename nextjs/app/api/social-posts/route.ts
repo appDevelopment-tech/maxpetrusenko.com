@@ -24,6 +24,58 @@ interface LatePost {
 
 const LATE_API = "https://zernio.com/api/v1/posts";
 
+function getSocialAgentBaseUrl(): string | null {
+  const env = getCloudflareEnv();
+  const value = env?.SOCIAL_AGENT_BASE_URL ?? process.env.SOCIAL_AGENT_BASE_URL;
+  return value?.trim() ? value.trim().replace(/\/$/, "") : null;
+}
+
+function isPublishedStatus(status: string | undefined): boolean {
+  return status === "published";
+}
+
+function isFailedStatus(status: string | undefined): boolean {
+  return ["failed", "error", "cancelled"].includes((status ?? "").toLowerCase());
+}
+
+function platformPriority(platform: LatePlatform): number {
+  if (isPublishedStatus(platform.status)) return 3;
+  if (isFailedStatus(platform.status)) return 1;
+  return 2;
+}
+
+function mergePlatforms(platforms: LatePlatform[]): LatePlatform[] {
+  const merged = new Map<string, LatePlatform>();
+
+  for (const platform of platforms) {
+    const key = platform.platform;
+    const existing = merged.get(key);
+    if (!existing) {
+      merged.set(key, platform);
+      continue;
+    }
+
+    const next =
+      platformPriority(platform) > platformPriority(existing)
+        ? { ...existing, ...platform }
+        : {
+            ...platform,
+            ...existing,
+            platformPostUrl: existing.platformPostUrl ?? platform.platformPostUrl,
+            publishedUrl: existing.publishedUrl ?? platform.publishedUrl,
+            error: existing.error ?? platform.error,
+            status:
+              platformPriority(existing) >= platformPriority(platform)
+                ? existing.status
+                : platform.status,
+          };
+
+    merged.set(key, next);
+  }
+
+  return [...merged.values()];
+}
+
 function getCloudflareEnv(): CloudflareEnv | null {
   try {
     return getRequestContext().env as CloudflareEnv;
@@ -37,11 +89,13 @@ function getSocialApiKeys(): string[] {
   const candidates = [
     env?.SOCIAL_POSTS_PRIMARY_API_KEY,
     env?.SOCIAL_POSTS_LIFETIME_API_KEY,
+    env?.GETLATE_DEV_API_KEY_FREE,
     process.env.SOCIAL_POSTS_PRIMARY_API_KEY,
     process.env.SOCIAL_POSTS_LIFETIME_API_KEY,
+    process.env.GETLATE_DEV_API_KEY_FREE,
   ];
 
-  return candidates.filter((value): value is string => Boolean(value?.trim()));
+  return [...new Set(candidates.filter((value): value is string => Boolean(value?.trim())))];
 }
 
 async function fetchPosts(apiKey: string, limit = 30): Promise<LatePost[]> {
@@ -52,6 +106,18 @@ async function fetchPosts(apiKey: string, limit = 30): Promise<LatePost[]> {
   const data = await res.json() as Record<string, unknown>;
   return (Array.isArray(data) ? data : (data.data ?? data.posts ?? [])) as LatePost[];
 }
+
+async function fetchPostsFromSocialAgent(baseUrl: string) {
+  const response = await fetch(`${baseUrl}/posts?limit=50`, {
+    headers: { Accept: "application/json" },
+  });
+
+  if (!response.ok) {
+    throw new Error(`Social agent returned HTTP ${response.status}`);
+  }
+
+  return response.json();
+}
 /**
  * GET /api/social-posts
  *
@@ -61,6 +127,19 @@ async function fetchPosts(apiKey: string, limit = 30): Promise<LatePost[]> {
  */
 export async function GET() {
   try {
+    const socialAgentBaseUrl = getSocialAgentBaseUrl();
+    if (socialAgentBaseUrl) {
+      try {
+        const payload = await fetchPostsFromSocialAgent(socialAgentBaseUrl);
+        return NextResponse.json(payload, {
+          status: 200,
+          headers: { "Cache-Control": "public, s-maxage=60, stale-while-revalidate=300" },
+        });
+      } catch (error) {
+        console.error("[social-posts social-agent fallback]", error);
+      }
+    }
+
     const apiKeys = getSocialApiKeys();
     if (apiKeys.length === 0) {
       return NextResponse.json(
@@ -87,7 +166,7 @@ export async function GET() {
           (p) => (p.content?.slice(0, 80)?.toLowerCase().trim() ?? p._id) === key
         );
         if (existing) {
-          existing.platforms = [...existing.platforms, ...post.platforms];
+          existing.platforms = mergePlatforms([...existing.platforms, ...post.platforms]);
         }
       }
     }
@@ -105,7 +184,7 @@ export async function GET() {
       publishedAt: post.publishedAt ?? post.createdAt,
       status: post.status,
       media: (post.mediaItems ?? []).map((m) => ({ url: m.url, type: m.type })),
-      platforms: post.platforms.map((p) => ({
+      platforms: mergePlatforms(post.platforms).map((p) => ({
         platform: p.platform,
         status: p.status,
         url: p.platformPostUrl ?? p.publishedUrl ?? null,
@@ -115,14 +194,17 @@ export async function GET() {
 
     // Compute daily post counts for charting
     const dailyCounts: Record<string, number> = {};
-    const platformCounts: Record<string, { published: number; failed: number }> = {};
+    const platformCounts: Record<string, { published: number; failed: number; pending: number }> = {};
     for (const post of posts) {
       const day = post.publishedAt.slice(0, 10);
       dailyCounts[day] = (dailyCounts[day] ?? 0) + 1;
       for (const p of post.platforms) {
-        if (!platformCounts[p.platform]) platformCounts[p.platform] = { published: 0, failed: 0 };
-        if (p.status === "published") platformCounts[p.platform].published++;
-        else platformCounts[p.platform].failed++;
+        if (!platformCounts[p.platform]) {
+          platformCounts[p.platform] = { published: 0, failed: 0, pending: 0 };
+        }
+        if (isPublishedStatus(p.status)) platformCounts[p.platform].published++;
+        else if (isFailedStatus(p.status)) platformCounts[p.platform].failed++;
+        else platformCounts[p.platform].pending++;
       }
     }
 

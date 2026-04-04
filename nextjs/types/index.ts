@@ -154,6 +154,8 @@ declare global {
     CONCIERGE_THREADS?: KVNamespace;
     SOCIAL_POSTS_PRIMARY_API_KEY?: string;
     SOCIAL_POSTS_LIFETIME_API_KEY?: string;
+    GETLATE_DEV_API_KEY_FREE?: string;
+    SOCIAL_AGENT_BASE_URL?: string;
     TURNSTILE_SECRET_KEY?: string;
     NEXT_PUBLIC_TURNSTILE_SITE_KEY?: string;
     RESEND_API_KEY?: string;
