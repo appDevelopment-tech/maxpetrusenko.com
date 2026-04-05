@@ -172,8 +172,8 @@ export function generateSpiritualityPersonSchema() {
     name: siteConfig.author.name,
     url: siteConfig.url,
     image: PERSON_IMAGE_URL,
-    jobTitle: "Tantra & Somatic Practitioner",
-    description: "Professional tantra massage and somatic energy work practitioner. Certified in tantric practices, nervous system regulation, and trauma-informed bodywork.",
+    jobTitle: "Tantra & Somatic Energy Work Practitioner",
+    description: "Certified tantra massage and somatic energy work practitioner trained at Tantra Nectar University (Satyarti). Specializing in nervous system regulation, breathwork, shadow work, and trauma-informed bodywork in Ubud, Bali and Miami, Florida.",
     worksFor: {
       "@type": "Organization",
       name: "Presence Atelier",
@@ -192,6 +192,15 @@ export function generateSpiritualityPersonSchema() {
       "Conscious Touch",
       "Kriya Yoga",
       "Shambhavi Mahamudra",
+      "Shadow Work",
+      "Energy Work",
+      "Meditation",
+      "Contemplative Practice",
+      "Consciousness Technology",
+      "Tantra Nectar University",
+      "Nervous System Reset",
+      "Couples Tantra",
+      "Embodied Awareness",
     ],
   };
 }
@@ -299,7 +308,7 @@ export function generateProfessionalServiceSchema() {
     "@context": "https://schema.org",
     "@type": "ProfessionalService",
     "name": "Presence Atelier - Tantra & Somatic Energy Work",
-    "description": "Professional tantra massage and somatic energy work for men, women, and couples. Certified tantric practitioner serving Ubud, Bali and South Florida. Nervous system reset, deep repatterning, and conscious presence sessions.",
+    "description": "Professional tantra massage and somatic energy work for men, women, and couples. Certified at Tantra Nectar University (Satyarti), serving Ubud, Bali and South Florida. Nervous system reset, deep repatterning, breathwork, and conscious presence sessions.",
     "url": `${siteConfig.url}/spirituality`,
     "logo": {
       "@type": "ImageObject",
@@ -375,7 +384,7 @@ export function generateProfessionalServiceSchema() {
       "@type": "Audience",
       "audienceType": ["men", "women", "couples", "LGBTQ+"]
     },
-    "keywords": "tantra, tantric, tantra massage, somatic energy work, bodywork, breathwork, nervous system reset, couples tantra, Ubud Bali, Miami Florida",
+    "keywords": "tantra, tantric, tantra massage, somatic energy work, bodywork, breathwork, nervous system reset, couples tantra, energy work, shadow work, Tantra Nectar University, Satyarti, tantra certification, Ubud Bali, Miami Florida",
     "availableChannel": {
       "@type": "ServiceChannel",
       "serviceType": "tantra massage, somatic energy work, bodywork",
@@ -495,6 +504,38 @@ export function generateFAQSchema() {
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "No. The focus is presence, communication, and nervous system regulation. Intimacy is held inside clear boundaries."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is somatic energy work?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Somatic energy work is a body-based practice combining breathwork, conscious touch, and presence techniques to regulate the nervous system, release stored tension, and build embodied awareness. Sessions are non-medical and focus on regulation, not performance."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What training does Max Petrusenko have?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Max holds a Tantra Massage Certification from Satyarti (Tantra Nectar University), Shambhavi Mahamudra initiation from Isha Foundation, and Kriya Yoga initiation in the Paramahansa Yogananda lineage. He also trained in Amenti Dance workshops for somatic movement."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is shadow work?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Shadow work is the practice of exploring and integrating unconscious patterns, suppressed emotions, and unexamined beliefs. In somatic practice, this often involves breathwork, body-based awareness, and gentle confrontation of held tension patterns in a safe container with clear boundaries."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is breathwork for nervous system regulation?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Breathwork for nervous system regulation uses specific breathing patterns to shift the autonomic nervous system from activation (fight-or-flight) toward calm (parasympathetic tone). Techniques include extended exhale breathing, coherence breathing, and somatic breath awareness integrated with conscious touch."
         }
       }
     ]
@@ -1490,7 +1531,7 @@ export function generateEnhancedPersonSchema() {
     award: [
       "Shambhavi Mahamudra - Isha Foundation",
       "Kriya Yoga Initiation - Yoganada Lineage",
-      "Tantra Massage Certification - Satyarti",
+      "Tantra Massage Certification - Satyarti / Tantra Nectar University",
     ],
     // MemberOf for community affiliations
     memberOf: [

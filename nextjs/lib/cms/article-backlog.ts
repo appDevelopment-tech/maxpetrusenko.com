@@ -764,6 +764,85 @@ const SEEDS: BacklogSeed[] = [
       "Track energy quality, not only output volume.",
     ],
   },
+  // ── Spirituality Discovery: Broader Reach ─────────────────────────
+  {
+    slug: "what-is-energy-work-complete-guide",
+    title: "What Is Energy Work? A Complete Guide",
+    excerpt:
+      "A practical introduction to somatic energy work: what it is, how sessions work, what to expect, and how to find a qualified practitioner.",
+    tags: ["Spirituality", "Energy Work", "Beginner Guide", "Somatic"],
+    series: "Tantra",
+    checklist: [
+      "Define energy work in accessible, non-clinical language.",
+      "Describe a typical session arc from intake to integration.",
+      "Include safety and boundary guidelines for first-timers.",
+    ],
+  },
+  {
+    slug: "how-to-find-a-spiritual-teacher",
+    title: "How to Find a Spiritual Teacher You Can Trust",
+    excerpt:
+      "A due-diligence framework for finding a spiritual teacher with strong ethics, clear boundaries, and real lineage credentials.",
+    tags: ["Spirituality", "Spiritual Teacher", "Safety", "Client Guide"],
+    series: "Tantra",
+    checklist: [
+      "Define what makes a teacher trustworthy vs performative.",
+      "List red flags and green flags in teacher-student dynamics.",
+      "Recommend verification steps for lineage and training claims.",
+    ],
+  },
+  {
+    slug: "shadow-work-for-beginners-practical-guide",
+    title: "Shadow Work for Beginners: A Practical Guide",
+    excerpt:
+      "An accessible introduction to shadow work: what it is, why it matters, and simple somatic practices to begin exploring unconscious patterns safely.",
+    tags: ["Spirituality", "Shadow Work", "Beginner Guide", "Somatic"],
+    series: "Tantra",
+    checklist: [
+      "Define shadow work without jargon or spiritual gatekeeping.",
+      "Offer 3 entry-level practices with safety notes.",
+      "Distinguish somatic shadow work from therapy.",
+    ],
+  },
+  {
+    slug: "breathwork-for-nervous-system-regulation",
+    title: "Breathwork for Nervous System Regulation",
+    excerpt:
+      "How specific breathing patterns shift the autonomic nervous system from activation toward calm. Practical techniques for daily regulation.",
+    tags: ["Spirituality", "Breathwork", "Nervous System", "Regulation"],
+    series: "Tantra",
+    checklist: [
+      "Explain autonomic nervous system basics simply.",
+      "Teach 3 breath patterns with step-by-step instructions.",
+      "Include contraindications and when to seek professional support.",
+    ],
+  },
+  {
+    slug: "meditation-for-software-developers",
+    title: "Meditation for Software Developers",
+    excerpt:
+      "Why meditation improves debugging, code review, and technical decision-making. Practical protocols for engineers who want to start sitting.",
+    tags: ["Bridge", "Meditation", "Developers", "Productivity"],
+    series: "Bridge",
+    checklist: [
+      "Connect meditation benefits to specific engineering tasks.",
+      "Offer a minimal viable practice for busy developers.",
+      "Address common resistance from analytical minds.",
+    ],
+  },
+  {
+    slug: "programming-as-spiritual-practice",
+    title: "Programming as Spiritual Practice",
+    excerpt:
+      "How writing code mirrors contemplative discipline: attention, debugging as inquiry, refactoring as letting go, and shipping as non-attachment.",
+    tags: ["Bridge", "Consciousness", "Programming", "Philosophy"],
+    series: "Bridge",
+    checklist: [
+      "Draw genuine parallels between code and contemplative practice.",
+      "Avoid forced metaphors; ground in real engineering experience.",
+      "Include reflection prompts for developer-practitioners.",
+    ],
+  },
 ];
 
 interface TopicPerspective {

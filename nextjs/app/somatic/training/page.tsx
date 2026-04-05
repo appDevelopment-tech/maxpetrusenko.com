@@ -71,9 +71,9 @@ export default function TrainingPage() {
               </p>
             </div>
             <div className="card">
-              <h3>Tantra Massage Certification</h3>
+              <h3>Tantra Nectar University Certification</h3>
               <p style={{ fontSize: "0.9em", color: "var(--text-secondary)" }}>
-                Satyarti workshops and certificates
+                Satyarti / Tantra Nectar University
               </p>
               <p style={{ marginTop: 12 }}>
                 Bodywork precision, boundaries-first touch, and safe expansion

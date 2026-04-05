@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Migration Dashboard — Max Petrusenko</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #0a0a0f;
+    --surface: #12121a;
+    --surface2: #1a1a26;
+    --border: #2a2a3a;
+    --text: #e0e0e8;
+    --text-dim: #8888a0;
+    --accent: #ff6b35;
+    --accent2: #00d4aa;
+    --accent3: #7c6aef;
+    --danger: #ff4466;
+    --warning: #ffaa22;
+    --success: #00d4aa;
+    --blue: #4a9eff;
+  }
+
+  body {
+    font-family: 'Space Grotesk', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  .grain {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.03;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    z-index: 999;
+  }
+
+  header {
+    padding: 40px 40px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  header h1 {
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+  }
+
+  header h1 span { color: var(--accent); }
+
+  header p {
+    color: var(--text-dim);
+    font-size: 14px;
+    margin-top: 6px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .tabs {
+    display: flex;
+    gap: 0;
+    padding: 0 40px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+
+  .tab {
+    padding: 14px 24px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    color: var(--text-dim);
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+    user-select: none;
+  }
+
+  .tab:hover { color: var(--text); }
+  .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+  .panel { display: none; padding: 40px; }
+  .panel.active { display: block; }
+
+  /* ---- CURRENT STATE ---- */
+  .locations {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 20px;
+    margin-bottom: 40px;
+  }
+
+  .loc-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .loc-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+  }
+
+  .loc-card.scattered::before { background: var(--danger); }
+  .loc-card.target::before { background: var(--success); }
+  .loc-card.agent::before { background: var(--accent3); }
+
+  .loc-card h3 {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+
+  .loc-path {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--text-dim);
+    margin-bottom: 16px;
+  }
+
+  .loc-items {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .loc-items li {
+    font-size: 13px;
+    padding: 8px 12px;
+    background: var(--surface2);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .tag {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+
+  .tag.web { background: #1a3a5c; color: #4a9eff; }
+  .tag.auto { background: #3a2a10; color: #ffaa22; }
+  .tag.agent { background: #2a1a4a; color: #7c6aef; }
+  .tag.social { background: #1a3a2a; color: #00d4aa; }
+  .tag.video { background: #3a1a1a; color: #ff6b35; }
+
+  /* ---- ARCHITECTURE ---- */
+  .arch-container {
+    position: relative;
+    min-height: 700px;
+  }
+
+  .arch-section {
+    margin-bottom: 32px;
+  }
+
+  .arch-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--text-dim);
+    margin-bottom: 16px;
+    padding-left: 4px;
+  }
+
+  .arch-row {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .arch-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    min-width: 200px;
+    flex: 1;
+    position: relative;
+    transition: all 0.3s;
+  }
+
+  .arch-box:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(255, 107, 53, 0.1);
+  }
+
+  .arch-box h4 {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+
+  .arch-box .desc {
+    font-size: 12px;
+    color: var(--text-dim);
+    line-height: 1.5;
+  }
+
+  .arch-box .port {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    margin-top: 8px;
+  }
+
+  .flow-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 0;
+    color: var(--text-dim);
+    font-size: 20px;
+  }
+
+  .flow-arrow span {
+    display: inline-block;
+    animation: pulse-down 1.5s ease infinite;
+  }
+
+  @keyframes pulse-down {
+    0%, 100% { opacity: 0.3; transform: translateY(-3px); }
+    50% { opacity: 1; transform: translateY(3px); }
+  }
+
+  /* ---- STEPS ---- */
+  .steps-container {
+    max-width: 800px;
+  }
+
+  .phase {
+    margin-bottom: 40px;
+  }
+
+  .phase-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .phase-num {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+
+  .phase-num.p0 { background: var(--danger); color: #fff; }
+  .phase-num.p1 { background: var(--warning); color: #000; }
+  .phase-num.p2 { background: var(--accent); color: #fff; }
+  .phase-num.p3 { background: var(--accent3); color: #fff; }
+  .phase-num.p4 { background: var(--blue); color: #fff; }
+  .phase-num.p5 { background: var(--success); color: #000; }
+
+  .phase h3 {
+    font-size: 18px;
+    font-weight: 600;
+  }
+
+  .phase-time {
+    font-size: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--text-dim);
+  }
+
+  .step-list {
+    list-style: none;
+    border-left: 2px solid var(--border);
+    margin-left: 17px;
+    padding-left: 28px;
+  }
+
+  .step-list li {
+    position: relative;
+    padding: 10px 0;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .step-list li::before {
+    content: '';
+    position: absolute;
+    left: -33px;
+    top: 16px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--surface2);
+    border: 2px solid var(--border);
+  }
+
+  .step-list li.done::before { background: var(--success); border-color: var(--success); }
+  .step-list li.current::before { background: var(--accent); border-color: var(--accent); box-shadow: 0 0 8px var(--accent); }
+
+  .step-list li strong {
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  .step-detail {
+    font-size: 12px;
+    color: var(--text-dim);
+    margin-top: 4px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  /* ---- AGENT VIEW ---- */
+  .agent-flow {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-width: 700px;
+  }
+
+  .agent-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    border-left: 4px solid var(--accent3);
+  }
+
+  .agent-card h4 {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--accent3);
+  }
+
+  .agent-card p {
+    font-size: 13px;
+    color: var(--text-dim);
+    line-height: 1.6;
+  }
+
+  .agent-card code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    background: var(--surface2);
+    padding: 2px 6px;
+    border-radius: 4px;
+    color: var(--accent);
+  }
+
+  /* ---- PRIORITY MATRIX ---- */
+  .matrix {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-top: 20px;
+  }
+
+  .matrix-quad {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+  }
+
+  .matrix-quad h4 {
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+  }
+
+  .matrix-quad.q1 h4 { color: var(--danger); }
+  .matrix-quad.q2 h4 { color: var(--warning); }
+  .matrix-quad.q3 h4 { color: var(--blue); }
+  .matrix-quad.q4 h4 { color: var(--text-dim); }
+
+  .matrix-quad ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .matrix-quad li {
+    font-size: 13px;
+    padding: 6px 10px;
+    background: var(--surface2);
+    border-radius: 6px;
+  }
+
+  /* ---- WHAT OTHERS DO ---- */
+  .insight-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 16px;
+  }
+
+  .insight-card h4 {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+
+  .insight-card p {
+    font-size: 13px;
+    color: var(--text-dim);
+    line-height: 1.7;
+  }
+
+  .insight-card .source {
+    margin-top: 10px;
+    font-size: 11px;
+    color: var(--accent);
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .callout {
+    background: linear-gradient(135deg, rgba(255,107,53,0.08), rgba(124,106,239,0.08));
+    border: 1px solid rgba(255,107,53,0.2);
+    border-radius: 12px;
+    padding: 24px;
+    margin: 24px 0;
+  }
+
+  .callout h4 {
+    color: var(--accent);
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  .callout p {
+    font-size: 13px;
+    line-height: 1.7;
+  }
+
+  @media (max-width: 768px) {
+    .tabs { padding: 0 16px; overflow-x: auto; }
+    .tab { padding: 12px 16px; font-size: 13px; white-space: nowrap; }
+    .panel { padding: 24px 16px; }
+    .matrix { grid-template-columns: 1fr; }
+    .arch-row { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+<div class="grain"></div>
+
+<header>
+  <h1>Migration <span>Dashboard</span></h1>
+  <p>maxpetrusenko.com -> Contabo VPS (173.249.52.27) via Coolify</p>
+</header>
+
+<div class="tabs">
+  <div class="tab active" data-panel="current">Current State</div>
+  <div class="tab" data-panel="target">Target Architecture</div>
+  <div class="tab" data-panel="steps">Where to Start</div>
+  <div class="tab" data-panel="agent">Agent Layer</div>
+  <div class="tab" data-panel="insights">What Others Do</div>
+</div>
+
+<!-- CURRENT STATE -->
+<div class="panel active" id="current">
+  <h2 style="font-size:20px;margin-bottom:8px;">Your stuff is in 5 places right now</h2>
+  <p style="color:var(--text-dim);font-size:14px;margin-bottom:28px;">This is why it feels tangled. Each location has different deploy mechanics, different secrets, different update paths.</p>
+
+  <div class="locations">
+    <div class="loc-card scattered">
+      <h3>Desktop/Projects</h3>
+      <div class="loc-path">~/Desktop/Projects/</div>
+      <ul class="loc-items">
+        <li><span class="tag video">video</span> tiktok-remotion (video renderer)</li>
+        <li><span class="tag social">social</span> skills/max-social-publisher (feed engine)</li>
+        <li><span class="tag web">web</span> medium (blog repo)</li>
+        <li><span class="tag auto">auto</span> manager (ops/DNS/runbooks)</li>
+        <li><span class="tag web">web</span> sweetistics (X analytics)</li>
+        <li><span class="tag agent">agent</span> Peekaboo (screen tools)</li>
+        <li><span class="tag agent">agent</span> bird (X CLI)</li>
+      </ul>
+    </div>
+
+    <div class="loc-card scattered">
+      <h3>Gauntlet</h3>
+      <div class="loc-path">~/Projects/ (Gauntlet workspace)</div>
+      <ul class="loc-items">
+        <li><span class="tag web">web</span> maxpetrusenko.com (main site)</li>
+        <li><span class="tag web">web</span> atelier subdomain</li>
+        <li><span class="tag web">web</span> nextjs/ (social dashboard)</li>
+        <li><span class="tag auto">auto</span> paperclip (.env with Contabo creds)</li>
+      </ul>
+    </div>
+
+    <div class="loc-card scattered">
+      <h3>Downloads/claw-code</h3>
+      <div class="loc-path">~/Downloads/claw-code/</div>
+      <ul class="loc-items">
+        <li><span class="tag agent">agent</span> Claude Code agent scripts</li>
+        <li><span class="tag auto">auto</span> Automation/scheduling logic</li>
+        <li><span class="tag auto">auto</span> Task runners and monitors</li>
+      </ul>
+    </div>
+
+    <div class="loc-card scattered">
+      <h3>Cowork Scheduled Tasks</h3>
+      <div class="loc-path">Claude Desktop / Cowork mode</div>
+      <ul class="loc-items">
+        <li><span class="tag social">social</span> 5x daily social posts (9/11/1/3/6)</li>
+        <li><span class="tag auto">auto</span> Feed engine triggers</li>
+        <li><span class="tag video">video</span> Remotion/Simli render pipeline</li>
+      </ul>
+    </div>
+
+    <div class="loc-card target">
+      <h3>Contabo VPS</h3>
+      <div class="loc-path">173.249.52.27 (Coolify)</div>
+      <ul class="loc-items">
+        <li><span class="tag auto">auto</span> Coolify v4 beta installed</li>
+        <li><span class="tag web">web</span> One test container deployed</li>
+        <li style="color:var(--text-dim);font-style:italic;">Everything else still needs to move here</li>
+      </ul>
+    </div>
+
+    <div class="loc-card agent">
+      <h3>Cloudflare</h3>
+      <div class="loc-path">DNS + Pages + Edge</div>
+      <ul class="loc-items">
+        <li><span class="tag web">web</span> maxpetrusenko.com (Pages)</li>
+        <li><span class="tag web">web</span> atelier.maxpetrusenko.com (Pages)</li>
+        <li>DNS zone for all subdomains</li>
+        <li style="color:var(--warning);">TLS still possibly on Flexible</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="callout">
+    <h4>The core problem</h4>
+    <p>Social automation runs on your MacBook via Cowork scheduled tasks. If your laptop sleeps, closes, or loses network, posts don't fire. Agent scripts in Downloads are disconnected from the repos they control. No single place to check "is everything working?"</p>
+  </div>
+</div>
+
+<!-- TARGET ARCHITECTURE -->
+<div class="panel" id="target">
+  <h2 style="font-size:20px;margin-bottom:24px;">Target: Everything consolidated, always-on</h2>
+
+  <div class="arch-container">
+    <!-- Layer 1: Edge -->
+    <div class="arch-section">
+      <div class="arch-label">Edge Layer (Cloudflare)</div>
+      <div class="arch-row">
+        <div class="arch-box">
+          <h4>Cloudflare Pages</h4>
+          <div class="desc">Static sites stay here. No change needed. maxpetrusenko.com, atelier, any static pages.</div>
+          <div class="port">Auto-deploy from GitHub</div>
+        </div>
+        <div class="arch-box">
+          <h4>Cloudflare DNS + Proxy</h4>
+          <div class="desc">Routes social.maxpetrusenko.com and api.maxpetrusenko.com to your VPS through Traefik. Full (strict) TLS with Origin CA cert.</div>
+          <div class="port">A record -> 173.249.52.27</div>
+        </div>
+        <div class="arch-box">
+          <h4>Cloudflare Tunnel + Access</h4>
+          <div class="desc">Secure admin access to Coolify dashboard without exposing port 8000. Only your email whitelisted.</div>
+          <div class="port">coolify.maxpetrusenko.com -> localhost:8000</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flow-arrow"><span>&#8595; &#8595; &#8595;</span></div>
+
+    <!-- Layer 2: VPS -->
+    <div class="arch-section">
+      <div class="arch-label">Compute Layer (Contabo VPS / Coolify)</div>
+      <div class="arch-row">
+        <div class="arch-box" style="border-color: var(--accent);">
+          <h4>social-poster</h4>
+          <div class="desc">The big one. Node.js container with cron scheduler, feed engine, Remotion renderer, vendor adapters (Zernio, Cartesia, Simli). Replaces all 5 Cowork scheduled tasks.</div>
+          <div class="port">:3333 /health /status /run/:job</div>
+        </div>
+        <div class="arch-box">
+          <h4>Traefik</h4>
+          <div class="desc">Reverse proxy. Routes incoming HTTPS to the right container. Handles SSL termination with Origin CA cert.</div>
+          <div class="port">:443 :80 (public)</div>
+        </div>
+      </div>
+      <div class="arch-row" style="margin-top: 16px;">
+        <div class="arch-box">
+          <h4>Monitoring Agent</h4>
+          <div class="desc">Netdata or lightweight agent. Watches CPU, RAM, disk, swap. Alerts to Slack on threshold breach. Also pings /health endpoints of your apps.</div>
+          <div class="port">Internal only</div>
+        </div>
+        <div class="arch-box">
+          <h4>Uptime Checker</h4>
+          <div class="desc">External: UptimeRobot (free) or Better Stack. Hits social.maxpetrusenko.com/health every 60s. Pages you on Slack/email if it goes down. You need this external to the VPS.</div>
+          <div class="port">External SaaS</div>
+        </div>
+        <div class="arch-box">
+          <h4>SQLite + Volumes</h4>
+          <div class="desc">Persistent Coolify volume at /app/data. Stores post history, dedup keys, job state. Daily backup to R2/S3.</div>
+          <div class="port">/app/data/social-poster.db</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flow-arrow"><span>&#8595; &#8595; &#8595;</span></div>
+
+    <!-- Layer 3: Dev -->
+    <div class="arch-section">
+      <div class="arch-label">Dev Layer (Your MacBook)</div>
+      <div class="arch-row">
+        <div class="arch-box">
+          <h4>Git Repos (GitHub)</h4>
+          <div class="desc">social-poster repo. Push to main -> Coolify auto-deploys. No more manual Cowork tasks.</div>
+          <div class="port">github.com/maxpetrusenko/social-poster</div>
+        </div>
+        <div class="arch-box">
+          <h4>Doppler</h4>
+          <div class="desc">All secrets managed here. Coolify pulls from Doppler. Never in .env files, never in docs.</div>
+          <div class="port">doppler.com/project/social-poster</div>
+        </div>
+        <div class="arch-box">
+          <h4>Claude Code / Cowork</h4>
+          <div class="desc">You still use Claude for dev work, code reviews, ad-hoc tasks. But it's not the scheduler anymore. The VPS is.</div>
+          <div class="port">Dev assistant, not infra</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- WHERE TO START -->
+<div class="panel" id="steps">
+  <h2 style="font-size:20px;margin-bottom:8px;">Execution Order</h2>
+  <p style="color:var(--text-dim);font-size:14px;margin-bottom:32px;">Start at phase 0. Don't skip ahead. Each phase unlocks the next.</p>
+
+  <div class="steps-container">
+    <div class="phase">
+      <div class="phase-header">
+        <div class="phase-num p0">0</div>
+        <div>
+          <h3>Lock Down What Exists (TODAY)</h3>
+          <div class="phase-time">~2 hours. Do this before touching any apps.</div>
+        </div>
+      </div>
+      <ul class="step-list">
+        <li class="current"><strong>Create Contabo snapshot</strong> as rollback point
+          <div class="step-detail">Contabo dashboard -> Snapshots -> Create. Auto-deletes after 30 days.</div>
+        </li>
+        <li>Harden SSH: disable password auth, disable root login, add your key
+          <div class="step-detail">ssh into VPS, edit /etc/ssh/sshd_config</div>
+        </li>
+        <li>Install fail2ban + add 4GB swap
+          <div class="step-detail">apt install fail2ban && create swapfile for Chromium/ffmpeg memory spikes</div>
+        </li>
+        <li>Audit Docker ports: run <code>docker ps</code>, kill anything exposed to 0.0.0.0
+          <div class="step-detail">Especially Coolify's 8000, 6001, 6002, 8080. Bind to 127.0.0.1.</div>
+        </li>
+        <li>Install Cloudflare Origin CA cert on Traefik, switch zone to Full (strict)
+          <div class="step-detail">Cloudflare dash -> SSL/TLS -> Full (strict). Install cert in Coolify proxy settings.</div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="phase">
+      <div class="phase-header">
+        <div class="phase-num p1">1</div>
+        <div>
+          <h3>Create the social-poster Repo (Day 1-2)</h3>
+          <div class="phase-time">Separate repo. Don't put it inside maxpetrusenko.com.</div>
+        </div>
+      </div>
+      <ul class="step-list">
+        <li>Create <code>github.com/maxpetrusenko/social-poster</code> (private)
+          <div class="step-detail">Scaffold: src/, config/, tests/, Dockerfile, docker-compose.yml</div>
+        </li>
+        <li>Port feed_engine.py logic to TypeScript (or keep as Python subprocess)
+          <div class="step-detail">Currently in ~/Desktop/Projects/skills/. Move the 47 RSS feeds config.</div>
+        </li>
+        <li>Set up Doppler project with all env vars from the migration plan
+          <div class="step-detail">ZERNIO_API_KEY, CARTESIA_API_KEY, SIMLI_API_KEY, voice/face IDs, etc.</div>
+        </li>
+        <li>Write the Dockerfile (from migration plan draft, includes chromium + ffmpeg + curl)
+        </li>
+        <li>Implement /health and /status endpoints first
+          <div class="step-detail">These are your "can I see if it's working" baseline. Everything else builds on this.</div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="phase">
+      <div class="phase-header">
+        <div class="phase-num p2">2</div>
+        <div>
+          <h3>Build the Pipeline (Day 2-4)</h3>
+          <div class="phase-time">One adapter at a time. Test each in isolation.</div>
+        </div>
+      </div>
+      <ul class="step-list">
+        <li>Image render pipeline (sharp): generate one test image per platform size
+        </li>
+        <li>Vendor adapters: zernio.ts, cartesia.ts, simli.ts with contract tests
+        </li>
+        <li>Video render: port tiktok-remotion/render.mjs into the container
+          <div class="step-detail">Cap concurrency. 8GB RAM + Chromium + ffmpeg = watch memory closely.</div>
+        </li>
+        <li>Scheduler with cron (5 jobs from schedule.json)
+          <div class="step-detail">node-cron or similar. Idempotency keys prevent double-posts on restart.</div>
+        </li>
+        <li>Dedup store in SQLite with WAL mode
+        </li>
+      </ul>
+    </div>
+
+    <div class="phase">
+      <div class="phase-header">
+        <div class="phase-num p3">3</div>
+        <div>
+          <h3>Deploy to Coolify (Day 4-5)</h3>
+          <div class="phase-time">First real deployment. Keep Cowork tasks running in parallel.</div>
+        </div>
+      </div>
+      <ul class="step-list">
+        <li>Create app in Coolify, attach persistent volume for /app/data
+        </li>
+        <li>Add env vars from Doppler into Coolify
+        </li>
+        <li>Bind social.maxpetrusenko.com via Traefik
+        </li>
+        <li>Verify /health returns 200 from outside (through Cloudflare)
+        </li>
+        <li>Set up Netdata container for host monitoring (CPU/RAM/disk/swap)
+          <div class="step-detail">One-click deploy in Coolify marketplace, or docker-compose sidecar.</div>
+        </li>
+        <li>Register external uptime check: UptimeRobot free tier, check /health every 60s
+          <div class="step-detail">Slack + email alerts on failure. This is your "did it break?" outside-in check.</div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="phase">
+      <div class="phase-header">
+        <div class="phase-num p4">4</div>
+        <div>
+          <h3>Shadow Run (Day 5-7)</h3>
+          <div class="phase-time">Both systems posting. Compare outputs. Fix drift.</div>
+        </div>
+      </div>
+      <ul class="step-list">
+        <li>Run VPS jobs in dry-run mode (log what would post, don't actually post)
+        </li>
+        <li>Compare VPS picks vs. Cowork picks for same time slots
+        </li>
+        <li>Fix any rendering/content differences
+        </li>
+        <li>Enable real posting for ONE time slot, watch it manually
+        </li>
+        <li>Gradually enable all 5 slots over 2-3 days
+        </li>
+      </ul>
+    </div>
+
+    <div class="phase">
+      <div class="phase-header">
+        <div class="phase-num p5">5</div>
+        <div>
+          <h3>Cutover + Cleanup (Day 7-10)</h3>
+          <div class="phase-time">Kill the old. Trust the new.</div>
+        </div>
+      </div>
+      <ul class="step-list">
+        <li>Disable all Cowork scheduled tasks
+        </li>
+        <li>Set up daily SQLite backup to R2/S3
+        </li>
+        <li>Consolidate agent scripts from Downloads/claw-code into the repo or deprecate
+          <div class="step-detail">If any scripts are still useful, move to social-poster/scripts/. Trash the rest.</div>
+        </li>
+        <li>Bookmark your monitoring dashboard:
+          <div class="step-detail">social.maxpetrusenko.com/status (app) + Netdata (host) + UptimeRobot (external)</div>
+        </li>
+        <li>Delete the Contabo snapshot after 1 clean week
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- AGENT LAYER -->
+<div class="panel" id="agent">
+  <h2 style="font-size:20px;margin-bottom:8px;">The Agent That Watches Everything</h2>
+  <p style="color:var(--text-dim);font-size:14px;margin-bottom:28px;">Three layers of "is it working?" — from inside-out.</p>
+
+  <div class="agent-flow">
+    <div class="agent-card">
+      <h4>Layer 1: App Self-Report (Inside the Container)</h4>
+      <p>Your social-poster exposes <code>GET /status</code> that returns JSON: last success time per job, next scheduled run, last error per vendor, queue depth. This is what YOU check when you want a quick glance. Hit <code>social.maxpetrusenko.com/status</code> from your phone.</p>
+    </div>
+
+    <div class="agent-card">
+      <h4>Layer 2: Host Monitor (Netdata on VPS)</h4>
+      <p>Netdata runs as a separate container, auto-discovers all running services, tracks CPU/RAM/disk/swap/network per container. Alerts to Slack when Chromium eats all your RAM (it will). This catches infrastructure problems the app can't see about itself.</p>
+    </div>
+
+    <div class="agent-card">
+      <h4>Layer 3: External Uptime (UptimeRobot / Better Stack)</h4>
+      <p>Runs OUTSIDE your VPS. Pings <code>/health</code> every 60 seconds. If your entire VPS goes down, Netdata can't tell you because it's also down. This external check catches that. Sends Slack DM + email. Free tier is enough.</p>
+    </div>
+
+    <div class="agent-card" style="border-left-color: var(--accent);">
+      <h4>Layer 4: Slack Aggregation (Your Single Pane)</h4>
+      <p>Everything reports to one Slack channel: <code>#infra-alerts</code>. Social-poster sends "posted to X at 11:02 AM" confirmations. Netdata sends "RAM > 80%" warnings. UptimeRobot sends "site down" alerts. One channel to check = one source of truth for "is it working?"</p>
+    </div>
+
+    <div class="callout" style="margin:0;">
+      <h4>What about the Claude agent from Downloads/claw-code?</h4>
+      <p>That agent was solving the wrong problem. You were using Claude as infrastructure (scheduling, monitoring) because you didn't have always-on infrastructure. Once social-poster runs on Contabo 24/7, you don't need an agent to "check if posts are working." The /status endpoint + Slack alerts do that. Claude goes back to being your dev assistant, not your cron daemon.</p>
+    </div>
+  </div>
+</div>
+
+<!-- WHAT OTHERS DO -->
+<div class="panel" id="insights">
+  <h2 style="font-size:20px;margin-bottom:8px;">What Others Do (Research)</h2>
+  <p style="color:var(--text-dim);font-size:14px;margin-bottom:28px;">Patterns from devs who've done this consolidation.</p>
+
+  <div class="insight-card">
+    <h4>Pattern 1: One VPS + Coolify = Your Own Heroku</h4>
+    <p>The dominant 2025-2026 pattern for solo devs: one beefy VPS ($10-30/mo), Coolify as PaaS layer, Git push to deploy. Replaces the "scripts on my laptop" problem entirely. Static sites stay on Cloudflare Pages (free), compute-heavy stuff goes to the VPS. You're already on this path.</p>
+    <div class="source">Sources: coolify.io, dev.to, digitalocean.com, criztec.com</div>
+  </div>
+
+  <div class="insight-card">
+    <h4>Pattern 2: Monitoring = 3 Layers (Not 1)</h4>
+    <p>Every production setup that works uses at minimum: (1) app-level health endpoints, (2) host-level metrics (Netdata, node-exporter + Grafana), (3) external uptime check from a different network. The mistake most solo devs make is only having #1, which can't detect if the whole box dies.</p>
+    <div class="source">Sources: peturgeorgievv.com, uptimerobot.com, rapidinnovation.io</div>
+  </div>
+
+  <div class="insight-card">
+    <h4>Pattern 3: "Deploy Fast" = Git Push, Nothing Else</h4>
+    <p>The simplest update path: push to main, Coolify auto-builds and deploys via webhook. Health check must pass before traffic routes. If it fails, auto-rollback to previous. Zero SSH, zero manual docker commands. The Dockerfile IS the deploy spec.</p>
+    <div class="source">Sources: dev.to/matthewh, dev.to/lucasnevespereira</div>
+  </div>
+
+  <div class="insight-card">
+    <h4>Pattern 4: Secrets in Doppler/Vault, Not in Repos or .env</h4>
+    <p>Your migration plan already calls this out. Doppler syncs to Coolify env vars. No secrets in git, no secrets in docs. Rotate anything that was ever in plaintext (your earlier draft had inline keys).</p>
+    <div class="source">Sources: doppler.com, your migration plan (correction section)</div>
+  </div>
+
+  <div class="insight-card">
+    <h4>Pattern 5: Don't Use AI Agents as Infrastructure</h4>
+    <p>Using Claude/Codex/agents as cron schedulers or monitoring agents is a common early pattern that breaks at scale. The agent should write and improve the code; the server should run it. "Agent manages and lets me know" = /status endpoint + Slack webhook, not a Claude loop.</p>
+    <div class="source">Sources: sundayguardianlive.com (OpenClaw analysis), openobserve.ai</div>
+  </div>
+
+  <div style="margin-top: 32px;">
+    <h3 style="font-size: 16px; margin-bottom: 16px;">Priority Matrix: What to Do in What Order</h3>
+    <div class="matrix">
+      <div class="matrix-quad q1">
+        <h4>Do First (Urgent + Important)</h4>
+        <ul>
+          <li>Harden VPS security (SSH, ports, swap)</li>
+          <li>Create social-poster repo with health endpoints</li>
+          <li>Set up Doppler and migrate all secrets</li>
+          <li>Cloudflare Full (strict) TLS</li>
+        </ul>
+      </div>
+      <div class="matrix-quad q2">
+        <h4>Do Next (Important, Not Urgent)</h4>
+        <ul>
+          <li>Build + deploy social-poster container</li>
+          <li>Set up 3-layer monitoring</li>
+          <li>Shadow run to validate parity</li>
+          <li>Daily SQLite backups to R2</li>
+        </ul>
+      </div>
+      <div class="matrix-quad q3">
+        <h4>Do Later (Nice to Have)</h4>
+        <ul>
+          <li>Cloudflare Tunnel for Coolify admin</li>
+          <li>GHCR images for rollback</li>
+          <li>Netdata long-term retention</li>
+          <li>api.maxpetrusenko.com for future services</li>
+        </ul>
+      </div>
+      <div class="matrix-quad q4">
+        <h4>Don't Do Yet</h4>
+        <ul>
+          <li>Second VPS (no need until failover is documented)</li>
+          <li>Postgres migration (SQLite is fine at this scale)</li>
+          <li>Multi-replica setup (one replica while using cron + SQLite)</li>
+          <li>Complex CI pipelines (Coolify auto-deploy is enough)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.querySelectorAll('.tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+      tab.classList.add('active');
+      document.getElementById(tab.dataset.panel).classList.add('active');
+    });
+  });
+</script>
+</body>
+</html>

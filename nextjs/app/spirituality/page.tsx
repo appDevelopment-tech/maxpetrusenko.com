@@ -20,9 +20,23 @@ import {
 
 export const metadata = generateMetadata({
   title: "Spirituality - Tantra & Somatic Energy Work",
-  description: "Intimate tantra massage and somatic energy work for men, women, and couples in Ubud, Bali and Miami, Florida. Certified tantric practitioner with nervous system reset, deep repatterning, and open-heart presence sessions. Available in South Florida from West Palm Beach to the Keys.",
+  description: "Certified tantra massage and somatic energy work for men, women, and couples in Ubud, Bali and Miami, Florida. Trained at Tantra Nectar University (Satyarti) with nervous system reset, deep repatterning, breathwork, and shadow work sessions. Available in South Florida from West Palm Beach to the Keys.",
   ogType: "website",
   canonical: absoluteUrl("/spirituality"),
+  keywords: [
+    "tantra massage",
+    "somatic energy work",
+    "energy work practitioner",
+    "nervous system regulation",
+    "breathwork",
+    "shadow work",
+    "tantra Ubud Bali",
+    "tantra Miami Florida",
+    "Tantra Nectar University",
+    "Satyarti certified",
+    "couples tantra",
+    "trauma-informed bodywork",
+  ],
 });
 
 export default function SpiritualityPage() {
@@ -106,7 +120,7 @@ export default function SpiritualityPage() {
         type="WebPage"
         data={generateWebPageSchema({
           title: "Spirituality - Tantra & Somatic Energy Work",
-          description: "Professional tantra massage and somatic energy work for men, women, and couples in Ubud, Bali and Miami, Florida. Certified tantric practitioner serving South Florida and Gianyar Regency.",
+          description: "Certified tantra massage and somatic energy work for men, women, and couples in Ubud, Bali and Miami, Florida. Trained at Tantra Nectar University (Satyarti) with nervous system reset, deep repatterning, breathwork, and embodied awareness sessions.",
           url: "/spirituality",
         })}
       />
@@ -174,6 +188,14 @@ export default function SpiritualityPage() {
         question="What tantra massage and somatic energy work services does Max Petrusenko offer?"
         answer="Max Petrusenko is a certified tantra and somatic practitioner offering intimate tantra massage and somatic energy work in Ubud, Bali and Miami, Florida. Sessions include nervous system reset (90 min), deep repatterning arcs, and Kyo-tai immersion bodywork. All sessions are intimate with clear boundaries and open-heart presence. Available for men, women, and couples. WhatsApp +1-786-543-6688 to book."
         displayAnswer="Private tantra massage and somatic energy work in Ubud and Miami. Boundaries first, nervous-system paced, and available for men, women, and couples by appointment."
+      />
+
+      <DirectAnswer
+        schemaType="WebPage"
+        showUi={false}
+        question="What is somatic energy work and who practices it near me?"
+        answer="Somatic energy work is a body-based practice using breathwork, conscious touch, and presence techniques for nervous system regulation and embodied awareness. Max Petrusenko holds a Tantra Massage Certification from Tantra Nectar University (Satyarti) and offers sessions in Ubud, Bali and Miami, Florida. Book via WhatsApp: +1-786-543-6688."
+        displayAnswer="Somatic energy work for nervous system regulation and embodied awareness. Certified practitioner available in Ubud and Miami."
       />
 
       <section className="dark-zone mt-8 py-16 px-4 md:py-20">
@@ -442,11 +464,11 @@ export default function SpiritualityPage() {
               </p>
             </div>
             <div className="card">
-              <h3>Tantra Massage Certification</h3>
+              <h3>Tantra Nectar University Certification</h3>
               <p>
-                Satyarti workshops and certificates: bodywork precision,
-                boundaries-first touch, and safe expansion inside clear
-                containers.
+                Tantra Nectar University (Satyarti) certified: bodywork
+                precision, boundaries-first touch, and safe expansion
+                inside clear containers.
               </p>
             </div>
           </div>

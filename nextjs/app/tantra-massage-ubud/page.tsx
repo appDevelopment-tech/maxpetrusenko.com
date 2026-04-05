@@ -201,12 +201,12 @@ export default function TantraMassageUbudPage() {
             </div>
           </div>
           <div className="card" style={{ marginTop: 14 }}>
-            <h3>Certified Training</h3>
-            <p>
-              Shambhavi Mahamudra (Isha), Kriya Yoga (Yogananda lineage), Tantra
-              Massage Certification (Satyarti), Amenti Dance Workshops. This isn&apos;t
-              weekend training — it&apos;s years of embodied practice.
-            </p>
+              <h3>Certified Training</h3>
+              <p>
+                Shambhavi Mahamudra (Isha), Kriya Yoga (Yogananda lineage), Tantra
+                Massage Certification (Satyarti / Tantra Nectar University), Amenti Dance Workshops. This isn&apos;t
+                weekend training — it&apos;s years of embodied practice.
+              </p>
           </div>
         </section>
 
