@@ -32,6 +32,53 @@ export default async function TechPage() {
     article.tags.some((tag) => tag.toLowerCase() === "tech")
   );
   const recentArticles = (techArticles.length >= 3 ? techArticles : articles).slice(0, 3);
+  const featuredProductApps = [
+    {
+      title: "Shipyard Agent",
+      href: "https://shipyard-agent.maxpetrusenko.com/benchmarks",
+      image: "/images/tech-apps/shipyard-agent.png",
+      alt: "Shipyard Agent benchmarks and orchestration flow",
+      description:
+        "Autonomous coding agent with LangGraph orchestration, worker agents, deterministic verify and review loops, run history, and benchmark tracking.",
+      tags: ["LangGraph", "Agents", "Benchmarks", "TypeScript"],
+    },
+    {
+      title: "OpenClaw Factory",
+      href: "https://software-factory.maxpetrusenko.com",
+      image: "/images/tech-apps/openclaw-factory.png",
+      alt: "OpenClaw Factory agent workspace with tickets and preview panel",
+      description:
+        "Agentic software factory with Athena orchestration, live ticket planning, multi-agent worktrees, health telemetry, preview controls, and a factory event stream.",
+      tags: ["Software Factory", "Athena", "Multi-Agent", "Telemetry"],
+    },
+    {
+      title: "CollabBoard",
+      href: "https://colabboard.maxpetrusenko.com",
+      image: "/images/tech-apps/collabboard.png",
+      alt: "CollabBoard realtime collaborative whiteboard login screen",
+      description:
+        "Realtime collaborative whiteboard with multi-user sync, AI board commands, React and Vite UI, Konva canvas, and Firebase-backed presence.",
+      tags: ["Realtime", "Konva", "Firebase", "AI Commands"],
+    },
+    {
+      title: "AI Math Tutor",
+      href: "https://aitutor.maxpetrusenko.com",
+      image: "/images/tech-apps/ai-math-tutor.png",
+      alt: "AI Math Tutor landing page with tutor avatar",
+      description:
+        "Realtime voice tutoring stack with FastAPI WebSockets, pluggable STT and LLM providers, Cartesia speech, and switchable 2D SVG or 3D Three.js avatars.",
+      tags: ["Voice AI", "FastAPI", "Three.js", "Deepgram"],
+    },
+    {
+      title: "Ghostfolio",
+      href: "https://ghostfolio.maxpetrusenko.com/en",
+      image: "/images/tech-apps/ghostfolio-app.png",
+      alt: "Ghostfolio personal finance dashboard landing page",
+      description:
+        "Privacy-first wealth dashboard for tracking net worth across cash, stocks, ETFs, and crypto with open source portfolio analytics.",
+      tags: ["Portfolio", "ETFs", "Crypto", "Net Worth"],
+    },
+  ];
 
   return (
     <>
@@ -429,6 +476,32 @@ export default async function TechPage() {
                 </div>
               </div>
             </a>
+            {featuredProductApps.map((app) => (
+              <a
+                key={app.title}
+                className="article-card"
+                href={app.href}
+                target="_blank"
+                rel="noopener"
+              >
+                <Image
+                  className="article-thumb"
+                  src={app.image}
+                  alt={app.alt}
+                  width={400}
+                  height={225}
+                />
+                <div className="article-body">
+                  <span className="article-title">{app.title}</span>
+                  <span className="article-sub">{app.description}</span>
+                  <div className="article-meta">
+                    {app.tags.map((tag) => (
+                      <span key={tag} className="stat">{tag}</span>
+                    ))}
+                  </div>
+                </div>
+              </a>
+            ))}
             <a
               className="article-card"
               href="https://lobby-app-5048e.web.app/"
