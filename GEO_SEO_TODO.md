@@ -144,3 +144,12 @@ Breakdown:
 3. Add unique OG image variants per core route (`/`, `/tech`, `/spirituality`) for citation previews
 4. Add route-level guardrails so future support pages cannot retarget the same exact commercial head term as the money page
 5. Compress or replace the largest remaining source JPGs used on hero routes if field CWV still shows weak LCP after recrawl
+
+---
+
+## April 5, 2026 Planned Follow-up
+
+- [ ] Execute spirituality discovery expansion plan in `docs/plans/2026-04-05-spirituality-aeo-geo-expansion-plan.md`
+- [ ] Sync `nextjs/public/.ai.txt` with current `llms.txt` and spirituality route coverage
+- [ ] Broaden spirituality schema and visible copy without adding duplicate `FAQPage` output
+- [ ] Add supporting spirituality backlog seeds for energy work, shadow work, and consciousness-tech crossover
