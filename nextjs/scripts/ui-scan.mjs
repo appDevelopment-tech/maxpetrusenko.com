@@ -3,6 +3,13 @@ import fs from "node:fs";
 
 const baseArg = process.argv[2];
 const baseEnv = process.env.UI_SCAN_BASE_URL;
+
+if (process.env.GITHUB_ACTIONS === "true" && !baseArg && !baseEnv) {
+  console.log("UI scan skipped in GitHub Actions because the live site is Cloudflare challenge-protected.");
+  console.log("Set UI_SCAN_BASE_URL to scan an explicit preview or local server.");
+  process.exit(0);
+}
+
 const baseUrl = new URL(baseArg || baseEnv || "https://www.maxpetrusenko.com");
 const origin = baseUrl.origin;
 
