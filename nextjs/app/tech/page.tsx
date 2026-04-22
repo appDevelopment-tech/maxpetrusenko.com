@@ -34,6 +34,15 @@ export default async function TechPage() {
   const recentArticles = (techArticles.length >= 3 ? techArticles : articles).slice(0, 3);
   const featuredProductApps = [
     {
+      title: "ClawPoster",
+      href: "https://clawposter.app",
+      image: "/images/tech-apps/clawposter.png",
+      alt: "ClawPoster AI social publishing command center",
+      description:
+        "AI social publishing agent with source-backed drafts, platform-native adaptation, model-key controls, schedules, replies, and multi-brand publishing operations.",
+      tags: ["AI Social", "Agents", "Publishing", "Next.js"],
+    },
+    {
       title: "Shipyard Agent",
       href: "https://shipyard-agent.maxpetrusenko.com/benchmarks",
       image: "/images/tech-apps/shipyard-agent.png",

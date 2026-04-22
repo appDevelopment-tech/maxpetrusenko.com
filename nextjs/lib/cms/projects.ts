@@ -20,6 +20,18 @@ export const projects: Project[] = [
     tags: ["AI", "Claude", "Automation", "DevOps"],
   },
   {
+    id: "clawposter",
+    slug: "clawposter",
+    title: "ClawPoster",
+    description:
+      "AI social publishing agent for source-backed drafts, platform-native posts, model-key control, schedules, replies, and multi-brand publishing operations.",
+    image: "/images/tech-apps/clawposter.png",
+    link: "https://clawposter.app",
+    status: "live",
+    category: "tech",
+    tags: ["AI", "Social Automation", "Agents", "Publishing"],
+  },
+  {
     id: "presence-atelier",
     slug: "presence-atelier",
     title: "Presence Atelier",
