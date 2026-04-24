@@ -1,7 +1,7 @@
 # AI-First SEO & GEO Implementation Checklist
 
 For: maxpetrusenko.com (Next.js app in /nextjs)
-Last Updated: 2026-04-04
+Last Updated: 2026-04-19
 
 ---
 
@@ -32,6 +32,7 @@ Last Updated: 2026-04-04
 - [x] Legacy `/_/view` now returns explicit `410 Gone` with `X-Robots-Tag: noindex, nofollow`
 - [x] Removed `/_/` robots disallow so Google can recrawl and process removal state
 - [x] Main `robots.txt` blocks `/atelier/` legacy duplicate paths (kept `/mindfold/events` crawlable as canonical main-domain route)
+- [x] Legal pages `/privacy-policy` and `/terms-of-service` cover site apps, tools, events, newsletters, workspace/auth, AI features, and consulting services; both are linked in footer, included in sitemap, and exposed in AI guidance files (2026-04-19)
 
 ---
 

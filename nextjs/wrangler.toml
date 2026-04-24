@@ -14,3 +14,7 @@ pages_build_output_dir = ".vercel/output/static"
 [[kv_namespaces]]
 binding = "EMAIL_SUBS"
 id = "90a570d807f04bc4abb9b46282291e5b"
+
+[[kv_namespaces]]
+binding = "CONCIERGE_THREADS"
+id = "6a8dcc40d55d440b8b2c7e046f539ea7"

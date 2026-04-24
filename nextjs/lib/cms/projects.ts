@@ -20,6 +20,42 @@ export const projects: Project[] = [
     tags: ["AI", "Claude", "Automation", "DevOps"],
   },
   {
+    id: "clawposter",
+    slug: "clawposter",
+    title: "ClawPoster",
+    description:
+      "AI social publishing agent for source-backed drafts, platform-native posts, model-key control, schedules, replies, and multi-brand publishing operations.",
+    image: "/images/tech-apps/clawposter.png",
+    link: "https://clawposter.app",
+    status: "live",
+    category: "tech",
+    tags: ["AI", "Social Automation", "Agents", "Publishing"],
+  },
+  {
+    id: "agent-persona",
+    slug: "agent-persona",
+    title: "Agent Persona",
+    description:
+      "Hiring surface for personality-led agent roles and operator funnels. Built to make positioning, qualification, and conversion easier to understand fast.",
+    image: "/images/tech-apps/agent-persona.png",
+    link: "https://agent-persona.org",
+    status: "live",
+    category: "tech",
+    tags: ["AI", "Hiring", "Lead Gen", "Operators"],
+  },
+  {
+    id: "smm-agent",
+    slug: "smm-agent",
+    title: "SMM Agent",
+    description:
+      "Operator-facing social media agent layer for source-backed drafts, reply queues, schedules, model keys, and approval-aware publishing.",
+    image: "/images/tech-apps/smm-agent.png",
+    link: "https://smmagent.app",
+    status: "live",
+    category: "tech",
+    tags: ["AI", "Social Automation", "Replies", "Scheduling"],
+  },
+  {
     id: "presence-atelier",
     slug: "presence-atelier",
     title: "Presence Atelier",
