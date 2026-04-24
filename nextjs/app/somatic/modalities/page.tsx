@@ -92,7 +92,7 @@ export default function ModalitiesPage() {
               <div style={{ flex: 1, minWidth: 280 }}>
                 <h3>Tantra Massage</h3>
                 <p style={{ color: "var(--accent)", fontWeight: 500 }}>
-                  120 minutes • Energetic activation and opening
+                  120 minutes • <strong>$222</strong>
                 </p>
               </div>
               <a

@@ -99,21 +99,21 @@ export default function TantraMassageUbudPage() {
               <div className="tile">
                 <div className="tile-meta">
                   <span className="tile-title">Nervous System Reset</span>
-                  <span className="tile-desc">90 min • IDR 2,500,000</span>
+                  <span className="tile-desc">90 min • <strong>$111</strong></span>
                 </div>
                 <span className="badge spirit">Popular</span>
               </div>
               <div className="tile">
                 <div className="tile-meta">
                   <span className="tile-title">Deep Repatterning</span>
-                  <span className="tile-desc">120 min • IDR 3,500,000</span>
+                  <span className="tile-desc">120 min • <strong>$222</strong></span>
                 </div>
                 <span className="badge spirit">Deep</span>
               </div>
               <div className="tile">
                 <div className="tile-meta">
                   <span className="tile-title">Couples Tantra</span>
-                  <span className="tile-desc">120 min • IDR 5,000,000</span>
+                  <span className="tile-desc">120 min • <strong>$404</strong></span>
                 </div>
                 <span className="badge spirit">Partners</span>
               </div>
@@ -345,9 +345,9 @@ export default function TantraMassageUbudPage() {
             <div className="card">
               <h4>What forms of payment do you accept?</h4>
               <p>
-                Cash (IDR), transfer to Indonesian bank, Wise transfer, or credit
-                card via secure payment link. Payment is collected before the
-                session begins.
+                Cash (USD or IDR), transfer to Indonesian bank, Wise transfer,
+                or credit card via secure payment link. Payment is collected
+                before the session begins.
               </p>
             </div>
           </div>

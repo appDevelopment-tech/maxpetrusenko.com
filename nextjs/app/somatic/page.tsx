@@ -95,7 +95,7 @@ export default function SomaticPage() {
               <div className="tile">
                 <div className="tile-meta">
                   <span className="tile-title">Tantra Massage</span>
-                  <span className="tile-desc">120 minutes • Energetic & somatic</span>
+                  <span className="tile-desc">120 minutes • <strong>$222</strong></span>
                 </div>
                 <span className="badge spirit">Deep</span>
               </div>

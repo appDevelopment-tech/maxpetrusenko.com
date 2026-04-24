@@ -141,6 +141,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.7,
     },
     {
+      url: `${baseUrl}/privacy-policy`,
+      lastModified: await getRouteLastModified(appDir, "/privacy-policy", fallbackLastModified),
+      changeFrequency: "yearly",
+      priority: 0.3,
+    },
+    {
+      url: `${baseUrl}/terms-of-service`,
+      lastModified: await getRouteLastModified(appDir, "/terms-of-service", fallbackLastModified),
+      changeFrequency: "yearly",
+      priority: 0.3,
+    },
+    {
       url: `${baseUrl}/mindfold/events`,
       lastModified: await getRouteLastModified(appDir, "/mindfold/events", fallbackLastModified),
       changeFrequency: "weekly",
@@ -398,6 +410,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: await getRouteLastModified(appDir, "/tantra-massage-ubud", fallbackLastModified),
       changeFrequency: "weekly",
       priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/couples-tantra-massage`,
+      lastModified: await getRouteLastModified(
+        appDir,
+        "/couples-tantra-massage",
+        fallbackLastModified
+      ),
+      changeFrequency: "weekly",
+      priority: 0.8,
     },
     {
       url: `${baseUrl}/spirituality/articles/tantra-trauma-ptsd`,

@@ -1,15 +1,17 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import Script from "next/script";
 import { usePathname } from "next/navigation";
-import { ImagePlus, SendHorizontal, Smile, X } from "lucide-react";
-import { getRouteContext } from "@/lib/concierge/context";
+import { ArrowUpRight, CalendarDays, Check, ImagePlus, SendHorizontal, Smile, X } from "lucide-react";
+import { siteConfig } from "@/config/site";
 import type {
   ConciergeContext,
   ConciergeAttachment,
+  ConciergeCalendarSlot,
   ConciergeMessage,
+  ConciergeToolBlock,
   ConciergeVisit,
 } from "@/lib/concierge/types";
 import styles from "./ConciergeWidget.module.css";
@@ -36,6 +38,214 @@ const STREAM_INTERVAL_MS = 28;
 const STREAM_CHUNK_SIZE = 3;
 const MAX_ATTACHMENT_DATA_URL_CHARS = 280_000;
 const EMOJI_SET = ["🙂", "🙏", "✨", "🤍", "🔥", "🧠", "🌿", "📍"];
+const WELCOME_TEXT =
+  "Hi. I can help with sessions, bookings, writing, apps, or questions. Tell me what you're looking for.";
+const STARTER_QUESTIONS = [
+  "I want to book a session.",
+  "Show me the apps.",
+  "Show me the writing.",
+  "I have a tech project question.",
+];
+const WHATSAPP_FALLBACK_URL =
+  siteConfig.social.whatsapp || "https://wa.me/17865436688";
+
+type ConciergeAssistantResponse = {
+  error?: string;
+  message?: string;
+  threadId?: string;
+  visitorId?: string;
+  messageData?: ConciergeMessage;
+  tools?: ConciergeToolBlock[];
+};
+
+type ConciergeQuestionnaireResponse = {
+  error?: string;
+  message?: string;
+  tools?: ConciergeToolBlock[];
+  bookingPath?: string;
+  bookingUrl?: string;
+  nextStep?: "book" | "follow_up";
+  offer?: {
+    slots?: Array<{
+      id: string;
+      practitionerName?: string;
+      start?: string;
+      end?: string;
+    }>;
+    practitioners?: Array<{
+      id: string;
+      name?: string;
+      bookingUrl?: string;
+    }>;
+  };
+};
+
+function isExternalHref(href: string) {
+  return /^https?:\/\//i.test(href);
+}
+
+function formatOfferSlotLabel(start?: string, end?: string) {
+  if (!start) return "Available time";
+
+  const startDate = new Date(start);
+  const endDate = end ? new Date(end) : null;
+  const dateLabel = startDate.toLocaleDateString(undefined, {
+    weekday: "short",
+    month: "short",
+    day: "numeric",
+  });
+  const timeLabel = startDate.toLocaleTimeString(undefined, {
+    hour: "numeric",
+    minute: "2-digit",
+  });
+
+  if (!endDate) return `${dateLabel} at ${timeLabel}`;
+
+  const endLabel = endDate.toLocaleTimeString(undefined, {
+    hour: "numeric",
+    minute: "2-digit",
+  });
+
+  return `${dateLabel} at ${timeLabel} to ${endLabel}`;
+}
+
+function formatCalendarSlotDescription(slot: ConciergeCalendarSlot) {
+  return slot.description || "";
+}
+
+function buildToolKey(
+  message: ConciergeMessage,
+  messageIndex: number,
+  block: ConciergeToolBlock,
+  blockIndex: number
+) {
+  return [
+    message.createdAt ?? `${message.role}-${messageIndex}`,
+    block.type,
+    "id" in block ? block.id : "",
+    blockIndex,
+  ].join(":");
+}
+
+function buildQuestionnaireSummary(
+  form: HTMLFormElement,
+  fields: Extract<ConciergeToolBlock, { type: "questionnaire" }>["fields"]
+) {
+  const formData = new FormData(form);
+  const entries = Array.from(formData.entries())
+    .map(([key, value]) => [key, String(value).trim()] as const)
+    .filter(([, value]) => value.length > 0);
+  const fieldLabels = new Map(fields.map((field) => [field.id, field.label]));
+
+  return {
+    payload: Object.fromEntries(entries),
+    text:
+      entries.length > 0
+        ? entries
+            .map(([key, value]) => `${fieldLabels.get(key) || key}: ${value}`)
+            .join("\n")
+        : "Questionnaire completed.",
+  };
+}
+
+function buildQuestionnaireWhatsappSummary(
+  block: Extract<ConciergeToolBlock, { type: "questionnaire" }>,
+  payload: Record<string, string>
+) {
+  const entries = block.fields
+    .map((field) => {
+      const value = payload[field.id]?.trim();
+      if (!value) return null;
+      return `${field.label}\n${value}`;
+    })
+    .filter((entry): entry is string => Boolean(entry));
+
+  const sections = [
+    block.title?.trim() || "Session intake",
+    block.description?.trim(),
+    entries.join("\n\n"),
+  ].filter((section): section is string => Boolean(section && section.trim()));
+
+  return sections.join("\n\n");
+}
+
+function buildWhatsappHref(summary?: string) {
+  if (!summary?.trim()) return WHATSAPP_FALLBACK_URL;
+
+  try {
+    const url = new URL(WHATSAPP_FALLBACK_URL);
+    url.searchParams.set("text", summary.trim());
+    return url.toString();
+  } catch {
+    return `${WHATSAPP_FALLBACK_URL}?text=${encodeURIComponent(summary.trim())}`;
+  }
+}
+
+function normalizeQuestionnaireResponse(
+  payload: ConciergeQuestionnaireResponse,
+  successMessage?: string
+) {
+  const tools = Array.isArray(payload.tools) ? [...payload.tools] : [];
+  const slotList = Array.isArray(payload.offer?.slots) ? payload.offer.slots : [];
+  const practitionerCards = Array.isArray(payload.offer?.practitioners)
+    ? payload.offer.practitioners.filter((item) => item.bookingUrl)
+    : [];
+  const calendarHref = payload.bookingUrl || payload.bookingPath;
+
+  if (
+    (slotList.length > 0 || calendarHref) &&
+    !tools.some((tool) => tool.type === "calendar")
+  ) {
+    tools.push({
+      type: "calendar",
+      title: payload.nextStep === "book" ? "Available times" : "Next step",
+      description:
+        payload.nextStep === "book"
+          ? "Pick a time that feels right."
+          : "A follow-up path is ready.",
+      slots: slotList.map((slot) => ({
+        id: slot.id,
+        label: formatOfferSlotLabel(slot.start, slot.end),
+        description: slot.practitionerName,
+        href: calendarHref,
+        message: slot.practitionerName
+          ? `I want ${slot.practitionerName} for ${formatOfferSlotLabel(slot.start, slot.end)}.`
+          : `I want ${formatOfferSlotLabel(slot.start, slot.end)}.`,
+      })),
+      ctaLabel: calendarHref ? "Open full calendar" : undefined,
+      ctaHref: calendarHref || undefined,
+    });
+  }
+
+  if (
+    practitionerCards.length > 0 &&
+    !tools.some((tool) => tool.type === "cards")
+  ) {
+    tools.push({
+      type: "cards",
+      title: "Practitioners",
+      description: "Open a specific calendar if you already know who you want.",
+      cards: practitionerCards.map((practitioner) => ({
+        id: practitioner.id,
+        title: practitioner.name || "Practitioner",
+        href: practitioner.bookingUrl!,
+        description: "Open calendar",
+        buttonLabel: "Open",
+      })),
+    });
+  }
+
+  return {
+    content:
+      payload.message ||
+      successMessage ||
+      (tools.length > 0
+        ? "I have the next step ready."
+        : "Thanks. I have your details."),
+    tools,
+    shouldRedirectToWhatsapp: tools.length === 0,
+  };
+}
 
 function readHistory(): ConciergeVisit[] {
   if (typeof window === "undefined") return [];
@@ -176,6 +386,10 @@ export function ConciergeWidget() {
   const [threadId, setThreadState] = useState<string | null>(null);
   const [visitorId, setVisitorState] = useState<string | null>(null);
   const [emojiOpen, setEmojiOpen] = useState(false);
+  const [pickerSelections, setPickerSelections] = useState<Record<string, string>>({});
+  const [questionnaireStatus, setQuestionnaireStatus] = useState<
+    Record<string, { error?: string; submitted?: boolean; submitting?: boolean }>
+  >({});
   const [turnstileLoaded, setTurnstileLoaded] = useState(!TURNSTILE_SITE_KEY);
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
   const turnstileRef = useRef<HTMLDivElement>(null);
@@ -185,7 +399,6 @@ export function ConciergeWidget() {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const turnstileRequired = Boolean(TURNSTILE_SITE_KEY);
 
-  const routeContext = useMemo(() => getRouteContext(pathname), [pathname]);
   const hidden =
     pathname.startsWith("/inbox") ||
     pathname.startsWith("/admin") ||
@@ -258,21 +471,8 @@ export function ConciergeWidget() {
 
   if (hidden) return null;
 
-  const welcomeText =
-    messages.length > 0
-      ? null
-      : routeContext.proactiveQuestion;
-
-  const starterQuestions = [
-    routeContext.proactiveQuestion,
-    routeContext.lane === "somatic"
-      ? "How do your sessions handle boundaries and pacing?"
-      : routeContext.lane === "tech"
-        ? "What kind of AI automation projects are a good fit?"
-        : routeContext.lane === "bridge"
-          ? "How do meditation and engineering connect in your work?"
-      : "Can you help me find the right part of the site?",
-  ];
+  const welcomeText = messages.length > 0 ? null : WELCOME_TEXT;
+  const starterQuestions = STARTER_QUESTIONS;
 
   function handleAvatarError() {
     if (avatarSrc !== "/images/DSC05871.jpg") {
@@ -309,7 +509,8 @@ export function ConciergeWidget() {
 
   async function revealAssistantMessage(
     baseMessages: ConciergeMessage[],
-    assistantText: string
+    assistantText: string,
+    tools?: ConciergeToolBlock[]
   ) {
     const createdAt = new Date().toISOString();
 
@@ -339,8 +540,30 @@ export function ConciergeWidget() {
         role: "assistant",
         content: assistantText,
         createdAt,
+        tools,
       },
     ]);
+  }
+
+  function openToolHref(href: string) {
+    if (typeof window === "undefined") return;
+    if (isExternalHref(href)) {
+      window.open(href, "_blank", "noopener,noreferrer");
+      return;
+    }
+
+    window.location.assign(href);
+  }
+
+  async function handleToolAction(message?: string, href?: string) {
+    if (message?.trim()) {
+      await sendMessage(message);
+      return;
+    }
+
+    if (href) {
+      openToolHref(href);
+    }
   }
 
   async function sendMessage(text: string) {
@@ -397,14 +620,9 @@ export function ConciergeWidget() {
         }),
       });
 
-      const data = (await response.json().catch(() => ({}))) as {
-        error?: string;
-        message?: string;
-        threadId?: string;
-        visitorId?: string;
-      };
+      const data = (await response.json().catch(() => ({}))) as ConciergeAssistantResponse;
 
-      if (!response.ok || !data.message) {
+      if (!response.ok || (!data.message && !data.messageData?.tools?.length && !data.tools?.length)) {
         throw new Error(data.error || `Request failed (${response.status})`);
       }
 
@@ -424,7 +642,11 @@ export function ConciergeWidget() {
         );
       }
 
-      await revealAssistantMessage(nextMessages, data.message);
+      await revealAssistantMessage(
+        nextMessages,
+        data.message || "",
+        data.messageData?.tools ?? data.tools
+      );
     } catch (requestError) {
       setMessages(messages);
       setInput(text);
@@ -450,6 +672,352 @@ export function ConciergeWidget() {
       event.preventDefault();
       void sendMessage(input);
     }
+  }
+
+  async function handleQuestionnaireSubmit(
+    event: FormEvent<HTMLFormElement>,
+    blockKey: string,
+    block: Extract<ConciergeToolBlock, { type: "questionnaire" }>
+  ) {
+    event.preventDefault();
+
+    const form = event.currentTarget;
+    if (!form.reportValidity()) return;
+
+    const { payload, text } = buildQuestionnaireSummary(form, block.fields);
+    const questionnaire = payload as Record<string, string>;
+    const whatsappSummary = buildQuestionnaireWhatsappSummary(block, questionnaire);
+    const whatsappHref = buildWhatsappHref(whatsappSummary);
+    const submittedAt = new Date().toISOString();
+
+    setQuestionnaireStatus((current) => ({
+      ...current,
+      [blockKey]: { submitted: false, submitting: true, error: undefined },
+    }));
+
+    try {
+      const response = await fetch(block.endpoint, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          sessionId: crypto.randomUUID(),
+          threadId,
+          visitorId,
+          pathname,
+          title: typeof document !== "undefined" ? document.title : undefined,
+          submittedAt,
+          questionnaire,
+          initialMessage: messages
+            .slice()
+            .reverse()
+            .find((message) => message.role === "user")
+            ?.content,
+          intention: questionnaire.intention || "",
+          blocker: questionnaire.blocker || "",
+          serviceType: questionnaire.serviceType || "solo",
+          practitionerPreference: questionnaire.practitionerPreference || "any",
+          requestedWindow: questionnaire.requestedWindow || "",
+          contact: {
+            name: questionnaire.name || "",
+            phone: questionnaire.phone || "",
+            email: questionnaire.email || "",
+            method: questionnaire.contactMethod || "",
+          },
+        }),
+      });
+
+      const data = (await response.json().catch(() => ({}))) as ConciergeQuestionnaireResponse;
+      if (!response.ok) {
+        throw new Error(data.error || `Questionnaire failed (${response.status})`);
+      }
+
+      const normalized = normalizeQuestionnaireResponse(data, block.successMessage);
+      const redirectToWhatsapp = normalized.shouldRedirectToWhatsapp;
+      const assistantContent = redirectToWhatsapp
+        ? "I could not load times here. I’m sending you to WhatsApp now."
+        : normalized.content;
+
+      setMessages((current) => [
+        ...current,
+        {
+          role: "user",
+          content: text,
+          createdAt: submittedAt,
+        },
+        {
+          role: "assistant",
+          content: assistantContent,
+          createdAt: new Date().toISOString(),
+          tools: normalized.tools,
+        },
+      ]);
+      setQuestionnaireStatus((current) => ({
+        ...current,
+        [blockKey]: { submitted: true, submitting: false, error: undefined },
+      }));
+      form.reset();
+      if (redirectToWhatsapp) {
+        window.setTimeout(() => openToolHref(whatsappHref), 120);
+      }
+    } catch (requestError) {
+      setMessages((current) => [
+        ...current,
+        {
+          role: "user",
+          content: text,
+          createdAt: submittedAt,
+        },
+        {
+          role: "assistant",
+          content: "Something failed here. I’m sending you to WhatsApp now.",
+          createdAt: new Date().toISOString(),
+        },
+      ]);
+      setQuestionnaireStatus((current) => ({
+        ...current,
+        [blockKey]: {
+          submitted: false,
+          submitting: false,
+          error: undefined,
+        },
+      }));
+      window.setTimeout(() => openToolHref(whatsappHref), 120);
+    }
+  }
+
+  function renderToolBlock(
+    message: ConciergeMessage,
+    messageIndex: number,
+    block: ConciergeToolBlock,
+    blockIndex: number
+  ) {
+    const blockKey = buildToolKey(message, messageIndex, block, blockIndex);
+    const questionnaireState = questionnaireStatus[blockKey];
+
+    if (block.type === "cards") {
+      return (
+        <section key={blockKey} className={styles.toolBlock}>
+          {(block.title || block.description) && (
+            <div className={styles.toolHeader}>
+              {block.title && <p className={styles.toolTitle}>{block.title}</p>}
+              {block.description && (
+                <p className={styles.toolDescription}>{block.description}</p>
+              )}
+            </div>
+          )}
+          <div className={styles.linkCardGrid}>
+            {block.cards.map((card) => {
+              const external = isExternalHref(card.href);
+              return (
+                <a
+                  key={card.id}
+                  className={styles.linkCard}
+                  href={card.href}
+                  target={external ? "_blank" : undefined}
+                  rel={external ? "noopener noreferrer" : undefined}
+                >
+                  {card.imageSrc ? (
+                    <div className={styles.linkCardImageWrap}>
+                      <img
+                        src={card.imageSrc}
+                        alt={card.imageAlt || card.title}
+                        className={styles.linkCardImage}
+                      />
+                    </div>
+                  ) : null}
+                  <div className={styles.linkCardBody}>
+                    {card.eyebrow && (
+                      <span className={styles.linkCardEyebrow}>{card.eyebrow}</span>
+                    )}
+                    <span className={styles.linkCardTitle}>{card.title}</span>
+                    {card.description && (
+                      <span className={styles.linkCardDescription}>
+                        {card.description}
+                      </span>
+                    )}
+                    <span className={styles.linkCardCta}>
+                      {card.buttonLabel || "Open"} <ArrowUpRight size={14} />
+                    </span>
+                  </div>
+                </a>
+              );
+            })}
+          </div>
+        </section>
+      );
+    }
+
+    if (block.type === "picker") {
+      return (
+        <section key={blockKey} className={styles.toolBlock}>
+          {(block.title || block.description) && (
+            <div className={styles.toolHeader}>
+              {block.title && <p className={styles.toolTitle}>{block.title}</p>}
+              {block.description && (
+                <p className={styles.toolDescription}>{block.description}</p>
+              )}
+            </div>
+          )}
+          <div className={styles.pickerList}>
+            {block.options.map((option) => {
+              const selected = pickerSelections[blockKey] === option.id;
+              return (
+                <button
+                  key={option.id}
+                  type="button"
+                  className={`${styles.pickerOption} ${
+                    selected ? styles.pickerOptionActive : ""
+                  }`}
+                  onClick={() => {
+                    setPickerSelections((current) => ({
+                      ...current,
+                      [blockKey]: option.id,
+                    }));
+                    void handleToolAction(option.message);
+                  }}
+                >
+                  <span className={styles.pickerLabelRow}>
+                    <span className={styles.pickerLabel}>{option.label}</span>
+                    {selected && <Check size={14} strokeWidth={2.3} />}
+                  </span>
+                  {option.description && (
+                    <span className={styles.pickerDescription}>
+                      {option.description}
+                    </span>
+                  )}
+                </button>
+              );
+            })}
+          </div>
+        </section>
+      );
+    }
+
+    if (block.type === "calendar") {
+      return (
+        <section key={blockKey} className={styles.toolBlock}>
+          {(block.title || block.description) && (
+            <div className={styles.toolHeader}>
+              {block.title && <p className={styles.toolTitle}>{block.title}</p>}
+              {block.description && (
+                <p className={styles.toolDescription}>{block.description}</p>
+              )}
+            </div>
+          )}
+          <div className={styles.calendarGrid}>
+            {block.slots.map((slot) => (
+              <button
+                key={slot.id}
+                type="button"
+                className={styles.calendarSlot}
+                onClick={() => void handleToolAction(slot.message || slot.label, slot.href)}
+              >
+                <span className={styles.calendarSlotMeta}>
+                  <CalendarDays size={14} strokeWidth={2.1} />
+                  <span className={styles.calendarSlotLabel}>{slot.label}</span>
+                </span>
+                {formatCalendarSlotDescription(slot) && (
+                  <span className={styles.calendarSlotDescription}>
+                    {formatCalendarSlotDescription(slot)}
+                  </span>
+                )}
+              </button>
+            ))}
+          </div>
+          {block.ctaHref && block.ctaLabel ? (
+            <button
+              type="button"
+              className={styles.calendarCta}
+              onClick={() => openToolHref(block.ctaHref!)}
+            >
+              {block.ctaLabel} <ArrowUpRight size={14} />
+            </button>
+          ) : null}
+        </section>
+      );
+    }
+
+    return (
+      <section key={blockKey} className={styles.toolBlock}>
+        {(block.title || block.description) && (
+          <div className={styles.toolHeader}>
+            {block.title && <p className={styles.toolTitle}>{block.title}</p>}
+            {block.description && (
+              <p className={styles.toolDescription}>{block.description}</p>
+            )}
+          </div>
+        )}
+        <form
+          className={styles.questionnaire}
+          onSubmit={(event) => void handleQuestionnaireSubmit(event, blockKey, block)}
+        >
+          <div className={styles.questionnaireFields}>
+            {block.fields.map((field) => (
+              <label key={field.id} className={styles.questionnaireField}>
+                <span className={styles.questionnaireLabel}>{field.label}</span>
+                {field.type === "textarea" ? (
+                  <textarea
+                    name={field.id}
+                    className={`${styles.questionnaireInput} ${styles.questionnaireTextarea}`}
+                    placeholder={field.placeholder}
+                    defaultValue={field.initialValue}
+                    required={field.required}
+                  />
+                ) : field.type === "select" ? (
+                  <select
+                    name={field.id}
+                    className={styles.questionnaireInput}
+                    defaultValue={field.initialValue || ""}
+                    required={field.required}
+                  >
+                    <option value="" disabled>
+                      {field.placeholder || "Select"}
+                    </option>
+                    {(field.options || []).map((option) => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </select>
+                ) : (
+                  <input
+                    name={field.id}
+                    type={field.type}
+                    className={styles.questionnaireInput}
+                    placeholder={field.placeholder}
+                    defaultValue={field.initialValue}
+                    required={field.required}
+                  />
+                )}
+              </label>
+            ))}
+          </div>
+          <div className={styles.questionnaireFooter}>
+            <button
+              type="submit"
+              className={styles.questionnaireSubmit}
+              disabled={questionnaireState?.submitting || questionnaireState?.submitted}
+            >
+              {questionnaireState?.submitted
+                ? "Sent"
+                : questionnaireState?.submitting
+                  ? "Sending"
+                  : block.submitLabel || "Send"}
+            </button>
+            {questionnaireState?.submitted && block.successMessage && (
+              <span className={styles.questionnaireSuccess}>
+                {block.successMessage}
+              </span>
+            )}
+            {questionnaireState?.error && (
+              <span className={styles.questionnaireError}>
+                {questionnaireState.error}
+              </span>
+            )}
+          </div>
+        </form>
+      </section>
+    );
   }
 
   return (
@@ -546,9 +1114,9 @@ export function ConciergeWidget() {
                           </>
                         )}
                       </div>
-                    ) : (
-                      message.content
-                    )}
+                    ) : message.content ? (
+                      <div>{message.content}</div>
+                    ) : null}
                     {message.status !== "thinking" &&
                       message.attachments &&
                       message.attachments.length > 0 && (
@@ -564,6 +1132,15 @@ export function ConciergeWidget() {
                         ))}
                       </div>
                     )}
+                    {message.status !== "thinking" &&
+                      message.tools &&
+                      message.tools.length > 0 && (
+                        <div className={styles.toolStack}>
+                          {message.tools.map((block, blockIndex) =>
+                            renderToolBlock(message, index, block, blockIndex)
+                          )}
+                        </div>
+                      )}
                   </div>
                   <span className={styles.messageLabel}>
                     {message.status === "thinking"

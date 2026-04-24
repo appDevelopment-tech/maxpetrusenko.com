@@ -325,6 +325,226 @@
   margin-top: 10px;
 }
 
+.toolStack {
+  display: grid;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.toolBlock {
+  display: grid;
+  gap: 10px;
+}
+
+.toolHeader {
+  display: grid;
+  gap: 4px;
+}
+
+.toolTitle {
+  margin: 0;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: rgba(32, 44, 42, 0.92);
+}
+
+.toolDescription {
+  margin: 0;
+  font-size: 0.78rem;
+  line-height: 1.45;
+  color: rgba(52, 74, 69, 0.72);
+}
+
+.linkCardGrid,
+.pickerList,
+.calendarGrid,
+.questionnaireFields {
+  display: grid;
+  gap: 10px;
+}
+
+.linkCard {
+  display: grid;
+  gap: 0;
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  border-radius: 18px;
+  border: 1px solid rgba(121, 53, 26, 0.1);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(248, 241, 232, 0.92));
+  box-shadow: 0 10px 24px rgba(45, 27, 18, 0.08);
+}
+
+.linkCardImageWrap {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: rgba(214, 100, 37, 0.08);
+}
+
+.linkCardImage {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.linkCardBody {
+  display: grid;
+  gap: 6px;
+  padding: 12px 13px 13px;
+}
+
+.linkCardEyebrow {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(14, 97, 93, 0.7);
+}
+
+.linkCardTitle {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: rgba(25, 34, 32, 0.94);
+}
+
+.linkCardDescription {
+  font-size: 0.8rem;
+  line-height: 1.45;
+  color: rgba(52, 74, 69, 0.74);
+}
+
+.linkCardCta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 2px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #b9471b;
+}
+
+.pickerOption,
+.calendarSlot,
+.calendarCta,
+.questionnaireSubmit {
+  appearance: none;
+  border: 0;
+  cursor: pointer;
+}
+
+.pickerOption,
+.calendarSlot {
+  display: grid;
+  gap: 5px;
+  width: 100%;
+  text-align: left;
+  border-radius: 16px;
+  padding: 11px 12px;
+  background: rgba(255, 255, 255, 0.74);
+  border: 1px solid rgba(121, 53, 26, 0.1);
+  color: rgba(25, 34, 32, 0.92);
+}
+
+.pickerOptionActive {
+  border-color: rgba(14, 97, 93, 0.34);
+  background: rgba(14, 97, 93, 0.1);
+}
+
+.pickerLabelRow,
+.calendarSlotMeta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.pickerLabel,
+.calendarSlotLabel {
+  font-size: 0.84rem;
+  font-weight: 700;
+}
+
+.pickerDescription,
+.calendarSlotDescription {
+  font-size: 0.78rem;
+  line-height: 1.45;
+  color: rgba(52, 74, 69, 0.72);
+}
+
+.calendarCta,
+.questionnaireSubmit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 40px;
+  padding: 0 14px;
+  border-radius: 999px;
+  background: rgba(14, 97, 93, 0.1);
+  color: #0e615d;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.calendarCta:disabled,
+.questionnaireSubmit:disabled {
+  opacity: 0.58;
+  cursor: default;
+}
+
+.questionnaire {
+  display: grid;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(121, 53, 26, 0.08);
+}
+
+.questionnaireField {
+  display: grid;
+  gap: 6px;
+}
+
+.questionnaireLabel {
+  font-size: 0.77rem;
+  font-weight: 700;
+  color: rgba(32, 44, 42, 0.86);
+}
+
+.questionnaireInput {
+  width: 100%;
+  border-radius: 14px;
+  border: 1px solid rgba(121, 53, 26, 0.14);
+  background: rgba(255, 252, 247, 0.96);
+  color: var(--ink);
+  padding: 10px 12px;
+  font: inherit;
+  outline: none;
+}
+
+.questionnaireTextarea {
+  min-height: 92px;
+  resize: vertical;
+}
+
+.questionnaireFooter {
+  display: grid;
+  gap: 8px;
+}
+
+.questionnaireError {
+  font-size: 0.76rem;
+  color: #9f1d20;
+}
+
+.questionnaireSuccess {
+  font-size: 0.76rem;
+  color: rgba(14, 97, 93, 0.76);
+}
+
 .attachmentCard {
   overflow: hidden;
   border-radius: 14px;

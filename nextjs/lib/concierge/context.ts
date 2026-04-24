@@ -33,12 +33,18 @@ const ROUTE_RULES: RouteContextRule[] = [
       "Want help understanding boundaries, pacing, or what a first session could feel like?",
   },
   {
+    prefixes: ["/socialmedia"],
+    lane: "tech",
+    label: "social publishing",
+    question:
+      "Want help understanding what this dashboard shows or how the posting system works?",
+  },
+  {
     prefixes: [
       "/tech",
       "/ai-workflow-automation",
       "/n8n-automation",
       "/claude-code-consultant",
-      "/socialmedia",
     ],
     lane: "tech",
     label: "tech consulting",
