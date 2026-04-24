@@ -27,6 +27,8 @@ export function Footer() {
             </Link>
           ))}
           <Link href="/blog/topics">Topics</Link>
+          <Link href="/privacy-policy">Privacy</Link>
+          <Link href="/terms-of-service">Terms</Link>
         </div>
       </div>
     </footer>

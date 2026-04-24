@@ -15,6 +15,11 @@ import {
   inferLeadFromConversation,
   mergeLeadProfiles,
 } from "@/lib/concierge/lead";
+import {
+  buildConciergeToolBlocks,
+  sanitizeConciergeToolBlocks,
+} from "@/lib/concierge/tooling";
+import { mergeConciergeTranscript } from "@/lib/concierge/transcript";
 import type {
   ConciergeAttachment,
   ConciergeContext,
@@ -38,8 +43,8 @@ Voice:
 Primary job:
 - help visitors understand Max's work
 - answer useful questions
-- route them gently toward the right next step
-- help the right people move toward a remote call, WhatsApp conversation, or booking path when there is clear intent
+- guide them gently toward the right next step
+- help the right people move toward a WhatsApp conversation, booking path, or the clearest next contact step when there is clear intent
 
 Lanes:
 1. Somatic: tantra, somatic work, nervous system regulation, boundaries, sessions
@@ -52,16 +57,23 @@ Operating rules:
 - do not over-answer when one clear paragraph and one clarifying question would do
 - avoid hype, guru language, and certainty theater
 - after helping, offer one practical next step when it fits
-- if the visitor is clearly exploring a service, help qualify gently
+- if the visitor is clearly exploring a service, help understand whether it is a good fit
 - when buying or booking intent is clear, ask for the smallest missing detail that helps follow-up: name, email or WhatsApp, timezone, company, or use case
 - capture details lightly inside the conversation instead of dropping into a long intake form
+- for somatic booking intent, gate the flow: explain the work and public pricing, ask intention first, then collect blocker/context/contact/timezone before giving any booking step
+- if Max is unavailable or not the fit, keep the same intake gate and help the visitor find the best next person or next step rather than promising availability
+- do not claim a live calendar is connected unless a booking link is explicitly provided in system context
+- decide tool use from the visitor's intention and the details already captured; do not advance to a tool before the gate is satisfied
+- somatic tool-use order: capture intention -> understand blocker/context -> ask practitioner preference when useful -> send questionnaire -> offer booking calendar only if configured -> otherwise WhatsApp handoff -> private team handoff only when needed
 - if they are just browsing ideas, stay light and useful
-- do not offer in-person meetings
-- Max only does remote intro calls and remote qualification conversations through phone, Zoom, WhatsApp, or email
-- when someone is ready to continue, prefer one clear remote CTA over multiple options
+- for tech and general inquiries, do not offer in-person meetings; keep those to remote calls, WhatsApp, or email
+- for somatic inquiries, do not describe the sessions as remote; somatic sessions are in-person offerings and booking starts through chat or WhatsApp
+- somatic sessions can be discussed as published services, but availability must be confirmed after a short conversation
+- when someone is ready to continue, prefer one clear next step over multiple options
 
 Safety:
 - tantra and somatic work must be framed as professional, consent-led, boundaries-first, and non-sexual-services
+- do not sound punitive or defensive when clarifying boundaries; stay calm and matter-of-fact
 - do not present this as medical, psychiatric, legal, or crisis support
 - if someone sounds in crisis, unstable, or asks for medical/trauma emergency guidance, respond briefly, set boundaries, and suggest appropriate in-person professional support
 - if someone sexualizes the somatic work, correct the frame and refuse to continue in that direction
@@ -331,6 +343,7 @@ function sanitizeMessages(messages: ConciergeMessage[]): ConciergeMessage[] {
             dataUrl: attachment.dataUrl.slice(0, MAX_ATTACHMENT_DATA_URL_CHARS),
           }))
       : undefined,
+    tools: sanitizeConciergeToolBlocks(message.tools),
   }));
 
   const totalText = trimmed.reduce(
@@ -409,7 +422,7 @@ function buildFallbackReply(params: {
 
   if (params.lane === "somatic") {
     if (text.includes("book") || text.includes("session")) {
-      return "I can help with that. Max's somatic work is slow, consent-led, and boundaries-first. If you want, tell me what you are seeking, your time zone, and the best way to reach you, and I can guide you to the clearest remote next step.";
+      return "I can help with that. The work is consent-led, boundaries-first, and paced carefully. If you want, tell me your intention, any important context, your practitioner preference, and the best way to reach you, and I can guide you to the clearest next step.";
     }
 
     return `You are in the right place. Max's somatic work is professional, grounded, and paced carefully around boundaries and consent.${hasImage ? " I can also use the image you shared as context." : ""} If you want, tell me whether you are curious about sessions, fit, or practical details, and I will keep it simple.`;
@@ -426,6 +439,30 @@ function buildFallbackReply(params: {
   return "You can start anywhere. Tell me what brought you here, and I will help you find the right angle, page, or next conversation without making it heavy.";
 }
 
+function buildOperationsContext(): string {
+  const somaticCalendarUrl = getEnvValue("SOMATIC_CALENDAR_URL");
+  const somaticQuestionnaireUrl = getEnvValue("SOMATIC_QUESTIONNAIRE_URL");
+  const somaticTeamLoginUrl =
+    getEnvValue("SOMATIC_ROUTING_LOGIN_URL") ?? "/workspace/sign-in";
+
+  return [
+    "Somatic public pricing reference: Nervous System Reset, 90 min, USD 111. Tantra Massage / Deep Repatterning, 120 min, USD 222. Couples Tantra, 120 min, USD 404.",
+    "Somatic location context: in-person sessions in Ubud, Bali and Miami, Florida, with travel-based availability by request. Do not describe somatic sessions as remote.",
+    somaticQuestionnaireUrl
+      ? `Somatic questionnaire link: ${somaticQuestionnaireUrl}`
+      : "Somatic questionnaire link: not configured. Use a concise in-chat questionnaire.",
+    somaticCalendarUrl
+      ? `Somatic booking calendar link: ${somaticCalendarUrl}`
+      : "Somatic booking calendar link: not configured. Do not claim live availability or offer a calendar link.",
+    `Private team handoff link: ${somaticTeamLoginUrl}`,
+    "Public booking fallback: WhatsApp +1-786-543-6688.",
+    "Somatic qualification: ask intention first. Ask blocker/context lightly. Ask practitioner preference as female, male, or no preference unless the visitor already asked for a specific practitioner.",
+    "Do not ask for psychiatric diagnoses, medications, pregnancy, or trauma history by default. Ask safety or health context only when relevant to fit, pacing, or contraindications.",
+    "Available agent actions: capture_intention, understand_blocker, ask_practitioner_preference, send_questionnaire, offer_calendar, whatsapp_handoff, private_team_handoff. Choose actions implicitly in the answer; do not expose action names to the visitor.",
+    "Tone for somatic booking: gentle, simple, practical. Avoid internal process language, scolding disclaimers, or heavy screening language in visitor-facing replies.",
+  ].join("\n");
+}
+
 async function persistThread(params: {
   threadId: string;
   priorThread: ConciergeThread | null;
@@ -437,6 +474,11 @@ async function persistThread(params: {
 }): Promise<void> {
   const history = sanitizeVisitHistory(params.context.history);
   const now = new Date().toISOString();
+  const archivedMessages = mergeConciergeTranscript({
+    existingMessages: params.priorThread?.messages,
+    incomingMessages: params.messages,
+    fallbackCreatedAt: now,
+  });
   const thread: ConciergeThread = {
     id: params.threadId,
     visitorId: params.visitorId,
@@ -445,17 +487,12 @@ async function persistThread(params: {
     updatedAt: now,
     pathname: params.context.pathname,
     title: params.context.title,
-    summary: params.lead.insight.summary || summarizeThread(params.messages),
+    summary: params.lead.insight.summary || summarizeThread(archivedMessages),
     lead: params.lead,
     crm: params.priorThread?.crm ?? null,
     proactivePrompt: params.context.proactivePrompt ?? null,
     history,
-    messages: params.messages.map((message) => ({
-      role: message.role,
-      content: message.content,
-      createdAt: message.createdAt ?? now,
-      attachments: message.attachments,
-    })),
+    messages: archivedMessages,
   };
 
   await saveConciergeThread(thread);
@@ -574,7 +611,7 @@ export async function POST(request: Request) {
 
       const requestBody = {
         model: provider.model,
-        instructions: `${SYSTEM_PROMPT}\n\nVisitor context:\n${contextSummary}\n\nCurrent lane: ${lane}`,
+        instructions: `${SYSTEM_PROMPT}\n\nOperational context:\n${buildOperationsContext()}\n\nVisitor context:\n${contextSummary}\n\nCurrent lane: ${lane}`,
         input: responseInput,
         text: {
           verbosity: "low",
@@ -599,16 +636,29 @@ export async function POST(request: Request) {
       const assistantMessage = extractMessage(data);
       if (!assistantMessage) continue;
 
+      const assistantTools = buildConciergeToolBlocks({
+        lane,
+        context,
+        messages,
+        somaticCalendarUrl: getEnvValue("SOMATIC_CALENDAR_URL"),
+      });
+      const assistantResponseMessage: ConciergeMessage = {
+        role: "assistant",
+        content: assistantMessage,
+        createdAt: new Date().toISOString(),
+        tools: assistantTools,
+      };
       const savedMessages: ConciergeMessage[] = [
         ...messages,
-        {
-          role: "assistant",
-          content: assistantMessage,
-          createdAt: new Date().toISOString(),
-        },
+        assistantResponseMessage,
       ];
+      const archivedMessages = mergeConciergeTranscript({
+        existingMessages: priorThread?.messages,
+        incomingMessages: savedMessages,
+        fallbackCreatedAt: new Date().toISOString(),
+      });
       const lead = inferLeadFromConversation({
-        messages: savedMessages,
+        messages: archivedMessages,
         lane,
         context,
         existingProfile: mergeLeadProfiles(
@@ -623,7 +673,7 @@ export async function POST(request: Request) {
         visitorId,
         lane,
         context,
-        messages: savedMessages,
+        messages: archivedMessages,
         lead,
       });
 
@@ -633,6 +683,8 @@ export async function POST(request: Request) {
         lane,
         provider: provider.name,
         message: assistantMessage,
+        tools: assistantTools,
+        messageData: assistantResponseMessage,
       });
     }
 
@@ -641,16 +693,29 @@ export async function POST(request: Request) {
       context,
       messages,
     });
+    const fallbackTools = buildConciergeToolBlocks({
+      lane,
+      context,
+      messages,
+      somaticCalendarUrl: getEnvValue("SOMATIC_CALENDAR_URL"),
+    });
+    const fallbackResponseMessage: ConciergeMessage = {
+      role: "assistant",
+      content: fallbackMessage,
+      createdAt: new Date().toISOString(),
+      tools: fallbackTools,
+    };
     const savedMessages: ConciergeMessage[] = [
       ...messages,
-      {
-        role: "assistant",
-        content: fallbackMessage,
-        createdAt: new Date().toISOString(),
-      },
+      fallbackResponseMessage,
     ];
+    const archivedMessages = mergeConciergeTranscript({
+      existingMessages: priorThread?.messages,
+      incomingMessages: savedMessages,
+      fallbackCreatedAt: new Date().toISOString(),
+    });
     const lead = inferLeadFromConversation({
-      messages: savedMessages,
+      messages: archivedMessages,
       lane,
       context,
       existingProfile: mergeLeadProfiles(
@@ -665,7 +730,7 @@ export async function POST(request: Request) {
       visitorId,
       lane,
       context,
-      messages: savedMessages,
+      messages: archivedMessages,
       lead,
     });
 
@@ -679,6 +744,8 @@ export async function POST(request: Request) {
       lane,
       provider: "fallback",
       message: fallbackMessage,
+      tools: fallbackTools,
+      messageData: fallbackResponseMessage,
     });
   } catch (error) {
     console.error("[concierge] unhandled error", error);

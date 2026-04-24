@@ -84,6 +84,21 @@ const nextConfig: NextConfig = {
         destination: "/spirituality",
         permanent: true, // 301 redirect
       },
+      {
+        source: "/couples-tantra",
+        destination: "/couples-tantra-massage",
+        permanent: true,
+      },
+      {
+        source: "/couples-tantra-ubud",
+        destination: "/couples-tantra-massage",
+        permanent: true,
+      },
+      {
+        source: "/couples-tantric-massage",
+        destination: "/couples-tantra-massage",
+        permanent: true,
+      },
     ];
   },
 

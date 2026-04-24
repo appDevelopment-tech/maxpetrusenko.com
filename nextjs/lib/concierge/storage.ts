@@ -13,6 +13,7 @@ interface KvStore {
 const THREAD_PREFIX = "concierge:thread:";
 const THREAD_INDEX_KEY = "concierge:index";
 const USER_PREFIX = "concierge:user:";
+const MAX_THREAD_INDEX_SIZE = 1000;
 const memoryThreads = new Map<string, ConciergeThread>();
 const memoryUsers = new Map<string, ConciergeUser>();
 let memoryIndex: string[] = [];
@@ -51,7 +52,7 @@ async function writeIndex(store: KvStore | null, ids: string[]): Promise<void> {
     return;
   }
 
-  await store.put(THREAD_INDEX_KEY, JSON.stringify(ids.slice(0, 200)));
+  await store.put(THREAD_INDEX_KEY, JSON.stringify(ids.slice(0, MAX_THREAD_INDEX_SIZE)));
 }
 
 export async function saveConciergeThread(thread: ConciergeThread): Promise<void> {
@@ -60,7 +61,7 @@ export async function saveConciergeThread(thread: ConciergeThread): Promise<void
   if (!store) {
     memoryThreads.set(thread.id, thread);
     const next = [thread.id, ...memoryIndex.filter((id) => id !== thread.id)];
-    memoryIndex = next.slice(0, 200);
+    memoryIndex = next.slice(0, MAX_THREAD_INDEX_SIZE);
     return;
   }
 
@@ -83,7 +84,7 @@ export async function getConciergeThread(id: string): Promise<ConciergeThread | 
   );
 }
 
-export async function listConciergeThreads(limit = 50): Promise<ConciergeThread[]> {
+export async function listConciergeThreads(limit = MAX_THREAD_INDEX_SIZE): Promise<ConciergeThread[]> {
   const store = getThreadStore();
   const ids = (await readIndex(store)).slice(0, limit);
 

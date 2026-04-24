@@ -13,6 +13,12 @@ This is a Next.js 14 website with programmatic SEO, built with TypeScript, Tailw
 - **Private Workspace**: Google sign-in via Supabase for people/team dashboard access
 - **Sitemap & Robots**: Auto-generated based on content
 
+## Live Product Highlights
+
+- **ClawPoster**: AI social publishing agent at `https://clawposter.app`
+- **Agent Persona**: operator and hiring surface at `https://agent-persona.org`
+- **SMM Agent**: social ops surface at `https://smmagent.app`
+
 ## Getting Started
 
 ### Prerequisites
@@ -138,6 +144,7 @@ It is intentionally `workflow_dispatch` only so it does not create duplicate pro
   - Add workspace auth variables: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `WORKSPACE_ALLOWED_EMAILS`, `WORKSPACE_ALLOWED_DOMAINS`
 
    Concierge threads persist more than transcripts. The same KV store now keeps:
+   - full saved chatbot transcript per visitor thread, merged across turns
    - volunteered contact details
    - inferred intent, stage, score, urgency, and next step
    - manual CRM controls from the inbox: stage override, owner, notes, and follow-up timestamps

@@ -23,6 +23,6 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const threads = await listConciergeThreads(80);
+  const threads = await listConciergeThreads();
   return NextResponse.json({ threads });
 }

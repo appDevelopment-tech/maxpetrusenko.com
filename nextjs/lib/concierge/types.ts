@@ -72,11 +72,84 @@ export interface ConciergeAttachment {
   dataUrl: string;
 }
 
+export interface ConciergeLinkCard {
+  id: string;
+  title: string;
+  href: string;
+  imageSrc?: string;
+  imageAlt?: string;
+  eyebrow?: string;
+  description?: string;
+  buttonLabel?: string;
+}
+
+export interface ConciergePickerOption {
+  id: string;
+  label: string;
+  message: string;
+  description?: string;
+}
+
+export interface ConciergeCalendarSlot {
+  id: string;
+  label: string;
+  description?: string;
+  message?: string;
+  href?: string;
+}
+
+export interface ConciergeQuestionnaireOption {
+  label: string;
+  value: string;
+}
+
+export interface ConciergeQuestionnaireField {
+  id: string;
+  label: string;
+  type: "text" | "email" | "tel" | "textarea" | "select";
+  placeholder?: string;
+  required?: boolean;
+  initialValue?: string;
+  options?: ConciergeQuestionnaireOption[];
+}
+
+export type ConciergeToolBlock =
+  | {
+      type: "cards";
+      title?: string;
+      description?: string;
+      cards: ConciergeLinkCard[];
+    }
+  | {
+      type: "picker";
+      title?: string;
+      description?: string;
+      options: ConciergePickerOption[];
+    }
+  | {
+      type: "calendar";
+      title?: string;
+      description?: string;
+      slots: ConciergeCalendarSlot[];
+      ctaLabel?: string;
+      ctaHref?: string;
+    }
+  | {
+      type: "questionnaire";
+      title?: string;
+      description?: string;
+      endpoint: string;
+      submitLabel?: string;
+      successMessage?: string;
+      fields: ConciergeQuestionnaireField[];
+    };
+
 export interface ConciergeMessage {
   role: "user" | "assistant";
   content: string;
   createdAt?: string;
   attachments?: ConciergeAttachment[];
+  tools?: ConciergeToolBlock[];
   status?: "thinking" | "streaming";
 }
 

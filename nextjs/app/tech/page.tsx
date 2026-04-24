@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Globe, MapPin, Trees } from "lucide-react";
+import { ArrowUpRight, Bot, Globe, MapPin, Sparkles, Trees } from "lucide-react";
 import { siteConfig } from "@/config/site";
 import { generateMetadata, absoluteUrl } from "@/lib/seo/metadata";
 import { JsonLd } from "@/components/seo/JsonLd";
@@ -32,7 +32,7 @@ export default async function TechPage() {
     article.tags.some((tag) => tag.toLowerCase() === "tech")
   );
   const recentArticles = (techArticles.length >= 3 ? techArticles : articles).slice(0, 3);
-  const featuredProductApps = [
+  const featuredOperatorApps = [
     {
       title: "ClawPoster",
       href: "https://clawposter.app",
@@ -47,9 +47,44 @@ export default async function TechPage() {
       href: "https://shipyard-agent.maxpetrusenko.com/benchmarks",
       image: "/images/tech-apps/shipyard-agent.png",
       alt: "Shipyard Agent benchmarks and orchestration flow",
+      eyebrow: "Agent delivery",
       description:
-        "Autonomous coding agent with LangGraph orchestration, worker agents, deterministic verify and review loops, run history, and benchmark tracking.",
-      tags: ["LangGraph", "Agents", "Benchmarks", "TypeScript"],
+        "Agentic factory view for benchmarks, orchestration, delivery status, and the systems around multi-agent software execution.",
+      tags: ["Software Factory", "Benchmarks", "Delivery"],
+      icon: Bot,
+    },
+    {
+      title: "Agent Persona",
+      href: "https://agent-persona.org",
+      image: "/images/tech-apps/agent-persona.png",
+      alt: "Agent Persona homepage with AI personality hiring workflow",
+      eyebrow: "Agent operations",
+      description:
+        "Hiring surface for personality-led agents and operator roles. Clear conversion path, sharper positioning, and an AI-native funnel that turns curiosity into qualified leads.",
+      tags: ["Hiring", "Lead Flow", "AI Product"],
+      icon: Bot,
+    },
+    {
+      title: "SMM Agent",
+      href: "https://smmagent.app",
+      image: "/images/tech-apps/smm-agent.png",
+      alt: "SMM Agent landing page with AI social media positioning",
+      eyebrow: "Social ops",
+      description:
+        "Operator-facing layer for source-backed drafts, reply queues, schedules, model-key controls, and approval-aware publishing across the social product stack.",
+      tags: ["Social AI", "Replies", "Scheduling"],
+      icon: Sparkles,
+    },
+  ];
+  const recentProductApps = [
+    {
+      title: "ClawPoster",
+      href: "https://clawposter.app",
+      image: "/images/tech-apps/clawposter.png",
+      alt: "ClawPoster AI social publishing command center",
+      description:
+        "AI social publishing agent with source-backed drafts, platform-native adaptation, model-key controls, schedules, replies, and multi-brand publishing operations.",
+      tags: ["AI Social", "Agents", "Publishing", "Next.js"],
     },
     {
       title: "OpenClaw Factory",
@@ -77,15 +112,6 @@ export default async function TechPage() {
       description:
         "Realtime voice tutoring stack with FastAPI WebSockets, pluggable STT and LLM providers, Cartesia speech, and switchable 2D SVG or 3D Three.js avatars.",
       tags: ["Voice AI", "FastAPI", "Three.js", "Deepgram"],
-    },
-    {
-      title: "Ghostfolio",
-      href: "https://ghostfolio.maxpetrusenko.com/en",
-      image: "/images/tech-apps/ghostfolio-app.png",
-      alt: "Ghostfolio personal finance dashboard landing page",
-      description:
-        "Privacy-first wealth dashboard for tracking net worth across cash, stocks, ETFs, and crypto with open source portfolio analytics.",
-      tags: ["Portfolio", "ETFs", "Crypto", "Net Worth"],
     },
   ];
 
@@ -430,6 +456,58 @@ export default async function TechPage() {
           <Testimonials type="tech" />
 
           <section className="section">
+            <div className="section-head">
+              <h2>Featured surfaces</h2>
+              <span className="section-note">Bigger product cards. Real screens. Clear positioning.</span>
+            </div>
+            <div className="feature-showcase-grid">
+              {featuredOperatorApps.map((app) => {
+                const Icon = app.icon;
+                return (
+                  <a
+                    key={app.title}
+                    className="feature-showcase-card"
+                    href={app.href}
+                    target="_blank"
+                    rel="noopener"
+                  >
+                    <div className="feature-showcase-media">
+                      <Image
+                        className="feature-showcase-image"
+                        src={app.image}
+                        alt={app.alt}
+                        width={1200}
+                        height={751}
+                      />
+                    </div>
+                    <div className="feature-showcase-body">
+                      <div className="feature-showcase-topline">
+                        <span className="feature-showcase-icon">
+                          <Icon size={17} />
+                        </span>
+                        <span className="feature-showcase-eyebrow">{app.eyebrow}</span>
+                      </div>
+                      <div className="feature-showcase-copy">
+                        <h3>{app.title}</h3>
+                        <p>{app.description}</p>
+                      </div>
+                      <div className="feature-showcase-meta">
+                        {app.tags.map((tag) => (
+                          <span key={tag} className="stat">{tag}</span>
+                        ))}
+                      </div>
+                      <span className="feature-showcase-link">
+                        Open app
+                        <ArrowUpRight size={16} />
+                      </span>
+                    </div>
+                  </a>
+                );
+              })}
+            </div>
+          </section>
+
+          <section className="section">
           <div className="section-head">
             <h2>Recent work</h2>
             <span className="section-note">Product + build shipped recently.</span>
@@ -485,7 +563,7 @@ export default async function TechPage() {
                 </div>
               </div>
             </a>
-            {featuredProductApps.map((app) => (
+            {recentProductApps.map((app) => (
               <a
                 key={app.title}
                 className="article-card"

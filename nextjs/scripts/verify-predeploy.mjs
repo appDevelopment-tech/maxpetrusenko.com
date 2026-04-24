@@ -26,6 +26,7 @@ const criticalRoutes = [
   "/spirituality/blog/temple-space-preparation",
   "/spirituality/articles/tantra-trauma-ptsd",
   "/tantra-massage-ubud",
+  "/couples-tantra-massage",
   "/tech",
   "/tech/articles",
   "/tech/articles/openclaw-installation-playbook",
@@ -34,6 +35,8 @@ const criticalRoutes = [
   "/tech/articles/seo-is-dead",
   "/tech/case-studies",
   "/tech/case-studies/claude-code-automation",
+  "/privacy-policy",
+  "/terms-of-service",
 ];
 
 const contentDirs = [

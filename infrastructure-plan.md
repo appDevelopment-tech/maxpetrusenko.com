@@ -76,11 +76,26 @@ No brute-force protection on SSH.
                             ┌────▼────┐
                             │ Traefik │  (reverse proxy, auto-TLS via CF)
                             └────┬────┘
-                    ┌────────────┼────────────┐
-                    │            │            │
-              social-poster  coolify-ui   future apps
-              (Docker)       (internal)   (Docker)
+                    ┌────────────┼────────────┬──────────────┐
+                    │            │            │              │
+              coolify-ui   shared supabase  node workers   future apps
+              (internal)   (1 stack)        / APIs         (Docker)
 ```
+
+### Shared backend direction
+
+Default backend for subscription products:
+
+- `1` shared self-hosted `Supabase` stack on Contabo
+- `Coolify` for app deploys and workers
+- `Node` workers for Stripe, reports, cron, AI jobs
+- edge/frontend kept thin
+
+Detailed rollout and app template:
+
+- `docs/plans/2026-04-07-coolify-shared-supabase-rollout.md`
+- `docs/plans/2026-04-07-shared-app-backend-template.md`
+- `docs/plans/2026-04-08-shared-supabase-ops-runbook.md`
 
 ### DNS Routing Plan
 
@@ -91,6 +106,8 @@ No brute-force protection on SSH.
 | `atelier.maxpetrusenko.com` | CF Pages (`atelier-8cw`) | ☁️ Yes | Keep as-is |
 | `api.maxpetrusenko.com` | A → `173.249.52.27` | ☁️ Yes | Social poster API / webhooks |
 | `coolify.maxpetrusenko.com` | A → `173.249.52.27` | ☁️ Yes | Coolify dashboard (CF Access gated) |
+| `supabase.maxpetrusenko.com` | A → `173.249.52.27` | ☁️ Yes | Shared Supabase API gateway |
+| `studio.supabase.maxpetrusenko.com` | A → `173.249.52.27` | ☁️ Yes | Optional Studio, gate with CF Access |
 | `*.apps.maxpetrusenko.com` | A → `173.249.52.27` | ☁️ Yes | Wildcard for future Coolify apps |
 | `blindfold.maxpetrusenko.com` | CNAME mindfoldsanctuary | ☁️ Yes | Keep as-is |
 
@@ -211,6 +228,22 @@ Instead of IP-restricting port 8000, use Cloudflare Access (Zero Trust free tier
 This is the Node.js service with node-cron, sharp, Remotion, Simli/Cartesia integrations. Deploy as a Docker container on Coolify with domain `api.maxpetrusenko.com`.
 
 Environment variables via Coolify's env management (sourced from Doppler or pasted directly).
+
+### Phase 7: Shared Supabase
+
+Deploy one shared self-hosted Supabase stack on the Contabo VPS.
+
+Rules:
+
+1. One stack only for the current box
+2. Use it for auth, Postgres, realtime, RLS, and storage
+3. Keep heavy jobs and Stripe webhooks in separate Node services
+4. Start with local storage if cost minimization is the priority
+5. Add off-box backups before trusting it as the backend for multiple apps
+
+Use the rollout doc before provisioning:
+
+- `docs/plans/2026-04-07-coolify-shared-supabase-rollout.md`
 
 ---
 

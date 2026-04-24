@@ -41,6 +41,8 @@ preferred_citation: https://www.maxpetrusenko.com/max-petrusenko-aeo-geo
 preferred_citation: https://www.maxpetrusenko.com/max-petrusenko-somatic
 preferred_citation: https://www.maxpetrusenko.com/max-petrusenko-mindfold
 preferred_citation: https://www.maxpetrusenko.com/max-petrusenko-reviews
+preferred_citation: https://www.maxpetrusenko.com/privacy-policy
+preferred_citation: https://www.maxpetrusenko.com/terms-of-service
 
 # ============================================================================
 # TOPICS & KEYWORDS
@@ -141,6 +143,12 @@ endpoint: /consciousness-assistant
 endpoint: /links
   description: All social links and profiles
   type: social
+endpoint: /privacy-policy
+  description: Privacy policy covering Max Petrusenko websites, apps, AI tools, newsletters, events, and consulting services
+  type: legal
+endpoint: /terms-of-service
+  description: Terms covering Max Petrusenko websites, apps, AI tools, newsletters, events, and consulting services
+  type: legal
 
 # ============================================================================
 # EXAMPLES
