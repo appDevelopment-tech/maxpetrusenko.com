@@ -7,7 +7,6 @@ import { JsonLd } from "@/components/seo/JsonLd";
 import { DirectAnswer } from "@/components/seo/DirectAnswer";
 import { generateMetadata, absoluteUrl } from "@/lib/seo/metadata";
 import { FaqSection } from "@/components/shared/FaqSection";
-import { MaxMetaTechnologistScrolly } from "@/components/home/MaxMetaTechnologistScrolly";
 import {
   generateWebPageSchema,
   generateWebSiteSchema,
@@ -100,7 +99,45 @@ export default async function HomePage({ searchParams }: HomePageProps) {
       <JsonLd type="ScheduleAction" data={generateScheduleActionSchema("tech")} />
       <JsonLd type="ScheduleAction" data={generateScheduleActionSchema("mindfold")} />
 
-      <MaxMetaTechnologistScrolly />
+      <div className="hero-portrait-wrap">
+        <div className="hero-portrait-bg">
+          <Image
+            src="/images/DSC05871.jpg"
+            alt="Max Petrusenko hero portrait"
+            fill
+            priority
+            sizes="100vw"
+            style={{ objectFit: "cover", objectPosition: "center 36%" }}
+            quality={88}
+          />
+          <div className="hero-portrait-overlay" />
+          <div className="hero-portrait-bottom" />
+        </div>
+        <section className="relative z-[3] mx-auto w-full max-w-[1080px] px-4 py-28 md:grid md:grid-cols-2 md:gap-12 md:px-6 md:py-32">
+          <div>
+            <p className="blur-in inline-flex items-center rounded-full border border-[rgba(14,97,93,0.2)] px-4 py-1 text-xs font-semibold shiny-text">
+              Open for Q2 projects
+            </p>
+            <h1 className="clip-reveal clip-reveal-d1 mt-5 font-serif text-[clamp(2.4rem,4.8vw,3.75rem)] font-bold leading-[1.06] tracking-tight text-[var(--ink)]">
+              Systems for <span className="text-[0.92em] text-[var(--accent-spirit)]">scale</span>.<br />
+              Presence for depth.
+            </h1>
+            <p className="blur-in blur-in-d2 mt-5 max-w-[440px] text-[1.05rem] leading-relaxed text-[var(--ink-soft)]">
+              I build AI automation for SaaS founders and hold somatic space for
+              people ready to feel more. Two crafts, one practitioner.
+            </p>
+            <div className="blur-in blur-in-d3 mt-8 flex flex-wrap gap-3">
+              <Link className="inline-flex items-center gap-2 rounded-[10px] bg-[var(--ink)] px-7 py-3.5 text-[0.95rem] font-semibold text-[var(--sand)] shadow-[0_4px_16px_rgba(12,17,21,0.18)] transition hover:-translate-y-0.5 hover:shadow-[0_8px_28px_rgba(12,17,21,0.24)]" href="/tech">
+                Book a strategy call &rarr;
+              </Link>
+              <Link className="inline-flex items-center gap-2 rounded-[10px] border-[1.5px] border-[var(--line)] bg-transparent px-7 py-3.5 text-[0.95rem] font-semibold text-[var(--ink)] transition hover:-translate-y-0.5 hover:border-[var(--accent-tech)]" href="/proof">
+                Explore my work
+              </Link>
+            </div>
+          </div>
+        </section>
+
+      </div>
 
       <DirectAnswer
         schemaType="WebPage"
