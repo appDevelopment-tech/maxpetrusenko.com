@@ -38,9 +38,11 @@ export default async function TechPage() {
       href: "https://clawposter.app",
       image: "/images/tech-apps/clawposter.png",
       alt: "ClawPoster AI social publishing command center",
+      eyebrow: "Social publishing",
       description:
         "AI social publishing agent with source-backed drafts, platform-native adaptation, model-key controls, schedules, replies, and multi-brand publishing operations.",
       tags: ["AI Social", "Agents", "Publishing", "Next.js"],
+      icon: Sparkles,
     },
     {
       title: "Shipyard Agent",
