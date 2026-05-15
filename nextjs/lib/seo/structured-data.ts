@@ -418,7 +418,7 @@ export function generateFAQSchema() {
         "name": "Where are sessions available?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Private sessions are scheduled by request after a short conversation. Message with a few words about what you’re exploring to confirm current availability, fit, and any legal or logistical requirements."
+          "text": "Private sessions are paused for now. Message with a few words about what you’re exploring. No calendar slots are open right now; fit can be discussed only if the practice reopens."
         }
       },
       {
@@ -1004,67 +1004,20 @@ export function generateMindfoldEventSchema() {
 
 /**
  * ============================================================================
- * SCHEDULE ACTION SCHEMA
+ * SCHEDULE ACTION SCHEMA DISABLED
  * ============================================================================
  */
 
 /**
- * Generate ScheduleAction schema for WhatsApp booking
- * Enables AI assistants to directly book sessions via structured actions
+ * Deprecated: do not emit ScheduleAction/Reservation schema.
+ * Agents were interpreting this as live bookable slots.
  */
-export function generateScheduleActionSchema(serviceType: "tantra" | "tech" | "mindfold") {
-  const serviceConfig = {
-    tantra: {
-      name: "Tantra & Somatic Session",
-      url: "/spirituality",
-      phone: "+1-786-543-6688",
-      template: "Hi Max, I'd like to book a tantra/somatic session. Preferred day/time: ____. Intentions: ____.",
-    },
-    tech: {
-      name: "AI Automation Consultation",
-      url: "/tech",
-      phone: "+1-786-543-6688",
-      template: "Hi Max, I'd like to discuss AI automation. My project: ____. Timeline: ____.",
-    },
-    mindfold: {
-      name: "Mindfold Sanctuary Event",
-      url: "/mindfold/events",
-      phone: "+1-786-543-6688",
-      template: "Hi Max, I'm interested in the next Mindfold event. City: ____. Date: ____. Questions: ____. ",
-    },
-  };
-
-  const config = serviceConfig[serviceType];
-
+export function generateScheduleActionSchema(_serviceType: "tantra" | "tech" | "mindfold") {
   return {
     "@context": "https://schema.org",
-    "@type": "ScheduleAction",
-    name: `Book ${config.name}`,
-    target: {
-      "@type": "EntryPoint",
-      urlTemplate: `https://wa.me/17865436688?text=${encodeURIComponent(config.template)}`,
-      actionPlatform: ["http://schema.org/DesktopWebPlatform", "http://schema.org/MobileWebPlatform", "http://schema.org/IOSPlatform", "http://schema.org/AndroidPlatform"],
-    },
-    object: {
-      "@type": "Reservation",
-      name: config.name,
-      url: `${siteConfig.url}${config.url}`,
-      description: config.template,
-      reservationFor: {
-        "@type": "Service",
-        name: config.name,
-        provider: {
-          "@type": "Person",
-          name: siteConfig.author.name,
-          telephone: config.phone,
-        },
-      },
-    },
-    result: {
-      "@type": "Reservation",
-      name: `${config.name} - WhatsApp Booking`,
-      description: "Reservation initiated via WhatsApp. Max will respond to confirm availability and timing.",
-    },
+    "@type": "WebPage",
+    name: "Inquiry only",
+    description: "No calendar slots or direct booking actions are available right now.",
   };
 }
 
@@ -1479,7 +1432,7 @@ export function generateServiceSpeakableSchema() {
     speakable: [
       {
         "@type": "Speakable",
-        text: "Max Petrusenko offers Tantra-informed somatic work by request. Text +1-786-543-6688 for availability.",
+        text: "Max Petrusenko offers Tantra-informed somatic work by request. No calendar slots are open right now.",
       },
       {
         "@type": "Speakable",
@@ -1567,7 +1520,7 @@ export function generateCombinedFAQSchema() {
         name: "Where are you currently located for tantra sessions?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Private sessions are scheduled by request after a short conversation. Message with a few words about what you’re exploring to confirm current availability and next steps.",
+          text: "Private sessions are paused for now. Message with a few words about what you’re exploring to confirm fit and next steps.",
         },
       },
       {
@@ -1613,7 +1566,7 @@ export function generateCombinedFAQSchema() {
       },
       {
         "@type": "Question",
-        name: "How do I book a session or consultation?",
+        name: "How do I join the inquiry list or consultation?",
         acceptedAnswer: {
           "@type": "Answer",
           text: "For tantra/somatic sessions, WhatsApp +1-786-543-6688 is fastest. You can also email hello@maxpetrusenko.com. For tech consulting, email with your project details. I'll respond to align on timing and approach.",

@@ -7,7 +7,6 @@ import {
   generateWebPageSchema,
   generateBreadcrumbSchema,
   generateMindfoldEventSchema,
-  generateScheduleActionSchema,
   generateMindfoldFAQSchema,
 } from "@/lib/seo/structured-data";
 
@@ -37,7 +36,6 @@ export default function MindfoldEventsPage() {
         ])}
       />
       <JsonLd type="Event" data={generateMindfoldEventSchema()} />
-      <JsonLd type="ScheduleAction" data={generateScheduleActionSchema("mindfold")} />
       <JsonLd type="FAQPage" data={generateMindfoldFAQSchema()} />
 
       <div className="hero-portrait-wrap">

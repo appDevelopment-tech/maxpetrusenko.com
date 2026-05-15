@@ -60,11 +60,11 @@ export default function ModalitiesPage() {
               </div>
               <a
                 className="btn primary sm"
-                href="https://wa.me/17865436688?text=Hi%20Max%2C%20I%27d%20like%20to%20book%20a%20Nervous%20System%20Reset.%20Preferred%20day%2Ftime%3A%20____."
+                href="https://wa.me/17865436688?text=Hi%20Max%2C%20I%27d%20like%20to%20join%20the%20inquiry%20list.%20I%27m%20exploring%3A%20nervous%20system%20work."
                 target="_blank"
                 rel="noopener"
               >
-                Text for availability
+                Join inquiry list
               </a>
             </div>
             <p style={{ marginTop: 12 }}>
@@ -101,7 +101,7 @@ export default function ModalitiesPage() {
                 target="_blank"
                 rel="noopener"
               >
-                Text for availability
+                Join inquiry list
               </a>
             </div>
             <p style={{ marginTop: 12 }}>
@@ -133,7 +133,7 @@ export default function ModalitiesPage() {
               </div>
               <a
                 className="btn primary sm"
-                href="https://wa.me/17865436688?text=Hi%20Max%2C%20I%27m%20interested%20in%20Kyo-Tai%20immersion.%20Preferred%20day%2Ftime%3A%20____."
+                href="https://wa.me/17865436688?text=Hi%20Max%2C%20I%27d%20like%20to%20join%20the%20inquiry%20list.%20I%27m%20exploring%3A%20Kyo-Tai."
                 target="_blank"
                 rel="noopener"
               >

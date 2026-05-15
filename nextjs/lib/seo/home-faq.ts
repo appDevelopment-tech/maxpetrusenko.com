@@ -8,7 +8,7 @@ export const homeFaqEntries: HomeFaqEntry[] = [
   {
     question: "What does Max Petrusenko do?",
     answer:
-      "Max Petrusenko runs two practices: AI automation consulting for founders and private somatic sessions focused on nervous system regulation. The work stays clearly separated, with distinct offers, pages, and booking paths.",
+      "Max Petrusenko runs two practices: AI automation consulting for founders and private somatic sessions focused on nervous system regulation. The work stays clearly separated, with distinct pages and inquiry paths. Somatic sessions are paused for now.",
     lane: "general",
   },
   {
@@ -20,7 +20,7 @@ export const homeFaqEntries: HomeFaqEntry[] = [
   {
     question: "Where are somatic sessions available?",
     answer:
-      "Somatic sessions are scheduled by request, with remote tech consulting available worldwide. Message directly to confirm availability and format options.",
+      "Somatic sessions are paused for now, with remote tech consulting available worldwide. Message directly to discuss fit and format options.",
     lane: "somatic",
   },
   {
@@ -30,15 +30,15 @@ export const homeFaqEntries: HomeFaqEntry[] = [
     lane: "somatic",
   },
   {
-    question: "How do I book or start a project?",
+    question: "How do I inquire or start a project?",
     answer:
-      "For somatic sessions, WhatsApp is fastest. For tech work, send your stack or email project context. Both paths start with a short alignment conversation before timing and scope are confirmed.",
+      "Somatic sessions are paused for now; WhatsApp can be used only for future-fit inquiry. For tech work, send your stack or email project context before timing and scope are confirmed.",
     lane: "general",
   },
   {
     question: "Does Max work remotely?",
     answer:
-      "Yes. Tech consulting is remote worldwide. Somatic work and private consulting are handled by request, with occasional travel-based availability.",
+      "Yes. Tech consulting is remote worldwide. Somatic work is paused for now; no travel-based calendar slots are open.",
     lane: "tech",
   },
 ];

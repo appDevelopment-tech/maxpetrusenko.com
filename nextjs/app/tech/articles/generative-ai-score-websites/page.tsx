@@ -2,7 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { generateMetadata, absoluteUrl } from "@/lib/seo/metadata";
 import { JsonLd } from "@/components/seo/JsonLd";
-import { generateWebPageSchema, generateTechArticleSchema, generateBreadcrumbSchema, generateScheduleActionSchema, generateTechPersonSchema } from "@/lib/seo/structured-data";
+import { generateWebPageSchema, generateTechArticleSchema, generateBreadcrumbSchema, generateTechPersonSchema } from "@/lib/seo/structured-data";
 import { RelatedReading } from "@/components/articles/RelatedReading";
 
 export const metadata = generateMetadata({
@@ -38,7 +38,6 @@ export default function GenerativeAIScoreArticle() {
           { name: "Generative AI Score for Websites", url: "/tech/articles/generative-ai-score-websites" },
         ])}
       />
-      <JsonLd type="ScheduleAction" data={generateScheduleActionSchema("tech")} />
       <JsonLd
         type="WebPage"
         data={generateWebPageSchema({

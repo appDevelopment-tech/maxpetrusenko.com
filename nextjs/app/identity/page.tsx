@@ -147,7 +147,7 @@ export default function IdentityPage() {
                 <li>Tantra & somatic energy work</li>
                 <li>Regulation & nervous system support</li>
                 <li>Boundary work & relational clarity</li>
-                <li>Private sessions by request</li>
+                <li>Private sessions paused for now</li>
               </ul>
               <a
                 className="btn secondary"

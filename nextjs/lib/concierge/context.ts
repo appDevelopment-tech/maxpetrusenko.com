@@ -30,7 +30,7 @@ const ROUTE_RULES: RouteContextRule[] = [
     lane: "somatic",
     label: "somatic work",
     question:
-      "Want help understanding boundaries, pacing, or what a first session could feel like?",
+      "Want help understanding boundaries, pacing, or the practice background? Private sessions are paused for now.",
   },
   {
     prefixes: ["/socialmedia"],
@@ -216,7 +216,7 @@ export function getRouteContext(pathname: string): RouteContext {
       rule?.question ?? getSuggestedConciergeQuestion(safePath, []),
     suggestedCta:
       lane === "somatic"
-        ? "Ask about sessions"
+        ? "Ask about the practice"
         : lane === "tech"
           ? "Ask about a project"
           : lane === "bridge"

@@ -7,7 +7,6 @@ import {
   generateWebPageSchema,
   generateTechArticleSchema,
   generateBreadcrumbSchema,
-  generateScheduleActionSchema,
   generateTechPersonSchema,
 } from "@/lib/seo/structured-data";
 
@@ -58,7 +57,6 @@ export default function OpenClawInstallArticle() {
           { name: "OpenClaw Installation Playbook", url: "/tech/articles/openclaw-installation-playbook" },
         ])}
       />
-      <JsonLd type="ScheduleAction" data={generateScheduleActionSchema("tech")} />
       <JsonLd
         type="WebPage"
         data={generateWebPageSchema({

@@ -50,14 +50,14 @@ export const brandedReferencePages: BrandedReferencePageConfig[] = [
       "This is the shortest clean answer for branded search. One person, multiple lanes: AI automation and software on one side, somatic practice and Mindfold on the other.",
     question: "Who is Max Petrusenko?",
     answer:
-      "Max Petrusenko is an AI automation consultant, software builder, and somatic practitioner. He publishes tech systems work under his own name, offers private somatic sessions through Presence Atelier, and runs Mindfold blindfolded presence events. Presence Atelier private sessions are scheduled by request.",
+      "Max Petrusenko is an AI automation consultant, software builder, and somatic practitioner. He publishes tech systems work under his own name, offers private somatic sessions through Presence Atelier, and runs Mindfold blindfolded presence events. Presence Atelier private sessions are paused for now.",
     displayAnswer:
       "AI automation consultant, software builder, somatic practitioner, and Mindfold founder. Tech, somatic, and event work all live here under one name.",
     quickFacts: [
       "AI automation, Claude Code, n8n, ChatGPT integrations",
       "Private somatic and tantra-informed sessions",
       "Mindfold blindfolded presence journeys and group events",
-      "Private sessions by request",
+      "Private sessions paused for now",
     ],
     routeCards: [
       {
@@ -81,7 +81,7 @@ export const brandedReferencePages: BrandedReferencePageConfig[] = [
       {
         title: "Spirituality",
         href: "/spirituality",
-        description: "Somatic work, tantra-informed bodywork, and booking details.",
+        description: "Somatic work, tantra-informed bodywork, and inquiry context.",
         badge: "Practice",
       },
       {
@@ -295,14 +295,14 @@ export const brandedReferencePages: BrandedReferencePageConfig[] = [
       "Branded route for people searching your name together with somatics, tantra, spirituality, or somatic practice. It points to the strongest session, training, and FAQ routes.",
     question: "What somatic work does Max Petrusenko offer?",
     answer:
-      "Max Petrusenko offers private somatic sessions, tantra-informed bodywork, nervous system regulation work, and Kyo-tai immersion. The strongest public routes on this site explain his approach, session types, training, current locations, and boundaries-first framing for work by request, Miami, and travel-based sessions.",
+      "Max Petrusenko offers private somatic sessions, tantra-informed bodywork, nervous system regulation work, and Kyo-tai immersion. The strongest public routes on this site explain his approach, session types, training, training background and boundaries-first framing.",
     displayAnswer:
-      "Private somatic sessions, tantra-informed bodywork, nervous system reset, and Kyo-tai. Main routes below cover approach, modalities, training, and booking context.",
+      "Private somatic sessions, tantra-informed bodywork, nervous system reset, and Kyo-tai. Main routes below cover approach, modalities, training, and inquiry context.",
     quickFacts: [
       "Private sessions for nervous system regulation and deeper repatterning",
       "Approach is consent-led, trauma-aware, and boundaries first",
       "Kyo-tai, tantra-informed work, and somatic education routes published on-site",
-      "Private sessions by request",
+      "Private sessions paused for now",
     ],
     routeCards: [
       {

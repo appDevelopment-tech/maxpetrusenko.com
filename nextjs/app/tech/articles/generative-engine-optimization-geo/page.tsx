@@ -7,7 +7,6 @@ import {
   generateWebPageSchema,
   generateTechArticleSchema,
   generateBreadcrumbSchema,
-  generateScheduleActionSchema,
   generateTechPersonSchema,
 } from "@/lib/seo/structured-data";
 
@@ -53,7 +52,6 @@ export default function GEOArticle() {
           { name: "Generative Engine Optimization", url: "/tech/articles/generative-engine-optimization-geo" },
         ])}
       />
-      <JsonLd type="ScheduleAction" data={generateScheduleActionSchema("tech")} />
       <JsonLd
         type="WebPage"
         data={generateWebPageSchema({

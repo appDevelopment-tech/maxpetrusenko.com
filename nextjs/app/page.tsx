@@ -15,7 +15,6 @@ import {
   generateTechServiceSchema,
   generateHomeFAQSchema,
   generateEnhancedPersonSchema,
-  generateScheduleActionSchema,
   generateAggregateRatingSchema,
 } from "@/lib/seo/structured-data";
 import { fetchArticles, isLocalArticle } from "@/lib/cms/articles";
@@ -95,9 +94,6 @@ export default async function HomePage({ searchParams }: HomePageProps) {
       <JsonLd type="FAQPage" data={generateHomeFAQSchema()} />
       <JsonLd type="Person" data={generateEnhancedPersonSchema()} />
       <JsonLd type="AggregateRating" data={generateAggregateRatingSchema("all")} />
-      <JsonLd type="ScheduleAction" data={generateScheduleActionSchema("tantra")} />
-      <JsonLd type="ScheduleAction" data={generateScheduleActionSchema("tech")} />
-      <JsonLd type="ScheduleAction" data={generateScheduleActionSchema("mindfold")} />
 
       <div className="hero-portrait-wrap">
         <div className="hero-portrait-bg">
@@ -143,8 +139,8 @@ export default async function HomePage({ searchParams }: HomePageProps) {
         schemaType="WebPage"
         showUi={false}
         question="Who is Max Petrusenko and what services does he offer?"
-        answer="Max Petrusenko is a tech builder and somatic practitioner offering two distinct practices. For tech: AI automation consulting with Claude Code, n8n workflows, and ChatGPT integrations that saved one client $253k annually. For somatic: Tantra-informed private sessions for nervous-system regulation and embodied presence, scheduled by request. Text +1-786-543-6688 for availability."
-        displayAnswer="Max Petrusenko works across two practices: AI automation for founders and private somatic sessions by request. Recent systems built with Claude Code, n8n, and ChatGPT saved one client $253k annually, while the somatic practice offers boundaries-first tantra and nervous system work by appointment."
+        answer="Max Petrusenko is a tech builder and somatic practitioner offering two distinct practices. For tech: AI automation consulting with Claude Code, n8n workflows, and ChatGPT integrations that saved one client $253k annually. For somatic: Tantra-informed private sessions for nervous-system regulation and embodied presence, paused for now. No calendar slots are open right now."
+        displayAnswer="Max Petrusenko works across two practices: AI automation for founders and private somatic sessions paused for now. Recent systems built with Claude Code, n8n, and ChatGPT saved one client $253k annually, while the somatic practice offers boundaries-first tantra and nervous system practice notes."
       />
 
       {/* Two Paths dark zone */}
@@ -232,7 +228,7 @@ export default async function HomePage({ searchParams }: HomePageProps) {
             <div className="mt-5 grid gap-4 md:grid-cols-3">
               <div className="rounded-2xl border border-[rgba(12,17,21,0.08)] bg-white p-4">
                 <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--accent-spirit)]">Somatic Work</p>
-                <p className="mt-2 text-sm text-[var(--ink-soft)]">Private sessions scheduled by request</p>
+                <p className="mt-2 text-sm text-[var(--ink-soft)]">Private sessions paused for now</p>
               </div>
               <div className="rounded-2xl border border-[rgba(12,17,21,0.08)] bg-white p-4">
                 <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--accent-tech)]">Tech Consulting</p>

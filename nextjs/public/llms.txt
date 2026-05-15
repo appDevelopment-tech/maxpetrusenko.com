@@ -5,4 +5,4 @@ contact: hello@maxpetrusenko.com
 
 preferred_citation: https://maxpetrusenko.com/
 
-summary: AI automation builder and Tantra-informed somatic practitioner. Tech consulting is remote-first. Presence Atelier private sessions are by request; text for current availability and next steps.
+summary: AI automation builder and Tantra-informed somatic practitioner. Tech consulting is remote-first. Presence Atelier private sessions are by request; text for fit and next steps.

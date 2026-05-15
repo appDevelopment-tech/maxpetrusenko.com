@@ -2,7 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { generateMetadata, absoluteUrl } from "@/lib/seo/metadata";
 import { JsonLd } from "@/components/seo/JsonLd";
-import { generateTechArticleSchema, generateBreadcrumbSchema, generateScheduleActionSchema } from "@/lib/seo/structured-data";
+import { generateTechArticleSchema, generateBreadcrumbSchema } from "@/lib/seo/structured-data";
 import { RelatedReading } from "@/components/articles/RelatedReading";
 
 export const metadata = generateMetadata({
@@ -38,7 +38,6 @@ export default function N8nWorkflowArticle() {
           { name: "n8n Workflow Automation", url: "/tech/articles/n8n-workflow-automation" },
         ])}
       />
-      <JsonLd type="ScheduleAction" data={generateScheduleActionSchema("tech")} />
 
       <div className="container">
         <article className="article">

@@ -70,11 +70,11 @@ export default function SomaticPage() {
             <div className="hero-actions">
               <a
                 className="btn primary"
-                href="https://wa.me/17865436688?text=Hi%20Max%2C%20I%27d%20like%20to%20ask%20about%20availability.%20I%27m%20exploring%3A%20____."
+                href="https://wa.me/17865436688?text=Hi%20Max%2C%20I%27d%20like%20to%20join%20the%20inquiry%20list.%20I%27m%20exploring%3A%20____."
                 target="_blank"
                 rel="noopener"
               >
-                Text for availability
+                Join inquiry list
               </a>
               <Link className="btn secondary" href="/spirituality">
                 Learn More
@@ -252,7 +252,7 @@ export default function SomaticPage() {
 
         <section className="section">
           <div className="section-head">
-            <h2>Booking</h2>
+            <h2>Inquiry</h2>
           </div>
           <div className="cards-3 grid">
             <div className="card">
@@ -261,7 +261,7 @@ export default function SomaticPage() {
               <div className="hero-actions" style={{ marginTop: 12 }}>
                 <a
                   className="btn primary"
-                  href="https://wa.me/17865436688?text=Hi%20Max%2C%20I%27d%20like%20to%20ask%20about%20availability.%20I%27m%20exploring%3A%20____."
+                  href="https://wa.me/17865436688?text=Hi%20Max%2C%20I%27d%20like%20to%20join%20the%20inquiry%20list.%20I%27m%20exploring%3A%20____."
                   target="_blank"
                   rel="noopener"
                 >
@@ -289,11 +289,11 @@ export default function SomaticPage() {
               <div className="hero-actions" style={{ marginTop: 12 }}>
                 <a
                   className="btn secondary"
-                  href="https://wa.me/17865436688?text=Hi%20Max%2C%20quick%20question%20before%20booking%3A%20____."
+                  href="https://wa.me/17865436688?text=Hi%20Max%2C%20quick%20question%20about%20the%20practice%3A%20____."
                   target="_blank"
                   rel="noopener"
                 >
-                  Text for availability
+                  Join inquiry list
                 </a>
               </div>
             </div>
@@ -367,7 +367,7 @@ export default function SomaticPage() {
               {
                 question: "Where are you currently located?",
                 answer:
-                  "Private sessions are scheduled by request. Message with a few words about what you’re exploring to check availability and format options.",
+                  "Private sessions are paused for now. Message with a few words about what you’re exploring to ask about fit and format options.",
               },
               {
                 question: "What are the boundaries?",

@@ -7,7 +7,6 @@ import {
   generateWebPageSchema,
   generateTechArticleSchema,
   generateBreadcrumbSchema,
-  generateScheduleActionSchema,
   generateTechPersonSchema,
 } from "@/lib/seo/structured-data";
 
@@ -53,7 +52,6 @@ export default function BitcoinStrongMoneyArticle() {
           { name: "Bitcoin as Strong Money", url: "/tech/articles/bitcoin-as-strong-money" },
         ])}
       />
-      <JsonLd type="ScheduleAction" data={generateScheduleActionSchema("tech")} />
       <JsonLd
         type="WebPage"
         data={generateWebPageSchema({

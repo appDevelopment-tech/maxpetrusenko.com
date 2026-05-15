@@ -78,11 +78,6 @@ export function JsonLd({ type, data }: JsonLdProps) {
       "@type": "Event",
       ...data,
     },
-    ScheduleAction: {
-      "@context": "https://schema.org",
-      "@type": "ScheduleAction",
-      ...data,
-    },
   };
 
   const schema = schemas[type];

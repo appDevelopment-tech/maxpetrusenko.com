@@ -87,7 +87,7 @@ export default function LinksPage() {
                 Tantra-informed somatic work by request through Presence Atelier.
               </p>
             </a>
-            <a className="dark-zone-card card-stripe-spirit" href="https://wa.me/17865436688?text=Hi%20Max%2C%20I%27d%20like%20to%20book%20a%20session.%20Preferred%20day%2Ftime%3A%20____.%20Intentions%3A%20____." target="_blank" rel="noopener">
+            <a className="dark-zone-card card-stripe-spirit" href="https://wa.me/17865436688?text=Hi%20Max%2C%20I%27d%20like%20to%20join%20the%20inquiry%20list.%20I%27m%20exploring%3A%20____." target="_blank" rel="noopener">
               <h3 className="font-serif text-[1.2rem] font-semibold text-[#e2e8f0]">WhatsApp</h3>
               <p className="mt-3 text-sm leading-relaxed text-[var(--dark-zone-muted)]">
                 Fastest path for bookings, availability, and direct questions.
@@ -224,18 +224,18 @@ export default function LinksPage() {
             >
               <div className="tile-meta">
                 <span className="tile-title">Presence Atelier</span>
-                <span className="tile-desc">Sessions, FAQs, and booking.</span>
+                <span className="tile-desc">Practice notes, FAQs, and inquiry context.</span>
               </div>
               <span className="badge spirit">Visit</span>
             </a>
             <a
               className="tile"
-              href="https://wa.me/17865436688?text=Hi%20Max%2C%20I%27d%20like%20to%20book%20a%20session.%20Preferred%20day%2Ftime%3A%20____.%20Intentions%3A%20____."
+              href="https://wa.me/17865436688?text=Hi%20Max%2C%20I%27d%20like%20to%20join%20the%20inquiry%20list.%20I%27m%20exploring%3A%20____."
               target="_blank"
               rel="noopener"
             >
               <div className="tile-meta">
-                <span className="tile-title">Text for availability</span>
+                <span className="tile-title">Join inquiry list</span>
                 <span className="tile-desc">Send a few words about what you’re exploring.</span>
               </div>
               <span className="badge spirit">Message</span>

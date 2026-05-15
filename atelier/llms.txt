@@ -5,4 +5,4 @@ contact: mailto:hello@maxpetrusenko.com
 
 allow: /
 preferred_citation: https://atelier.maxpetrusenko.com/
-summary: Tantra-informed somatic work for nervous-system regulation, intimacy, and embodied presence. Private sessions are scheduled by request; text for availability and next steps.
+summary: Tantra-informed somatic work for nervous-system regulation, intimacy, and embodied presence. Private sessions are paused for now; text for fit and next steps.

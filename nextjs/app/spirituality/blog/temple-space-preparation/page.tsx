@@ -140,11 +140,11 @@ export default function TempleSpacePreparationPage() {
               </p>
               <a
                 className="btn primary"
-                href="https://wa.me/17865436688?text=Hi%20Max%2C%20I%20want%20to%20book%20a%20session%20in%20private%20session%20work."
+                href="https://wa.me/17865436688?text=Hi%20Max%2C%20I%27d%20like%20to%20join%20the%20inquiry%20list.%20I%27m%20exploring%3A%20____."
                 target="_blank"
                 rel="noopener"
               >
-                Text for availability
+                Join inquiry list
               </a>
             </div>
           </div>

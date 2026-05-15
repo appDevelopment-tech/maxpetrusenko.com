@@ -14,13 +14,12 @@ import {
   generateBreadcrumbSchema,
   generateProfessionalServiceSchema,
   generateFAQSchema,
-  generateScheduleActionSchema,
   generateSpiritualityPersonSchema,
 } from "@/lib/seo/structured-data";
 
 export const metadata = generateMetadata({
   title: "Spirituality - Tantra & Somatic Energy Work",
-  description: "Tantra-informed somatic work for nervous-system regulation, intimacy, and embodied presence. Private sessions are scheduled by request.",
+  description: "Tantra-informed somatic work for nervous-system regulation, intimacy, and embodied presence. Private sessions are paused for now.",
   ogType: "website",
   canonical: absoluteUrl("/spirituality"),
   keywords: [
@@ -73,12 +72,12 @@ export default function SpiritualityPage() {
     {
       question: "Where are sessions available?",
       answer:
-        "Private sessions are scheduled by request. Message with a few words about what you’re exploring to confirm availability and format options.",
+        "Private sessions are paused for now. Message with a few words about what you’re exploring. No calendar slots are open right now; format can be discussed only if the practice reopens.",
     },
     {
       question: "How do I request availability?",
       answer:
-        "Text or email with a few words about what you are exploring. Availability, format, and fit are confirmed privately by request.",
+        "Text or email with a few words about what you are exploring. There are no calendar slots open right now; fit and format can be discussed only if the practice reopens.",
     },
   ];
 
@@ -114,12 +113,11 @@ export default function SpiritualityPage() {
       <JsonLd type="Organization" data={generateOrganizationSchema()} />
       <JsonLd type="WebPage" data={generateProfessionalServiceSchema()} />
       <JsonLd type="FAQPage" data={generateFAQSchema()} />
-      <JsonLd type="ScheduleAction" data={generateScheduleActionSchema("tantra")} />
       <JsonLd
         type="WebPage"
         data={generateWebPageSchema({
           title: "Spirituality - Tantra & Somatic Energy Work",
-          description: "Tantra-informed somatic work for nervous-system regulation, intimacy, and embodied awareness. Private sessions are scheduled by request.",
+          description: "Tantra-informed somatic work for nervous-system regulation, intimacy, and embodied awareness. Private sessions are paused for now.",
           url: "/spirituality",
         })}
       />
@@ -150,23 +148,23 @@ export default function SpiritualityPage() {
         <section className="relative z-[3] mx-auto w-full max-w-[1080px] px-4 py-28 md:px-6 md:py-32">
           <div>
             <p className="blur-in inline-flex items-center rounded-full border border-[rgba(14,97,93,0.2)] px-4 py-1 text-xs font-semibold text-[var(--accent-spirit)]">
-              Private sessions by request
+              Private sessions paused for now
             </p>
             <h1 className="clip-reveal clip-reveal-d1 mt-5 max-w-[12ch] font-serif text-[clamp(2.35rem,4.8vw,3.75rem)] font-bold leading-[1.06] tracking-tight text-[var(--ink)]">
               Somatic energy work with boundaries first.
             </h1>
             <p className="blur-in blur-in-d2 mt-5 max-w-[460px] text-[1.05rem] leading-relaxed text-[var(--ink-soft)]">
               Tantra-informed somatic work for nervous-system regulation, intimacy,
-              and embodied presence. Sessions are scheduled by request.
+              and embodied presence. Sessions are not open for direct booking right now.
             </p>
             <div className="blur-in blur-in-d3 mt-8 flex flex-wrap gap-3">
               <a
                 className="inline-flex items-center gap-2 rounded-[10px] bg-[var(--ink)] px-7 py-3.5 text-[0.95rem] font-semibold text-[var(--sand)] shadow-[0_4px_16px_rgba(12,17,21,0.18)] transition hover:-translate-y-0.5 hover:shadow-[0_8px_28px_rgba(12,17,21,0.24)]"
-                href="https://wa.me/17865436688?text=Hi%20Max%2C%20I%27d%20like%20to%20ask%20about%20availability.%20I%27m%20exploring%3A%20____."
+                href="https://wa.me/17865436688?text=Hi%20Max%2C%20I%27d%20like%20to%20join%20the%20inquiry%20list.%20I%27m%20exploring%3A%20____."
                 target="_blank"
                 rel="noopener"
               >
-                Text for availability
+                Join inquiry list
               </a>
               <a
                 className="inline-flex items-center gap-2 rounded-[10px] border-[1.5px] border-[var(--line)] bg-transparent px-7 py-3.5 text-[0.95rem] font-semibold text-[var(--ink)] transition hover:-translate-y-0.5 hover:border-[var(--accent-spirit)]"
@@ -185,7 +183,7 @@ export default function SpiritualityPage() {
         schemaType="WebPage"
         showUi={false}
         question="What tantra-informed somatic and energy work does Max Petrusenko offer?"
-        answer="Max Petrusenko is a certified tantra and somatic practitioner offering tantra-informed somatic work for nervous-system regulation, intimacy, and embodied presence. Private sessions are scheduled by request, paced with clear boundaries, and shaped around what is alive for the client. Text +1-786-543-6688 for availability."
+        answer="Max Petrusenko is a certified tantra and somatic practitioner offering tantra-informed somatic work for nervous-system regulation, intimacy, and embodied presence. Private sessions are paused for now, paced with clear boundaries, and shaped around what is alive for the client. No calendar slots are open right now."
         displayAnswer="Tantra-informed somatic work by request. Boundaries first, nervous-system paced, and shaped around what is alive now."
       />
 
@@ -193,8 +191,8 @@ export default function SpiritualityPage() {
         schemaType="WebPage"
         showUi={false}
         question="What is somatic energy work and who practices it near me?"
-        answer="Somatic energy work is a body-based practice using breathwork, conscious touch, and presence techniques for nervous system regulation and embodied awareness. Max Petrusenko holds a Tantra Massage Certification from Tantra Nectar University (Satyarti). Text for availability: +1-786-543-6688."
-        displayAnswer="Somatic energy work for nervous system regulation and embodied awareness. Private sessions by request."
+        answer="Somatic energy work is a body-based practice using breathwork, conscious touch, and presence techniques for nervous system regulation and embodied awareness. Max Petrusenko holds a Tantra Massage Certification from Tantra Nectar University (Satyarti). No calendar slots are open right now. You can send an inquiry by text: +1-786-543-6688."
+        displayAnswer="Somatic energy work for nervous system regulation and embodied awareness. Private sessions paused for now."
       />
 
       <section className="dark-zone mt-8 py-16 px-4 md:py-20">
@@ -251,7 +249,7 @@ export default function SpiritualityPage() {
           <EmailCaptureInline
             source="spirituality-page"
             headline="Stay updated"
-            subtitle="Drop your email to get notified about future offerings and session availability."
+            subtitle="Drop your email to get notified about future offerings and practice updates."
             buttonText="Get updates"
           />
         </section>
@@ -307,12 +305,12 @@ export default function SpiritualityPage() {
             </p>
             <a
               className="btn primary"
-              href="https://wa.me/17865436688?text=Hi%20Max%2C%20I%27d%20like%20to%20ask%20about%20availability.%20I%27m%20exploring%3A%20____."
+              href="https://wa.me/17865436688?text=Hi%20Max%2C%20I%27d%20like%20to%20join%20the%20inquiry%20list.%20I%27m%20exploring%3A%20____."
               style={{ marginTop: 12 }}
               target="_blank"
               rel="noopener"
             >
-              Text for availability
+              Join inquiry list
             </a>
           </div>
         </section>
@@ -323,19 +321,19 @@ export default function SpiritualityPage() {
 
         <section className="section">
           <div className="section-head">
-            <h2>Booking</h2>
+            <h2>Inquiry</h2>
           </div>
           <div className="cards-3 grid">
             <div className="card card-with-actions">
               <h3>WhatsApp</h3>
               <p>
-                Send a few words about what you’re exploring. I’ll reply personally with current availability and next steps.
+                Send a few words about what you’re exploring. I’ll reply only if there is a real fit; no sessions are open for direct booking right now.
               </p>
               <div className="card-actions-spacer"></div>
               <div className="hero-actions" style={{ marginTop: 12 }}>
                 <a
                   className="btn primary"
-                  href="https://wa.me/17865436688?text=Hi%20Max%2C%20I%27d%20like%20to%20ask%20about%20availability.%20I%27m%20exploring%3A%20____."
+                  href="https://wa.me/17865436688?text=Hi%20Max%2C%20I%27d%20like%20to%20join%20the%20inquiry%20list.%20I%27m%20exploring%3A%20____."
                   target="_blank"
                   rel="noopener"
                 >
@@ -368,11 +366,11 @@ export default function SpiritualityPage() {
               <div className="hero-actions" style={{ marginTop: 12 }}>
                 <a
                   className="btn secondary"
-                  href="https://wa.me/17865436688?text=Hi%20Max%2C%20quick%20question%20before%20booking%3A%20____."
+                  href="https://wa.me/17865436688?text=Hi%20Max%2C%20quick%20question%20about%20the%20practice%3A%20____."
                   target="_blank"
                   rel="noopener"
                 >
-                  Text for availability
+                  Join inquiry list
                 </a>
               </div>
             </div>
@@ -424,7 +422,7 @@ export default function SpiritualityPage() {
                 rel="noopener"
                 style={{ marginTop: 12 }}
               >
-                Ask on WhatsApp
+                Send an inquiry
               </a>
             </div>
           </div>
@@ -534,13 +532,13 @@ export default function SpiritualityPage() {
           <div className="section-head">
             <h2>Availability</h2>
             <span className="section-note">
-              Private sessions are scheduled by request after a short conversation.
+              Private sessions are paused for now.
             </span>
           </div>
           <div className="card">
             <h3>By request</h3>
             <p>
-              Message with a few words about what you’re exploring. I’ll reply personally with current availability, fit, and next steps.
+              Message with a few words about what you’re exploring. I’ll reply only if there is a real fit; no calendar slots are open right now.
             </p>
           </div>
         </section>

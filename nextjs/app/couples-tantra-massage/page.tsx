@@ -48,7 +48,7 @@ export default function CouplesTantraMassagePage() {
                 target="_blank"
                 rel="noopener"
               >
-                Text for availability
+                Join inquiry list
               </a>
               <Link className="btn secondary" href="/spirituality">
                 Open spirituality

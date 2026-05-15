@@ -352,14 +352,14 @@ function buildLauncherCards(): ConciergeToolBlock {
     description: "Open the path that fits best.",
     cards: [
       {
-        id: "book-session",
-        title: "Book a session",
+        id: "somatic-inquiry",
+        title: "Join the inquiry list",
         href: "/spirituality",
         imageSrc: "/images/DSC05871.jpg",
         imageAlt: "Somatic session portrait",
         eyebrow: "Somatic work",
-        description: "Sessions, boundaries, fit, and the next booking step.",
-        buttonLabel: "Open sessions",
+        description: "Boundaries, fit, and future inquiry. No calendar slots are open right now.",
+        buttonLabel: "Read practice note",
       },
       {
         id: "open-studio",
@@ -470,7 +470,7 @@ function buildSomaticQuestionnaire(
       id: "intention",
       label: "Intention",
       type: "textarea",
-      placeholder: "What are you hoping to move toward in this session?",
+      placeholder: "What are you hoping to explore if the practice reopens?",
       required: true,
     },
     {
@@ -482,7 +482,7 @@ function buildSomaticQuestionnaire(
     },
     {
       id: "serviceType",
-      label: "Session type",
+      label: "Inquiry type",
       type: "select",
       initialValue: "solo",
       options: [
@@ -535,12 +535,12 @@ function buildSomaticQuestionnaire(
 
   return {
     type: "questionnaire",
-    title: "A few details before times",
+    title: "A few details for future-fit inquiry",
     description:
-      "This keeps the first booking step gentle and lets me show the best next openings.",
+      "Private sessions are paused for now. This only captures context for a future-fit inquiry; it will not show times.",
     endpoint: "/api/somatic-intake",
-    submitLabel: "See openings",
-    successMessage: "Thanks. Here are the next openings that fit.",
+    submitLabel: "Send inquiry",
+    successMessage: "Thanks. No calendar slots are open right now; Max can follow up only if there is a real future fit.",
     fields,
   };
 }
@@ -548,11 +548,11 @@ function buildSomaticQuestionnaire(
 function buildSomaticCalendar(calendarUrl: string): ConciergeToolBlock {
   return {
     type: "calendar",
-    title: "Shared calendar",
+    title: "Calendar disabled",
     description:
-      "If you already know the fit, you can open the shared calendar and choose the best time.",
+      "No calendar slots are open right now.",
     slots: [],
-    ctaLabel: "Open shared calendar",
+    ctaLabel: "No calendar available",
     ctaHref: calendarUrl,
   };
 }
@@ -595,15 +595,15 @@ export function buildConciergeToolBlocks(params: {
   if (isSomaticIntent(lower) || params.lane === "somatic") {
     blocks.push({
       type: "cards",
-      title: "Session paths",
-      description: "Open the studio or stay here and keep going.",
+      title: "Somatic practice paths",
+      description: "Read the studio/practice context. Private sessions are paused for now.",
       cards: [
         {
           id: "studio",
           title: "Studio",
           href: STUDIO_URL,
           imageSrc: "/images/DSC05871.jpg",
-          imageAlt: "Studio session path",
+          imageAlt: "Studio practice path",
           eyebrow: "Direct path",
           description: "Open the studio surface.",
           buttonLabel: "Open studio",
@@ -635,16 +635,13 @@ export function buildConciergeToolBlocks(params: {
       blocks.push({
         type: "picker",
         title: "Do you have a practitioner preference?",
-        description: "I can narrow the openings before showing times.",
+        description: "Private sessions are paused for now; this is only for future-fit context.",
         options: PRACTITIONER_OPTIONS,
       });
       return blocks;
     }
 
     blocks.push(buildSomaticQuestionnaire(conversationText));
-    if (params.somaticCalendarUrl) {
-      blocks.push(buildSomaticCalendar(params.somaticCalendarUrl));
-    }
     return blocks;
   }
 

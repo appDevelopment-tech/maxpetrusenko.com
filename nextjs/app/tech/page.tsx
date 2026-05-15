@@ -14,7 +14,6 @@ import {
   generateBreadcrumbSchema,
   generateTechServiceSchema,
   generateTechFAQSchema,
-  generateScheduleActionSchema,
   generateTechPersonSchema,
 } from "@/lib/seo/structured-data";
 
@@ -142,7 +141,6 @@ export default async function TechPage() {
         type="FAQPage"
         data={generateTechFAQSchema()}
       />
-      <JsonLd type="ScheduleAction" data={generateScheduleActionSchema("tech")} />
       <JsonLd type="Person" data={generateTechPersonSchema()} />
 
       {/* Hero portrait background */}

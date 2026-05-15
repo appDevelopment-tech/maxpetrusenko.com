@@ -347,7 +347,7 @@ export default function FirstTantraSessionBlogPost() {
               </p>
             </details>
 
-            <h2>Ready to Book Your First Session?</h2>
+            <h2>Interested in Future Session Work?</h2>
 
             <p>
               If you&apos;re feeling called to explore tantra work, I&apos;d be honored to support
@@ -361,9 +361,9 @@ export default function FirstTantraSessionBlogPost() {
             </p>
 
             <div className="article-cta">
-              <h3>Book Your First Tantra Session by request</h3>
+              <h3>Join the Inquiry List for Future Session Work</h3>
               <p>
-                Private sessions by request • Trauma-informed practice
+                Private sessions paused for now • Trauma-informed practice
               </p>
               <a
                 className="btn primary"

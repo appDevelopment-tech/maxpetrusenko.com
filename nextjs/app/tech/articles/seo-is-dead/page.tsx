@@ -7,7 +7,6 @@ import {
   generateWebPageSchema,
   generateTechArticleSchema,
   generateBreadcrumbSchema,
-  generateScheduleActionSchema,
   generateTechPersonSchema,
 } from "@/lib/seo/structured-data";
 
@@ -53,7 +52,6 @@ export default function SEOIsDeadArticle() {
           { name: "SEO Is Dead", url: "/tech/articles/seo-is-dead" },
         ])}
       />
-      <JsonLd type="ScheduleAction" data={generateScheduleActionSchema("tech")} />
       <JsonLd
         type="WebPage"
         data={generateWebPageSchema({
