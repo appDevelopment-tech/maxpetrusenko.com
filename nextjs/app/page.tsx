@@ -90,7 +90,7 @@ export default async function HomePage({ searchParams }: HomePageProps) {
         type="BreadcrumbList"
         data={generateBreadcrumbSchema([{ name: "Home", url: "/" }])}
       />
-      <JsonLd type="ProfessionalService" data={generateProfessionalServiceSchema()} />
+      <JsonLd type="WebPage" data={generateProfessionalServiceSchema()} />
       <JsonLd type="ProfessionalService" data={generateTechServiceSchema()} />
       <JsonLd type="FAQPage" data={generateHomeFAQSchema()} />
       <JsonLd type="Person" data={generateEnhancedPersonSchema()} />

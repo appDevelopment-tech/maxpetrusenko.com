@@ -112,7 +112,7 @@ export default function SpiritualityPage() {
   return (
     <>
       <JsonLd type="Organization" data={generateOrganizationSchema()} />
-      <JsonLd type="ProfessionalService" data={generateProfessionalServiceSchema()} />
+      <JsonLd type="WebPage" data={generateProfessionalServiceSchema()} />
       <JsonLd type="FAQPage" data={generateFAQSchema()} />
       <JsonLd type="ScheduleAction" data={generateScheduleActionSchema("tantra")} />
       <JsonLd

@@ -275,18 +275,18 @@ const SERVICE_LOCATIONS = {
 };
 
 /**
- * Generate JSON-LD structured data for ProfessionalService
- * Critical for local SEO and AI discoverability
- * Now includes AggregateRating for social proof
+ * Generate JSON-LD structured data for the tantra-informed somatic practice page.
+ * Keep this as WebPage, not LocalBusiness/ProfessionalService, to avoid
+ * anchoring the practice as a commercial/local service.
  */
 export function generateProfessionalServiceSchema() {
   const spiritualityTestimonials = testimonials.filter((t) => t.type === "spirituality");
 
   return {
     "@context": "https://schema.org",
-    "@type": "ProfessionalService",
-    "name": "Presence Atelier - Tantra & Somatic Energy Work",
-    "description": "Professional tantra massage and somatic energy work for men, women, and couples. Certified at Tantra Nectar University (Satyarti), Nervous system reset, deep repatterning, breathwork, and conscious presence sessions.",
+    "@type": "WebPage",
+    "name": "Presence Atelier - Tantra-Informed Somatic Practice",
+    "description": "Tantra-informed somatic practice, energy work, breath, boundaries, and embodied awareness by request. Grounded in Tantra Nectar / Satyarti training and nervous-system regulation.",
     "url": `${siteConfig.url}/spirituality`,
     "logo": {
       "@type": "ImageObject",
@@ -294,7 +294,6 @@ export function generateProfessionalServiceSchema() {
     },
     "image": BRAND_LOGO_URL,
     "telephone": "+1-786-543-6688",
-    "areaServed": "By request",
     "aggregateRating": {
       "@type": "AggregateRating",
       "ratingValue": "4.9",
@@ -304,15 +303,15 @@ export function generateProfessionalServiceSchema() {
     },
     "hasOfferCatalog": {
       "@type": "OfferCatalog",
-      "name": "Tantra & Somatic Services",
+      "name": "Tantra-informed somatic practice pathways",
       "itemListElement": [
         {
           "@type": "Offer",
           "itemOffered": {
             "@type": "Service",
             "name": "Nervous System Reset",
-            "description": "90-minute tantra massage session for men, women, and couples. Nervous system regulation and conscious presence through breathwork, somatic awareness, and conscious touch techniques.",
-            "category": "Tantra Massage"
+            "description": "Tantra-informed somatic practice for nervous system regulation and conscious presence through breathwork, somatic awareness, and consent-led touch techniques.",
+            "category": "Somatic Practice"
           }
         },
         {
@@ -329,8 +328,8 @@ export function generateProfessionalServiceSchema() {
           "itemOffered": {
             "@type": "Service",
             "name": "Kyo-tai Immersion",
-            "description": "Intensive bodywork and contact practice. Byōtōh-inspired intimate bodywork with clear boundaries for deep pattern release.",
-            "category": "Bodywork"
+            "description": "Contact-based embodied awareness practice with clear boundaries for deep pattern release.",
+            "category": "Somatic Practice"
           }
         },
         {
@@ -1090,8 +1089,8 @@ export function generateReviewSchema(testimonial: {
     "@context": "https://schema.org",
     "@type": "Review",
     itemReviewed: {
-      "@type": serviceName === "tantra" ? "ProfessionalService" : "Service",
-      name: serviceName === "tantra" ? "Presence Atelier - Tantra & Somatic Energy Work" :
+      "@type": "Service",
+      name: serviceName === "tantra" ? "Presence Atelier - Tantra-Informed Somatic Practice" :
            serviceName === "tech" ? "AI & Automation Services" :
            "Mindfold Sanctuary - Sensory Journeys",
       url: serviceName === "tantra" ? `${siteConfig.url}/spirituality` :
@@ -1230,21 +1229,20 @@ export function generateOrganizationWithGBP() {
  */
 
 /**
- * Generate JSON-LD structured data for ProfessionalService (private practice)
- * Critical for local SEO - helps rank in "tantra-informed somatic work" searches
+ * Generate JSON-LD structured data for private practice as a WebPage.
+ * Avoid LocalBusiness/ProfessionalService schema for this posture.
  */
 export function generateProfessionalServiceSchemaByRequest() {
   const reviewCount = testimonials.filter((t) => t.type === "spirituality").length.toString();
 
   return {
     "@context": "https://schema.org",
-    "@type": "ProfessionalService",
-    "name": "Tantra-Informed Somatic Work - Max Petrusenko",
+    "@type": "WebPage",
+    "name": "Tantra-Informed Somatic Practice - Max Petrusenko",
     "alternateName": "Presence Atelier",
     "description": "Tantra-informed somatic education and nervous-system practice by request. Boundaries-led sessions focused on breath, presence, regulation, and embodied awareness.",
     "url": `${siteConfig.url}/spirituality`,
     "telephone": "+1-786-543-6688",
-    "areaServed": "By request",
     "keywords": "tantra-informed somatic work, somatic education, energy work private practice, nervous system regulation, couples embodiment practice, somatic bodywork",
     "aggregateRating": {
       "@type": "AggregateRating",
@@ -1296,25 +1294,22 @@ export function generateProfessionalServiceSchemaByRequest() {
 }
 
 /**
- * Generate JSON-LD structured data for ProfessionalService (Miami)
- * For the Florida location
+ * Generate JSON-LD structured data for somatic education as a WebPage.
+ * Not a local-service schema.
  */
 export function generateProfessionalServiceSchemaMiami() {
   const reviewCount = testimonials.filter((t) => t.type === "spirituality").length.toString();
 
   return {
     "@context": "https://schema.org",
-    "@type": "ProfessionalService",
-    "name": "Presence Atelier Miami - Somatic Education & Energy Work",
+    "@type": "WebPage",
+    "name": "Presence Atelier - Somatic Education & Energy Work",
     "alternateName": "Max Petrusenko - Somatic Education",
     "description": "Somatic education and energy work teaching in Fort Lauderdale, Florida. Educational workshops, student teachings, and nervous system training serving South Florida from West Palm Beach to the Keys.",
     "url": `${siteConfig.url}/spirituality`,
     "telephone": "+1-786-543-6688",
     "email": "hello@maxpetrusenko.com",
-    "areaServed": "By request",
-    "priceRange": "$$$",
-    "openingHours": "Mo-Su 09:00-19:00",
-    "keywords": "tantra massage Miami, tantric massage South Florida, somatic energy work Miami, trauma release massage, couples tantra Miami",
+    "keywords": "tantra-informed somatic practice, somatic education, energy work, nervous system regulation, couples embodiment practice",
     "aggregateRating": {
       "@type": "AggregateRating",
       "ratingValue": "4.9",
