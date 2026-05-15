@@ -481,6 +481,25 @@ function buildSomaticQuestionnaire(
       required: true,
     },
     {
+      id: "location",
+      label: "Where would you want a session?",
+      type: "text",
+      placeholder: "City / area, or 'not sure yet'",
+      required: true,
+    },
+    {
+      id: "preferredTiming",
+      label: "Preferred timing",
+      type: "text",
+      placeholder: "Rough dates or timing, not a booking request",
+    },
+    {
+      id: "expectations",
+      label: "Expectation or support needed",
+      type: "textarea",
+      placeholder: "What would make this feel safe, clear, or useful?",
+    },
+    {
       id: "serviceType",
       label: "Inquiry type",
       type: "select",
@@ -539,8 +558,8 @@ function buildSomaticQuestionnaire(
     description:
       "Private sessions are paused for now. This only captures context for a future-fit inquiry; it will not show times.",
     endpoint: "/api/somatic-intake",
-    submitLabel: "Send inquiry",
-    successMessage: "Thanks. No calendar slots are open right now; Max can follow up only if there is a real future fit.",
+    submitLabel: "Prepare WhatsApp handoff",
+    successMessage: "Thanks. I prepared a private WhatsApp handoff for Max’s Hermes assistant.",
     fields,
   };
 }
@@ -596,7 +615,7 @@ export function buildConciergeToolBlocks(params: {
     blocks.push({
       type: "cards",
       title: "Somatic practice paths",
-      description: "Read the studio/practice context. Private sessions are paused for now.",
+      description: "Read context or prepare a private future-fit handoff. Private sessions are paused for now.",
       cards: [
         {
           id: "studio",
@@ -627,16 +646,6 @@ export function buildConciergeToolBlocks(params: {
         title: "What are you looking for?",
         description: "Pick the closest starting point.",
         options: SOMATIC_INTENTION_OPTIONS,
-      });
-      return blocks;
-    }
-
-    if (!hasPractitionerPreference(conversationText)) {
-      blocks.push({
-        type: "picker",
-        title: "Do you have a practitioner preference?",
-        description: "Private sessions are paused for now; this is only for future-fit context.",
-        options: PRACTITIONER_OPTIONS,
       });
       return blocks;
     }

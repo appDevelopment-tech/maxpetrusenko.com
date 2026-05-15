@@ -46,8 +46,7 @@ const STARTER_QUESTIONS = [
   "Show me the writing.",
   "I have a tech project question.",
 ];
-const WHATSAPP_FALLBACK_URL =
-  siteConfig.social.whatsapp || "https://wa.me/17865436688";
+const WHATSAPP_FALLBACK_URL = "https://wa.me/19542759666";
 
 type ConciergeAssistantResponse = {
   error?: string;
@@ -64,7 +63,9 @@ type ConciergeQuestionnaireResponse = {
   tools?: ConciergeToolBlock[];
   bookingPath?: string;
   bookingUrl?: string;
-  nextStep?: "book" | "follow_up";
+  handoffUrl?: string;
+  handoffText?: string;
+  nextStep?: "book" | "follow_up" | "handoff";
   offer?: {
     slots?: Array<{
       id: string;
@@ -183,55 +184,28 @@ function buildWhatsappHref(summary?: string) {
 
 function normalizeQuestionnaireResponse(
   payload: ConciergeQuestionnaireResponse,
-  successMessage?: string
+  successMessage?: string,
+  fallbackWhatsappHref?: string
 ) {
   const tools = Array.isArray(payload.tools) ? [...payload.tools] : [];
-  const slotList = Array.isArray(payload.offer?.slots) ? payload.offer.slots : [];
-  const practitionerCards = Array.isArray(payload.offer?.practitioners)
-    ? payload.offer.practitioners.filter((item) => item.bookingUrl)
-    : [];
-  const calendarHref = payload.bookingUrl || payload.bookingPath;
+  const handoffHref = payload.handoffUrl || fallbackWhatsappHref;
 
-  if (
-    (slotList.length > 0 || calendarHref) &&
-    !tools.some((tool) => tool.type === "calendar")
-  ) {
-    tools.push({
-      type: "calendar",
-      title: payload.nextStep === "book" ? "Available times" : "Next step",
-      description:
-        payload.nextStep === "book"
-          ? "Pick a time that feels right."
-          : "A follow-up path is ready.",
-      slots: slotList.map((slot) => ({
-        id: slot.id,
-        label: formatOfferSlotLabel(slot.start, slot.end),
-        description: slot.practitionerName,
-        href: calendarHref,
-        message: slot.practitionerName
-          ? `I want ${slot.practitionerName} for ${formatOfferSlotLabel(slot.start, slot.end)}.`
-          : `I want ${formatOfferSlotLabel(slot.start, slot.end)}.`,
-      })),
-      ctaLabel: calendarHref ? "Open full calendar" : undefined,
-      ctaHref: calendarHref || undefined,
-    });
-  }
-
-  if (
-    practitionerCards.length > 0 &&
-    !tools.some((tool) => tool.type === "cards")
-  ) {
+  if (handoffHref && !tools.some((tool) => tool.type === "cards")) {
     tools.push({
       type: "cards",
-      title: "Practitioners",
-      description: "Open a specific calendar if you already know who you want.",
-      cards: practitionerCards.map((practitioner) => ({
-        id: practitioner.id,
-        title: practitioner.name || "Practitioner",
-        href: practitioner.bookingUrl!,
-        description: "Open calendar",
-        buttonLabel: "Open",
-      })),
+      title: "Private WhatsApp handoff",
+      description:
+        "Send the prepared context to Max’s Hermes assistant. No public calendar slots are shown here.",
+      cards: [
+        {
+          id: "whatsapp-handoff",
+          title: "Send inquiry to WhatsApp",
+          href: handoffHref,
+          eyebrow: "Next step",
+          description: "Includes intention, location, preferred timing, and expectations.",
+          buttonLabel: "Send",
+        },
+      ],
     });
   }
 
@@ -239,11 +213,10 @@ function normalizeQuestionnaireResponse(
     content:
       payload.message ||
       successMessage ||
-      (tools.length > 0
-        ? "I have the next step ready."
-        : "Thanks. I have your details."),
+      "Thanks. I prepared the private WhatsApp handoff.",
     tools,
-    shouldRedirectToWhatsapp: tools.length === 0,
+    redirectHref: handoffHref,
+    shouldRedirectToWhatsapp: Boolean(handoffHref),
   };
 }
 
@@ -716,6 +689,9 @@ export function ConciergeWidget() {
           blocker: questionnaire.blocker || "",
           serviceType: questionnaire.serviceType || "solo",
           practitionerPreference: questionnaire.practitionerPreference || "any",
+          location: questionnaire.location || "",
+          preferredTiming: questionnaire.preferredTiming || questionnaire.requestedWindow || "",
+          expectations: questionnaire.expectations || "",
           requestedWindow: questionnaire.requestedWindow || "",
           contact: {
             name: questionnaire.name || "",
@@ -731,11 +707,9 @@ export function ConciergeWidget() {
         throw new Error(data.error || `Questionnaire failed (${response.status})`);
       }
 
-      const normalized = normalizeQuestionnaireResponse(data, block.successMessage);
+      const normalized = normalizeQuestionnaireResponse(data, block.successMessage, whatsappHref);
       const redirectToWhatsapp = normalized.shouldRedirectToWhatsapp;
-      const assistantContent = redirectToWhatsapp
-        ? "I could not load times here. I’m sending you to WhatsApp now."
-        : normalized.content;
+      const assistantContent = normalized.content;
 
       setMessages((current) => [
         ...current,
@@ -757,7 +731,7 @@ export function ConciergeWidget() {
       }));
       form.reset();
       if (redirectToWhatsapp) {
-        window.setTimeout(() => openToolHref(whatsappHref), 120);
+        window.setTimeout(() => openToolHref(normalized.redirectHref || whatsappHref), 120);
       }
     } catch (requestError) {
       setMessages((current) => [

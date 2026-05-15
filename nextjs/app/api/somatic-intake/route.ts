@@ -1,60 +1,70 @@
 import { NextResponse } from "next/server";
-import { getRequestContext } from "@cloudflare/next-on-pages";
 
 export const runtime = "edge";
 
-const DEFAULT_ONBOARDING_URL = "https://studio.maxpetrusenko.com/api/public/onboarding";
+const HERMES_WHATSAPP_NUMBER = "19542759666";
+const HERMES_WHATSAPP_URL = `https://wa.me/${HERMES_WHATSAPP_NUMBER}`;
 
-function envValue(key: string): string | null {
-  try {
-    const env = getRequestContext().env as unknown as Record<string, unknown>;
-    const value = env[key];
-    if (typeof value === "string" && value.trim()) return value;
-  } catch {
-    // Local Next dev does not always provide Cloudflare request context.
-  }
+type IntakeContact = {
+  name?: unknown;
+  phone?: unknown;
+  email?: unknown;
+  method?: unknown;
+};
 
-  const value = process.env[key];
-  return value?.trim() ? value : null;
+function clean(value: unknown, max = 500): string {
+  return typeof value === "string" ? value.trim().slice(0, max) : "";
+}
+
+function line(label: string, value: unknown, max?: number): string | null {
+  const text = clean(value, max);
+  return text ? `${label}: ${text}` : null;
+}
+
+function buildHandoffText(body: Record<string, unknown>): string {
+  const questionnaire =
+    body.questionnaire && typeof body.questionnaire === "object"
+      ? (body.questionnaire as Record<string, unknown>)
+      : {};
+  const contact =
+    body.contact && typeof body.contact === "object"
+      ? (body.contact as IntakeContact)
+      : {};
+
+  const parts = [
+    "New tantra/somatic future-fit inquiry from maxpetrusenko.com",
+    line("Name", contact.name ?? questionnaire.name, 120),
+    line("Visitor WhatsApp/phone", contact.phone ?? questionnaire.phone, 80),
+    line("Email", contact.email ?? questionnaire.email, 160),
+    line("Preferred reply", contact.method ?? questionnaire.contactMethod, 80),
+    line("Where they want a session", body.location ?? questionnaire.location, 180),
+    line("Preferred timing", body.preferredTiming ?? questionnaire.preferredTiming ?? questionnaire.requestedWindow, 180),
+    line("Intention", body.intention ?? questionnaire.intention, 700),
+    line("What feels blocked/important", body.blocker ?? questionnaire.blocker, 700),
+    line("Expectation", body.expectations ?? questionnaire.expectations, 700),
+    line("Inquiry type", body.serviceType ?? questionnaire.serviceType, 80),
+    line("Practitioner preference", body.practitionerPreference ?? questionnaire.practitionerPreference, 80),
+    line("Original message", body.initialMessage, 500),
+    line("Page", body.pathname, 180),
+  ].filter((item): item is string => Boolean(item));
+
+  return parts.join("\n");
 }
 
 export async function POST(request: Request) {
-  const endpoint = envValue("TANTRA_STUDIO_PUBLIC_ONBOARDING_URL") || DEFAULT_ONBOARDING_URL;
-  const fallbackCalendarUrl = envValue("SOMATIC_CALENDAR_URL");
-  const body = await request.json().catch(() => ({}));
+  const body = (await request.json().catch(() => ({}))) as Record<string, unknown>;
+  const handoffText = buildHandoffText(body);
+  const url = new URL(HERMES_WHATSAPP_URL);
+  url.searchParams.set("text", handoffText);
 
-  try {
-    const response = await fetch(endpoint, {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify(body),
-    });
-    const payload = await response.json().catch(() => ({})) as Record<string, unknown>;
-    const hasOfferSlots =
-      Array.isArray((payload.offer as { slots?: unknown[] } | undefined)?.slots) &&
-      ((payload.offer as { slots?: unknown[] }).slots?.length ?? 0) > 0;
-    const hasBookingUrl =
-      typeof payload.bookingUrl === "string" && payload.bookingUrl.trim().length > 0;
-    const hasBookingPath =
-      typeof payload.bookingPath === "string" && payload.bookingPath.trim().length > 0;
-
-    if (
-      fallbackCalendarUrl &&
-      !hasBookingUrl &&
-      !hasBookingPath &&
-      (payload.nextStep === "book" || hasOfferSlots)
-    ) {
-      payload.bookingUrl = fallbackCalendarUrl;
-    }
-
-    return NextResponse.json(payload, {
-      status: response.status,
-      headers: { "cache-control": "no-store" },
-    });
-  } catch {
-    return NextResponse.json(
-      { error: "somatic_intake_unavailable" },
-      { status: 502, headers: { "cache-control": "no-store" } },
-    );
-  }
+  return NextResponse.json(
+    {
+      nextStep: "handoff",
+      message:
+        "Thanks. I’ve prepared the context for Max’s Hermes assistant on WhatsApp. Send the message there so it can route the inquiry without showing public calendar slots.",
+      handoffUrl: url.toString(),
+      handoffText,
+    },
+    { headers: { "cache-control": "no-store" } }
+  );
 }

@@ -1,26 +1,15 @@
 "use client";
 
 import { FormEvent, useState, type CSSProperties } from "react";
-import Link from "next/link";
-import { CalendarDays, SendHorizontal } from "lucide-react";
+import { SendHorizontal } from "lucide-react";
 
 type Phase = "ask" | "intention" | "details" | "sending" | "done";
 
-type BookingSlot = {
-  id: string;
-  practitionerName: string;
-  start: string;
-  end: string;
-};
-
 type IntakeResult = {
-  bookingPath?: string;
-  bookingUrl?: string;
-  nextStep?: "book" | "follow_up";
-  offer?: {
-    slots?: BookingSlot[];
-    practitioners?: Array<{ id: string; name?: string; bookingUrl?: string }>;
-  };
+  handoffUrl?: string;
+  handoffText?: string;
+  message?: string;
+  nextStep?: "handoff" | "follow_up";
 };
 
 const fieldStyle: CSSProperties = {
@@ -39,20 +28,6 @@ const textareaStyle: CSSProperties = {
   resize: "vertical",
 };
 
-function formatSlot(slot: BookingSlot) {
-  const start = new Date(slot.start);
-  return `${slot.practitionerName}, ${start.toLocaleDateString(undefined, {
-    weekday: "short",
-    month: "short",
-    day: "numeric",
-    timeZone: "Asia/Makassar",
-  })} at ${start.toLocaleTimeString(undefined, {
-    hour: "numeric",
-    minute: "2-digit",
-    timeZone: "Asia/Makassar",
-    timeZoneName: "short",
-  })}`;
-}
 
 export function SomaticIntakeTool() {
   const [phase, setPhase] = useState<Phase>("ask");
@@ -61,6 +36,9 @@ export function SomaticIntakeTool() {
   const [intention, setIntention] = useState("");
   const [blocker, setBlocker] = useState("");
   const [serviceType, setServiceType] = useState("solo");
+  const [location, setLocation] = useState("");
+  const [preferredTiming, setPreferredTiming] = useState("");
+  const [expectations, setExpectations] = useState("");
   const [practitionerPreference, setPractitionerPreference] = useState("any");
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
@@ -104,6 +82,9 @@ export function SomaticIntakeTool() {
         intention,
         blocker,
         serviceType,
+        location,
+        preferredTiming,
+        expectations,
         practitionerPreference,
         contact: { name, phone, email, method: contactMethod },
       }),
@@ -119,19 +100,16 @@ export function SomaticIntakeTool() {
     setPhase("done");
   }
 
-  const slots = result?.offer?.slots || [];
-  const practitionerLinks = (result?.offer?.practitioners || []).filter((item) => item.bookingUrl);
-
   return (
     <div className="card" id="session-intake" style={{ overflow: "hidden", padding: 0 }}>
       <div className="split" style={{ gap: 0 }}>
         <div style={{ padding: "clamp(1.25rem,3vw,2rem)" }}>
           <p className="section-eyebrow">Session intake</p>
-          <h2 style={{ marginTop: 8 }}>Ask before booking</h2>
+          <h2 style={{ marginTop: 8 }}>Share context before any session talk</h2>
           <p className="text-muted" style={{ marginTop: 10 }}>
-            Share intention first. Then the studio can route fit, practitioner match,
-            price context, and calendar options without turning the first step into
-            a cold booking form.
+            Share intention, location, preferred timing, and expectations. This
+            prepares a private WhatsApp handoff for future-fit inquiry without
+            showing public booking or calendar slots.
           </p>
           <div className="tiles" style={{ marginTop: 18 }}>
             <div className="tile">
@@ -139,8 +117,8 @@ export function SomaticIntakeTool() {
               <span className="tile-desc">Boundaries before logistics</span>
             </div>
             <div className="tile">
-              <span className="tile-title">private practice sessions</span>
-              <span className="tile-desc">Somatic and tantra massage</span>
+              <span className="tile-title">Future-fit inquiry</span>
+              <span className="tile-desc">No public calendar slots</span>
             </div>
           </div>
         </div>
@@ -152,7 +130,7 @@ export function SomaticIntakeTool() {
               <textarea
                 id="somatic-question"
                 onChange={(event) => setInitialMessage(event.target.value)}
-                placeholder="I want to ask about tantra massage..."
+                placeholder="I want to ask about a tantra-informed session..."
                 style={{ ...textareaStyle, marginTop: 8 }}
                 value={initialMessage}
               />
@@ -188,6 +166,11 @@ export function SomaticIntakeTool() {
                   value={blocker}
                 />
                 <div className="cards-3 grid" style={{ gap: 10 }}>
+                  <input onChange={(event) => setLocation(event.target.value)} placeholder="Where would you want a session?" style={fieldStyle} value={location} />
+                  <input onChange={(event) => setPreferredTiming(event.target.value)} placeholder="Preferred timing" style={fieldStyle} value={preferredTiming} />
+                  <input onChange={(event) => setExpectations(event.target.value)} placeholder="Expectation or support needed" style={fieldStyle} value={expectations} />
+                </div>
+                <div className="cards-3 grid" style={{ gap: 10 }}>
                   <select onChange={(event) => setServiceType(event.target.value)} style={fieldStyle} value={serviceType}>
                     <option value="solo">Solo</option>
                     <option value="couples">Couples</option>
@@ -206,43 +189,24 @@ export function SomaticIntakeTool() {
                 </div>
               </div>
               <button className="btn primary" disabled={phase === "sending"} style={{ marginTop: 12 }} type="submit">
-                {phase === "sending" ? "Sending" : "Send intake"} <CalendarDays size={16} />
+                {phase === "sending" ? "Preparing" : "Prepare WhatsApp handoff"} <SendHorizontal size={16} />
               </button>
             </form>
           ) : null}
 
           {phase === "done" ? (
             <div>
-              <h3>Intake saved</h3>
+              <h3>Inquiry prepared</h3>
               <p className="text-muted" style={{ marginTop: 8 }}>
-                {result?.nextStep === "book"
-                  ? "Calendar options are ready."
-                  : "The studio will follow up with the cleanest option."}
+                {result?.message ||
+                  "I prepared a WhatsApp message for Max’s Hermes assistant. Send it there so the inquiry can be routed privately."}
               </p>
-              {slots.length ? (
-                <div className="tiles" style={{ marginTop: 14 }}>
-                  {slots.slice(0, 3).map((slot) => (
-                    <div className="tile" key={slot.id}>
-                      <span className="tile-title">{formatSlot(slot)}</span>
-                    </div>
-                  ))}
-                </div>
-              ) : null}
               <div className="hero-actions" style={{ marginTop: 16 }}>
-                {result?.bookingUrl ? (
-                  <a className="btn primary" href={result.bookingUrl} rel="noopener" target="_blank">
-                    Open calendar
+                {result?.handoffUrl ? (
+                  <a className="btn primary" href={result.handoffUrl} rel="noopener" target="_blank">
+                    Send to WhatsApp <SendHorizontal size={16} />
                   </a>
-                ) : result?.bookingPath ? (
-                  <Link className="btn primary" href={result.bookingPath}>
-                    Open calendar
-                  </Link>
                 ) : null}
-                {practitionerLinks.map((practitioner) => (
-                  <a className="btn secondary" href={practitioner.bookingUrl} key={practitioner.id} rel="noopener" target="_blank">
-                    {practitioner.name || "Practitioner"} calendar
-                  </a>
-                ))}
               </div>
             </div>
           ) : null}
