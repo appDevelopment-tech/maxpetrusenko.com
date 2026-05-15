@@ -508,7 +508,7 @@ export default function HeroExplore2() {
           <div className="exp2-proof-label">Client experience</div>
         </div>
         <div>
-          <div className="exp2-proof-value">Ubud + Miami</div>
+          <div className="exp2-proof-value">By request</div>
           <div className="exp2-proof-label">Based in</div>
         </div>
       </div>
@@ -530,11 +530,11 @@ export default function HeroExplore2() {
             <h2 className="exp2-section-title">In person and worldwide</h2>
             <div className="exp2-location-grid">
               <div className="exp2-location-item">
-                <div className="exp2-location-label spirit">Primary Base</div>
-                <div className="exp2-location-text">Ubud, Bali, Indonesia</div>
+                <div className="exp2-location-label spirit">Somatic Work</div>
+                <div className="exp2-location-text">private sessions by request</div>
               </div>
               <div className="exp2-location-item">
-                <div className="exp2-location-label tech">Secondary Base</div>
+                <div className="exp2-location-label tech">Tech Consulting</div>
                 <div className="exp2-location-text">Miami, Florida, USA</div>
               </div>
               <div className="exp2-location-item">

@@ -73,11 +73,6 @@ export function JsonLd({ type, data }: JsonLdProps) {
       "@type": "Review",
       ...data,
     },
-    LocalBusiness: {
-      "@context": "https://schema.org",
-      "@type": "LocalBusiness",
-      ...data,
-    },
     Event: {
       "@context": "https://schema.org",
       "@type": "Event",

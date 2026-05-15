@@ -25,7 +25,6 @@ const criticalRoutes = [
   "/spirituality/blog/tantra-vs-regular-massage",
   "/spirituality/blog/temple-space-preparation",
   "/spirituality/articles/tantra-trauma-ptsd",
-  "/tantra-massage-ubud",
   "/couples-tantra-massage",
   "/tech",
   "/tech/articles",

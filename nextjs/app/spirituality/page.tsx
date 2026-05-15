@@ -16,23 +16,21 @@ import {
   generateFAQSchema,
   generateScheduleActionSchema,
   generateSpiritualityPersonSchema,
-  SERVICE_LOCATIONS,
 } from "@/lib/seo/structured-data";
 
 export const metadata = generateMetadata({
   title: "Spirituality - Tantra & Somatic Energy Work",
-  description: "Certified tantra massage and somatic energy work for men, women, and couples in Ubud, Bali and Miami, Florida. Trained at Tantra Nectar University (Satyarti) with nervous system reset, deep repatterning, breathwork, and shadow work sessions. Available in South Florida from West Palm Beach to the Keys.",
+  description: "Tantra-informed somatic work for nervous-system regulation, intimacy, and embodied presence. Private sessions are scheduled by request.",
   ogType: "website",
   canonical: absoluteUrl("/spirituality"),
   keywords: [
-    "tantra massage",
+    "tantra-informed somatic work",
     "somatic energy work",
     "energy work practitioner",
     "nervous system regulation",
     "breathwork",
     "shadow work",
-    "tantra Ubud Bali",
-    "tantra Miami Florida",
+    "tantra-informed somatic work",
     "Tantra Nectar University",
     "Satyarti certified",
     "couples tantra",
@@ -43,14 +41,14 @@ export const metadata = generateMetadata({
 export default function SpiritualityPage() {
   const individualFaqs = [
     {
-      question: "What is tantra massage?",
+      question: "What is tantra-informed somatic practice?",
       answer:
-        "Tantra massage is a somatic energy work practice combining breathwork, conscious touch, and presence techniques for nervous system regulation and embodied awareness. Sessions are intimate with clear boundaries and consent-led pacing.",
+        "Tantra-informed somatic practice combines breathwork, conscious touch, meditation, and presence techniques for nervous system regulation and embodied awareness. It is boundaries-led and consent-led throughout.",
     },
     {
-      question: "Is this sexual?",
+      question: "What are the boundaries?",
       answer:
-        "This is intimate work with clear boundaries. There is no performance or expectation. The focus is presence, regulation, and connection, with consent checked throughout.",
+        "The work is consent-led and shaped around clear agreements. The focus is presence, regulation, boundaries, and embodied awareness.",
     },
     {
       question: "Do I have to be nude?",
@@ -75,12 +73,12 @@ export default function SpiritualityPage() {
     {
       question: "Where are sessions available?",
       answer:
-        "I maintain bases in Ubud, Bali and Miami, Florida, and travel globally. Message to confirm your city.",
+        "Private sessions are scheduled by request. Message with a few words about what you’re exploring to confirm availability and format options.",
     },
     {
-      question: "How do I book?",
+      question: "How do I request availability?",
       answer:
-        "The fastest way is WhatsApp: +1-786-543-6688. Email works too at hello@maxpetrusenko.com.",
+        "Text or email with a few words about what you are exploring. Availability, format, and fit are confirmed privately by request.",
     },
   ];
 
@@ -121,7 +119,7 @@ export default function SpiritualityPage() {
         type="WebPage"
         data={generateWebPageSchema({
           title: "Spirituality - Tantra & Somatic Energy Work",
-          description: "Certified tantra massage and somatic energy work for men, women, and couples in Ubud, Bali and Miami, Florida. Trained at Tantra Nectar University (Satyarti) with nervous system reset, deep repatterning, breathwork, and embodied awareness sessions.",
+          description: "Tantra-informed somatic work for nervous-system regulation, intimacy, and embodied awareness. Private sessions are scheduled by request.",
           url: "/spirituality",
         })}
       />
@@ -152,23 +150,23 @@ export default function SpiritualityPage() {
         <section className="relative z-[3] mx-auto w-full max-w-[1080px] px-4 py-28 md:px-6 md:py-32">
           <div>
             <p className="blur-in inline-flex items-center rounded-full border border-[rgba(14,97,93,0.2)] px-4 py-1 text-xs font-semibold text-[var(--accent-spirit)]">
-              Open for private sessions
+              Private sessions by request
             </p>
             <h1 className="clip-reveal clip-reveal-d1 mt-5 max-w-[12ch] font-serif text-[clamp(2.35rem,4.8vw,3.75rem)] font-bold leading-[1.06] tracking-tight text-[var(--ink)]">
               Somatic energy work with boundaries first.
             </h1>
             <p className="blur-in blur-in-d2 mt-5 max-w-[460px] text-[1.05rem] leading-relaxed text-[var(--ink-soft)]">
-              Private tantra and somatic sessions in Ubud and Miami. Nervous
-              system regulation, deep rewiring, and conscious presence.
+              Tantra-informed somatic work for nervous-system regulation, intimacy,
+              and embodied presence. Sessions are scheduled by request.
             </p>
             <div className="blur-in blur-in-d3 mt-8 flex flex-wrap gap-3">
               <a
                 className="inline-flex items-center gap-2 rounded-[10px] bg-[var(--ink)] px-7 py-3.5 text-[0.95rem] font-semibold text-[var(--sand)] shadow-[0_4px_16px_rgba(12,17,21,0.18)] transition hover:-translate-y-0.5 hover:shadow-[0_8px_28px_rgba(12,17,21,0.24)]"
-                href="https://wa.me/17865436688?text=Hi%20Max%2C%20I%27d%20like%20to%20book%20a%20session.%20Preferred%20day%2Ftime%3A%20____.%20Intentions%3A%20____."
+                href="https://wa.me/17865436688?text=Hi%20Max%2C%20I%27d%20like%20to%20ask%20about%20availability.%20I%27m%20exploring%3A%20____."
                 target="_blank"
                 rel="noopener"
               >
-                Book via WhatsApp
+                Text for availability
               </a>
               <a
                 className="inline-flex items-center gap-2 rounded-[10px] border-[1.5px] border-[var(--line)] bg-transparent px-7 py-3.5 text-[0.95rem] font-semibold text-[var(--ink)] transition hover:-translate-y-0.5 hover:border-[var(--accent-spirit)]"
@@ -186,17 +184,17 @@ export default function SpiritualityPage() {
       <DirectAnswer
         schemaType="WebPage"
         showUi={false}
-        question="What tantra massage and somatic energy work services does Max Petrusenko offer?"
-        answer="Max Petrusenko is a certified tantra and somatic practitioner offering intimate tantra massage and somatic energy work in Ubud, Bali and Miami, Florida. Sessions include nervous system reset (90 min), deep repatterning arcs, and Kyo-tai immersion bodywork. All sessions are intimate with clear boundaries and open-heart presence. Available for men, women, and couples. WhatsApp +1-786-543-6688 to book."
-        displayAnswer="Private tantra massage and somatic energy work in Ubud and Miami. Boundaries first, nervous-system paced, and available for men, women, and couples by appointment."
+        question="What tantra-informed somatic and energy work does Max Petrusenko offer?"
+        answer="Max Petrusenko is a certified tantra and somatic practitioner offering tantra-informed somatic work for nervous-system regulation, intimacy, and embodied presence. Private sessions are scheduled by request, paced with clear boundaries, and shaped around what is alive for the client. Text +1-786-543-6688 for availability."
+        displayAnswer="Tantra-informed somatic work by request. Boundaries first, nervous-system paced, and shaped around what is alive now."
       />
 
       <DirectAnswer
         schemaType="WebPage"
         showUi={false}
         question="What is somatic energy work and who practices it near me?"
-        answer="Somatic energy work is a body-based practice using breathwork, conscious touch, and presence techniques for nervous system regulation and embodied awareness. Max Petrusenko holds a Tantra Massage Certification from Tantra Nectar University (Satyarti) and offers sessions in Ubud, Bali and Miami, Florida. Book via WhatsApp: +1-786-543-6688."
-        displayAnswer="Somatic energy work for nervous system regulation and embodied awareness. Certified practitioner available in Ubud and Miami."
+        answer="Somatic energy work is a body-based practice using breathwork, conscious touch, and presence techniques for nervous system regulation and embodied awareness. Max Petrusenko holds a Tantra Massage Certification from Tantra Nectar University (Satyarti). Text for availability: +1-786-543-6688."
+        displayAnswer="Somatic energy work for nervous system regulation and embodied awareness. Private sessions by request."
       />
 
       <section className="dark-zone mt-8 py-16 px-4 md:py-20">
@@ -207,8 +205,8 @@ export default function SpiritualityPage() {
             Presence, pacing, and clear boundaries
           </h2>
           <p className="mt-2 max-w-[560px] text-[var(--dark-zone-muted)]">
-            Sessions are intimate, trauma-aware, and paced to your nervous system.
-            First-timers welcome. Men, women, and couples by appointment.
+            Sessions are trauma-aware and paced to your nervous system.
+            First-timers welcome. Men, women, and couples by request.
           </p>
 
           <div className="mt-10 grid gap-6 md:grid-cols-2">
@@ -253,7 +251,7 @@ export default function SpiritualityPage() {
           <EmailCaptureInline
             source="spirituality-page"
             headline="Stay updated"
-            subtitle="Drop your email to get notified about session availability in your city."
+            subtitle="Drop your email to get notified about future offerings and session availability."
             buttonText="Get updates"
           />
         </section>
@@ -305,16 +303,16 @@ export default function SpiritualityPage() {
           </div>
           <div className="card" style={{ marginTop: 20, textAlign: "center" }}>
             <p className="text-muted">
-              <strong>Availability:</strong> Ubud, Bali and Miami, FL with travel on request
+              <strong>Availability:</strong> private sessions by request
             </p>
             <a
               className="btn primary"
-              href="https://wa.me/17865436688?text=Hi%20Max%2C%20I%27d%20like%20to%20book%20a%20session.%20Preferred%20day%2Ftime%3A%20____.%20Intentions%3A%20____."
+              href="https://wa.me/17865436688?text=Hi%20Max%2C%20I%27d%20like%20to%20ask%20about%20availability.%20I%27m%20exploring%3A%20____."
               style={{ marginTop: 12 }}
               target="_blank"
               rel="noopener"
             >
-              Book a Session
+              Text for availability
             </a>
           </div>
         </section>
@@ -331,13 +329,13 @@ export default function SpiritualityPage() {
             <div className="card card-with-actions">
               <h3>WhatsApp</h3>
               <p>
-                Fastest channel. Send your intention and preferred day/time.
+                Send a few words about what you’re exploring. I’ll reply personally with current availability and next steps.
               </p>
               <div className="card-actions-spacer"></div>
               <div className="hero-actions" style={{ marginTop: 12 }}>
                 <a
                   className="btn primary"
-                  href="https://wa.me/17865436688?text=Hi%20Max%2C%20I%27d%20like%20to%20book%20a%20session.%20Preferred%20day%2Ftime%3A%20____.%20Intentions%3A%20____."
+                  href="https://wa.me/17865436688?text=Hi%20Max%2C%20I%27d%20like%20to%20ask%20about%20availability.%20I%27m%20exploring%3A%20____."
                   target="_blank"
                   rel="noopener"
                 >
@@ -347,7 +345,7 @@ export default function SpiritualityPage() {
             </div>
             <div className="card card-with-actions">
               <h3>Email</h3>
-              <p>Prefer email? Share your availability and intentions.</p>
+              <p>Prefer email? Share what you’re exploring and the best way to reply.</p>
               <div className="card-actions-spacer"></div>
               <div className="hero-actions" style={{ marginTop: 12 }}>
                 <a
@@ -363,7 +361,7 @@ export default function SpiritualityPage() {
             <div className="card card-with-actions">
               <h3>Questions</h3>
               <p>
-                Ask anything before you book; boundaries and pacing are set
+                Ask anything before requesting availability; boundaries and pacing are set
                 together.
               </p>
               <div className="card-actions-spacer"></div>
@@ -374,7 +372,7 @@ export default function SpiritualityPage() {
                   target="_blank"
                   rel="noopener"
                 >
-                  Text on WhatsApp
+                  Text for availability
                 </a>
               </div>
             </div>
@@ -390,7 +388,7 @@ export default function SpiritualityPage() {
 
         <section className="section">
           <div className="section-head">
-            <h2>Read Before You Book</h2>
+            <h2>Read Before You Request Availability</h2>
             <span className="section-note">
               Direct answers to first-timer questions, boundaries, and safety.
             </span>
@@ -534,43 +532,15 @@ export default function SpiritualityPage() {
 
         <section className="section">
           <div className="section-head">
-            <h2>Service Areas</h2>
+            <h2>Availability</h2>
             <span className="section-note">
-              Private sessions at my temple or yours. I travel to you.
+              Private sessions are scheduled by request after a short conversation.
             </span>
           </div>
-          <div className="split">
-            <div className="card">
-              <h3>Bali Base — Ubud &amp; Gianyar Regency</h3>
-              <p>
-                Private tantra and somatic sessions in Ubud with travel to
-                surrounding villages:{" "}
-                {SERVICE_LOCATIONS.bali.slice(0, -1).join(", ")}, and{" "}
-                {SERVICE_LOCATIONS.bali[SERVICE_LOCATIONS.bali.length - 2]}.
-              </p>
-              <p style={{ marginTop: 12 }}>
-                <small>June — August annually</small>
-              </p>
-            </div>
-            <div className="card">
-              <h3>Florida Base — Miami to West Palm Beach</h3>
-              <p>
-                Serving the greater Miami-Fort Lauderdale area including: Miami,
-                Miami Beach, North Miami, Coral Gables, Aventura, Hollywood,
-                Pembroke Pines, Fort Lauderdale, Pompano Beach, Boca Raton,
-                Delray Beach, West Palm Beach, and surrounding cities in
-                Miami-Dade, Broward, and Palm Beach counties.
-              </p>
-              <p style={{ marginTop: 12 }}>
-                <small>March — June &amp; August onwards</small>
-              </p>
-            </div>
-          </div>
-          <div className="card" style={{ marginTop: 14 }}>
-            <h3>Global Availability</h3>
+          <div className="card">
+            <h3>By request</h3>
             <p>
-              I travel internationally and am available for sessions worldwide.
-              Message to check availability in your city or arrange a visit.
+              Message with a few words about what you’re exploring. I’ll reply personally with current availability, fit, and next steps.
             </p>
           </div>
         </section>

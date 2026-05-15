@@ -9,11 +9,11 @@ export function Footer() {
     <footer>
       <div className="location-banner" role="note">
         <span className="location-item">
-          <strong>Ubud, Bali</strong> in-person
+          <strong>private sessions by request</strong> private
         </span>
         <span className="location-divider">|</span>
         <span className="location-item">
-          <strong>Miami, FL</strong> in-person
+          <strong>Miami, FL</strong> private
         </span>
         <span className="location-divider">|</span>
         <span className="location-item">Remote worldwide</span>

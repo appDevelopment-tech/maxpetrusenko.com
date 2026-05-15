@@ -72,7 +72,7 @@ export default function TempleSpacePreparationPage() {
           <div style={{ maxWidth: 900, margin: "26px auto 32px" }}>
             <Image
               src="/images/article-covers/spirit-temple-space.svg"
-              alt="Temple-like natural setting in Bali"
+              alt="Temple-like natural setting while traveling"
               width={1600}
               height={900}
               style={{ borderRadius: "var(--radius)" }}
@@ -136,15 +136,15 @@ export default function TempleSpacePreparationPage() {
             <div className="article-cta">
               <h3>Want to book in this exact setup?</h3>
               <p>
-                I currently run sessions in Ubud with this boundaries-first container.
+                I currently run sessions by request with this boundaries-first container.
               </p>
               <a
                 className="btn primary"
-                href="https://wa.me/17865436688?text=Hi%20Max%2C%20I%20want%20to%20book%20a%20session%20in%20your%20Ubud%20space."
+                href="https://wa.me/17865436688?text=Hi%20Max%2C%20I%20want%20to%20book%20a%20session%20in%20private%20session%20work."
                 target="_blank"
                 rel="noopener"
               >
-                Book via WhatsApp
+                Text for availability
               </a>
             </div>
           </div>

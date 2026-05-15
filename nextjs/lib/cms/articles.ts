@@ -26,7 +26,7 @@ const LOCAL_ARTICLES_RAW: Article[] = [
     image: "/images/article-covers/spirit-first-session.svg",
     link: "/spirituality/blog/what-to-expect-first-tantra-session",
     publishedAt: "2026-02-02T00:00:00.000Z",
-    tags: ["Spirituality", "Tantra", "Beginner Guide", "Ubud"],
+    tags: ["Spirituality", "Tantra", "Beginner Guide", "private practice"],
     author: { name: "Max Petrusenko" },
   },
   {
@@ -62,13 +62,13 @@ const LOCAL_ARTICLES_RAW: Article[] = [
     slug: "temple-space-preparation",
     title: "How I Prepare the Temple Space for Tantra Sessions",
     excerpt:
-      "A behind-the-scenes look at creating a safe, intentional, and grounded container for tantra work in Ubud.",
+      "A behind-the-scenes look at creating a safe, intentional, and grounded container for tantra work by request.",
     content:
       "<p>This article is published on maxpetrusenko.com. Open the canonical route to read the full version.</p>",
     image: "/images/article-covers/spirit-temple-space.svg",
     link: "/spirituality/blog/temple-space-preparation",
     publishedAt: "2026-02-02T00:00:00.000Z",
-    tags: ["Spirituality", "Tantra", "Practice", "Ubud"],
+    tags: ["Spirituality", "Tantra", "Practice", "private practice"],
     author: { name: "Max Petrusenko" },
   },
   {

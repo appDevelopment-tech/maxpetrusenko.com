@@ -199,7 +199,7 @@ export default function TrainingPage() {
               target="_blank"
               rel="noopener"
             >
-              Book a Session
+              Text for availability
             </a>
           </div>
         </section>

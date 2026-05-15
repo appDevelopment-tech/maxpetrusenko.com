@@ -430,7 +430,7 @@ export default function ClaudeCodeSetupArticle() {
               <span>multi-agent systems</span>
             </div>
             <p className="article-location">
-              <strong>Availability:</strong> Remote worldwide · In-person in Miami FL, Ubud Bali
+              <strong>Availability:</strong> Remote worldwide · Private in Miami FL, by request
             </p>
           </footer>
           <RelatedReading currentLink="/tech/articles/claude-code-setup" />

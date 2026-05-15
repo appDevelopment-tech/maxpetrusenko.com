@@ -84,7 +84,7 @@ export default function LinksPage() {
             <a className="dark-zone-card card-stripe-spirit" href={siteConfig.externalLinks.atelier} target="_blank" rel="noopener">
               <h3 className="font-serif text-[1.2rem] font-semibold text-[#e2e8f0]">Atelier sessions</h3>
               <p className="mt-3 text-sm leading-relaxed text-[var(--dark-zone-muted)]">
-                Private tantra and somatic sessions in Ubud through Presence Atelier.
+                Tantra-informed somatic work by request through Presence Atelier.
               </p>
             </a>
             <a className="dark-zone-card card-stripe-spirit" href="https://wa.me/17865436688?text=Hi%20Max%2C%20I%27d%20like%20to%20book%20a%20session.%20Preferred%20day%2Ftime%3A%20____.%20Intentions%3A%20____." target="_blank" rel="noopener">
@@ -235,8 +235,8 @@ export default function LinksPage() {
               rel="noopener"
             >
               <div className="tile-meta">
-                <span className="tile-title">WhatsApp to Book</span>
-                <span className="tile-desc">Send preferred day/time.</span>
+                <span className="tile-title">Text for availability</span>
+                <span className="tile-desc">Send a few words about what you’re exploring.</span>
               </div>
               <span className="badge spirit">Message</span>
             </a>

@@ -36,7 +36,7 @@ export default function IdentityPage() {
       <div className="hero-portrait-wrap">
         <div className="hero-portrait-bg">
           <Image
-            src="/images/bali/DSC04934.jpg"
+            src="/images/DSC05764.jpg"
             alt="Identity and authorship visual"
             fill
             priority
@@ -99,12 +99,12 @@ export default function IdentityPage() {
             <div className="dark-zone-card card-stripe-spirit">
               <h3 className="font-serif text-[1.25rem] font-semibold text-[#e2e8f0]">Secondary practice</h3>
               <p className="mt-3 text-sm leading-relaxed text-[var(--dark-zone-muted)]">
-                Private somatic bodywork through Presence Atelier, with in-person
-                sessions in Ubud by arrangement and boundaries-first framing.
+                Private somatic bodywork through Presence Atelier, with sessions
+                shaped by request and boundaries-first framing.
               </p>
               <div className="mt-4 flex flex-wrap gap-2">
                 <span className="rounded-md bg-[rgba(14,97,93,0.15)] px-2.5 py-1 text-[0.7rem] font-semibold text-[#2eb8a8]">Atelier</span>
-                <span className="rounded-md bg-[rgba(14,97,93,0.15)] px-2.5 py-1 text-[0.7rem] font-semibold text-[#2eb8a8]">Ubud</span>
+                <span className="rounded-md bg-[rgba(14,97,93,0.15)] px-2.5 py-1 text-[0.7rem] font-semibold text-[#2eb8a8]">By request</span>
                 <span className="rounded-md bg-[rgba(14,97,93,0.15)] px-2.5 py-1 text-[0.7rem] font-semibold text-[#2eb8a8]">Private sessions</span>
               </div>
             </div>
@@ -147,7 +147,7 @@ export default function IdentityPage() {
                 <li>Tantra & somatic energy work</li>
                 <li>Regulation & nervous system support</li>
                 <li>Boundary work & relational clarity</li>
-                <li>In-person sessions in Ubud, Bali</li>
+                <li>Private sessions by request</li>
               </ul>
               <a
                 className="btn secondary"
@@ -191,7 +191,7 @@ export default function IdentityPage() {
                   Presence Atelier is my private practice, not a studio or center
                 </li>
                 <li>I work remotely with clients globally</li>
-                <li>In-person somatic sessions are by appointment only</li>
+                <li>Private somatic sessions are by appointment only</li>
                 <li>I do not employ others—solo practitioner</li>
               </ul>
             </div>

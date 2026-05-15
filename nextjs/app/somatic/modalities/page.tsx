@@ -64,7 +64,7 @@ export default function ModalitiesPage() {
                 target="_blank"
                 rel="noopener"
               >
-                Book Reset
+                Text for availability
               </a>
             </div>
             <p style={{ marginTop: 12 }}>
@@ -86,33 +86,33 @@ export default function ModalitiesPage() {
             </div>
           </div>
 
-          {/* Tantra Massage */}
+          {/* Tantra-informed somatic practice */}
           <div className="card" style={{ marginBottom: 20 }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: 12 }}>
               <div style={{ flex: 1, minWidth: 280 }}>
-                <h3>Tantra Massage</h3>
+                <h3>Tantra-Informed Somatic Practice</h3>
                 <p style={{ color: "var(--accent)", fontWeight: 500 }}>
-                  120 minutes • <strong>$222</strong>
+                  By request • Inquiry first
                 </p>
               </div>
               <a
                 className="btn primary sm"
-                href="https://wa.me/17865436688?text=Hi%20Max%2C%20I%27d%20like%20to%20book%20a%20Tantra%20Massage.%20Preferred%20day%2Ftime%3A%20____."
+                href="https://wa.me/17865436688?text=Hi%20Max%2C%20I%27d%20like%20to%20ask%20about%20tantra-informed%20somatic%20practice%20availability.%20I%27m%20exploring%3A%20____."
                 target="_blank"
                 rel="noopener"
               >
-                Book Tantra
+                Text for availability
               </a>
             </div>
             <p style={{ marginTop: 12 }}>
-              Energetic activation, conscious intimacy, and somatic repatterning
-              for those ready to open. Consent-led sensual mapping with energy
-              channel work and breath pacing.
+              Breath, presence, boundaries, and somatic repatterning for embodied
+              awareness. Consent-led boundary mapping with energy work and breath
+              pacing.
             </p>
             <div style={{ marginTop: 16 }}>
               <h4>What's included:</h4>
               <ul className="list" style={{ marginTop: 8, marginLeft: 20 }}>
-                <li>Consent-led sensual mapping</li>
+                <li>Consent-led boundary mapping</li>
                 <li>Energy channel work + breath pacing</li>
                 <li>Post-session grounding tea + reflection</li>
               </ul>

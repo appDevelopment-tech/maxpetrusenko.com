@@ -129,12 +129,11 @@ export default function ApproachPage() {
             </div>
           </div>
           <div className="card" style={{ marginTop: 14 }}>
-            <h3>Not sexual service</h3>
+            <h3>Clear agreements</h3>
             <p>
               Tantra massage in my practice is a somatic energy work and healing
-              modality. Sessions are non-sexual with clear boundaries. I do not
-              initiate or respond to sexual behavior. The focus is on nervous
-              system regulation and conscious presence.
+              modality. Sessions are shaped around respectful boundaries, nervous
+              system regulation, and conscious presence.
             </p>
           </div>
         </section>
@@ -176,7 +175,7 @@ export default function ApproachPage() {
               target="_blank"
               rel="noopener"
             >
-              Book a Session
+              Text for availability
             </a>
             <Link className="btn secondary" href="/somatic">
               Back to Somatic

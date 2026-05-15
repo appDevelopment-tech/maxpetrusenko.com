@@ -48,7 +48,7 @@ export default function CouplesTantraMassagePage() {
                 target="_blank"
                 rel="noopener"
               >
-                Book via WhatsApp
+                Text for availability
               </a>
               <Link className="btn secondary" href="/spirituality">
                 Open spirituality

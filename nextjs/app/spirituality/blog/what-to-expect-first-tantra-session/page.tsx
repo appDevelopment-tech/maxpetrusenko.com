@@ -6,8 +6,8 @@ import { generateArticleSchema, generateBreadcrumbSchema } from "@/lib/seo/struc
 import { RelatedReading } from "@/components/articles/RelatedReading";
 
 export const metadata = generateMetadata({
-  title: "What to Expect in Your First Tantra Massage Session | Ubud, Bali",
-  description: "Nervous about your first tantra session? This guide walks you through everything from arrival to integration. Learn what to expect, how to prepare, and why first-timers are welcome in Ubud, Bali.",
+  title: "What to Expect in Your First Tantra Massage Session | private sessions by request",
+  description: "Nervous about your first tantra session? This guide walks you through everything from arrival to integration. Learn what to expect, how to prepare, and why first-timers are welcome by request.",
   ogType: "article",
   canonical: absoluteUrl("/spirituality/blog/what-to-expect-first-tantra-session"),
   ogImage: "/images/article-covers/spirit-first-session.svg",
@@ -20,7 +20,7 @@ export default function FirstTantraSessionBlogPost() {
         type="Article"
         data={generateArticleSchema({
           title: "What to Expect in Your First Tantra Massage Session",
-          description: "A complete guide to your first tantra massage session in Ubud, Bali. Learn what to expect from arrival to integration.",
+          description: "A complete guide to your first tantra massage session by request. Learn what to expect from arrival to integration.",
           image: "/images/article-covers/spirit-first-session.svg",
           url: "/spirituality/blog/what-to-expect-first-tantra-session",
           datePublished: "2026-01-15",
@@ -51,7 +51,7 @@ export default function FirstTantraSessionBlogPost() {
             <h1>What to Expect in Your First Tantra Massage Session</h1>
             <p className="article-subtitle">
               A complete walkthrough for first-timers. From arrival to integration,
-              learn exactly what happens during a tantra massage session in Ubud, Bali.
+              learn exactly what happens during a tantra massage session by request.
             </p>
             <div className="article-meta">
               <time>January 15, 2026</time>
@@ -65,7 +65,7 @@ export default function FirstTantraSessionBlogPost() {
           <div style={{ maxWidth: 900, margin: "26px auto 32px" }}>
             <Image
               src="/images/article-covers/spirit-first-session.svg"
-              alt="Ubud landscape for first session context"
+              alt="Natural setting for first session context"
               width={1600}
               height={900}
               style={{ borderRadius: "var(--radius)" }}
@@ -81,7 +81,7 @@ export default function FirstTantraSessionBlogPost() {
             </p>
             <p className="lead">
               This guide walks you through exactly what to expect, based on how I run
-              sessions at my Ubud practice. My approach is boundaries-first, trauma-informed,
+              sessions at my private practice. My approach is boundaries-first, trauma-informed,
               and designed to help you feel safe every step of the way.
             </p>
 
@@ -110,7 +110,7 @@ export default function FirstTantraSessionBlogPost() {
             <h2>Arrival (Minutes 1-10)</h2>
 
             <p>
-              When you arrive at my Ubud temple space, you&apos;ll notice it&apos;s designed for
+              When you arrive at my private session space, you&apos;ll notice it&apos;s designed for
               relaxation — clean, calm, and private. I&apos;ll greet you and offer tea or water.
               We&apos;ll sit briefly to connect before any work begins.
             </p>
@@ -330,12 +330,11 @@ export default function FirstTantraSessionBlogPost() {
             </details>
 
             <details className="faq-item">
-              <summary>Is this a sexual service?</summary>
+              <summary>What are the boundaries?</summary>
               <p>
-                No. Tantra massage in my practice is a somatic energy work modality.
-                Sessions are non-sexual with clear boundaries. I do not initiate or respond
-                to sexual behavior. The focus is on nervous system regulation and
-                conscious presence.
+                Tantra massage in my practice is a somatic energy work modality.
+                Sessions are shaped around clear agreements, nervous system regulation,
+                and conscious presence.
               </p>
             </details>
 
@@ -352,19 +351,19 @@ export default function FirstTantraSessionBlogPost() {
 
             <p>
               If you&apos;re feeling called to explore tantra work, I&apos;d be honored to support
-              your journey. My practice in Ubud, Bali offers year-round availability
+              your journey. Private sessions are scheduled by request
               with a trauma-informed, boundaries-first approach.
             </p>
 
             <p>
               WhatsApp is the fastest way to reach me. Most inquiries are answered within
-              30 minutes during business hours (9am-7pm Bali time).
+              a personal window when I’m available.
             </p>
 
             <div className="article-cta">
-              <h3>Book Your First Tantra Session in Ubud</h3>
+              <h3>Book Your First Tantra Session by request</h3>
               <p>
-                Available year-round • Fast WhatsApp response • Trauma-informed practice
+                Private sessions by request • Trauma-informed practice
               </p>
               <a
                 className="btn primary"
@@ -383,7 +382,7 @@ export default function FirstTantraSessionBlogPost() {
 
             <div className="article-footer">
               <p className="article-location">
-                <strong>Location:</strong> Ubud, Bali (Gianyar Regency) • Available year-round
+                <strong>Location:</strong> private sessions by request
               </p>
             </div>
           </div>
@@ -397,10 +396,10 @@ export default function FirstTantraSessionBlogPost() {
           <div className="cards-3 grid">
             <Link className="card" href="/spirituality">
               <h3>View All Services</h3>
-              <p>Learn more about tantra massage and somatic energy work in Ubud.</p>
+              <p>Learn more about tantra massage and somatic energy work by request.</p>
             </Link>
-            <Link className="card" href="/tantra-massage-ubud">
-              <h3>Tantra Massage Ubud</h3>
+            <Link className="card" href="/spirituality">
+              <h3>Tantra-Informed Somatic Work</h3>
               <p>Dedicated page for tantra services with detailed information.</p>
             </Link>
             <Link className="card" href="/spirituality/articles/tantra-trauma-ptsd">

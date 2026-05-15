@@ -73,7 +73,7 @@ export default function TantraVsRegularMassagePage() {
           <div style={{ maxWidth: 900, margin: "26px auto 32px" }}>
             <Image
               src="/images/article-covers/spirit-vs-massage.svg"
-              alt="Rice-field landscape near Ubud"
+              alt="Natural landscape for somatic work"
               width={1600}
               height={900}
               style={{ borderRadius: "var(--radius)" }}

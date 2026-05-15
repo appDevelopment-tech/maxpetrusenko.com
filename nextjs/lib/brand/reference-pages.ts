@@ -50,14 +50,14 @@ export const brandedReferencePages: BrandedReferencePageConfig[] = [
       "This is the shortest clean answer for branded search. One person, multiple lanes: AI automation and software on one side, somatic practice and Mindfold on the other.",
     question: "Who is Max Petrusenko?",
     answer:
-      "Max Petrusenko is an AI automation consultant, software builder, and somatic practitioner. He publishes tech systems work under his own name, offers private somatic sessions through Presence Atelier, and runs Mindfold blindfolded presence events. Primary bases: Ubud, Bali and South Florida.",
+      "Max Petrusenko is an AI automation consultant, software builder, and somatic practitioner. He publishes tech systems work under his own name, offers private somatic sessions through Presence Atelier, and runs Mindfold blindfolded presence events. Presence Atelier private sessions are scheduled by request.",
     displayAnswer:
       "AI automation consultant, software builder, somatic practitioner, and Mindfold founder. Tech, somatic, and event work all live here under one name.",
     quickFacts: [
       "AI automation, Claude Code, n8n, ChatGPT integrations",
       "Private somatic and tantra-informed sessions",
       "Mindfold blindfolded presence journeys and group events",
-      "Bases in Ubud, Bali and South Florida",
+      "Private sessions by request",
     ],
     routeCards: [
       {
@@ -139,7 +139,7 @@ export const brandedReferencePages: BrandedReferencePageConfig[] = [
       "Claude Code setup and team rollout",
       "n8n workflow architecture and debugging",
       "ChatGPT API and custom automation systems",
-      "Remote worldwide, with in-person availability while traveling",
+      "Remote worldwide, with private availability while traveling",
     ],
     routeCards: [
       {
@@ -287,23 +287,22 @@ export const brandedReferencePages: BrandedReferencePageConfig[] = [
       "max petrusenko tantra",
       "max petrusenko spirituality",
       "max petrusenko tantra massage",
-      "max petrusenko ubud",
     ],
     eyebrow: "Somatic reference",
     heroImage: "/images/DSC05764.jpg",
     h1: "Max Petrusenko somatic practice",
     intro:
-      "Branded route for people searching your name together with somatics, tantra, spirituality, or Ubud. It points to the strongest session, training, and FAQ routes.",
+      "Branded route for people searching your name together with somatics, tantra, spirituality, or somatic practice. It points to the strongest session, training, and FAQ routes.",
     question: "What somatic work does Max Petrusenko offer?",
     answer:
-      "Max Petrusenko offers private somatic sessions, tantra-informed bodywork, nervous system regulation work, and Kyo-tai immersion. The strongest public routes on this site explain his approach, session types, training, current locations, and boundaries-first framing for work in Ubud, Miami, and travel-based sessions.",
+      "Max Petrusenko offers private somatic sessions, tantra-informed bodywork, nervous system regulation work, and Kyo-tai immersion. The strongest public routes on this site explain his approach, session types, training, current locations, and boundaries-first framing for work by request, Miami, and travel-based sessions.",
     displayAnswer:
       "Private somatic sessions, tantra-informed bodywork, nervous system reset, and Kyo-tai. Main routes below cover approach, modalities, training, and booking context.",
     quickFacts: [
       "Private sessions for nervous system regulation and deeper repatterning",
       "Approach is consent-led, trauma-aware, and boundaries first",
       "Kyo-tai, tantra-informed work, and somatic education routes published on-site",
-      "Main bases in Ubud and South Florida, with travel-based availability",
+      "Private sessions by request",
     ],
     routeCards: [
       {
@@ -337,10 +336,10 @@ export const brandedReferencePages: BrandedReferencePageConfig[] = [
         badge: "Training",
       },
       {
-        title: "Tantra Massage Ubud",
-        href: "/tantra-massage-ubud",
-        description: "Local-intent route for Ubud queries and booking context.",
-        badge: "Local",
+        title: "Tantra-Informed Somatic Work",
+        href: "/spirituality",
+        description: "Somatic reference route with training and availability context.",
+        badge: "Somatic",
       },
     ],
     searchPhrases: [
@@ -348,7 +347,6 @@ export const brandedReferencePages: BrandedReferencePageConfig[] = [
       "max petrusenko tantra",
       "max petrusenko spirituality",
       "max petrusenko tantra massage",
-      "max petrusenko ubud",
     ],
     primaryCta: {
       href: "/spirituality",
@@ -372,7 +370,7 @@ export const brandedReferencePages: BrandedReferencePageConfig[] = [
       "max petrusenko community",
     ],
     eyebrow: "Mindfold reference",
-    heroImage: "/images/bali/DSC05052.jpg",
+    heroImage: "/images/DSC05764.jpg",
     h1: "Max Petrusenko Mindfold",
     intro:
       "Branded route for Mindfold search intent: blindfolded presence journeys, group events, private formats, and adjacent embodied practice routes.",

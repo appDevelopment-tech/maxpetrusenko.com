@@ -14,7 +14,7 @@ export const events: Event[] = [
     description:
       "100 people at a music festival learning how to feel through blindfolded presence journey.",
     date: "2024-11-15T14:00:00Z",
-    location: "Create Infinite Elements Festival, Bali",
+    location: "Create Infinite Elements Festival",
     capacity: 100,
     waiverUrl: "https://wa.me/17865436688",
   },

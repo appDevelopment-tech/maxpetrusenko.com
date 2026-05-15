@@ -18,7 +18,6 @@ const paths = [
   "/about",
   "/blog/topics",
   "/blog/ssr-ai-citations-fundamentals",
-  "/tantra-massage-ubud",
   "/tech",
   "/tech/articles",
   "/tech/articles/openclaw-installation-playbook",

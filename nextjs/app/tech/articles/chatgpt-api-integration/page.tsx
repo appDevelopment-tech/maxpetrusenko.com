@@ -457,7 +457,7 @@ export default function ChatGPTApiArticle() {
               <span>fine-tuning</span>
             </div>
             <p className="article-location">
-              <strong>Availability:</strong> Remote worldwide · In-person in Miami FL, Ubud Bali
+              <strong>Availability:</strong> Remote worldwide · Private in Miami FL, by request
             </p>
           </footer>
           <RelatedReading currentLink="/tech/articles/chatgpt-api-integration" />

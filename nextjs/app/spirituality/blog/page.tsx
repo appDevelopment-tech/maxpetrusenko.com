@@ -7,7 +7,7 @@ import { getLocalArticles, getLocalArticlesByTag, sortArticlesByDateDesc } from 
 
 export const metadata = generateMetadata({
   title: "Spirituality Blog | Tantra & Somatic Articles",
-  description: "Articles on tantra massage, somatic energy work, trauma release, and conscious touch in Ubud, Bali. Learn what to expect and how to prepare for your session.",
+  description: "Articles on tantra massage, somatic energy work, trauma release, and conscious touch by request. Learn what to expect and how to prepare for your session.",
   ogType: "website",
   canonical: absoluteUrl("/spirituality/blog"),
 });
@@ -24,7 +24,7 @@ export default function SpiritualityBlogPage() {
         type="WebPage"
         data={generateWebPageSchema({
           title: "Spirituality Blog | Tantra & Somatic Articles",
-          description: "Articles on tantra massage, somatic energy work, and trauma release in Ubud, Bali.",
+          description: "Articles on tantra massage, somatic energy work, and trauma release by request.",
           url: "/spirituality/blog",
         })}
       />
@@ -46,7 +46,7 @@ export default function SpiritualityBlogPage() {
             <h1>Articles on Tantra & Somatic Work</h1>
             <p>
               Educational resources on tantra massage, somatic energy work, trauma
-              release, and conscious presence. Written from my practice in Ubud, Bali.
+              release, and conscious presence. Written from practice: boundaries, consent, nervous-system literacy, and preparation that actually helps.
             </p>
           </div>
         </section>
@@ -141,9 +141,9 @@ export default function SpiritualityBlogPage() {
 
         <section className="section">
           <div className="card" style={{ textAlign: "center", padding: "40px" }}>
-            <h3>Ready to Book a Session?</h3>
+            <h3>Ready to ask about availability?</h3>
             <p style={{ marginBottom: 20 }}>
-              Professional tantra massage in Ubud, Bali. Available year-round with fast WhatsApp response.
+              Tantra-informed somatic work by request.
             </p>
             <a
               className="btn primary"
@@ -151,7 +151,7 @@ export default function SpiritualityBlogPage() {
               target="_blank"
               rel="noopener"
             >
-              Book via WhatsApp
+              Text for availability
             </a>
           </div>
         </section>

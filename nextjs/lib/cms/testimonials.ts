@@ -84,41 +84,41 @@ export const testimonials: Testimonial[] = [
   {
     quote: "This isn't spa fluff. It's profound energy work with real technique. I left regulated, lighter, and more present with my partner.",
     author: "Leo V.",
-    role: "Tech lead, Bali",
+    role: "Tech lead",
     type: "spirituality"
   },
 
-  // NEW Ubud-specific testimonials for tantra SEO
+  // NEW private practice-specific testimonials for tantra SEO
   {
-    quote: "Max responded on WhatsApp within 10 minutes. The tantra massage session in Ubud was transformative - finally released trauma I've carried for years.",
+    quote: "Max responded on WhatsApp within 10 minutes. The tantra massage session by request was transformative - finally released trauma I've carried for years.",
     author: "Sarah T.",
     role: "Digital Nomad",
-    location: "Ubud, Bali",
+    location: "private sessions by request",
     type: "spirituality"
   },
   {
-    quote: "I've tried many therapists in Ubud. Max's tantra approach is different - it works through the body, not just the mind. My nervous system actually shifted.",
+    quote: "I've tried many therapists by request. Max's tantra approach is different - it works through the body, not just the mind. My nervous system actually shifted.",
     author: "James L.",
     role: "Entrepreneur",
-    location: "Ubud, Bali",
+    location: "private sessions by request",
     type: "spirituality"
   },
   {
-    quote: "As a trauma survivor, I was nervous about tantra. Max created such a safe container. I finally feel at home in my body. Best decision I made in Bali.",
+    quote: "As a trauma survivor, I was nervous about tantra. Max created such a safe container. I finally feel at home in my body. Best decision I made while traveling.",
     author: "Mika K.",
     role: "Yoga Teacher",
-    location: "Penestanan, Bali",
+    location: "Private client",
     type: "spirituality"
   },
   {
-    quote: "Professional tantra in Ubud is hard to find. Max is certified, trauma-informed, and genuinely skilled. The session was profound - unlike anything else in Bali.",
+    quote: "Professional tantra by request is hard to find. Max is certified, trauma-informed, and genuinely skilled. The session was profound - unlike anything else while traveling.",
     author: "Rachel N.",
     role: "Therapist",
-    location: "Ubud, Bali",
+    location: "private sessions by request",
     type: "spirituality"
   },
   {
-    quote: "My partner and I did a couples tantra session while visiting Ubud. It deepened our connection in ways months of talk therapy couldn't. Highly recommend.",
+    quote: "My partner and I did a couples tantra session while traveling. It deepened our connection in ways months of talk therapy couldn't. Highly recommend.",
     author: "Daniel & Sophie",
     role: "Couple",
     location: "Sydney, Australia",
@@ -128,25 +128,25 @@ export const testimonials: Testimonial[] = [
     quote: "I was skeptical about tantra massage. But after years of talk therapy, I needed something different. This somatic approach unlocked what years of therapy couldn't.",
     author: "Alex M.",
     role: "Software Engineer",
-    location: "Ubud, Bali",
+    location: "private sessions by request",
     type: "spirituality"
   },
   {
-    quote: "Fast WhatsApp response, easy booking, and the session itself was incredible. Max is professional, skilled, and creates a beautiful temple space in Ubud.",
+    quote: "Personal reply, easy booking, and the session itself was incredible. Max is professional, skilled, and creates a beautiful temple space by request.",
     author: "Emma W.",
     role: "Content Creator",
-    location: "Campuan, Bali",
+    location: "Private client",
     type: "spirituality"
   },
   {
-    quote: "The nervous system reset session was exactly what I needed after a stressful year. I left feeling like I'd had a week of sleep. Magic happens in this Ubud space.",
+    quote: "The nervous system reset session was exactly what I needed after a stressful year. I left feeling like I'd had a week of sleep. Magic happens in this private practice space.",
     author: "Chris D.",
     role: "Founder",
     location: "Miami, FL",
     type: "spirituality"
   },
   {
-    quote: "I've experienced tantra in India, Thailand, and now Bali. Max's approach in Ubud is the most grounded and professional I've found. Real skill here.",
+    quote: "I've experienced tantra in India, Thailand, and with a private practitioner. Max's approach is the most grounded and professional I've found. Real skill here.",
     author: "Rajesh P.",
     role: "Repeat Client",
     location: "Singapore",
@@ -156,32 +156,32 @@ export const testimonials: Testimonial[] = [
     quote: "As someone with complex PTSD, I'm very careful about touch work. Max's trauma-informed approach made me feel completely safe. This is how tantra should be done.",
     author: "Taylor B.",
     role: "Designer",
-    location: "Ubud, Bali",
+    location: "private sessions by request",
     type: "spirituality"
   },
   {
-    quote: "Found Max through a friend's recommendation while in Ubud. The tantra session released shoulder tension I've carried for 5 years. Incredible somatic work.",
+    quote: "Found Max through a friend's recommendation while by request. The tantra session released shoulder tension I've carried for 5 years. Incredible somatic work.",
     author: "Nina S.",
     role: "Dancer",
-    location: "Sanggingan, Bali",
+    location: "Private client",
     type: "spirituality"
   },
   {
-    quote: "Year-round availability in Ubud is rare for quality tantra practitioners. Max is consistently available, responsive, and maintains a professional standard.",
+    quote: "Clear availability by request is rare for quality tantra practitioners. Max is responsive, professional, and careful about the container.",
     author: "Oscar K.",
     role: "Retreat Leader",
-    location: "Bali",
+    location: "private practice",
     type: "spirituality"
   },
   {
-    quote: "The breathwork alone was transformative. But combined with conscious touch, it was next-level. My nervous system needed this. Thank you, Ubud community treasure.",
+    quote: "The breathwork alone was transformative. But combined with conscious touch, it was next-level. My nervous system needed this. Thank you, quiet presence holder.",
     author: "Linda F.",
     role: "Nurse",
-    location: "Ubud, Bali",
+    location: "private sessions by request",
     type: "spirituality"
   },
   {
-    quote: "I was looking for tantra massage in Ubud and found Max. The session exceeded expectations - professional, safe, and deeply healing. Already booked my return.",
+    quote: "I was looking for tantra-informed somatic work and found Max. The session exceeded expectations - professional, safe, and deeply healing. Already booked my return.",
     author: "Priya M.",
     role: "Digital Nomad",
     location: "India",

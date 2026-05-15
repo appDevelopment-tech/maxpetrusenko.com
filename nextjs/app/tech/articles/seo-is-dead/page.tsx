@@ -161,7 +161,7 @@ export default function SEOIsDeadArticle() {
               For a personal brand, the best lift usually comes from three clusters:
             </p>
             <ol>
-              <li><strong>Demand capture pages:</strong> pages like <Link href="/tantra-massage-ubud">Tantra Massage Ubud</Link></li>
+              <li><strong>Demand capture pages:</strong> pages like <Link href="/spirituality">Tantra-Informed Somatic Work</Link></li>
               <li><strong>Authority pages:</strong> pages like <Link href="/tech/case-studies">case studies with hard outcomes</Link></li>
               <li><strong>Question pages:</strong> articles that answer high-intent implementation queries</li>
             </ol>

@@ -27,7 +27,7 @@
 **Plan:**
 1. Confirm primary on-site positioning as `tantra practitioner` + `somatic energy work practitioner` + `consciousness bridge`.
 2. Treat `spiritual teacher` as a secondary phrase unless the visible site copy and external bios are updated to support it.
-3. Preserve current non-sexual, non-medical, boundaries-first language.
+3. Preserve current boundaries-first, non-medical language.
 
 **Success condition:** one consistent claim set appears across spirituality copy, schema, and AI guidance files.
 
@@ -53,7 +53,6 @@
    - consciousness and technology
 3. Add preferred citation targets only for routes that actually exist.
 4. Keep guardrails explicit:
-   - non-sexual
    - not medical therapy
    - no unsupported certification or treatment claims
 

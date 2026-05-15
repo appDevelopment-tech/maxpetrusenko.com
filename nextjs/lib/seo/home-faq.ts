@@ -20,7 +20,7 @@ export const homeFaqEntries: HomeFaqEntry[] = [
   {
     question: "Where are somatic sessions available?",
     answer:
-      "Somatic sessions are available in person in Ubud, Bali and South Florida, with remote tech consulting available worldwide. Message directly to confirm current city and availability.",
+      "Somatic sessions are scheduled by request, with remote tech consulting available worldwide. Message directly to confirm availability and format options.",
     lane: "somatic",
   },
   {
@@ -38,7 +38,7 @@ export const homeFaqEntries: HomeFaqEntry[] = [
   {
     question: "Does Max work remotely?",
     answer:
-      "Yes. Tech consulting is remote worldwide. In-person somatic work happens in Ubud and South Florida, with occasional travel-based availability elsewhere.",
+      "Yes. Tech consulting is remote worldwide. Somatic work and private consulting are handled by request, with occasional travel-based availability.",
     lane: "tech",
   },
 ];

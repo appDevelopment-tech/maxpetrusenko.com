@@ -7,7 +7,7 @@ import { RelatedReading } from "@/components/articles/RelatedReading";
 
 export const metadata = generateMetadata({
   title: "Tantra Massage for Trauma & PTSD: How Somatic Touch Rewires Your Nervous System",
-  description: "Discover how tantra massage in Ubud, Bali helps release trauma and regulate the nervous system through somatic touch, breathwork, and conscious presence. Evidence-based approach to PTSD recovery.",
+  description: "Discover how tantra massage by request helps release trauma and regulate the nervous system through somatic touch, breathwork, and conscious presence. Evidence-based approach to PTSD recovery.",
   ogType: "article",
   canonical: absoluteUrl("/spirituality/articles/tantra-trauma-ptsd"),
   ogImage: "/images/article-covers/spirit-trauma-ptsd.svg",
@@ -50,7 +50,7 @@ export default function TantraTraumaArticle() {
             </div>
             <h1>Tantra Massage for Trauma & PTSD: How Somatic Touch Rewires Your Nervous System</h1>
             <p className="article-subtitle">
-              Evidence-based somatic approach to trauma release available in Ubud, Bali.
+              Evidence-based somatic approach to trauma release available by request.
               Learn how conscious touch and breathwork help regulate the vagus nerve and
               release stored trauma from the body.
             </p>
@@ -183,15 +183,15 @@ export default function TantraTraumaArticle() {
               sessions.
             </p>
 
-            <h2>Why Ubud?</h2>
+            <h2>Why the setting matters</h2>
             <p>
-              Ubud, Bali is an ideal setting for trauma work. The natural environment,
+              private sessions by request is an ideal setting for trauma work. The natural environment,
               spiritual heritage, and slower pace of life all support nervous system
               regulation. Many clients combine tantra sessions with other healing
-              modalities available in Ubud — yoga, meditation, purification rituals.
+              modalities available by request — yoga, meditation, purification rituals.
             </p>
             <p>
-              My practice in Ubud offers year-round availability with a professional
+              Private sessions are scheduled by request with a professional
               team trained in trauma-informed somatic work. We understand that trauma
               recovery isn&apos;t linear, and we&apos;re here to support your journey with
               patience, skill, and deep respect.
@@ -210,11 +210,11 @@ export default function TantraTraumaArticle() {
               <li>Being honest about your history so we can tailor the work appropriately</li>
             </ul>
 
-            <h2>Booking Your Trauma-Focused Session</h2>
+            <h2>Requesting Trauma-Focused Somatic Work</h2>
             <p>
-              If you&apos;re ready to explore somatic trauma release, I offer sessions in
-              Ubud, Bali year-round. WhatsApp is the fastest way to reach me — most
-              inquiries are answered within 30 minutes during business hours.
+              If you&apos;re ready to explore somatic trauma release, availability is
+              confirmed privately by request. Message with a few words about what you are
+              exploring and I will reply personally with appropriate next steps.
             </p>
             <p>
               During our initial communication, please share that you&apos;re interested in
@@ -225,8 +225,8 @@ export default function TantraTraumaArticle() {
             <div className="article-cta">
               <h3>Ready to Begin Your Healing Journey?</h3>
               <p>
-                Book a trauma-focused tantra massage session in Ubud, Bali.
-                Available year-round with fast WhatsApp response.
+                Request trauma-focused tantra-informed somatic work by request.
+                Availability and format are confirmed privately.
               </p>
               <a
                 className="btn primary"
@@ -234,7 +234,7 @@ export default function TantraTraumaArticle() {
                 target="_blank"
                 rel="noopener"
               >
-                WhatsApp to Book
+                Request availability
               </a>
               <Link className="btn secondary" href="/spirituality">
                 View All Services
@@ -307,10 +307,10 @@ export default function TantraTraumaArticle() {
               <span>somatic healing</span>
               <span>nervous system</span>
               <span>vagus nerve</span>
-              <span>tantra Ubud</span>
+              <span>tantra-informed somatic work</span>
             </div>
             <p className="article-location">
-              <strong>Location:</strong> Ubud, Bali (Gianyar Regency) • Available year-round
+              <strong>Location:</strong> private sessions by request
             </p>
           </footer>
           <RelatedReading currentLink="/spirituality/articles/tantra-trauma-ptsd" />
@@ -324,11 +324,11 @@ export default function TantraTraumaArticle() {
           <div className="cards-3 grid">
             <Link className="card" href="/spirituality">
               <h3>View All Services</h3>
-              <p>Learn more about tantra massage, somatic energy work, and booking options in Ubud.</p>
+              <p>Learn more about tantra massage, somatic energy work, and booking options by request.</p>
             </Link>
-            <Link className="card" href="/tantra-massage-ubud">
-              <h3>Tantra Massage Ubud</h3>
-              <p>Dedicated page for tantra services in Ubud with detailed information and booking.</p>
+            <Link className="card" href="/spirituality">
+              <h3>Tantra-Informed Somatic Work</h3>
+              <p>Dedicated page for tantra services by request with detailed information and booking.</p>
             </Link>
             <Link className="card" href="/somatic">
               <h3>Somatic Practice</h3>

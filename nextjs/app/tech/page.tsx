@@ -20,7 +20,7 @@ import {
 
 export const metadata = generateMetadata({
   title: "Tech",
-  description: "AI automation consultant specializing in Claude Code, n8n workflows, and ChatGPT integrations. Available remotely worldwide and in-person in Miami, Ubud Bali, and globally while traveling.",
+  description: "AI automation consultant specializing in Claude Code, n8n workflows, and ChatGPT integrations. Available remotely worldwide, with private work by request while traveling.",
   ogType: "website",
   canonical: absoluteUrl("/tech"),
 });
@@ -331,7 +331,7 @@ export default async function TechPage() {
           </div>
           <div className="card" style={{ marginTop: 20, textAlign: "center" }}>
             <p className="text-muted">
-              <strong>Availability:</strong> Remote worldwide · In-person in Miami FL, Ubud Bali · Currently traveling: Dubai → Athens → Lisbon
+              <strong>Availability:</strong> Remote worldwide · Private work by request while traveling
             </p>
             <a
               className="btn primary"
@@ -414,7 +414,7 @@ export default async function TechPage() {
           <section className="section">
           <div className="section-head">
             <h2 className="!text-[#e2e8f0]">Location & Availability</h2>
-            <span className="section-note !text-[var(--dark-zone-muted)]">Remote-first with in-person options.</span>
+            <span className="section-note !text-[var(--dark-zone-muted)]">Remote-first with private options.</span>
           </div>
           <div className="cards-3 grid">
             <div className="card">
@@ -429,15 +429,15 @@ export default async function TechPage() {
               <h3 className="flex items-center gap-2"><MapPin size={18} /> Miami, Florida</h3>
               <p>
                 Seasonal base (March-June, August-December). Available for
-                in-person consulting, team training, and onsite automation setup
+                private consulting, team training, and onsite automation setup
                 in Miami and South Florida.
               </p>
             </div>
             <div className="card">
-              <h3 className="flex items-center gap-2"><Trees size={18} /> Ubud, Bali</h3>
+              <h3 className="flex items-center gap-2"><Trees size={18} /> Traveling</h3>
               <p>
-                Seasonal base (June-August). Combine automation work with a trip
-                to Bali. In-person consulting available on the island.
+                Private consulting, team training, and onsite automation setup
+                are available by request when the timing and context fit.
               </p>
             </div>
           </div>

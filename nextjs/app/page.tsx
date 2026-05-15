@@ -47,7 +47,7 @@ const EmailCapture = dynamic(
 export const metadata = generateMetadata({
   title: "Max Petrusenko — Presence & Product",
   description:
-    "Max Petrusenko builds calm products and embodied experiences: AI automation for creators and founders, plus tantra massage and somatic energy work in Ubud and Miami.",
+    "Max Petrusenko builds calm products and embodied experiences: AI automation for creators and founders, plus Tantra-informed somatic work by request.",
   ogType: "website",
   canonical: absoluteUrl("/"),
 });
@@ -81,7 +81,7 @@ export default async function HomePage({ searchParams }: HomePageProps) {
         type="WebPage"
         data={generateWebPageSchema({
           title: "Max Petrusenko — Presence & Product",
-          description: "AI automation for creators and founders, plus tantra massage and somatic energy work in Ubud and Miami.",
+          description: "AI automation for creators and founders, plus Tantra-informed somatic work by request.",
           url: "/",
         })}
       />
@@ -143,8 +143,8 @@ export default async function HomePage({ searchParams }: HomePageProps) {
         schemaType="WebPage"
         showUi={false}
         question="Who is Max Petrusenko and what services does he offer?"
-        answer="Max Petrusenko is a tech builder and somatic practitioner offering two distinct services. For tech: AI automation consulting with Claude Code, n8n workflows, and ChatGPT integrations that saved one client $253k annually. For somatic: professional tantra massage and energy work in Ubud, Bali and Miami, Florida with 4.9/5 ratings. WhatsApp +1-786-543-6688 for bookings."
-        displayAnswer="Max Petrusenko works across two practices: AI automation for founders and private somatic sessions in Ubud and Miami. Recent systems built with Claude Code, n8n, and ChatGPT saved one client $253k annually, while the somatic practice offers boundaries-first tantra and nervous system work by appointment."
+        answer="Max Petrusenko is a tech builder and somatic practitioner offering two distinct practices. For tech: AI automation consulting with Claude Code, n8n workflows, and ChatGPT integrations that saved one client $253k annually. For somatic: Tantra-informed private sessions for nervous-system regulation and embodied presence, scheduled by request. Text +1-786-543-6688 for availability."
+        displayAnswer="Max Petrusenko works across two practices: AI automation for founders and private somatic sessions by request. Recent systems built with Claude Code, n8n, and ChatGPT saved one client $253k annually, while the somatic practice offers boundaries-first tantra and nervous system work by appointment."
       />
 
       {/* Two Paths dark zone */}
@@ -226,21 +226,21 @@ export default async function HomePage({ searchParams }: HomePageProps) {
               />
             </div>
             <div className="flex flex-wrap items-center justify-between gap-3">
-              <h2 className="text-2xl font-semibold text-[var(--ink)] md:text-3xl">Area Served</h2>
-              <p className="text-sm font-medium text-[var(--muted)]">In person: Ubud + South Florida. Remote: worldwide.</p>
+              <h2 className="text-2xl font-semibold text-[var(--ink)] md:text-3xl">Availability</h2>
+              <p className="text-sm font-medium text-[var(--muted)]">Somatic work: by request. Tech consulting: remote worldwide.</p>
             </div>
             <div className="mt-5 grid gap-4 md:grid-cols-3">
               <div className="rounded-2xl border border-[rgba(12,17,21,0.08)] bg-white p-4">
-                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--accent-spirit)]">Primary Base</p>
-                <p className="mt-2 text-sm text-[var(--ink-soft)]">Ubud, Gianyar Regency, Bali, Indonesia</p>
+                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--accent-spirit)]">Somatic Work</p>
+                <p className="mt-2 text-sm text-[var(--ink-soft)]">Private sessions scheduled by request</p>
               </div>
               <div className="rounded-2xl border border-[rgba(12,17,21,0.08)] bg-white p-4">
-                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--accent-tech)]">Secondary Base</p>
-                <p className="mt-2 text-sm text-[var(--ink-soft)]">Miami-Fort Lauderdale, Florida, United States</p>
+                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--accent-tech)]">Tech Consulting</p>
+                <p className="mt-2 text-sm text-[var(--ink-soft)]">Remote worldwide; in-person by request while traveling</p>
               </div>
               <div className="rounded-2xl border border-[rgba(12,17,21,0.08)] bg-white p-4">
-                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--accent-mindfold)]">Business Address</p>
-                <p className="mt-2 text-sm text-[var(--ink-soft)]">917 SW 18th Ct, Fort Lauderdale, FL 33315, US</p>
+                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--accent-mindfold)]">Contact</p>
+                <p className="mt-2 text-sm text-[var(--ink-soft)]">hello@maxpetrusenko.com</p>
               </div>
             </div>
           </section>

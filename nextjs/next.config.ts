@@ -95,6 +95,11 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
+        source: "/tantra-massage-ubud",
+        destination: "/spirituality",
+        permanent: true,
+      },
+      {
         source: "/couples-tantric-massage",
         destination: "/couples-tantra-massage",
         permanent: true,

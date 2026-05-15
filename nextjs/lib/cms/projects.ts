@@ -60,12 +60,12 @@ export const projects: Project[] = [
     slug: "presence-atelier",
     title: "Presence Atelier",
     description:
-      "Private tantra and somatic energy work practice in Ubud, Bali. Deep rewiring and nervous system reset through embodied presence.",
+      "Tantra-informed somatic work by request. Deep rewiring and nervous system reset through embodied presence.",
     image: "/images/atelier.svg",
     link: "https://atelier.maxpetrusenko.com",
     status: "live",
     category: "product",
-    tags: ["Somatic", "Tantra", "Coaching", "Ubud"],
+    tags: ["Somatic", "Tantra", "Coaching", "private practice"],
   },
   {
     id: "mindfold",

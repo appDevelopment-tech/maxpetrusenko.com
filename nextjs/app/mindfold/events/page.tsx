@@ -43,7 +43,7 @@ export default function MindfoldEventsPage() {
       <div className="hero-portrait-wrap">
         <div className="hero-portrait-bg">
           <Image
-            src="/images/bali/DSC05052.jpg"
+            src="/images/DSC05764.jpg"
             alt="Mindfold immersive event atmosphere"
             fill
             priority
@@ -210,7 +210,7 @@ export default function MindfoldEventsPage() {
                   If you touch a private area inadvertently, don&apos;t linger.
                 </li>
                 <li>
-                  Respect verbal and nonverbal consent; this is a non-sexual
+                  Respect verbal and nonverbal consent; this is a clear-boundary
                   space.
                 </li>
                 <li>
@@ -326,7 +326,7 @@ export default function MindfoldEventsPage() {
               <p>
                 A blindfolded presence practice for groups. With sensory subtraction
                 and slow movement, participants drop into embodied awareness in a
-                non-verbal, non-sexual container.
+                non-verbal, clear-boundary container.
               </p>
             </details>
             <details className="faq-item card">
@@ -344,10 +344,10 @@ export default function MindfoldEventsPage() {
               </p>
             </details>
             <details className="faq-item card">
-              <summary>Is Mindfold sexual?</summary>
+              <summary>What are the boundaries?</summary>
               <p>
-                No. Mindfold is non-sexual. The focus is nervous system regulation,
-                embodied awareness, and respectful boundaries.
+                Mindfold centers nervous system regulation, embodied awareness,
+                and respectful boundaries.
               </p>
             </details>
             <details className="faq-item card">

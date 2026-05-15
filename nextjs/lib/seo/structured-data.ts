@@ -173,7 +173,7 @@ export function generateSpiritualityPersonSchema() {
     url: siteConfig.url,
     image: PERSON_IMAGE_URL,
     jobTitle: "Tantra & Somatic Energy Work Practitioner",
-    description: "Certified tantra massage and somatic energy work practitioner trained at Tantra Nectar University (Satyarti). Specializing in nervous system regulation, breathwork, shadow work, and trauma-informed bodywork in Ubud, Bali and Miami, Florida.",
+    description: "Certified tantra massage and somatic energy work practitioner trained at Tantra Nectar University (Satyarti). Specializing in nervous system regulation, breathwork, shadow work, and trauma-informed bodywork.",
     worksFor: {
       "@type": "Organization",
       name: "Presence Atelier",
@@ -270,30 +270,8 @@ export function generateItemListSchema(
  * Includes all cities within 30-minute drive from bases (I-595 accessible from FLL)
  */
 const SERVICE_LOCATIONS = {
-  bali: [
-    "Ubud", "Gianyar Regency", "Campuan", "Penestanan", "Sanggingan",
-    "Kedewatan", "Peliatan", "Mas", "Pengosekan", "Tegallalung",
-    "Sayan", "Kutuh Kaja", "Bali"
-  ],
-  florida: [
-    // Miami-Dade County (Core + West Miami cities)
-    "Miami", "Miami Beach", "North Miami", "North Miami Beach", "Coral Gables",
-    "Aventura", "Sunny Isles Beach", "Hallandale Beach", "Hollywood", "Pembroke Pines",
-    "Miramar", "Westchester", "Tamiami", "Fontainebleau", "The Hammocks",
-    "Country Walk", "Richmond West", "South Miami Heights", "Lakes by the Bay",
-    "West Park", "Pembroke Park", "Carver Ranches", "Golden Glades", "Ives Estates",
-    "Gladeview", "Bunche Park", "Hialeah", "Miami Gardens", "Miami Lakes",
-    "Palmetto Bay", "Key Biscayne", "Doral", "Sweetwater",
-    // Broward County (Fort Lauderdale + I-595 corridor cities)
-    "Fort Lauderdale", "Lauderdale-by-the-Sea", "Dania Beach", "Oakland Park",
-    "Wilton Manors", "Plantation", "Sunrise", "Weston", "Davie",
-    "Lauderhill", "Tamarac", "Margate", "North Lauderdale", "Coconut Creek",
-    // Palm Beach County (South)
-    "Pompano Beach", "Deerfield Beach", "Boca Raton", "Delray Beach",
-    "Boynton Beach", "Lake Worth", "West Palm Beach", "Coral Springs",
-    // Regional descriptors
-    "South Florida", "Miami-Dade County", "Broward County", "Palm Beach County"
-  ]
+  somatic: ["By request"],
+  florida: ["By request"]
 };
 
 /**
@@ -308,7 +286,7 @@ export function generateProfessionalServiceSchema() {
     "@context": "https://schema.org",
     "@type": "ProfessionalService",
     "name": "Presence Atelier - Tantra & Somatic Energy Work",
-    "description": "Professional tantra massage and somatic energy work for men, women, and couples. Certified at Tantra Nectar University (Satyarti), serving Ubud, Bali and South Florida. Nervous system reset, deep repatterning, breathwork, and conscious presence sessions.",
+    "description": "Professional tantra massage and somatic energy work for men, women, and couples. Certified at Tantra Nectar University (Satyarti), Nervous system reset, deep repatterning, breathwork, and conscious presence sessions.",
     "url": `${siteConfig.url}/spirituality`,
     "logo": {
       "@type": "ImageObject",
@@ -316,21 +294,7 @@ export function generateProfessionalServiceSchema() {
     },
     "image": BRAND_LOGO_URL,
     "telephone": "+1-786-543-6688",
-    "address": [
-      {
-        "@type": "PostalAddress",
-        "addressLocality": "Ubud",
-        "addressRegion": "Gianyar Regency",
-        "addressCountry": "ID"
-      },
-      {
-        "@type": "PostalAddress",
-        "addressLocality": "Miami",
-        "addressRegion": "FL",
-        "addressCountry": "US"
-      }
-    ],
-    "areaServed": [...SERVICE_LOCATIONS.bali, ...SERVICE_LOCATIONS.florida],
+    "areaServed": "By request",
     "aggregateRating": {
       "@type": "AggregateRating",
       "ratingValue": "4.9",
@@ -384,10 +348,10 @@ export function generateProfessionalServiceSchema() {
       "@type": "Audience",
       "audienceType": ["men", "women", "couples", "LGBTQ+"]
     },
-    "keywords": "tantra, tantric, tantra massage, somatic energy work, bodywork, breathwork, nervous system reset, couples tantra, energy work, shadow work, Tantra Nectar University, Satyarti, tantra certification, Ubud Bali, Miami Florida",
+    "keywords": "tantra, tantric, tantra massage, somatic energy work, bodywork, breathwork, nervous system reset, couples tantra, energy work, shadow work, Tantra Nectar University, Satyarti, tantra certification",
     "availableChannel": {
       "@type": "ServiceChannel",
-      "serviceType": "tantra massage, somatic energy work, bodywork",
+      "serviceType": "tantra-informed somatic practice, breathwork, energy work, embodiment education",
       "serviceUrl": `${siteConfig.url}/spirituality`
     }
   };
@@ -455,7 +419,7 @@ export function generateFAQSchema() {
         "name": "Where are sessions available?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "I maintain bases in Ubud, Bali and Miami, Florida, and travel globally. Message to confirm your city."
+          "text": "Private sessions are scheduled by request after a short conversation. Message with a few words about what you’re exploring to confirm current availability, fit, and any legal or logistical requirements."
         }
       },
       {
@@ -626,7 +590,7 @@ export function generateTechServiceSchema() {
         worstRating: "1",
       }
     } : {}),
-    description: "AI automation consultant specializing in Claude Code, n8n workflows, ChatGPT integrations, and workflow automation for creators and founders. Available remotely worldwide and in-person in Miami, Ubud Bali, and while traveling.",
+    description: "AI automation consultant specializing in Claude Code, n8n workflows, ChatGPT integrations, and workflow automation for creators and founders. Available remotely worldwide, with in-person work by request while traveling.",
     url: `${siteConfig.url}/tech`,
     logo: {
       "@type": "ImageObject",
@@ -635,21 +599,7 @@ export function generateTechServiceSchema() {
     image: BRAND_LOGO_URL,
     telephone: "+1-786-543-6688",
     email: "hello@maxpetrusenko.com",
-    address: [
-      {
-        "@type": "PostalAddress",
-        addressLocality: "Ubud",
-        addressRegion: "Gianyar Regency",
-        addressCountry: "ID",
-      },
-      {
-        "@type": "PostalAddress",
-        addressLocality: "Miami",
-        addressRegion: "FL",
-        addressCountry: "US",
-      },
-    ],
-    areaServed: ["Global", "Remote", "Worldwide", "Miami", "Ubud", "Bali", "South Florida", "Digital Nomad", "Remote First"],
+    areaServed: ["Global", "Remote", "Worldwide", "By request"],
     hasOfferCatalog: {
       "@type": "OfferCatalog",
       name: "AI & Automation Services",
@@ -908,12 +858,6 @@ export function generateEventSchema(data: {
       location: {
         "@type": "Place",
         name: data.location,
-        address: {
-          "@type": "PostalAddress",
-          addressLocality: "Ubud",
-          addressRegion: "Gianyar Regency",
-          addressCountry: "ID",
-        },
       },
     }),
     eventStatus: data.eventStatus || "EventScheduled",
@@ -978,22 +922,8 @@ export function generateMindfoldEventSchema() {
     isAccessibleForFree: false,
     location: {
       "@type": "Place",
-      name: "Various locations in Ubud, Bali and Miami, Florida",
+      name: "Various locations by request",
       description: "Location shared after RSVP. Private events available at your venue.",
-      address: [
-        {
-          "@type": "PostalAddress",
-          addressLocality: "Ubud",
-          addressRegion: "Gianyar Regency",
-          addressCountry: "ID",
-        },
-        {
-          "@type": "PostalAddress",
-          addressLocality: "Miami",
-          addressRegion: "FL",
-          addressCountry: "US",
-        },
-      ],
     },
     organizer: {
       "@type": "Person",
@@ -1014,7 +944,7 @@ export function generateMindfoldEventSchema() {
       "@type": "Audience",
       audienceType: ["adults", "groups", "corporate teams", "digital nomads", "founders", "creators"],
     },
-    keywords: "blindfold, sensory deprivation, presence journey, meditation, somatic work, consciousness, mindfulness, group event, workshop, Ubud Bali, Miami Florida, team building, corporate wellness",
+    keywords: "blindfold, sensory deprivation, presence journey, meditation, somatic work, consciousness, mindfulness, group event, workshop, by request, Miami Florida, team building, corporate wellness",
     offers: [
       {
         "@type": "Offer",
@@ -1178,10 +1108,6 @@ export function generateReviewSchema(testimonial: {
       "@type": "Person",
       name: testimonial.author,
       ...(testimonial.role && { description: testimonial.role }),
-      ...(testimonial.location && { address: {
-        "@type": "PostalAddress",
-        addressLocality: testimonial.location,
-      }}),
     },
     reviewBody: testimonial.quote,
     publisher: {
@@ -1299,54 +1225,27 @@ export function generateOrganizationWithGBP() {
 
 /**
  * ============================================================================
- * LOCAL BUSINESS SCHEMA FOR UBUD
+ * PRIVATE PRACTICE SCHEMA
  * ============================================================================
  */
 
 /**
- * Generate JSON-LD structured data for LocalBusiness (Ubud)
- * Critical for local SEO - helps rank in "tantra massage Ubud" searches
+ * Generate JSON-LD structured data for ProfessionalService (private practice)
+ * Critical for local SEO - helps rank in "tantra-informed somatic work" searches
  */
-export function generateLocalBusinessSchemaUbud() {
+export function generateProfessionalServiceSchemaByRequest() {
   const reviewCount = testimonials.filter((t) => t.type === "spirituality").length.toString();
 
   return {
     "@context": "https://schema.org",
-    "@type": "LocalBusiness",
-    "name": "Tantra Massage Ubud - Max Petrusenko",
-    "alternateName": "Presence Atelier Ubud",
-    "description": "Professional tantra massage and somatic energy work in Ubud, Bali. Team available year-round for nervous system reset, trauma release, and couples tantra sessions.",
+    "@type": "ProfessionalService",
+    "name": "Tantra-Informed Somatic Work - Max Petrusenko",
+    "alternateName": "Presence Atelier",
+    "description": "Tantra-informed somatic education and nervous-system practice by request. Boundaries-led sessions focused on breath, presence, regulation, and embodied awareness.",
     "url": `${siteConfig.url}/spirituality`,
     "telephone": "+1-786-543-6688",
-    "address": {
-      "@type": "PostalAddress",
-      "addressLocality": "Ubud",
-      "addressRegion": "Gianyar Regency",
-      "addressCountry": "ID"
-    },
-    "geo": {
-      "@type": "GeoCoordinates",
-      "latitude": "-8.5069",
-      "longitude": "115.2625"
-    },
-    "areaServed": [
-      "Ubud",
-      "Gianyar Regency",
-      "Campuan",
-      "Penestanan",
-      "Sanggingan",
-      "Kedewatan",
-      "Peliatan",
-      "Mas",
-      "Pengosekan",
-      "Tegallalung",
-      "Sayan",
-      "Kutuh Kaja",
-      "Bali"
-    ],
-    "priceRange": "$$$",
-    "openingHours": "Mo-Su 09:00-19:00",
-    "keywords": "tantra massage Ubud, tantric massage Bali, somatic energy work Ubud, trauma release massage, couples tantra Bali, bodywork Ubud",
+    "areaServed": "By request",
+    "keywords": "tantra-informed somatic work, somatic education, energy work private practice, nervous system regulation, couples embodiment practice, somatic bodywork",
     "aggregateRating": {
       "@type": "AggregateRating",
       "ratingValue": "4.9",
@@ -1356,14 +1255,14 @@ export function generateLocalBusinessSchemaUbud() {
     },
     "hasOfferCatalog": {
       "@type": "OfferCatalog",
-      "name": "Tantra & Somatic Services in Ubud",
+      "name": "Somatic education and practice by request",
       "itemListElement": [
         {
           "@type": "Offer",
           "itemOffered": {
             "@type": "Service",
-            "name": "Nervous System Reset - Tantra Massage Ubud",
-            "description": "90-minute professional tantra massage session in Ubud for nervous system regulation and conscious presence."
+            "name": "Nervous System Reset - Tantra-Informed Somatic Practice",
+            "description": "Boundaries-led somatic practice by request for nervous system regulation and conscious presence."
           }
         },
         {
@@ -1371,15 +1270,15 @@ export function generateLocalBusinessSchemaUbud() {
           "itemOffered": {
             "@type": "Service",
             "name": "Deep Repatterning - Somatic Energy Work",
-            "description": "Longer arc for deep rewiring and transformation through somatic energy work in Ubud, Bali."
+            "description": "Longer arc for deep rewiring and transformation through somatic energy work by request."
           }
         },
         {
           "@type": "Offer",
           "itemOffered": {
             "@type": "Service",
-            "name": "Couples Tantra Session Ubud",
-            "description": "Partners seeking to deepen connection through tantra and somatic practice in Ubud, Bali."
+            "name": "Couples Tantra Practice",
+            "description": "Partners seeking to deepen connection through tantra-informed somatic practice."
           }
         }
       ]
@@ -1390,42 +1289,29 @@ export function generateLocalBusinessSchemaUbud() {
     },
     "availableChannel": {
       "@type": "ServiceChannel",
-      "serviceType": "tantra massage, somatic energy work, bodywork",
+      "serviceType": "tantra-informed somatic practice, breathwork, energy work, embodiment education",
       "serviceUrl": `${siteConfig.url}/spirituality`
     }
   };
 }
 
 /**
- * Generate JSON-LD structured data for LocalBusiness (Miami)
+ * Generate JSON-LD structured data for ProfessionalService (Miami)
  * For the Florida location
  */
-export function generateLocalBusinessSchemaMiami() {
+export function generateProfessionalServiceSchemaMiami() {
   const reviewCount = testimonials.filter((t) => t.type === "spirituality").length.toString();
 
   return {
     "@context": "https://schema.org",
-    "@type": "LocalBusiness",
+    "@type": "ProfessionalService",
     "name": "Presence Atelier Miami - Somatic Education & Energy Work",
     "alternateName": "Max Petrusenko - Somatic Education",
     "description": "Somatic education and energy work teaching in Fort Lauderdale, Florida. Educational workshops, student teachings, and nervous system training serving South Florida from West Palm Beach to the Keys.",
     "url": `${siteConfig.url}/spirituality`,
     "telephone": "+1-786-543-6688",
     "email": "hello@maxpetrusenko.com",
-    "address": {
-      "@type": "PostalAddress",
-      "streetAddress": "917 SW 18th Ct",
-      "addressLocality": "Fort Lauderdale",
-      "addressRegion": "FL",
-      "postalCode": "33315",
-      "addressCountry": "US"
-    },
-    "geo": {
-      "@type": "GeoCoordinates",
-      "latitude": "26.1055",
-      "longitude": "-80.1735"
-    },
-    "areaServed": SERVICE_LOCATIONS.florida,
+    "areaServed": "By request",
     "priceRange": "$$$",
     "openingHours": "Mo-Su 09:00-19:00",
     "keywords": "tantra massage Miami, tantric massage South Florida, somatic energy work Miami, trauma release massage, couples tantra Miami",
@@ -1457,7 +1343,7 @@ export function generateEnhancedPersonSchema() {
     alternateName: ["Max", "Presence Atelier", "Max Petrusenko Tech"],
     url: siteConfig.url,
     image: PERSON_IMAGE_URL,
-    description: "Tech builder and somatic practitioner specializing in AI automation, tantra massage, and somatic energy work. Available in Ubud, Bali and Miami, Florida.",
+    description: "Tech builder and somatic practitioner specializing in AI automation, tantra-informed somatic practice, and nervous-system work by request.",
     jobTitle: "Tech Builder & Somatic Practitioner",
     worksFor: {
       "@type": "Organization",
@@ -1466,10 +1352,6 @@ export function generateEnhancedPersonSchema() {
     },
     birthPlace: {
       "@type": "Place",
-      address: {
-        "@type": "PostalAddress",
-        addressCountry: "US",
-      },
     },
     // Enhanced sameAs for knowledge panel verification
     sameAs: [
@@ -1556,20 +1438,6 @@ export function generateEnhancedPersonSchema() {
       serviceUrl: siteConfig.url,
     },
     // Areas served
-    address: [
-      {
-        "@type": "PostalAddress",
-        addressLocality: "Ubud",
-        addressRegion: "Gianyar Regency",
-        addressCountry: "ID",
-      },
-      {
-        "@type": "PostalAddress",
-        addressLocality: "Miami",
-        addressRegion: "FL",
-        addressCountry: "US",
-      },
-    ],
   };
 }
 
@@ -1616,7 +1484,7 @@ export function generateServiceSpeakableSchema() {
     speakable: [
       {
         "@type": "Speakable",
-        text: "Max Petrusenko offers intimate tantra massage and somatic energy work in Ubud, Bali and Miami, Florida. Book via WhatsApp at +1-786-543-6688.",
+        text: "Max Petrusenko offers Tantra-informed somatic work by request. Text +1-786-543-6688 for availability.",
       },
       {
         "@type": "Speakable",
@@ -1704,7 +1572,7 @@ export function generateCombinedFAQSchema() {
         name: "Where are you currently located for tantra sessions?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "I maintain regular bases in Ubud, Bali (Gianyar Regency) and Miami, Florida, serving the greater South Florida area from West Palm Beach to the Keys. I also travel globally for sessions. Current location is displayed on my website. I offer sessions at my private temple space and can travel to yours.",
+          text: "Private sessions are scheduled by request after a short conversation. Message with a few words about what you’re exploring to confirm current availability and next steps.",
         },
       },
       {

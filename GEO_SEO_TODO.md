@@ -45,7 +45,7 @@ Last Updated: 2026-04-19
 - [x] Add a lightweight logo/brand image for structured data `image` fields
 - [x] Remove redundant brand suffix in OG/Twitter titles when the page title already includes `Max Petrusenko` (2026-03-06)
 - [x] Tighten high-impression titles/descriptions on `/tech/articles/openclaw-installation-playbook`, `/tech/articles/answer-engine-optimization-aeo`, `/tech/articles/generative-engine-optimization-geo`, and `/tech/articles/seo-is-dead` (2026-03-06)
-- [x] Reduce keyword cannibalization by removing exact `tantric massage ubud` targeting from supporting spirituality pages so `/tantra-massage-ubud` remains the primary owner (2026-03-06)
+- [x] Reduce keyword cannibalization by moving location-specific tantra targeting to safer by-request spirituality positioning (2026-03-06; hardened again 2026-05-15)
 
 ---
 
@@ -54,7 +54,7 @@ Last Updated: 2026-04-19
 - [x] `Person` + `WebSite` on core pages
 - [x] `ProfessionalService` for tech services
 - [x] `ProfessionalService` for somatic services
-- [x] `LocalBusiness` for Presence Atelier (Ubud)
+- [x] `ProfessionalService` for Presence Atelier without Indonesia local address/geo anchoring
 - [x] `Organization` for Mindfold Sanctuary
 - [x] `FAQPage` schema for spirituality + mindfold FAQ sections (spirituality + mindfold done)
 - [x] `Event` schema for Mindfold (rolling quarterly dates; update when fixed dates are published)
@@ -83,7 +83,7 @@ Last Updated: 2026-04-19
 
 ## PHASE 5 — GEO SIGNALS
 
-- [x] Ubud location referenced on somatic/atelier pages
+- [x] Location-specific somatic/atelier language removed; availability framed by request
 - [x] Add a consistent location banner or footer line on all pages
 - [x] Add `areaServed` and `address` to a dedicated GEO section on the homepage
 
@@ -93,7 +93,7 @@ Last Updated: 2026-04-19
 
 Monthly (1-2 hours):
 - [ ] Query: "Who is Max Petrusenko?"
-- [ ] Query: "Somatic practitioner in Ubud" and "Product builder for creators"
+- [ ] Query: "Max Petrusenko somatic practitioner" and "Product builder for creators"
 - [ ] Capture citations and update the fact blocks accordingly
 - [x] Add pre-deploy verification command (`npm run verify:predeploy`)
 - [x] Remove hidden keyword stuffing blocks from service pages (keep visible, evidence-based content only)
@@ -104,8 +104,8 @@ Monthly (1-2 hours):
 
 ## March 6, 2026 Verified Hardening Pass
 
-- [x] Core landing pages now keep a single primary `h1` by demoting decorative hero overlay headings on `/`, `/blog`, `/tech`, `/spirituality`, and `/tantra-massage-ubud`
-- [x] Removed unnecessary `priority` loading from non-LCP images on `/` and `/tantra-massage-ubud`
+- [x] Core landing pages now keep a single primary `h1` by demoting decorative hero overlay headings on `/`, `/blog`, `/tech`, `/spirituality`, and legacy redirect routes
+- [x] Removed unnecessary `priority` loading from non-LCP images on `/blog` and legacy redirect routes
 - [x] Replaced the decorative PNG on `/blog` with the smaller JPG variant already in the repo
 - [x] Verified the pass with `npm run lint` and `npm run verify:predeploy` from `nextjs/` on 2026-03-06
 

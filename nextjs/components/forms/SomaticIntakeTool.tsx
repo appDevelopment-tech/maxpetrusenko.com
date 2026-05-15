@@ -139,7 +139,7 @@ export function SomaticIntakeTool() {
               <span className="tile-desc">Boundaries before logistics</span>
             </div>
             <div className="tile">
-              <span className="tile-title">Ubud sessions</span>
+              <span className="tile-title">private practice sessions</span>
               <span className="tile-desc">Somatic and tantra massage</span>
             </div>
           </div>

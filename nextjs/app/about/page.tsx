@@ -8,7 +8,7 @@ import { generatePersonSchema, generateWebPageSchema, generateBreadcrumbSchema }
 
 export const metadata = generateMetadata({
   title: "About Max Petrusenko",
-  description: "About Max Petrusenko—tech builder and somatic practitioner based in Ubud, Bali and Miami.",
+  description: "About Max Petrusenko—tech builder and somatic practitioner.",
   ogType: "website",
   canonical: absoluteUrl("/about"),
 });
@@ -21,7 +21,7 @@ export default function AboutPage() {
         type="WebPage"
         data={generateWebPageSchema({
           title: "About Max Petrusenko",
-          description: "Tech builder and somatic practitioner based in Ubud, Bali and Miami.",
+          description: "Tech builder and somatic practitioner.",
           url: "/about",
         })}
       />
@@ -135,7 +135,7 @@ export default function AboutPage() {
             <div className="card">
               <h3>Spirituality</h3>
               <p>
-                Sessions in Ubud focused on regulation, boundaries, and depth.
+                Sessions focused on regulation, boundaries, and depth.
               </p>
               <div className="hero-actions" style={{ marginTop: 12 }}>
                 <Link className="btn primary" href="/spirituality">

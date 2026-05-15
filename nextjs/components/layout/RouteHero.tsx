@@ -19,7 +19,7 @@ export function RouteHero() {
     "/tech",
     "/about",
     "/spirituality",
-    "/tantra-massage-ubud",
+    "/spirituality",
     "/blog",
     "/links",
     "/proof",

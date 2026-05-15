@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Presence Atelier | Tantra & Energy Therapy in Ubud</title>
-    <meta name="description" content="Private Tantra and Somatic Energy Therapy in Ubud, Bali. Intensive bodywork for nervous system regulation, deep rewiring, and conscious presence.">
+    <title>Presence Atelier | Tantra-Informed Somatic Work</title>
+    <meta name="description" content="Tantra-informed somatic work for nervous-system regulation, intimacy, and embodied presence. Private sessions are scheduled by request.">
     <meta name="author" content="Max Petrusenko">
     <link rel="canonical" href="https://atelier.maxpetrusenko.com/">
     <link rel="icon" href="https://maxpetrusenko.com/assets/favicon.png">
     <link rel="apple-touch-icon" href="https://maxpetrusenko.com/assets/favicon.png">
-    <meta property="og:title" content="Presence Atelier | Tantra & Energy Therapy Ubud">
-    <meta property="og:description" content="Private sessions for founders and creators. Book your journey.">
+    <meta property="og:title" content="Presence Atelier | Tantra-Informed Somatic Work">
+    <meta property="og:description" content="Private sessions by request for nervous-system regulation, intimacy, and embodied presence.">
     <meta property="og:image" content="https://images.squarespace-cdn.com/content/v1/5eb21632e6b5040e804bb80e/17e77498-dd21-4086-9e5e-01ec1331aec1/AdobeStock_996810586.jpeg">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://atelier.maxpetrusenko.com/">
@@ -19,8 +19,8 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:site" content="@petrusenko_max">
     <meta name="twitter:creator" content="@petrusenko_max">
-    <meta name="twitter:title" content="Presence Atelier | Tantra & Energy Therapy in Ubud">
-    <meta name="twitter:description" content="Private Tantra and Somatic Energy Therapy in Ubud, Bali. Intensive bodywork for nervous system regulation, deep rewiring, and conscious presence.">
+    <meta name="twitter:title" content="Presence Atelier | Tantra-Informed Somatic Work">
+    <meta name="twitter:description" content="Tantra-informed somatic work for nervous-system regulation, intimacy, and embodied presence. Private sessions are scheduled by request.">
     <meta name="twitter:image" content="https://images.squarespace-cdn.com/content/v1/5eb21632e6b5040e804bb80e/17e77498-dd21-4086-9e5e-01ec1331aec1/AdobeStock_996810586.jpeg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -42,20 +42,12 @@
                     ]
                 },
                 {
-                    "@type": "LocalBusiness",
-                    "@id": "https://atelier.maxpetrusenko.com/#business",
+                    "@type": "WebPage",
+                    "@id": "https://atelier.maxpetrusenko.com/#webpage",
                     "name": "Presence Atelier",
                     "url": "https://atelier.maxpetrusenko.com/",
-                    "image": "https://images.squarespace-cdn.com/content/v1/5eb21632e6b5040e804bb80e/17e77498-dd21-4086-9e5e-01ec1331aec1/AdobeStock_996810586.jpeg",
-                    "address": {
-                        "@type": "PostalAddress",
-                        "addressLocality": "Ubud",
-                        "addressRegion": "Bali",
-                        "addressCountry": "ID"
-                    },
-                    "areaServed": "Ubud, Bali, Indonesia",
-                    "priceRange": "$$$",
-                    "founder": {
+                    "description": "A private page for tantra-informed somatic practice, nervous-system work, and embodiment inquiry.",
+                    "about": {
                         "@id": "https://maxpetrusenko.com/#person"
                     }
                 }
@@ -438,7 +430,7 @@
             margin-bottom: 14px;
         }
 
-        .price {
+        .practice-note {
             font-size: 28px;
             font-weight: 700;
             margin-bottom: 10px;
@@ -597,8 +589,8 @@
             font-size: 14px;
         }
 
-        /* Booking */
-        .booking {
+        /* Inquiry */
+        .inquiry {
             background: linear-gradient(120deg, #0c1115, #0f3d3f);
             color: #f7f2e6;
             border-radius: calc(var(--radius) + 6px);
@@ -607,11 +599,11 @@
             box-shadow: 0 24px 70px rgba(12, 17, 21, 0.4);
         }
 
-        .booking h2 {
+        .inquiry h2 {
             margin-bottom: 10px;
         }
 
-        .booking-top {
+        .inquiry-top {
             display: flex;
             justify-content: space-between;
             gap: 20px;
@@ -619,13 +611,13 @@
             align-items: center;
         }
 
-        .booking-actions {
+        .inquiry-actions {
             display: flex;
             gap: 10px;
             flex-wrap: wrap;
         }
 
-        .booking p {
+        .inquiry p {
             color: #dce3e6;
             max-width: 540px;
         }
@@ -649,7 +641,7 @@
             margin-bottom: 4px;
         }
 
-        .selected-service {
+        .selected-inquiry {
             margin-top: 14px;
             font-weight: 600;
             color: #0c1115;
@@ -755,7 +747,7 @@
                 gap: 12px;
             }
 
-            .booking-top {
+            .inquiry-top {
                 flex-direction: column;
                 align-items: flex-start;
                 gap: 16px;
@@ -793,10 +785,10 @@
         <div class="container nav-inner">
             <div class="brand">Presence Atelier</div>
             <div class="nav-meta">
-                <span class="pill">Ubud • In-person only</span>
-                <span class="pill">By appointment</span>
+                <span class="pill">Private sessions</span>
+                <span class="pill">By request</span>
             </div>
-            <button class="btn primary" onclick="scrollToBooking()">Book a private</button>
+            <button class="btn primary" onclick="scrollToInquiry()">Start an inquiry</button>
         </div>
     </nav>
 
@@ -804,19 +796,19 @@
         <section class="hero">
             <div class="hero-grid">
                 <div class="hero-copy">
-                    <div class="eyebrow"><span class="dot"></span>Tantra + somatic energy therapy</div>
-                    <h1>Intensive bodywork for people who lead, create, and need to feel again.</h1>
-                    <p class="hero-sub">I work privately with founders, artists, and seekers who want to step back into presence. Expect focused touch, energetic attunement, and a studio built for deep rewiring.</p>
+                    <div class="eyebrow"><span class="dot"></span>Tantra + somatic embodiment practice</div>
+                    <h1>Tantra-informed somatic practice for people who lead, create, and need to feel again.</h1>
+                    <p class="hero-sub">I work privately with founders, artists, and seekers who want to step back into presence. Expect breath, boundaries, focused attention, energetic attunement, and a private container for deep rewiring.</p>
 
                     <div class="list-inline">
-                        <div class="chip">Discreet Ubud studio</div>
+                        <div class="chip">Discreet, consent-led container</div>
                         <div class="chip">Male & female clients welcomed with boundaries</div>
-                        <div class="chip">2-3 hour signature journeys</div>
+                        <div class="chip">Format confirmed privately by request</div>
                     </div>
 
                     <div class="hero-actions">
-                        <button class="btn primary" onclick="scrollToBooking()">Reserve a session</button>
-                        <button class="btn secondary" onclick="scrollToServices()">Explore the work</button>
+                        <button class="btn primary" onclick="scrollToInquiry()">Start an inquiry</button>
+                        <button class="btn secondary" onclick="scrollToPractice()">Explore the practice</button>
                     </div>
 
                     <div class="social-proof">
@@ -825,16 +817,16 @@
 
                     <div class="stat-row">
                         <div class="stat-card">
-                            <strong>60 min</strong>
-                            Reset for nervous system & sleep
+                            <strong>Reset</strong>
+                            Nervous system & sleep support
                         </div>
                         <div class="stat-card">
-                            <strong>120 min</strong>
-                            Tantra + energy attunement journey
+                            <strong>Practice</strong>
+                            Tantra + energy attunement
                         </div>
                         <div class="stat-card">
-                            <strong>120 min</strong>
-                            Kyo-Tai shared-body journey
+                            <strong>Kyo-Tai</strong>
+                            Advanced shared-body practice
                         </div>
                     </div>
                 </div>
@@ -842,20 +834,20 @@
                 <div class="hero-visual">
                     <div class="hero-card">
                         <div class="hero-image">
-                            <img id="hero-img" src="https://images.squarespace-cdn.com/content/v1/5eb21632e6b5040e804bb80e/17e77498-dd21-4086-9e5e-01ec1331aec1/AdobeStock_996810586.jpeg" alt="Luxury bodywork and energy therapy session in Ubud studio with soft lighting">
+                            <img id="hero-img" src="https://images.squarespace-cdn.com/content/v1/5eb21632e6b5040e804bb80e/17e77498-dd21-4086-9e5e-01ec1331aec1/AdobeStock_996810586.jpeg" alt="Quiet somatic practice setting with soft lighting">
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section class="section" id="services">
+        <section class="section" id="practice">
             <div class="section-header">
                 <div>
-                    <h2>Offerings built for deep shifts</h2>
-                    <p>Every session is customized to your nervous system, intention, and boundaries. Energy work is integrated with precise somatic touch.</p>
+                    <h2>Practice pathways for deep shifts</h2>
+                    <p>Each pathway is shaped around your nervous system, intention, and boundaries. Somatic attention and energy work are held inside a clear container.</p>
                 </div>
-                <button class="btn secondary" onclick="scrollToBooking()">Request a time</button>
+                <button class="btn secondary" onclick="scrollToInquiry()">Start an inquiry</button>
             </div>
 
             <div class="offers-grid">
@@ -863,18 +855,18 @@
                     <span class="tag">Essential</span>
                     <h3>Full Body Reset</h3>
                     <div class="offer-meta">
-                        <span>60 minutes</span>
+                        <span>By request</span>
                         <span>•</span>
-                        <span>Rp 2.0M</span>
+                        <span>Inquiry first</span>
                     </div>
-                    <div class="price">$111</div>
-                    <p class="outcome">Grounding bodywork to discharge stress, regulate your breath, and restore circulation.</p>
+                    <div class="practice-note">Format discussed privately</div>
+                    <p class="outcome">Grounding somatic practice to discharge stress, regulate breath, and restore presence.</p>
                     <ul class="benefit-list">
                         <li><span class="dot"></span>Guided down-regulation and breath</li>
                         <li><span class="dot"></span>Somatic release for shoulders, spine, and hips</li>
                         <li><span class="dot"></span>Closing integration + home ritual</li>
                     </ul>
-                    <button class="btn primary block" onclick="bookService('Full Body Reset')">Book Reset</button>
+                    <button class="btn primary block" onclick="selectPractice('Full Body Reset')">Explore fit</button>
                     <div class="trust-ribbon">
                         <div class="line"></div>
                         90% clients report better sleep same night
@@ -884,20 +876,20 @@
 
                 <div class="offer-card">
                     <span class="tag">Signature</span>
-                    <h3>Tantra Massage</h3>
+                    <h3>Tantra-Informed Somatic Practice</h3>
                     <div class="offer-meta">
-                        <span>120 minutes</span>
+                        <span>By request</span>
                         <span>•</span>
-                        <span>Rp 3.5M</span>
+                        <span>Inquiry first</span>
                     </div>
-                    <div class="price">$222</div>
-                    <p class="outcome">Energetic activation, conscious intimacy, and somatic re-patterning for those ready to open.</p>
+                    <div class="practice-note">Format discussed privately</div>
+                    <p class="outcome">Breath, presence, boundaries, and somatic re-patterning for embodied awareness.</p>
                     <ul class="benefit-list">
-                        <li><span class="dot"></span>Consent-led sensual mapping</li>
+                        <li><span class="dot"></span>Consent-led boundary mapping</li>
                         <li><span class="dot"></span>Energy channel work + breath pacing</li>
                         <li><span class="dot"></span>Post-session grounding tea + reflection</li>
                     </ul>
-                    <button class="btn primary block" onclick="bookService('Tantra Massage')">Book Tantra</button>
+                    <button class="btn primary block" onclick="selectPractice('Tantra-Informed Somatic Practice')">Explore fit</button>
                     <div class="trust-ribbon">
                         <div class="line"></div>
                         Deepens connection and self-awareness
@@ -909,18 +901,18 @@
                     <span class="tag">Immersive</span>
                     <h3>Kyo-Tai (Shared Body)</h3>
                     <div class="offer-meta">
-                        <span>120 minutes</span>
+                        <span>By request</span>
                         <span>•</span>
-                        <span>Rp 5.3M</span>
+                        <span>Inquiry first</span>
                     </div>
-                    <div class="price">$333</div>
-                    <p class="outcome">Evokes the deep physical and energetic merging that occurs during contact movement. Kyo means “shared/common” and tai means “body,” suggesting two bodies becoming one integrated system.</p>
+                    <div class="practice-note">Format discussed privately</div>
+                    <p class="outcome">A deep contact-based practice for trained facilitators and experienced clients. Kyo means “shared/common” and tai means “body,” pointing to coordinated embodied awareness.</p>
                     <ul class="benefit-list">
                         <li><span class="dot"></span>Somatic unwinding + fascia melt</li>
                         <li><span class="dot"></span>Contact-based Ki transmission for full-system rewiring</li>
                         <li><span class="dot"></span>Guided practice to carry forward and pass on awareness</li>
                     </ul>
-                    <button class="btn primary block" onclick="bookService('Kyo-Tai')">Book Kyo-Tai</button>
+                    <button class="btn primary block" onclick="selectPractice('Kyo-Tai')">Explore fit</button>
                     <div class="trust-ribbon">
                         <div class="line"></div>
                         For facilitators and those who treat this as a craft
@@ -933,14 +925,14 @@
         <section class="section">
             <div class="section-header">
                 <div>
-                    <h2>Studio glimpses</h2>
-                    <p>Warm light, grounded touch, and a private Ubud space designed for deep work.</p>
+                    <h2>Session atmosphere</h2>
+                    <p>Warm light, grounded presence, and a private container designed for deep work.</p>
                 </div>
-                <span class="pill">No walk-ins • By appointment only</span>
+                <span class="pill">Inquiry first • By request</span>
             </div>
             <div class="studio-grid">
                 <div class="studio-card">
-                    <img id="studio-1" src="https://tarayogacentre.co.uk/wp-content/uploads/2022/03/585A3801-scaled.jpg" alt="Massage work in Ubud studio, practitioner supporting leg">
+                    <img id="studio-1" src="https://tarayogacentre.co.uk/wp-content/uploads/2022/03/585A3801-scaled.jpg" alt="Somatic practice image, practitioner supporting movement">
                     <p>Focused somatic release and nervous system down-regulation.</p>
                 </div>
                 <div class="studio-card">
@@ -948,7 +940,7 @@
                     <p>Tantra-informed touch paired with subtle energy attunement.</p>
                 </div>
                 <div class="studio-card">
-                    <img id="studio-3" src="https://img.evbuc.com/https%3A%2F%2Fcdn.evbuc.com%2Fimages%2F1046245583%2F252204203322%2F1%2Foriginal.20250605-002701?w=600&auto=format%2Ccompress&q=75&sharp=10&s=21526a6e4af79593e624756685d53c5f" alt="Soft lighting and candles in private tantra studio">
+                    <img id="studio-3" src="https://img.evbuc.com/https%3A%2F%2Fcdn.evbuc.com%2Fimages%2F1046245583%2F252204203322%2F1%2Foriginal.20250605-002701?w=600&auto=format%2Ccompress&q=75&sharp=10&s=21526a6e4af79593e624756685d53c5f" alt="Soft lighting and candles in a private practice setting">
                     <p>Soft light, clean linens, and ritual space to help you arrive.</p>
                 </div>
             </div>
@@ -960,7 +952,7 @@
                     <h2>What working together feels like</h2>
                     <p>Grounded, clear, and intentional. Nothing rushed, nothing left vague. Boundaries are set together and held.</p>
                 </div>
-                <span class="pill">Private studio • Phones off, mind open</span>
+                <span class="pill">Private setting • Phones off, mind open</span>
             </div>
 
             <div class="process">
@@ -1010,32 +1002,32 @@
                     <div class="stars">★★★★★</div>
                     <p>"This isn't spa fluff. It's profound energy work with real technique. I left regulated, lighter, and more present with my partner."</p>
                     <div class="name">Leo V.</div>
-                    <div class="role">Tech lead, Bali</div>
+                    <div class="role">Tech lead</div>
                 </div>
             </div>
         </section>
 
-        <section class="section" id="booking">
-            <div class="booking">
-                <div class="booking-top">
+        <section class="section" id="inquiry">
+            <div class="inquiry">
+                <div class="inquiry-top">
                     <div>
-                        <h2>Ready when you are</h2>
-                        <p>Private, discreet, and intentional. Message me with your preferred day/time and which service speaks to you. I’ll confirm within hours.</p>
+                        <h2>Inquiry first</h2>
+                        <p>Private, discreet, and intentional. Text me with a few words about what you’re exploring. I’ll reply personally about fit, format, and next steps.</p>
                         <div class="availability">
                             <div class="tile">
-                                <strong>Hours</strong>
-                                Mon–Sat • 12pm–5pm
+                                <strong>Format</strong>
+                                Confirmed privately
                             </div>
                             <div class="tile">
-                                <strong>Location</strong>
-                                Ubud, Bali • Address shared on confirmation
+                                <strong>Fit</strong>
+                                Inquiry before any practice
                             </div>
                         </div>
-                        <div class="selected-service" id="selected-service">No service selected yet.</div>
+                        <div class="selected-inquiry" id="selected-inquiry">No practice focus selected yet.</div>
                     </div>
-                    <div class="booking-actions">
-                        <button class="btn primary" onclick="openWhatsApp()">WhatsApp to book</button>
-                        <button class="btn secondary" onclick="scrollToServices()">Compare sessions</button>
+                    <div class="inquiry-actions">
+                        <button class="btn primary" onclick="openWhatsApp()">Send inquiry</button>
+                        <button class="btn secondary" onclick="scrollToPractice()">Compare pathways</button>
                     </div>
                 </div>
             </div>
@@ -1082,7 +1074,7 @@
                     </div>
                     <div class="faq-answer">
                         <div class="faq-answer-content">
-                            Wear loose clothing, arrive hydrated, and avoid heavy meals for 2 hours beforehand. The studio is stocked with linens, oils, tea, and a private shower.
+                            Wear loose clothing, arrive hydrated, and avoid heavy meals for 2 hours beforehand. Any session details, materials, and setting are confirmed privately by request.
                         </div>
                     </div>
                 </div>
@@ -1103,37 +1095,37 @@
     </main>
 
     <footer class="container">
-        © 2025 Presence Atelier • Private tantra & energy therapy in Ubud, Bali
+        © 2025 Presence Atelier • Tantra-informed somatic work by request
     </footer>
 
     <script>
-        let selectedServiceName = "";
+        let selectedPracticeName = "";
 
-        function scrollToServices() {
-            const el = document.getElementById('services');
+        function scrollToPractice() {
+            const el = document.getElementById('practice');
             if (el) el.scrollIntoView({ behavior: 'smooth' });
         }
 
-        function scrollToBooking() {
-            const el = document.getElementById('booking');
+        function scrollToInquiry() {
+            const el = document.getElementById('inquiry');
             if (el) el.scrollIntoView({ behavior: 'smooth' });
         }
 
-        function bookService(serviceName) {
-            selectedServiceName = serviceName;
-            const target = document.getElementById('selected-service');
+        function selectPractice(practiceName) {
+            selectedPracticeName = practiceName;
+            const target = document.getElementById('selected-inquiry');
             if (target) {
-                target.textContent = `Reserved for ${serviceName}. Send a message to confirm your time.`;
+                target.textContent = `Practice focus selected: ${practiceName}. Send a message to explore fit and format.`;
             }
-            scrollToBooking();
+            scrollToInquiry();
         }
 
         function openWhatsApp() {
             const base = 'https://wa.me/17865436688';
-            const preset = selectedServiceName
-                ? `Booking inquiry for ${selectedServiceName}`
-                : 'Booking inquiry';
-            const message = encodeURIComponent(`${preset} — please share your preferred day/time.`);
+            const preset = selectedPracticeName
+                ? `Practice inquiry: ${selectedPracticeName}`
+                : 'Practice inquiry';
+            const message = encodeURIComponent(`${preset} — I’m exploring: ____. I’m interested in boundaries-led somatic and spiritual practice.`);
             window.open(`${base}?text=${message}`, '_blank');
         }
 

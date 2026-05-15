@@ -56,7 +56,7 @@ export const metadata = generateMetadata({
   canonical: absoluteUrl("/spirituality/articles"),
   keywords: [
     "tantra session preparation",
-    "somatic healing bali",
+    "somatic healing",
     "tantra boundaries",
     "trauma-informed bodywork",
     "nervous system regulation",
@@ -76,7 +76,7 @@ export default function SpiritualityArticlesIndexPage() {
         data={generateWebPageSchema({
           title: "Spirituality Articles",
           description:
-            "Articles on tantra, somatic practice, and nervous-system regulation from real sessions in Ubud.",
+            "Articles on tantra, somatic practice, and nervous-system regulation from real sessions by request.",
           url: "/spirituality/articles",
         })}
       />
@@ -104,7 +104,7 @@ export default function SpiritualityArticlesIndexPage() {
                 Spirituality Articles
               </h1>
               <p className="text-xl text-muted" style={{ marginBottom: 0 }}>
-                Practical writing from real session work in Ubud: boundaries,
+                Practical writing from real session work by request: boundaries,
                 consent, nervous-system literacy, and preparation that actually helps.
               </p>
             </header>

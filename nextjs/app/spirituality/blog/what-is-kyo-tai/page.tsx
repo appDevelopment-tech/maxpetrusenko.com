@@ -18,7 +18,7 @@ export const metadata = generateMetadata({
     "contact improvisation",
     "bodywork",
     "energy work",
-    "Ubud",
+    "private practice",
   ],
 });
 

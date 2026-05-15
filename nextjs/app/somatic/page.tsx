@@ -42,8 +42,8 @@ export default function SomaticPage() {
         <div className="hero-portrait-bg">
           <FloatingOrbs color="rgba(14, 97, 93, 0.06)" count={2} />
           <Image
-            src="/images/bali/DSC04799.jpg"
-            alt="Professional somatic sessions in calming Bali environment"
+            src="/images/DSC05764.jpg"
+            alt="Professional somatic sessions in a calming natural environment"
             fill
             priority
             sizes="100vw"
@@ -70,11 +70,11 @@ export default function SomaticPage() {
             <div className="hero-actions">
               <a
                 className="btn primary"
-                href="https://wa.me/17865436688?text=Hi%20Max%2C%20I%27d%20like%20to%20book%20a%20session.%20Preferred%20day%2Ftime%3A%20____.%20Intentions%3A%20____."
+                href="https://wa.me/17865436688?text=Hi%20Max%2C%20I%27d%20like%20to%20ask%20about%20availability.%20I%27m%20exploring%3A%20____."
                 target="_blank"
                 rel="noopener"
               >
-                Book via WhatsApp
+                Text for availability
               </a>
               <Link className="btn secondary" href="/spirituality">
                 Learn More
@@ -94,8 +94,8 @@ export default function SomaticPage() {
               </div>
               <div className="tile">
                 <div className="tile-meta">
-                  <span className="tile-title">Tantra Massage</span>
-                  <span className="tile-desc">120 minutes • <strong>$222</strong></span>
+                  <span className="tile-title">Tantra-Informed Practice</span>
+                  <span className="tile-desc">By request • Inquiry first</span>
                 </div>
                 <span className="badge spirit">Deep</span>
               </div>
@@ -108,7 +108,7 @@ export default function SomaticPage() {
               </div>
             </div>
             <p style={{ marginTop: 12, fontSize: "0.9em" }}>
-              Sessions available worldwide. Message to confirm availability in your city.
+              Availability and format are confirmed privately by request.
             </p>
           </div>
         </section>
@@ -183,14 +183,13 @@ export default function SomaticPage() {
               </p>
             </div>
             <div className="card">
-              <h3>Tantra Massage (120 min)</h3>
+              <h3>Tantra-Informed Somatic Practice</h3>
               <p>
-                Energetic activation, conscious intimacy, and somatic
-                re-patterning for those ready to open. Consent-led sensual
-                mapping with energy channel work.
+                Breath, presence, boundaries, and somatic re-patterning for
+                embodied awareness. Consent-led boundary mapping with energy work.
               </p>
               <ul className="list" style={{ marginTop: 12 }}>
-                <li>Consent-led sensual mapping</li>
+                <li>Consent-led boundary mapping</li>
                 <li>Energy channel work + breath pacing</li>
                 <li>Post-session grounding tea + reflection</li>
               </ul>
@@ -258,11 +257,11 @@ export default function SomaticPage() {
           <div className="cards-3 grid">
             <div className="card">
               <h3>WhatsApp</h3>
-              <p>Fastest channel. Send your intention and preferred day/time.</p>
+              <p>Fastest channel. Send a few words about what you’re exploring.</p>
               <div className="hero-actions" style={{ marginTop: 12 }}>
                 <a
                   className="btn primary"
-                  href="https://wa.me/17865436688?text=Hi%20Max%2C%20I%27d%20like%20to%20book%20a%20session.%20Preferred%20day%2Ftime%3A%20____.%20Intentions%3A%20____."
+                  href="https://wa.me/17865436688?text=Hi%20Max%2C%20I%27d%20like%20to%20ask%20about%20availability.%20I%27m%20exploring%3A%20____."
                   target="_blank"
                   rel="noopener"
                 >
@@ -272,7 +271,7 @@ export default function SomaticPage() {
             </div>
             <div className="card">
               <h3>Email</h3>
-              <p>Prefer email? Share your availability and intentions.</p>
+              <p>Prefer email? Share what you’re exploring and the best way to reply.</p>
               <div className="hero-actions" style={{ marginTop: 12 }}>
                 <a
                   className="btn secondary"
@@ -294,7 +293,7 @@ export default function SomaticPage() {
                   target="_blank"
                   rel="noopener"
                 >
-                  Text on WhatsApp
+                  Text for availability
                 </a>
               </div>
             </div>
@@ -368,12 +367,12 @@ export default function SomaticPage() {
               {
                 question: "Where are you currently located?",
                 answer:
-                  "I see clients in Bali (Ubud) and South Florida (Miami to West Palm Beach). Sessions are also available worldwide. I can travel to your city. Message to check availability.",
+                  "Private sessions are scheduled by request. Message with a few words about what you’re exploring to check availability and format options.",
               },
               {
-                question: "Is tantra massage sexual?",
+                question: "What are the boundaries?",
                 answer:
-                  "No. Tantra massage in my practice is a somatic energy work and healing modality, not a sexual service. Sessions are non-sexual with clear boundaries.",
+                  "Tantra massage in my practice is a somatic energy work and healing modality. Sessions are shaped around clear agreements and respectful boundaries.",
               },
             ]}
           />

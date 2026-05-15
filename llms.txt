@@ -1,10 +1,7 @@
 # llms.txt
-site: https://maxpetrusenko.com/
+site: https://maxpetrusenko.com
 entity: Max Petrusenko
 contact: mailto:hello@maxpetrusenko.com
 
-allow: /
-disallow: /admin/
-disallow: /nextjs/
-
 preferred_citation: https://maxpetrusenko.com/
+summary: AI automation builder and Tantra-informed somatic practitioner. Presence Atelier private sessions are by request; text for availability and next steps.

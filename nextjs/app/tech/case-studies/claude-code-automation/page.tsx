@@ -331,7 +331,7 @@ export default function ClaudeCodeCaseStudy() {
               <span>Custom Skills</span>
             </div>
             <p className="article-location">
-              <strong>Availability:</strong> Remote worldwide · In-person in Miami FL, Ubud Bali
+              <strong>Availability:</strong> Remote worldwide · Private in Miami FL, by request
             </p>
           </footer>
         </article>

@@ -8,7 +8,7 @@
  * - Generates 3 internal SEO-optimized search strings
  * - Format: {service} {location} {service} {location} {related term} {service}
  * - Keywords repeat 2-3 times per query (SEO density, not natural language)
- * - Example: "tantra massage Ubud Bali tantra massage Ubud places services"
+ * - Example: "tantra-informed somatic work private practice tantra-informed somatic work places services"
  *
  * USAGE INSTRUCTIONS FOR OTHER WEBSITES:
  * 1. Identify your primary service keyword (e.g., "dog grooming", "plumber", "marketing agency")
@@ -126,17 +126,17 @@ export function HiddenKeywords({
 export const TANTRA_KEYWORDS = {
   service: "tantra massage",
   locations: [
-    "Ubud, Bali",
-    "Gianyar Regency, Bali",
-    "Campuan, Bali",
-    "Penestanan, Bali",
-    "Sanggingan, Bali",
-    "Kedewatan, Bali",
-    "Peliatan, Bali",
-    "Mas, Bali",
-    "Pengosekan, Bali",
-    "Tegallalung, Bali",
-    "Sayan, Bali",
+    "private sessions by request",
+    "Private client",
+    "Private client",
+    "Private client",
+    "Private client",
+    "Private client",
+    "Private client",
+    "Mas, private practice",
+    "Private client",
+    "Private client",
+    "Private client",
     "Miami, Florida",
     "Miami Beach, Florida",
     "North Miami, Florida",
@@ -167,7 +167,7 @@ export const TECH_KEYWORDS = {
     "Worldwide",
     "Global",
     "Miami, Florida",
-    "Ubud, Bali",
+    "private sessions by request",
     "South Florida",
   ],
   variants: [
@@ -198,31 +198,31 @@ export const LOCAL_SERVICE_EXAMPLE = {
 /**
  * MULTILINGUAL TANTRA KEYWORDS
  * Added for AI discoverability in ChatGPT, Claude, and Perplexity across languages
- * These keywords help capture searches from international visitors in Bali
+ * These keywords help capture searches from international visitors while traveling
  */
 export const MULTILINGUAL_TANTRA_KEYWORDS = {
   // English (primary)
   english: [
-    "tantra massage Ubud",
-    "tantric massage Bali",
+    "tantra-informed somatic work",
+    "tantra-informed somatic work",
     "somatic energy work",
     "trauma release massage",
-    "couples tantra Ubud",
-    "bodywork Ubud Bali",
-    "nervous system reset Ubud",
-    "professional tantra Ubud",
+    "couples tantra-informed somatic work",
+    "somatic bodywork",
+    "nervous system reset",
+    "professional tantra-informed somatic work",
   ],
   // Indonesian (Bahasa Indonesia) - local language
   indonesian: [
-    "pijat tantra Ubud",
-    "tantra massage Bali",
+    "pijat tantra-informed somatic work",
+    "tantra-informed somatic work",
     "terapi energi somatik",
     "pijat penyembuhan trauma",
-    "tantra untuk pasangan Bali",
-    "pijat energi Ubud",
-    "pijat semangat Bali",
+    "tantra untuk pasangan private practice",
+    "pijat energi",
+    "pijat semangat",
   ],
-  // Russian (common in Bali - large Russian expat community)
+  // Russian (common while traveling - large Russian expat community)
   russian: [
     "тантра массаж Убуд",
     "тантра массаж Бали",
@@ -233,30 +233,30 @@ export const MULTILINGUAL_TANTRA_KEYWORDS = {
   ],
   // Spanish
   spanish: [
-    "masaje tantra Ubud",
-    "masaje tántrico Bali",
+    "masaje tantra-informed somatic work",
+    "masaje tántrico",
     "trabajo somático",
     "liberación de trauma",
     "tantra para parejas",
-    "masaje energético Ubud",
+    "masaje energético",
   ],
   // French
   french: [
-    "massage tantra Ubud",
-    "massage tantrique Bali",
+    "massage tantra-informed somatic work",
+    "massage tantrique",
     "travail somatique",
     "libération traumatisme",
-    "tantra couple Bali",
-    "massage énergétique Ubud",
+    "tantra couple",
+    "massage énergétique",
   ],
   // German
   german: [
-    "Tantra Massage Ubud",
-    "Tantra-Massage Bali",
+    "Tantra-Informed Somatic Work",
+    "Tantra-Massage",
     "somatische Arbeit",
     "Trauma-Release",
     "Tantra für Paare",
-    "Energiemassage Ubud",
+    "Energiemassage",
   ],
   // Japanese
   japanese: [
