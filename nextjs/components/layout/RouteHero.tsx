@@ -28,6 +28,7 @@ export function RouteHero() {
     "/claude-code-consultant",
     "/ai-workflow-automation",
     "/n8n-automation",
+    "/chinola",
   ];
   const hiddenPrefixes = [
     "/mindfold",

@@ -375,7 +375,8 @@ export function ConciergeWidget() {
   const hidden =
     pathname.startsWith("/inbox") ||
     pathname.startsWith("/admin") ||
-    pathname.startsWith("/workspace");
+    pathname.startsWith("/workspace") ||
+    pathname.startsWith("/chinola");
 
   useEffect(() => {
     if (hidden) return;
