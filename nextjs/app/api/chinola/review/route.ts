@@ -116,6 +116,8 @@ export async function POST(request: Request) {
     reviewedCount,
     boxCount,
     readyForTraining: Boolean(payload.complete),
+    signalKey: payload.complete ? `${KEY_PREFIX}:${payload.token}:complete` : `${KEY_PREFIX}:${payload.token}:latest`,
+    statusUrl: `/api/chinola/review?token=${encodeURIComponent(payload.token)}`,
     stored: Boolean(kv),
   });
 }

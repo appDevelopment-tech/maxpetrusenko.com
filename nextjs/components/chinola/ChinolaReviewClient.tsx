@@ -9,6 +9,7 @@ type ReviewLabel = "passion_fruit" | "not_fruit" | "unsure";
 type FarmImage = {
   id: string;
   album: string;
+  folder?: string;
   src: string;
   thumb: string;
   draftBoxes?: ReviewBox[];
@@ -61,9 +62,17 @@ function normalizeBox(startX: number, startY: number, endX: number, endY: number
   return { x, y, width, height };
 }
 
+function formatFolderName(folder: string) {
+  if (folder === "Q92NXK86SFGFswFGA") return "Farm photos 1";
+  if (folder === "EqYkUDHbJe6fy1HV7") return "Farm photos 2";
+  if (folder === "Qo1pGi8bqw6c2NX87") return "Farm photos 3";
+  return folder;
+}
+
 export function ChinolaReviewClient({ token }: { token: string }) {
   const [manifest, setManifest] = useState<Manifest | null>(null);
   const [activeIndex, setActiveIndex] = useState(0);
+  const [activeFolder, setActiveFolder] = useState("all");
   const [reviews, setReviews] = useState<ReviewState>({});
   const [selectedBoxId, setSelectedBoxId] = useState<string | null>(null);
   const [activeLabel, setActiveLabel] = useState<ReviewLabel>("passion_fruit");
@@ -75,7 +84,22 @@ export function ChinolaReviewClient({ token }: { token: string }) {
   const imageFrameRef = useRef<HTMLDivElement>(null);
 
   const images = useMemo(() => manifest?.images ?? [], [manifest]);
-  const activeImage = images[activeIndex];
+  const folders = useMemo(() => {
+    const unique = new Map<string, string>();
+    for (const image of images) {
+      const folder = image.folder ?? image.album;
+      unique.set(folder, folder);
+    }
+    return Array.from(unique.values());
+  }, [images]);
+  const visibleImages = useMemo(
+    () =>
+      activeFolder === "all"
+        ? images
+        : images.filter((image) => (image.folder ?? image.album) === activeFolder),
+    [activeFolder, images]
+  );
+  const activeImage = visibleImages[activeIndex] ?? visibleImages[0];
   const activeReview = activeImage
     ? reviews[activeImage.id] ?? emptyReview(activeImage.id)
     : null;
@@ -83,6 +107,10 @@ export function ChinolaReviewClient({ token }: { token: string }) {
   const reviewedCount = useMemo(
     () => images.filter((image) => reviews[image.id]?.reviewed).length,
     [images, reviews]
+  );
+  const visibleReviewedCount = useMemo(
+    () => visibleImages.filter((image) => reviews[image.id]?.reviewed).length,
+    [reviews, visibleImages]
   );
   const boxCount = useMemo(
     () =>
@@ -278,7 +306,7 @@ export function ChinolaReviewClient({ token }: { token: string }) {
   }
 
   function move(delta: number) {
-    setActiveIndex((current) => Math.max(0, Math.min(images.length - 1, current + delta)));
+    setActiveIndex((current) => Math.max(0, Math.min(visibleImages.length - 1, current + delta)));
     setSelectedBoxId(null);
   }
 
@@ -302,7 +330,7 @@ export function ChinolaReviewClient({ token }: { token: string }) {
           </h1>
           <p className="mt-2 max-w-[760px] text-sm leading-6 text-[var(--ink-soft)] md:text-base">
             Draw tight boxes around actual passion fruit. If an image is unclear or has no visible fruit,
-            mark it reviewed with no boxes. Submit final review when all images are checked.
+            mark it reviewed with no boxes. Final submit stores a training-ready signal for Max.
           </p>
         </div>
         <div className="grid gap-2 text-sm md:min-w-[280px]">
@@ -326,10 +354,49 @@ export function ChinolaReviewClient({ token }: { token: string }) {
       <div className="grid gap-4 lg:grid-cols-[240px_1fr_280px]">
         <aside className="max-h-[72vh] overflow-auto rounded-[8px] border border-[rgba(12,17,21,0.12)] bg-white/78 p-2">
           <div className="px-2 py-2 text-xs font-bold uppercase tracking-[0.08em] text-[var(--muted)]">
-            {reviewedCount}/{images.length} reviewed
+            {visibleReviewedCount}/{visibleImages.length} in folder
+          </div>
+          <div className="mb-2 grid gap-1">
+            <button
+              className={`rounded-[8px] border px-2 py-2 text-left text-xs font-bold ${
+                activeFolder === "all"
+                  ? "border-[var(--accent-spirit)] bg-[rgba(14,97,93,0.12)]"
+                  : "border-[rgba(12,17,21,0.08)] bg-white/60"
+              }`}
+              onClick={() => {
+                setActiveFolder("all");
+                setActiveIndex(0);
+                setSelectedBoxId(null);
+              }}
+              type="button"
+            >
+              All folders · {reviewedCount}/{images.length}
+            </button>
+            {folders.map((folder) => {
+              const folderImages = images.filter((image) => (image.folder ?? image.album) === folder);
+              const folderReviewed = folderImages.filter((image) => reviews[image.id]?.reviewed).length;
+              return (
+                <button
+                  className={`rounded-[8px] border px-2 py-2 text-left text-xs font-bold ${
+                    activeFolder === folder
+                      ? "border-[var(--accent-spirit)] bg-[rgba(14,97,93,0.12)]"
+                      : "border-[rgba(12,17,21,0.08)] bg-white/60"
+                  }`}
+                  key={folder}
+                  onClick={() => {
+                    setActiveFolder(folder);
+                    setActiveIndex(0);
+                    setSelectedBoxId(null);
+                  }}
+                  type="button"
+                >
+                  {formatFolderName(folder)} · {folderReviewed}/{folderImages.length}
+                </button>
+              );
+            })}
           </div>
           <div className="grid gap-2">
-            {images.map((image, imageIndex) => {
+            {visibleImages.map((image, imageIndex) => {
               const review = reviews[image.id] ?? emptyReview(image.id);
               return (
                 <button
@@ -389,7 +456,8 @@ export function ChinolaReviewClient({ token }: { token: string }) {
             />
             {[...activeReview.boxes, ...(draftBox ? [draftBox] : [])].map((box) => (
               <button
-                className={`absolute border-2 text-left ${
+                aria-label={`${box.label} box`}
+                className={`absolute border-2 bg-transparent text-left ${
                   box.id === selectedBoxId ? "border-[#c7f06b]" : "border-[#42c8ff]"
                 }`}
                 data-box-id={box.id}
@@ -406,11 +474,7 @@ export function ChinolaReviewClient({ token }: { token: string }) {
                   height: `${box.height * 100}%`,
                 }}
                 type="button"
-              >
-                <span className="absolute left-0 top-0 bg-[#42c8ff] px-1 py-0.5 text-[10px] font-bold text-black">
-                  {LABELS.find((label) => label.value === box.label)?.label}
-                </span>
-              </button>
+              />
             ))}
           </div>
         </div>
@@ -441,6 +505,34 @@ export function ChinolaReviewClient({ token }: { token: string }) {
               No fruit visible
             </button>
           </div>
+          <div className="mt-5 max-h-[180px] overflow-auto rounded-[8px] bg-white/60 p-2">
+            <p className="px-1 pb-2 text-xs font-bold uppercase tracking-[0.08em] text-[var(--muted)]">
+              Boxes on this image
+            </p>
+            <div className="grid gap-1">
+              {activeReview.boxes.length === 0 ? (
+                <p className="px-1 text-sm text-[var(--muted)]">No boxes.</p>
+              ) : (
+                activeReview.boxes.map((box, boxIndex) => (
+                  <button
+                    className={`rounded-[6px] border px-2 py-1 text-left text-xs ${
+                      selectedBoxId === box.id
+                        ? "border-[var(--accent-spirit)] bg-[rgba(14,97,93,0.12)]"
+                        : "border-[rgba(12,17,21,0.1)] bg-white/70"
+                    }`}
+                    key={box.id}
+                    onClick={() => {
+                      setSelectedBoxId(box.id);
+                      setActiveLabel(box.label);
+                    }}
+                    type="button"
+                  >
+                    {boxIndex + 1}. {LABELS.find((label) => label.value === box.label)?.label}
+                  </button>
+                ))
+              )}
+            </div>
+          </div>
           <div className="mt-5 rounded-[8px] bg-[rgba(12,17,21,0.06)] p-3 text-sm leading-6 text-[var(--ink-soft)]">
             <strong className="text-[var(--ink)]">Progress</strong>
             <br />
@@ -449,6 +541,10 @@ export function ChinolaReviewClient({ token }: { token: string }) {
             {boxCount} passion fruit boxes
             <br />
             {status}
+            <br />
+            <span className="text-xs text-[var(--muted)]">
+              Submit final writes the complete review signal. Max pulls that signal to train the next test model.
+            </span>
           </div>
         </aside>
       </div>
