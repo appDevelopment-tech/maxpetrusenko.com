@@ -462,7 +462,7 @@ export default async function TechPage() {
             </div>
             <div className="feature-showcase-grid">
               {featuredOperatorApps.map((app) => {
-                const Icon = app.icon;
+                const Icon = app.icon ?? Bot;
                 return (
                   <a
                     key={app.title}
