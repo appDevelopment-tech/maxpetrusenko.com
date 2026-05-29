@@ -124,7 +124,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
     {
       url: `${baseUrl}/ailab`,
-      lastModified: await getRouteLastModified(appDir, "/ailab", fallbackLastModified),
+      lastModified: await getRouteLastModified(appDir, "/ailab", fallbackLastModified, [
+        path.join(appDir, "ailab", "nadia", "page.tsx"),
+      ]),
       changeFrequency: "monthly",
       priority: 0.5,
     },

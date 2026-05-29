@@ -33,6 +33,7 @@ export function RouteHero() {
     "/mindfold",
     "/admin",
     "/workspace",
+    "/ailab",
   ];
 
   if (
