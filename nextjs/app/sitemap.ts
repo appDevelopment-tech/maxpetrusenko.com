@@ -129,12 +129,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.5,
     },
     {
-      url: `${baseUrl}/ailab/nadia`,
-      lastModified: await getRouteLastModified(appDir, "/ailab/nadia", fallbackLastModified),
-      changeFrequency: "monthly",
-      priority: 0.5,
-    },
-    {
       url: `${baseUrl}/tech`,
       lastModified: await getRouteLastModified(appDir, "/tech", fallbackLastModified),
       changeFrequency: "weekly",
