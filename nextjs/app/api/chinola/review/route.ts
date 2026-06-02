@@ -3,7 +3,7 @@ import { getRequestContext } from "@cloudflare/next-on-pages";
 
 export const runtime = "edge";
 
-const VALID_TOKENS = new Set(["farm-michael-7d4e9c"]);
+const VALID_TOKENS = new Set(["farm-michael-7d4e9c", "kaggle-health-open-v1"]);
 const KEY_PREFIX = "chinola-review";
 
 type ReviewBox = {

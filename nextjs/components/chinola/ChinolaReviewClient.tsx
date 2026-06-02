@@ -39,6 +39,7 @@ type ImageReview = {
 };
 
 type ReviewState = Record<string, ImageReview>;
+type StatusFilter = "open" | "all" | "reviewed";
 
 const LABELS: Array<{ value: ReviewLabel; label: string }> = [
   { value: "passion_fruit", label: "Passion fruit" },
@@ -48,6 +49,30 @@ const LABELS: Array<{ value: ReviewLabel; label: string }> = [
 
 function emptyReview(imageId: string): ImageReview {
   return { imageId, boxes: [], reviewed: false };
+}
+
+function seedReviewsFromManifest(manifest: Manifest, savedReviews: ReviewState = {}) {
+  const nextReviews: ReviewState = {};
+
+  for (const image of manifest.images) {
+    const saved = savedReviews[image.id];
+    const draftBoxes = image.draftBoxes ?? [];
+
+    if (saved) {
+      nextReviews[image.id] =
+        !saved.reviewed && saved.boxes.length === 0 && draftBoxes.length > 0
+          ? { ...saved, boxes: draftBoxes }
+          : saved;
+    } else if (draftBoxes.length > 0) {
+      nextReviews[image.id] = {
+        imageId: image.id,
+        boxes: draftBoxes,
+        reviewed: false,
+      };
+    }
+  }
+
+  return nextReviews;
 }
 
 function clamp(value: number) {
@@ -73,6 +98,7 @@ export function ChinolaReviewClient({ token }: { token: string }) {
   const [manifest, setManifest] = useState<Manifest | null>(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const [activeFolder, setActiveFolder] = useState("all");
+  const [statusFilter, setStatusFilter] = useState<StatusFilter>("open");
   const [reviews, setReviews] = useState<ReviewState>({});
   const [selectedBoxId, setSelectedBoxId] = useState<string | null>(null);
   const [activeLabel, setActiveLabel] = useState<ReviewLabel>("passion_fruit");
@@ -92,12 +118,22 @@ export function ChinolaReviewClient({ token }: { token: string }) {
     }
     return Array.from(unique.values());
   }, [images]);
-  const visibleImages = useMemo(
+  const folderImages = useMemo(
     () =>
       activeFolder === "all"
         ? images
         : images.filter((image) => (image.folder ?? image.album) === activeFolder),
     [activeFolder, images]
+  );
+  const visibleImages = useMemo(
+    () =>
+      folderImages.filter((image) => {
+        const reviewed = reviews[image.id]?.reviewed ?? false;
+        if (statusFilter === "open") return !reviewed;
+        if (statusFilter === "reviewed") return reviewed;
+        return true;
+      }),
+    [folderImages, reviews, statusFilter]
   );
   const activeImage = visibleImages[activeIndex] ?? visibleImages[0];
   const activeReview = activeImage
@@ -109,9 +145,10 @@ export function ChinolaReviewClient({ token }: { token: string }) {
     [images, reviews]
   );
   const visibleReviewedCount = useMemo(
-    () => visibleImages.filter((image) => reviews[image.id]?.reviewed).length,
-    [reviews, visibleImages]
+    () => folderImages.filter((image) => reviews[image.id]?.reviewed).length,
+    [folderImages, reviews]
   );
+  const openCount = Math.max(0, images.length - reviewedCount);
   const boxCount = useMemo(
     () =>
       Object.values(reviews).reduce(
@@ -125,7 +162,7 @@ export function ChinolaReviewClient({ token }: { token: string }) {
     let cancelled = false;
 
     async function loadManifest() {
-      const response = await fetch("/chinola/review/farm-images.json");
+      const response = await fetch(`/chinola/review/${encodeURIComponent(token)}/manifest.json`);
       const data = (await response.json()) as Manifest;
 
       if (cancelled) return;
@@ -133,34 +170,25 @@ export function ChinolaReviewClient({ token }: { token: string }) {
 
       const localRaw = window.localStorage.getItem(`chinola-review:${token}`);
       if (localRaw) {
-        setReviews(JSON.parse(localRaw) as ReviewState);
+        setReviews(seedReviewsFromManifest(data, JSON.parse(localRaw) as ReviewState));
         setStatus("Loaded saved browser progress.");
       } else {
         const serverResponse = await fetch(`/api/chinola/review?token=${encodeURIComponent(token)}`);
         const serverData = await serverResponse.json();
         if (serverData?.review?.images) {
-          const nextReviews: ReviewState = {};
+          const savedReviews: ReviewState = {};
           for (const image of serverData.review.images as ImageReview[]) {
-            nextReviews[image.imageId] = image;
+            savedReviews[image.imageId] = image;
           }
-          setReviews(nextReviews);
+          setReviews(seedReviewsFromManifest(data, savedReviews));
           setStatus("Loaded saved server progress.");
-      } else {
-        const seededReviews: ReviewState = {};
-        for (const image of data.images) {
-          if (image.draftBoxes?.length) {
-            seededReviews[image.id] = {
-              imageId: image.id,
-              boxes: image.draftBoxes,
-              reviewed: false,
-            };
+        } else {
+          const seededReviews = seedReviewsFromManifest(data);
+          if (Object.keys(seededReviews).length) {
+            setReviews(seededReviews);
           }
+          setStatus("Draw boxes around visible passion fruit. Mark unclear images as reviewed with no boxes.");
         }
-        if (Object.keys(seededReviews).length) {
-          setReviews(seededReviews);
-        }
-        setStatus("Draw boxes around visible passion fruit. Mark unclear images as reviewed with no boxes.");
-      }
       }
     }
 
@@ -175,6 +203,11 @@ export function ChinolaReviewClient({ token }: { token: string }) {
       window.localStorage.setItem(`chinola-review:${token}`, JSON.stringify(reviews));
     }
   }, [manifest, reviews, token]);
+
+  useEffect(() => {
+    setActiveIndex((current) => (current >= visibleImages.length ? 0 : current));
+    setSelectedBoxId(null);
+  }, [visibleImages.length]);
 
   function getPoint(event: PointerEvent<HTMLDivElement>) {
     const rect = imageFrameRef.current?.getBoundingClientRect();
@@ -239,6 +272,12 @@ export function ChinolaReviewClient({ token }: { token: string }) {
   function setCurrentReviewed(reviewed: boolean) {
     updateActiveReview((review) => ({ ...review, reviewed }));
     setStatus(reviewed ? "Image marked reviewed." : "Image marked not reviewed.");
+  }
+
+  function markReviewedAndMoveNext() {
+    setCurrentReviewed(true);
+    setActiveIndex((current) => Math.min(visibleImages.length - 1, current + 1));
+    setSelectedBoxId(null);
   }
 
   function deleteSelectedBox() {
@@ -354,7 +393,31 @@ export function ChinolaReviewClient({ token }: { token: string }) {
       <div className="grid gap-4 lg:grid-cols-[240px_1fr_280px]">
         <aside className="max-h-[72vh] overflow-auto rounded-[8px] border border-[rgba(12,17,21,0.12)] bg-white/78 p-2">
           <div className="px-2 py-2 text-xs font-bold uppercase tracking-[0.08em] text-[var(--muted)]">
-            {visibleReviewedCount}/{visibleImages.length} in folder
+            {visibleReviewedCount}/{folderImages.length} in folder
+          </div>
+          <div className="mb-2 grid grid-cols-3 gap-1 px-1 text-xs font-bold">
+            {[
+              { value: "open", label: `Open ${openCount}` },
+              { value: "all", label: `All ${images.length}` },
+              { value: "reviewed", label: `Done ${reviewedCount}` },
+            ].map((filter) => (
+              <button
+                className={`rounded-[8px] border px-2 py-2 ${
+                  statusFilter === filter.value
+                    ? "border-[var(--accent-spirit)] bg-[rgba(14,97,93,0.12)]"
+                    : "border-[rgba(12,17,21,0.08)] bg-white/60"
+                }`}
+                key={filter.value}
+                onClick={() => {
+                  setStatusFilter(filter.value as StatusFilter);
+                  setActiveIndex(0);
+                  setSelectedBoxId(null);
+                }}
+                type="button"
+              >
+                {filter.label}
+              </button>
+            ))}
           </div>
           <div className="mb-2 grid gap-1">
             <button
@@ -396,7 +459,11 @@ export function ChinolaReviewClient({ token }: { token: string }) {
             })}
           </div>
           <div className="grid gap-2">
-            {visibleImages.map((image, imageIndex) => {
+            {visibleImages.length === 0 ? (
+              <p className="rounded-[8px] bg-white/60 p-3 text-sm text-[var(--muted)]">
+                No images in this view.
+              </p>
+            ) : visibleImages.map((image, imageIndex) => {
               const review = reviews[image.id] ?? emptyReview(image.id);
               return (
                 <button
@@ -437,6 +504,9 @@ export function ChinolaReviewClient({ token }: { token: string }) {
               </button>
               <button className="rounded-[8px] bg-[#c7f06b] px-3 py-2 font-bold text-[#142000]" onClick={() => setCurrentReviewed(true)} type="button">
                 Mark reviewed
+              </button>
+              <button className="rounded-[8px] bg-[#c7f06b] px-3 py-2 font-bold text-[#142000]" onClick={markReviewedAndMoveNext} type="button">
+                Reviewed + next
               </button>
             </div>
           </div>
