@@ -42,8 +42,12 @@ export default function AiLabIndexPage() {
         <p className="mt-5 max-w-[680px] text-lg leading-relaxed text-[var(--ink-soft)]">
           Small public pages for AI Lab sessions, transcripts, and source-backed summaries.
         </p>
-        <div className="mt-8 rounded-[24px] border border-[rgba(12,17,21,0.08)] bg-white/70 p-6 shadow-[0_18px_50px_rgba(12,17,21,0.08)]">
-          <Link className="block rounded-2xl border border-[rgba(12,17,21,0.08)] bg-white/70 p-5 transition hover:-translate-y-0.5 hover:shadow-[0_12px_30px_rgba(12,17,21,0.10)]" href="/ailab/nadia">
+        <div className="mt-8 grid gap-4 rounded-[24px] border border-[rgba(12,17,21,0.08)] bg-white/70 p-6 shadow-[0_18px_50px_rgba(12,17,21,0.08)] md:grid-cols-2">
+          <Link className="block rounded-[8px] border border-[rgba(12,17,21,0.08)] bg-white/70 p-5 transition hover:-translate-y-0.5 hover:shadow-[0_12px_30px_rgba(12,17,21,0.10)]" href="/ailab/six-pendulum-cartpole">
+            <span className="block font-serif text-2xl font-bold text-[var(--ink)]">Six link cartpole lab</span>
+            <span className="mt-2 block text-[var(--ink-soft)]">Interactive browser sketch and training notes for a six link cartpole reinforcement learning run.</span>
+          </Link>
+          <Link className="block rounded-[8px] border border-[rgba(12,17,21,0.08)] bg-white/70 p-5 transition hover:-translate-y-0.5 hover:shadow-[0_12px_30px_rgba(12,17,21,0.10)]" href="/ailab/nadia">
             <span className="block font-serif text-2xl font-bold text-[var(--ink)]">Working with AI agents</span>
             <span className="mt-2 block text-[var(--ink-soft)]">Context, tools, skills, verification, and practical QA workflow from Nadia's AI Lab session.</span>
           </Link>

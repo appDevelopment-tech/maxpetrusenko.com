@@ -126,6 +126,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       url: `${baseUrl}/ailab`,
       lastModified: await getRouteLastModified(appDir, "/ailab", fallbackLastModified, [
         path.join(appDir, "ailab", "nadia", "page.tsx"),
+        path.join(appDir, "ailab", "six-pendulum-cartpole", "page.tsx"),
+      ]),
+      changeFrequency: "monthly",
+      priority: 0.5,
+    },
+    {
+      url: `${baseUrl}/ailab/six-pendulum-cartpole`,
+      lastModified: await getRouteLastModified(appDir, "/ailab/six-pendulum-cartpole", fallbackLastModified, [
+        path.join(appDir, "ailab", "six-pendulum-cartpole", "SixPendulumCartpoleLab.tsx"),
       ]),
       changeFrequency: "monthly",
       priority: 0.5,

@@ -376,7 +376,8 @@ export function ConciergeWidget() {
     pathname.startsWith("/inbox") ||
     pathname.startsWith("/admin") ||
     pathname.startsWith("/workspace") ||
-    pathname.startsWith("/chinola");
+    pathname.startsWith("/chinola") ||
+    pathname.startsWith("/ailab/six-pendulum-cartpole");
 
   useEffect(() => {
     if (hidden) return;
