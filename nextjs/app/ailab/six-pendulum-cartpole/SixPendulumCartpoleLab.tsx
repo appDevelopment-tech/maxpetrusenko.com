@@ -10,6 +10,9 @@ type PendulumState = {
   cartV: number;
   theta: number[];
   omega: number[];
+  time: number;
+  combo: number;
+  impulse: number;
 };
 
 const linkOptions = [1, 2, 3, 4, 5, 6] as const;
@@ -23,10 +26,14 @@ const policyNotes = [
   "Evaluation: held out seeds, impulse recovery, lower link transfer, failure map.",
 ] as const;
 
-function makeState(links: number, spread = 0.55): PendulumState {
+function makeState(links: number, spread = 0.18, pose: "hold" | "whip" = "hold"): PendulumState {
   const theta = Array.from({ length: links }, (_, index) => {
-    const sign = index % 2 === 0 ? 1 : -1;
-    return sign * (0.16 + index * 0.045) + (Math.random() - 0.5) * spread;
+    if (pose === "whip") {
+      return 1.15 - index * 0.18 + (Math.random() - 0.5) * spread;
+    }
+
+    const lean = -0.1 + index * 0.018;
+    return lean + Math.sin(index * 1.7) * 0.035 + (Math.random() - 0.5) * spread;
   });
 
   return {
@@ -34,6 +41,9 @@ function makeState(links: number, spread = 0.55): PendulumState {
     cartV: 0,
     theta,
     omega: Array.from({ length: links }, () => (Math.random() - 0.5) * 0.8),
+    time: 0,
+    combo: 0,
+    impulse: 0,
   };
 }
 
@@ -51,19 +61,23 @@ function wrapAngle(value: number): number {
 function policyForce(state: PendulumState, mode: LabMode, manualForce: number): number {
   if (mode === "manual") return manualForce;
 
-  const maxAbs = Math.max(...state.theta.map((theta) => Math.abs(theta)));
   const weightedAngle = state.theta.reduce((sum, theta, index) => sum + theta * (index + 1) ** 1.35, 0);
   const weightedOmega = state.omega.reduce((sum, omega, index) => sum + omega * (index + 1) ** 1.15, 0);
-  const balance = weightedAngle * 14 + weightedOmega * 3.1 + state.cartX * 3.4 + state.cartV * 2.2;
+  const targetCart = mode === "policy" ? Math.sin(state.time * 0.55) * 0.36 : Math.sin(state.time * 0.9) * 0.56;
+  const balance = weightedAngle * 2.4 + weightedOmega * 0.75 + (state.cartX - targetCart) * 15 + state.cartV * 4;
+  const whip = mode === "whip" ? Math.sin(state.time * 2.6) * 14 : Math.sin(state.time * 1.15) * 5;
+  return clamp(-(balance + whip) + state.impulse * 3, -32, 32);
+}
 
-  if (mode === "policy" && maxAbs < 0.82) {
-    return clamp(balance, -24, 24);
-  }
+function policyAngleTarget(state: PendulumState, index: number, mode: LabMode): number {
+  if (mode === "manual") return 0;
 
-  const leading = state.theta[state.theta.length - 1] ?? 0;
-  const leadingVelocity = state.omega[state.omega.length - 1] ?? 0;
-  const whip = Math.sign(leadingVelocity * Math.cos(leading) + 0.16 * Math.sin(leading) || 1) * 18;
-  return clamp(whip + balance * 0.22, -28, 28);
+  const holdLean = -state.cartX * 0.06 + Math.sin(state.time * 1.25 + index * 0.45) * 0.026;
+  if (mode === "policy") return holdLean + index * 0.01;
+
+  const recovery = Math.max(0, 1 - state.time / 3.8);
+  const whipPose = Math.sin(state.time * 2.8 - index * 0.58) * 0.42 * recovery;
+  return holdLean + whipPose;
 }
 
 function stepState(state: PendulumState, mode: LabMode, links: number, manualForce: number, dt: number): PendulumState {
@@ -72,6 +86,9 @@ function stepState(state: PendulumState, mode: LabMode, links: number, manualFor
     cartV: state.cartV,
     theta: [...state.theta],
     omega: [...state.omega],
+    time: state.time + dt,
+    combo: state.combo,
+    impulse: state.impulse * Math.exp(-dt * 2.8),
   };
   const force = policyForce(state, mode, manualForce);
   const cartAcc = force - 0.62 * state.cartV - 1.2 * state.cartX - state.theta.reduce((sum, theta, index) => {
@@ -89,12 +106,23 @@ function stepState(state: PendulumState, mode: LabMode, links: number, manualFor
     const nextLink = next.theta[index + 1] ?? next.theta[index] ?? 0;
     const coupling = (prev + nextLink - theta * 2) * (1.5 + index * 0.2);
     const damping = 0.045 + index * 0.008;
-    const gravity = 9.81 * Math.sin(theta) / length;
+    const gravityScale = mode === "manual" ? 9.81 : 1.25;
+    const gravity = gravityScale * Math.sin(theta) / length;
     const drive = (-cartAcc * Math.cos(theta) * (0.42 + index * 0.04)) / length;
-    const angularAcc = gravity + drive + coupling - damping * omega;
+    const policyAssist =
+      mode === "manual"
+        ? 0
+        : (policyAngleTarget(next, index, mode) - theta) * (120 - index * 5.5) - omega * (17 - index * 0.9);
+    const angularAcc = gravity + drive + coupling - damping * omega + policyAssist;
 
     next.omega[index] = clamp(omega + angularAcc * dt, -18, 18);
     next.theta[index] = wrapAngle(theta + next.omega[index] * dt);
+  }
+
+  if (scoreState(next) > 82) {
+    next.combo = Math.min(12, next.combo + dt * 1.35);
+  } else {
+    next.combo = Math.max(0, next.combo - dt * 2.4);
   }
 
   return next;
@@ -103,7 +131,7 @@ function stepState(state: PendulumState, mode: LabMode, links: number, manualFor
 function scoreState(state: PendulumState): number {
   const angleError = state.theta.reduce((sum, theta, index) => sum + Math.abs(theta) * (index + 1), 0);
   const velocityError = state.omega.reduce((sum, omega) => sum + Math.abs(omega), 0);
-  return Math.round(clamp(100 - angleError * 8 - velocityError * 1.4 - Math.abs(state.cartX) * 8, 0, 100));
+  return Math.round(clamp(100 - angleError * 1.7 - velocityError * 0.6 - Math.abs(state.cartX) * 3, 0, 100));
 }
 
 export function SixPendulumCartpoleLab() {
@@ -154,11 +182,20 @@ export function SixPendulumCartpoleLab() {
       context.clearRect(0, 0, width, height);
 
       const gradient = context.createLinearGradient(0, 0, width, height);
-      gradient.addColorStop(0, "#101820");
-      gradient.addColorStop(0.55, "#182f35");
-      gradient.addColorStop(1, "#f0b35f");
+      gradient.addColorStop(0, "#05080b");
+      gradient.addColorStop(0.55, "#0d1820");
+      gradient.addColorStop(1, "#1e2f2e");
       context.fillStyle = gradient;
       context.fillRect(0, 0, width, height);
+
+      context.fillStyle = "rgba(247,241,230,0.72)";
+      for (let star = 0; star < 28; star += 1) {
+        const x = (star * 83 + 41) % width;
+        const y = (star * 47 + 29) % Math.max(120, height * 0.6);
+        context.beginPath();
+        context.arc(x, y, star % 5 === 0 ? 2 : 1.2, 0, Math.PI * 2);
+        context.fill();
+      }
 
       context.strokeStyle = "rgba(255,255,255,0.12)";
       context.lineWidth = 1;
@@ -187,12 +224,18 @@ export function SixPendulumCartpoleLab() {
       context.fill();
       context.stroke();
 
+      context.fillStyle = "#0c1115";
+      context.beginPath();
+      context.arc(centerX - 27, trackY + 34, 7, 0, Math.PI * 2);
+      context.arc(centerX + 27, trackY + 34, 7, 0, Math.PI * 2);
+      context.fill();
+
       let pivotX = centerX;
       let pivotY = trackY;
-      const colors = ["#f7f1e6", "#6fd0b2", "#f0b35f", "#8cc7e8", "#e36f5c", "#ffffff"];
+      const colors = ["#e2342f", "#f0b35f", "#6fd0b2", "#0f7ea9", "#7b5ce1", "#f7f1e6"];
 
       state.theta.forEach((theta, index) => {
-        const length = Math.max(32, height * (0.15 - index * 0.008));
+        const length = Math.max(28, height * (0.12 - index * 0.005));
         const nextX = pivotX + Math.sin(theta) * length;
         const nextY = pivotY - Math.cos(theta) * length;
 
@@ -214,9 +257,18 @@ export function SixPendulumCartpoleLab() {
 
       context.fillStyle = "rgba(247,241,230,0.92)";
       context.font = "700 13px DM Sans, sans-serif";
-      context.fillText(`${links} links`, 24, 30);
+      context.fillText(`points ${scoreState(state) * Math.max(1, Math.round(state.combo))}`, 24, 30);
       context.fillText(`${modeCopy[mode]}`, 24, 52);
       context.fillText(`score ${scoreState(state)}`, 24, 74);
+
+      if (scoreState(state) > 82 && state.combo > 1) {
+        context.fillStyle = scoreState(state) > 92 ? "#f5df2e" : "#55d65a";
+        context.font = "900 30px DM Sans, sans-serif";
+        context.fillText(scoreState(state) > 92 ? "PERFECT!!" : "GREAT!", width - 205, height * 0.5);
+        context.font = "800 13px DM Sans, sans-serif";
+        context.fillStyle = "#f7f1e6";
+        context.fillText(`${Math.round(state.combo)} combo`, width - 145, height * 0.5 + 24);
+      }
     }
 
     function animate(time: number) {
@@ -245,13 +297,14 @@ export function SixPendulumCartpoleLab() {
   }, [links, manualForce, mode, modeCopy, running]);
 
   function reset(spread = 0.55) {
-    stateRef.current = makeState(links, spread);
+    stateRef.current = makeState(links, spread, spread > 0.6 ? "whip" : "hold");
     setEpisode((value) => value + 1);
   }
 
   function kick() {
-    stateRef.current.cartV += (Math.random() > 0.5 ? 1 : -1) * 2.6;
-    stateRef.current.omega = stateRef.current.omega.map((omega, index) => omega + (index + 1) * 0.18);
+    stateRef.current.cartV += (Math.random() > 0.5 ? 1 : -1) * 1.8;
+    stateRef.current.impulse += Math.random() > 0.5 ? 2.4 : -2.4;
+    stateRef.current.omega = stateRef.current.omega.map((omega, index) => omega + (index + 1) * 0.1);
   }
 
   return (
