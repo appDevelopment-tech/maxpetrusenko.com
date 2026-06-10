@@ -148,7 +148,7 @@ def build_contract(total_timesteps: int = 10_000_000) -> dict:
             "ppoUpdateSmoke": {
                 "command": "npm run train:six-pendulum:puffer-mjwarp:device-rollout:ppo-update",
                 "artifact": "/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/training-checkpoints/puffer-mjwarp-device-rollout-ppo-update.json",
-                "covered": "Three PPO epochs consume the fixed recurrent rollout buffers, recompute logprobs/values over the stored sequence, backpropagate through the recurrent actor-critic, and change parameters.",
+                "covered": "Three PPO epochs consume the fixed recurrent rollout buffers, recompute logprobs/values over the stored sequence, backpropagate through the recurrent actor-critic, and change parameters. The rollout buffer now records pre-action observations; the first PPO epoch reconstructs ratioMean=1.0 and ratioMax=1.0 in the smoke artifact.",
                 "caveat": "This is a local CPU fixed-batch smoke update, not a PufferPPO training run and not a learned policy solve.",
             },
             "devicePpoTrain": {
@@ -162,8 +162,10 @@ def build_contract(total_timesteps: int = 10_000_000) -> dict:
                 "preferredArtifact": "/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/training-checkpoints/puffer-mjwarp-device-ppo-hold-probe-f32.json",
                 "comparisonCommand": "npm run train:six-pendulum:puffer-mjwarp:device-ppo-hold-probe-f64",
                 "comparisonArtifact": "/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/training-checkpoints/puffer-mjwarp-device-ppo-hold-probe.json",
-                "covered": "A three-update 2.56s-horizon hold-start probe at forceScale 32 reached held-out hold-start 0.435s with no cart terminal; the same probe at forceScale 64 reached only 0.3175s and all hold eval worlds hit cart terminal.",
-                "caveat": "Still subsecond; proves the next issue is stabilizer learning/reward, not down-start swing-up.",
+                "bcWarmupCommand": "npm run train:six-pendulum:puffer-mjwarp:device-ppo-hold-bc-probe",
+                "bcWarmupArtifact": "/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/training-checkpoints/puffer-mjwarp-device-ppo-hold-bc-probe.json",
+                "covered": "A three-update 2.56s-horizon hold-start probe at forceScale 32 reached held-out hold-start 0.435s with no cart terminal; the same probe at forceScale 64 reached only 0.3175s and all hold eval worlds hit cart terminal. After fixing PPO buffer observation timing and strengthening swing-up reward, a learned stabilizer BC warmup on the same recurrent device-buffer policy reached held-out hold-start 1.4425s.",
+                "caveat": "BC warmup proves the policy can learn the top stabilizer, but it is curriculum progress only. Held-out down-start remains 0.0s and does not promote to link two.",
             },
             "policyReflection": {
                 "consults": [
@@ -171,8 +173,8 @@ def build_contract(total_timesteps: int = 10_000_000) -> dict:
                     "/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/model-consults/gemini-pendulum-policy-reflection.md",
                     "/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/model-consults/oracle-pendulum-policy-reflection.md",
                 ],
-                "diagnosis": "The short 96-step/0.24s rollout and nworld=8 batch are not enough to learn one-link hold or down-start swing-up; prove long-horizon hold-start before GPU/down-start scale.",
-                "nextCommand": "npm run train:six-pendulum:puffer-mjwarp:device-ppo-hold-probe",
+                "diagnosis": "PPO tuple plumbing is now coherent: pre-action observations are stored with their sampled actions/logprobs, and ratio reconstruction is 1.0 on the first smoke epoch. The remaining blocker is pure down-start transfer: forceScale 120 mixed-start probes reach near-catch flashes up to 0.8825s inside curriculum rollouts, but held-out down-start remains 0.0s.",
+                "nextCommand": "increase down-start sampling and run the forceScale 120 swing-up curriculum on GPU-scale worlds; link two remains locked until held-out pure down-start holds for at least one second",
             },
             "actionScaleDiagnostic": {
                 "command": "npm run train:six-pendulum:puffer-mjwarp:action-scale-diagnostic",
@@ -200,7 +202,9 @@ def build_contract(total_timesteps: int = 10_000_000) -> dict:
         },
         "nextCommands": [
             "npm run train:six-pendulum:puffer-mjwarp:pufferppo-contract",
-            "npm run train:six-pendulum:puffer-mjwarp:device-ppo-hold-probe",
+            "npm run train:six-pendulum:puffer-mjwarp:device-ppo-hold-bc-probe",
+            "npm run train:six-pendulum:puffer-mjwarp:device-ppo-down-swingup-probe",
+            "npm run train:six-pendulum:puffer-mjwarp:device-ppo-down-swingup-conservative",
             "doppler run --project api_keys --config dev -- modal run --write-result /Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/training-checkpoints/puffer-mjwarp-pufferppo-runtime.json scripts/modal-train-six-pendulum-pufferppo-mjwarp.py::inspect_pufferppo_runtime",
         ],
     }

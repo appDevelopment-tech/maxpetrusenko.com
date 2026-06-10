@@ -312,6 +312,13 @@ def run_device_rollout(
     runner.initialize_prev_potential_from_current(synchronize=False)
 
     for step_index in range(int(steps)):
+        if record_buffer:
+            wp.launch(
+                record_rollout_obs_kernel,
+                dim=(int(nworld), OBS_DIM),
+                inputs=[runner.obs_wp, int(step_index), int(nworld), obs_buffer],
+                device=device,
+            )
         action_vector_wp = None
         logprob_wp = None
         value_wp = None
@@ -336,12 +343,6 @@ def run_device_rollout(
         runner.score_device(data.qpos, data.qvel, synchronize=False)
         runner.post_step_device(pose_hold, horizon, synchronize=False)
         if record_buffer:
-            wp.launch(
-                record_rollout_obs_kernel,
-                dim=(int(nworld), OBS_DIM),
-                inputs=[runner.obs_wp, int(step_index), int(nworld), obs_buffer],
-                device=device,
-            )
             wp.launch(
                 record_rollout_scalars_kernel,
                 dim=int(nworld),

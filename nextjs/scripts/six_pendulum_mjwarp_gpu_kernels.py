@@ -264,15 +264,15 @@ def score_obs_kernel(
 
     dense_alignment = wp.exp(-mean_upright_error * 1.15 - max_bend_error * 2.0 - mean_speed * 0.08)
     action_fraction = last_action[i] / action_scale
-    shaped_reward = height * 0.08 + dense_alignment * 0.1 + (score / 100.0) * (score / 100.0) * 1.8
+    shaped_reward = height * 0.3 + dense_alignment * 0.1 + (score / 100.0) * (score / 100.0) * 2.5
     if is_whip:
-        shaped_reward += 0.1
+        shaped_reward += 0.2
     if is_near_top_fast:
-        shaped_reward += 0.18
+        shaped_reward += 0.35
     if in_catch_basin:
-        shaped_reward += 0.26
-    shaped_reward -= wp.abs(x) * 0.015
-    shaped_reward -= action_fraction * action_fraction * 0.002
+        shaped_reward += 1.0
+    shaped_reward -= wp.abs(x) * 0.004
+    shaped_reward -= action_fraction * action_fraction * 0.0005
 
     base = i * OBS_DIM
     obs[base] = x
@@ -281,7 +281,7 @@ def score_obs_kernel(
 
     reward[i] = shaped_reward
     strict_score[i] = score
-    potential[i] = height - 0.035 * energy_gap - 0.025 * wp.abs(x)
+    potential[i] = height - 0.02 * energy_gap - 0.01 * wp.abs(x)
     mean_tip_height[i] = height
     energy_error[i] = energy_gap
     catch_basin[i] = 1.0 if in_catch_basin else 0.0
@@ -314,8 +314,8 @@ def post_step_kernel(
 
     reward_value = shaped_reward[i]
     if pose_hold == 0:
-        delta = wp.min(wp.max(potential[i] - prev_potential[i], -0.18), 0.28)
-        reward_value = reward_value + delta * 1.2
+        delta = wp.min(wp.max(potential[i] - prev_potential[i], -0.25), 0.35)
+        reward_value = reward_value + delta * 2.0
     prev_potential[i] = potential[i]
     final_reward[i] = reward_value
 

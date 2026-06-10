@@ -48,13 +48,13 @@ def score_batch(qpos, qvel, last_action, links: int, action_scale: float = DEFAU
     )
     dense_alignment = np.exp(-mean_upright_error * 1.15 - max_bend_error * 2.0 - mean_speed * 0.08)
     whip = (np.abs(absolute[:, -1]) < 0.65) & (mean_speed > 1.0)
-    reward = mean_tip_height * 0.08 + dense_alignment * 0.1 + (strict_score / 100.0) ** 2 * 1.8
-    reward += np.where(whip, 0.1, 0.0)
-    reward += np.where(near_top_fast, 0.18, 0.0)
-    reward += np.where(catch_basin, 0.26, 0.0)
-    reward -= np.abs(qpos[:, 0]) * 0.015
-    reward -= (last_action / action_scale) ** 2 * 0.002
-    potential = mean_tip_height - 0.035 * energy_error - 0.025 * np.abs(qpos[:, 0])
+    reward = mean_tip_height * 0.3 + dense_alignment * 0.1 + (strict_score / 100.0) ** 2 * 2.5
+    reward += np.where(whip, 0.2, 0.0)
+    reward += np.where(near_top_fast, 0.35, 0.0)
+    reward += np.where(catch_basin, 1.0, 0.0)
+    reward -= np.abs(qpos[:, 0]) * 0.004
+    reward -= (last_action / action_scale) ** 2 * 0.0005
+    potential = mean_tip_height - 0.02 * energy_error - 0.01 * np.abs(qpos[:, 0])
 
     obs = np.zeros((qpos.shape[0], OBS_DIM), dtype=np.float32)
     obs[:, 0] = qpos[:, 0]

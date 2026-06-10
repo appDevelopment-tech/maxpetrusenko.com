@@ -24,6 +24,9 @@ const pufferArtifacts = [
   "puffer-mjwarp-device-ppo-train.json",
   "puffer-mjwarp-device-ppo-hold-probe.json",
   "puffer-mjwarp-device-ppo-hold-probe-f32.json",
+  "puffer-mjwarp-device-ppo-hold-bc-probe.json",
+  "puffer-mjwarp-device-ppo-down-swingup-probe.json",
+  "puffer-mjwarp-device-ppo-down-swingup-conservative.json",
   "puffer-mjwarp-device-rollout-link6.json",
   "puffer-mjwarp-device-rollout-random-horizon.json",
   "puffer-mjwarp-local-ppo-smoke.json",
@@ -112,7 +115,13 @@ function sourceRow(entry, index) {
     holdStartSolvedOneSecond: holdHeld >= 1,
     countsTowardSolve: !teacher && downHeld >= 1,
     sourceArtifact: fullPath,
-    note: file.includes("device-ppo-hold-probe")
+    note: file.includes("device-ppo-down-swingup-conservative")
+      ? "Conservative one-link mixed-start swing-up/catch PPO probe at force 120 with lower LR, tighter clip, and stabilizer BC initialization. Counts only if held-out pure down-start holds for at least one second."
+      : file.includes("device-ppo-down-swingup-probe")
+      ? "One-link mixed-start swing-up/catch PPO probe at force 120 with stronger potential/catch reward and stabilizer BC initialization. Counts only if held-out pure down-start holds for at least one second."
+      : file.includes("device-ppo-hold-bc-probe")
+      ? "Device-buffer recurrent policy learned one-link hold-start with stabilizer BC warmup and passed held-out hold-start over one second. Down-start remains zero, so this is curriculum progress only."
+      : file.includes("device-ppo-hold-probe")
       ? "Long-horizon one-link hold-start PPO probe. Force 32 avoids cart terminal but remains subsecond; force 64 is terminal-prone. Counts only if held-out down-start holds for at least one second."
       : file.includes("device-ppo-train")
       ? "Repeated MJWarp rollout-buffer PPO training: stochastic collect, persistent optimizer updates, deterministic down-start eval after each update. Counts only if held-out down-start holds for at least one second."
