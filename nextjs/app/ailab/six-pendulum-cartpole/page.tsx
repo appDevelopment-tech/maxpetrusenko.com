@@ -146,6 +146,33 @@ const buildPlan = [
   },
 ] as const;
 
+const experimentResults = [
+  {
+    label: "Pezzza-style CEM",
+    run: "ap-Atp5F3zbazixndWxBHdeQp",
+    speed: "~721k SPS",
+    result: "Strict score 187.95, mean hold 6.90s, solved rate 100%.",
+  },
+  {
+    label: "Pezzza 480 Hz",
+    run: "ap-h3iaYTUzuCymR0hUnE6FOX",
+    speed: "~784k SPS",
+    result: "Strict score 164.60, mean hold 5.37s, solved rate 94.9%.",
+  },
+  {
+    label: "Full gravity only",
+    run: "ap-2tRCgyI6nU9xcxAIMHIXyE",
+    speed: "~77k SPS",
+    result: "Strict score 0. Curriculum was the difference.",
+  },
+  {
+    label: "SAC / TD3 / PPO",
+    run: "multiple",
+    speed: "~282 to 825 SPS",
+    result: "Strict score 0. TD3 can hold from near-upright, but down-start still fails.",
+  },
+] as const;
+
 export const metadata = generateMetadata({
   title: PAGE_TITLE,
   description: PAGE_DESCRIPTION,
@@ -220,10 +247,24 @@ export default function SixPendulumCartpolePage() {
 
           <div className="rounded-[8px] border border-[rgba(12,17,21,0.08)] bg-[#101820] p-6 text-[#f7f1e6]">
             <p className="text-sm font-bold uppercase tracking-[0.18em] text-[#8cc7e8]">Implementation status</p>
-            <h2 className="mt-4 font-serif text-3xl font-bold text-[#f7f1e6]">Link one is the current wall.</h2>
+            <h2 className="mt-4 font-serif text-3xl font-bold text-[#f7f1e6]">Link one is solved in the vectorized trainer.</h2>
             <p className="mt-4 text-base leading-relaxed text-[#dce6e9]">
-              The canvas now starts at one hanging pendulum, uses model force only, and locks links two through six until link one passes a one-second strict hold. The latest Modal MuJoCo runs do not pass: recurrent PPO reached 0.0125 seconds from down, pure SAC reached 0.0229 seconds, and stabilize-then-down SAC also reached 0.0229 seconds. The next checkpoint must solve this one-link down-start gate before higher link counts count.
+              The canvas still starts at one hanging pendulum, uses model force only, and locks links two through six until link one passes a one-second strict hold. The new Pezzza-style evolutionary trainer solved the one-link down-start gate under normal gravity. The full-gravity ablation stayed at zero, so the useful finding is curriculum plus whiplash/recovery shaping, not just more steps.
             </p>
+          </div>
+        </section>
+
+        <section className="mt-10">
+          <p className="mb-4 text-sm font-bold uppercase tracking-[0.18em] text-[var(--muted)]">Experiment comparison</p>
+          <div className="grid gap-4 md:grid-cols-4">
+            {experimentResults.map((item) => (
+              <div className="rounded-[8px] border border-[rgba(12,17,21,0.08)] bg-white/70 p-5" key={item.label}>
+                <h2 className="font-serif text-2xl font-bold text-[var(--ink)]">{item.label}</h2>
+                <p className="mt-3 text-xs font-bold uppercase tracking-[0.14em] text-[var(--muted)]">{item.run}</p>
+                <p className="mt-3 text-sm font-bold text-[var(--accent-tech)]">{item.speed}</p>
+                <p className="mt-3 text-sm leading-relaxed text-[var(--ink-soft)]">{item.result}</p>
+              </div>
+            ))}
           </div>
         </section>
 
@@ -305,10 +346,10 @@ export default function SixPendulumCartpolePage() {
         <section className="mt-10 rounded-[8px] border border-[rgba(12,17,21,0.08)] bg-white/70 p-6">
           <p className="text-sm font-bold uppercase tracking-[0.18em] text-[var(--muted)]">Next real training run</p>
           <h2 className="mt-4 max-w-[18ch] font-serif text-3xl font-bold leading-tight text-[var(--ink)] md:text-4xl">
-            Stabilize one-link PPO first.
+            Turn the solve into a Puffer-style sweep.
           </h2>
           <p className="mt-4 max-w-[860px] text-base leading-relaxed text-[var(--ink-soft)]">
-            The useful artifact is not just a clip. CEM found brief two-link upright moments but not a stable controller. The MuJoCo PPO path is now wired, and the next run should overfit the one-link hold gate before adding mixed starts, randomized horizon, link two, and the eventual three-through-six-link curriculum.
+            The useful artifact is not just a clip. The repo now has a strict score report where subsecond holds do not count, a Pezzza-style CEM trainer, and a wallclock-vs-score comparison path. Next step is a small Puffer-style sweep: many configs, strict validation score, randomized horizon only after whip behavior appears, then MinGRU/PPO once the environment speed path is proven.
           </p>
         </section>
       </article>

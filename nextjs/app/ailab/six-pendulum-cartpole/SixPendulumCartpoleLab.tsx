@@ -10,7 +10,7 @@ type TrainedPolicy = {
   inputCount?: number;
   forceScale: number;
   weights?: number[];
-  layers?: { weights: number[][]; bias: number[]; activation?: "relu" | "tanh" }[];
+  layers?: { weights: number[][]; bias: number[]; activation?: "linear" | "relu" | "tanh" }[];
   knotCount?: number;
   knots?: number[];
   feedback?: number[];
@@ -131,6 +131,7 @@ function runSacPolicy(state: PendulumState): number | null {
         return value + activation * (layer.weights[inputIndex]?.[outputIndex] ?? 0);
       }, bias);
       if (layer.activation === "relu") return Math.max(0, sum);
+      if (layer.activation === "linear") return sum;
       return Math.tanh(sum);
     });
     activations = next;

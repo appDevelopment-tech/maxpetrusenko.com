@@ -16,11 +16,38 @@ The deployed browser policy is a progress checkpoint, not a solve. Strict score 
 ## Source Evidence
 
 - X thread: https://x.com/yacineMTB/status/2064148140899348779
+- Bird thread read confirmed the core claims: PufferPPO, Puffer MinGRU, MuJoCo Warp, APIC/CUDA graph capture, 18M SPS on some configs, 3.6k experiments, GP-picked top hyperparameters, and randomized episode length after whipping appeared.
 - Hero solve video downloaded to `outputs/yacine-thread-media/2064145781477580800-*.mp4`.
 - Hyperparameter scatter video downloaded from `2064150381408485769`.
 - Reward/policy video downloaded from `2064152523095560528`.
 - Phase-space / simulator-speed video downloaded from `2064155513244246028`.
 - Main clues: PufferPPO, Puffer MinGRU, MuJoCo Warp, APIC/CUDA graph capture, 3.6k experiments, top hyperparameters selected from high-compute runs, randomized episode length after whip behavior appeared.
+- Pezzza video downloaded with `yt-dlp` to `/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/youtube/pezzza-double-pendulum.mp4`.
+- Pezzza transcript downloaded to `/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/youtube/pezzza-double-pendulum.en.vtt`; frames sampled under `outputs/youtube/frames/`.
+- XPBD paper downloaded to `/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/papers/XPBD.pdf`.
+- `johnBuffer/Pendulum-NEAT` cloned under `/Users/maxpetrusenko/Desktop/Projects/oss/Pendulum-NEAT`.
+
+## Multi-Agent Review
+
+Agents were split by approach:
+
+- Aristotle: Pendulum-NEAT, Pezzza transcript, XPBD source table.
+- Ampere: CEM/evolution recommendation and policy shape.
+- Pascal: PPO/SAC/TD3 baseline comparison.
+- Goodall: XPBD/MuJoCo physics recommendation.
+- Pauli: PufferPPO/PufferLib wallclock-first sweep model.
+- Hegel: Puffer MinGRU policy ablation.
+- Boole: MuJoCo Warp, MJX, APIC/CUDA graph speed path.
+- Tesla: reward shaping, randomized horizon trigger, GP/hyperparameter sweep schema.
+
+Consensus:
+
+1. Do not count holds shorter than one second.
+2. Keep strict validation separate from shaped reward.
+3. Use CEM/evolution for fast one-link discovery.
+4. Use many experiments and wallclock-vs-score reporting before trying to scale.
+5. Treat MinGRU/PufferPPO as the next controlled RL ablation.
+6. Keep MuJoCo/MJX/MJWarp for later physics-speed work; XPBD is useful for browser visual fidelity, not the current training bottleneck.
 
 ## Plan
 
@@ -33,6 +60,66 @@ The deployed browser policy is a progress checkpoint, not a solve. Strict score 
 5. Add randomized episode lengths only after early whip/hold appears, matching Yacine's thread.
 6. Save every run as JSON with stage validation, score, held fraction, whip fraction, seed, GPU, and elapsed time.
 7. Move from the browser physics approximation to MuJoCo Playground or MJWarp once the curriculum path is proven.
+
+## Pezzza-Style One-Link Evolution Result
+
+New trainer:
+
+```bash
+npm run train:six-pendulum:pezzza:smoke
+```
+
+Modal run:
+https://modal.com/apps/max-petrusenko/main/ap-Atp5F3zbazixndWxBHdeQp
+
+Artifact:
+`/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/training-checkpoints/pezzza-evolution-1link-smoke.json`
+
+Result:
+
+- Algorithm: `modal-pezzza-style-evolution`.
+- Policy: 24 open-loop force knots plus tiny MLP feedback.
+- Inputs: cart position, cart velocity, sin/cos angle, angular velocity, previous action, normalized time.
+- Movement terms: compensation, loss-of-balance penalty, gravity swing-up, whiplash, center staying.
+- Curriculum: low gravity/high friction, medium gravity, near-normal, normal gravity.
+- Final comparison score: strict score 187.95, mean hold 6.899 seconds, solved-one-second rate 1.0, about 721k simulated steps per second.
+
+Interpretation:
+
+This is the first one-link down-start solve, but it is in the vectorized analytic trainer, not the MuJoCo/browser production policy yet. It proves the source direction: curriculum plus whiplash/recovery shaping solves the discovery problem that PPO/SAC/TD3 did not.
+
+### Ablations
+
+Full-gravity, no curriculum:
+
+```bash
+npm run train:six-pendulum:pezzza:full-gravity-smoke
+```
+
+- Modal run: https://modal.com/apps/max-petrusenko/main/ap-2tRCgyI6nU9xcxAIMHIXyE
+- Result: strict score 0.0, mean hold 0.0 seconds.
+- Interpretation: full difficulty from step zero does not find the behavior.
+
+480 Hz curriculum:
+
+```bash
+npm run train:six-pendulum:pezzza:480hz-smoke
+```
+
+- Modal run: https://modal.com/apps/max-petrusenko/main/ap-h3iaYTUzuCymR0hUnE6FOX
+- Result: strict score 164.60, mean hold 5.373 seconds, solved-one-second rate 0.949, about 784k simulated steps per second.
+- Interpretation: 480 Hz works and is strong, but not clearly better enough to replace 240 Hz for smoke work.
+
+Comparison report:
+
+```bash
+npm run six-pendulum:compare
+```
+
+- Markdown: `/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/sweeps/latest-six-pendulum-comparison.md`
+- JSONL dots: `/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/sweeps/latest-six-pendulum-comparison.jsonl`
+
+The report uses strict validation score for the Y axis. Subsecond holds remain diagnostics and do not count.
 
 ## Smoke Result
 

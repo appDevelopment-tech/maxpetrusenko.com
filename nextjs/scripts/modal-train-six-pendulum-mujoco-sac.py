@@ -17,19 +17,28 @@ image = modal.Image.debian_slim(python_version="3.11").pip_install(
 
 
 @app.function(image=image, gpu="L4", timeout=7200)
-def train_policy(mjcf_xml: str, links: int = 1, smoke: bool = True, seed: int = 426210, curriculum: str = "down") -> str:
+def train_policy(
+    mjcf_xml: str,
+    links: int = 1,
+    smoke: bool = True,
+    seed: int = 426210,
+    curriculum: str = "down",
+    algo: str = "sac",
+) -> str:
     import gymnasium as gym
     import mujoco
     import numpy as np
     import torch
     import torch.nn as nn
     from gymnasium import spaces
-    from stable_baselines3 import SAC
+    from stable_baselines3 import SAC, TD3
+    from stable_baselines3.common.noise import NormalActionNoise
     from stable_baselines3.common.vec_env import DummyVecEnv
 
     started = time.time()
     safe_links = max(1, min(6, int(links)))
-    safe_curriculum = curriculum if curriculum in {"down", "stabilize-down"} else "down"
+    safe_curriculum = curriculum if curriculum in {"down", "hold", "stabilize-down"} else "down"
+    safe_algo = algo if algo in {"sac", "td3"} else "sac"
     max_links = 6
     obs_dim = 3 + max_links * 5
     action_scale = 32.0
@@ -144,12 +153,12 @@ def train_policy(mjcf_xml: str, links: int = 1, smoke: bool = True, seed: int = 
             upright_shape = math.exp(-max_upright_error * 1.7 - max_bend_error * 2.5 - mean_speed * 0.06)
             held_seconds = self.consecutive_held_steps * control_dt
 
-            reward = tip_height * 1.6
+            reward = tip_height * 1.8
             reward += upright_shape * 0.8
-            reward += (score / 100.0) ** 2 * 4.5
-            reward += min(held_seconds, 2.0) ** 2 * 8.0
-            reward += 3.0 if score > 82 else 0.0
-            reward += 6.0 if held_seconds >= 1.0 else 0.0
+            reward += (score / 100.0) ** 2 * 8.0
+            reward += min(held_seconds, 2.0) ** 2 * 18.0
+            reward += 6.0 if score > 82 else 0.0
+            reward += 20.0 if held_seconds >= 1.0 else 0.0
             reward -= abs(float(self.data.qpos[0])) * 0.03
             reward -= (ctrl / action_scale) ** 2 * 0.01
 
@@ -159,22 +168,28 @@ def train_policy(mjcf_xml: str, links: int = 1, smoke: bool = True, seed: int = 
                 "score": score,
                 "held": 1.0 if score > 82 else 0.0,
                 "maxHeldSeconds": self.max_consecutive_held_steps * control_dt,
+                "maxUprightError": max_upright_error,
+                "tipHeight": tip_height,
             }
             return self.obs(), float(reward), bool(terminated), bool(truncated), info
 
     def make_env(env_index: int, eval_mode: bool = False, pose_mode: str = "down"):
         return lambda: OneLinkCartpoleEnv(env_index, eval_mode, pose_mode)
 
-    def validate(model, episodes: int = 24):
+    def validate(model, episodes: int = 24, pose_mode: str = "down"):
         total_score = []
         total_held = []
         total_max_held_seconds = []
+        total_tip_height = []
+        total_upright_error = []
         returns = []
         for episode in range(episodes):
-            env = OneLinkCartpoleEnv(10_000 + episode, eval_mode=True, pose_mode="down")
+            env = OneLinkCartpoleEnv(10_000 + episode, eval_mode=True, pose_mode=pose_mode)
             obs, _ = env.reset()
             ep_score = []
             ep_held = []
+            ep_tip_height = []
+            ep_upright_error = []
             ep_return = 0.0
             ep_max_held_seconds = 0.0
             for _ in range(horizon):
@@ -183,15 +198,19 @@ def train_policy(mjcf_xml: str, links: int = 1, smoke: bool = True, seed: int = 
                 ep_return += reward
                 ep_score.append(info["score"])
                 ep_held.append(info["held"])
+                ep_tip_height.append(info["tipHeight"])
+                ep_upright_error.append(info["maxUprightError"])
                 ep_max_held_seconds = max(ep_max_held_seconds, info["maxHeldSeconds"])
                 if terminated or truncated:
                     break
             total_score.append(ep_score[-1] if ep_score else 0.0)
             total_held.append(float(np.mean(ep_held)) if ep_held else 0.0)
             total_max_held_seconds.append(ep_max_held_seconds)
+            total_tip_height.append(float(np.mean(ep_tip_height)) if ep_tip_height else 0.0)
+            total_upright_error.append(float(np.min(ep_upright_error)) if ep_upright_error else math.pi)
             returns.append(ep_return)
         return {
-            "pose": "down",
+            "pose": pose_mode,
             "episodes": episodes,
             "score": float(np.mean(total_score)),
             "scoreP10": float(np.quantile(total_score, 0.1)),
@@ -200,30 +219,45 @@ def train_policy(mjcf_xml: str, links: int = 1, smoke: bool = True, seed: int = 
             "maxHeldSeconds": float(np.mean(total_max_held_seconds)),
             "maxHeldSecondsP10": float(np.quantile(total_max_held_seconds, 0.1)),
             "solvedOneSecondRate": float(np.mean(np.asarray(total_max_held_seconds) >= 1.0)),
+            "tipHeight": float(np.mean(total_tip_height)),
+            "bestUprightError": float(np.mean(total_upright_error)),
             "return": float(np.mean(returns)),
+        }
+
+    def validate_all(model, episodes: int = 24):
+        return {
+            "down": validate(model, episodes, "down"),
+            "hold": validate(model, episodes, "hold"),
+            "mixed": validate(model, episodes, "mixed"),
         }
 
     env_count = 8 if smoke else 16
     vec_env = DummyVecEnv([make_env(index, pose_mode="down") for index in range(env_count)])
-    model = SAC(
-        "MlpPolicy",
-        vec_env,
-        seed=seed + safe_links,
-        learning_rate=3e-4,
-        buffer_size=180_000 if smoke else 700_000,
-        learning_starts=2_000,
-        batch_size=256,
-        tau=0.02,
-        gamma=0.99,
-        train_freq=(1, "step"),
-        gradient_steps=1,
-        ent_coef="auto",
-        policy_kwargs={"net_arch": [128, 128], "activation_fn": nn.ReLU},
-        verbose=0,
-        device="cuda" if torch.cuda.is_available() else "cpu",
-    )
+    common_kwargs = {
+        "policy": "MlpPolicy",
+        "env": vec_env,
+        "seed": seed + safe_links,
+        "learning_rate": 3e-4,
+        "buffer_size": 180_000 if smoke else 700_000,
+        "learning_starts": 2_000,
+        "batch_size": 256,
+        "tau": 0.02,
+        "gamma": 0.99,
+        "train_freq": (1, "step"),
+        "gradient_steps": 1,
+        "policy_kwargs": {"net_arch": [128, 128], "activation_fn": nn.ReLU},
+        "verbose": 0,
+        "device": "cuda" if torch.cuda.is_available() else "cpu",
+    }
+    if safe_algo == "td3":
+        action_noise = NormalActionNoise(mean=np.zeros(1), sigma=np.ones(1) * 5.0)
+        model = TD3(**common_kwargs, action_noise=action_noise, policy_delay=2, target_policy_noise=2.0, target_noise_clip=6.0)
+    else:
+        model = SAC(**common_kwargs, ent_coef="auto")
 
-    if safe_curriculum == "stabilize-down":
+    if safe_curriculum == "hold":
+        phases = [("hold", total_timesteps)]
+    elif safe_curriculum == "stabilize-down":
         phases = [("hold", 40_000), ("mixed", 40_000), ("down", 80_000)] if smoke else [
             ("hold", 120_000),
             ("mixed", 160_000),
@@ -245,9 +279,24 @@ def train_policy(mjcf_xml: str, links: int = 1, smoke: bool = True, seed: int = 
             model.learn(total_timesteps=chunk, reset_num_timesteps=completed == 0, progress_bar=False)
             completed += chunk
             phase_completed += chunk
-            validation = validate(model, episodes=12 if smoke else 24)
-            selection = validation["solvedOneSecondRate"] * 1000.0 + validation["maxHeldSeconds"] * 100.0 + validation["score"]
-            line = {"phase": phase_name, "timesteps": completed, "selection": selection, **validation}
+            all_validation = validate_all(model, episodes=12 if smoke else 24)
+            validation = all_validation["down"]
+            phase_validation = all_validation[phase_name] if phase_name in all_validation else validation
+            selection = (
+                validation["solvedOneSecondRate"] * 1000.0
+                + validation["maxHeldSeconds"] * 100.0
+                + validation["score"]
+                + validation["tipHeight"] * 10.0
+                + phase_validation["maxHeldSeconds"] * 25.0
+            )
+            line = {
+                "phase": phase_name,
+                "timesteps": completed,
+                "selection": selection,
+                "down": all_validation["down"],
+                "hold": all_validation["hold"],
+                "mixed": all_validation["mixed"],
+            }
             print(json.dumps(line), flush=True)
             history.append(line)
             if selection > best_score:
@@ -257,20 +306,46 @@ def train_policy(mjcf_xml: str, links: int = 1, smoke: bool = True, seed: int = 
     if best_state is not None:
         model.policy.load_state_dict({key: value.to(model.device) for key, value in best_state.items()})
 
-    final_validation = validate(model, episodes=32 if smoke else 96)
+    final_validation = validate_all(model, episodes=32 if smoke else 96)
 
     def export_linear_layers():
         actor = model.policy.actor
         modules = []
-        for module in actor.latent_pi:
+
+        def add_linear(module, activation):
+            modules.append({
+                "weights": module.weight.detach().cpu().numpy().T.tolist(),
+                "bias": module.bias.detach().cpu().numpy().tolist(),
+                "activation": activation,
+            })
+
+        if hasattr(actor, "latent_pi"):
+            for module in actor.latent_pi:
+                if isinstance(module, nn.Linear):
+                    add_linear(module, "relu")
+            add_linear(actor.mu, "tanh")
+            return modules
+
+        sequential = actor.mu if hasattr(actor, "mu") else actor
+        pending_linear = None
+        for module in sequential:
             if isinstance(module, nn.Linear):
-                modules.append({"weights": module.weight.detach().cpu().numpy().T.tolist(), "bias": module.bias.detach().cpu().numpy().tolist(), "activation": "relu"})
-        modules.append({"weights": actor.mu.weight.detach().cpu().numpy().T.tolist(), "bias": actor.mu.bias.detach().cpu().numpy().tolist(), "activation": "tanh"})
+                if pending_linear is not None:
+                    add_linear(pending_linear, "linear")
+                pending_linear = module
+            elif isinstance(module, nn.ReLU) and pending_linear is not None:
+                add_linear(pending_linear, "relu")
+                pending_linear = None
+            elif isinstance(module, nn.Tanh) and pending_linear is not None:
+                add_linear(pending_linear, "tanh")
+                pending_linear = None
+        if pending_linear is not None:
+            add_linear(pending_linear, "linear")
         return modules
 
     output = {
         "trainedAt": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
-        "algorithm": "modal-mujoco-sac",
+        "algorithm": f"modal-mujoco-{safe_algo}",
         "environment": f"mujoco-cartpole-{safe_links}-link-down-start",
         "seed": seed + safe_links,
         "links": safe_links,
@@ -284,6 +359,7 @@ def train_policy(mjcf_xml: str, links: int = 1, smoke: bool = True, seed: int = 
             "torch": torch.__version__,
             "mujoco": mujoco.__version__,
             "stableBaselines3": "2.6.0",
+            "algo": safe_algo,
             "elapsedSeconds": round(time.time() - started, 3),
             "smoke": smoke,
             "totalTimesteps": total_timesteps,
@@ -293,7 +369,8 @@ def train_policy(mjcf_xml: str, links: int = 1, smoke: bool = True, seed: int = 
             "controlDt": control_dt,
             "curriculum": safe_curriculum,
             "history": history,
-            "validation": final_validation,
+            "validation": final_validation["down"],
+            "validationByPose": final_validation,
             "strictScore": {
                 "maxUprightAngleRad": score_max_upright_angle,
                 "maxChainBendRad": score_max_chain_bend,
@@ -310,10 +387,10 @@ def train_policy(mjcf_xml: str, links: int = 1, smoke: bool = True, seed: int = 
 
 
 @app.local_entrypoint()
-def main(links: int = 1, smoke: bool = True, curriculum: str = "down"):
+def main(links: int = 1, smoke: bool = True, curriculum: str = "down", algo: str = "sac"):
     if links != 1:
         raise ValueError("SAC gate starts with exactly one pendulum. Solve link 1 before links 2-6.")
     path = Path("app/ailab/six-pendulum-cartpole/mjcf/cartpole_1_link.xml")
     if not path.exists():
         raise FileNotFoundError(f"Missing MJCF file: {path}")
-    return train_policy.remote(path.read_text(), links, smoke, 426210, curriculum)
+    return train_policy.remote(path.read_text(), links, smoke, 426210, curriculum, algo)
