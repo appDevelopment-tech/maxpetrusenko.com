@@ -19,7 +19,7 @@ def build_model(links: int) -> ET.ElementTree:
 
     default = add(root, "default")
     add(default, "joint", damping="0", frictionloss="0", armature="0")
-    add(default, "geom", density="650", friction="0 0 0")
+    add(default, "geom", density="650", friction="0.00001 0 0", contype="0", conaffinity="0")
 
     asset = add(root, "asset")
     add(asset, "material", name="cart", rgba="0.95 0.2 0.16 1")

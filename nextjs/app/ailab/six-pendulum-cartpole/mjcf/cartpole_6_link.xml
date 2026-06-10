@@ -4,7 +4,7 @@
   <option timestep="0.0025" gravity="0 0 -9.8" />
   <default>
     <joint damping="0" frictionloss="0" armature="0" />
-    <geom density="650" friction="0 0 0" />
+    <geom density="650" friction="0.00001 0 0" contype="0" conaffinity="0" />
   </default>
   <asset>
     <material name="cart" rgba="0.95 0.2 0.16 1" />

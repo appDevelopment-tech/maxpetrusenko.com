@@ -129,10 +129,20 @@ Phase 0, proof substrate:
 
 ```bash
 npm run six-pendulum:mjcf
+npm run train:six-pendulum:puffer-mjwarp:local-smoke
 npm run train:six-pendulum:puffer-mjwarp:smoke
 ```
 
-The smoke writes `outputs/training-checkpoints/puffer-mjwarp-substrate-smoke.json`. It must prove Modal can install PufferLib and MuJoCo Warp, load the same MJCF, run `nworld` batched worlds, and capture/replay `mjw.step` with Warp CUDA graphs. This is not a solve metric. It is the minimum before spending on PPO.
+The local smoke writes `outputs/training-checkpoints/puffer-mjwarp-local-substrate-smoke.json`. The Modal smoke writes `outputs/training-checkpoints/puffer-mjwarp-substrate-smoke.json`. These are not solve metrics. They prove the substrate before spending on PPO: PufferLib and MuJoCo Warp import, the same MJCF loads, `nworld` batched worlds step, and Warp graph capture/replay is attempted.
+
+Local substrate result:
+
+- Command: `npm run train:six-pendulum:puffer-mjwarp:local-smoke`
+- Artifact: `/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/training-checkpoints/puffer-mjwarp-local-substrate-smoke.json`
+- Result: `substrate-smoke-passed`, `nworld=4`, `steps=16`, `64` simulated world-steps.
+- Device: local Mac Warp CPU only, so throughput is not meaningful for the final target.
+- Model invariants: `nq=2`, `nv=2`, `nu=1`, timestep `0.0025`, gravity `[0, 0, -9.8]`, DOF damping `0`, DOF frictionloss `0`.
+- MJCF fix: visual geoms are now contact-disabled with `contype=0` and `conaffinity=0`; the six-pendulum task has no contacts, and this avoids MJWarp friction/contact warnings from decorative rail/cart/link geoms.
 
 Phase 1, one-link PufferPPO:
 
