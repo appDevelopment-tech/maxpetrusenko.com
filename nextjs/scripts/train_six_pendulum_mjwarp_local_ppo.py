@@ -60,7 +60,7 @@ def evaluate(policy, mjcf_xml: str, links: int, nworld: int, steps: int, pose: s
     }
 
 
-def train(mjcf_xml: str, links: int, nworld: int, rollout_steps: int, updates: int, pose: str, seed: int) -> dict:
+def train(mjcf_xml: str, links: int, nworld: int, rollout_steps: int, eval_steps: int, updates: int, pose: str, seed: int) -> dict:
     torch.manual_seed(seed)
     np.random.seed(seed)
     started = time.time()
@@ -140,8 +140,8 @@ def train(mjcf_xml: str, links: int, nworld: int, rollout_steps: int, updates: i
         )
 
     env.close()
-    hold_eval = evaluate(policy, mjcf_xml, links, nworld, rollout_steps, "hold")
-    down_eval = evaluate(policy, mjcf_xml, links, nworld, rollout_steps, "down")
+    hold_eval = evaluate(policy, mjcf_xml, links, nworld, eval_steps, "hold")
+    down_eval = evaluate(policy, mjcf_xml, links, nworld, eval_steps, "down")
     return {
         "schema": "six-pendulum-mjwarp-local-recurrent-ppo-smoke-v1",
         "status": "training-smoke-passed",
@@ -149,6 +149,8 @@ def train(mjcf_xml: str, links: int, nworld: int, rollout_steps: int, updates: i
         "links": links,
         "nworld": nworld,
         "rolloutSteps": rollout_steps,
+        "evalSteps": eval_steps,
+        "evalSeconds": eval_steps * 0.0025,
         "updates": updates,
         "pose": pose,
         "seed": seed,
@@ -176,6 +178,7 @@ def main():
     parser.add_argument("--links", type=int, default=1)
     parser.add_argument("--nworld", type=int, default=4)
     parser.add_argument("--rollout-steps", type=int, default=96)
+    parser.add_argument("--eval-steps", type=int, default=480)
     parser.add_argument("--updates", type=int, default=3)
     parser.add_argument("--pose", choices=["down", "hold"], default="hold")
     parser.add_argument("--seed", type=int, default=426210)
@@ -189,7 +192,7 @@ def main():
     mjcf_path = Path(f"app/ailab/six-pendulum-cartpole/mjcf/cartpole_{args.links}_link.xml")
     if not mjcf_path.exists():
         raise FileNotFoundError(f"Missing MJCF file: {mjcf_path}")
-    result = train(mjcf_path.read_text(), args.links, args.nworld, args.rollout_steps, args.updates, args.pose, args.seed)
+    result = train(mjcf_path.read_text(), args.links, args.nworld, args.rollout_steps, args.eval_steps, args.updates, args.pose, args.seed)
     args.write_result.parent.mkdir(parents=True, exist_ok=True)
     args.write_result.write_text(json.dumps(result, indent=2) + "\n")
     print(json.dumps(result, indent=2))

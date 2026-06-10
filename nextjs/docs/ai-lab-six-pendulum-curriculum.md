@@ -169,9 +169,9 @@ Local recurrent training smoke:
 - Command: `npm run train:six-pendulum:puffer-mjwarp:local-ppo`
 - Artifact: `/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/training-checkpoints/puffer-mjwarp-local-ppo-smoke.json`
 - Script: `scripts/train_six_pendulum_mjwarp_local_ppo.py`
-- Result: `training-smoke-passed`, `links=1`, `nworld=4`, `rolloutSteps=96`, `updates=3`.
+- Result: `training-smoke-passed`, `links=1`, `nworld=4`, `rolloutSteps=96`, `evalSteps=480`, `updates=3`.
 - Policy: tiny GRU policy-gradient smoke, `27,267` parameters. This is a local CPU wiring test, not the final Puffer MinGRU scale.
-- Hold-start eval: max strict score `99.73`, max held `0.24s`, one-second gate false.
+- Hold-start eval: max strict score `99.73`, max held `0.46s` over a `1.2s` validation horizon, one-second gate false.
 - Down-start eval: max strict score `0`, max held `0s`, promotion false.
 - Interpretation: recurrent training now runs through MJWarp and backpropagates, but it does not solve one-link down-start. Next useful work is GPU scale plus proper PPO minibatches, then Puffer MinGRU/PufferNet.
 
