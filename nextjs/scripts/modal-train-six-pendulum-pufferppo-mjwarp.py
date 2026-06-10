@@ -91,7 +91,7 @@ def build_contract(total_timesteps: int = 10_000_000) -> dict:
     representative = rows[-1]
     return {
         "schema": "six-pendulum-pufferppo-mjwarp-contract-v1",
-        "status": "pufferppo-contract-ready-recurrent-policy-rollout-buffers-puffer-integration-missing",
+        "status": "pufferppo-contract-ready-ppo-update-smoke-gpu-puffer-integration-missing",
         "createdAtUnix": time.time(),
         "algorithm": "PufferPPO",
         "policyFamily": "PufferNet/MinGRU target, local smoke uses PufferLib Default+RNN API until PufferNet is wired",
@@ -145,13 +145,19 @@ def build_contract(total_timesteps: int = 10_000_000) -> dict:
                 "covered": "The rollout converts the current Warp observation buffer with wp.to_torch, runs a recurrent Torch actor-critic with per-world hidden state, converts normalized policy actions/logprobs/values back with wp.from_torch, records fixed-shape PPO buffers, then writes ctrl through a Warp action-vector kernel without NumPy action writes.",
                 "caveat": "The local smoke policy is tiny and untrained, and local Mac execution uses Warp CPU. The next bridge is PufferPPO ownership of these buffers, minibatch update plumbing, and GPU stream/capture discipline.",
             },
+            "ppoUpdateSmoke": {
+                "command": "npm run train:six-pendulum:puffer-mjwarp:device-rollout:ppo-update",
+                "artifact": "/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/training-checkpoints/puffer-mjwarp-device-rollout-ppo-update.json",
+                "covered": "One PPO minibatch update consumes the fixed recurrent rollout buffers, recomputes logprobs/values over the stored sequence, backpropagates through the recurrent actor-critic, and changes parameters.",
+                "caveat": "This is a single local CPU smoke update, not a PufferPPO training run and not a learned policy solve.",
+            },
             "randomHorizonSupport": {
                 "command": "npm run train:six-pendulum:puffer-mjwarp:device-rollout:random-horizon",
                 "artifact": "/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/training-checkpoints/puffer-mjwarp-device-rollout-random-horizon.json",
                 "covered": "Per-world truncation horizons are sampled in the reset Warp kernel and consumed by the post-step Warp kernel without per-step host reads.",
                 "gate": "Keep disabled until a learned policy shows whip/near-catch behavior; this matches the source thread warning that random horizons helped only after the model was already scoring.",
             },
-            "notCovered": "Puffer rollout integration, PufferPPO/MinGRU training attachment, minibatch updates from the fixed buffers, Modal GPU execution, and CUDA graph/APIC capture.",
+            "notCovered": "Puffer rollout integration, PufferPPO/MinGRU training attachment, multi-update sweeps, Modal GPU execution, and CUDA graph/APIC capture.",
         },
         "gpuKernelBlocker": {
             "currentEnv": "scripts/six_pendulum_mjwarp_env.py",

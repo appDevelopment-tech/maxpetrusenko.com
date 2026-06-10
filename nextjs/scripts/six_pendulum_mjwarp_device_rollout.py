@@ -50,9 +50,25 @@ def build_torch_policy(obs_dim: int, hidden_dim: int, seed: int, recurrent: bool
                 dist = torch.distributions.Normal(mean, std)
                 raw_action = mean
                 action = torch.tanh(raw_action).contiguous()
-                logprob = (dist.log_prob(raw_action) - torch.log(1.0 - action * action + 1e-6)).contiguous()
+                logprob = self.squashed_logprob(dist, raw_action, action)
                 value = self.critic(next_hidden).reshape(-1).contiguous()
                 return action, logprob, value, next_hidden
+
+            def squashed_logprob(self, dist, raw_action, action):
+                return (dist.log_prob(raw_action) - torch.log(1.0 - action * action + 1e-6)).contiguous()
+
+            def evaluate_actions(self, obs, hidden, action):
+                encoded = torch.tanh(self.encoder(obs))
+                next_hidden = self.rnn(encoded, hidden)
+                mean = self.actor(next_hidden).reshape(-1)
+                std = torch.exp(self.log_std).reshape(())
+                dist = torch.distributions.Normal(mean, std)
+                clamped = torch.clamp(action.reshape(-1), -0.999, 0.999)
+                raw_action = 0.5 * (torch.log1p(clamped) - torch.log1p(-clamped))
+                logprob = self.squashed_logprob(dist, raw_action, clamped)
+                entropy = dist.entropy().reshape(-1).contiguous()
+                value = self.critic(next_hidden).reshape(-1).contiguous()
+                return logprob, entropy, value, next_hidden
 
         policy = TinyRecurrentActorCritic()
         policy.eval()
@@ -66,6 +82,102 @@ def build_torch_policy(obs_dim: int, hidden_dim: int, seed: int, recurrent: bool
     )
     policy.eval()
     return policy
+
+
+def run_recurrent_ppo_update_smoke(
+    policy,
+    obs_np: np.ndarray,
+    normalized_action_np: np.ndarray,
+    old_logprob_np: np.ndarray,
+    old_value_np: np.ndarray,
+    reward_np: np.ndarray,
+    terminal_np: np.ndarray,
+    truncation_np: np.ndarray,
+    hidden_dim: int,
+) -> dict:
+    import torch
+
+    obs = torch.as_tensor(obs_np, dtype=torch.float32)
+    actions = torch.as_tensor(normalized_action_np, dtype=torch.float32)
+    old_logprob = torch.as_tensor(old_logprob_np, dtype=torch.float32)
+    old_value = torch.as_tensor(old_value_np, dtype=torch.float32)
+    rewards = torch.as_tensor(reward_np, dtype=torch.float32)
+    done = torch.as_tensor((terminal_np > 0.5) | (truncation_np > 0.5), dtype=torch.float32)
+    steps, nworld, _ = obs.shape
+
+    gamma = 0.995
+    gae_lambda = 0.95
+    advantages = torch.zeros(steps, nworld, dtype=torch.float32)
+    last_gae = torch.zeros(nworld, dtype=torch.float32)
+    next_value = torch.zeros(nworld, dtype=torch.float32)
+    for step in range(steps - 1, -1, -1):
+        next_nonterminal = 1.0 - done[step]
+        delta = rewards[step] + gamma * next_value * next_nonterminal - old_value[step]
+        last_gae = delta + gamma * gae_lambda * next_nonterminal * last_gae
+        advantages[step] = last_gae
+        next_value = old_value[step]
+    returns = advantages + old_value
+    normalized_advantage = (advantages - advantages.mean()) / (advantages.std() + 1e-6)
+
+    hidden = torch.zeros(nworld, int(hidden_dim), dtype=torch.float32)
+    logprob_steps = []
+    value_steps = []
+    entropy_steps = []
+    for step in range(steps):
+        logprob, entropy, value, hidden = policy.evaluate_actions(obs[step], hidden, actions[step])
+        logprob_steps.append(logprob)
+        value_steps.append(value)
+        entropy_steps.append(entropy)
+        if step < steps - 1 and bool(done[step].any()):
+            hidden = hidden.clone()
+            hidden[done[step] > 0.5] = 0.0
+
+    new_logprob = torch.stack(logprob_steps)
+    new_value = torch.stack(value_steps)
+    entropy = torch.stack(entropy_steps)
+    ratio = torch.exp(new_logprob - old_logprob)
+    clip_coef = 0.2
+    pg_loss_unclipped = -normalized_advantage * ratio
+    pg_loss_clipped = -normalized_advantage * torch.clamp(ratio, 1.0 - clip_coef, 1.0 + clip_coef)
+    policy_loss = torch.max(pg_loss_unclipped, pg_loss_clipped).mean()
+    value_clipped = old_value + torch.clamp(new_value - old_value, -clip_coef, clip_coef)
+    value_loss = 0.5 * torch.max((new_value - returns).pow(2), (value_clipped - returns).pow(2)).mean()
+    entropy_loss = entropy.mean()
+    loss = policy_loss + 0.5 * value_loss - 0.01 * entropy_loss
+
+    before = torch.cat([parameter.detach().flatten() for parameter in policy.parameters()])
+    optimizer = torch.optim.AdamW(policy.parameters(), lr=3e-4, weight_decay=1e-5)
+    optimizer.zero_grad(set_to_none=True)
+    loss.backward()
+    grad_norm = float(torch.nn.utils.clip_grad_norm_(policy.parameters(), 0.7).detach())
+    optimizer.step()
+    after = torch.cat([parameter.detach().flatten() for parameter in policy.parameters()])
+    parameter_delta_l2 = float(torch.linalg.vector_norm(after - before))
+
+    return {
+        "enabled": True,
+        "optimizer": "AdamW",
+        "learningRate": 3e-4,
+        "minibatches": 1,
+        "sequenceShape": [int(steps), int(nworld), int(obs.shape[-1])],
+        "actionShape": [int(steps), int(nworld)],
+        "policyLoss": float(policy_loss.detach()),
+        "valueLoss": float(value_loss.detach()),
+        "entropy": float(entropy_loss.detach()),
+        "loss": float(loss.detach()),
+        "advantageMean": float(advantages.mean()),
+        "advantageStd": float(advantages.std()),
+        "ratioMean": float(ratio.detach().mean()),
+        "ratioMax": float(ratio.detach().max()),
+        "gradNorm": grad_norm,
+        "parameterDeltaL2": parameter_delta_l2,
+        "updatedParameters": bool(parameter_delta_l2 > 0.0),
+        "notes": [
+            "This is a one-minibatch PPO update smoke over fixed recurrent rollout buffers.",
+            "It proves gradients flow from buffered observations/actions/logprobs/values into the recurrent actor-critic.",
+            "It is not a trained policy and does not count toward solve.",
+        ],
+    }
 
 
 def run_device_rollout(
@@ -84,6 +196,7 @@ def run_device_rollout(
     action_plan: np.ndarray | None = None,
     policy_hidden_dim: int = 64,
     recurrent_policy: bool = False,
+    ppo_update_smoke: bool = False,
 ) -> dict:
     import mujoco
     import mujoco_warp as mjw
@@ -263,6 +376,7 @@ def run_device_rollout(
         "enabled": False,
         "fixedShape": True,
     }
+    ppo_update_summary = {"enabled": False}
     if record_buffer:
         obs_np = obs_buffer.numpy().reshape(int(steps), int(nworld), OBS_DIM)
         reward_np = reward_buffer.numpy().reshape(int(steps), int(nworld))
@@ -312,6 +426,20 @@ def run_device_rollout(
             ),
             "cpuReads": "rollout buffers copied once after final synchronize",
         }
+        if ppo_update_smoke:
+            if action_source != "torch-policy" or not recurrent_policy:
+                raise ValueError("ppo_update_smoke requires --action-source torch-policy --recurrent-policy")
+            ppo_update_summary = run_recurrent_ppo_update_smoke(
+                torch_policy,
+                obs_np,
+                normalized_action_np,
+                logprob_np,
+                value_np,
+                reward_np,
+                terminal_np,
+                truncation_np,
+                policy_hidden_dim,
+            )
 
     return {
         "schema": "six-pendulum-mjwarp-device-rollout-smoke-v1",
@@ -363,6 +491,7 @@ def run_device_rollout(
         "randomHorizonCurrentMin": int(np.min(horizon_steps)) if random_horizon_enabled and horizon_steps.size else 0,
         "randomHorizonCurrentMax": int(np.max(horizon_steps)) if random_horizon_enabled and horizon_steps.size else 0,
         "rolloutBuffer": rollout_buffer_summary,
+        "ppoUpdateSmoke": ppo_update_summary,
         "cpuMetricReadsPerStep": 0,
         "cpuStateWritesPerStep": 0,
         "cpuReads": "summary arrays only after final synchronize",
@@ -379,6 +508,7 @@ def run_device_rollout(
             "The buffer action source is a precomputed deterministic tensor consumed by a Warp kernel; it is policy-interface plumbing, not a learned policy.",
             "The torch-policy action source uses Torch/Warp tensor interop for policy output plumbing, but the policy is untrained.",
             "The recurrent torch-policy smoke records normalized actions, logprobs, and values for PPO-style rollout plumbing.",
+            "The PPO update smoke performs one minibatch update from fixed recurrent buffers only.",
             "Strict score still requires continuous upright hold; subsecond flashes do not count.",
             "Randomized per-world horizons are opt-in and should stay disabled until a learned policy shows whip behavior.",
             "Rollout buffer recording is fixed-shape plumbing for a future trainer, not policy learning.",
@@ -401,6 +531,7 @@ def main():
     parser.add_argument("--action-source", choices=["scripted", "buffer", "torch-policy"], default="scripted")
     parser.add_argument("--policy-hidden-dim", type=int, default=64)
     parser.add_argument("--recurrent-policy", action="store_true")
+    parser.add_argument("--ppo-update-smoke", action="store_true")
     parser.add_argument("--write-result", type=Path, default=DEFAULT_OUTPUT)
     args = parser.parse_args()
 
@@ -422,6 +553,7 @@ def main():
         action_source=args.action_source,
         policy_hidden_dim=args.policy_hidden_dim,
         recurrent_policy=args.recurrent_policy,
+        ppo_update_smoke=args.ppo_update_smoke,
     )
     args.write_result.parent.mkdir(parents=True, exist_ok=True)
     args.write_result.write_text(json.dumps(result, indent=2) + "\n")

@@ -20,6 +20,7 @@ const pufferArtifacts = [
   "puffer-mjwarp-device-rollout-buffer.json",
   "puffer-mjwarp-device-rollout-action-buffer.json",
   "puffer-mjwarp-device-rollout-torch-policy.json",
+  "puffer-mjwarp-device-rollout-ppo-update.json",
   "puffer-mjwarp-device-rollout-link6.json",
   "puffer-mjwarp-device-rollout-random-horizon.json",
   "puffer-mjwarp-local-ppo-smoke.json",
@@ -114,6 +115,8 @@ function sourceRow(entry, index) {
               ? "Device-side MJWarp rollout smoke: external fixed-shape action tensor is consumed by a Warp ctrl kernel; precomputed buffer only, not learned."
               : file.includes("torch-policy")
                 ? "Device-side MJWarp rollout smoke: recurrent Torch actor-critic actions/logprobs/values are bridged through wp.to_torch/wp.from_torch into fixed PPO buffers and Warp ctrl; untrained policy only."
+                : file.includes("ppo-update")
+                  ? "Device-side MJWarp rollout smoke: one PPO minibatch update consumes fixed recurrent buffers and changes parameters; smoke only, not learned."
               : "Device-side MJWarp rollout smoke: scripted action kernel only, no per-step CPU metric reads, not a learned policy."
           : "Current MJWarp/Puffer substrate evidence.",
   };
