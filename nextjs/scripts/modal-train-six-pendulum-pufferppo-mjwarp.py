@@ -166,6 +166,12 @@ def build_contract(total_timesteps: int = 10_000_000) -> dict:
                 "diagnosis": "The short 96-step/0.24s rollout and nworld=8 batch are not enough to learn one-link hold or down-start swing-up; prove long-horizon hold-start before GPU/down-start scale.",
                 "nextCommand": "npm run train:six-pendulum:puffer-mjwarp:device-ppo-hold-long",
             },
+            "actionScaleDiagnostic": {
+                "command": "npm run train:six-pendulum:puffer-mjwarp:action-scale-diagnostic",
+                "artifact": "/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/training-checkpoints/puffer-mjwarp-action-scale-diagnostic.json",
+                "covered": "Open-loop max-force probes from one-link down-start show forceScale 32 and 64 do not reach near-vertical in 1s; forceScale 120 reaches near-vertical at about 0.60s and 240 at about 0.335s, usually with cart-terminal risk.",
+                "caveat": "This is an action-authority diagnostic, not a policy and not a solve.",
+            },
             "randomHorizonSupport": {
                 "command": "npm run train:six-pendulum:puffer-mjwarp:device-rollout:random-horizon",
                 "artifact": "/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/training-checkpoints/puffer-mjwarp-device-rollout-random-horizon.json",
