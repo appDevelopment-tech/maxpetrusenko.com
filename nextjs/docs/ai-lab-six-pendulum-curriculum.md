@@ -242,6 +242,10 @@ Phase 1, one-link PufferPPO:
 - Runtime inspect command: `npm run train:six-pendulum:puffer-mjwarp:pufferppo-runtime`
 - Runtime inspect result on 2026-06-10: `App creation failed: workspace billing cycle spend limit reached`.
 - Contract result: first sweep rows are one-link only, `nworld={4096,8192}`, `rollout={256,512}`, `forceScale={120,240}`, fixed horizon first, and randomized episode length locked until learned whip behavior appears.
+- GPU score-kernel smoke command: `npm run train:six-pendulum:puffer-mjwarp:gpu-score-smoke`
+- GPU score-kernel smoke artifact: `/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/training-checkpoints/puffer-mjwarp-gpu-score-kernel-smoke.json`
+- GPU score-kernel smoke result on 2026-06-10: passed on local Warp CPU for `512` one-link worlds. Max parity error vs the existing NumPy scorer was `7.62939453125e-06` across observation, reward, potential, strict score, catch basin, near-top-fast, and whip terms.
+- Interpretation: this is the first GPU-callable reward/observation math gate, not a learned-policy solve. Reset, action-to-ctrl writes, terminal/truncation, held-step accumulation, potential-delta reward, multi-link cumsum, and Puffer rollout integration still need to move on-device.
 
 Puffer-style sweep ledger:
 

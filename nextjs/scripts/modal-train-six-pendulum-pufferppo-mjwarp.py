@@ -91,7 +91,7 @@ def build_contract(total_timesteps: int = 10_000_000) -> dict:
     representative = rows[-1]
     return {
         "schema": "six-pendulum-pufferppo-mjwarp-contract-v1",
-        "status": "pufferppo-contract-ready-env-gpu-kernels-missing",
+        "status": "pufferppo-contract-ready-score-kernel-parity-env-integration-missing",
         "createdAtUnix": time.time(),
         "algorithm": "PufferPPO",
         "policyFamily": "PufferNet/MinGRU target, local smoke uses PufferLib Default+RNN API until PufferNet is wired",
@@ -115,6 +115,13 @@ def build_contract(total_timesteps: int = 10_000_000) -> dict:
         },
         "sweepRows": rows,
         "representativePufferTrainConfig": build_puffer_train_config(representative, total_timesteps),
+        "gpuKernelProgress": {
+            "firstParityGate": "scripts/six_pendulum_mjwarp_gpu_kernels.py",
+            "command": "npm run train:six-pendulum:puffer-mjwarp:gpu-score-smoke",
+            "artifact": "/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/training-checkpoints/puffer-mjwarp-gpu-score-kernel-smoke.json",
+            "covered": "One-link observation, reward, potential, strict score, catch basin, near-top-fast, and whip flags match the existing NumPy scorer.",
+            "notCovered": "Reset, ctrl writes, terminal/truncation, held-step accumulation, potential-delta reward, multi-link cumsum, and Puffer rollout integration.",
+        },
         "gpuKernelBlocker": {
             "currentEnv": "scripts/six_pendulum_mjwarp_env.py",
             "problem": "Current env calls d.qpos.numpy(), d.qvel.numpy(), d.ctrl.assign(numpy), and wp.synchronize() in step/reset/reward paths.",
@@ -145,7 +152,7 @@ def inspect_pufferppo_runtime(total_timesteps: int = 10_000_000) -> str:
     import mujoco_warp as mjw
 
     contract = build_contract(total_timesteps)
-    contract["status"] = "pufferppo-runtime-inspected-env-gpu-kernels-missing"
+    contract["status"] = "pufferppo-runtime-inspected-score-kernel-parity-env-integration-missing"
     contract["runtime"] = {
         "torch": getattr(torch, "__version__", "unknown"),
         "torchCudaAvailable": bool(torch.cuda.is_available()),

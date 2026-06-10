@@ -14,6 +14,7 @@ const pufferArtifacts = [
   "puffer-mjwarp-local-env-contract.json",
   "puffer-mjwarp-pufferppo-contract.json",
   "puffer-mjwarp-pufferppo-runtime.json",
+  "puffer-mjwarp-gpu-score-kernel-smoke.json",
   "puffer-mjwarp-env-driver.json",
   "puffer-mjwarp-local-ppo-smoke.json",
   "puffer-mjwarp-local-ppo-hold-search.json",
@@ -65,10 +66,15 @@ function sourceRow(entry, index) {
   const holdHeld = asNumber(hold.maxHeldSeconds, asNumber(hold.maxHoldSeconds));
   const strictScore = strictScoreFromMetric(down);
   const algorithm = String(root.algorithm || "");
+  const plumbingArtifact =
+    file.includes("substrate") ||
+    file.includes("contract") ||
+    file.includes("env-driver") ||
+    file.includes("gpu-score-kernel");
   const learned =
     algorithm.includes("behavior-clone") ||
     algorithm.includes("dagger") ||
-    (!algorithm.includes("teacher") && !file.includes("substrate") && !file.includes("contract") && !file.includes("env-driver"));
+    (!algorithm.includes("teacher") && !plumbingArtifact);
   const teacher = root.algorithm === "energy-pump-plus-stabilizer-teacher";
 
   return {
@@ -94,7 +100,9 @@ function sourceRow(entry, index) {
       ? "Teacher proves swing-up/catch signal in MJWarp, but it is not a learned policy."
       : learned && downHeld < 1
         ? "Learned/plumbing row does not solve down-start; score forced to 0 because hold is under 1s."
-        : "Current MJWarp/Puffer substrate evidence.",
+        : file.includes("gpu-score-kernel")
+          ? "One-link score/observation Warp kernel matches NumPy scorer; environment integration still pending."
+          : "Current MJWarp/Puffer substrate evidence.",
   };
 }
 
