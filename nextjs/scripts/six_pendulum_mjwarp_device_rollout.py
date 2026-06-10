@@ -10,6 +10,7 @@ from six_pendulum_mjwarp_gpu_kernels import (
     DEFAULT_ACTION_SCALE,
     OBS_DIM,
     WarpScoreKernel,
+    record_policy_scalars_kernel,
     record_rollout_obs_kernel,
     record_rollout_scalars_kernel,
 )
@@ -27,10 +28,36 @@ def build_deterministic_action_plan(steps: int, nworld: int, force_scale: float)
     return np.clip(force / float(force_scale), -1.0, 1.0).astype(np.float32)
 
 
-def build_torch_policy(obs_dim: int, hidden_dim: int, seed: int):
+def build_torch_policy(obs_dim: int, hidden_dim: int, seed: int, recurrent: bool = False):
     import torch
 
     torch.manual_seed(int(seed))
+    if recurrent:
+        class TinyRecurrentActorCritic(torch.nn.Module):
+            def __init__(self):
+                super().__init__()
+                self.encoder = torch.nn.Linear(int(obs_dim), int(hidden_dim))
+                self.rnn = torch.nn.GRUCell(int(hidden_dim), int(hidden_dim))
+                self.actor = torch.nn.Linear(int(hidden_dim), 1)
+                self.critic = torch.nn.Linear(int(hidden_dim), 1)
+                self.log_std = torch.nn.Parameter(torch.tensor([-0.5], dtype=torch.float32))
+
+            def forward(self, obs, hidden):
+                encoded = torch.tanh(self.encoder(obs))
+                next_hidden = self.rnn(encoded, hidden)
+                mean = self.actor(next_hidden).reshape(-1)
+                std = torch.exp(self.log_std).reshape(())
+                dist = torch.distributions.Normal(mean, std)
+                raw_action = mean
+                action = torch.tanh(raw_action).contiguous()
+                logprob = (dist.log_prob(raw_action) - torch.log(1.0 - action * action + 1e-6)).contiguous()
+                value = self.critic(next_hidden).reshape(-1).contiguous()
+                return action, logprob, value, next_hidden
+
+        policy = TinyRecurrentActorCritic()
+        policy.eval()
+        return policy
+
     policy = torch.nn.Sequential(
         torch.nn.Linear(int(obs_dim), int(hidden_dim)),
         torch.nn.Tanh(),
@@ -56,6 +83,7 @@ def run_device_rollout(
     action_source: str = "scripted",
     action_plan: np.ndarray | None = None,
     policy_hidden_dim: int = 64,
+    recurrent_policy: bool = False,
 ) -> dict:
     import mujoco
     import mujoco_warp as mjw
@@ -89,9 +117,10 @@ def run_device_rollout(
     if action_source == "torch-policy":
         import torch
 
-        torch_policy = build_torch_policy(OBS_DIM, policy_hidden_dim, seed)
+        torch_policy = build_torch_policy(OBS_DIM, policy_hidden_dim, seed, recurrent_policy)
         torch_policy_parameters = int(sum(parameter.numel() for parameter in torch_policy.parameters()))
         torch_interop = True
+        torch_hidden = torch.zeros(int(nworld), int(policy_hidden_dim), dtype=torch.float32) if recurrent_policy else None
     if action_source == "buffer":
         if action_plan is None:
             action_plan = build_deterministic_action_plan(steps, nworld, force_scale)
@@ -109,12 +138,19 @@ def run_device_rollout(
     terminal_buffer = None
     truncation_buffer = None
     action_buffer = None
+    normalized_action_buffer = None
+    logprob_buffer = None
+    value_buffer = None
     if record_buffer:
         obs_buffer = wp.zeros(int(steps) * int(nworld) * OBS_DIM, dtype=wp.float32, device=device)
         reward_buffer = wp.zeros(int(steps) * int(nworld), dtype=wp.float32, device=device)
         terminal_buffer = wp.zeros(int(steps) * int(nworld), dtype=wp.float32, device=device)
         truncation_buffer = wp.zeros(int(steps) * int(nworld), dtype=wp.float32, device=device)
         action_buffer = wp.zeros(int(steps) * int(nworld), dtype=wp.float32, device=device)
+        if action_source == "torch-policy":
+            normalized_action_buffer = wp.zeros(int(steps) * int(nworld), dtype=wp.float32, device=device)
+            logprob_buffer = wp.zeros(int(steps) * int(nworld), dtype=wp.float32, device=device)
+            value_buffer = wp.zeros(int(steps) * int(nworld), dtype=wp.float32, device=device)
 
     runner.reset_worlds(
         data.qpos,
@@ -133,11 +169,21 @@ def run_device_rollout(
     runner.initialize_prev_potential_from_current(synchronize=False)
 
     for step_index in range(int(steps)):
+        action_vector_wp = None
+        logprob_wp = None
+        value_wp = None
         if action_source == "torch-policy":
             obs_torch = wp.to_torch(runner.obs_wp).reshape(int(nworld), OBS_DIM)
             with torch.no_grad():
-                action_torch = torch_policy(obs_torch).reshape(int(nworld)).contiguous()
+                if recurrent_policy:
+                    action_torch, logprob_torch, value_torch, torch_hidden = torch_policy(obs_torch, torch_hidden)
+                else:
+                    action_torch = torch_policy(obs_torch).reshape(int(nworld)).contiguous()
+                    logprob_torch = torch.zeros_like(action_torch)
+                    value_torch = torch.zeros_like(action_torch)
             action_vector_wp = wp.from_torch(action_torch, dtype=wp.float32)
+            logprob_wp = wp.from_torch(logprob_torch, dtype=wp.float32)
+            value_wp = wp.from_torch(value_torch, dtype=wp.float32)
             runner.apply_action_vector(action_vector_wp, data.ctrl, synchronize=False)
         elif action_source == "buffer":
             runner.apply_action_buffer(action_plan_wp, data.ctrl, step_index, synchronize=False)
@@ -170,6 +216,22 @@ def run_device_rollout(
                 ],
                 device=device,
             )
+            if action_source == "torch-policy":
+                wp.launch(
+                    record_policy_scalars_kernel,
+                    dim=int(nworld),
+                    inputs=[
+                        action_vector_wp,
+                        logprob_wp,
+                        value_wp,
+                        int(step_index),
+                        int(nworld),
+                        normalized_action_buffer,
+                        logprob_buffer,
+                        value_buffer,
+                    ],
+                    device=device,
+                )
         runner.reset_worlds(
             data.qpos,
             data.qvel,
@@ -207,6 +269,13 @@ def run_device_rollout(
         terminal_np = terminal_buffer.numpy().reshape(int(steps), int(nworld))
         truncation_np = truncation_buffer.numpy().reshape(int(steps), int(nworld))
         action_np = action_buffer.numpy().reshape(int(steps), int(nworld))
+        normalized_action_np = None
+        logprob_np = None
+        value_np = None
+        if action_source == "torch-policy":
+            normalized_action_np = normalized_action_buffer.numpy().reshape(int(steps), int(nworld))
+            logprob_np = logprob_buffer.numpy().reshape(int(steps), int(nworld))
+            value_np = value_buffer.numpy().reshape(int(steps), int(nworld))
         rollout_buffer_summary = {
             "enabled": True,
             "fixedShape": True,
@@ -216,14 +285,31 @@ def run_device_rollout(
             "truncationShape": [int(steps), int(nworld)],
             "actionShape": [int(steps), int(nworld)],
             "actionUnits": "scaled cart force",
+            "normalizedActionShape": [int(steps), int(nworld)] if action_source == "torch-policy" else [],
+            "normalizedActionUnits": "normalized policy action [-1, 1]" if action_source == "torch-policy" else "",
+            "logprobShape": [int(steps), int(nworld)] if action_source == "torch-policy" else [],
+            "valueShape": [int(steps), int(nworld)] if action_source == "torch-policy" else [],
             "observationFinite": bool(np.isfinite(obs_np).all()),
             "rewardFinite": bool(np.isfinite(reward_np).all()),
             "actionFinite": bool(np.isfinite(action_np).all()),
+            "normalizedActionFinite": bool(np.isfinite(normalized_action_np).all()) if normalized_action_np is not None else None,
+            "logprobFinite": bool(np.isfinite(logprob_np).all()) if logprob_np is not None else None,
+            "valueFinite": bool(np.isfinite(value_np).all()) if value_np is not None else None,
             "rewardMean": float(np.mean(reward_np)),
+            "logprobMean": float(np.mean(logprob_np)) if logprob_np is not None else None,
+            "valueMean": float(np.mean(value_np)) if value_np is not None else None,
             "terminalCount": int(np.sum(terminal_np > 0.5)),
             "truncationCount": int(np.sum(truncation_np > 0.5)),
             "actionAbsMax": float(np.max(np.abs(action_np))) if action_np.size else 0.0,
-            "bytes": int(obs_np.nbytes + reward_np.nbytes + terminal_np.nbytes + truncation_np.nbytes + action_np.nbytes),
+            "normalizedActionAbsMax": float(np.max(np.abs(normalized_action_np))) if normalized_action_np is not None and normalized_action_np.size else None,
+            "bytes": int(
+                obs_np.nbytes
+                + reward_np.nbytes
+                + terminal_np.nbytes
+                + truncation_np.nbytes
+                + action_np.nbytes
+                + (0 if normalized_action_np is None else normalized_action_np.nbytes + logprob_np.nbytes + value_np.nbytes)
+            ),
             "cpuReads": "rollout buffers copied once after final synchronize",
         }
 
@@ -263,8 +349,12 @@ def run_device_rollout(
         "torchPolicyInterop": torch_interop,
         "torchPolicyParameters": torch_policy_parameters,
         "torchPolicyHiddenDim": int(policy_hidden_dim) if action_source == "torch-policy" else 0,
+        "torchPolicyRecurrent": bool(recurrent_policy) if action_source == "torch-policy" else False,
+        "torchPolicyHiddenShape": [int(nworld), int(policy_hidden_dim)] if action_source == "torch-policy" and recurrent_policy else [],
         "torchPolicyObsInterop": "wp.to_torch(runner.obs_wp)" if action_source == "torch-policy" else "",
         "torchPolicyActionInterop": "wp.from_torch(action_torch)" if action_source == "torch-policy" else "",
+        "torchPolicyLogprobInterop": "wp.from_torch(logprob_torch)" if action_source == "torch-policy" and recurrent_policy else "",
+        "torchPolicyValueInterop": "wp.from_torch(value_torch)" if action_source == "torch-policy" and recurrent_policy else "",
         "torchPolicyCpuActionWritesPerStep": 0 if action_source == "torch-policy" else None,
         "torchPolicyLearned": False if action_source == "torch-policy" else None,
         "randomHorizonEnabled": random_horizon_enabled,
@@ -288,6 +378,7 @@ def run_device_rollout(
             "This is a device-rollout substrate smoke, not training and not a learned policy.",
             "The buffer action source is a precomputed deterministic tensor consumed by a Warp kernel; it is policy-interface plumbing, not a learned policy.",
             "The torch-policy action source uses Torch/Warp tensor interop for policy output plumbing, but the policy is untrained.",
+            "The recurrent torch-policy smoke records normalized actions, logprobs, and values for PPO-style rollout plumbing.",
             "Strict score still requires continuous upright hold; subsecond flashes do not count.",
             "Randomized per-world horizons are opt-in and should stay disabled until a learned policy shows whip behavior.",
             "Rollout buffer recording is fixed-shape plumbing for a future trainer, not policy learning.",
@@ -309,6 +400,7 @@ def main():
     parser.add_argument("--record-buffer", action="store_true")
     parser.add_argument("--action-source", choices=["scripted", "buffer", "torch-policy"], default="scripted")
     parser.add_argument("--policy-hidden-dim", type=int, default=64)
+    parser.add_argument("--recurrent-policy", action="store_true")
     parser.add_argument("--write-result", type=Path, default=DEFAULT_OUTPUT)
     args = parser.parse_args()
 
@@ -329,6 +421,7 @@ def main():
         record_buffer=args.record_buffer,
         action_source=args.action_source,
         policy_hidden_dim=args.policy_hidden_dim,
+        recurrent_policy=args.recurrent_policy,
     )
     args.write_result.parent.mkdir(parents=True, exist_ok=True)
     args.write_result.write_text(json.dumps(result, indent=2) + "\n")

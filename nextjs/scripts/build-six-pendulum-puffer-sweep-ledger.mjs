@@ -113,7 +113,7 @@ function sourceRow(entry, index) {
             ? file.includes("action-buffer")
               ? "Device-side MJWarp rollout smoke: external fixed-shape action tensor is consumed by a Warp ctrl kernel; precomputed buffer only, not learned."
               : file.includes("torch-policy")
-                ? "Device-side MJWarp rollout smoke: Torch policy output is bridged through wp.to_torch/wp.from_torch and consumed by a Warp ctrl kernel; untrained policy only."
+                ? "Device-side MJWarp rollout smoke: recurrent Torch actor-critic actions/logprobs/values are bridged through wp.to_torch/wp.from_torch into fixed PPO buffers and Warp ctrl; untrained policy only."
               : "Device-side MJWarp rollout smoke: scripted action kernel only, no per-step CPU metric reads, not a learned policy."
           : "Current MJWarp/Puffer substrate evidence.",
   };

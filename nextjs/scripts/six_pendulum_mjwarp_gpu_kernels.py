@@ -372,6 +372,24 @@ def record_rollout_scalars_kernel(
     action_buffer[dst] = last_action[world]
 
 
+@wp.kernel
+def record_policy_scalars_kernel(
+    normalized_action: wp.array(dtype=wp.float32),
+    logprob: wp.array(dtype=wp.float32),
+    value: wp.array(dtype=wp.float32),
+    step_index: int,
+    nworld: int,
+    normalized_action_buffer: wp.array(dtype=wp.float32),
+    logprob_buffer: wp.array(dtype=wp.float32),
+    value_buffer: wp.array(dtype=wp.float32),
+):
+    world = wp.tid()
+    dst = step_index * nworld + world
+    normalized_action_buffer[dst] = normalized_action[world]
+    logprob_buffer[dst] = logprob[world]
+    value_buffer[dst] = value[world]
+
+
 def deterministic_batch(nworld: int, action_scale: float, seed: int) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
     rng = np.random.default_rng(seed)
     qpos = np.zeros((nworld, 1 + MAX_LINKS), dtype=np.float32)
