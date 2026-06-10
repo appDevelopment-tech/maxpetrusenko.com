@@ -20,6 +20,10 @@ const pufferArtifacts = [
   "puffer-mjwarp-mixed-warmstart.json",
   "puffer-mjwarp-energy-teacher.json",
   "puffer-mjwarp-energy-teacher-bc.json",
+  "puffer-mjwarp-energy-teacher-sequence-bc.json",
+  "puffer-mjwarp-energy-teacher-dagger.json",
+  "puffer-mjwarp-sequence-bc-down-warmstart.json",
+  "puffer-mjwarp-anchored-down-warmstart.json",
 ];
 
 function asNumber(value, fallback = 0) {
@@ -62,7 +66,7 @@ function sourceRow(entry, index) {
   const learned =
     algorithm.includes("behavior-clone") ||
     (!algorithm.includes("teacher") && !file.includes("substrate") && !file.includes("contract") && !file.includes("env-driver"));
-  const teacher = String(root.algorithm || "").includes("teacher") && !String(root.algorithm || "").includes("behavior-clone");
+  const teacher = root.algorithm === "energy-pump-plus-stabilizer-teacher";
 
   return {
     experimentId: `current-${String(index + 1).padStart(2, "0")}-${file.replace(/\.json$/, "")}`,

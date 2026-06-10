@@ -19,11 +19,14 @@ Separate model-based progress: `m1el/inverted-pendulum` now gives this project a
 
 - X thread: https://x.com/yacineMTB/status/2064148140899348779
 - Raw Bird thread read saved to `/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/research/yacine-thread-bird-2064148140899348779.txt`.
+- Current raw Bird JSON saved to `/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/assets/x-yacine/2064148140899348779.thread.json`.
 - Bird thread read confirmed the core claims: PufferPPO, Puffer MinGRU, MuJoCo Warp, APIC/CUDA graph capture, 18M SPS on some configs, 3.6k experiments, GP-picked top hyperparameters, and randomized episode length after whipping appeared.
+- Bird also confirmed gravity `9.8`, no hinge friction, velocity reduction to keep the chain straight, and the cart attempting to track `0`.
 - Hero solve video downloaded to `outputs/yacine-thread-media/2064145781477580800-*.mp4`.
 - Hyperparameter scatter video downloaded from `2064150381408485769`.
 - Reward/policy video downloaded from `2064152523095560528`.
 - Phase-space / simulator-speed video downloaded from `2064155513244246028`.
+- Current downloaded media and sampled frames are under `/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/assets/x-yacine/`.
 - Main clues: PufferPPO, Puffer MinGRU, MuJoCo Warp, APIC/CUDA graph capture, 3.6k experiments, top hyperparameters selected from high-compute runs, randomized episode length after whip behavior appeared.
 - Pezzza video downloaded with `yt-dlp` to `/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/youtube/pezzza-double-pendulum.mp4`.
 - Pezzza transcript downloaded to `/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/youtube/pezzza-double-pendulum.en.vtt`; frames sampled under `outputs/youtube/frames/`.
@@ -221,6 +224,10 @@ Energy teacher scaffold for PufferPPO:
 - Teacher: Astrom/Furuta-style energy pumping with symmetry-breaking kick plus stabilizer catch. Tuned local gains: `kE=12`, `kv=0.6`, `kx=0.05`, `aMax=30`, `forcePerAcceleration=6.75`, catch angle `0.36`, catch rate `3.0`.
 - Teacher result: pure one-link down-start in MJWarp reached max strict score `99.04` and max held `1.3875s` over `10s`, so the swing-up/catch signal exists in the MJWarp environment.
 - Learned tiny-GRU BC result: teacher rollout loss fell to `0.00028`, but closed-loop held-out down-start stayed `0s`; no link-two promotion.
+- Sequence BC result: GRU sequence training reached held-out down-start max strict score `77.13`, but max held stayed `0s`.
+- Sequence-BC warmstart RL result: in-training max held improved to `0.2275s`; held-out down-start stayed `0s`.
+- DAgger result: online learner-state labeling produced learner rollouts with catch/near-top events, but held-out down-start stayed `0s`.
+- Anchored warmstart result: teacher-anchor PPO improved in-training max held to `0.37s`; held-out down-start stayed `0s`.
 - Interpretation: this is useful reward/curriculum scaffolding for the Yacine-style PufferPPO sweep, not a final learned policy. The next real reproduction step is many PufferPPO/MJWarp experiments with MinGRU-sized policies and wallclock-vs-score logging.
 
 Phase 1, one-link PufferPPO:
@@ -236,9 +243,9 @@ Puffer-style sweep ledger:
 - Command: `npm run six-pendulum:puffer-ledger`
 - Markdown: `/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/sweeps/puffer-mjwarp-one-link-sweep-ledger.md`
 - JSONL dots: `/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/sweeps/puffer-mjwarp-one-link-sweep-ledger.jsonl`
-- Result: learned policy rows solved held-out one-link down-start `0/6`. The energy teacher scaffold reaches one-link down-start hold `1.387s` with strict score `99.04`, but it is explicitly not counted as a learned policy solve.
+- Result: learned policy rows solved held-out one-link down-start `0/9`. The energy teacher scaffold reaches one-link down-start hold `1.387s` with strict score `99.04`, but it is explicitly not counted as a learned policy solve.
 - Queued rows now match the Yacine experiment shape: PufferPPO, Puffer MinGRU/PufferNet, about `1m` params, MJWarp GPU batching, fixed horizon first, randomized episode length only after whip behavior appears, and link-two promotion only after held-out one-link down-start passes the one-second gate.
-- Current blocker: Modal GPU execution is blocked by the workspace spend limit, so true PufferPPO/MinGRU dots are queued rather than run.
+- Current blockers: Modal GPU execution is blocked by the workspace spend limit, and the current MJWarp env still uses CPU `.numpy()` state reads plus `wp.synchronize()` in the step loop. The real PufferPPO/MJWarp path must move observation, reward, reset, terminal, and strict-score math GPU-side before claiming Yacine-like speed.
 
 Phase 2, link scaling:
 
