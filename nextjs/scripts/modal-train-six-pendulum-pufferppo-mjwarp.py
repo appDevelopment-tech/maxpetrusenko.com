@@ -151,13 +151,28 @@ def build_contract(total_timesteps: int = 10_000_000) -> dict:
                 "covered": "Three PPO epochs consume the fixed recurrent rollout buffers, recompute logprobs/values over the stored sequence, backpropagate through the recurrent actor-critic, and change parameters.",
                 "caveat": "This is a local CPU fixed-batch smoke update, not a PufferPPO training run and not a learned policy solve.",
             },
+            "devicePpoTrain": {
+                "command": "npm run train:six-pendulum:puffer-mjwarp:device-ppo-train",
+                "artifact": "/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/training-checkpoints/puffer-mjwarp-device-ppo-train.json",
+                "covered": "Repeated stochastic recurrent-policy collection, persistent PPO optimizer updates, and deterministic held-out down-start/hold-start evaluation after each update on the MJWarp rollout-buffer path.",
+                "caveat": "Local Mac execution still uses Warp/MJWarp CPU and is a correctness path, not the final PufferPPO/MinGRU GPU sweep.",
+            },
+            "policyReflection": {
+                "consults": [
+                    "/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/model-consults/hermes-pendulum-policy-reflection.md",
+                    "/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/model-consults/gemini-pendulum-policy-reflection.md",
+                    "/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/model-consults/oracle-pendulum-policy-reflection.md",
+                ],
+                "diagnosis": "The short 96-step/0.24s rollout and nworld=8 batch are not enough to learn one-link hold or down-start swing-up; prove long-horizon hold-start before GPU/down-start scale.",
+                "nextCommand": "npm run train:six-pendulum:puffer-mjwarp:device-ppo-hold-long",
+            },
             "randomHorizonSupport": {
                 "command": "npm run train:six-pendulum:puffer-mjwarp:device-rollout:random-horizon",
                 "artifact": "/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/training-checkpoints/puffer-mjwarp-device-rollout-random-horizon.json",
                 "covered": "Per-world truncation horizons are sampled in the reset Warp kernel and consumed by the post-step Warp kernel without per-step host reads.",
                 "gate": "Keep disabled until a learned policy shows whip/near-catch behavior; this matches the source thread warning that random horizons helped only after the model was already scoring.",
             },
-            "notCovered": "Puffer rollout integration, PufferPPO/MinGRU training attachment, multi-update sweeps, Modal GPU execution, and CUDA graph/APIC capture.",
+            "notCovered": "Puffer rollout integration, PufferPPO/MinGRU training attachment, Modal GPU execution, and CUDA graph/APIC capture.",
         },
         "gpuKernelBlocker": {
             "currentEnv": "scripts/six_pendulum_mjwarp_env.py",
@@ -171,6 +186,7 @@ def build_contract(total_timesteps: int = 10_000_000) -> dict:
         },
         "nextCommands": [
             "npm run train:six-pendulum:puffer-mjwarp:pufferppo-contract",
+            "npm run train:six-pendulum:puffer-mjwarp:device-ppo-hold-long",
             "doppler run --project api_keys --config dev -- modal run --write-result /Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/training-checkpoints/puffer-mjwarp-pufferppo-runtime.json scripts/modal-train-six-pendulum-pufferppo-mjwarp.py::inspect_pufferppo_runtime",
         ],
     }

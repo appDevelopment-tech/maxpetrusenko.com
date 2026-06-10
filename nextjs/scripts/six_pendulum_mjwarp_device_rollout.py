@@ -42,13 +42,13 @@ def build_torch_policy(obs_dim: int, hidden_dim: int, seed: int, recurrent: bool
                 self.critic = torch.nn.Linear(int(hidden_dim), 1)
                 self.log_std = torch.nn.Parameter(torch.tensor([-0.5], dtype=torch.float32))
 
-            def forward(self, obs, hidden):
+            def forward(self, obs, hidden, deterministic: bool = True):
                 encoded = torch.tanh(self.encoder(obs))
                 next_hidden = self.rnn(encoded, hidden)
                 mean = self.actor(next_hidden).reshape(-1)
                 std = torch.exp(self.log_std).reshape(())
                 dist = torch.distributions.Normal(mean, std)
-                raw_action = mean
+                raw_action = mean if deterministic else dist.sample()
                 action = torch.tanh(raw_action).contiguous()
                 logprob = self.squashed_logprob(dist, raw_action, action)
                 value = self.critic(next_hidden).reshape(-1).contiguous()

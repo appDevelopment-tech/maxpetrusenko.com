@@ -21,6 +21,7 @@ const pufferArtifacts = [
   "puffer-mjwarp-device-rollout-action-buffer.json",
   "puffer-mjwarp-device-rollout-torch-policy.json",
   "puffer-mjwarp-device-rollout-ppo-update.json",
+  "puffer-mjwarp-device-ppo-train.json",
   "puffer-mjwarp-device-rollout-link6.json",
   "puffer-mjwarp-device-rollout-random-horizon.json",
   "puffer-mjwarp-local-ppo-smoke.json",
@@ -57,11 +58,15 @@ function strictScoreFromMetric(metric) {
 }
 
 function downMetric(root) {
+  if (root?.bestDownEvaluation) return root.bestDownEvaluation;
   if (root?.evaluation?.down) return root.evaluation.down;
   return root || {};
 }
 
 function holdMetric(root) {
+  if (Array.isArray(root?.history) && root.history.length > 0) {
+    return root.history[root.history.length - 1]?.evaluation?.hold || {};
+  }
   return root?.evaluation?.hold || {};
 }
 
@@ -95,8 +100,8 @@ function sourceRow(entry, index) {
     policyParams: asNumber(root.policyParameters, learned ? 27267 : 0),
     forceScale: asNumber(root.forceScale, null),
     nworld: asNumber(root.nworld),
-    rolloutSteps: asNumber(root.training?.rolloutSteps, asNumber(root.steps)),
-    wallclockSeconds: asNumber(root.training?.elapsedSeconds),
+    rolloutSteps: asNumber(root.training?.rolloutSteps, asNumber(root.rolloutSteps, asNumber(root.steps))),
+    wallclockSeconds: asNumber(root.training?.elapsedSeconds, asNumber(root.elapsedSeconds)),
     score: strictScore,
     maxHeldSeconds: downHeld,
     solvedOneSecond: downHeld >= 1,
@@ -104,7 +109,9 @@ function sourceRow(entry, index) {
     holdStartSolvedOneSecond: holdHeld >= 1,
     countsTowardSolve: !teacher && downHeld >= 1,
     sourceArtifact: fullPath,
-    note: teacher
+    note: file.includes("device-ppo-train")
+      ? "Repeated MJWarp rollout-buffer PPO training: stochastic collect, persistent optimizer updates, deterministic down-start eval after each update. Counts only if held-out down-start holds for at least one second."
+      : teacher
       ? "Teacher proves swing-up/catch signal in MJWarp, but it is not a learned policy."
       : learned && downHeld < 1
         ? "Learned/plumbing row does not solve down-start; score forced to 0 because hold is under 1s."
@@ -116,7 +123,7 @@ function sourceRow(entry, index) {
               : file.includes("torch-policy")
                 ? "Device-side MJWarp rollout smoke: recurrent Torch actor-critic actions/logprobs/values are bridged through wp.to_torch/wp.from_torch into fixed PPO buffers and Warp ctrl; untrained policy only."
                 : file.includes("ppo-update")
-                  ? "Device-side MJWarp rollout smoke: one PPO minibatch update consumes fixed recurrent buffers and changes parameters; smoke only, not learned."
+                  ? "Device-side MJWarp rollout smoke: three PPO epochs consume fixed recurrent buffers and change parameters; smoke only, not learned."
               : "Device-side MJWarp rollout smoke: scripted action kernel only, no per-step CPU metric reads, not a learned policy."
           : "Current MJWarp/Puffer substrate evidence.",
   };
