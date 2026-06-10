@@ -253,10 +253,13 @@ Phase 1, one-link PufferPPO:
 - Rollout-buffer device smoke command: `npm run train:six-pendulum:puffer-mjwarp:device-rollout:buffer`
 - Rollout-buffer device smoke artifact: `/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/training-checkpoints/puffer-mjwarp-device-rollout-buffer.json`
 - Rollout-buffer result on 2026-06-10: one-link wrote fixed-shape device buffers for observations `[32, 8, 33]`, rewards `[32, 8]`, terminals `[32, 8]`, truncations `[32, 8]`, and actions `[32, 8]`; all checked finite after one final read.
+- Action-buffer device smoke command: `npm run train:six-pendulum:puffer-mjwarp:device-rollout:action-buffer`
+- Action-buffer device smoke artifact: `/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/training-checkpoints/puffer-mjwarp-device-rollout-action-buffer.json`
+- Action-buffer result on 2026-06-10: one-link copied a fixed time-major `[32, 8]` normalized action tensor before rollout, consumed it through `warp-action-buffer-kernel`, wrote ctrl/last-action on device, and kept `actionPlanCpuWritesPerStep=0`. The driver now rejects wrong-shaped or non-finite action plans. The recorded rollout action buffer is scaled cart force; PPO/logprob plumbing still needs the normalized sampled action too. This is precomputed deterministic policy-interface plumbing only, not a learned policy.
 - Random-horizon device smoke command: `npm run train:six-pendulum:puffer-mjwarp:device-rollout:random-horizon`
 - Random-horizon device smoke artifact: `/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/training-checkpoints/puffer-mjwarp-device-rollout-random-horizon.json`
 - Random-horizon result on 2026-06-10: one-link ran `32` worlds for `96` steps with per-world horizons sampled on-device between `16` and `32` steps; reset counts averaged above `4`, proving truncation/resets occurred without per-step CPU metric reads.
-- Interpretation: reset sampling/writes, horizon sampling, action scaling, ctrl writes, reward, observation, strict score, cart terminal, truncation, held/max-held accumulation, potential-delta reward, and fixed-shape rollout-buffer writes are now reusable Warp kernels. A standalone MJWarp rollout can keep metrics device-side per step. The remaining Yacine-speed blocker is replacing the scripted action source with policy actions and attaching these buffers to PufferPPO/MinGRU without falling back to the NumPy-returning PufferEnv step interface.
+- Interpretation: reset sampling/writes, horizon sampling, action scaling, action-tensor ctrl writes, reward, observation, strict score, cart terminal, truncation, held/max-held accumulation, potential-delta reward, and fixed-shape rollout-buffer writes are now reusable Warp kernels. A standalone MJWarp rollout can keep metrics device-side per step. The remaining Yacine-speed blocker is making a policy forward pass write the action tensor with Torch/Warp interop, ideally through an MJWarp control callback or captured fixed-shape loop, and attaching these buffers to PufferPPO/MinGRU without falling back to the NumPy-returning PufferEnv step interface.
 - Proof boundary: the device-rollout action source is a deterministic Warp scripted-action kernel for plumbing only. It is not a learned policy, not a score row, and not a solve.
 
 Lower-link execution plan from current evidence:
@@ -274,6 +277,7 @@ Source anchors:
 - PufferLib docs: PuffeRL/PufferNet/Protein are the native path for fast training and sweeps.
 - MuJoCo Warp docs: MJWarp is throughput-first for large parallel RL batches, not single-env latency.
 - Warp APIC issue and CUDA graph docs: capture/replay requires device-side fixed work and no synchronization/query inside capture.
+- Warp Torch interop: use `wp.to_torch`, `wp.from_torch`, or DLPack-style interop for policy tensors; do not route CUDA policy actions through NumPy.
 
 Puffer-style sweep ledger:
 
@@ -282,7 +286,7 @@ Puffer-style sweep ledger:
 - JSONL dots: `/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/sweeps/puffer-mjwarp-one-link-sweep-ledger.jsonl`
 - Result: learned policy rows solved held-out one-link down-start `0/10`. The energy teacher scaffold reaches one-link down-start hold `1.387s` with strict score `99.04`, but it is explicitly not counted as a learned policy solve.
 - Queued rows now match the Yacine experiment shape: PufferPPO, Puffer MinGRU/PufferNet, about `1m` params, MJWarp GPU batching, fixed horizon first, randomized episode length only after whip behavior appears, and link-two promotion only after held-out one-link down-start passes the one-second gate.
-- Current blockers: Modal GPU execution is blocked by the workspace spend limit, and the current Puffer-facing env still returns NumPy observations/rewards/dones each step. The standalone device-rollout smoke proves the no-per-step-CPU-metric path; the real PufferPPO/MJWarp path must attach that path to Puffer before claiming Yacine-like speed.
+- Current blockers: Modal GPU execution is blocked by the workspace spend limit, and the current Puffer-facing env still returns NumPy observations/rewards/dones each step. The standalone device-rollout smoke proves the no-per-step-CPU-metric path and the action-buffer smoke proves a no-per-step-host-action-write interface. The real PufferPPO/MJWarp path must make policy forward write that buffer and attach rollout tensors to Puffer before claiming Yacine-like speed.
 
 Phase 2, link scaling:
 

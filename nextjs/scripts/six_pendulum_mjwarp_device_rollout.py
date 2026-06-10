@@ -20,6 +20,13 @@ DEFAULT_OUTPUT = Path(
 )
 
 
+def build_deterministic_action_plan(steps: int, nworld: int, force_scale: float) -> np.ndarray:
+    step_axis = np.linspace(0.0, 4.0 * np.pi, int(steps), endpoint=False, dtype=np.float32)
+    world_phase = np.linspace(0.0, 0.75 * np.pi, int(nworld), endpoint=False, dtype=np.float32)
+    force = np.sin(step_axis[:, None] + world_phase[None, :]) * 18.0
+    return np.clip(force / float(force_scale), -1.0, 1.0).astype(np.float32)
+
+
 def run_device_rollout(
     mjcf_xml: str,
     links: int = 1,
@@ -32,6 +39,8 @@ def run_device_rollout(
     min_horizon: int = 160,
     max_horizon: int = 512,
     record_buffer: bool = False,
+    action_source: str = "scripted",
+    action_plan: np.ndarray | None = None,
 ) -> dict:
     import mujoco
     import mujoco_warp as mjw
@@ -55,6 +64,22 @@ def run_device_rollout(
         min_horizon = max(1, int(min_horizon))
         max_horizon = max(min_horizon, int(max_horizon))
     pose_hold = pose == "hold"
+    if action_source not in {"scripted", "buffer"}:
+        raise ValueError(f"Unsupported action_source: {action_source}")
+    action_plan_wp = None
+    action_plan_shape = None
+    if action_source == "buffer":
+        if action_plan is None:
+            action_plan = build_deterministic_action_plan(steps, nworld, force_scale)
+        action_plan = np.asarray(action_plan, dtype=np.float32)
+        expected_shape = (int(steps), int(nworld))
+        if action_plan.shape != expected_shape:
+            raise ValueError(f"action_plan must be time-major shape {expected_shape}, got {action_plan.shape}")
+        if not np.isfinite(action_plan).all():
+            raise ValueError("action_plan contains non-finite values")
+        action_plan = np.ascontiguousarray(action_plan, dtype=np.float32)
+        action_plan_shape = [int(steps), int(nworld)]
+        action_plan_wp = wp.array(action_plan.reshape(int(steps) * int(nworld)), dtype=wp.float32, device=device)
     obs_buffer = None
     reward_buffer = None
     terminal_buffer = None
@@ -84,7 +109,10 @@ def run_device_rollout(
     runner.initialize_prev_potential_from_current(synchronize=False)
 
     for step_index in range(int(steps)):
-        runner.apply_scripted_actions(data.ctrl, step_index, steps, synchronize=False)
+        if action_source == "buffer":
+            runner.apply_action_buffer(action_plan_wp, data.ctrl, step_index, synchronize=False)
+        else:
+            runner.apply_scripted_actions(data.ctrl, step_index, steps, synchronize=False)
         mjw.step(model, data)
         runner.score_device(data.qpos, data.qvel, synchronize=False)
         runner.post_step_device(pose_hold, horizon, synchronize=False)
@@ -157,6 +185,7 @@ def run_device_rollout(
             "terminalShape": [int(steps), int(nworld)],
             "truncationShape": [int(steps), int(nworld)],
             "actionShape": [int(steps), int(nworld)],
+            "actionUnits": "scaled cart force",
             "observationFinite": bool(np.isfinite(obs_np).all()),
             "rewardFinite": bool(np.isfinite(reward_np).all()),
             "actionFinite": bool(np.isfinite(action_np).all()),
@@ -185,7 +214,14 @@ def run_device_rollout(
         "scoreBackend": "warp-score-kernel",
         "rolloutBackend": "warp-post-step-kernel-device-loop",
         "resetBackend": "warp-reset-kernel",
-        "actionBackend": "warp-scripted-action-kernel",
+        "actionBackend": "warp-action-buffer-kernel" if action_source == "buffer" else "warp-scripted-action-kernel",
+        "actionSource": "external-action-buffer" if action_source == "buffer" else "scripted-kernel",
+        "actionPlanShape": action_plan_shape or [],
+        "actionPlanLayout": "time-major [steps, nworld]" if action_source == "buffer" else "",
+        "actionPlanUnits": "normalized policy action [-1, 1]" if action_source == "buffer" else "",
+        "actionPlanCopiedBeforeRollout": bool(action_source == "buffer"),
+        "actionPlanCpuWritesPerStep": 0,
+        "policyReadyActionInterface": bool(action_source == "buffer"),
         "randomHorizonEnabled": random_horizon_enabled,
         "randomHorizonMinSteps": int(min_horizon) if random_horizon_enabled else 0,
         "randomHorizonMaxSteps": int(max_horizon) if random_horizon_enabled else 0,
@@ -205,7 +241,7 @@ def run_device_rollout(
         "truncatedWorlds": int(np.sum(truncation > 0.5)) if truncation.size else 0,
         "notes": [
             "This is a device-rollout substrate smoke, not training and not a learned policy.",
-            "The action source is a deterministic Warp scripted-action kernel only to exercise ctrl writes through MJWarp.",
+            "The buffer action source is a precomputed deterministic tensor consumed by a Warp kernel; it is policy-interface plumbing, not a learned policy.",
             "Strict score still requires continuous upright hold; subsecond flashes do not count.",
             "Randomized per-world horizons are opt-in and should stay disabled until a learned policy shows whip behavior.",
             "Rollout buffer recording is fixed-shape plumbing for a future trainer, not policy learning.",
@@ -225,6 +261,7 @@ def main():
     parser.add_argument("--min-horizon", type=int, default=160)
     parser.add_argument("--max-horizon", type=int, default=512)
     parser.add_argument("--record-buffer", action="store_true")
+    parser.add_argument("--action-source", choices=["scripted", "buffer"], default="scripted")
     parser.add_argument("--write-result", type=Path, default=DEFAULT_OUTPUT)
     args = parser.parse_args()
 
@@ -243,6 +280,7 @@ def main():
         min_horizon=args.min_horizon,
         max_horizon=args.max_horizon,
         record_buffer=args.record_buffer,
+        action_source=args.action_source,
     )
     args.write_result.parent.mkdir(parents=True, exist_ok=True)
     args.write_result.write_text(json.dumps(result, indent=2) + "\n")

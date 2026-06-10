@@ -91,7 +91,7 @@ def build_contract(total_timesteps: int = 10_000_000) -> dict:
     representative = rows[-1]
     return {
         "schema": "six-pendulum-pufferppo-mjwarp-contract-v1",
-        "status": "pufferppo-contract-ready-device-rollout-buffer-puffer-integration-missing",
+        "status": "pufferppo-contract-ready-action-buffer-rollout-puffer-integration-missing",
         "createdAtUnix": time.time(),
         "algorithm": "PufferPPO",
         "policyFamily": "PufferNet/MinGRU target, local smoke uses PufferLib Default+RNN API until PufferNet is wired",
@@ -133,13 +133,19 @@ def build_contract(total_timesteps: int = 10_000_000) -> dict:
                 "covered": "Fixed-shape observation, reward, terminal, truncation, and action buffers are written on device each step and copied once after final synchronize.",
                 "whyItMatters": "This is the trainer bridge: PufferPPO needs fixed rollout tensors, not per-step Python info dictionaries.",
             },
+            "actionBuffer": {
+                "command": "npm run train:six-pendulum:puffer-mjwarp:device-rollout:action-buffer",
+                "artifact": "/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/training-checkpoints/puffer-mjwarp-device-rollout-action-buffer.json",
+                "covered": "A fixed-shape external action tensor is copied before rollout and consumed by a Warp ctrl kernel each step without per-step CPU action writes.",
+                "caveat": "The current tensor is deterministic and precomputed. It proves the policy-action interface only; it is not a learned policy and does not count toward solve.",
+            },
             "randomHorizonSupport": {
                 "command": "npm run train:six-pendulum:puffer-mjwarp:device-rollout:random-horizon",
                 "artifact": "/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/training-checkpoints/puffer-mjwarp-device-rollout-random-horizon.json",
                 "covered": "Per-world truncation horizons are sampled in the reset Warp kernel and consumed by the post-step Warp kernel without per-step host reads.",
                 "gate": "Keep disabled until a learned policy shows whip/near-catch behavior; this matches the source thread warning that random horizons helped only after the model was already scoring.",
             },
-            "notCovered": "Puffer rollout integration, PufferPPO/MinGRU training attachment, Modal GPU execution, and CUDA graph/APIC capture.",
+            "notCovered": "Policy forward pass writing the action tensor, Puffer rollout integration, PufferPPO/MinGRU training attachment, Modal GPU execution, and CUDA graph/APIC capture.",
         },
         "gpuKernelBlocker": {
             "currentEnv": "scripts/six_pendulum_mjwarp_env.py",

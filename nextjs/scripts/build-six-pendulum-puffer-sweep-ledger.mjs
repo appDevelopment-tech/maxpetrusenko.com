@@ -18,6 +18,7 @@ const pufferArtifacts = [
   "puffer-mjwarp-env-driver.json",
   "puffer-mjwarp-device-rollout.json",
   "puffer-mjwarp-device-rollout-buffer.json",
+  "puffer-mjwarp-device-rollout-action-buffer.json",
   "puffer-mjwarp-device-rollout-link6.json",
   "puffer-mjwarp-device-rollout-random-horizon.json",
   "puffer-mjwarp-local-ppo-smoke.json",
@@ -107,8 +108,10 @@ function sourceRow(entry, index) {
         ? "Learned/plumbing row does not solve down-start; score forced to 0 because hold is under 1s."
         : file.includes("gpu-score-kernel")
           ? "Links 1..6 score/observation/terminal Warp kernel matches NumPy scorer and is wired into the env scorer."
-          : file.includes("device-rollout")
-            ? "Device-side MJWarp rollout smoke: scripted action kernel only, no per-step CPU metric reads, not a learned policy."
+        : file.includes("device-rollout")
+            ? file.includes("action-buffer")
+              ? "Device-side MJWarp rollout smoke: external fixed-shape action tensor is consumed by a Warp ctrl kernel; precomputed buffer only, not learned."
+              : "Device-side MJWarp rollout smoke: scripted action kernel only, no per-step CPU metric reads, not a learned policy."
           : "Current MJWarp/Puffer substrate evidence.",
   };
 }
