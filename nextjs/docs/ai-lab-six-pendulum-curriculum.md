@@ -264,6 +264,19 @@ First Modal attempt:
 - Result: blocked before function execution with `ResourceExhaustedError: Function call failed: workspace billing cycle spend limit reached`.
 - Modal billing report command works: `modal billing report --for "this month" --json`.
 
+Local MPS mini-run:
+
+```bash
+npm run train:six-pendulum:pezzza:chain2-local-mini
+```
+
+- Artifact: `/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/training-checkpoints/pezzza-chain-2link-local-mini.json`
+- Device: Apple MPS through local Torch.
+- Elapsed: `83.892s`.
+- Best intermediate signal: two-link hold stage reached `0.512s` mean max hold and `0.135` solved-one-second rate from near-upright.
+- Final two-link down-start validation: strict score `0`, mean max hold `0`, solved-one-second rate `0`.
+- Interpretation: local smoke proves the new two-link trainer runs without Modal, and the near-upright stabilizer has partial signal. It does not solve two-link down-start.
+
 Planned implementation:
 
 1. Generate a one-through-six-link MJCF chain with gravity 9.8 and zero hinge friction.

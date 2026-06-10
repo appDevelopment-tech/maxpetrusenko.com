@@ -28,7 +28,15 @@ def train_policy(
 
     torch.manual_seed(seed + safe_links + safe_control_hz + safe_population + safe_generations)
     torch.set_float32_matmul_precision("high")
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    if torch.cuda.is_available():
+        device = torch.device("cuda")
+        device_name = torch.cuda.get_device_name(0)
+    elif hasattr(torch.backends, "mps") and torch.backends.mps.is_available():
+        device = torch.device("mps")
+        device_name = "apple-mps"
+    else:
+        device = torch.device("cpu")
+        device_name = "cpu"
 
     dt = 1.0 / float(safe_control_hz)
     horizon_seconds = 7.0 if smoke else 14.0
@@ -299,7 +307,7 @@ def train_policy(
                         "stage": stage["name"],
                         "seed": seed,
                         "wallclockSeconds": line["wallclockSeconds"],
-                        "gpu": torch.cuda.get_device_name(0) if device.type == "cuda" else "cpu",
+                        "gpu": device_name,
                         "train": {
                             "population": safe_population,
                             "eliteCount": elite_count,
@@ -340,7 +348,7 @@ def train_policy(
         ],
         "training": {
             "device": str(device),
-            "gpu": torch.cuda.get_device_name(0) if device.type == "cuda" else "cpu",
+            "gpu": device_name,
             "torch": torch.__version__,
             "elapsedSeconds": round(time.time() - started, 3),
             "smoke": smoke,
