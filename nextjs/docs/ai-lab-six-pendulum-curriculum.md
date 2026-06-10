@@ -98,16 +98,54 @@ Validation-aware smoke check:
 - Link 2 swing validation: score 0.60, held 0.00812, whip 0.2165.
 - Final lower-link validation: link 2, score 0.22, held 0.00716, whip 0.2177.
 
-## Next Run
+## Validation-Aware Link-2 Search
 
-Run a link-2-focused lower-link curriculum before spending on all six:
+Command:
 
 ```bash
 doppler run --project api_keys --config dev -- modal run --write-result /Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/training-checkpoints/curriculum-link2-search.json scripts/modal-train-six-pendulum-curriculum.py --smoke --max-stage-links 2 --generation-scale 8
 ```
 
-After link 2 strict held time improves materially, run the full curriculum:
+Modal run:
+https://modal.com/apps/max-petrusenko/main/ap-hE1pTu9hRqgQ305ISctIhM
+
+Artifact:
+`/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/training-checkpoints/curriculum-link2-search.json`
+
+Result:
+
+- Elapsed: 453.119 seconds.
+- Link 1 hold validation: score 34.14, held 0.1156, whip 0.3194.
+- Link 1 swing validation: score 39.84, held 0.1162, whip 0.3067.
+- Link 2 hold validation: score 0.13, held 0.0168, whip 0.2265.
+- Link 2 swing validation: score 0.24, held 0.00424, whip 0.1819.
+- Final lower-link validation: link 2, score 0.82, held 0.00476, whip 0.1840.
+- Best transient link-2 hold checkpoint: generation 8, strict score 67.32, held 0.0192.
+- Best transient link-2 swing checkpoint by held fraction: generation 56, held 0.0577, strict score 0.0.
+
+Interpretation:
+
+Validation-aware CEM can find brief two-link upright moments, but it still cannot make a stable two-link controller. More spend on the current time-knot feedback policy is likely a poor use of Modal credits unless the policy class changes.
+
+## Next Run
+
+Move the lower-link curriculum to recurrent PPO before spending on all six:
 
 ```bash
-npm run train:six-pendulum:curriculum
+npm run six-pendulum:mjcf
 ```
+
+Planned implementation:
+
+1. Generate a one-through-six-link MJCF chain with gravity 9.8 and zero hinge friction.
+2. Start with one and two links only.
+3. Train PPO with a small recurrent policy so the controller has memory for whip timing.
+4. Add randomized episode length only after link-two whip appears.
+5. Require strict held-time validation before unlocking link 3.
+6. Keep the browser page as public proof and run ledger, not the source simulator.
+
+MJCF scaffold:
+
+- Command: `npm run six-pendulum:mjcf`
+- Generated files: `app/ailab/six-pendulum-cartpole/mjcf/cartpole_1_link.xml` through `cartpole_6_link.xml`.
+- Verified: each file parses as XML, has gravity `0 0 -9.8`, one cart motor, and the expected number of hinge joints.
