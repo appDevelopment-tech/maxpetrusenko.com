@@ -171,6 +171,20 @@ def action_buffer_to_ctrl_kernel(
 
 
 @wp.kernel
+def action_vector_to_ctrl_kernel(
+    action_vector: wp.array(dtype=wp.float32),
+    ctrl: wp.array2d(dtype=wp.float32),
+    last_action: wp.array(dtype=wp.float32),
+    action_scale: float,
+):
+    i = wp.tid()
+    normalized = wp.min(wp.max(action_vector[i], -1.0), 1.0)
+    force = normalized * action_scale
+    ctrl[i, 0] = force
+    last_action[i] = force
+
+
+@wp.kernel
 def score_obs_kernel(
     qpos: wp.array2d(dtype=wp.float32),
     qvel: wp.array2d(dtype=wp.float32),
@@ -488,6 +502,16 @@ class WarpScoreKernel:
             action_buffer_to_ctrl_kernel,
             dim=self.nworld,
             inputs=[action_plan_wp, ctrl_wp, self.last_action_wp, int(step_index), int(self.nworld), float(self.action_scale)],
+            device=self.device,
+        )
+        if synchronize:
+            wp.synchronize()
+
+    def apply_action_vector(self, action_vector_wp, ctrl_wp, synchronize: bool = False):
+        wp.launch(
+            action_vector_to_ctrl_kernel,
+            dim=self.nworld,
+            inputs=[action_vector_wp, ctrl_wp, self.last_action_wp, float(self.action_scale)],
             device=self.device,
         )
         if synchronize:

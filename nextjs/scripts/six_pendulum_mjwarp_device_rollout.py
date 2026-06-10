@@ -27,6 +27,20 @@ def build_deterministic_action_plan(steps: int, nworld: int, force_scale: float)
     return np.clip(force / float(force_scale), -1.0, 1.0).astype(np.float32)
 
 
+def build_torch_policy(obs_dim: int, hidden_dim: int, seed: int):
+    import torch
+
+    torch.manual_seed(int(seed))
+    policy = torch.nn.Sequential(
+        torch.nn.Linear(int(obs_dim), int(hidden_dim)),
+        torch.nn.Tanh(),
+        torch.nn.Linear(int(hidden_dim), 1),
+        torch.nn.Tanh(),
+    )
+    policy.eval()
+    return policy
+
+
 def run_device_rollout(
     mjcf_xml: str,
     links: int = 1,
@@ -41,6 +55,7 @@ def run_device_rollout(
     record_buffer: bool = False,
     action_source: str = "scripted",
     action_plan: np.ndarray | None = None,
+    policy_hidden_dim: int = 64,
 ) -> dict:
     import mujoco
     import mujoco_warp as mjw
@@ -64,10 +79,19 @@ def run_device_rollout(
         min_horizon = max(1, int(min_horizon))
         max_horizon = max(min_horizon, int(max_horizon))
     pose_hold = pose == "hold"
-    if action_source not in {"scripted", "buffer"}:
+    if action_source not in {"scripted", "buffer", "torch-policy"}:
         raise ValueError(f"Unsupported action_source: {action_source}")
     action_plan_wp = None
     action_plan_shape = None
+    torch_policy = None
+    torch_policy_parameters = 0
+    torch_interop = False
+    if action_source == "torch-policy":
+        import torch
+
+        torch_policy = build_torch_policy(OBS_DIM, policy_hidden_dim, seed)
+        torch_policy_parameters = int(sum(parameter.numel() for parameter in torch_policy.parameters()))
+        torch_interop = True
     if action_source == "buffer":
         if action_plan is None:
             action_plan = build_deterministic_action_plan(steps, nworld, force_scale)
@@ -109,7 +133,13 @@ def run_device_rollout(
     runner.initialize_prev_potential_from_current(synchronize=False)
 
     for step_index in range(int(steps)):
-        if action_source == "buffer":
+        if action_source == "torch-policy":
+            obs_torch = wp.to_torch(runner.obs_wp).reshape(int(nworld), OBS_DIM)
+            with torch.no_grad():
+                action_torch = torch_policy(obs_torch).reshape(int(nworld)).contiguous()
+            action_vector_wp = wp.from_torch(action_torch, dtype=wp.float32)
+            runner.apply_action_vector(action_vector_wp, data.ctrl, synchronize=False)
+        elif action_source == "buffer":
             runner.apply_action_buffer(action_plan_wp, data.ctrl, step_index, synchronize=False)
         else:
             runner.apply_scripted_actions(data.ctrl, step_index, steps, synchronize=False)
@@ -214,14 +244,29 @@ def run_device_rollout(
         "scoreBackend": "warp-score-kernel",
         "rolloutBackend": "warp-post-step-kernel-device-loop",
         "resetBackend": "warp-reset-kernel",
-        "actionBackend": "warp-action-buffer-kernel" if action_source == "buffer" else "warp-scripted-action-kernel",
-        "actionSource": "external-action-buffer" if action_source == "buffer" else "scripted-kernel",
+        "actionBackend": "warp-policy-action-vector-kernel"
+        if action_source == "torch-policy"
+        else "warp-action-buffer-kernel"
+        if action_source == "buffer"
+        else "warp-scripted-action-kernel",
+        "actionSource": "torch-policy-vector"
+        if action_source == "torch-policy"
+        else "external-action-buffer"
+        if action_source == "buffer"
+        else "scripted-kernel",
         "actionPlanShape": action_plan_shape or [],
         "actionPlanLayout": "time-major [steps, nworld]" if action_source == "buffer" else "",
         "actionPlanUnits": "normalized policy action [-1, 1]" if action_source == "buffer" else "",
         "actionPlanCopiedBeforeRollout": bool(action_source == "buffer"),
         "actionPlanCpuWritesPerStep": 0,
-        "policyReadyActionInterface": bool(action_source == "buffer"),
+        "policyReadyActionInterface": bool(action_source in {"buffer", "torch-policy"}),
+        "torchPolicyInterop": torch_interop,
+        "torchPolicyParameters": torch_policy_parameters,
+        "torchPolicyHiddenDim": int(policy_hidden_dim) if action_source == "torch-policy" else 0,
+        "torchPolicyObsInterop": "wp.to_torch(runner.obs_wp)" if action_source == "torch-policy" else "",
+        "torchPolicyActionInterop": "wp.from_torch(action_torch)" if action_source == "torch-policy" else "",
+        "torchPolicyCpuActionWritesPerStep": 0 if action_source == "torch-policy" else None,
+        "torchPolicyLearned": False if action_source == "torch-policy" else None,
         "randomHorizonEnabled": random_horizon_enabled,
         "randomHorizonMinSteps": int(min_horizon) if random_horizon_enabled else 0,
         "randomHorizonMaxSteps": int(max_horizon) if random_horizon_enabled else 0,
@@ -242,6 +287,7 @@ def run_device_rollout(
         "notes": [
             "This is a device-rollout substrate smoke, not training and not a learned policy.",
             "The buffer action source is a precomputed deterministic tensor consumed by a Warp kernel; it is policy-interface plumbing, not a learned policy.",
+            "The torch-policy action source uses Torch/Warp tensor interop for policy output plumbing, but the policy is untrained.",
             "Strict score still requires continuous upright hold; subsecond flashes do not count.",
             "Randomized per-world horizons are opt-in and should stay disabled until a learned policy shows whip behavior.",
             "Rollout buffer recording is fixed-shape plumbing for a future trainer, not policy learning.",
@@ -261,7 +307,8 @@ def main():
     parser.add_argument("--min-horizon", type=int, default=160)
     parser.add_argument("--max-horizon", type=int, default=512)
     parser.add_argument("--record-buffer", action="store_true")
-    parser.add_argument("--action-source", choices=["scripted", "buffer"], default="scripted")
+    parser.add_argument("--action-source", choices=["scripted", "buffer", "torch-policy"], default="scripted")
+    parser.add_argument("--policy-hidden-dim", type=int, default=64)
     parser.add_argument("--write-result", type=Path, default=DEFAULT_OUTPUT)
     args = parser.parse_args()
 
@@ -281,6 +328,7 @@ def main():
         max_horizon=args.max_horizon,
         record_buffer=args.record_buffer,
         action_source=args.action_source,
+        policy_hidden_dim=args.policy_hidden_dim,
     )
     args.write_result.parent.mkdir(parents=True, exist_ok=True)
     args.write_result.write_text(json.dumps(result, indent=2) + "\n")
