@@ -332,13 +332,26 @@ def train_policy(
     knots, w1, b1, w2, b2 = unpack(best_params.view(1, -1))
     output = {
         "trainedAt": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+        "policyVersion": 1,
         "algorithm": "modal-pezzza-style-evolution",
         "environment": "one-link-vectorized-cartpole-down-start",
-        "modelType": "mlpPolicy",
+        "modelType": "pezzzaKnotMlp",
         "links": 1,
         "inputCount": input_count,
         "knotCount": knot_count,
         "forceScale": action_scale,
+        "controlHz": safe_control_hz,
+        "dt": dt,
+        "horizonSeconds": horizon_seconds,
+        "observation": [
+            "cartX/2.4",
+            "cartV/6",
+            "sin(theta0)",
+            "cos(theta0)",
+            "omega0/10",
+            "lastAction/forceScale",
+            "time/horizonSeconds",
+        ],
         "knots": knots.squeeze(0).detach().cpu().tolist(),
         "layers": [
             {"weights": w1.squeeze(0).detach().cpu().tolist(), "bias": b1.squeeze(0).detach().cpu().tolist(), "activation": "tanh"},

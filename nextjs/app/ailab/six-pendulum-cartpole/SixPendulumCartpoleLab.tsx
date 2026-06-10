@@ -7,8 +7,12 @@ import trainedPolicy from "./sixPendulumPolicy.json";
 type TrainedPolicy = {
   algorithm?: string;
   modelType?: string;
+  policyVersion?: number;
   inputCount?: number;
   forceScale: number;
+  controlHz?: number;
+  horizonSeconds?: number;
+  observation?: string[];
   weights?: number[];
   layers?: { weights: number[][]; bias: number[]; activation?: "linear" | "relu" | "tanh" }[];
   knotCount?: number;
@@ -16,6 +20,10 @@ type TrainedPolicy = {
   feedback?: number[];
   steps?: number;
   dt?: number;
+  training?: {
+    horizonSeconds?: number;
+    controlHz?: number;
+  };
 };
 
 type PendulumState = {
@@ -108,6 +116,50 @@ function runMlpPolicy(inputs: number[]): number | null {
   return (activations[0] ?? 0) * policy.forceScale;
 }
 
+function runPezzzaOneLinkPolicy(state: PendulumState): number | null {
+  if (
+    policy.algorithm !== "modal-pezzza-style-evolution" ||
+    !["pezzzaKnotMlp", "mlpPolicy"].includes(policy.modelType ?? "")
+  ) {
+    return null;
+  }
+  if (!Array.isArray(policy.knots) || !Array.isArray(policy.layers) || policy.layers.length < 2) return null;
+
+  const knotCount = policy.knotCount ?? policy.knots.length;
+  const horizonSeconds = policy.horizonSeconds ?? policy.training?.horizonSeconds ?? 8;
+  const tNorm = clamp(state.time / horizonSeconds, 0, 1);
+  const knotPosition = tNorm * Math.max(0, knotCount - 1);
+  const left = Math.floor(knotPosition);
+  const right = Math.min(left + 1, Math.max(0, knotCount - 1));
+  const mix = knotPosition - left;
+  const base = (policy.knots[left] ?? 0) * (1 - mix) + (policy.knots[right] ?? policy.knots[left] ?? 0) * mix;
+  const inputs = [
+    state.cartX / 2.4,
+    state.cartV / 6,
+    Math.sin(state.theta[0] ?? 0),
+    Math.cos(state.theta[0] ?? 0),
+    (state.omega[0] ?? 0) / 10,
+    state.lastAction / policy.forceScale,
+    tNorm,
+  ];
+  const hiddenLayer = policy.layers[0];
+  const outputLayer = policy.layers[1];
+  const hidden = hiddenLayer.bias.map((bias, outputIndex) => {
+    const sum = inputs.reduce((value, input, inputIndex) => {
+      return value + input * (hiddenLayer.weights[inputIndex]?.[outputIndex] ?? 0);
+    }, bias);
+    return Math.tanh(sum);
+  });
+  const feedback = outputLayer.bias.reduce((sum, bias, outputIndex) => {
+    const weighted = hidden.reduce((value, activation, inputIndex) => {
+      return value + activation * (outputLayer.weights[inputIndex]?.[outputIndex] ?? 0);
+    }, bias);
+    return sum + weighted;
+  }, 0);
+
+  return Math.tanh(base + feedback) * policy.forceScale;
+}
+
 function runSacPolicy(state: PendulumState): number | null {
   if (policy.modelType !== "sacMlp" || !Array.isArray(policy.layers)) return null;
 
@@ -163,8 +215,12 @@ function runTimeKnotFeedbackPolicy(state: PendulumState): number | null {
 }
 
 function policyForce(state: PendulumState): number {
-  const trainedForce = runSacPolicy(state) ?? runTimeKnotFeedbackPolicy(state) ?? runMlpPolicy(observe(state));
-  if (trainedForce !== null) return clamp(trainedForce, -32, 32);
+  const trainedForce =
+    runPezzzaOneLinkPolicy(state) ?? runSacPolicy(state) ?? runTimeKnotFeedbackPolicy(state) ?? runMlpPolicy(observe(state));
+  if (trainedForce !== null) {
+    const forceLimit = Math.max(32, policy.forceScale);
+    return clamp(trainedForce, -forceLimit, forceLimit);
+  }
 
   const inputs = observe(state);
   let activation = 0;
@@ -175,7 +231,51 @@ function policyForce(state: PendulumState): number {
   return clamp(Math.tanh(activation) * policy.forceScale, -32, 32);
 }
 
+function stepPezzzaOneLinkState(state: PendulumState, dt: number): PendulumState {
+  const force = policyForce(state);
+  const cartMass = 1.0;
+  const poleMass = 0.1;
+  const length = 0.5;
+  const totalMass = cartMass + poleMass;
+  const gravity = 9.81;
+  const cartDamping = 0.08;
+  const hingeDamping = 0.02;
+  const theta = state.theta[0] ?? 0;
+  const omega = state.omega[0] ?? 0;
+  const dampedForce = force - cartDamping * state.cartV - 0.35 * state.cartX;
+  const temp = (dampedForce + poleMass * length * omega ** 2 * Math.sin(theta)) / totalMass;
+  const thetaAcc =
+    (gravity * Math.sin(theta) - Math.cos(theta) * temp) /
+      (length * (4 / 3 - (poleMass * Math.cos(theta) ** 2) / totalMass)) -
+    hingeDamping * omega;
+  const cartAcc = temp - (poleMass * length * thetaAcc * Math.cos(theta)) / totalMass;
+  const cartV = clamp(state.cartV + cartAcc * dt, -8, 8);
+  const cartX = clamp(state.cartX + cartV * dt, -2.88, 2.88);
+  const nextOmega = clamp(omega + thetaAcc * dt, -22, 22);
+  const nextTheta = wrapAngle(theta + nextOmega * dt);
+  const nextState: PendulumState = {
+    cartX,
+    cartV,
+    theta: [nextTheta],
+    omega: [nextOmega],
+    time: state.time + dt,
+    combo: state.combo,
+    impulse: state.impulse * Math.exp(-dt * 2.8),
+    lastAction: force,
+  };
+  nextState.combo = isStrictHoldState(nextState) ? nextState.combo + dt : 0;
+  return nextState;
+}
+
 function stepState(state: PendulumState, links: number, dt: number): PendulumState {
+  if (
+    links === 1 &&
+    policy.algorithm === "modal-pezzza-style-evolution" &&
+    ["pezzzaKnotMlp", "mlpPolicy"].includes(policy.modelType ?? "")
+  ) {
+    return stepPezzzaOneLinkState(state, dt);
+  }
+
   const next: PendulumState = {
     cartX: state.cartX,
     cartV: state.cartV,
@@ -211,9 +311,18 @@ function stepState(state: PendulumState, links: number, dt: number): PendulumSta
     next.theta[index] = wrapAngle(theta + next.omega[index] * dt);
   }
 
-  next.combo = scoreState(next) > 82 ? next.combo + dt : 0;
+  next.combo = isStrictHoldState(next) ? next.combo + dt : 0;
 
   return next;
+}
+
+function isStrictHoldState(state: PendulumState): boolean {
+  return (
+    scoreState(state) > 82 &&
+    Math.abs(state.cartX) < 1.2 &&
+    state.theta.every((theta) => Math.abs(theta) < SCORE_MAX_UPRIGHT_ANGLE) &&
+    state.omega.every((omega) => Math.abs(omega) < 4.5)
+  );
 }
 
 function scoreState(state: PendulumState): number {
@@ -240,6 +349,7 @@ export function SixPendulumCartpoleLab() {
   const [links, setLinks] = useState<(typeof linkOptions)[number]>(1);
   const [running, setRunning] = useState(true);
   const [score, setScore] = useState(0);
+  const [heldSeconds, setHeldSeconds] = useState(0);
   const [episode, setEpisode] = useState(1);
 
   useEffect(() => {
@@ -344,15 +454,16 @@ export function SixPendulumCartpoleLab() {
 
       context.fillStyle = "rgba(247,241,230,0.92)";
       context.font = "700 13px DM Sans, sans-serif";
-      context.fillText(`strict score ${scoreState(state)}`, 24, 30);
+      const strictScore = state.combo >= 1 ? scoreState(state) : 0;
+      context.fillText(`strict score ${strictScore}`, 24, 30);
       context.fillText("automated model only", 24, 52);
-      context.fillText(`score ${scoreState(state)}`, 24, 74);
+      context.fillText(`score ${strictScore}`, 24, 74);
       context.fillText(`held ${state.combo.toFixed(2)}s / 1.00s min`, 24, 96);
 
-      if (scoreState(state) > 82 && state.combo > 1) {
-        context.fillStyle = scoreState(state) > 92 ? "#f5df2e" : "#55d65a";
+      if (strictScore > 82 && state.combo > 1) {
+        context.fillStyle = strictScore > 92 ? "#f5df2e" : "#55d65a";
         context.font = "900 30px DM Sans, sans-serif";
-        context.fillText(scoreState(state) > 92 ? "PERFECT!!" : "GREAT!", width - 205, height * 0.5);
+        context.fillText(strictScore > 92 ? "PERFECT!!" : "GREAT!", width - 205, height * 0.5);
         context.font = "800 13px DM Sans, sans-serif";
         context.fillStyle = "#f7f1e6";
         context.fillText(`${state.combo.toFixed(2)}s held`, width - 145, height * 0.5 + 24);
@@ -369,7 +480,8 @@ export function SixPendulumCartpoleLab() {
         for (let index = 0; index < substeps; index += 1) {
           stateRef.current = stepState(stateRef.current, links, dt / substeps);
         }
-        setScore(scoreState(stateRef.current));
+        setHeldSeconds(stateRef.current.combo);
+        setScore(stateRef.current.combo >= 1 ? scoreState(stateRef.current) : 0);
       }
 
       draw(stateRef.current);
@@ -386,6 +498,7 @@ export function SixPendulumCartpoleLab() {
 
   function reset() {
     stateRef.current = makeState(links, 0.18);
+    setHeldSeconds(0);
     setEpisode((value) => value + 1);
   }
 
@@ -405,6 +518,9 @@ export function SixPendulumCartpoleLab() {
               <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#4b535c]">Episode {episode}</p>
               <p className="mt-1 text-3xl font-black text-[#0c1115]">{score}</p>
               <p className="mt-1 text-sm font-bold text-[#4b535c]">1.00s minimum hold</p>
+              <p className="sr-only" data-pendulum-held={heldSeconds.toFixed(3)} data-pendulum-score={score}>
+                Held {heldSeconds.toFixed(3)} seconds. Score {score}.
+              </p>
             </div>
             <button
               className="inline-flex h-11 w-11 items-center justify-center rounded-[8px] border border-[rgba(12,17,21,0.14)] bg-white text-[#0c1115]"

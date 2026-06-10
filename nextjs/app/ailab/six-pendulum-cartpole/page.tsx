@@ -151,7 +151,7 @@ const experimentResults = [
     label: "Pezzza-style CEM",
     run: "ap-Atp5F3zbazixndWxBHdeQp",
     speed: "~721k SPS",
-    result: "Strict score 187.95, mean hold 6.90s, solved rate 100%.",
+    result: "Trainer strict score 187.95. Browser proof now holds 6.56s from down, score 95.",
   },
   {
     label: "Pezzza 480 Hz",
@@ -247,9 +247,9 @@ export default function SixPendulumCartpolePage() {
 
           <div className="rounded-[8px] border border-[rgba(12,17,21,0.08)] bg-[#101820] p-6 text-[#f7f1e6]">
             <p className="text-sm font-bold uppercase tracking-[0.18em] text-[#8cc7e8]">Implementation status</p>
-            <h2 className="mt-4 font-serif text-3xl font-bold text-[#f7f1e6]">Link one is solved in the vectorized trainer.</h2>
+            <h2 className="mt-4 font-serif text-3xl font-bold text-[#f7f1e6]">Link one is solved in the browser proof.</h2>
             <p className="mt-4 text-base leading-relaxed text-[#dce6e9]">
-              The canvas still starts at one hanging pendulum, uses model force only, and locks links two through six until link one passes a one-second strict hold. The new Pezzza-style evolutionary trainer solved the one-link down-start gate under normal gravity. The full-gravity ablation stayed at zero, so the useful finding is curriculum plus whiplash/recovery shaping, not just more steps.
+              The canvas starts at one hanging pendulum, uses model force only, and keeps links two through six locked. The exported Pezzza-style evolutionary checkpoint now passes the local browser gate: 6.56 seconds held from down with score 95. The full-gravity ablation stayed at zero, so the useful finding is curriculum plus whiplash/recovery shaping, not just more steps.
             </p>
           </div>
         </section>
@@ -346,10 +346,10 @@ export default function SixPendulumCartpolePage() {
         <section className="mt-10 rounded-[8px] border border-[rgba(12,17,21,0.08)] bg-white/70 p-6">
           <p className="text-sm font-bold uppercase tracking-[0.18em] text-[var(--muted)]">Next real training run</p>
           <h2 className="mt-4 max-w-[18ch] font-serif text-3xl font-bold leading-tight text-[var(--ink)] md:text-4xl">
-            Turn the solve into a Puffer-style sweep.
+            Promote only after two links pass.
           </h2>
           <p className="mt-4 max-w-[860px] text-base leading-relaxed text-[var(--ink-soft)]">
-            The useful artifact is not just a clip. The repo now has a strict score report where subsecond holds do not count, a Pezzza-style CEM trainer, and a wallclock-vs-score comparison path. Next step is a small Puffer-style sweep: many configs, strict validation score, randomized horizon only after whip behavior appears, then MinGRU/PPO once the environment speed path is proven.
+            The useful artifact is not just a clip. The repo now has a strict score report where subsecond holds do not count, a Pezzza-style CEM trainer, a one-link browser proof, and a wallclock-vs-score comparison path. Next step is a two-link curriculum run with the same gate: randomized horizon only after whip behavior appears, then MinGRU/PPO once the environment speed path is proven.
           </p>
         </section>
       </article>

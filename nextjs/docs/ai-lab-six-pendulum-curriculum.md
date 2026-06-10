@@ -11,7 +11,7 @@ read_when:
 
 Live route: https://www.maxpetrusenko.com/ailab/six-pendulum-cartpole
 
-The deployed browser policy is a progress checkpoint, not a solve. Strict score is now zero unless all active links are near upright and the active chain is nearly straight.
+One-link down-start is now solved in the local browser runtime using the Modal-trained Pezzza-style policy. Six links are not solved. Strict score is zero until the active chain is near upright, nearly straight, and held for at least one consecutive second.
 
 ## Source Evidence
 
@@ -86,7 +86,20 @@ Result:
 
 Interpretation:
 
-This is the first one-link down-start solve, but it is in the vectorized analytic trainer, not the MuJoCo/browser production policy yet. It proves the source direction: curriculum plus whiplash/recovery shaping solves the discovery problem that PPO/SAC/TD3 did not.
+This was the first one-link down-start solve in the vectorized analytic trainer. The checkpoint is now exported into the browser runtime and verified locally, so the current one-link gate passes. It proves the source direction: curriculum plus whiplash/recovery shaping solves the discovery problem that PPO/SAC/TD3 did not.
+
+### Browser Runtime Proof
+
+The browser policy was replaced with the Pezzza one-link checkpoint and the runtime now supports that checkpoint schema directly as `pezzzaKnotMlp`: time knots plus MLP feedback with inputs `cart x`, `cart velocity`, `sin(theta)`, `cos(theta)`, `angular velocity`, `previous action`, and normalized time.
+
+Verification:
+
+- Local deterministic replay over 16 down-start seeds: mean strict hold `5.681s`, every seed over `5.5s`.
+- Playwright page proof on `http://localhost:3016/ailab/six-pendulum-cartpole`: held `8.043s`, score `95`.
+- Screenshot: `/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/verification/pezzza-one-link-browser-schema-v1-clean/one-link-down-start-proof.png`
+- Video: `/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/verification/pezzza-one-link-browser-schema-v1-clean/8197ecb6de75b2ce231a2bb617c2d6c6.webm`
+
+The browser score stays zero until the one-second gate is crossed. Subsecond upright moments do not count.
 
 ### Ablations
 
@@ -216,11 +229,40 @@ Validation-aware CEM can find brief two-link upright moments, but it still canno
 
 ## Next Run
 
-Move the lower-link curriculum to recurrent PPO before spending on all six:
+Next target is two links, not six. Run order:
+
+1. Extend the Pezzza vectorized trainer from one link to two links, keeping the same strict one-second gate.
+2. Keep curriculum stages and whiplash/recovery terms; add randomized horizon only after two-link whip appears.
+3. Add a recurrent Puffer-style PPO/MinGRU run only after the two-link environment and strict validator are fast enough to sweep.
+4. Unlock link three only after two-link browser or MuJoCo validation holds for at least one second on held-out seeds.
+
+MuJoCo path remains ready for the recurrent PPO branch:
 
 ```bash
 npm run six-pendulum:mjcf
 ```
+
+### Two-Link Trainer Scaffold
+
+New vectorized chain trainer:
+
+```bash
+npm run train:six-pendulum:pezzza:chain2-smoke
+```
+
+Implementation:
+
+- Script: `scripts/modal-train-six-pendulum-pezzza-chain.py`
+- Policy: `pezzzaChainKnotMlp`, 32 time knots plus MLP feedback.
+- Curriculum: one-link schema pretrain, two-link hold, two-link low gravity, two-link normal gravity.
+- Gate: strict score stays zero unless mean max hold is at least one second.
+- Promotion rule: do not unlock link three until two-link down-start validation has nonzero strict score, solved rate, and P10 hold.
+
+First Modal attempt:
+
+- Run: https://modal.com/apps/max-petrusenko/main/ap-SEf7QFGky6p9E2hSzPjZJB
+- Result: blocked before function execution with `ResourceExhaustedError: Function call failed: workspace billing cycle spend limit reached`.
+- Modal billing report command works: `modal billing report --for "this month" --json`.
 
 Planned implementation:
 
