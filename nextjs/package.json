@@ -11,6 +11,8 @@
     "test": "node --import ./scripts/register-ts-tests.mjs --test lib/cms/legacy-blog-compat.test.mjs lib/seo/home-faq.test.mjs lib/concierge/transcript.test.mjs next.config.redirects.test.mjs components/motion/utils.test.mjs && node scripts/verify-predeploy.mjs && node scripts/verify-topic-clusters.mjs && npm run ui:scan",
     "ui:scan": "node scripts/ui-scan.mjs",
     "train:six-pendulum": "doppler run --project api_keys --config dev -- modal run --write-result app/ailab/six-pendulum-cartpole/sixPendulumPolicy.json scripts/modal-train-six-pendulum-cem.py::train_policy",
+    "train:six-pendulum:curriculum": "doppler run --project api_keys --config dev -- modal run --write-result app/ailab/six-pendulum-cartpole/sixPendulumPolicy.json scripts/modal-train-six-pendulum-curriculum.py",
+    "train:six-pendulum:curriculum:smoke": "doppler run --project api_keys --config dev -- modal run --write-result /Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/training-checkpoints/curriculum-smoke-lower-links.json scripts/modal-train-six-pendulum-curriculum.py --smoke",
     "crm:import:whatsapp": "node scripts/import-whatsapp-contacts.mjs",
     "verify:predeploy": "npm run guard:dev-server && npm run lint && npm run build && npm run test",
     "pages:build": "npm run guard:dev-server && npx @cloudflare/next-on-pages",

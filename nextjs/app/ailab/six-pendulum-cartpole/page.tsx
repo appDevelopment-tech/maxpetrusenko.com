@@ -55,6 +55,25 @@ const outsideQuestions = [
   "Benchmark comparison: another reply noted that 90k steps per second on a 22 DoF humanoid with domain randomization is not comparable to a no contact cartpole task.",
 ] as const;
 
+const mediaFindings = [
+  {
+    title: "Hero solve",
+    body: "The clip starts from a bent whip posture, then score only appears during straight upright windows. That matches the strict public score gate.",
+  },
+  {
+    title: "Experiment cloud",
+    body: "The scatter video is a field of hyperparameter runs, with the useful policies living as outliers. The reproduction needs a run ledger, not one hand-tuned policy.",
+  },
+  {
+    title: "Reward step",
+    body: "The reward/policy clip shows a visible step after useful behavior appears. The next trainer should add horizon randomization after whip behavior, not before.",
+  },
+  {
+    title: "Phase traces",
+    body: "The simulator-speed clip shows repeated green trajectory clusters. The useful behavior is a learned whip path followed by a hold, not random shaking.",
+  },
+] as const;
+
 const researchNotes = [
   {
     title: "Multi link pendulums are real benchmarks",
@@ -119,7 +138,7 @@ const buildPlan = [
   },
   {
     phase: "3. Search",
-    body: "Run PufferPPO with a small MinGRU policy, sweep reward weights, action force set or continuous force, horizon, entropy, curriculum mix, mass, and force magnitude.",
+    body: "Run lower-link curriculum first. Keep the same policy shape while advancing 1, 2, 3, 4, 5, then 6 links so later stages inherit timing and feedback.",
   },
   {
     phase: "4. Gate",
@@ -201,10 +220,22 @@ export default function SixPendulumCartpolePage() {
 
           <div className="rounded-[8px] border border-[rgba(12,17,21,0.08)] bg-[#101820] p-6 text-[#f7f1e6]">
             <p className="text-sm font-bold uppercase tracking-[0.18em] text-[#8cc7e8]">Implementation status</p>
-            <h2 className="mt-4 font-serif text-3xl font-bold text-[#f7f1e6]">Modal-trained CEM checkpoint deployed.</h2>
+            <h2 className="mt-4 font-serif text-3xl font-bold text-[#f7f1e6]">Curriculum smoke started.</h2>
             <p className="mt-4 text-base leading-relaxed text-[#dce6e9]">
-              The canvas runs a lightweight coupled physics approximation and a checked-in policy trained on Modal L4 with cross-entropy search over a time-basis plus feedback model. This is progress, not the final Yacine-level MuJoCo/PufferPPO solve. Score is now strict: fallen, bent, or mostly-upright-but-not-straight chains get zero. The next checkpoint should move the environment to MJWarp or MJX with PPO and recorded eval videos.
+              The canvas runs a lightweight coupled physics approximation and a checked-in policy trained on Modal L4 with cross-entropy search over a time-basis plus feedback model. This is progress, not the final Yacine-level MuJoCo/PufferPPO solve. Score is strict: fallen, bent, or mostly-upright-but-not-straight chains get zero. A new curriculum trainer now starts at one link, advances to two, and only then scales toward six. The first smoke produced real link-one strict hold signal and link-two whip signal, but not a link-two solve.
             </p>
+          </div>
+        </section>
+
+        <section className="mt-10">
+          <p className="mb-4 text-sm font-bold uppercase tracking-[0.18em] text-[var(--muted)]">X media pass</p>
+          <div className="grid gap-4 md:grid-cols-4">
+            {mediaFindings.map((item) => (
+              <div className="rounded-[8px] border border-[rgba(12,17,21,0.08)] bg-white/70 p-5" key={item.title}>
+                <h2 className="font-serif text-2xl font-bold text-[var(--ink)]">{item.title}</h2>
+                <p className="mt-3 text-sm leading-relaxed text-[var(--ink-soft)]">{item.body}</p>
+              </div>
+            ))}
           </div>
         </section>
 
@@ -274,10 +305,10 @@ export default function SixPendulumCartpolePage() {
         <section className="mt-10 rounded-[8px] border border-[rgba(12,17,21,0.08)] bg-white/70 p-6">
           <p className="text-sm font-bold uppercase tracking-[0.18em] text-[var(--muted)]">Next real training run</p>
           <h2 className="mt-4 max-w-[18ch] font-serif text-3xl font-bold leading-tight text-[var(--ink)] md:text-4xl">
-            Ship the benchmark before chasing the hero video.
+            Extend lower links before chasing six.
           </h2>
           <p className="mt-4 max-w-[860px] text-base leading-relaxed text-[var(--ink-soft)]">
-            The useful artifact is not just a clip. It is a reproducible environment, saved seeds, reward curves, policy checkpoints, and failure cases. That makes the solve inspectable and gives future agents something to improve.
+            The useful artifact is not just a clip. The next run should spend more generations on links one and two, require materially better strict held time on link two, then unlock links three through six. Every run should save seeds, reward curves, policy checkpoints, failure cases, and eval recordings.
           </p>
         </section>
       </article>
