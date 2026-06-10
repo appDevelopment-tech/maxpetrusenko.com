@@ -149,3 +149,30 @@ MJCF scaffold:
 - Command: `npm run six-pendulum:mjcf`
 - Generated files: `app/ailab/six-pendulum-cartpole/mjcf/cartpole_1_link.xml` through `cartpole_6_link.xml`.
 - Verified: each file parses as XML, has gravity `0 0 -9.8`, one cart motor, and the expected number of hinge joints.
+
+## MuJoCo Recurrent PPO Smoke
+
+Command:
+
+```bash
+npm run train:six-pendulum:mujoco-ppo:smoke
+```
+
+Modal run:
+https://modal.com/apps/max-petrusenko/main/ap-jquk3AxQFGVyT8ko7vw3cl
+
+Artifact:
+`/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/training-checkpoints/mujoco-ppo-1link-smoke.json`
+
+Result:
+
+- Algorithm: `modal-mujoco-recurrent-ppo`.
+- Simulator: MuJoCo 3.3.7.
+- GPU: NVIDIA L4.
+- Elapsed: 14.487 seconds after image build.
+- One-link hold validation: score 0.0, held 0.0979, held P10 0.0604, return 108.20.
+- One-link mixed validation: score 0.0, held 0.0646, held P10 0.0, return 71.79.
+
+Interpretation:
+
+The MuJoCo/PPO path is now wired and produces measurable hold signal, but the first recurrent PPO smoke does not keep the one-link pendulum upright through the final strict score gate. The next run should overfit one-link hold before enabling mixed starts or link two.

@@ -222,7 +222,7 @@ export default function SixPendulumCartpolePage() {
             <p className="text-sm font-bold uppercase tracking-[0.18em] text-[#8cc7e8]">Implementation status</p>
             <h2 className="mt-4 font-serif text-3xl font-bold text-[#f7f1e6]">Link two is the current wall.</h2>
             <p className="mt-4 text-base leading-relaxed text-[#dce6e9]">
-              The canvas runs a lightweight coupled physics approximation and a checked-in policy trained on Modal L4 with cross-entropy search over a time-basis plus feedback model. This is progress, not the final Yacine-level MuJoCo/PufferPPO solve. Score is strict: fallen, bent, or mostly-upright-but-not-straight chains get zero. Hold-first training made link one reliable enough to expose the real bottleneck. The longer validation-aware link-two run found transient strict score samples, but final held fraction stayed below 0.005. The next credible step is recurrent PPO in MuJoCo Playground or MJWarp.
+              The canvas runs a lightweight coupled physics approximation and a checked-in policy trained on Modal L4 with cross-entropy search over a time-basis plus feedback model. This is progress, not the final Yacine-level MuJoCo/PufferPPO solve. Score is strict: fallen, bent, or mostly-upright-but-not-straight chains get zero. Hold-first CEM exposed link two as the wall. A new MuJoCo recurrent PPO scaffold now runs on the generated MJCF files; its first one-link smoke holds briefly but still ends with strict score zero, so the next target is stable one-link hold before mixed swing.
             </p>
           </div>
         </section>
@@ -305,10 +305,10 @@ export default function SixPendulumCartpolePage() {
         <section className="mt-10 rounded-[8px] border border-[rgba(12,17,21,0.08)] bg-white/70 p-6">
           <p className="text-sm font-bold uppercase tracking-[0.18em] text-[var(--muted)]">Next real training run</p>
           <h2 className="mt-4 max-w-[18ch] font-serif text-3xl font-bold leading-tight text-[var(--ink)] md:text-4xl">
-            Move link two to recurrent PPO.
+            Stabilize one-link PPO first.
           </h2>
           <p className="mt-4 max-w-[860px] text-base leading-relaxed text-[var(--ink-soft)]">
-            The useful artifact is not just a clip. CEM is finding brief two-link upright moments but not a stable controller. The next run should use a MuJoCo MJCF chain, PPO with a small recurrent policy, randomized horizon after whip behavior appears, and a strict held-time gate before unlocking links three through six.
+            The useful artifact is not just a clip. CEM found brief two-link upright moments but not a stable controller. The MuJoCo PPO path is now wired, and the next run should overfit the one-link hold gate before adding mixed starts, randomized horizon, link two, and the eventual three-through-six-link curriculum.
           </p>
         </section>
       </article>
