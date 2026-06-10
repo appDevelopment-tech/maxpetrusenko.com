@@ -13,9 +13,12 @@ Live route: https://www.maxpetrusenko.com/ailab/six-pendulum-cartpole
 
 One-link down-start is now solved in the local browser runtime using the Modal-trained Pezzza-style policy. Six links are not solved. Strict score is zero until the active chain is near upright, nearly straight, and held for at least one consecutive second.
 
+Separate model-based progress: `m1el/inverted-pendulum` now gives this project a locally verified six-link control solve. It is not the browser neural checkpoint. It is seed-free controllability-aware direct collocation plus full-state TVLQR on verified N-link dynamics. Local repro generated controls, passed nominal verification, and passed the perturbed-start challenge.
+
 ## Source Evidence
 
 - X thread: https://x.com/yacineMTB/status/2064148140899348779
+- Raw Bird thread read saved to `/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/research/yacine-thread-bird-2064148140899348779.txt`.
 - Bird thread read confirmed the core claims: PufferPPO, Puffer MinGRU, MuJoCo Warp, APIC/CUDA graph capture, 18M SPS on some configs, 3.6k experiments, GP-picked top hyperparameters, and randomized episode length after whipping appeared.
 - Hero solve video downloaded to `outputs/yacine-thread-media/2064145781477580800-*.mp4`.
 - Hyperparameter scatter video downloaded from `2064150381408485769`.
@@ -26,6 +29,63 @@ One-link down-start is now solved in the local browser runtime using the Modal-t
 - Pezzza transcript downloaded to `/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/youtube/pezzza-double-pendulum.en.vtt`; frames sampled under `outputs/youtube/frames/`.
 - XPBD paper downloaded to `/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/papers/XPBD.pdf`.
 - `johnBuffer/Pendulum-NEAT` cloned under `/Users/maxpetrusenko/Desktop/Projects/oss/Pendulum-NEAT`.
+- `m1el/inverted-pendulum` cloned under `/Users/maxpetrusenko/Desktop/Projects/oss/inverted-pendulum`. This is the strongest public N=6 source found: verified dynamics, seed-free controllability-aware trajectory optimization, TVLQR, official verifier, and media.
+- `jgerstmayr/EXUDYN` `openAIgymNLinkAdvanced.py` is the strongest public N=5 RL source found. It documents SAC for multi-link inverted pendulums, says four and five links work, uses smaller random initialization/disturbance for `>=5`, and includes N=6 actuation/threshold parameters but no public N=6 checkpoint.
+- Deep-search artifacts are saved under `/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/research/`. Perplexity API returned `401 insufficient_quota`; Gemini CLI hit capacity/503 retries; DeepSeek completed but was treated as advisory because it hallucinated some commands.
+
+### Canonical Yacine Requirements From Bird Read
+
+Treat these as hard constraints for the RL reproduction:
+
+1. Method is RL, not model-based control: train an environment with `pufferPPO`.
+2. Infrastructure matters: PufferLib wallclock speed, MuJoCo Warp, APIC/CUDA graph capture callable from C.
+3. Scale is many experiments: Yacine reported `3.6k` experiments, with wallclock on x-axis and score on y-axis.
+4. Policy is small recurrent: puffer MinGRU, about `1m` parameters.
+5. Hyperparameters come from broad sweeps: use GP-picked/top-scoring higher-compute runs, then tweak the task.
+6. Reward shaping is active: help the policy find whipping behavior, then stabilize.
+7. Randomized episode length is a late-stage trick: add it after the model learns whipping but gets lazy around fixed episode timing.
+8. Physics constraints: gravity `9.8`, no hinge friction.
+9. Task constraint: cart is trying to track `0`.
+10. No subsecond score: public score still requires at least one continuous upright hold second.
+
+Implication for current code:
+
+The m1el route proves a six-link control trajectory and gives the bend-order lesson. The Yacine route requires a separate high-throughput RL path, likely PufferPPO/MuJoCo Warp/MinGRU, not more small local CEM.
+
+## Verified Model-Based N=6 Reproduction
+
+Source:
+`/Users/maxpetrusenko/Desktop/Projects/oss/inverted-pendulum`
+
+The decisive source insight is bend order. A six-link chain that goes near-straight mid-swing is near-uncontrollable from one pivot. The working trajectory keeps a coordinated bend shimmy and adds a one-sided soft floor on bend-mode excitation instead of globally fighting the swing.
+
+Commands:
+
+```bash
+uv run python tests/test_dynamics.py
+uv run python repro/generate_n6.py
+uv run python repro/simulate_n6.py /Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/m1el-n6-seedfree-proof.mp4 repro/n6_controls.npz
+uv run python repro/perturbed_n6.py repro/n6_controls.npz --render /Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/m1el-n6-seedfree-perturbed-proof.mp4
+```
+
+Results:
+
+- Dynamics tests passed.
+- Seed-free generator selected `soft_w100_fl0.8`.
+- Generator metrics: final `0.0184deg`, maxK `68110`, accel max `7.3`, saved `repro/n6_controls.npz`.
+- Nominal verifier: final angle error `0.364deg` over all six links, `VERIFICATION: PASS`.
+- Perturbed challenge: `16/16 succeed`, `CHALLENGE: PASS`, robust to `>= +/-0.80 rad` initial angle error.
+- Hosted proof videos copied to:
+  - `/Users/maxpetrusenko/Desktop/Projects/maxpetrusenko.com/nextjs/public/ailab/six-pendulum/m1el-n6-seedfree-proof.mp4`
+  - `/Users/maxpetrusenko/Desktop/Projects/maxpetrusenko.com/nextjs/public/ailab/six-pendulum/m1el-n6-seedfree-perturbed-proof.mp4`
+
+Trainer implications:
+
+1. Do not reward straightness during pump.
+2. Add bend-excitation/controllability shaping that penalizes bend collapse only below a threshold.
+3. Keep phases explicit: energy pump, catch, hold.
+4. Keep strict score separate: no score for subsecond holds.
+5. Use Exudyn's N=5 SAC setup as the RL baseline source, then switch to PufferPPO/MuJoCo Warp for throughput if needed.
 
 ## Multi-Agent Review
 

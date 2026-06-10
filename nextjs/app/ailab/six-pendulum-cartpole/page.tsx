@@ -16,7 +16,10 @@ const DATE_MODIFIED = "2026-06-10T00:00:00.000Z";
 const xFacts = [
   "Yacine posted the six pendulum cartpole solve at 00:50 UTC on June 9, 2026.",
   "He said the run used PufferPPO, MuJoCo Warp, several RTX 4090s, and a Puffer minGRU policy near one million parameters.",
-  "The working trick was not just model size. It was environment speed, reward shaping, thousands of hyperparameter experiments, and randomized episode length.",
+  "The working trick was not just model size. It was environment speed, reward shaping, 3.6k hyperparameter experiments, and randomized episode length.",
+  "The randomized horizon came after the policy learned whipping behavior but could not keep it up longer than about 10 seconds.",
+  "He reported 18 million steps per second on some MuJoCo Warp configs by capturing the CUDA graph with APIC and calling it from C.",
+  "He confirmed gravity was 9.8, hinge friction was zero, and the cart was effectively tracking position zero.",
   "Later that day he posted a MuJoCo Playground reproduction at 120k steps per second, 200 million steps, and 27.8 minutes of training.",
   "A scan of the public yacineMTB GitHub repositories did not find a released six-pendulum source repo, so this page treats the thread as the source of truth.",
 ] as const;
@@ -76,6 +79,16 @@ const mediaFindings = [
 
 const researchNotes = [
   {
+    title: "Verified N=6 model-based solve",
+    body: "m1el/inverted-pendulum publishes verified N-link dynamics plus seed-free controllability-aware trajectory optimization and TVLQR. The local reproduction passed nominal and perturbed N=6 verification.",
+    href: "https://github.com/m1el/inverted-pendulum",
+  },
+  {
+    title: "Exudyn N=5 RL baseline",
+    body: "Exudyn's openAIgymNLinkAdvanced.py documents SAC training for multi-link inverted pendulums and notes that four and five links work, with smaller init noise and long training for higher link counts.",
+    href: "https://github.com/jgerstmayr/EXUDYN/blob/master/main/pythonDev/Examples/openAIgymNLinkAdvanced.py",
+  },
+  {
     title: "Multi link pendulums are real benchmarks",
     body: "Kaheman, Fasel, Bramburger, Strom, Kutz, and Brunton frame the multi arm pendulum on a cart as a benchmark for chaos, system identification, learning, and control.",
     href: "https://arxiv.org/abs/2205.06231",
@@ -130,23 +143,29 @@ const researchNotes = [
 const buildPlan = [
   {
     phase: "1. Environment",
-    body: "Start from MuJoCo Playground cartpole, extend the MJCF to one through six serial hinged links, set gravity to 9.8, keep hinge friction at zero for the first reproduction, and save every seed.",
+    body: "Start from MuJoCo Playground or MuJoCo Warp cartpole, extend the MJCF to one through six serial hinged links, set gravity to 9.8, keep hinge friction at zero, and make the cart track zero.",
   },
   {
     phase: "2. Reward",
-    body: "Use dense alignment and swing-up shaping during training, but visible score is zero unless every link is near upright and the serial chain is nearly straight.",
+    body: "Use dense swing-up shaping to discover whipping, but visible score is zero unless every link is near upright, the chain is nearly straight, and the hold lasts at least one second.",
   },
   {
     phase: "3. Search",
-    body: "Run lower-link curriculum first. Keep the same policy shape while advancing 1, 2, 3, 4, 5, then 6 links so later stages inherit timing and feedback.",
+    body: "Run many sweeps, not one hand run. Promote top hyperparameters from higher-compute runs, then tweak task details once useful behavior appears.",
   },
   {
     phase: "4. Gate",
-    body: "Require held out seeds, randomized episode lengths, lower link transfer, impulse recovery, and a visible failure map before calling the reproduction solved.",
+    body: "Randomize episode lengths only after whipping appears. Require held-out seeds, long holds, lower-link transfer, and a visible failure map before calling it solved.",
   },
 ] as const;
 
 const experimentResults = [
+  {
+    label: "Seed-free N=6",
+    run: "m1el local repro",
+    speed: "575.8s generation",
+    result: "Direct collocation plus TVLQR. Nominal verifier PASS at 0.364deg final error; perturbed challenge PASS 16/16.",
+  },
   {
     label: "Pezzza-style CEM",
     run: "ap-Atp5F3zbazixndWxBHdeQp",
@@ -170,6 +189,21 @@ const experimentResults = [
     run: "multiple",
     speed: "~282 to 825 SPS",
     result: "Strict score 0. TD3 can hold from near-upright, but down-start still fails.",
+  },
+] as const;
+
+const modelProof = [
+  {
+    label: "Nominal seed-free solve",
+    metric: "PASS",
+    body: "Generated from a neutral N=2 to N=5 ladder, lifted to N=6 with a one-sided bend-excitation floor, then verified with TVLQR catch and hold.",
+    video: "/ailab/six-pendulum/m1el-n6-seedfree-proof.mp4",
+  },
+  {
+    label: "Perturbed start",
+    metric: "16/16",
+    body: "Same controls from random initial offsets of +/-10% pi and +/-0.5 rad/s. The official challenge reports robustness through +/-0.80 rad.",
+    video: "/ailab/six-pendulum/m1el-n6-seedfree-perturbed-proof.mp4",
   },
 ] as const;
 
@@ -228,6 +262,32 @@ export default function SixPendulumCartpolePage() {
         </header>
 
         <SixPendulumCartpoleLab />
+
+        <section className="mt-10">
+          <p className="mb-4 text-sm font-bold uppercase tracking-[0.18em] text-[var(--muted)]">External verified N=6 proof</p>
+          <div className="grid gap-4 lg:grid-cols-2">
+            {modelProof.map((item) => (
+              <div className="overflow-hidden rounded-[8px] border border-[rgba(12,17,21,0.10)] bg-white/70" key={item.label}>
+                <video
+                  className="aspect-video w-full bg-[#101820] object-contain"
+                  controls
+                  muted
+                  playsInline
+                  preload="metadata"
+                  src={item.video}
+                />
+                <div className="p-5">
+                  <p className="text-xs font-bold uppercase tracking-[0.18em] text-[var(--muted)]">{item.label}</p>
+                  <h2 className="mt-2 font-serif text-3xl font-bold text-[var(--ink)]">{item.metric}</h2>
+                  <p className="mt-3 text-sm leading-relaxed text-[var(--ink-soft)]">{item.body}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+          <p className="mt-4 max-w-[920px] text-sm leading-relaxed text-[var(--ink-soft)]">
+            This is not the browser neural checkpoint. It is a reproducible six-link control solve from `m1el/inverted-pendulum`: verified dynamics, seed-free direct collocation, controllability-aware bend order, and full-state TVLQR. The lesson for our trainer is concrete: do not force straightness during the pump phase. Keep bend modes excitable, then catch and hold.
+          </p>
+        </section>
 
         <section className="mt-10 grid gap-4 md:grid-cols-2">
           <div className="rounded-[8px] border border-[rgba(12,17,21,0.08)] bg-white/70 p-6">
