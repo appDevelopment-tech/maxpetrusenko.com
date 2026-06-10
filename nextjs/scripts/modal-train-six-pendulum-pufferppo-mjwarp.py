@@ -91,7 +91,7 @@ def build_contract(total_timesteps: int = 10_000_000) -> dict:
     representative = rows[-1]
     return {
         "schema": "six-pendulum-pufferppo-mjwarp-contract-v1",
-        "status": "pufferppo-contract-ready-device-rollout-smoke-puffer-integration-missing",
+        "status": "pufferppo-contract-ready-device-rollout-random-horizon-smoke-puffer-integration-missing",
         "createdAtUnix": time.time(),
         "algorithm": "PufferPPO",
         "policyFamily": "PufferNet/MinGRU target, local smoke uses PufferLib Default+RNN API until PufferNet is wired",
@@ -126,6 +126,12 @@ def build_contract(total_timesteps: int = 10_000_000) -> dict:
                 "artifact": "/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/training-checkpoints/puffer-mjwarp-device-rollout.json",
                 "covered": "MJWarp loop can run reset/action/score/post-step kernels without per-step CPU metric reads; only summary arrays are copied after final synchronize.",
                 "caveat": "The action source is a deterministic scripted Warp kernel for substrate proof only. It is not a learned policy and does not count toward solve.",
+            },
+            "randomHorizonSupport": {
+                "command": "npm run train:six-pendulum:puffer-mjwarp:device-rollout:random-horizon",
+                "artifact": "/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/training-checkpoints/puffer-mjwarp-device-rollout-random-horizon.json",
+                "covered": "Per-world truncation horizons are sampled in the reset Warp kernel and consumed by the post-step Warp kernel without per-step host reads.",
+                "gate": "Keep disabled until a learned policy shows whip/near-catch behavior; this matches the source thread warning that random horizons helped only after the model was already scoring.",
             },
             "notCovered": "Puffer rollout integration, PufferPPO/MinGRU training attachment, Modal GPU execution, and CUDA graph/APIC capture.",
         },

@@ -47,11 +47,15 @@ def reset_state_kernel(
     elapsed: wp.array(dtype=wp.int32),
     held_steps: wp.array(dtype=wp.int32),
     max_held_steps: wp.array(dtype=wp.int32),
+    horizon_steps: wp.array(dtype=wp.int32),
     reset_count: wp.array(dtype=wp.int32),
     links: int,
     pose_mode: int,
     seed: int,
     reset_all: int,
+    random_horizon_enabled: int,
+    min_horizon: int,
+    max_horizon: int,
 ):
     i = wp.tid()
     should_reset = reset_all == 1 or terminal[i] > 0.5 or truncation[i] > 0.5
@@ -65,6 +69,10 @@ def reset_state_kernel(
         elapsed[i] = 0
         held_steps[i] = 0
         max_held_steps[i] = 0
+        horizon_steps[i] = 0
+        if random_horizon_enabled == 1:
+            span = wp.max(0, max_horizon - min_horizon)
+            horizon_steps[i] = min_horizon + int(rand_unit(seed, i, 70, count) * float(span + 1))
 
         selector = (i + count) - 4 * ((i + count) / 4)
         down_noise = rand_range(seed, i, 2, count, -0.08, 0.08)
@@ -264,6 +272,7 @@ def post_step_kernel(
     elapsed: wp.array(dtype=wp.int32),
     held_steps: wp.array(dtype=wp.int32),
     max_held_steps: wp.array(dtype=wp.int32),
+    horizon_steps: wp.array(dtype=wp.int32),
     rollout_max_held_steps: wp.array(dtype=wp.int32),
     rollout_max_strict_score: wp.array(dtype=wp.float32),
     final_reward: wp.array(dtype=wp.float32),
@@ -288,8 +297,11 @@ def post_step_kernel(
     rollout_max_held_steps[i] = wp.max(rollout_max_held_steps[i], max_held_steps[i])
     rollout_max_strict_score[i] = wp.max(rollout_max_strict_score[i], strict_score[i])
 
-    done = terminal[i] > 0.5 or step_count >= horizon
-    truncation[i] = 1.0 if step_count >= horizon and terminal[i] <= 0.5 else 0.0
+    world_horizon = horizon
+    if horizon_steps[i] > 0:
+        world_horizon = horizon_steps[i]
+    done = terminal[i] > 0.5 or step_count >= world_horizon
+    truncation[i] = 1.0 if step_count >= world_horizon and terminal[i] <= 0.5 else 0.0
     if done:
         elapsed[i] = 0
         held_steps[i] = 0
@@ -351,13 +363,26 @@ class WarpScoreKernel:
         self.elapsed_wp = wp.zeros(self.nworld, dtype=wp.int32, device=self.device)
         self.held_steps_wp = wp.zeros(self.nworld, dtype=wp.int32, device=self.device)
         self.max_held_steps_wp = wp.zeros(self.nworld, dtype=wp.int32, device=self.device)
+        self.horizon_steps_wp = wp.zeros(self.nworld, dtype=wp.int32, device=self.device)
         self.reset_count_wp = wp.zeros(self.nworld, dtype=wp.int32, device=self.device)
         self.final_reward_wp = wp.zeros(self.nworld, dtype=wp.float32, device=self.device)
         self.truncation_wp = wp.zeros(self.nworld, dtype=wp.float32, device=self.device)
         self.rollout_max_held_steps_wp = wp.zeros(self.nworld, dtype=wp.int32, device=self.device)
         self.rollout_max_strict_score_wp = wp.zeros(self.nworld, dtype=wp.float32, device=self.device)
 
-    def reset_worlds(self, qpos_wp, qvel_wp, ctrl_wp, pose: str, seed: int, reset_all: bool = False, synchronize: bool = True):
+    def reset_worlds(
+        self,
+        qpos_wp,
+        qvel_wp,
+        ctrl_wp,
+        pose: str,
+        seed: int,
+        reset_all: bool = False,
+        synchronize: bool = True,
+        random_horizon: bool = False,
+        min_horizon: int = 160,
+        max_horizon: int = 512,
+    ):
         pose_mode = 1 if pose == "hold" else 2 if pose == "mixed" else 0
         wp.launch(
             reset_state_kernel,
@@ -372,11 +397,15 @@ class WarpScoreKernel:
                 self.elapsed_wp,
                 self.held_steps_wp,
                 self.max_held_steps_wp,
+                self.horizon_steps_wp,
                 self.reset_count_wp,
                 int(self.links),
                 int(pose_mode),
                 int(seed),
                 1 if reset_all else 0,
+                1 if random_horizon else 0,
+                int(min_horizon),
+                int(max_horizon),
             ],
             device=self.device,
         )
@@ -499,6 +528,7 @@ class WarpScoreKernel:
                 self.elapsed_wp,
                 self.held_steps_wp,
                 self.max_held_steps_wp,
+                self.horizon_steps_wp,
                 self.rollout_max_held_steps_wp,
                 self.rollout_max_strict_score_wp,
                 self.final_reward_wp,

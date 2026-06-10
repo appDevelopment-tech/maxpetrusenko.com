@@ -18,6 +18,7 @@ const pufferArtifacts = [
   "puffer-mjwarp-env-driver.json",
   "puffer-mjwarp-device-rollout.json",
   "puffer-mjwarp-device-rollout-link6.json",
+  "puffer-mjwarp-device-rollout-random-horizon.json",
   "puffer-mjwarp-local-ppo-smoke.json",
   "puffer-mjwarp-local-ppo-hold-search.json",
   "puffer-mjwarp-stabilizer-bc.json",
@@ -200,8 +201,9 @@ fs.writeFileSync(jsonlPath, rows.map((row) => JSON.stringify(row)).join("\n") + 
 const completedLearnedRows = rows.filter((row) => row.status === "completed");
 const solvedLearnedRows = completedLearnedRows.filter((row) => row.countsTowardSolve);
 const teacherRows = rows.filter((row) => row.status === "scaffold");
-const bestCurrent = rows
-  .filter((row) => row.status !== "blocked-modal-spend-limit" && row.status !== "gated-by-1link")
+const bestLearned = completedLearnedRows
+  .sort((a, b) => b.score - a.score || b.maxHeldSeconds - a.maxHeldSeconds)[0];
+const bestScaffold = teacherRows
   .sort((a, b) => b.score - a.score || b.maxHeldSeconds - a.maxHeldSeconds)[0];
 
 const tableRows = rows.map((row) =>
@@ -231,7 +233,8 @@ const markdown = [
   "",
   `- Learned policy rows solved held-out down-start: ${solvedLearnedRows.length}/${completedLearnedRows.length}.`,
   `- Teacher scaffold rows with swing-up/catch signal: ${teacherRows.length}.`,
-  `- Best current score row: ${bestCurrent?.experimentId || "none"} with score ${formatNumber(bestCurrent?.score || 0, 2)} and down-start hold ${formatNumber(bestCurrent?.maxHeldSeconds || 0, 3)}s.`,
+  `- Best learned row: ${bestLearned?.experimentId || "none"} with counting score ${formatNumber(bestLearned?.score || 0, 2)} and down-start hold ${formatNumber(bestLearned?.maxHeldSeconds || 0, 3)}s.`,
+  `- Best non-counting scaffold row: ${bestScaffold?.experimentId || "none"} with score ${formatNumber(bestScaffold?.score || 0, 2)} and down-start hold ${formatNumber(bestScaffold?.maxHeldSeconds || 0, 3)}s.`,
   "- True PufferPPO/MinGRU sweep rows are queued, not run, because Modal GPU execution is blocked by the workspace spend limit.",
   "",
   "experiment | status | algorithm | links | policy | params | wallclock_s | score | down_hold_s | solved_1s | counts | note",

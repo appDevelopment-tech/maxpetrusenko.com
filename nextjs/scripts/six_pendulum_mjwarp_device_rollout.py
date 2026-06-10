@@ -22,6 +22,9 @@ def run_device_rollout(
     pose: str = "down",
     force_scale: float = DEFAULT_ACTION_SCALE,
     seed: int = 426210,
+    random_horizon: bool = False,
+    min_horizon: int = 160,
+    max_horizon: int = 512,
 ) -> dict:
     import mujoco
     import mujoco_warp as mjw
@@ -40,9 +43,24 @@ def run_device_rollout(
         terminal_boundary=2.35,
     )
     horizon = max(1, int(steps) + 1)
+    random_horizon_enabled = bool(random_horizon)
+    if random_horizon_enabled:
+        min_horizon = max(1, int(min_horizon))
+        max_horizon = max(min_horizon, int(max_horizon))
     pose_hold = pose == "hold"
 
-    runner.reset_worlds(data.qpos, data.qvel, data.ctrl, pose, seed, reset_all=True, synchronize=False)
+    runner.reset_worlds(
+        data.qpos,
+        data.qvel,
+        data.ctrl,
+        pose,
+        seed,
+        reset_all=True,
+        synchronize=False,
+        random_horizon=random_horizon_enabled,
+        min_horizon=min_horizon,
+        max_horizon=max_horizon,
+    )
     mjw.forward(model, data)
     runner.score_device(data.qpos, data.qvel, synchronize=False)
     runner.initialize_prev_potential_from_current(synchronize=False)
@@ -52,7 +70,18 @@ def run_device_rollout(
         mjw.step(model, data)
         runner.score_device(data.qpos, data.qvel, synchronize=False)
         runner.post_step_device(pose_hold, horizon, synchronize=False)
-        runner.reset_worlds(data.qpos, data.qvel, data.ctrl, pose, seed, reset_all=False, synchronize=False)
+        runner.reset_worlds(
+            data.qpos,
+            data.qvel,
+            data.ctrl,
+            pose,
+            seed,
+            reset_all=False,
+            synchronize=False,
+            random_horizon=random_horizon_enabled,
+            min_horizon=min_horizon,
+            max_horizon=max_horizon,
+        )
         mjw.forward(model, data)
         runner.score_device(data.qpos, data.qvel, synchronize=False)
         runner.sync_reset_potential(synchronize=False)
@@ -65,6 +94,7 @@ def run_device_rollout(
     reset_count = runner.reset_count_wp.numpy()
     terminal = runner.terminal_wp.numpy()
     truncation = runner.truncation_wp.numpy()
+    horizon_steps = runner.horizon_steps_wp.numpy()
     control_dt = float(mjm.opt.timestep)
     simulated_steps = int(nworld) * int(steps)
 
@@ -86,6 +116,11 @@ def run_device_rollout(
         "rolloutBackend": "warp-post-step-kernel-device-loop",
         "resetBackend": "warp-reset-kernel",
         "actionBackend": "warp-scripted-action-kernel",
+        "randomHorizonEnabled": random_horizon_enabled,
+        "randomHorizonMinSteps": int(min_horizon) if random_horizon_enabled else 0,
+        "randomHorizonMaxSteps": int(max_horizon) if random_horizon_enabled else 0,
+        "randomHorizonCurrentMin": int(np.min(horizon_steps)) if random_horizon_enabled and horizon_steps.size else 0,
+        "randomHorizonCurrentMax": int(np.max(horizon_steps)) if random_horizon_enabled and horizon_steps.size else 0,
         "cpuMetricReadsPerStep": 0,
         "cpuStateWritesPerStep": 0,
         "cpuReads": "summary arrays only after final synchronize",
@@ -101,6 +136,7 @@ def run_device_rollout(
             "This is a device-rollout substrate smoke, not training and not a learned policy.",
             "The action source is a deterministic Warp scripted-action kernel only to exercise ctrl writes through MJWarp.",
             "Strict score still requires continuous upright hold; subsecond flashes do not count.",
+            "Randomized per-world horizons are opt-in and should stay disabled until a learned policy shows whip behavior.",
         ],
     }
 
@@ -113,6 +149,9 @@ def main():
     parser.add_argument("--pose", choices=["down", "hold", "mixed"], default="down")
     parser.add_argument("--force-scale", type=float, default=DEFAULT_ACTION_SCALE)
     parser.add_argument("--seed", type=int, default=426210)
+    parser.add_argument("--random-horizon", action="store_true")
+    parser.add_argument("--min-horizon", type=int, default=160)
+    parser.add_argument("--max-horizon", type=int, default=512)
     parser.add_argument("--write-result", type=Path, default=DEFAULT_OUTPUT)
     args = parser.parse_args()
 
@@ -127,6 +166,9 @@ def main():
         pose=args.pose,
         force_scale=args.force_scale,
         seed=args.seed,
+        random_horizon=args.random_horizon,
+        min_horizon=args.min_horizon,
+        max_horizon=args.max_horizon,
     )
     args.write_result.parent.mkdir(parents=True, exist_ok=True)
     args.write_result.write_text(json.dumps(result, indent=2) + "\n")

@@ -250,8 +250,27 @@ Phase 1, one-link PufferPPO:
 - Device-rollout smoke artifact: `/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/training-checkpoints/puffer-mjwarp-device-rollout.json`
 - Six-link device-rollout smoke artifact: `/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/training-checkpoints/puffer-mjwarp-device-rollout-link6.json`
 - Device-rollout result on 2026-06-10: one-link ran `128` worlds for `256` steps and six-link ran `16` worlds for `32` steps with `cpuMetricReadsPerStep=0` and `cpuStateWritesPerStep=0`; summary arrays are copied only after final synchronize. Both use local Mac Warp CPU, so SPS is not the final GPU number.
-- Interpretation: reset sampling/writes, action scaling, ctrl writes, reward, observation, strict score, cart terminal, truncation, held/max-held accumulation, and potential-delta reward are now computed through reusable Warp kernels. A standalone MJWarp rollout can now keep metrics device-side per step. The remaining Yacine-speed blocker is attaching this path to PufferPPO/MinGRU without falling back to the NumPy-returning PufferEnv step interface, then running it on Modal/GPU with fixed shapes and graph capture.
+- Random-horizon device smoke command: `npm run train:six-pendulum:puffer-mjwarp:device-rollout:random-horizon`
+- Random-horizon device smoke artifact: `/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/training-checkpoints/puffer-mjwarp-device-rollout-random-horizon.json`
+- Random-horizon result on 2026-06-10: one-link ran `32` worlds for `96` steps with per-world horizons sampled on-device between `16` and `32` steps; reset counts averaged above `4`, proving truncation/resets occurred without per-step CPU metric reads.
+- Interpretation: reset sampling/writes, horizon sampling, action scaling, ctrl writes, reward, observation, strict score, cart terminal, truncation, held/max-held accumulation, and potential-delta reward are now computed through reusable Warp kernels. A standalone MJWarp rollout can keep metrics device-side per step. The remaining Yacine-speed blocker is attaching this path to PufferPPO/MinGRU without falling back to the NumPy-returning PufferEnv step interface, then running it on Modal/GPU with fixed shapes and graph capture.
 - Proof boundary: the device-rollout action source is a deterministic Warp scripted-action kernel for plumbing only. It is not a learned policy, not a score row, and not a solve.
+
+Lower-link execution plan from current evidence:
+
+1. Keep training on one link until held-out pure down-start reaches one continuous second. Do not unlock link two from hold-start, teacher, scripted rollout, or mixed-start wins.
+2. Use fixed episode lengths first. Turn on randomized per-world horizons only after learned whip or near-catch appears, because the source thread says it helped after the model was already scoring but getting lazy on fixed endings.
+3. Train by sweeps, not single hand-tuning: many one-link PufferPPO/PufferNet-MinGRU runs, wallclock-vs-score dots, strict promotion gate.
+4. Keep observations policy-usable only: cart state, previous action, relative/absolute angle encodings, velocities. Do not leak score-only terms.
+5. Port the device rollout into the trainer path before GPU spend: the Puffer-facing step still returns NumPy arrays, while the device smoke proves the no-per-step-host-read path.
+6. On GPU, capture only fixed-topology work. CPU Python and synchronization do not belong inside `wp.ScopedCapture`; graph capture comes after fixed-shape rollout and policy plumbing.
+
+Source anchors:
+
+- Yacine/kache thread: PufferPPO, Puffer MinGRU, MuJoCo Warp, random horizon only after whip, `3.6k` experiments, wallclock-vs-score.
+- PufferLib docs: PuffeRL/PufferNet/Protein are the native path for fast training and sweeps.
+- MuJoCo Warp docs: MJWarp is throughput-first for large parallel RL batches, not single-env latency.
+- Warp APIC issue and CUDA graph docs: capture/replay requires device-side fixed work and no synchronization/query inside capture.
 
 Puffer-style sweep ledger:
 
