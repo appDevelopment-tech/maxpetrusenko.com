@@ -46,7 +46,7 @@ def build_torch_policy(obs_dim: int, hidden_dim: int, seed: int, recurrent: bool
                 encoded = torch.tanh(self.encoder(obs))
                 next_hidden = self.rnn(encoded, hidden)
                 mean = self.actor(next_hidden).reshape(-1)
-                std = torch.exp(self.log_std).reshape(())
+                std = torch.exp(torch.clamp(self.log_std, -2.0, 0.5)).reshape(())
                 dist = torch.distributions.Normal(mean, std)
                 raw_action = mean if deterministic else dist.sample()
                 action = torch.tanh(raw_action).contiguous()
@@ -61,7 +61,7 @@ def build_torch_policy(obs_dim: int, hidden_dim: int, seed: int, recurrent: bool
                 encoded = torch.tanh(self.encoder(obs))
                 next_hidden = self.rnn(encoded, hidden)
                 mean = self.actor(next_hidden).reshape(-1)
-                std = torch.exp(self.log_std).reshape(())
+                std = torch.exp(torch.clamp(self.log_std, -2.0, 0.5)).reshape(())
                 dist = torch.distributions.Normal(mean, std)
                 clamped = torch.clamp(action.reshape(-1), -0.999, 0.999)
                 raw_action = 0.5 * (torch.log1p(clamped) - torch.log1p(-clamped))
@@ -441,6 +441,8 @@ def run_device_rollout(
             "logprobFinite": bool(np.isfinite(logprob_np).all()) if logprob_np is not None else None,
             "valueFinite": bool(np.isfinite(value_np).all()) if value_np is not None else None,
             "rewardMean": float(np.mean(reward_np)),
+            "cartAbsMean": float(np.mean(np.abs(obs_np[:, :, 0]))) if obs_np.size else 0.0,
+            "cartAbsMax": float(np.max(np.abs(obs_np[:, :, 0]))) if obs_np.size else 0.0,
             "logprobMean": float(np.mean(logprob_np)) if logprob_np is not None else None,
             "valueMean": float(np.mean(value_np)) if value_np is not None else None,
             "terminalCount": int(np.sum(terminal_np > 0.5)),
@@ -553,7 +555,7 @@ def main():
     parser.add_argument("--links", type=int, default=1)
     parser.add_argument("--nworld", type=int, default=128)
     parser.add_argument("--steps", type=int, default=256)
-    parser.add_argument("--pose", choices=["down", "hold", "mixed"], default="down")
+    parser.add_argument("--pose", choices=["down", "hold", "mixed", "down-heavy"], default="down")
     parser.add_argument("--force-scale", type=float, default=DEFAULT_ACTION_SCALE)
     parser.add_argument("--seed", type=int, default=426210)
     parser.add_argument("--random-horizon", action="store_true")

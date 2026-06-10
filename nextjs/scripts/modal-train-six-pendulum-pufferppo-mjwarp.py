@@ -174,7 +174,7 @@ def build_contract(total_timesteps: int = 10_000_000) -> dict:
                     "/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/model-consults/oracle-pendulum-policy-reflection.md",
                 ],
                 "diagnosis": "PPO tuple plumbing is now coherent: pre-action observations are stored with their sampled actions/logprobs, and ratio reconstruction is 1.0 on the first smoke epoch. The remaining blocker is pure down-start transfer: forceScale 120 mixed-start probes reach near-catch flashes up to 0.8825s inside curriculum rollouts, but held-out down-start remains 0.0s.",
-                "nextCommand": "increase down-start sampling and run the forceScale 120 swing-up curriculum on GPU-scale worlds; link two remains locked until held-out pure down-start holds for at least one second",
+                "nextCommand": "npm run train:six-pendulum:puffer-mjwarp:device-ppo-down-heavy-conservative",
             },
             "actionScaleDiagnostic": {
                 "command": "npm run train:six-pendulum:puffer-mjwarp:action-scale-diagnostic",
@@ -205,6 +205,10 @@ def build_contract(total_timesteps: int = 10_000_000) -> dict:
             "npm run train:six-pendulum:puffer-mjwarp:device-ppo-hold-bc-probe",
             "npm run train:six-pendulum:puffer-mjwarp:device-ppo-down-swingup-probe",
             "npm run train:six-pendulum:puffer-mjwarp:device-ppo-down-swingup-conservative",
+            "npm run train:six-pendulum:puffer-mjwarp:device-ppo-down-heavy-conservative",
+            "npm run train:six-pendulum:puffer-mjwarp:device-ppo-link2-diagnostic",
+            "npm run train:six-pendulum:puffer-mjwarp:device-ppo-link3-diagnostic",
+            "npm run train:six-pendulum:puffer-mjwarp:device-ppo-link4-diagnostic",
             "doppler run --project api_keys --config dev -- modal run --write-result /Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/training-checkpoints/puffer-mjwarp-pufferppo-runtime.json scripts/modal-train-six-pendulum-pufferppo-mjwarp.py::inspect_pufferppo_runtime",
         ],
     }

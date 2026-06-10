@@ -27,6 +27,10 @@ const pufferArtifacts = [
   "puffer-mjwarp-device-ppo-hold-bc-probe.json",
   "puffer-mjwarp-device-ppo-down-swingup-probe.json",
   "puffer-mjwarp-device-ppo-down-swingup-conservative.json",
+  "puffer-mjwarp-device-ppo-down-heavy-conservative.json",
+  "puffer-mjwarp-device-ppo-link2-down-heavy-diagnostic.json",
+  "puffer-mjwarp-device-ppo-link3-down-heavy-diagnostic.json",
+  "puffer-mjwarp-device-ppo-link4-down-heavy-diagnostic.json",
   "puffer-mjwarp-device-rollout-link6.json",
   "puffer-mjwarp-device-rollout-random-horizon.json",
   "puffer-mjwarp-local-ppo-smoke.json",
@@ -115,7 +119,11 @@ function sourceRow(entry, index) {
     holdStartSolvedOneSecond: holdHeld >= 1,
     countsTowardSolve: !teacher && downHeld >= 1,
     sourceArtifact: fullPath,
-    note: file.includes("device-ppo-down-swingup-conservative")
+    note: file.includes("device-ppo-down-heavy-conservative")
+      ? "Down-heavy one-link swing-up/catch PPO probe at force 120: mostly pure hanging starts, some pump/catch starts, conservative PPO, and stabilizer BC initialization. Counts only if held-out pure down-start holds for at least one second."
+      : file.includes("device-ppo-link")
+      ? "Parallel lower-link diagnostic down-heavy PPO run. It is exploratory only: higher links are not promoted until every lower link passes held-out pure down-start for at least one second."
+      : file.includes("device-ppo-down-swingup-conservative")
       ? "Conservative one-link mixed-start swing-up/catch PPO probe at force 120 with lower LR, tighter clip, and stabilizer BC initialization. Counts only if held-out pure down-start holds for at least one second."
       : file.includes("device-ppo-down-swingup-probe")
       ? "One-link mixed-start swing-up/catch PPO probe at force 120 with stronger potential/catch reward and stabilizer BC initialization. Counts only if held-out pure down-start holds for at least one second."

@@ -281,6 +281,13 @@ Phase 1, one-link PufferPPO:
 - One-link mixed swing-up command: `npm run train:six-pendulum:puffer-mjwarp:device-ppo-down-swingup-probe`
 - One-link conservative mixed swing-up command: `npm run train:six-pendulum:puffer-mjwarp:device-ppo-down-swingup-conservative`
 - One-link mixed swing-up result on 2026-06-10: both forceScale `120` probes use stronger potential/catch reward and coherent PPO buffers. Regular PPO still held pure down-start `0.0s`; conservative PPO also held pure down-start `0.0s`. The conservative run did produce a mixed-rollout near-catch flash of `0.8825s`, but held-out pure down-start remains unsolved and link two stays locked.
+- Down-heavy one-link command: `npm run train:six-pendulum:puffer-mjwarp:device-ppo-down-heavy-conservative`
+- Down-heavy one-link result on 2026-06-10: added mostly-down reset sampling, low-height pump reward, cart-boundary penalty, terminal penalty, sustained-hold shaping, action/std diagnostics, and cart drift metrics. Held-out pure down-start still held `0.0s`, so it does not count. Best stochastic down-heavy rollout reached `0.73s`; this is still subsecond. The new `cartAbsMax ~= 2.35` metric proves the learned policy is driving into the rail before a valid catch.
+- Parallel lower-link diagnostics:
+  - `npm run train:six-pendulum:puffer-mjwarp:device-ppo-link2-diagnostic`
+  - `npm run train:six-pendulum:puffer-mjwarp:device-ppo-link3-diagnostic`
+  - `npm run train:six-pendulum:puffer-mjwarp:device-ppo-link4-diagnostic`
+- Parallel lower-link diagnostic result on 2026-06-10: links `2`, `3`, and `4` all stayed at held-out pure down-start `0.0s`. Link 2 reached hold-start `0.58s`; link 3 reached `0.1175s`; link 4 reached `0.0975s`. Down-start action usage saturated upward with link count: link 2 mean force about `97/120`, link 3 about `112/120`, link 4 about `108/120`. These runs are diagnostic dots only, not promotion.
 - Long-horizon hold-start full command queued after probe: `npm run train:six-pendulum:puffer-mjwarp:device-ppo-hold-long` (`forceScale=32`, `nworld=128`, `rolloutSteps=1024`, `updates=50`, `evalInterval=5`)
 - Random-horizon device smoke command: `npm run train:six-pendulum:puffer-mjwarp:device-rollout:random-horizon`
 - Random-horizon device smoke artifact: `/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/training-checkpoints/puffer-mjwarp-device-rollout-random-horizon.json`

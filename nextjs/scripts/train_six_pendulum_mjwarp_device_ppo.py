@@ -225,6 +225,10 @@ def collect_recurrent_rollout(
     reward_np = reward_buffer.numpy().reshape(int(steps), int(nworld))
     terminal_np = terminal_buffer.numpy().reshape(int(steps), int(nworld))
     truncation_np = truncation_buffer.numpy().reshape(int(steps), int(nworld))
+    action_np = action_buffer.numpy().reshape(int(steps), int(nworld))
+    normalized_action_np = normalized_action_buffer.numpy().reshape(int(steps), int(nworld))
+    obs_np = obs_buffer.numpy().reshape(int(steps), int(nworld), OBS_DIM)
+    cart_abs_np = np.abs(obs_np[:, :, 0])
 
     return {
         "summary": {
@@ -236,6 +240,12 @@ def collect_recurrent_rollout(
             "simulatedSteps": int(steps) * int(nworld),
             "sps": (int(steps) * int(nworld)) / max(time.time() - started, 1e-9),
             "rewardMean": float(np.mean(reward_np)),
+            "actionAbsMean": float(np.mean(np.abs(action_np))),
+            "actionAbsMax": float(np.max(np.abs(action_np))) if action_np.size else 0.0,
+            "normalizedActionAbsMean": float(np.mean(np.abs(normalized_action_np))),
+            "normalizedActionAbsMax": float(np.max(np.abs(normalized_action_np))) if normalized_action_np.size else 0.0,
+            "cartAbsMean": float(np.mean(cart_abs_np)) if cart_abs_np.size else 0.0,
+            "cartAbsMax": float(np.max(cart_abs_np)) if cart_abs_np.size else 0.0,
             "terminalCount": int(np.sum(terminal_np > 0.5)),
             "truncationCount": int(np.sum(truncation_np > 0.5)),
             "maxStrictScore": float(np.max(strict_score)) if strict_score.size else 0.0,
@@ -243,8 +253,8 @@ def collect_recurrent_rollout(
             "solvedOneSecond": bool(max_held_steps.size and np.max(max_held_steps) * control_dt >= 1.0),
         },
         "buffers": {
-            "obs": obs_buffer.numpy().reshape(int(steps), int(nworld), OBS_DIM),
-            "actions": normalized_action_buffer.numpy().reshape(int(steps), int(nworld)),
+            "obs": obs_np,
+            "actions": normalized_action_np,
             "logprobs": logprob_buffer.numpy().reshape(int(steps), int(nworld)),
             "values": value_buffer.numpy().reshape(int(steps), int(nworld)),
             "rewards": reward_np,
@@ -305,6 +315,9 @@ def ppo_update(
         new_value = torch.stack(value_steps)
         entropy = torch.stack(entropy_steps)
         ratio = torch.exp(new_logprob - old_logprob)
+        logratio = new_logprob - old_logprob
+        approx_kl = ((ratio - 1.0) - logratio).mean()
+        clipfrac = ((ratio - 1.0).abs() > float(clip_coef)).float().mean()
         policy_loss = torch.max(
             -normalized_advantage * ratio,
             -normalized_advantage * torch.clamp(ratio, 1.0 - clip_coef, 1.0 + clip_coef),
@@ -327,6 +340,9 @@ def ppo_update(
                 "loss": float(loss.detach()),
                 "ratioMean": float(ratio.detach().mean()),
                 "ratioMax": float(ratio.detach().max()),
+                "approxKl": float(approx_kl.detach()),
+                "clipFrac": float(clipfrac.detach()),
+                "logStd": float(getattr(policy, "log_std").detach().reshape(-1)[0]) if hasattr(policy, "log_std") else None,
                 "gradNorm": grad_norm,
                 "parameterDeltaL2": float(torch.linalg.vector_norm(after_epoch - before)),
             }
@@ -524,7 +540,7 @@ def main():
     parser.add_argument("--eval-steps", type=int, default=480)
     parser.add_argument("--updates", type=int, default=4)
     parser.add_argument("--update-epochs", type=int, default=2)
-    parser.add_argument("--pose", choices=["down", "hold", "mixed"], default="down")
+    parser.add_argument("--pose", choices=["down", "hold", "mixed", "down-heavy"], default="down")
     parser.add_argument("--force-scale", type=float, default=DEFAULT_ACTION_SCALE)
     parser.add_argument("--policy-hidden-dim", type=int, default=64)
     parser.add_argument("--seed", type=int, default=426210)

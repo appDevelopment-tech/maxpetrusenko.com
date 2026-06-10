@@ -75,6 +75,7 @@ def reset_state_kernel(
             horizon_steps[i] = min_horizon + int(rand_unit(seed, i, 70, count) * float(span + 1))
 
         selector = (i + count) - 4 * ((i + count) / 4)
+        selector8 = (i + count) - 8 * ((i + count) / 8)
         down_noise = rand_range(seed, i, 2, count, -0.08, 0.08)
         for link in range(MAX_LINKS):
             if link < links:
@@ -96,6 +97,19 @@ def reset_state_kernel(
                     else:
                         angle = rand_range(seed, i, 10 + link, count, -0.035, 0.035) * float(link + 1)
                         velocity = rand_range(seed, i, 30 + link, count, -0.06, 0.06)
+                elif pose_mode == 3:
+                    if selector8 < 5:
+                        angle = 3.141592653589793 - float(link) * 0.05 + down_noise
+                        velocity = rand_range(seed, i, 30 + link, count, -0.18, 0.18)
+                    elif selector8 == 5:
+                        angle = 3.141592653589793 - float(link) * 0.05 + rand_range(seed, i, 10 + link, count, -0.18, 0.18)
+                        velocity = rand_range(seed, i, 30 + link, count, 0.8, 1.7)
+                    elif selector8 == 6:
+                        angle = 0.78 * 3.141592653589793 - float(link) * 0.04 + rand_range(seed, i, 10 + link, count, -0.12, 0.12)
+                        velocity = rand_range(seed, i, 30 + link, count, -1.55, -0.7)
+                    else:
+                        angle = rand_range(seed, i, 10 + link, count, -0.045, 0.045) * float(link + 1)
+                        velocity = rand_range(seed, i, 30 + link, count, -0.08, 0.08)
                 else:
                     angle = 3.141592653589793 - float(link) * 0.05 + down_noise
                     velocity = rand_range(seed, i, 30 + link, count, -0.08, 0.08)
@@ -264,15 +278,22 @@ def score_obs_kernel(
 
     dense_alignment = wp.exp(-mean_upright_error * 1.15 - max_bend_error * 2.0 - mean_speed * 0.08)
     action_fraction = last_action[i] / action_scale
+    low_height = 1.0 - height
+    pump_reward = wp.min(wp.abs(xvel) * low_height, 3.0) * 0.08
+    pump_reward += wp.min(mean_speed * low_height, 3.0) * 0.04
     shaped_reward = height * 0.3 + dense_alignment * 0.1 + (score / 100.0) * (score / 100.0) * 2.5
+    shaped_reward += pump_reward
     if is_whip:
         shaped_reward += 0.2
     if is_near_top_fast:
         shaped_reward += 0.35
     if in_catch_basin:
         shaped_reward += 1.0
-    shaped_reward -= wp.abs(x) * 0.004
-    shaped_reward -= action_fraction * action_fraction * 0.0005
+    cart_fraction = wp.abs(x) / terminal_boundary
+    shaped_reward -= cart_fraction * cart_fraction * 0.25
+    if cart_fraction > 0.8:
+        shaped_reward -= (cart_fraction - 0.8) * 1.5
+    shaped_reward -= action_fraction * action_fraction * 0.015
 
     base = i * OBS_DIM
     obs[base] = x
@@ -313,15 +334,24 @@ def post_step_kernel(
     elapsed[i] = step_count
 
     reward_value = shaped_reward[i]
-    if pose_hold == 0:
+    hit_terminal = terminal[i] > 0.5
+    if hit_terminal:
+        reward_value -= 3.0
+    elif pose_hold == 0:
         delta = wp.min(wp.max(potential[i] - prev_potential[i], -0.25), 0.35)
         reward_value = reward_value + delta * 2.0
     prev_potential[i] = potential[i]
-    final_reward[i] = reward_value
 
     current_held = 0
     if strict_score[i] > 82.0:
         current_held = held_steps[i] + 1
+    if current_held > 0:
+        reward_value += wp.min(float(current_held), 400.0) * 0.001
+    if current_held >= 40:
+        reward_value += 0.2
+    if current_held >= 160:
+        reward_value += 0.4
+    final_reward[i] = reward_value
     held_steps[i] = current_held
     max_held_steps[i] = wp.max(max_held_steps[i], current_held)
     rollout_max_held_steps[i] = wp.max(rollout_max_held_steps[i], max_held_steps[i])
@@ -465,7 +495,7 @@ class WarpScoreKernel:
         min_horizon: int = 160,
         max_horizon: int = 512,
     ):
-        pose_mode = 1 if pose == "hold" else 2 if pose == "mixed" else 0
+        pose_mode = 1 if pose == "hold" else 2 if pose == "mixed" else 3 if pose == "down-heavy" else 0
         wp.launch(
             reset_state_kernel,
             dim=self.nworld,
