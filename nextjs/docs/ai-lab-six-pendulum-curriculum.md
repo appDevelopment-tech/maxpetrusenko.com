@@ -184,6 +184,17 @@ Stronger local hold-search:
 - Down-start eval remained strict score `0`, max held `0s`, so no link-two promotion.
 - Interpretation: more local CPU updates improve near-upright stabilization but plateau below the strict hold gate. The next change should improve the PPO update or use GPU scale, not unlock more links.
 
+Learned hold-start stabilizer:
+
+- Command: `npm run train:six-pendulum:puffer-mjwarp:stabilizer-bc`
+- Artifact: `/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/training-checkpoints/puffer-mjwarp-stabilizer-bc.json`
+- Result: `behavior-clone-smoke-passed`, `links=1`, `nworld=8`, `rolloutSteps=480`, `evalSteps=640`, `epochs=600`.
+- Expert target: near-upright stabilizer `force = -(kx*x + kv*v + kt*theta + kw*omega)` with gains `kx=8`, `kv=4`, `kt=-60`, `kw=-16`. This expert held `1.2s` in MJWarp.
+- Learned model: same tiny GRU policy, `27,267` parameters, trained by behavior cloning from the stabilizer target.
+- Learned hold-start eval: max strict score `99.89`, max held `1.285s`, one-second gate passed.
+- Learned down-start eval: strict score `0`, max held `0s`, so there is still no link-two promotion.
+- Interpretation: one-link near-upright catch/hold is now learned in the MJWarp lane. This is curriculum pretraining, not the final down-start swing-up solve.
+
 Phase 1, one-link PufferPPO:
 
 - Environment: same MJCF constraints, gravity `9.8`, hinge friction `0`, cart track centered at `0`.

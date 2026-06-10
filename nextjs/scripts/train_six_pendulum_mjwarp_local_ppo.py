@@ -173,6 +173,94 @@ def train(mjcf_xml: str, links: int, nworld: int, rollout_steps: int, eval_steps
     }
 
 
+def expert_action_from_obs(obs, gains):
+    kx, kv, kt, kw = gains
+    x = obs[:, 0]
+    v = obs[:, 1] * 5.0
+    theta = np.arctan2(obs[:, 3], obs[:, 4])
+    omega = obs[:, 7] * 8.0
+    force = -(kx * x + kv * v + kt * theta + kw * omega)
+    return np.clip(force / 32.0, -1.0, 1.0).reshape(len(obs), 1).astype(np.float32)
+
+
+def behavior_clone(mjcf_xml: str, links: int, nworld: int, rollout_steps: int, eval_steps: int, epochs: int, seed: int) -> dict:
+    torch.manual_seed(seed)
+    np.random.seed(seed)
+    started = time.time()
+    gains = (8.0, 4.0, -60.0, -16.0)
+    env = SixPendulumMJWarpPufferEnv(mjcf_xml, links=links, nworld=nworld, horizon=rollout_steps + 1, pose="hold")
+    obs, _ = env.reset()
+    obs_batches = []
+    action_batches = []
+    expert_max_held = 0.0
+    expert_max_score = 0.0
+    for _ in range(rollout_steps):
+        action = expert_action_from_obs(obs, gains)
+        obs_batches.append(obs.copy())
+        action_batches.append(action.copy())
+        obs, _, _, _, infos = env.step(action)
+        expert_max_held = max(expert_max_held, max(info["maxHeldSeconds"] for info in infos))
+        expert_max_score = max(expert_max_score, max(info["strictScore"] for info in infos))
+    env.close()
+
+    observations = torch.as_tensor(np.concatenate(obs_batches), dtype=torch.float32)
+    actions = torch.as_tensor(np.concatenate(action_batches), dtype=torch.float32)
+    policy = TinyRecurrentPolicy()
+    optimizer = torch.optim.AdamW(policy.parameters(), lr=1e-3, weight_decay=1e-5)
+    losses = []
+    batch_size = min(512, len(observations))
+    for epoch in range(epochs):
+        indices = torch.randperm(len(observations))[:batch_size]
+        hidden = torch.zeros(len(indices), policy.gru.hidden_size)
+        mean, _, _, _ = policy(observations[indices], hidden)
+        loss = (mean - actions[indices]).pow(2).mean()
+        optimizer.zero_grad(set_to_none=True)
+        loss.backward()
+        torch.nn.utils.clip_grad_norm_(policy.parameters(), 0.7)
+        optimizer.step()
+        if epoch in {0, epochs // 4, epochs // 2, epochs - 1}:
+            losses.append({"epoch": epoch + 1, "loss": float(loss.detach())})
+
+    hold_eval = evaluate(policy, mjcf_xml, links, nworld, eval_steps, "hold")
+    down_eval = evaluate(policy, mjcf_xml, links, nworld, eval_steps, "down")
+    return {
+        "schema": "six-pendulum-mjwarp-local-stabilizer-bc-v1",
+        "status": "behavior-clone-smoke-passed",
+        "algorithm": "tiny-gru-stabilizer-behavior-clone",
+        "links": links,
+        "nworld": nworld,
+        "rolloutSteps": rollout_steps,
+        "evalSteps": eval_steps,
+        "evalSeconds": eval_steps * 0.0025,
+        "epochs": epochs,
+        "seed": seed,
+        "elapsedSeconds": time.time() - started,
+        "parameterCount": int(sum(parameter.numel() for parameter in policy.parameters())),
+        "expert": {
+            "controller": "force = -(kx*x + kv*v + kt*theta + kw*omega)",
+            "gains": {"kx": gains[0], "kv": gains[1], "kt": gains[2], "kw": gains[3]},
+            "maxStrictScore": float(expert_max_score),
+            "maxHeldSeconds": float(expert_max_held),
+            "solvedOneSecond": bool(expert_max_held >= 1.0),
+        },
+        "losses": losses,
+        "evaluation": {
+            "hold": hold_eval,
+            "down": down_eval,
+        },
+        "gates": {
+            "strictOneSecondRequired": True,
+            "holdStartGatePassed": bool(hold_eval["solvedOneSecond"]),
+            "promoteToNextLink": bool(down_eval["solvedOneSecond"]),
+        },
+        "nextRequiredWork": [
+            "Use this learned stabilizer as a curriculum bootstrap, not as a final down-start solve.",
+            "Train swing-up into this catch policy from down start.",
+            "Replace the hand-designed stabilizer target with RL-discovered behavior at GPU scale.",
+        ],
+    }
+
+
 def main():
     parser = argparse.ArgumentParser(description="Run a tiny local recurrent PPO smoke on the MJWarp env adapter.")
     parser.add_argument("--links", type=int, default=1)
@@ -180,7 +268,9 @@ def main():
     parser.add_argument("--rollout-steps", type=int, default=96)
     parser.add_argument("--eval-steps", type=int, default=480)
     parser.add_argument("--updates", type=int, default=3)
+    parser.add_argument("--bc-epochs", type=int, default=600)
     parser.add_argument("--pose", choices=["down", "hold"], default="hold")
+    parser.add_argument("--behavior-clone-stabilizer", action="store_true")
     parser.add_argument("--seed", type=int, default=426210)
     parser.add_argument(
         "--write-result",
@@ -192,7 +282,10 @@ def main():
     mjcf_path = Path(f"app/ailab/six-pendulum-cartpole/mjcf/cartpole_{args.links}_link.xml")
     if not mjcf_path.exists():
         raise FileNotFoundError(f"Missing MJCF file: {mjcf_path}")
-    result = train(mjcf_path.read_text(), args.links, args.nworld, args.rollout_steps, args.eval_steps, args.updates, args.pose, args.seed)
+    if args.behavior_clone_stabilizer:
+        result = behavior_clone(mjcf_path.read_text(), args.links, args.nworld, args.rollout_steps, args.eval_steps, args.bc_epochs, args.seed)
+    else:
+        result = train(mjcf_path.read_text(), args.links, args.nworld, args.rollout_steps, args.eval_steps, args.updates, args.pose, args.seed)
     args.write_result.parent.mkdir(parents=True, exist_ok=True)
     args.write_result.write_text(json.dumps(result, indent=2) + "\n")
     print(json.dumps(result, indent=2))
