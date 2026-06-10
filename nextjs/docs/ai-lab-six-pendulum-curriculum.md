@@ -154,6 +154,16 @@ Local environment-contract result:
 - Reward/score contract now separates shaped reward from strict score.
 - Down-start strict score stayed `0`; hold-start reached max strict score `99.73`, but the one-second gate still stayed false because the smoke ran only `0.16s`. This proves subsecond upright flashes are not counted as solved.
 
+PufferEnv driver result:
+
+- Command: `npm run train:six-pendulum:puffer-mjwarp:env-driver`
+- Artifact: `/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/training-checkpoints/puffer-mjwarp-env-driver.json`
+- Script: `scripts/six_pendulum_mjwarp_env.py`
+- Result: `puffer-env-driver-smoke-passed`, `links=1`, `nworld=4`, `steps=128`.
+- Adapter: `SixPendulumMJWarpPufferEnv` exposes Puffer-compatible `single_observation_space` and `single_action_space`, internal reset, `step(actions)`, reward, terminals, truncations, and per-agent info.
+- Action contract: normalized action `[-1, 1]` maps to cart force `[-32, 32]`.
+- Down-start baseline still scored `0`, which is expected. This artifact proves the trainer-facing environment loop, not learning.
+
 Phase 1, one-link PufferPPO:
 
 - Environment: same MJCF constraints, gravity `9.8`, hinge friction `0`, cart track centered at `0`.
