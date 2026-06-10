@@ -195,6 +195,20 @@ Learned hold-start stabilizer:
 - Learned down-start eval: strict score `0`, max held `0s`, so there is still no link-two promotion.
 - Interpretation: one-link near-upright catch/hold is now learned in the MJWarp lane. This is curriculum pretraining, not the final down-start swing-up solve.
 
+Checkpoint warmstart and mixed curriculum:
+
+- Commands:
+  - `npm run train:six-pendulum:puffer-mjwarp:down-warmstart`
+  - `npm run train:six-pendulum:puffer-mjwarp:mixed-warmstart`
+- Artifacts:
+  - `/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/training-checkpoints/puffer-mjwarp-down-warmstart.json`
+  - `/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/training-checkpoints/puffer-mjwarp-mixed-warmstart.json`
+- Code changes: the MJWarp env now uses seeded random perturbations instead of deterministic linspace resets, adds energy/potential/catch-basin shaping for down-start, and supports a `mixed` reverse-curriculum reset.
+- Horizon fix: warmstart training now uses `480` rollout steps (`1.2s`) and `800` eval steps (`2.0s`), so subsecond flashes are not counted as training progress.
+- Down warmstart result: randomized hold eval stayed solved at `1.2325s`; pure down-start eval stayed `0s`.
+- Mixed warmstart result: mixed training produced one-second-plus catch/hold inside rollouts on `6/8` updates, best `1.2s`; held-out pure down-start eval stayed `0s`.
+- Interpretation: the learned catch policy is real, and the reverse curriculum can exercise one-second holds. The missing skill is still swing-up from pure down-start. Do not unlock link two.
+
 Phase 1, one-link PufferPPO:
 
 - Environment: same MJCF constraints, gravity `9.8`, hinge friction `0`, cart track centered at `0`.
@@ -572,4 +586,4 @@ Result:
 
 Interpretation:
 
-The one-link task is still not solved. Plain down-start SAC learns some energy/height signal, but not the stabilizer. Stabilizer pretraining helps reach the same best transient much faster, but it still does not transfer into a one-second down-start hold. The next training change should use a real recurrent/off-policy sequence policy or explicit phase-conditioned curriculum while keeping the down-start one-second validation gate unchanged.
+The one-link Pezzza/browser policy is solved, but this MuJoCo SAC/TD3 lane did not solve one-link down-start. Plain down-start SAC learns some energy/height signal, but not the stabilizer. Stabilizer pretraining helps reach the same best transient much faster, but it still does not transfer into a one-second down-start hold. The next training change should use a real recurrent/off-policy sequence policy or explicit phase-conditioned curriculum while keeping the down-start one-second validation gate unchanged.

@@ -31,6 +31,22 @@ class TinyRecurrentPolicy(nn.Module):
         return mean, std, value, next_hidden
 
 
+def save_checkpoint(path: Path | None, policy, metadata: dict) -> str | None:
+    if path is None:
+        return None
+    path.parent.mkdir(parents=True, exist_ok=True)
+    torch.save({"stateDict": policy.state_dict(), "metadata": metadata}, path)
+    return str(path)
+
+
+def load_checkpoint(path: Path | None, policy) -> dict | None:
+    if path is None:
+        return None
+    payload = torch.load(path, map_location="cpu")
+    policy.load_state_dict(payload["stateDict"])
+    return payload.get("metadata", {})
+
+
 def evaluate(policy, mjcf_xml: str, links: int, nworld: int, steps: int, pose: str) -> dict:
     env = SixPendulumMJWarpPufferEnv(mjcf_xml, links=links, nworld=nworld, horizon=steps + 1, pose=pose)
     obs, infos = env.reset()
@@ -60,12 +76,24 @@ def evaluate(policy, mjcf_xml: str, links: int, nworld: int, steps: int, pose: s
     }
 
 
-def train(mjcf_xml: str, links: int, nworld: int, rollout_steps: int, eval_steps: int, updates: int, pose: str, seed: int) -> dict:
+def train(
+    mjcf_xml: str,
+    links: int,
+    nworld: int,
+    rollout_steps: int,
+    eval_steps: int,
+    updates: int,
+    pose: str,
+    seed: int,
+    warmstart_checkpoint: Path | None = None,
+    write_checkpoint: Path | None = None,
+) -> dict:
     torch.manual_seed(seed)
     np.random.seed(seed)
     started = time.time()
     env = SixPendulumMJWarpPufferEnv(mjcf_xml, links=links, nworld=nworld, horizon=rollout_steps + 1, pose=pose)
     policy = TinyRecurrentPolicy()
+    warmstart_metadata = load_checkpoint(warmstart_checkpoint, policy)
     optimizer = torch.optim.AdamW(policy.parameters(), lr=3e-4, weight_decay=1e-5)
     obs, infos = env.reset()
     hidden = torch.zeros(nworld, policy.gru.hidden_size)
@@ -142,13 +170,14 @@ def train(mjcf_xml: str, links: int, nworld: int, rollout_steps: int, eval_steps
     env.close()
     hold_eval = evaluate(policy, mjcf_xml, links, nworld, eval_steps, "hold")
     down_eval = evaluate(policy, mjcf_xml, links, nworld, eval_steps, "down")
-    return {
+    result = {
         "schema": "six-pendulum-mjwarp-local-recurrent-ppo-smoke-v1",
         "status": "training-smoke-passed",
         "algorithm": "tiny-local-recurrent-policy-gradient",
         "links": links,
         "nworld": nworld,
         "rolloutSteps": rollout_steps,
+        "rolloutSeconds": rollout_steps * 0.0025,
         "evalSteps": eval_steps,
         "evalSeconds": eval_steps * 0.0025,
         "updates": updates,
@@ -156,6 +185,8 @@ def train(mjcf_xml: str, links: int, nworld: int, rollout_steps: int, eval_steps
         "seed": seed,
         "elapsedSeconds": time.time() - started,
         "parameterCount": int(sum(parameter.numel() for parameter in policy.parameters())),
+        "warmstartCheckpoint": str(warmstart_checkpoint) if warmstart_checkpoint else None,
+        "warmstartMetadata": warmstart_metadata,
         "history": history,
         "evaluation": {
             "hold": hold_eval,
@@ -163,6 +194,7 @@ def train(mjcf_xml: str, links: int, nworld: int, rollout_steps: int, eval_steps
         },
         "gates": {
             "strictOneSecondRequired": True,
+            "trainingHorizonMeetsGate": bool(rollout_steps * 0.0025 >= 1.0),
             "promoteToNextLink": bool(down_eval["solvedOneSecond"]),
         },
         "nextRequiredWork": [
@@ -171,6 +203,8 @@ def train(mjcf_xml: str, links: int, nworld: int, rollout_steps: int, eval_steps
             "Promote link count only after down-start held-out validation exceeds one second.",
         ],
     }
+    result["checkpointPath"] = save_checkpoint(write_checkpoint, policy, {key: value for key, value in result.items() if key != "history"})
+    return result
 
 
 def expert_action_from_obs(obs, gains):
@@ -183,7 +217,16 @@ def expert_action_from_obs(obs, gains):
     return np.clip(force / 32.0, -1.0, 1.0).reshape(len(obs), 1).astype(np.float32)
 
 
-def behavior_clone(mjcf_xml: str, links: int, nworld: int, rollout_steps: int, eval_steps: int, epochs: int, seed: int) -> dict:
+def behavior_clone(
+    mjcf_xml: str,
+    links: int,
+    nworld: int,
+    rollout_steps: int,
+    eval_steps: int,
+    epochs: int,
+    seed: int,
+    write_checkpoint: Path | None = None,
+) -> dict:
     torch.manual_seed(seed)
     np.random.seed(seed)
     started = time.time()
@@ -223,7 +266,7 @@ def behavior_clone(mjcf_xml: str, links: int, nworld: int, rollout_steps: int, e
 
     hold_eval = evaluate(policy, mjcf_xml, links, nworld, eval_steps, "hold")
     down_eval = evaluate(policy, mjcf_xml, links, nworld, eval_steps, "down")
-    return {
+    result = {
         "schema": "six-pendulum-mjwarp-local-stabilizer-bc-v1",
         "status": "behavior-clone-smoke-passed",
         "algorithm": "tiny-gru-stabilizer-behavior-clone",
@@ -259,6 +302,8 @@ def behavior_clone(mjcf_xml: str, links: int, nworld: int, rollout_steps: int, e
             "Replace the hand-designed stabilizer target with RL-discovered behavior at GPU scale.",
         ],
     }
+    result["checkpointPath"] = save_checkpoint(write_checkpoint, policy, {key: value for key, value in result.items() if key != "losses"})
+    return result
 
 
 def main():
@@ -269,8 +314,10 @@ def main():
     parser.add_argument("--eval-steps", type=int, default=480)
     parser.add_argument("--updates", type=int, default=3)
     parser.add_argument("--bc-epochs", type=int, default=600)
-    parser.add_argument("--pose", choices=["down", "hold"], default="hold")
+    parser.add_argument("--pose", choices=["down", "hold", "mixed"], default="hold")
     parser.add_argument("--behavior-clone-stabilizer", action="store_true")
+    parser.add_argument("--warmstart-checkpoint", type=Path)
+    parser.add_argument("--write-checkpoint", type=Path)
     parser.add_argument("--seed", type=int, default=426210)
     parser.add_argument(
         "--write-result",
@@ -283,9 +330,29 @@ def main():
     if not mjcf_path.exists():
         raise FileNotFoundError(f"Missing MJCF file: {mjcf_path}")
     if args.behavior_clone_stabilizer:
-        result = behavior_clone(mjcf_path.read_text(), args.links, args.nworld, args.rollout_steps, args.eval_steps, args.bc_epochs, args.seed)
+        result = behavior_clone(
+            mjcf_path.read_text(),
+            args.links,
+            args.nworld,
+            args.rollout_steps,
+            args.eval_steps,
+            args.bc_epochs,
+            args.seed,
+            args.write_checkpoint,
+        )
     else:
-        result = train(mjcf_path.read_text(), args.links, args.nworld, args.rollout_steps, args.eval_steps, args.updates, args.pose, args.seed)
+        result = train(
+            mjcf_path.read_text(),
+            args.links,
+            args.nworld,
+            args.rollout_steps,
+            args.eval_steps,
+            args.updates,
+            args.pose,
+            args.seed,
+            args.warmstart_checkpoint,
+            args.write_checkpoint,
+        )
     args.write_result.parent.mkdir(parents=True, exist_ok=True)
     args.write_result.write_text(json.dumps(result, indent=2) + "\n")
     print(json.dumps(result, indent=2))
