@@ -119,8 +119,8 @@ def build_contract(total_timesteps: int = 10_000_000) -> dict:
             "firstParityGate": "scripts/six_pendulum_mjwarp_gpu_kernels.py",
             "command": "npm run train:six-pendulum:puffer-mjwarp:gpu-score-smoke",
             "artifact": "/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/training-checkpoints/puffer-mjwarp-gpu-score-kernel-smoke.json",
-            "covered": "One-link observation, reward, potential, strict score, catch basin, near-top-fast, and whip flags match the existing NumPy scorer.",
-            "notCovered": "Reset, ctrl writes, terminal/truncation, held-step accumulation, potential-delta reward, multi-link cumsum, and Puffer rollout integration.",
+            "covered": "Links 1..6 observation, reward, potential, strict score, multi-link cumsum, bend penalties, catch basin, near-top-fast, and whip flags match the existing NumPy scorer.",
+            "notCovered": "Reset, ctrl writes, terminal/truncation, held-step accumulation, potential-delta reward, and Puffer rollout integration.",
         },
         "gpuKernelBlocker": {
             "currentEnv": "scripts/six_pendulum_mjwarp_env.py",
@@ -129,7 +129,7 @@ def build_contract(total_timesteps: int = 10_000_000) -> dict:
             "requiredBeforeRealSweep": [
                 "Move reset sampling into Warp arrays or a fixed GPU-side reset kernel.",
                 "Move action scaling and ctrl writes into GPU-side arrays.",
-                "Move observation, reward, terminal, truncation, held-step, strict-score, whip, and catch-basin math into Warp kernels.",
+                "Integrate the parity-tested observation, reward, strict-score, whip, and catch-basin kernel into the live env, then move terminal, truncation, and held-step math GPU-side.",
                 "Keep fixed shapes for nworld, obs_dim, action_dim, and rollout horizon so CUDA graph capture is possible.",
                 "Only then attach pufferlib.pufferl.PuffeRL to the vector env and run 4096+ worlds.",
             ],
