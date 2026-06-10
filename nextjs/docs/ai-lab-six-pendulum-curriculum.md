@@ -231,6 +231,15 @@ Phase 1, one-link PufferPPO:
 - Policy: start small recurrent, then grow toward puffer MinGRU/PufferNet and the reported `~1m` parameter policy.
 - Sweep: run many PufferPPO/MJWarp experiments, report wallclock on x-axis and strict score on y-axis, and promote only held-out down-start checkpoints.
 
+Puffer-style sweep ledger:
+
+- Command: `npm run six-pendulum:puffer-ledger`
+- Markdown: `/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/sweeps/puffer-mjwarp-one-link-sweep-ledger.md`
+- JSONL dots: `/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/sweeps/puffer-mjwarp-one-link-sweep-ledger.jsonl`
+- Result: learned policy rows solved held-out one-link down-start `0/6`. The energy teacher scaffold reaches one-link down-start hold `1.387s` with strict score `99.04`, but it is explicitly not counted as a learned policy solve.
+- Queued rows now match the Yacine experiment shape: PufferPPO, Puffer MinGRU/PufferNet, about `1m` params, MJWarp GPU batching, fixed horizon first, randomized episode length only after whip behavior appears, and link-two promotion only after held-out one-link down-start passes the one-second gate.
+- Current blocker: Modal GPU execution is blocked by the workspace spend limit, so true PufferPPO/MinGRU dots are queued rather than run.
+
 Phase 2, link scaling:
 
 - Unlock link 2 only after 1-link held-out down-start holds for at least one second.
