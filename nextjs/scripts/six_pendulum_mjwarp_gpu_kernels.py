@@ -308,6 +308,40 @@ def post_step_kernel(
         max_held_steps[i] = 0
 
 
+@wp.kernel
+def record_rollout_obs_kernel(
+    obs: wp.array(dtype=wp.float32),
+    step_index: int,
+    nworld: int,
+    obs_buffer: wp.array(dtype=wp.float32),
+):
+    world, feature = wp.tid()
+    src = world * OBS_DIM + feature
+    dst = (step_index * nworld + world) * OBS_DIM + feature
+    obs_buffer[dst] = obs[src]
+
+
+@wp.kernel
+def record_rollout_scalars_kernel(
+    final_reward: wp.array(dtype=wp.float32),
+    terminal: wp.array(dtype=wp.float32),
+    truncation: wp.array(dtype=wp.float32),
+    last_action: wp.array(dtype=wp.float32),
+    step_index: int,
+    nworld: int,
+    reward_buffer: wp.array(dtype=wp.float32),
+    terminal_buffer: wp.array(dtype=wp.float32),
+    truncation_buffer: wp.array(dtype=wp.float32),
+    action_buffer: wp.array(dtype=wp.float32),
+):
+    world = wp.tid()
+    dst = step_index * nworld + world
+    reward_buffer[dst] = final_reward[world]
+    terminal_buffer[dst] = terminal[world]
+    truncation_buffer[dst] = truncation[world]
+    action_buffer[dst] = last_action[world]
+
+
 def deterministic_batch(nworld: int, action_scale: float, seed: int) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
     rng = np.random.default_rng(seed)
     qpos = np.zeros((nworld, 1 + MAX_LINKS), dtype=np.float32)

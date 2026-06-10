@@ -17,6 +17,7 @@ const pufferArtifacts = [
   "puffer-mjwarp-gpu-score-kernel-smoke.json",
   "puffer-mjwarp-env-driver.json",
   "puffer-mjwarp-device-rollout.json",
+  "puffer-mjwarp-device-rollout-buffer.json",
   "puffer-mjwarp-device-rollout-link6.json",
   "puffer-mjwarp-device-rollout-random-horizon.json",
   "puffer-mjwarp-local-ppo-smoke.json",
