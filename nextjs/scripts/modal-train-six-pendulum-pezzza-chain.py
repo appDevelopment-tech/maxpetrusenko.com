@@ -133,6 +133,9 @@ def train_policy(
         b2 = params[:, cursor : cursor + output_count]
         return knots, w1, b1, w2, b2
 
+    def angle_delta(a, b):
+        return torch.atan2(torch.sin(a - b), torch.cos(a - b))
+
     def policy(params, x, xdot, theta, omega, last_action, tick):
         knots, w1, b1, w2, b2 = unpack(params)
         t_norm = torch.full_like(x, float(tick) / max(steps - 1, 1))
@@ -146,29 +149,13 @@ def train_policy(
         for index in range(safe_links):
             features.extend([torch.sin(theta[:, index]), torch.cos(theta[:, index]), omega[:, index] / 10.0])
         for index in range(1, safe_links):
-            relative = theta[:, index] - theta[:, index - 1]
+            relative = angle_delta(theta[:, index], theta[:, index - 1])
             features.extend([torch.sin(relative), torch.cos(relative)])
         features.extend([last_action / action_scale, t_norm])
         obs = torch.stack(features, dim=1)
         h = torch.tanh(torch.bmm(obs.unsqueeze(1), w1).squeeze(1) + b1)
         feedback = torch.bmm(h.unsqueeze(1), w2).squeeze(1).squeeze(1) + b2.squeeze(1)
         return torch.tanh(base + feedback) * action_scale
-
-    def initial_state(batch, active_links, pose):
-        x = torch.randn(batch, device=device) * 0.025
-        xdot = torch.randn(batch, device=device) * 0.04
-        theta = torch.zeros((batch, safe_links), device=device)
-        omega = torch.zeros((batch, safe_links), device=device)
-        if pose == "hold":
-            theta[:, :active_links] = torch.randn(batch, active_links, device=device) * 0.08
-            omega[:, :active_links] = torch.randn(batch, active_links, device=device) * 0.08
-        else:
-            theta[:, :active_links] = math.pi + torch.randn(batch, active_links, device=device) * 0.04
-            if active_links > 1:
-                theta[:, 1:active_links] -= torch.arange(1, active_links, device=device).view(1, -1) * 0.05
-            theta = torch.remainder(theta + math.pi, 2 * math.pi) - math.pi
-            omega[:, :active_links] = torch.randn(batch, active_links, device=device) * 0.05
-        return x, xdot, theta, omega
 
     def step_chain(x, xdot, theta, omega, action, active_links, gravity, cart_damping, hinge_damping):
         active = torch.zeros((theta.shape[0], safe_links), device=device)
@@ -186,7 +173,7 @@ def train_policy(
             length = 0.52 + index * 0.05
             prev = theta[:, index - 1] if index > 0 else theta[:, index]
             nxt = theta[:, index + 1] if index + 1 < active_links else theta[:, index]
-            coupling = (prev + nxt - theta[:, index] * 2.0) * (1.65 + index * 0.25)
+            coupling = (angle_delta(prev, theta[:, index]) + angle_delta(nxt, theta[:, index])) * (1.65 + index * 0.25)
             drive = (-cart_acc * torch.cos(theta[:, index]) * (0.47 + index * 0.05)) / length
             angular_acc = gravity * torch.sin(theta[:, index]) / length + drive + coupling - hinge_damping * omega[:, index]
             next_omega[:, index] = torch.clamp(omega[:, index] + angular_acc * dt, -24.0, 24.0)
@@ -200,7 +187,7 @@ def train_policy(
         active_omega = omega[:, :active_links]
         max_upright = active_theta.abs().max(dim=1).values
         if active_links > 1:
-            max_bend = (active_theta[:, 1:] - active_theta[:, :-1]).abs().max(dim=1).values
+            max_bend = angle_delta(active_theta[:, 1:], active_theta[:, :-1]).abs().max(dim=1).values
         else:
             max_bend = torch.zeros_like(max_upright)
         max_omega = active_omega.abs().max(dim=1).values
@@ -218,7 +205,24 @@ def train_policy(
         else:
             horizon_steps = torch.full((batch,), steps, device=device, dtype=torch.long)
 
-        x, xdot, theta, omega = initial_state(batch, active_links, pose)
+        def initial_state_for_stage():
+            x = torch.randn(batch, device=device) * 0.025
+            xdot = torch.randn(batch, device=device) * 0.04
+            theta = torch.zeros((batch, safe_links), device=device)
+            omega = torch.zeros((batch, safe_links), device=device)
+            if pose == "hold":
+                theta[:, :active_links] = torch.randn(batch, active_links, device=device) * 0.08
+                omega[:, :active_links] = torch.randn(batch, active_links, device=device) * 0.08
+            else:
+                start_angle_scale = float(stage.get("startAngleScale", 1.0))
+                theta[:, :active_links] = math.pi * start_angle_scale + torch.randn(batch, active_links, device=device) * 0.04
+                if active_links > 1:
+                    theta[:, 1:active_links] -= torch.arange(1, active_links, device=device).view(1, -1) * 0.05
+                theta = torch.remainder(theta + math.pi, 2 * math.pi) - math.pi
+                omega[:, :active_links] = torch.randn(batch, active_links, device=device) * 0.05
+            return x, xdot, theta, omega
+
+        x, xdot, theta, omega = initial_state_for_stage()
         reward = torch.zeros(batch, device=device)
         hold_run = torch.zeros(batch, device=device)
         max_hold = torch.zeros(batch, device=device)
@@ -238,8 +242,9 @@ def train_policy(
             upright_error = active_theta.abs().mean(dim=1)
             max_upright = active_theta.abs().max(dim=1).values
             if active_links > 1:
-                bend_error = (active_theta[:, 1:] - active_theta[:, :-1]).abs().mean(dim=1)
-                max_bend = (active_theta[:, 1:] - active_theta[:, :-1]).abs().max(dim=1).values
+                bend_delta = angle_delta(active_theta[:, 1:], active_theta[:, :-1])
+                bend_error = bend_delta.abs().mean(dim=1)
+                max_bend = bend_delta.abs().max(dim=1).values
             else:
                 bend_error = torch.zeros_like(upright_error)
                 max_bend = torch.zeros_like(upright_error)
@@ -318,9 +323,32 @@ def train_policy(
             "horizonSeconds": float(metrics["horizonSeconds"].detach().cpu()),
         }
 
+    def validation_rank(metrics, active_links):
+        return (
+            metrics["selection"]
+            + metrics["maxHoldSeconds"] * (220.0 + active_links * 70.0)
+            + metrics["solvedOneSecond"] * (620.0 + active_links * 220.0)
+            + metrics["centerRatio"] * 18.0
+            + metrics["bendRatio"] * (28.0 if active_links > 1 else 2.0)
+            - metrics["smoothPenalty"] * 8.0
+        )
+
+    def summary_rank(summary, active_links):
+        return (
+            summary["strictScore"] * 100.0
+            + summary["selection"]
+            + summary["maxHoldSeconds"] * (220.0 + active_links * 70.0)
+            + summary["solvedOneSecondRate"] * (620.0 + active_links * 220.0)
+            + summary["centerRatio"] * 18.0
+            + summary["bendRatio"] * (28.0 if active_links > 1 else 2.0)
+            - summary["smoothPenalty"] * 8.0
+        )
+
     stages = [
         {"name": "one-link-schema-pretrain", "links": 1, "pose": "down", "gravity": 7.2, "cartDamping": 0.14, "hingeDamping": 0.08, "generations": max(4, safe_generations // 4), "randomHorizon": False},
         {"name": "two-link-hold", "links": safe_links, "pose": "hold", "gravity": 4.8, "cartDamping": 0.20, "hingeDamping": 0.16, "generations": max(4, safe_generations // 4), "randomHorizon": False},
+        {"name": "two-link-angle-035", "links": safe_links, "pose": "angle", "startAngleScale": 0.35, "gravity": 4.8, "cartDamping": 0.20, "hingeDamping": 0.14, "generations": max(4, safe_generations // 4), "randomHorizon": False},
+        {"name": "two-link-angle-065", "links": safe_links, "pose": "angle", "startAngleScale": 0.65, "gravity": 6.5, "cartDamping": 0.18, "hingeDamping": 0.10, "generations": max(4, safe_generations // 4), "randomHorizon": False},
         {"name": "two-link-low-gravity", "links": safe_links, "pose": "down", "gravity": 4.8, "cartDamping": 0.18, "hingeDamping": 0.12, "generations": max(4, safe_generations // 4), "randomHorizon": False},
         {"name": "two-link-normal", "links": safe_links, "pose": "down", "gravity": 9.81, "cartDamping": 0.08, "hingeDamping": 0.03, "generations": safe_generations, "randomHorizon": True},
     ]
@@ -331,6 +359,8 @@ def train_policy(
     for stage in stages:
         stage_best_params = mean.clone()
         stage_best_selection = torch.tensor(-1e9, device=device)
+        stage_validation_best_params = mean.clone()
+        stage_validation_best_value = -1e9
         for generation in range(stage["generations"]):
             stage_for_eval = {**stage, "randomHorizon": bool(stage.get("randomHorizon", False) and randomized_horizon_ready)}
             params = mean.view(1, -1) + torch.randn(safe_population, param_count, device=device) * sigma
@@ -345,15 +375,26 @@ def train_policy(
             if values[0] > best_selection:
                 best_selection = values[0]
             if generation % 4 == 0 or generation == stage["generations"] - 1:
-                eval_params = stage_best_params.view(1, -1).repeat(96 if smoke else 256, 1)
+                candidate_count = min(8, elites.shape[0])
+                candidate_params = elites[:candidate_count]
+                candidate_metrics = evaluate(candidate_params, stage, validation=True)
+                candidate_values = validation_rank(candidate_metrics, int(stage["links"]))
+                candidate_index = int(torch.argmax(candidate_values).detach().cpu())
+                candidate_best = candidate_params[candidate_index].clone()
+                eval_params = candidate_best.view(1, -1).repeat(96 if smoke else 256, 1)
                 metrics = evaluate(eval_params, stage, validation=True)
                 summary = summarize(metrics, int(stage["links"]))
+                ranked_summary = summary_rank(summary, int(stage["links"]))
+                if ranked_summary > stage_validation_best_value:
+                    stage_validation_best_value = ranked_summary
+                    stage_validation_best_params = candidate_best.clone()
                 if int(stage["links"]) == safe_links and summary["whiplashSeconds"] >= 0.10 and summary["solvedOneSecondRate"] < 0.5:
                     randomized_horizon_ready = True
                 line = {
                     "stage": stage["name"],
                     "links": int(stage["links"]),
                     "pose": stage["pose"],
+                    "startAngleScale": stage.get("startAngleScale", 1.0),
                     "gravity": stage["gravity"],
                     "randomizedHorizon": stage_for_eval["randomHorizon"],
                     "generation": generation,
@@ -361,6 +402,7 @@ def train_policy(
                     "bestSelection": float(stage_best_selection.detach().cpu()),
                     "eliteSelection": float(values[0].detach().cpu()),
                     "wallclockSeconds": round(time.time() - started, 3),
+                    "validationBestRank": stage_validation_best_value,
                     **summary,
                 }
                 print(json.dumps(line), flush=True)
@@ -386,7 +428,7 @@ def train_policy(
                         "metrics": summary,
                     }
                 )
-        best_params = stage_best_params.clone()
+        best_params = stage_validation_best_params.clone()
         mean = best_params * 0.70 + mean * 0.30
 
     final_stage = {"name": "validation-two-link-normal-down", "links": safe_links, "pose": "down", "gravity": 9.81, "cartDamping": 0.08, "hingeDamping": 0.03, "generations": 0, "randomHorizon": False}

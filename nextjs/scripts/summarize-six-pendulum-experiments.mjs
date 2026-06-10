@@ -30,9 +30,10 @@ function profileLabel(training) {
   return "";
 }
 
-function maxHistoryHold(training, targetLinks) {
+function maxHistoryHold(training, targetLinks, stageFilter = () => true) {
   let maxHold = 0;
   for (const entry of training?.history || []) {
+    if (!stageFilter(entry)) continue;
     const candidates = [entry, entry.down, entry.hold, entry.mixed].filter(Boolean);
     for (const candidate of candidates) {
       if (targetLinks && candidate.links && candidate.links !== targetLinks) continue;
@@ -94,13 +95,17 @@ function readRows() {
       const validation = pickValidation(training, root);
       const horizonSeconds = asNumber(training.horizonSeconds, asNumber(root.steps) * asNumber(root.dt), 8);
       const targetLinks = asNumber(root.links);
-      const maxHold = Math.max(
-        asNumber(validation.maxHoldSeconds, asNumber(validation.maxHeldSeconds)),
-        maxHistoryHold(training, targetLinks),
+      const finalDownMaxHold = asNumber(validation.maxHoldSeconds, asNumber(validation.maxHeldSeconds));
+      const bestStageMaxHold = maxHistoryHold(training, targetLinks);
+      const bestHoldStartMaxHold = maxHistoryHold(training, targetLinks, (entry) =>
+        String(entry.stage || "").includes("hold") || entry.pose === "hold",
+      );
+      const bestAngleMaxHold = maxHistoryHold(training, targetLinks, (entry) =>
+        String(entry.stage || "").includes("angle") || entry.pose === "angle",
       );
       const metrics = {
         ...validation,
-        maxHoldSeconds: maxHold,
+        maxHoldSeconds: finalDownMaxHold,
       };
       const elapsed = asNumber(training.elapsedSeconds);
       const steps = simSteps(root, training);
@@ -113,7 +118,11 @@ function readRows() {
         simSteps: steps,
         sps: elapsed > 0 && steps > 0 ? steps / elapsed : 0,
         strictScore: strictScore(metrics, horizonSeconds),
-        maxHoldSeconds: maxHold,
+        maxHoldSeconds: finalDownMaxHold,
+        finalDownMaxHoldSeconds: finalDownMaxHold,
+        bestStageMaxHoldSeconds: bestStageMaxHold,
+        bestHoldStartMaxHoldSeconds: bestHoldStartMaxHold,
+        bestAngleMaxHoldSeconds: bestAngleMaxHold,
         maxHoldSecondsP10: asNumber(validation.maxHoldSecondsP10, asNumber(validation.maxHeldSecondsP10)),
         solvedOneSecondRate: asNumber(validation.solvedOneSecondRate),
         whiplashSeconds: asNumber(validation.whiplashSeconds, asNumber(validation.whip)),
@@ -148,7 +157,12 @@ function fmt(value, digits = 3) {
   return value.toFixed(digits).replace(/\.?0+$/, "");
 }
 
-const rows = readRows().sort((a, b) => b.strictScore - a.strictScore || b.maxHoldSeconds - a.maxHoldSeconds);
+const rows = readRows().sort(
+  (a, b) =>
+    b.strictScore - a.strictScore ||
+    b.finalDownMaxHoldSeconds - a.finalDownMaxHoldSeconds ||
+    b.bestStageMaxHoldSeconds - a.bestStageMaxHoldSeconds,
+);
 fs.mkdirSync(outputDir, { recursive: true });
 const jsonlPath = path.join(outputDir, "latest-six-pendulum-comparison.jsonl");
 fs.writeFileSync(jsonlPath, rows.map((row) => JSON.stringify(row)).join("\n") + "\n");
@@ -163,7 +177,10 @@ const tableRows = rows
       fmt(row.wallclockSeconds, 1),
       fmt(row.sps, 0),
       fmt(row.strictScore, 2),
-      fmt(row.maxHoldSeconds, 3),
+      fmt(row.finalDownMaxHoldSeconds, 3),
+      fmt(row.bestStageMaxHoldSeconds, 3),
+      fmt(row.bestHoldStartMaxHoldSeconds, 3),
+      fmt(row.bestAngleMaxHoldSeconds, 3),
       fmt(row.maxHoldSecondsP10, 3),
       fmt(row.solvedOneSecondRate, 3),
       fmt(row.whiplashSeconds, 3),
@@ -174,10 +191,10 @@ const tableRows = rows
 const markdown = [
   "# Six Pendulum Experiment Comparison",
   "",
-  "Score is strict validation score. Runs with less than one second mean hold keep score 0; subsecond holds stay diagnostics.",
+  "Score and sorting use final down-start validation only. Runs with less than one second mean hold keep score 0; stage holds stay diagnostics.",
   "",
-  "artifact | algorithm | profile | wallclock_s | sps | strict_score | max_hold_s | p10_hold_s | solved_rate | whiplash_s | center_ratio",
-  "--- | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---:",
+  "artifact | algorithm | profile | wallclock_s | sps | strict_score | final_down_hold_s | best_stage_hold_s | best_hold_start_s | best_angle_s | p10_hold_s | solved_rate | whiplash_s | center_ratio",
+  "--- | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---:",
   ...tableRows,
   "",
   `JSONL dots: ${jsonlPath}`,

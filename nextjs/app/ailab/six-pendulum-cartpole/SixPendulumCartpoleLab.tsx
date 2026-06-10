@@ -8,6 +8,7 @@ type TrainedPolicy = {
   algorithm?: string;
   modelType?: string;
   policyVersion?: number;
+  links?: number;
   inputCount?: number;
   forceScale: number;
   controlHz?: number;
@@ -39,6 +40,10 @@ type PendulumState = {
 
 const linkOptions = [1, 2, 3, 4, 5, 6] as const;
 const policy = trainedPolicy as TrainedPolicy;
+const selectableLinkLimit =
+  policy.algorithm === "modal-pezzza-style-chain-evolution" && policy.modelType === "pezzzaChainKnotMlp"
+    ? Math.max(1, Math.min(6, policy.links ?? 1))
+    : 1;
 const SCORE_MAX_UPRIGHT_ANGLE = 0.16;
 const SCORE_MAX_CHAIN_BEND = 0.14;
 
@@ -77,6 +82,10 @@ function wrapAngle(value: number): number {
   while (angle > Math.PI) angle -= Math.PI * 2;
   while (angle < -Math.PI) angle += Math.PI * 2;
   return angle;
+}
+
+function angleDelta(a: number, b: number): number {
+  return Math.atan2(Math.sin(a - b), Math.cos(a - b));
 }
 
 function observe(state: PendulumState): number[] {
@@ -160,6 +169,50 @@ function runPezzzaOneLinkPolicy(state: PendulumState): number | null {
   return Math.tanh(base + feedback) * policy.forceScale;
 }
 
+function runPezzzaChainPolicy(state: PendulumState, links: number): number | null {
+  if (policy.algorithm !== "modal-pezzza-style-chain-evolution" || policy.modelType !== "pezzzaChainKnotMlp") {
+    return null;
+  }
+  if (!Array.isArray(policy.knots) || !Array.isArray(policy.layers) || policy.layers.length < 2) return null;
+
+  const activeLinks = Math.max(1, Math.min(links, policy.links ?? links));
+  const knotCount = policy.knotCount ?? policy.knots.length;
+  const horizonSeconds = policy.horizonSeconds ?? policy.training?.horizonSeconds ?? 7;
+  const tNorm = clamp(state.time / horizonSeconds, 0, 1);
+  const knotPosition = tNorm * Math.max(0, knotCount - 1);
+  const left = Math.floor(knotPosition);
+  const right = Math.min(left + 1, Math.max(0, knotCount - 1));
+  const mix = knotPosition - left;
+  const base = (policy.knots[left] ?? 0) * (1 - mix) + (policy.knots[right] ?? policy.knots[left] ?? 0) * mix;
+  const inputs = [state.cartX / 2.4, state.cartV / 6];
+
+  for (let index = 0; index < activeLinks; index += 1) {
+    inputs.push(Math.sin(state.theta[index] ?? 0), Math.cos(state.theta[index] ?? 0), (state.omega[index] ?? 0) / 10);
+  }
+  for (let index = 1; index < activeLinks; index += 1) {
+    const relative = angleDelta(state.theta[index] ?? 0, state.theta[index - 1] ?? 0);
+    inputs.push(Math.sin(relative), Math.cos(relative));
+  }
+  inputs.push(state.lastAction / policy.forceScale, tNorm);
+
+  const hiddenLayer = policy.layers[0];
+  const outputLayer = policy.layers[1];
+  const hidden = hiddenLayer.bias.map((bias, outputIndex) => {
+    const sum = inputs.reduce((value, input, inputIndex) => {
+      return value + input * (hiddenLayer.weights[inputIndex]?.[outputIndex] ?? 0);
+    }, bias);
+    return Math.tanh(sum);
+  });
+  const feedback = outputLayer.bias.reduce((sum, bias, outputIndex) => {
+    const weighted = hidden.reduce((value, activation, inputIndex) => {
+      return value + activation * (outputLayer.weights[inputIndex]?.[outputIndex] ?? 0);
+    }, bias);
+    return sum + weighted;
+  }, 0);
+
+  return Math.tanh(base + feedback) * policy.forceScale;
+}
+
 function runSacPolicy(state: PendulumState): number | null {
   if (policy.modelType !== "sacMlp" || !Array.isArray(policy.layers)) return null;
 
@@ -216,7 +269,11 @@ function runTimeKnotFeedbackPolicy(state: PendulumState): number | null {
 
 function policyForce(state: PendulumState): number {
   const trainedForce =
-    runPezzzaOneLinkPolicy(state) ?? runSacPolicy(state) ?? runTimeKnotFeedbackPolicy(state) ?? runMlpPolicy(observe(state));
+    runPezzzaChainPolicy(state, state.theta.length) ??
+    runPezzzaOneLinkPolicy(state) ??
+    runSacPolicy(state) ??
+    runTimeKnotFeedbackPolicy(state) ??
+    runMlpPolicy(observe(state));
   if (trainedForce !== null) {
     const forceLimit = Math.max(32, policy.forceScale);
     return clamp(trainedForce, -forceLimit, forceLimit);
@@ -229,6 +286,46 @@ function policyForce(state: PendulumState): number {
   }
 
   return clamp(Math.tanh(activation) * policy.forceScale, -32, 32);
+}
+
+function stepPezzzaChainState(state: PendulumState, links: number, dt: number): PendulumState {
+  const force = policyForce(state);
+  const next: PendulumState = {
+    cartX: state.cartX,
+    cartV: state.cartV,
+    theta: [...state.theta],
+    omega: [...state.omega],
+    time: state.time + dt,
+    combo: state.combo,
+    impulse: state.impulse * Math.exp(-dt * 2.8),
+    lastAction: force,
+  };
+  const gravity = 9.81;
+  const cartDamping = 0.08;
+  const hingeDamping = 0.03;
+  let cartForce = force - cartDamping * state.cartV - 0.35 * state.cartX;
+  for (let index = 0; index < links; index += 1) {
+    cartForce -= Math.sin(state.theta[index] ?? 0) * (index + 1) * 0.11;
+  }
+  const cartAcc = cartForce;
+  next.cartV = clamp(state.cartV + cartAcc * dt, -8, 8);
+  next.cartX = clamp(state.cartX + next.cartV * dt, -2.88, 2.88);
+
+  for (let index = 0; index < links; index += 1) {
+    const theta = state.theta[index] ?? 0;
+    const omega = state.omega[index] ?? 0;
+    const length = 0.52 + index * 0.05;
+    const previousTheta = index > 0 ? state.theta[index - 1] ?? theta : theta;
+    const nextTheta = index + 1 < links ? state.theta[index + 1] ?? theta : theta;
+    const coupling = (angleDelta(previousTheta, theta) + angleDelta(nextTheta, theta)) * (1.65 + index * 0.25);
+    const drive = (-cartAcc * Math.cos(theta) * (0.47 + index * 0.05)) / length;
+    const angularAcc = (gravity * Math.sin(theta)) / length + drive + coupling - hingeDamping * omega;
+    next.omega[index] = clamp(omega + angularAcc * dt, -24, 24);
+    next.theta[index] = wrapAngle(theta + next.omega[index] * dt);
+  }
+
+  next.combo = isStrictHoldState(next) ? next.combo + dt : 0;
+  return next;
 }
 
 function stepPezzzaOneLinkState(state: PendulumState, dt: number): PendulumState {
@@ -268,6 +365,14 @@ function stepPezzzaOneLinkState(state: PendulumState, dt: number): PendulumState
 }
 
 function stepState(state: PendulumState, links: number, dt: number): PendulumState {
+  if (
+    policy.algorithm === "modal-pezzza-style-chain-evolution" &&
+    policy.modelType === "pezzzaChainKnotMlp" &&
+    links <= (policy.links ?? 0)
+  ) {
+    return stepPezzzaChainState(state, links, dt);
+  }
+
   if (
     links === 1 &&
     policy.algorithm === "modal-pezzza-style-evolution" &&
@@ -329,7 +434,7 @@ function scoreState(state: PendulumState): number {
   const maxUprightError = state.theta.reduce((max, theta) => Math.max(max, Math.abs(theta)), 0);
   const maxBendError = state.theta.reduce((max, theta, index) => {
     if (index === 0) return max;
-    return Math.max(max, Math.abs(theta - state.theta[index - 1]));
+    return Math.max(max, Math.abs(angleDelta(theta, state.theta[index - 1] ?? 0)));
   }, 0);
 
   if (maxUprightError > SCORE_MAX_UPRIGHT_ANGLE || maxBendError > SCORE_MAX_CHAIN_BEND) {
@@ -540,14 +645,14 @@ export function SixPendulumCartpoleLab() {
                   className={`h-10 rounded-[8px] border text-sm font-black ${
                     option === links
                       ? "border-[#0c1115] bg-[#0c1115] text-[#f7f1e6]"
-                      : option !== 1
+                      : option > selectableLinkLimit
                         ? "cursor-not-allowed border-[rgba(12,17,21,0.08)] bg-[#ece4d6] text-[#7a7167]"
                       : "border-[rgba(12,17,21,0.14)] bg-white text-[#0c1115]"
                   }`}
-                  disabled={option !== 1}
+                  disabled={option > selectableLinkLimit}
                   key={option}
                   onClick={() => setLinks(option)}
-                  title={option === 1 ? "Active one-link gate" : "Locked until one-link down-start hold is solved"}
+                  title={option <= selectableLinkLimit ? `${option}-link verification` : "Locked until the lower-link gate is solved"}
                   type="button"
                 >
                   {option}

@@ -5,7 +5,7 @@ from pathlib import Path
 
 SCRIPT_PATH = Path("scripts/modal-train-six-pendulum-pezzza-chain.py")
 OUTPUT_PATH = Path(
-    "/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/training-checkpoints/pezzza-chain-2link-local-warm-mini.json"
+    "/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/training-checkpoints/pezzza-chain-2link-local-angle-mini.json"
 )
 INITIAL_POLICY_PATH = Path("app/ailab/six-pendulum-cartpole/sixPendulumPolicy.json")
 

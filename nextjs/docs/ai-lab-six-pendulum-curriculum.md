@@ -272,16 +272,24 @@ npm run train:six-pendulum:pezzza:chain2-local-mini
 
 - Cold artifact: `/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/training-checkpoints/pezzza-chain-2link-local-mini.json`
 - Warm-start artifact: `/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/training-checkpoints/pezzza-chain-2link-local-warm-mini.json`
+- Branch-cut fix artifact: `/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/training-checkpoints/pezzza-chain-2link-local-angle-mini.json`
 - Device: Apple MPS through local Torch.
 - Cold elapsed: `83.892s`.
 - Warm-start elapsed: `82.444s`.
+- Branch-cut fix elapsed: `172.697s`.
 - Warm start maps the proven one-link checkpoint into the two-link policy: interpolated time knots, first-link observation weights, softened second-link and relative-angle weights, and lower initial sigma.
 - Stage selection is local to each curriculum stage so a high one-link pretrain score cannot block the two-link checkpoint from being carried forward.
+- Two-link relative angles are now wrapped with `atan2(sin(delta), cos(delta))` for policy features, coupling, bend reward, and strict bend checks. Before this fix, a tiny bend near the `pi` branch cut could look like a false `~6.2 rad` bend.
+- The trainer now re-validates elite candidates and carries the validation-best checkpoint between stages instead of raw shaped-selection best.
 - Cold intermediate two-link hold signal: `0.512s` mean max hold, `0.135` solved-one-second rate from near-upright.
 - Warm intermediate two-link hold signal after stage-local selection: `0.555s` mean max hold, `0.156` solved-one-second rate from near-upright.
 - Warm best normal-gravity down-start flash: `0.0104s`.
 - Warm final two-link down-start validation: strict score `0`, mean max hold `0.00241s`, solved-one-second rate `0`.
-- Interpretation: local smoke proves the new two-link trainer runs without Modal. The one-link warm start plus stage-local carry improves down-start transfer from zero to small flashes, but it still does not solve two-link down-start.
+- Branch-cut fix final two-link down-start validation: strict score `0`, mean max hold `0.0768s`, solved-one-second rate `0`, whiplash `0.547s`.
+- Branch-cut fix diagnostics: best two-link hold-start `0.643s`, best angle-curriculum hold `0.129s`.
+- Comparison report now separates final down-start hold from best intermediate stage hold so subsecond stage progress cannot be mistaken for a solved run.
+- Browser runtime now has a matching `pezzzaChainKnotMlp` path for future chain checkpoints: exact trainer feature order, wrapped relative angles, and chain physics matching the trainer. The public policy remains the solved one-link checkpoint until two-link passes strict down-start validation.
+- Interpretation: local smoke proves the new two-link trainer runs without Modal. The one-link warm start plus wrapped-angle math improves actual down-start transfer from tiny flashes to measurable whiplash and `0.0768s` holds, but it still does not solve two-link down-start.
 
 Planned implementation:
 
