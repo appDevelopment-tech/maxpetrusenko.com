@@ -8,7 +8,7 @@ export const runtime = "edge";
 
 const PAGE_TITLE = "Six Link Cartpole AI Lab";
 const PAGE_DESCRIPTION =
-  "Interactive six link cartpole lab with Yacine timeline notes, control research, and a reconstruction plan for a future reinforcement learning run.";
+  "Interactive six link cartpole lab with a Modal-trained browser policy checkpoint, Yacine timeline notes, control research, and a reconstruction plan.";
 const PAGE_URL = "/ailab/six-pendulum-cartpole";
 const DATE_PUBLISHED = "2026-06-09T00:00:00.000Z";
 const DATE_MODIFIED = "2026-06-09T00:00:00.000Z";
@@ -161,7 +161,7 @@ export default function SixPendulumCartpolePage() {
             Six link cartpole lab.
           </h1>
           <p className="mt-6 max-w-[820px] text-lg leading-relaxed text-[var(--ink-soft)] md:text-xl">
-            A live browser sketch of the six link cartpole problem, plus the training notes needed to turn it into a real reinforcement learning run.
+            A live browser sketch of the six link cartpole problem, plus a Modal GPU policy checkpoint and the training notes needed for the full reinforcement learning reproduction.
           </p>
         </header>
 
@@ -184,10 +184,10 @@ export default function SixPendulumCartpolePage() {
           </div>
 
           <div className="rounded-[8px] border border-[rgba(12,17,21,0.08)] bg-[#101820] p-6 text-[#f7f1e6]">
-            <p className="text-sm font-bold uppercase tracking-[0.18em] text-[#8cc7e8]">Local implementation status</p>
-            <h2 className="mt-4 font-serif text-3xl font-bold text-[#f7f1e6]">Browser sketch, not a trained policy yet.</h2>
+            <p className="text-sm font-bold uppercase tracking-[0.18em] text-[#8cc7e8]">Implementation status</p>
+            <h2 className="mt-4 font-serif text-3xl font-bold text-[#f7f1e6]">Modal-trained CEM checkpoint deployed.</h2>
             <p className="mt-4 text-base leading-relaxed text-[#dce6e9]">
-              The canvas uses a lightweight coupled physics approximation and heuristic control so the page can run in the browser. A real solve should use MJWarp or MJX, PufferPPO, recurrent state, GPU batched environments, and recorded eval videos.
+              The canvas runs a lightweight coupled physics approximation and a checked-in policy trained on Modal L4 with cross-entropy search over a time-basis plus feedback model. This is progress, not the final Yacine-level MuJoCo/PufferPPO solve. The next checkpoint should increase sustained hold time, then move the environment to MJWarp or MJX with PPO and recorded eval videos.
             </p>
           </div>
         </section>

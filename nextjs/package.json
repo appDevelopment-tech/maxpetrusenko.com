@@ -10,6 +10,7 @@
     "guard:dev-server": "node scripts/guard-no-running-dev.mjs",
     "test": "node --import ./scripts/register-ts-tests.mjs --test lib/cms/legacy-blog-compat.test.mjs lib/seo/home-faq.test.mjs lib/concierge/transcript.test.mjs next.config.redirects.test.mjs components/motion/utils.test.mjs && node scripts/verify-predeploy.mjs && node scripts/verify-topic-clusters.mjs && npm run ui:scan",
     "ui:scan": "node scripts/ui-scan.mjs",
+    "train:six-pendulum": "doppler run --project api_keys --config dev -- modal run --write-result app/ailab/six-pendulum-cartpole/sixPendulumPolicy.json scripts/modal-train-six-pendulum-cem.py::train_policy",
     "crm:import:whatsapp": "node scripts/import-whatsapp-contacts.mjs",
     "verify:predeploy": "npm run guard:dev-server && npm run lint && npm run build && npm run test",
     "pages:build": "npm run guard:dev-server && npx @cloudflare/next-on-pages",

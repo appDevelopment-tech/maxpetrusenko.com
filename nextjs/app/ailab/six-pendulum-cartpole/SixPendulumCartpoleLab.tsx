@@ -2,8 +2,23 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Pause, Play, RotateCcw, Shuffle, Zap } from "lucide-react";
+import trainedPolicy from "./sixPendulumPolicy.json";
 
-type LabMode = "policy" | "whip" | "manual";
+type LabMode = "policy" | "swingup" | "whip" | "manual";
+
+type TrainedPolicy = {
+  algorithm?: string;
+  modelType?: string;
+  inputCount?: number;
+  forceScale: number;
+  weights?: number[];
+  layers?: { weights: number[][]; bias: number[] }[];
+  knotCount?: number;
+  knots?: number[];
+  feedback?: number[];
+  steps?: number;
+  dt?: number;
+};
 
 type PendulumState = {
   cartX: number;
@@ -16,6 +31,7 @@ type PendulumState = {
 };
 
 const linkOptions = [1, 2, 3, 4, 5, 6] as const;
+const policy = trainedPolicy as TrainedPolicy;
 
 const policyNotes = [
   "Observation: cart x, cart velocity, six link angles, six angular velocities.",
@@ -26,8 +42,12 @@ const policyNotes = [
   "Evaluation: held out seeds, impulse recovery, lower link transfer, failure map.",
 ] as const;
 
-function makeState(links: number, spread = 0.18, pose: "hold" | "whip" = "hold"): PendulumState {
+function makeState(links: number, spread = 0.18, pose: "hold" | "whip" | "down" = "hold"): PendulumState {
   const theta = Array.from({ length: links }, (_, index) => {
+    if (pose === "down") {
+      return Math.PI - index * 0.08;
+    }
+
     if (pose === "whip") {
       return 1.15 - index * 0.18 + (Math.random() - 0.5) * spread;
     }
@@ -40,7 +60,7 @@ function makeState(links: number, spread = 0.18, pose: "hold" | "whip" = "hold")
     cartX: 0,
     cartV: 0,
     theta,
-    omega: Array.from({ length: links }, () => (Math.random() - 0.5) * 0.8),
+    omega: Array.from({ length: links }, () => (pose === "down" ? 0 : (Math.random() - 0.5) * 0.8)),
     time: 0,
     combo: 0,
     impulse: 0,
@@ -58,26 +78,78 @@ function wrapAngle(value: number): number {
   return angle;
 }
 
+function observe(state: PendulumState): number[] {
+  const values = [
+    1,
+    state.cartX,
+    state.cartV,
+    Math.sin(state.time * 0.7),
+    Math.cos(state.time * 0.7),
+    Math.sin(state.time * 1.7),
+    Math.cos(state.time * 1.7),
+    clamp(state.time / 6, 0, 1),
+    clamp(state.time / 6, 0, 1) ** 2,
+  ];
+
+  for (let index = 0; index < 6; index += 1) {
+    values.push(Math.sin(state.theta[index] ?? 0), Math.cos(state.theta[index] ?? 0), (state.omega[index] ?? 0) / 8);
+  }
+
+  return values;
+}
+
+function runMlpPolicy(inputs: number[]): number | null {
+  if (!Array.isArray(policy.layers)) return null;
+
+  let activations = inputs;
+  policy.layers.forEach((layer: { weights: number[][]; bias: number[] }, layerIndex: number) => {
+    const next = layer.bias.map((bias, outputIndex) => {
+      const sum = activations.reduce((value, activation, inputIndex) => {
+        return value + activation * (layer.weights[inputIndex]?.[outputIndex] ?? 0);
+      }, bias);
+      return layerIndex === (policy.layers?.length ?? 1) - 1 ? Math.tanh(sum) : Math.tanh(sum);
+    });
+    activations = next;
+  });
+
+  return (activations[0] ?? 0) * policy.forceScale;
+}
+
+function runTimeKnotFeedbackPolicy(state: PendulumState): number | null {
+  if (policy.modelType !== "timeKnotFeedback") return null;
+
+  const knots = policy.knots ?? [];
+  const feedback = policy.feedback ?? [];
+  const knotCount = policy.knotCount ?? knots.length;
+  const policyDuration = (policy.steps ?? 560) * (policy.dt ?? 0.025);
+  const position = clamp((state.time / policyDuration) * Math.max(0, knotCount - 1), 0, Math.max(0, knotCount - 1));
+  const left = Math.floor(position);
+  const right = Math.min(left + 1, Math.max(0, knotCount - 1));
+  const mix = position - left;
+  const base = (knots[left] ?? 0) * (1 - mix) + (knots[right] ?? knots[left] ?? 0) * mix;
+  const features = [state.cartX, state.cartV / 5];
+
+  for (let index = 0; index < 6; index += 1) {
+    features.push(Math.sin(state.theta[index] ?? 0), (state.omega[index] ?? 0) / 8);
+  }
+
+  const correction = features.reduce((sum, value, index) => sum + value * (feedback[index] ?? 0), 0);
+  return Math.tanh(base + correction) * policy.forceScale;
+}
+
 function policyForce(state: PendulumState, mode: LabMode, manualForce: number): number {
   if (mode === "manual") return manualForce;
 
-  const weightedAngle = state.theta.reduce((sum, theta, index) => sum + theta * (index + 1) ** 1.35, 0);
-  const weightedOmega = state.omega.reduce((sum, omega, index) => sum + omega * (index + 1) ** 1.15, 0);
-  const targetCart = mode === "policy" ? Math.sin(state.time * 0.55) * 0.36 : Math.sin(state.time * 0.9) * 0.56;
-  const balance = weightedAngle * 2.4 + weightedOmega * 0.75 + (state.cartX - targetCart) * 15 + state.cartV * 4;
-  const whip = mode === "whip" ? Math.sin(state.time * 2.6) * 14 : Math.sin(state.time * 1.15) * 5;
-  return clamp(-(balance + whip) + state.impulse * 3, -32, 32);
-}
+  const trainedForce = runTimeKnotFeedbackPolicy(state) ?? runMlpPolicy(observe(state));
+  if (trainedForce !== null) return clamp(trainedForce, -32, 32);
 
-function policyAngleTarget(state: PendulumState, index: number, mode: LabMode): number {
-  if (mode === "manual") return 0;
+  const inputs = observe(state);
+  let activation = 0;
+  for (let index = 0; index < (policy.inputCount ?? inputs.length); index += 1) {
+    activation += (policy.weights?.[index] ?? 0) * (inputs[index] ?? 0);
+  }
 
-  const holdLean = -state.cartX * 0.06 + Math.sin(state.time * 1.25 + index * 0.45) * 0.026;
-  if (mode === "policy") return holdLean + index * 0.01;
-
-  const recovery = Math.max(0, 1 - state.time / 3.8);
-  const whipPose = Math.sin(state.time * 2.8 - index * 0.58) * 0.42 * recovery;
-  return holdLean + whipPose;
+  return clamp(Math.tanh(activation) * policy.forceScale, -32, 32);
 }
 
 function stepState(state: PendulumState, mode: LabMode, links: number, manualForce: number, dt: number): PendulumState {
@@ -106,14 +178,9 @@ function stepState(state: PendulumState, mode: LabMode, links: number, manualFor
     const nextLink = next.theta[index + 1] ?? next.theta[index] ?? 0;
     const coupling = (prev + nextLink - theta * 2) * (1.5 + index * 0.2);
     const damping = 0.045 + index * 0.008;
-    const gravityScale = mode === "manual" ? 9.81 : 1.25;
-    const gravity = gravityScale * Math.sin(theta) / length;
+    const gravity = (9.81 * Math.sin(theta)) / length;
     const drive = (-cartAcc * Math.cos(theta) * (0.42 + index * 0.04)) / length;
-    const policyAssist =
-      mode === "manual"
-        ? 0
-        : (policyAngleTarget(next, index, mode) - theta) * (120 - index * 5.5) - omega * (17 - index * 0.9);
-    const angularAcc = gravity + drive + coupling - damping * omega + policyAssist;
+    const angularAcc = gravity + drive + coupling - damping * omega;
 
     next.omega[index] = clamp(omega + angularAcc * dt, -18, 18);
     next.theta[index] = wrapAngle(theta + next.omega[index] * dt);
@@ -134,6 +201,12 @@ function scoreState(state: PendulumState): number {
   return Math.round(clamp(100 - angleError * 1.7 - velocityError * 0.6 - Math.abs(state.cartX) * 3, 0, 100));
 }
 
+function poseForMode(mode: LabMode, seeded = false): "hold" | "whip" | "down" {
+  if (mode === "swingup") return "down";
+  if (mode === "whip" || seeded) return "whip";
+  return "hold";
+}
+
 export function SixPendulumCartpoleLab() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const stateRef = useRef<PendulumState>(makeState(6));
@@ -149,6 +222,7 @@ export function SixPendulumCartpoleLab() {
   const modeCopy = useMemo(
     () => ({
       policy: "Policy sketch",
+      swingup: "Swing up",
       whip: "Whip search",
       manual: "Manual force",
     }),
@@ -156,9 +230,9 @@ export function SixPendulumCartpoleLab() {
   );
 
   useEffect(() => {
-    stateRef.current = makeState(links);
+    stateRef.current = makeState(links, mode === "swingup" ? 0.12 : 0.18, poseForMode(mode));
     setEpisode((value) => value + 1);
-  }, [links]);
+  }, [links, mode]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -207,7 +281,7 @@ export function SixPendulumCartpoleLab() {
         context.stroke();
       }
 
-      const trackY = height * 0.68;
+      const trackY = mode === "swingup" ? height * 0.5 : height * 0.68;
       const centerX = width / 2 + state.cartX * width * 0.16;
       context.strokeStyle = "rgba(247,241,230,0.82)";
       context.lineWidth = 4;
@@ -235,7 +309,8 @@ export function SixPendulumCartpoleLab() {
       const colors = ["#e2342f", "#f0b35f", "#6fd0b2", "#0f7ea9", "#7b5ce1", "#f7f1e6"];
 
       state.theta.forEach((theta, index) => {
-        const length = Math.max(28, height * (0.12 - index * 0.005));
+        const length =
+          mode === "swingup" ? Math.max(24, height * (0.085 - index * 0.003)) : Math.max(28, height * (0.12 - index * 0.005));
         const nextX = pivotX + Math.sin(theta) * length;
         const nextY = pivotY - Math.cos(theta) * length;
 
@@ -297,7 +372,7 @@ export function SixPendulumCartpoleLab() {
   }, [links, manualForce, mode, modeCopy, running]);
 
   function reset(spread = 0.55) {
-    stateRef.current = makeState(links, spread, spread > 0.6 ? "whip" : "hold");
+    stateRef.current = makeState(links, mode === "swingup" ? 0.12 : spread, poseForMode(mode, spread > 0.6));
     setEpisode((value) => value + 1);
   }
 
