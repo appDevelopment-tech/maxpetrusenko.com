@@ -85,7 +85,7 @@ Trainer implications:
 2. Add bend-excitation/controllability shaping that penalizes bend collapse only below a threshold.
 3. Keep phases explicit: energy pump, catch, hold.
 4. Keep strict score separate: no score for subsecond holds.
-5. Use Exudyn's N=5 SAC setup as the RL baseline source, then switch to PufferPPO/MuJoCo Warp for throughput if needed.
+5. Use Exudyn's N=5 SAC setup as a reward/curriculum reference only. The Yacine reproduction lane is PufferPPO or close recurrent PPO on MuJoCo Warp, not more browser CEM or plain SAC.
 
 ## Multi-Agent Review
 
@@ -120,6 +120,41 @@ Consensus:
 5. Add randomized episode lengths only after early whip/hold appears, matching Yacine's thread.
 6. Save every run as JSON with stage validation, score, held fraction, whip fraction, seed, GPU, and elapsed time.
 7. Move from the browser physics approximation to MuJoCo Playground or MJWarp once the curriculum path is proven.
+
+## Yacine RL Reproduction Workstream
+
+This is now the target lane. The existing Pezzza/CEM and Python MuJoCo PPO scripts are useful lower-link research, but they are not the reproduced solve because they do not use PufferPPO, Puffer MinGRU, MuJoCo Warp batching, or CUDA graph capture.
+
+Phase 0, proof substrate:
+
+```bash
+npm run six-pendulum:mjcf
+npm run train:six-pendulum:puffer-mjwarp:smoke
+```
+
+The smoke writes `outputs/training-checkpoints/puffer-mjwarp-substrate-smoke.json`. It must prove Modal can install PufferLib and MuJoCo Warp, load the same MJCF, run `nworld` batched worlds, and capture/replay `mjw.step` with Warp CUDA graphs. This is not a solve metric. It is the minimum before spending on PPO.
+
+Phase 1, one-link PufferPPO:
+
+- Environment: same MJCF constraints, gravity `9.8`, hinge friction `0`, cart track centered at `0`.
+- Observation: cart position, cart velocity, link absolute/relative angle encodings, angular velocities, previous action. Do not leak score-only terms into observation.
+- Reward: dense height/energy/whip shaping plus strict hold bonus. Strict score remains zero until at least one continuous upright second.
+- Policy: start small recurrent, then grow toward puffer MinGRU/PufferNet and the reported `~1m` parameter policy.
+- Sweep: report wallclock on x-axis and strict score on y-axis. Promote only held-out down-start checkpoints.
+
+Phase 2, link scaling:
+
+- Unlock link 2 only after 1-link held-out down-start holds for at least one second.
+- Use the m1el lesson during pump: preserve bend order and penalize bend collapse only below a floor; do not reward straightness too early.
+- Unlock links 3 through 6 only after the previous count passes the same held-out one-second gate.
+- Add randomized episode length only after whip behavior exists and the policy is plateauing on short/fixed holds.
+- Treat the eventual target as a sweep problem, not one long run: Yacine reported `3.6k` experiments and GP-selected high-compute hyperparameters.
+
+Phase 3, acceptance:
+
+- Public score counts only continuous strict hold time over one second.
+- Final proof must include checkpoint JSON, training scatter/ledger, held-out validation replay, and hosted video.
+- A model-based TVLQR trajectory can stay as external proof, but it cannot close the RL reproduction.
 
 ## Pezzza-Style One-Link Evolution Result
 
@@ -242,7 +277,7 @@ Result:
 
 Interpretation:
 
-Hold-first training is the right direction for one link: it materially improves strict one-link hold and swing validation. The same time-knot feedback policy still does not carry to link 2. Do not deploy this as the public policy checkpoint. Next work should either make elite selection validation-aware, preserve distribution mean instead of only the best elite, or move the lower-link curriculum into PPO/recurrent policy training.
+Hold-first training is the right direction for one link: it materially improves strict one-link hold and swing validation. The same time-knot feedback policy still does not carry to link 2. Do not deploy this as the public policy checkpoint. Validation-aware elite selection and distribution-mean handoff were implemented later, but link 2 still does not pass the strict down-start gate. The target lane is now recurrent PPO/Puffer-style training on MuJoCo/MJWarp.
 
 Follow-up implementation:
 
