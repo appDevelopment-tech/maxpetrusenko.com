@@ -175,6 +175,15 @@ Local recurrent training smoke:
 - Down-start eval: max strict score `0`, max held `0s`, promotion false.
 - Interpretation: recurrent training now runs through MJWarp and backpropagates, but it does not solve one-link down-start. Next useful work is GPU scale plus proper PPO minibatches, then Puffer MinGRU/PufferNet.
 
+Stronger local hold-search:
+
+- Command: `npm run train:six-pendulum:puffer-mjwarp:hold-search`
+- Artifact: `/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/training-checkpoints/puffer-mjwarp-local-ppo-hold-search.json`
+- Result: `links=1`, `nworld=8`, `rolloutSteps=160`, `evalSteps=640`, `updates=16`.
+- Hold-start eval improved to max held `0.5875s` over a `1.6s` validation horizon, still below the one-second gate.
+- Down-start eval remained strict score `0`, max held `0s`, so no link-two promotion.
+- Interpretation: more local CPU updates improve near-upright stabilization but plateau below the strict hold gate. The next change should improve the PPO update or use GPU scale, not unlock more links.
+
 Phase 1, one-link PufferPPO:
 
 - Environment: same MJCF constraints, gravity `9.8`, hinge friction `0`, cart track centered at `0`.
