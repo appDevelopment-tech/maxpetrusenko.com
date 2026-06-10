@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 import argparse
 import json
-import math
 import time
 from pathlib import Path
 
@@ -107,6 +106,7 @@ class SixPendulumMJWarpPufferEnv(pufferlib.PufferEnv):
         self.horizon = max(1, int(horizon))
         self.pose = pose
         self.force_scale = float(force_scale)
+        self.reset_seed = int(seed if seed is not None else 426210)
         self.rng = np.random.default_rng(seed)
         self.num_agents = self.nworld
         self.single_observation_space = pufferlib.gymnasium.spaces.Box(low=-np.inf, high=np.inf, shape=(OBS_DIM,), dtype=np.float32)
@@ -142,50 +142,22 @@ class SixPendulumMJWarpPufferEnv(pufferlib.PufferEnv):
     def _score_metrics_current_action(self):
         return self.score_kernel.score_from_current_last_action(self.d.qpos, self.d.qvel)
 
-    def _reset_arrays(self, indices, pose: str):
-        qpos = self.d.qpos.numpy()
-        qvel = self.d.qvel.numpy()
-        indices = np.asarray(indices, dtype=np.int32)
-        qpos[indices, :] = 0.0
-        qvel[indices, :] = 0.0
-        base = self.rng.uniform(-0.045, 0.045, len(indices)).astype(np.float32)
-        qpos[indices, 0] = base
-        qvel[indices, 0] = self.rng.uniform(-0.05, 0.05, len(indices)).astype(np.float32)
-        if pose == "hold":
-            for index in range(self.links):
-                qpos[indices, 1 + index] = self.rng.uniform(-0.035, 0.035, len(indices)).astype(np.float32) * (index + 1)
-                qvel[indices, 1 + index] = self.rng.uniform(-0.06, 0.06, len(indices)).astype(np.float32)
-        elif pose == "mixed":
-            selector = np.arange(len(indices)) % 4
-            for index in range(self.links):
-                qpos[indices[selector == 0], 1 + index] = math.pi - index * 0.05 + self.rng.uniform(-0.08, 0.08, int(np.sum(selector == 0)))
-                qpos[indices[selector == 1], 1 + index] = 0.75 * math.pi - index * 0.04 + self.rng.uniform(-0.08, 0.08, int(np.sum(selector == 1)))
-                qpos[indices[selector == 2], 1 + index] = 0.42 * math.pi - index * 0.03 + self.rng.uniform(-0.07, 0.07, int(np.sum(selector == 2)))
-                qpos[indices[selector == 3], 1 + index] = self.rng.uniform(-0.035, 0.035, int(np.sum(selector == 3))) * (index + 1)
-            qvel[indices[selector == 0], 1 : 1 + self.links] = self.rng.uniform(-0.12, 0.12, (int(np.sum(selector == 0)), self.links))
-            qvel[indices[selector == 1], 1 : 1 + self.links] = self.rng.uniform(-1.45, -0.8, (int(np.sum(selector == 1)), self.links))
-            qvel[indices[selector == 2], 1 : 1 + self.links] = self.rng.uniform(-0.85, -0.25, (int(np.sum(selector == 2)), self.links))
-            qvel[indices[selector == 3], 1 : 1 + self.links] = self.rng.uniform(-0.06, 0.06, (int(np.sum(selector == 3)), self.links))
-        else:
-            down_noise = self.rng.uniform(-0.08, 0.08, len(indices)).astype(np.float32)
-            for index in range(self.links):
-                qpos[indices, 1 + index] = math.pi - index * 0.05 + down_noise
-                qvel[indices, 1 + index] = self.rng.uniform(-0.08, 0.08, len(indices)).astype(np.float32)
-        self.d.qpos.assign(qpos)
-        self.d.qvel.assign(qvel)
-        self.elapsed[indices] = 0
-        self.held_steps[indices] = 0
-        self.max_held_steps[indices] = 0
-        self.last_action[indices] = 0.0
+    def _reset_worlds(self, reset_all: bool = False):
+        self.score_kernel.reset_worlds(self.d.qpos, self.d.qvel, self.d.ctrl, self.pose, self.reset_seed, reset_all=reset_all)
 
     def reset(self, seed=None):
         import warp as wp
 
         if seed is not None:
+            self.reset_seed = int(seed)
             self.rng = np.random.default_rng(seed)
-        self._reset_arrays(np.arange(self.nworld), self.pose)
+        self._reset_worlds(reset_all=True)
+        self.elapsed.fill(0)
+        self.held_steps.fill(0)
+        self.max_held_steps.fill(0)
+        self.last_action.fill(0.0)
         self.mjw.forward(self.m, self.d)
-        metrics = self._score_metrics()
+        metrics = self._score_metrics_current_action()
         self.prev_potential[:] = metrics["potential"]
         self.score_kernel.reset_rollout_state(self.prev_potential, self.elapsed, self.held_steps, self.max_held_steps)
         self.observations[:] = metrics["observation"]
@@ -211,11 +183,11 @@ class SixPendulumMJWarpPufferEnv(pufferlib.PufferEnv):
         self.truncations[:] = rollout["truncation"] > 0.5
         done = self.terminals | self.truncations
         if np.any(done):
-            self._reset_arrays(np.flatnonzero(done), self.pose)
+            self._reset_worlds(reset_all=False)
             self.mjw.forward(self.m, self.d)
-            reset_metrics = self._score_metrics()
-            self.prev_potential[np.flatnonzero(done)] = reset_metrics["potential"][np.flatnonzero(done)]
-            self.score_kernel.reset_rollout_state(self.prev_potential, self.elapsed, self.held_steps, self.max_held_steps)
+            self._score_metrics_current_action()
+            self.score_kernel.sync_reset_potential()
+            self.prev_potential[:] = self.score_kernel.prev_potential_wp.numpy()
         return self.observations, self.rewards, self.terminals, self.truncations, self._infos(metrics)
 
     def _infos(self, metrics):
@@ -252,9 +224,7 @@ def run_driver_smoke(
     reward_sum = np.zeros(env.nworld, dtype=np.float32)
     for step_index in range(steps):
         if pose == "hold":
-            qpos = env.d.qpos.numpy()
-            qvel = env.d.qvel.numpy()
-            force = np.clip(-18.0 * qpos[:, 0] - 5.0 * qvel[:, 0], -force_scale, force_scale)
+            force = np.clip(-18.0 * obs[:, 0] - 25.0 * obs[:, 1], -force_scale, force_scale)
         else:
             phase = step_index / max(1, steps - 1)
             force = np.full(env.nworld, np.sin(phase * np.pi * 4.0) * 18.0, dtype=np.float32)
@@ -277,6 +247,7 @@ def run_driver_smoke(
         "forceScale": force_scale,
         "scoreBackend": "warp-score-kernel",
         "rolloutBackend": "warp-post-step-kernel",
+        "resetBackend": "warp-reset-kernel",
         "rewardMean": float(np.mean(reward_sum)),
         "maxStrictScore": float(max_score),
         "maxHeldSeconds": float(max_held),

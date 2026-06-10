@@ -25,6 +25,88 @@ def wrap_angle(angle: float):
     return shifted - pi
 
 
+@wp.func
+def rand_unit(seed: int, world: int, channel: int, reset_count: int):
+    value = wp.sin(float(seed) * 12.9898 + float(world) * 78.233 + float(channel) * 37.719 + float(reset_count) * 19.19) * 43758.5453
+    return value - wp.floor(value)
+
+
+@wp.func
+def rand_range(seed: int, world: int, channel: int, reset_count: int, low: float, high: float):
+    return low + (high - low) * rand_unit(seed, world, channel, reset_count)
+
+
+@wp.kernel
+def reset_state_kernel(
+    qpos: wp.array2d(dtype=wp.float32),
+    qvel: wp.array2d(dtype=wp.float32),
+    ctrl: wp.array2d(dtype=wp.float32),
+    terminal: wp.array(dtype=wp.float32),
+    truncation: wp.array(dtype=wp.float32),
+    last_action: wp.array(dtype=wp.float32),
+    elapsed: wp.array(dtype=wp.int32),
+    held_steps: wp.array(dtype=wp.int32),
+    max_held_steps: wp.array(dtype=wp.int32),
+    reset_count: wp.array(dtype=wp.int32),
+    links: int,
+    pose_mode: int,
+    seed: int,
+    reset_all: int,
+):
+    i = wp.tid()
+    should_reset = reset_all == 1 or terminal[i] > 0.5 or truncation[i] > 0.5
+    if should_reset:
+        count = reset_count[i] + 1
+        reset_count[i] = count
+        qpos[i, 0] = rand_range(seed, i, 0, count, -0.045, 0.045)
+        qvel[i, 0] = rand_range(seed, i, 1, count, -0.05, 0.05)
+        ctrl[i, 0] = 0.0
+        last_action[i] = 0.0
+        elapsed[i] = 0
+        held_steps[i] = 0
+        max_held_steps[i] = 0
+
+        selector = (i + count) - 4 * ((i + count) / 4)
+        down_noise = rand_range(seed, i, 2, count, -0.08, 0.08)
+        for link in range(MAX_LINKS):
+            if link < links:
+                angle = 0.0
+                velocity = 0.0
+                if pose_mode == 1:
+                    angle = rand_range(seed, i, 10 + link, count, -0.035, 0.035) * float(link + 1)
+                    velocity = rand_range(seed, i, 30 + link, count, -0.06, 0.06)
+                elif pose_mode == 2:
+                    if selector == 0:
+                        angle = 3.141592653589793 - float(link) * 0.05 + rand_range(seed, i, 10 + link, count, -0.08, 0.08)
+                        velocity = rand_range(seed, i, 30 + link, count, -0.12, 0.12)
+                    elif selector == 1:
+                        angle = 0.75 * 3.141592653589793 - float(link) * 0.04 + rand_range(seed, i, 10 + link, count, -0.08, 0.08)
+                        velocity = rand_range(seed, i, 30 + link, count, -1.45, -0.8)
+                    elif selector == 2:
+                        angle = 0.42 * 3.141592653589793 - float(link) * 0.03 + rand_range(seed, i, 10 + link, count, -0.07, 0.07)
+                        velocity = rand_range(seed, i, 30 + link, count, -0.85, -0.25)
+                    else:
+                        angle = rand_range(seed, i, 10 + link, count, -0.035, 0.035) * float(link + 1)
+                        velocity = rand_range(seed, i, 30 + link, count, -0.06, 0.06)
+                else:
+                    angle = 3.141592653589793 - float(link) * 0.05 + down_noise
+                    velocity = rand_range(seed, i, 30 + link, count, -0.08, 0.08)
+                qpos[i, 1 + link] = angle
+                qvel[i, 1 + link] = velocity
+
+
+@wp.kernel
+def sync_reset_potential_kernel(
+    potential: wp.array(dtype=wp.float32),
+    terminal: wp.array(dtype=wp.float32),
+    truncation: wp.array(dtype=wp.float32),
+    prev_potential: wp.array(dtype=wp.float32),
+):
+    i = wp.tid()
+    if terminal[i] > 0.5 or truncation[i] > 0.5:
+        prev_potential[i] = potential[i]
+
+
 @wp.kernel
 def action_to_ctrl_kernel(
     actions: wp.array2d(dtype=wp.float32),
@@ -240,8 +322,34 @@ class WarpScoreKernel:
         self.elapsed_wp = wp.zeros(self.nworld, dtype=wp.int32, device=self.device)
         self.held_steps_wp = wp.zeros(self.nworld, dtype=wp.int32, device=self.device)
         self.max_held_steps_wp = wp.zeros(self.nworld, dtype=wp.int32, device=self.device)
+        self.reset_count_wp = wp.zeros(self.nworld, dtype=wp.int32, device=self.device)
         self.final_reward_wp = wp.zeros(self.nworld, dtype=wp.float32, device=self.device)
         self.truncation_wp = wp.zeros(self.nworld, dtype=wp.float32, device=self.device)
+
+    def reset_worlds(self, qpos_wp, qvel_wp, ctrl_wp, pose: str, seed: int, reset_all: bool = False):
+        pose_mode = 1 if pose == "hold" else 2 if pose == "mixed" else 0
+        wp.launch(
+            reset_state_kernel,
+            dim=self.nworld,
+            inputs=[
+                qpos_wp,
+                qvel_wp,
+                ctrl_wp,
+                self.terminal_wp,
+                self.truncation_wp,
+                self.last_action_wp,
+                self.elapsed_wp,
+                self.held_steps_wp,
+                self.max_held_steps_wp,
+                self.reset_count_wp,
+                int(self.links),
+                int(pose_mode),
+                int(seed),
+                1 if reset_all else 0,
+            ],
+            device=self.device,
+        )
+        wp.synchronize()
 
     def apply_actions(self, actions: np.ndarray, ctrl_wp) -> np.ndarray:
         self.action_wp.assign(np.asarray(actions, dtype=np.float32).reshape(self.nworld, 1))
@@ -298,6 +406,15 @@ class WarpScoreKernel:
         self.elapsed_wp.assign(zeros if elapsed is None else np.asarray(elapsed, dtype=np.int32).reshape(self.nworld))
         self.held_steps_wp.assign(zeros if held_steps is None else np.asarray(held_steps, dtype=np.int32).reshape(self.nworld))
         self.max_held_steps_wp.assign(zeros if max_held_steps is None else np.asarray(max_held_steps, dtype=np.int32).reshape(self.nworld))
+
+    def sync_reset_potential(self):
+        wp.launch(
+            sync_reset_potential_kernel,
+            dim=self.nworld,
+            inputs=[self.potential_wp, self.terminal_wp, self.truncation_wp, self.prev_potential_wp],
+            device=self.device,
+        )
+        wp.synchronize()
 
     def post_step(self, pose_hold: bool, horizon: int) -> dict:
         wp.launch(
@@ -414,7 +531,7 @@ def main():
             "whip",
             "terminal",
         ],
-        "integrationStatus": "score, observation, cart terminal, action scaling, ctrl write, held-step, truncation, max-held, and potential-delta reward math have Warp kernels; reset sampling and Puffer rollout integration still pending",
+        "integrationStatus": "score, observation, cart terminal, action scaling, ctrl write, held-step, truncation, max-held, potential-delta reward, reset sampling, and reset writes have Warp kernels; CPU done trigger, CPU metric copies, and Puffer rollout integration still pending",
     }
     args.write_result.parent.mkdir(parents=True, exist_ok=True)
     args.write_result.write_text(json.dumps(result, indent=2) + "\n")
