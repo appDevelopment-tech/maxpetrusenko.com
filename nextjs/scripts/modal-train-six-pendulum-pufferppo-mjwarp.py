@@ -148,8 +148,8 @@ def build_contract(total_timesteps: int = 10_000_000) -> dict:
             "ppoUpdateSmoke": {
                 "command": "npm run train:six-pendulum:puffer-mjwarp:device-rollout:ppo-update",
                 "artifact": "/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/training-checkpoints/puffer-mjwarp-device-rollout-ppo-update.json",
-                "covered": "One PPO minibatch update consumes the fixed recurrent rollout buffers, recomputes logprobs/values over the stored sequence, backpropagates through the recurrent actor-critic, and changes parameters.",
-                "caveat": "This is a single local CPU smoke update, not a PufferPPO training run and not a learned policy solve.",
+                "covered": "Three PPO epochs consume the fixed recurrent rollout buffers, recompute logprobs/values over the stored sequence, backpropagate through the recurrent actor-critic, and change parameters.",
+                "caveat": "This is a local CPU fixed-batch smoke update, not a PufferPPO training run and not a learned policy solve.",
             },
             "randomHorizonSupport": {
                 "command": "npm run train:six-pendulum:puffer-mjwarp:device-rollout:random-horizon",

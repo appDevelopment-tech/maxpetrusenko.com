@@ -94,6 +94,7 @@ def run_recurrent_ppo_update_smoke(
     terminal_np: np.ndarray,
     truncation_np: np.ndarray,
     hidden_dim: int,
+    update_epochs: int = 1,
 ) -> dict:
     import torch
 
@@ -119,38 +120,64 @@ def run_recurrent_ppo_update_smoke(
     returns = advantages + old_value
     normalized_advantage = (advantages - advantages.mean()) / (advantages.std() + 1e-6)
 
-    hidden = torch.zeros(nworld, int(hidden_dim), dtype=torch.float32)
-    logprob_steps = []
-    value_steps = []
-    entropy_steps = []
-    for step in range(steps):
-        logprob, entropy, value, hidden = policy.evaluate_actions(obs[step], hidden, actions[step])
-        logprob_steps.append(logprob)
-        value_steps.append(value)
-        entropy_steps.append(entropy)
-        if step < steps - 1 and bool(done[step].any()):
-            hidden = hidden.clone()
-            hidden[done[step] > 0.5] = 0.0
-
-    new_logprob = torch.stack(logprob_steps)
-    new_value = torch.stack(value_steps)
-    entropy = torch.stack(entropy_steps)
-    ratio = torch.exp(new_logprob - old_logprob)
-    clip_coef = 0.2
-    pg_loss_unclipped = -normalized_advantage * ratio
-    pg_loss_clipped = -normalized_advantage * torch.clamp(ratio, 1.0 - clip_coef, 1.0 + clip_coef)
-    policy_loss = torch.max(pg_loss_unclipped, pg_loss_clipped).mean()
-    value_clipped = old_value + torch.clamp(new_value - old_value, -clip_coef, clip_coef)
-    value_loss = 0.5 * torch.max((new_value - returns).pow(2), (value_clipped - returns).pow(2)).mean()
-    entropy_loss = entropy.mean()
-    loss = policy_loss + 0.5 * value_loss - 0.01 * entropy_loss
-
     before = torch.cat([parameter.detach().flatten() for parameter in policy.parameters()])
     optimizer = torch.optim.AdamW(policy.parameters(), lr=3e-4, weight_decay=1e-5)
-    optimizer.zero_grad(set_to_none=True)
-    loss.backward()
-    grad_norm = float(torch.nn.utils.clip_grad_norm_(policy.parameters(), 0.7).detach())
-    optimizer.step()
+    clip_coef = 0.2
+    epoch_history = []
+    grad_norm = 0.0
+    parameter_delta_l2 = 0.0
+    policy_loss = torch.tensor(0.0)
+    value_loss = torch.tensor(0.0)
+    entropy_loss = torch.tensor(0.0)
+    loss = torch.tensor(0.0)
+    ratio = torch.ones_like(old_logprob)
+
+    for epoch_index in range(max(1, int(update_epochs))):
+        hidden = torch.zeros(nworld, int(hidden_dim), dtype=torch.float32)
+        logprob_steps = []
+        value_steps = []
+        entropy_steps = []
+        for step in range(steps):
+            logprob, entropy, value, hidden = policy.evaluate_actions(obs[step], hidden, actions[step])
+            logprob_steps.append(logprob)
+            value_steps.append(value)
+            entropy_steps.append(entropy)
+            if step < steps - 1 and bool(done[step].any()):
+                hidden = hidden.clone()
+                hidden[done[step] > 0.5] = 0.0
+
+        new_logprob = torch.stack(logprob_steps)
+        new_value = torch.stack(value_steps)
+        entropy = torch.stack(entropy_steps)
+        ratio = torch.exp(new_logprob - old_logprob)
+        pg_loss_unclipped = -normalized_advantage * ratio
+        pg_loss_clipped = -normalized_advantage * torch.clamp(ratio, 1.0 - clip_coef, 1.0 + clip_coef)
+        policy_loss = torch.max(pg_loss_unclipped, pg_loss_clipped).mean()
+        value_clipped = old_value + torch.clamp(new_value - old_value, -clip_coef, clip_coef)
+        value_loss = 0.5 * torch.max((new_value - returns).pow(2), (value_clipped - returns).pow(2)).mean()
+        entropy_loss = entropy.mean()
+        loss = policy_loss + 0.5 * value_loss - 0.01 * entropy_loss
+
+        optimizer.zero_grad(set_to_none=True)
+        loss.backward()
+        grad_norm = float(torch.nn.utils.clip_grad_norm_(policy.parameters(), 0.7).detach())
+        optimizer.step()
+        after_epoch = torch.cat([parameter.detach().flatten() for parameter in policy.parameters()])
+        parameter_delta_l2 = float(torch.linalg.vector_norm(after_epoch - before))
+        epoch_history.append(
+            {
+                "epoch": epoch_index + 1,
+                "policyLoss": float(policy_loss.detach()),
+                "valueLoss": float(value_loss.detach()),
+                "entropy": float(entropy_loss.detach()),
+                "loss": float(loss.detach()),
+                "ratioMean": float(ratio.detach().mean()),
+                "ratioMax": float(ratio.detach().max()),
+                "gradNorm": grad_norm,
+                "parameterDeltaL2": parameter_delta_l2,
+            }
+        )
+
     after = torch.cat([parameter.detach().flatten() for parameter in policy.parameters()])
     parameter_delta_l2 = float(torch.linalg.vector_norm(after - before))
 
@@ -158,7 +185,8 @@ def run_recurrent_ppo_update_smoke(
         "enabled": True,
         "optimizer": "AdamW",
         "learningRate": 3e-4,
-        "minibatches": 1,
+        "minibatches": int(max(1, int(update_epochs))),
+        "updateEpochs": int(max(1, int(update_epochs))),
         "sequenceShape": [int(steps), int(nworld), int(obs.shape[-1])],
         "actionShape": [int(steps), int(nworld)],
         "policyLoss": float(policy_loss.detach()),
@@ -172,8 +200,9 @@ def run_recurrent_ppo_update_smoke(
         "gradNorm": grad_norm,
         "parameterDeltaL2": parameter_delta_l2,
         "updatedParameters": bool(parameter_delta_l2 > 0.0),
+        "epochHistory": epoch_history,
         "notes": [
-            "This is a one-minibatch PPO update smoke over fixed recurrent rollout buffers.",
+            "This is a PPO update smoke over fixed recurrent rollout buffers.",
             "It proves gradients flow from buffered observations/actions/logprobs/values into the recurrent actor-critic.",
             "It is not a trained policy and does not count toward solve.",
         ],
@@ -197,6 +226,7 @@ def run_device_rollout(
     policy_hidden_dim: int = 64,
     recurrent_policy: bool = False,
     ppo_update_smoke: bool = False,
+    ppo_update_epochs: int = 1,
 ) -> dict:
     import mujoco
     import mujoco_warp as mjw
@@ -439,6 +469,7 @@ def run_device_rollout(
                 terminal_np,
                 truncation_np,
                 policy_hidden_dim,
+                ppo_update_epochs,
             )
 
     return {
@@ -532,6 +563,7 @@ def main():
     parser.add_argument("--policy-hidden-dim", type=int, default=64)
     parser.add_argument("--recurrent-policy", action="store_true")
     parser.add_argument("--ppo-update-smoke", action="store_true")
+    parser.add_argument("--ppo-update-epochs", type=int, default=1)
     parser.add_argument("--write-result", type=Path, default=DEFAULT_OUTPUT)
     args = parser.parse_args()
 
@@ -554,6 +586,7 @@ def main():
         policy_hidden_dim=args.policy_hidden_dim,
         recurrent_policy=args.recurrent_policy,
         ppo_update_smoke=args.ppo_update_smoke,
+        ppo_update_epochs=args.ppo_update_epochs,
     )
     args.write_result.parent.mkdir(parents=True, exist_ok=True)
     args.write_result.write_text(json.dumps(result, indent=2) + "\n")
