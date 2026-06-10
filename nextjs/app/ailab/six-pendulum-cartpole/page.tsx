@@ -220,9 +220,9 @@ export default function SixPendulumCartpolePage() {
 
           <div className="rounded-[8px] border border-[rgba(12,17,21,0.08)] bg-[#101820] p-6 text-[#f7f1e6]">
             <p className="text-sm font-bold uppercase tracking-[0.18em] text-[#8cc7e8]">Implementation status</p>
-            <h2 className="mt-4 font-serif text-3xl font-bold text-[#f7f1e6]">Link two is the current wall.</h2>
+            <h2 className="mt-4 font-serif text-3xl font-bold text-[#f7f1e6]">Link one is the current wall.</h2>
             <p className="mt-4 text-base leading-relaxed text-[#dce6e9]">
-              The canvas runs a lightweight coupled physics approximation and a checked-in policy trained on Modal L4 with cross-entropy search over a time-basis plus feedback model. This is progress, not the final Yacine-level MuJoCo/PufferPPO solve. Score is strict: fallen, bent, or mostly-upright-but-not-straight chains get zero. Hold-first CEM exposed link two as the wall. A new MuJoCo recurrent PPO scaffold now runs on the generated MJCF files; its first one-link smoke holds briefly but still ends with strict score zero, so the next target is stable one-link hold before mixed swing.
+              The canvas now starts at one hanging pendulum, uses model force only, and locks links two through six until link one passes a one-second strict hold. The latest Modal MuJoCo runs do not pass: recurrent PPO reached 0.0125 seconds from down, pure SAC reached 0.0229 seconds, and stabilize-then-down SAC also reached 0.0229 seconds. The next checkpoint must solve this one-link down-start gate before higher link counts count.
             </p>
           </div>
         </section>

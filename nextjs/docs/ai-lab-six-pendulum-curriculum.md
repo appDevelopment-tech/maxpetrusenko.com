@@ -176,3 +176,88 @@ Result:
 Interpretation:
 
 The MuJoCo/PPO path is now wired and produces measurable hold signal, but the first recurrent PPO smoke does not keep the one-link pendulum upright through the final strict score gate. The next run should overfit one-link hold before enabling mixed starts or link two.
+
+## One-Link Down-Start Gate
+
+The acceptance rule changed after reviewing the failure mode: less than one consecutive second does not count, and no run starting near the top counts as solved. Validation must start from the hanging position and use only model-produced cart force.
+
+UI changes:
+
+- Default active count is one pendulum.
+- Links two through six are locked until one-link down-start validation passes.
+- Manual force, seed, kick, and top-start controls were removed.
+- Canvas hold time resets to zero whenever strict score drops below 82.
+
+### PPO Down-Start Smoke
+
+Command:
+
+```bash
+npm run train:six-pendulum:mujoco-ppo:down-smoke
+```
+
+Modal run:
+https://modal.com/apps/max-petrusenko/main/ap-LdwqF2yPAWGy2SYZhg6IkV
+
+Artifact:
+`/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/training-checkpoints/mujoco-ppo-1link-down-smoke.json`
+
+Result:
+
+- Down-start final validation: score 0.0, held 0.00208, max held 0.0125 seconds, solved-one-second rate 0.0.
+- Hold-start validation briefly reached max held 0.4766 seconds, but top-start does not count.
+
+### SAC Down-Start Smoke
+
+Command:
+
+```bash
+npm run train:six-pendulum:mujoco-sac:down-smoke
+```
+
+Modal run:
+https://modal.com/apps/max-petrusenko/main/ap-jxIbOLSuJCDeMi0ppiX3ZA
+
+Artifact:
+`/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/training-checkpoints/mujoco-sac-1link-down-smoke.json`
+
+Result:
+
+- Final validation: score 0.0, held 0.000521, max held 0.00469 seconds, solved-one-second rate 0.0.
+- Best transient checkpoint: 30k steps, max held 0.0125 seconds, solved-one-second rate 0.0.
+
+### SAC Down-Start Full Run
+
+Modal run:
+https://modal.com/apps/max-petrusenko/main/ap-ranbDs7A1VQGWFETRRyMJq
+
+Artifact:
+`/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/training-checkpoints/mujoco-sac-1link-down-full.json`
+
+Result:
+
+- Final validation: score 0.0, held 0.00100, max held 0.0141 seconds, solved-one-second rate 0.0.
+- Best transient checkpoint: 245k steps, max held 0.0229 seconds, solved-one-second rate 0.0.
+
+### SAC Stabilize-Then-Down Smoke
+
+Command:
+
+```bash
+npm run train:six-pendulum:mujoco-sac:stabilize-smoke
+```
+
+Modal run:
+https://modal.com/apps/max-petrusenko/main/ap-7mrtxn3pqLxwGfqNOzbP1X
+
+Artifact:
+`/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/training-checkpoints/mujoco-sac-1link-stabilize-smoke.json`
+
+Result:
+
+- Final validation: score 0.0, held 0.00122, max held 0.0109 seconds, solved-one-second rate 0.0.
+- Best transient checkpoint: hold phase at 30k steps, max held 0.0229 seconds, solved-one-second rate 0.0.
+
+Interpretation:
+
+The one-link task is still not solved. Plain down-start SAC learns some energy/height signal, but not the stabilizer. Stabilizer pretraining helps reach the same best transient much faster, but it still does not transfer into a one-second down-start hold. The next training change should use a real recurrent/off-policy sequence policy or explicit phase-conditioned curriculum while keeping the down-start one-second validation gate unchanged.

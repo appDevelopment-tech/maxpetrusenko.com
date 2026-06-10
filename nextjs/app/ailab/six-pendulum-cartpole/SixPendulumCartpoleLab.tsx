@@ -1,10 +1,8 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
-import { Pause, Play, RotateCcw, Shuffle, Zap } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { Pause, Play, RotateCcw } from "lucide-react";
 import trainedPolicy from "./sixPendulumPolicy.json";
-
-type LabMode = "policy" | "swingup" | "whip" | "manual";
 
 type TrainedPolicy = {
   algorithm?: string;
@@ -12,7 +10,7 @@ type TrainedPolicy = {
   inputCount?: number;
   forceScale: number;
   weights?: number[];
-  layers?: { weights: number[][]; bias: number[] }[];
+  layers?: { weights: number[][]; bias: number[]; activation?: "relu" | "tanh" }[];
   knotCount?: number;
   knots?: number[];
   feedback?: number[];
@@ -28,6 +26,7 @@ type PendulumState = {
   time: number;
   combo: number;
   impulse: number;
+  lastAction: number;
 };
 
 const linkOptions = [1, 2, 3, 4, 5, 6] as const;
@@ -36,36 +35,28 @@ const SCORE_MAX_UPRIGHT_ANGLE = 0.16;
 const SCORE_MAX_CHAIN_BEND = 0.14;
 
 const policyNotes = [
-  "Observation: cart x, cart velocity, six link angles, six angular velocities.",
-  "Action: start with a small force set, then test continuous cart force.",
+  "Observation: cart x, cart velocity, previous action, and sin/cos angle features.",
+  "Action: model-produced continuous cart force only.",
   "Reward: dense swing-up shaping during training, strict visible score only when every link is upright and straight.",
-  "Curriculum: solve one link, then two, then mixed one to six link episodes.",
+  "Curriculum: solve one link from the hanging position, then two, then mixed one to six link episodes.",
   "Randomization: mass, force magnitude, initial angle, episode horizon.",
-  "Evaluation: held out seeds, impulse recovery, lower link transfer, failure map.",
+  "Evaluation: one second minimum consecutive strict hold, held out seeds, lower link transfer, failure map.",
 ] as const;
 
-function makeState(links: number, spread = 0.18, pose: "hold" | "whip" | "down" = "hold"): PendulumState {
+function makeState(links: number, spread = 0.18): PendulumState {
   const theta = Array.from({ length: links }, (_, index) => {
-    if (pose === "down") {
-      return Math.PI - index * 0.08;
-    }
-
-    if (pose === "whip") {
-      return 1.15 - index * 0.18 + (Math.random() - 0.5) * spread;
-    }
-
-    const lean = -0.1 + index * 0.018;
-    return lean + Math.sin(index * 1.7) * 0.035 + (Math.random() - 0.5) * spread;
+    return Math.PI - index * 0.08 + (Math.random() - 0.5) * spread;
   });
 
   return {
     cartX: 0,
     cartV: 0,
     theta,
-    omega: Array.from({ length: links }, () => (pose === "down" ? 0 : (Math.random() - 0.5) * 0.8)),
+    omega: Array.from({ length: links }, () => 0),
     time: 0,
     combo: 0,
     impulse: 0,
+    lastAction: 0,
   };
 }
 
@@ -117,6 +108,37 @@ function runMlpPolicy(inputs: number[]): number | null {
   return (activations[0] ?? 0) * policy.forceScale;
 }
 
+function runSacPolicy(state: PendulumState): number | null {
+  if (policy.modelType !== "sacMlp" || !Array.isArray(policy.layers)) return null;
+
+  const values = [state.cartX, state.cartV / 5, state.lastAction / policy.forceScale];
+  for (let index = 0; index < 6; index += 1) {
+    const theta = state.theta[index] ?? 0;
+    const relative = index === 0 ? theta : theta - (state.theta[index - 1] ?? 0);
+    values.push(
+      Math.sin(theta),
+      Math.cos(theta),
+      Math.sin(relative),
+      Math.cos(relative),
+      (state.omega[index] ?? 0) / 8
+    );
+  }
+
+  let activations = values.slice(0, policy.inputCount ?? values.length);
+  policy.layers.forEach((layer) => {
+    const next = layer.bias.map((bias, outputIndex) => {
+      const sum = activations.reduce((value, activation, inputIndex) => {
+        return value + activation * (layer.weights[inputIndex]?.[outputIndex] ?? 0);
+      }, bias);
+      if (layer.activation === "relu") return Math.max(0, sum);
+      return Math.tanh(sum);
+    });
+    activations = next;
+  });
+
+  return (activations[0] ?? 0) * policy.forceScale;
+}
+
 function runTimeKnotFeedbackPolicy(state: PendulumState): number | null {
   if (policy.modelType !== "timeKnotFeedback") return null;
 
@@ -139,10 +161,8 @@ function runTimeKnotFeedbackPolicy(state: PendulumState): number | null {
   return Math.tanh(base + correction) * policy.forceScale;
 }
 
-function policyForce(state: PendulumState, mode: LabMode, manualForce: number): number {
-  if (mode === "manual") return manualForce;
-
-  const trainedForce = runTimeKnotFeedbackPolicy(state) ?? runMlpPolicy(observe(state));
+function policyForce(state: PendulumState): number {
+  const trainedForce = runSacPolicy(state) ?? runTimeKnotFeedbackPolicy(state) ?? runMlpPolicy(observe(state));
   if (trainedForce !== null) return clamp(trainedForce, -32, 32);
 
   const inputs = observe(state);
@@ -154,7 +174,7 @@ function policyForce(state: PendulumState, mode: LabMode, manualForce: number): 
   return clamp(Math.tanh(activation) * policy.forceScale, -32, 32);
 }
 
-function stepState(state: PendulumState, mode: LabMode, links: number, manualForce: number, dt: number): PendulumState {
+function stepState(state: PendulumState, links: number, dt: number): PendulumState {
   const next: PendulumState = {
     cartX: state.cartX,
     cartV: state.cartV,
@@ -163,8 +183,10 @@ function stepState(state: PendulumState, mode: LabMode, links: number, manualFor
     time: state.time + dt,
     combo: state.combo,
     impulse: state.impulse * Math.exp(-dt * 2.8),
+    lastAction: state.lastAction,
   };
-  const force = policyForce(state, mode, manualForce);
+  const force = policyForce(state);
+  next.lastAction = force;
   const cartAcc = force - 0.62 * state.cartV - 1.2 * state.cartX - state.theta.reduce((sum, theta, index) => {
     return sum + Math.sin(theta) * (index + 1) * 0.08;
   }, 0);
@@ -188,11 +210,7 @@ function stepState(state: PendulumState, mode: LabMode, links: number, manualFor
     next.theta[index] = wrapAngle(theta + next.omega[index] * dt);
   }
 
-  if (scoreState(next) > 82) {
-    next.combo = Math.min(12, next.combo + dt * 1.35);
-  } else {
-    next.combo = Math.max(0, next.combo - dt * 2.4);
-  }
+  next.combo = scoreState(next) > 82 ? next.combo + dt : 0;
 
   return next;
 }
@@ -213,38 +231,20 @@ function scoreState(state: PendulumState): number {
   return Math.round(clamp(100 - angleError * 12 - maxBendError * 30 - velocityError * 2.5 - Math.abs(state.cartX) * 8, 0, 100));
 }
 
-function poseForMode(mode: LabMode, seeded = false): "hold" | "whip" | "down" {
-  if (mode === "swingup") return "down";
-  if (mode === "whip" || seeded) return "whip";
-  return "hold";
-}
-
 export function SixPendulumCartpoleLab() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const stateRef = useRef<PendulumState>(makeState(6));
+  const stateRef = useRef<PendulumState>(makeState(1));
   const frameRef = useRef<number | null>(null);
   const lastTimeRef = useRef<number | null>(null);
-  const [links, setLinks] = useState<(typeof linkOptions)[number]>(6);
-  const [mode, setMode] = useState<LabMode>("policy");
-  const [manualForce, setManualForce] = useState(0);
+  const [links, setLinks] = useState<(typeof linkOptions)[number]>(1);
   const [running, setRunning] = useState(true);
   const [score, setScore] = useState(0);
   const [episode, setEpisode] = useState(1);
 
-  const modeCopy = useMemo(
-    () => ({
-      policy: "Policy sketch",
-      swingup: "Swing up",
-      whip: "Whip search",
-      manual: "Manual force",
-    }),
-    []
-  );
-
   useEffect(() => {
-    stateRef.current = makeState(links, mode === "swingup" ? 0.12 : 0.18, poseForMode(mode));
+    stateRef.current = makeState(links, 0.18);
     setEpisode((value) => value + 1);
-  }, [links, mode]);
+  }, [links]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -293,7 +293,7 @@ export function SixPendulumCartpoleLab() {
         context.stroke();
       }
 
-      const trackY = mode === "swingup" ? height * 0.5 : height * 0.68;
+      const trackY = height * 0.5;
       const centerX = width / 2 + state.cartX * width * 0.16;
       context.strokeStyle = "rgba(247,241,230,0.82)";
       context.lineWidth = 4;
@@ -321,8 +321,7 @@ export function SixPendulumCartpoleLab() {
       const colors = ["#e2342f", "#f0b35f", "#6fd0b2", "#0f7ea9", "#7b5ce1", "#f7f1e6"];
 
       state.theta.forEach((theta, index) => {
-        const length =
-          mode === "swingup" ? Math.max(24, height * (0.085 - index * 0.003)) : Math.max(28, height * (0.12 - index * 0.005));
+        const length = Math.max(24, height * (0.085 - index * 0.003));
         const nextX = pivotX + Math.sin(theta) * length;
         const nextY = pivotY - Math.cos(theta) * length;
 
@@ -344,9 +343,10 @@ export function SixPendulumCartpoleLab() {
 
       context.fillStyle = "rgba(247,241,230,0.92)";
       context.font = "700 13px DM Sans, sans-serif";
-      context.fillText(`points ${scoreState(state) * Math.max(1, Math.round(state.combo))}`, 24, 30);
-      context.fillText(`${modeCopy[mode]}`, 24, 52);
+      context.fillText(`strict score ${scoreState(state)}`, 24, 30);
+      context.fillText("automated model only", 24, 52);
       context.fillText(`score ${scoreState(state)}`, 24, 74);
+      context.fillText(`held ${state.combo.toFixed(2)}s / 1.00s min`, 24, 96);
 
       if (scoreState(state) > 82 && state.combo > 1) {
         context.fillStyle = scoreState(state) > 92 ? "#f5df2e" : "#55d65a";
@@ -354,7 +354,7 @@ export function SixPendulumCartpoleLab() {
         context.fillText(scoreState(state) > 92 ? "PERFECT!!" : "GREAT!", width - 205, height * 0.5);
         context.font = "800 13px DM Sans, sans-serif";
         context.fillStyle = "#f7f1e6";
-        context.fillText(`${Math.round(state.combo)} combo`, width - 145, height * 0.5 + 24);
+        context.fillText(`${state.combo.toFixed(2)}s held`, width - 145, height * 0.5 + 24);
       }
     }
 
@@ -366,7 +366,7 @@ export function SixPendulumCartpoleLab() {
       if (running) {
         const substeps = 3;
         for (let index = 0; index < substeps; index += 1) {
-          stateRef.current = stepState(stateRef.current, mode, links, manualForce, dt / substeps);
+          stateRef.current = stepState(stateRef.current, links, dt / substeps);
         }
         setScore(scoreState(stateRef.current));
       }
@@ -381,17 +381,11 @@ export function SixPendulumCartpoleLab() {
       frameRef.current = null;
       lastTimeRef.current = null;
     };
-  }, [links, manualForce, mode, modeCopy, running]);
+  }, [links, running]);
 
-  function reset(spread = 0.55) {
-    stateRef.current = makeState(links, mode === "swingup" ? 0.12 : spread, poseForMode(mode, spread > 0.6));
+  function reset() {
+    stateRef.current = makeState(links, 0.18);
     setEpisode((value) => value + 1);
-  }
-
-  function kick() {
-    stateRef.current.cartV += (Math.random() > 0.5 ? 1 : -1) * 1.8;
-    stateRef.current.impulse += Math.random() > 0.5 ? 2.4 : -2.4;
-    stateRef.current.omega = stateRef.current.omega.map((omega, index) => omega + (index + 1) * 0.1);
   }
 
   return (
@@ -409,6 +403,7 @@ export function SixPendulumCartpoleLab() {
             <div>
               <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#4b535c]">Episode {episode}</p>
               <p className="mt-1 text-3xl font-black text-[#0c1115]">{score}</p>
+              <p className="mt-1 text-sm font-bold text-[#4b535c]">1.00s minimum hold</p>
             </div>
             <button
               className="inline-flex h-11 w-11 items-center justify-center rounded-[8px] border border-[rgba(12,17,21,0.14)] bg-white text-[#0c1115]"
@@ -428,10 +423,14 @@ export function SixPendulumCartpoleLab() {
                   className={`h-10 rounded-[8px] border text-sm font-black ${
                     option === links
                       ? "border-[#0c1115] bg-[#0c1115] text-[#f7f1e6]"
+                      : option !== 1
+                        ? "cursor-not-allowed border-[rgba(12,17,21,0.08)] bg-[#ece4d6] text-[#7a7167]"
                       : "border-[rgba(12,17,21,0.14)] bg-white text-[#0c1115]"
                   }`}
+                  disabled={option !== 1}
                   key={option}
                   onClick={() => setLinks(option)}
+                  title={option === 1 ? "Active one-link gate" : "Locked until one-link down-start hold is solved"}
                   type="button"
                 >
                   {option}
@@ -440,60 +439,13 @@ export function SixPendulumCartpoleLab() {
             </div>
           </div>
 
-          <div className="mt-6">
-            <p className="mb-2 text-xs font-bold uppercase tracking-[0.18em] text-[#4b535c]">Mode</p>
-            <div className="grid gap-2">
-              {(Object.keys(modeCopy) as LabMode[]).map((option) => (
-                <button
-                  className={`rounded-[8px] border px-3 py-2 text-left text-sm font-black ${
-                    option === mode
-                      ? "border-[#0f7ea9] bg-[#0f7ea9] text-white"
-                      : "border-[rgba(12,17,21,0.14)] bg-white text-[#0c1115]"
-                  }`}
-                  key={option}
-                  onClick={() => setMode(option)}
-                  type="button"
-                >
-                  {modeCopy[option]}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <label className="mt-6 block">
-            <span className="text-xs font-bold uppercase tracking-[0.18em] text-[#4b535c]">Manual force</span>
-            <input
-              className="mt-3 w-full accent-[#0f7ea9]"
-              max={28}
-              min={-28}
-              onChange={(event) => setManualForce(Number(event.target.value))}
-              step={1}
-              type="range"
-              value={manualForce}
-            />
-          </label>
-
-          <div className="mt-6 grid grid-cols-3 gap-2">
+          <div className="mt-6 grid grid-cols-1 gap-2">
             <button
               className="inline-flex items-center justify-center gap-2 rounded-[8px] border border-[rgba(12,17,21,0.14)] bg-white px-3 py-2 text-sm font-black text-[#0c1115]"
-              onClick={() => reset(0.22)}
+              onClick={() => reset()}
               type="button"
             >
-              <RotateCcw aria-hidden="true" size={16} /> Reset
-            </button>
-            <button
-              className="inline-flex items-center justify-center gap-2 rounded-[8px] border border-[rgba(12,17,21,0.14)] bg-white px-3 py-2 text-sm font-black text-[#0c1115]"
-              onClick={() => reset(1.1)}
-              type="button"
-            >
-              <Shuffle aria-hidden="true" size={16} /> Seed
-            </button>
-            <button
-              className="inline-flex items-center justify-center gap-2 rounded-[8px] border border-[rgba(12,17,21,0.14)] bg-white px-3 py-2 text-sm font-black text-[#0c1115]"
-              onClick={kick}
-              type="button"
-            >
-              <Zap aria-hidden="true" size={16} /> Kick
+              <RotateCcw aria-hidden="true" size={16} /> Reset from down
             </button>
           </div>
 

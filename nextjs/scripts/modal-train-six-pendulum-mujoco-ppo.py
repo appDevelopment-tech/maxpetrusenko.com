@@ -15,35 +15,36 @@ image = modal.Image.debian_slim(python_version="3.11").pip_install(
 
 
 @app.function(image=image, gpu="L4", timeout=7200)
-def train_policy(mjcf_xml: str, links: int = 1, smoke: bool = True, seed: int = 426210) -> str:
+def train_policy(mjcf_xml: str, links: int = 1, smoke: bool = True, seed: int = 426210, curriculum: str = "down") -> str:
     import mujoco
     import numpy as np
     import torch
     import torch.nn as nn
-    import torch.nn.functional as F
     from torch.distributions import Normal
 
     started = time.time()
     safe_links = max(1, min(6, int(links)))
+    safe_curriculum = curriculum if curriculum in {"down", "hold", "mixed"} else "down"
     torch.manual_seed(seed + safe_links)
     rng = np.random.default_rng(seed + safe_links)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     max_links = 6
-    obs_dim = 2 + max_links * 2
+    obs_dim = 3 + max_links * 5
     hidden_dim = 96
     action_scale = 32.0
     control_skip = 10
+    control_dt = 0.0025 * control_skip
     horizon = 240 if smoke else 420
-    num_envs = 16 if smoke else 48
-    rollout_steps = 96 if smoke else 160
-    updates = 10 if smoke else 80
+    num_envs = 32 if smoke and safe_curriculum in {"down", "hold"} else (16 if smoke else 48)
+    rollout_steps = 128 if smoke and safe_curriculum in {"down", "hold"} else (96 if smoke else 160)
+    updates = 28 if smoke and safe_curriculum == "down" else (24 if smoke and safe_curriculum == "hold" else (10 if smoke else 80))
     minibatch_size = 384 if smoke else 768
     train_epochs = 3 if smoke else 4
     gamma = 0.985
     gae_lambda = 0.92
     clip_coef = 0.2
-    entropy_coef = 0.01
+    entropy_coef = 0.003 if safe_curriculum == "hold" else 0.01
     value_coef = 0.45
     max_grad_norm = 0.7
     score_max_upright_angle = 0.16
@@ -57,12 +58,18 @@ def train_policy(mjcf_xml: str, links: int = 1, smoke: bool = True, seed: int = 
             self.env_index = env_index
             self.elapsed = 0
             self.pose = "hold"
+            self.consecutive_held_steps = 0
+            self.max_consecutive_held_steps = 0
+            self.last_action = 0.0
             self.reset("hold")
 
         def reset(self, pose: str = "mixed"):
             mujoco.mj_resetData(model, self.data)
             self.elapsed = 0
             self.pose = pose
+            self.consecutive_held_steps = 0
+            self.max_consecutive_held_steps = 0
+            self.last_action = 0.0
             self.data.qpos[0] = rng.normal(0.0, 0.015)
             self.data.qvel[0] = rng.normal(0.0, 0.03)
             if pose == "hold":
@@ -91,12 +98,20 @@ def train_policy(mjcf_xml: str, links: int = 1, smoke: bool = True, seed: int = 
             return relative, absolute, abs_vel
 
         def obs(self):
-            _, absolute, abs_vel = self.angles()
+            relative, absolute, abs_vel = self.angles()
             out = np.zeros(obs_dim, dtype=np.float32)
             out[0] = float(self.data.qpos[0])
             out[1] = float(self.data.qvel[0]) / 5.0
-            out[2 : 2 + safe_links] = absolute
-            out[2 + max_links : 2 + max_links + safe_links] = abs_vel / 8.0
+            out[2] = self.last_action / action_scale
+            cursor = 3
+            for index in range(max_links):
+                if index < safe_links:
+                    out[cursor] = math.sin(float(absolute[index]))
+                    out[cursor + 1] = math.cos(float(absolute[index]))
+                    out[cursor + 2] = math.sin(float(relative[index]))
+                    out[cursor + 3] = math.cos(float(relative[index]))
+                    out[cursor + 4] = float(abs_vel[index]) / 8.0
+                cursor += 5
             return out
 
         def strict_score(self):
@@ -113,26 +128,43 @@ def train_policy(mjcf_xml: str, links: int = 1, smoke: bool = True, seed: int = 
 
         def step(self, action: float):
             self.data.ctrl[0] = float(np.clip(action, -action_scale, action_scale))
+            self.last_action = float(self.data.ctrl[0])
             for _ in range(control_skip):
                 mujoco.mj_step(model, self.data)
             self.elapsed += 1
             relative, absolute, abs_vel = self.angles()
             score = self.strict_score()
+            if score > 82:
+                self.consecutive_held_steps += 1
+            else:
+                self.consecutive_held_steps = 0
+            self.max_consecutive_held_steps = max(self.max_consecutive_held_steps, self.consecutive_held_steps)
             mean_upright_error = float(np.mean(np.abs(absolute)))
+            max_upright_error = float(np.max(np.abs(absolute)))
             mean_speed = float(np.mean(np.abs(abs_vel)))
             max_bend_error = float(np.max(np.abs(relative[1:]))) if safe_links > 1 else 0.0
+            mean_tip_height = float(np.mean((np.cos(absolute) + 1.0) * 0.5))
+            near_top = 1.0 if max_upright_error < 0.35 and max_bend_error < 0.25 else 0.0
             dense_alignment = math.exp(-mean_upright_error * 1.15 - max_bend_error * 2.0 - mean_speed * 0.08)
             whip = 1.0 if abs(float(absolute[-1])) < 0.65 and mean_speed > 1.0 else 0.0
             late = self.elapsed / max(horizon, 1)
-            reward = dense_alignment * (0.05 + late * 0.18)
+            reward = mean_tip_height * (0.04 + late * 0.18)
+            reward += dense_alignment * (0.05 + late * 0.18)
+            reward += near_top * (0.2 - mean_speed * 0.015)
             reward += whip * (0.10 if self.elapsed < horizon * 0.65 else 0.03)
             reward += (score / 100.0) ** 2 * (0.8 + late * 2.2)
+            reward += min(self.consecutive_held_steps * control_dt, 2.0) ** 2 * 1.6
             reward += 1.0 if score > 82 else 0.0
             reward += 2.4 if score > 92 else 0.0
             reward -= abs(float(self.data.qpos[0])) * 0.015
             reward -= (float(self.data.ctrl[0]) / action_scale) ** 2 * 0.002
             done = self.elapsed >= horizon or abs(float(self.data.qpos[0])) > 2.35
-            return self.obs(), float(reward), bool(done), {"score": score, "held": 1.0 if score > 82 else 0.0, "whip": whip}
+            return self.obs(), float(reward), bool(done), {
+                "score": score,
+                "held": 1.0 if score > 82 else 0.0,
+                "whip": whip,
+                "maxHeldSeconds": self.max_consecutive_held_steps * control_dt,
+            }
 
     class RecurrentActorCritic(nn.Module):
         def __init__(self):
@@ -141,7 +173,7 @@ def train_policy(mjcf_xml: str, links: int = 1, smoke: bool = True, seed: int = 
             self.gru = nn.GRU(hidden_dim, hidden_dim)
             self.actor = nn.Linear(hidden_dim, 1)
             self.critic = nn.Linear(hidden_dim, 1)
-            self.log_std = nn.Parameter(torch.tensor([-0.35]))
+            self.log_std = nn.Parameter(torch.tensor([math.log(3.0)]))
 
         def forward(self, obs, hidden):
             x = self.encoder(obs)
@@ -153,7 +185,7 @@ def train_policy(mjcf_xml: str, links: int = 1, smoke: bool = True, seed: int = 
 
         def evaluate_actions(self, obs, hidden, action):
             mean, std, value, _ = self.forward(obs, hidden)
-            dist = Normal(mean, std * action_scale)
+            dist = Normal(mean, std)
             logprob = dist.log_prob(action)
             entropy = dist.entropy()
             return logprob, entropy, value
@@ -168,6 +200,10 @@ def train_policy(mjcf_xml: str, links: int = 1, smoke: bool = True, seed: int = 
     history = []
 
     def reset_pose(update_index: int):
+        if safe_curriculum == "down":
+            return "down"
+        if safe_curriculum == "hold":
+            return "hold"
         if safe_links == 1:
             return "mixed" if update_index > updates * 0.75 else "hold"
         if update_index < updates * 0.35:
@@ -191,7 +227,7 @@ def train_policy(mjcf_xml: str, links: int = 1, smoke: bool = True, seed: int = 
             hidden_in = hidden.detach()
             with torch.no_grad():
                 mean, std, value, next_hidden = policy(obs_t, hidden_in)
-                dist = Normal(mean, std * action_scale)
+                dist = Normal(mean, std)
                 action = dist.sample().clamp(-action_scale, action_scale)
                 logprob = dist.log_prob(action)
             next_obs = []
@@ -293,6 +329,7 @@ def train_policy(mjcf_xml: str, links: int = 1, smoke: bool = True, seed: int = 
         total_score = []
         total_held = []
         total_whip = []
+        total_max_held_seconds = []
         returns = []
         for episode in range(episodes):
             env = MujocoCartpoleEnv(1000 + episode)
@@ -301,6 +338,7 @@ def train_policy(mjcf_xml: str, links: int = 1, smoke: bool = True, seed: int = 
             ep_score = []
             ep_held = []
             ep_whip = []
+            ep_max_held_seconds = 0.0
             ep_return = 0.0
             for _ in range(horizon):
                 with torch.no_grad():
@@ -311,11 +349,13 @@ def train_policy(mjcf_xml: str, links: int = 1, smoke: bool = True, seed: int = 
                 ep_score.append(info["score"])
                 ep_held.append(info["held"])
                 ep_whip.append(info["whip"])
+                ep_max_held_seconds = max(ep_max_held_seconds, info["maxHeldSeconds"])
                 if done:
                     break
             total_score.append(ep_score[-1] if ep_score else 0.0)
             total_held.append(float(np.mean(ep_held)) if ep_held else 0.0)
             total_whip.append(float(np.mean(ep_whip)) if ep_whip else 0.0)
+            total_max_held_seconds.append(ep_max_held_seconds)
             returns.append(ep_return)
         return {
             "pose": pose,
@@ -324,14 +364,32 @@ def train_policy(mjcf_xml: str, links: int = 1, smoke: bool = True, seed: int = 
             "scoreP10": float(np.quantile(total_score, 0.1)),
             "held": float(np.mean(total_held)),
             "heldP10": float(np.quantile(total_held, 0.1)),
+            "maxHeldSeconds": float(np.mean(total_max_held_seconds)),
+            "maxHeldSecondsP10": float(np.quantile(total_max_held_seconds, 0.1)),
+            "solvedOneSecondRate": float(np.mean(np.asarray(total_max_held_seconds) >= 1.0)),
             "whip": float(np.mean(total_whip)),
             "return": float(np.mean(returns)),
         }
 
+    best_state = None
+    best_validation = None
+    best_validation_score = -1.0
     for update_index in range(updates):
         batch = collect_rollout(update_index)
         loss = update_policy(batch)
         if update_index % 2 == 0 or update_index == updates - 1:
+            selection_pose = "down" if safe_curriculum == "down" else ("hold" if safe_curriculum == "hold" else "mixed")
+            selection_validation = validate(selection_pose, 8 if smoke else 16)
+            selection_score = (
+                selection_validation["solvedOneSecondRate"] * 1000.0
+                + selection_validation["maxHeldSeconds"] * 100.0
+                + selection_validation["score"]
+                + selection_validation["held"] * 10.0
+            )
+            if selection_score > best_validation_score:
+                best_validation_score = selection_score
+                best_validation = selection_validation
+                best_state = {key: value.detach().cpu().clone() for key, value in policy.state_dict().items()}
             line = {
                 "update": update_index,
                 "links": safe_links,
@@ -341,13 +399,20 @@ def train_policy(mjcf_xml: str, links: int = 1, smoke: bool = True, seed: int = 
                 "held": float(batch["held"].mean().detach().cpu()),
                 "whip": float(batch["whip"].mean().detach().cpu()),
                 "completedReturn": float(np.mean(completed_returns[-16:])) if completed_returns else 0.0,
+                "selectionPose": selection_pose,
+                "selectionMaxHeldSeconds": selection_validation["maxHeldSeconds"],
+                "selectionSolvedOneSecondRate": selection_validation["solvedOneSecondRate"],
+                "selectionScore": selection_validation["score"],
             }
             print(json.dumps(line), flush=True)
             history.append(line)
 
+    if best_state is not None:
+        policy.load_state_dict({key: value.to(device) for key, value in best_state.items()})
+    down_validation = validate("down", 16 if smoke else 48)
     hold_validation = validate("hold", 16 if smoke else 48)
     mixed_validation = validate("mixed", 16 if smoke else 48)
-    print(json.dumps({"holdValidation": hold_validation, "mixedValidation": mixed_validation}), flush=True)
+    print(json.dumps({"downValidation": down_validation, "holdValidation": hold_validation, "mixedValidation": mixed_validation}), flush=True)
     output = {
         "trainedAt": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         "algorithm": "modal-mujoco-recurrent-ppo",
@@ -370,8 +435,11 @@ def train_policy(mjcf_xml: str, links: int = 1, smoke: bool = True, seed: int = 
             "updates": updates,
             "horizon": horizon,
             "controlSkip": control_skip,
+            "curriculum": safe_curriculum,
             "history": history,
-            "validation": mixed_validation,
+            "validation": down_validation if safe_curriculum == "down" else mixed_validation,
+            "bestValidation": best_validation,
+            "downValidation": down_validation,
             "holdValidation": hold_validation,
             "mixedValidation": mixed_validation,
             "strictScore": {
@@ -391,8 +459,8 @@ def train_policy(mjcf_xml: str, links: int = 1, smoke: bool = True, seed: int = 
 
 
 @app.local_entrypoint()
-def main(links: int = 1, smoke: bool = True):
+def main(links: int = 1, smoke: bool = True, curriculum: str = "down"):
     path = Path(f"app/ailab/six-pendulum-cartpole/mjcf/cartpole_{links}_link.xml")
     if not path.exists():
         raise FileNotFoundError(f"Missing MJCF file: {path}")
-    return train_policy.remote(path.read_text(), links, smoke)
+    return train_policy.remote(path.read_text(), links, smoke, 426210, curriculum)
