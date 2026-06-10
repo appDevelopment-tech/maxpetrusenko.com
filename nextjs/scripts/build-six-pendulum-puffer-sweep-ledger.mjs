@@ -22,6 +22,8 @@ const pufferArtifacts = [
   "puffer-mjwarp-device-rollout-torch-policy.json",
   "puffer-mjwarp-device-rollout-ppo-update.json",
   "puffer-mjwarp-device-ppo-train.json",
+  "puffer-mjwarp-device-ppo-hold-probe.json",
+  "puffer-mjwarp-device-ppo-hold-probe-f32.json",
   "puffer-mjwarp-device-rollout-link6.json",
   "puffer-mjwarp-device-rollout-random-horizon.json",
   "puffer-mjwarp-local-ppo-smoke.json",
@@ -64,6 +66,7 @@ function downMetric(root) {
 }
 
 function holdMetric(root) {
+  if (root?.bestHoldEvaluation) return root.bestHoldEvaluation;
   if (Array.isArray(root?.history) && root.history.length > 0) {
     return root.history[root.history.length - 1]?.evaluation?.hold || {};
   }
@@ -109,7 +112,9 @@ function sourceRow(entry, index) {
     holdStartSolvedOneSecond: holdHeld >= 1,
     countsTowardSolve: !teacher && downHeld >= 1,
     sourceArtifact: fullPath,
-    note: file.includes("device-ppo-train")
+    note: file.includes("device-ppo-hold-probe")
+      ? "Long-horizon one-link hold-start PPO probe. Force 32 avoids cart terminal but remains subsecond; force 64 is terminal-prone. Counts only if held-out down-start holds for at least one second."
+      : file.includes("device-ppo-train")
       ? "Repeated MJWarp rollout-buffer PPO training: stochastic collect, persistent optimizer updates, deterministic down-start eval after each update. Counts only if held-out down-start holds for at least one second."
       : teacher
       ? "Teacher proves swing-up/catch signal in MJWarp, but it is not a learned policy."

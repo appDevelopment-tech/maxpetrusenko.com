@@ -269,7 +269,12 @@ Phase 1, one-link PufferPPO:
 - Action-scale diagnostic command: `npm run train:six-pendulum:puffer-mjwarp:action-scale-diagnostic`
 - Action-scale diagnostic artifact: `/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/training-checkpoints/puffer-mjwarp-action-scale-diagnostic.json`
 - Action-scale diagnostic result on 2026-06-10: one-link open-loop probes from down-start show `forceScale=32` and `64` do not reach near-vertical in `1.0s`; `120` reaches near-vertical in about `0.60s`; `240` reaches it in about `0.335s` but usually with cart-terminal risk. This is not a policy and does not count.
-- Long-horizon hold-start command queued from reflection: `npm run train:six-pendulum:puffer-mjwarp:device-ppo-hold-long` (`forceScale=64`, `nworld=128`, `rolloutSteps=1024`, `updates=50`)
+- Long-horizon hold-start probe command: `npm run train:six-pendulum:puffer-mjwarp:device-ppo-hold-probe`
+- Hold-start probe artifacts:
+  - Preferred `forceScale=32`: `/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/training-checkpoints/puffer-mjwarp-device-ppo-hold-probe-f32.json`
+  - Comparison `forceScale=64`: `/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/training-checkpoints/puffer-mjwarp-device-ppo-hold-probe.json`
+- Hold-start probe result on 2026-06-10: `forceScale=32` is safer for hold-start, reaching held-out hold `0.435s` over `2.56s` eval with zero terminal worlds; stochastic rollouts reached up to `0.6825s`. `forceScale=64` reached only `0.3175s` and all hold eval worlds hit cart terminal. Neither passes the one-second gate.
+- Long-horizon hold-start full command queued after probe: `npm run train:six-pendulum:puffer-mjwarp:device-ppo-hold-long` (`forceScale=32`, `nworld=128`, `rolloutSteps=1024`, `updates=50`, `evalInterval=5`)
 - Random-horizon device smoke command: `npm run train:six-pendulum:puffer-mjwarp:device-rollout:random-horizon`
 - Random-horizon device smoke artifact: `/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/training-checkpoints/puffer-mjwarp-device-rollout-random-horizon.json`
 - Random-horizon result on 2026-06-10: one-link ran `32` worlds for `96` steps with per-world horizons sampled on-device between `16` and `32` steps; reset counts averaged above `4`, proving truncation/resets occurred without per-step CPU metric reads.

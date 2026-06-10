@@ -259,6 +259,8 @@ def train_device_ppo(
     force_scale: float,
     seed: int,
     hidden_dim: int,
+    eval_interval: int = 1,
+    write_progress: Path | None = None,
 ) -> dict:
     import torch
 
@@ -269,6 +271,51 @@ def train_device_ppo(
     optimizer = torch.optim.AdamW(policy.parameters(), lr=3e-4, weight_decay=1e-5)
     history = []
     best_down = {"maxHeldSeconds": 0.0, "maxStrictScore": 0.0, "solvedOneSecond": False}
+    best_hold = {"maxHeldSeconds": 0.0, "maxStrictScore": 0.0, "solvedOneSecond": False}
+
+    def build_result(status: str) -> dict:
+        return {
+            "schema": "six-pendulum-mjwarp-device-ppo-training-v1",
+            "status": status,
+            "algorithm": "local-recurrent-ppo-on-mjwarp-rollout-buffers",
+            "links": int(links),
+            "nworld": int(nworld),
+            "rolloutSteps": int(rollout_steps),
+            "rolloutSeconds": float(rollout_steps) * 0.0025,
+            "evalSteps": int(eval_steps),
+            "evalSeconds": float(eval_steps) * 0.0025,
+            "updates": int(updates),
+            "completedUpdates": len(history),
+            "updateEpochs": int(update_epochs),
+            "evalInterval": max(1, int(eval_interval)),
+            "pose": pose,
+            "seed": int(seed),
+            "forceScale": float(force_scale),
+            "policyParameters": int(sum(parameter.numel() for parameter in policy.parameters())),
+            "elapsedSeconds": time.time() - started,
+            "history": history,
+            "bestDownEvaluation": best_down,
+            "bestHoldEvaluation": best_hold,
+            "gates": {
+                "learnedPolicyOnly": True,
+                "strictOneSecondRequired": True,
+                "subsecondDoesNotCount": True,
+                "holdStartSolvedOneSecond": bool(best_hold["solvedOneSecond"]),
+                "promoteToNextLink": bool(best_down["solvedOneSecond"]),
+            },
+            "notes": [
+                "This repeatedly collects stochastic recurrent policy rollouts, updates the same policy with PPO, then evaluates deterministic down-start and hold-start behavior.",
+                "Local Mac execution still reports a CPU Warp/MJWarp device; this is a correctness path before Modal/GPU scale.",
+                "A score is counted only when held-out down-start maxHeldSeconds is at least one second.",
+                "Partial progress is written after each update when writeProgress/writeResult is provided.",
+            ],
+        }
+
+    def write_progress_result():
+        if write_progress is None:
+            return
+        write_progress.parent.mkdir(parents=True, exist_ok=True)
+        write_progress.write_text(json.dumps(build_result("device-ppo-training-running"), indent=2) + "\n")
 
     for update_index in range(int(updates)):
         rollout = collect_recurrent_rollout(
@@ -284,76 +331,54 @@ def train_device_ppo(
             stochastic=True,
         )
         update = ppo_update(policy, optimizer, rollout["buffers"], hidden_dim, update_epochs)
-        down_eval = collect_recurrent_rollout(
-            mjcf_xml,
-            policy,
-            links,
-            nworld,
-            eval_steps,
-            "down",
-            force_scale,
-            seed + 10_000 + update_index,
-            hidden_dim,
-            stochastic=False,
-        )["summary"]
-        hold_eval = collect_recurrent_rollout(
-            mjcf_xml,
-            policy,
-            links,
-            nworld,
-            eval_steps,
-            "hold",
-            force_scale,
-            seed + 20_000 + update_index,
-            hidden_dim,
-            stochastic=False,
-        )["summary"]
-        if down_eval["maxHeldSeconds"] > best_down["maxHeldSeconds"]:
-            best_down = down_eval
+        evaluation = {}
+        should_eval = (update_index + 1) % max(1, int(eval_interval)) == 0 or update_index + 1 == int(updates)
+        if should_eval:
+            down_eval = collect_recurrent_rollout(
+                mjcf_xml,
+                policy,
+                links,
+                nworld,
+                eval_steps,
+                "down",
+                force_scale,
+                seed + 10_000 + update_index,
+                hidden_dim,
+                stochastic=False,
+            )["summary"]
+            hold_eval = collect_recurrent_rollout(
+                mjcf_xml,
+                policy,
+                links,
+                nworld,
+                eval_steps,
+                "hold",
+                force_scale,
+                seed + 20_000 + update_index,
+                hidden_dim,
+                stochastic=False,
+            )["summary"]
+            if down_eval["maxHeldSeconds"] > best_down["maxHeldSeconds"]:
+                best_down = down_eval
+            if hold_eval["maxHeldSeconds"] > best_hold["maxHeldSeconds"]:
+                best_hold = hold_eval
+            evaluation = {
+                "down": down_eval,
+                "hold": hold_eval,
+            }
         history.append(
             {
                 "update": update_index + 1,
                 "rollout": rollout["summary"],
                 "ppo": update,
-                "evaluation": {
-                    "down": down_eval,
-                    "hold": hold_eval,
-                },
-                "countsTowardSolve": bool(down_eval["solvedOneSecond"]),
+                "evaluation": evaluation,
+                "countsTowardSolve": bool(evaluation.get("down", {}).get("solvedOneSecond", False)),
             }
         )
+        print(json.dumps({"update": update_index + 1, "rollout": rollout["summary"], "evaluation": evaluation}, sort_keys=True), flush=True)
+        write_progress_result()
 
-    return {
-        "schema": "six-pendulum-mjwarp-device-ppo-training-v1",
-        "status": "device-ppo-training-finished",
-        "algorithm": "local-recurrent-ppo-on-mjwarp-rollout-buffers",
-        "links": int(links),
-        "nworld": int(nworld),
-        "rolloutSteps": int(rollout_steps),
-        "rolloutSeconds": float(rollout_steps) * 0.0025,
-        "evalSteps": int(eval_steps),
-        "evalSeconds": float(eval_steps) * 0.0025,
-        "updates": int(updates),
-        "updateEpochs": int(update_epochs),
-        "pose": pose,
-        "seed": int(seed),
-        "forceScale": float(force_scale),
-        "policyParameters": int(sum(parameter.numel() for parameter in policy.parameters())),
-        "elapsedSeconds": time.time() - started,
-        "history": history,
-        "bestDownEvaluation": best_down,
-        "gates": {
-            "learnedPolicyOnly": True,
-            "strictOneSecondRequired": True,
-            "subsecondDoesNotCount": True,
-            "promoteToNextLink": bool(best_down["solvedOneSecond"]),
-        },
-        "notes": [
-            "This repeatedly collects stochastic recurrent policy rollouts, updates the same policy with PPO, then evaluates deterministic down-start and hold-start behavior.",
-            "Local Mac execution still reports a CPU Warp/MJWarp device; this is a correctness path before Modal/GPU scale.",
-            "A score is counted only when held-out down-start maxHeldSeconds is at least one second.",
-        ],
-    }
+    return build_result("device-ppo-training-finished")
 
 
 def main():
@@ -368,6 +393,7 @@ def main():
     parser.add_argument("--force-scale", type=float, default=DEFAULT_ACTION_SCALE)
     parser.add_argument("--policy-hidden-dim", type=int, default=64)
     parser.add_argument("--seed", type=int, default=426210)
+    parser.add_argument("--eval-interval", type=int, default=1)
     parser.add_argument("--write-result", type=Path, default=DEFAULT_OUTPUT)
     args = parser.parse_args()
 
@@ -386,6 +412,8 @@ def main():
         args.force_scale,
         args.seed,
         args.policy_hidden_dim,
+        args.eval_interval,
+        args.write_result,
     )
     args.write_result.parent.mkdir(parents=True, exist_ok=True)
     args.write_result.write_text(json.dumps(result, indent=2) + "\n")

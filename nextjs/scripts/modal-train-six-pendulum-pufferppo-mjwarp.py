@@ -157,6 +157,14 @@ def build_contract(total_timesteps: int = 10_000_000) -> dict:
                 "covered": "Repeated stochastic recurrent-policy collection, persistent PPO optimizer updates, and deterministic held-out down-start/hold-start evaluation after each update on the MJWarp rollout-buffer path.",
                 "caveat": "Local Mac execution still uses Warp/MJWarp CPU and is a correctness path, not the final PufferPPO/MinGRU GPU sweep.",
             },
+            "holdProbe": {
+                "preferredCommand": "npm run train:six-pendulum:puffer-mjwarp:device-ppo-hold-probe",
+                "preferredArtifact": "/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/training-checkpoints/puffer-mjwarp-device-ppo-hold-probe-f32.json",
+                "comparisonCommand": "npm run train:six-pendulum:puffer-mjwarp:device-ppo-hold-probe-f64",
+                "comparisonArtifact": "/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/training-checkpoints/puffer-mjwarp-device-ppo-hold-probe.json",
+                "covered": "A three-update 2.56s-horizon hold-start probe at forceScale 32 reached held-out hold-start 0.435s with no cart terminal; the same probe at forceScale 64 reached only 0.3175s and all hold eval worlds hit cart terminal.",
+                "caveat": "Still subsecond; proves the next issue is stabilizer learning/reward, not down-start swing-up.",
+            },
             "policyReflection": {
                 "consults": [
                     "/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/model-consults/hermes-pendulum-policy-reflection.md",
@@ -164,7 +172,7 @@ def build_contract(total_timesteps: int = 10_000_000) -> dict:
                     "/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/model-consults/oracle-pendulum-policy-reflection.md",
                 ],
                 "diagnosis": "The short 96-step/0.24s rollout and nworld=8 batch are not enough to learn one-link hold or down-start swing-up; prove long-horizon hold-start before GPU/down-start scale.",
-                "nextCommand": "npm run train:six-pendulum:puffer-mjwarp:device-ppo-hold-long",
+                "nextCommand": "npm run train:six-pendulum:puffer-mjwarp:device-ppo-hold-probe",
             },
             "actionScaleDiagnostic": {
                 "command": "npm run train:six-pendulum:puffer-mjwarp:action-scale-diagnostic",
@@ -192,7 +200,7 @@ def build_contract(total_timesteps: int = 10_000_000) -> dict:
         },
         "nextCommands": [
             "npm run train:six-pendulum:puffer-mjwarp:pufferppo-contract",
-            "npm run train:six-pendulum:puffer-mjwarp:device-ppo-hold-long",
+            "npm run train:six-pendulum:puffer-mjwarp:device-ppo-hold-probe",
             "doppler run --project api_keys --config dev -- modal run --write-result /Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/training-checkpoints/puffer-mjwarp-pufferppo-runtime.json scripts/modal-train-six-pendulum-pufferppo-mjwarp.py::inspect_pufferppo_runtime",
         ],
     }
