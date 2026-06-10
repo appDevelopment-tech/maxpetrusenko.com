@@ -7,9 +7,10 @@ from pathlib import Path
 import numpy as np
 import warp as wp
 
-from six_pendulum_mjwarp_env import DEFAULT_ACTION_SCALE, MAX_LINKS, OBS_DIM, score_batch
 
-
+DEFAULT_ACTION_SCALE = 32.0
+MAX_LINKS = 6
+OBS_DIM = 3 + MAX_LINKS * 5
 DEFAULT_OUTPUT = Path(
     "/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/training-checkpoints/puffer-mjwarp-gpu-score-kernel-smoke.json"
 )
@@ -24,16 +25,14 @@ def wrap_angle(angle: float):
     return shifted - pi
 
 
-QPOS_STRIDE = 1 + MAX_LINKS
-
-
 @wp.kernel
 def score_obs_kernel(
-    qpos: wp.array(dtype=wp.float32),
-    qvel: wp.array(dtype=wp.float32),
+    qpos: wp.array2d(dtype=wp.float32),
+    qvel: wp.array2d(dtype=wp.float32),
     last_action: wp.array(dtype=wp.float32),
     links: int,
     action_scale: float,
+    terminal_boundary: float,
     obs: wp.array(dtype=wp.float32),
     reward: wp.array(dtype=wp.float32),
     strict_score: wp.array(dtype=wp.float32),
@@ -43,10 +42,11 @@ def score_obs_kernel(
     catch_basin: wp.array(dtype=wp.float32),
     near_top_fast: wp.array(dtype=wp.float32),
     whip: wp.array(dtype=wp.float32),
+    terminal: wp.array(dtype=wp.float32),
 ):
     i = wp.tid()
-    x = qpos[i * QPOS_STRIDE]
-    xvel = qvel[i * QPOS_STRIDE]
+    x = qpos[i, 0]
+    xvel = qvel[i, 0]
     running_angle = 0.0
     running_velocity = 0.0
     max_upright_error = 0.0
@@ -62,9 +62,9 @@ def score_obs_kernel(
     for link in range(MAX_LINKS):
         obs_base = i * OBS_DIM + 3 + link * 5
         if link < links:
-            relative = wrap_angle(qpos[i * QPOS_STRIDE + 1 + link])
+            relative = wrap_angle(qpos[i, 1 + link])
             running_angle = wrap_angle(running_angle + relative)
-            running_velocity += qvel[i * QPOS_STRIDE + 1 + link]
+            running_velocity += qvel[i, 1 + link]
             abs_angle = wp.abs(running_angle)
             abs_velocity = wp.abs(running_velocity)
             height = (wp.cos(running_angle) + 1.0) * 0.5
@@ -128,12 +128,13 @@ def score_obs_kernel(
     catch_basin[i] = 1.0 if in_catch_basin else 0.0
     near_top_fast[i] = 1.0 if is_near_top_fast else 0.0
     whip[i] = 1.0 if is_whip else 0.0
+    terminal[i] = 1.0 if wp.abs(x) > terminal_boundary else 0.0
 
 
 def deterministic_batch(nworld: int, action_scale: float, seed: int) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
     rng = np.random.default_rng(seed)
-    qpos = np.zeros((nworld, QPOS_STRIDE), dtype=np.float32)
-    qvel = np.zeros((nworld, QPOS_STRIDE), dtype=np.float32)
+    qpos = np.zeros((nworld, 1 + MAX_LINKS), dtype=np.float32)
+    qvel = np.zeros((nworld, 1 + MAX_LINKS), dtype=np.float32)
     qpos[:, 0] = rng.uniform(-0.35, 0.35, nworld).astype(np.float32)
     qpos[:, 1:] = rng.uniform(-3.8, 3.8, (nworld, MAX_LINKS)).astype(np.float32)
     qvel[:, 0] = rng.uniform(-1.4, 1.4, nworld).astype(np.float32)
@@ -148,58 +149,88 @@ def deterministic_batch(nworld: int, action_scale: float, seed: int) -> tuple[np
         qpos[index, 2:] = np.float32(angle / 8.0)
         qvel[index, 2:] = np.float32((index - 4) * 0.07)
         last_action[index] = np.float32((index - 4) * action_scale / 8.0)
+    if nworld > 2:
+        qpos[-2, 0] = np.float32(-2.7)
+        qpos[-1, 0] = np.float32(2.6)
 
     return qpos, qvel, last_action
 
 
-def run_kernel(qpos: np.ndarray, qvel: np.ndarray, last_action: np.ndarray, links: int, action_scale: float, device: str) -> dict:
-    nworld = qpos.shape[0]
-    qpos_wp = wp.array(qpos.reshape(-1), dtype=wp.float32, device=device)
-    qvel_wp = wp.array(qvel.reshape(-1), dtype=wp.float32, device=device)
-    last_action_wp = wp.array(last_action, dtype=wp.float32, device=device)
-    obs_wp = wp.zeros(nworld * OBS_DIM, dtype=wp.float32, device=device)
-    reward_wp = wp.zeros(nworld, dtype=wp.float32, device=device)
-    strict_score_wp = wp.zeros(nworld, dtype=wp.float32, device=device)
-    potential_wp = wp.zeros(nworld, dtype=wp.float32, device=device)
-    mean_tip_height_wp = wp.zeros(nworld, dtype=wp.float32, device=device)
-    energy_error_wp = wp.zeros(nworld, dtype=wp.float32, device=device)
-    catch_basin_wp = wp.zeros(nworld, dtype=wp.float32, device=device)
-    near_top_fast_wp = wp.zeros(nworld, dtype=wp.float32, device=device)
-    whip_wp = wp.zeros(nworld, dtype=wp.float32, device=device)
+class WarpScoreKernel:
+    def __init__(
+        self,
+        nworld: int,
+        links: int,
+        action_scale: float = DEFAULT_ACTION_SCALE,
+        device: str = "cpu",
+        terminal_boundary: float = 2.35,
+    ):
+        self.nworld = int(nworld)
+        self.links = max(1, min(MAX_LINKS, int(links)))
+        self.action_scale = float(action_scale)
+        self.device = device
+        self.terminal_boundary = float(terminal_boundary)
+        self.last_action_wp = wp.zeros(self.nworld, dtype=wp.float32, device=self.device)
+        self.obs_wp = wp.zeros(self.nworld * OBS_DIM, dtype=wp.float32, device=self.device)
+        self.reward_wp = wp.zeros(self.nworld, dtype=wp.float32, device=self.device)
+        self.strict_score_wp = wp.zeros(self.nworld, dtype=wp.float32, device=self.device)
+        self.potential_wp = wp.zeros(self.nworld, dtype=wp.float32, device=self.device)
+        self.mean_tip_height_wp = wp.zeros(self.nworld, dtype=wp.float32, device=self.device)
+        self.energy_error_wp = wp.zeros(self.nworld, dtype=wp.float32, device=self.device)
+        self.catch_basin_wp = wp.zeros(self.nworld, dtype=wp.float32, device=self.device)
+        self.near_top_fast_wp = wp.zeros(self.nworld, dtype=wp.float32, device=self.device)
+        self.whip_wp = wp.zeros(self.nworld, dtype=wp.float32, device=self.device)
+        self.terminal_wp = wp.zeros(self.nworld, dtype=wp.float32, device=self.device)
 
-    wp.launch(
-        score_obs_kernel,
-        dim=nworld,
-        inputs=[
-            qpos_wp,
-            qvel_wp,
-            last_action_wp,
-            int(links),
-            float(action_scale),
-            obs_wp,
-            reward_wp,
-            strict_score_wp,
-            potential_wp,
-            mean_tip_height_wp,
-            energy_error_wp,
-            catch_basin_wp,
-            near_top_fast_wp,
-            whip_wp,
-        ],
-        device=device,
-    )
-    wp.synchronize()
-    return {
-        "observation": obs_wp.numpy().reshape(nworld, OBS_DIM),
-        "reward": reward_wp.numpy(),
-        "strictScore": strict_score_wp.numpy(),
-        "meanTipHeight": mean_tip_height_wp.numpy(),
-        "energyError": energy_error_wp.numpy(),
-        "potential": potential_wp.numpy(),
-        "catchBasin": catch_basin_wp.numpy(),
-        "nearTopFast": near_top_fast_wp.numpy(),
-        "whip": whip_wp.numpy(),
-    }
+    def score_from_warp_arrays(self, qpos_wp, qvel_wp, last_action: np.ndarray) -> dict:
+        self.last_action_wp.assign(np.asarray(last_action, dtype=np.float32).reshape(self.nworld))
+        self.obs_wp.zero_()
+        wp.launch(
+            score_obs_kernel,
+            dim=self.nworld,
+            inputs=[
+                qpos_wp,
+                qvel_wp,
+                self.last_action_wp,
+                int(self.links),
+                float(self.action_scale),
+                float(self.terminal_boundary),
+                self.obs_wp,
+                self.reward_wp,
+                self.strict_score_wp,
+                self.potential_wp,
+                self.mean_tip_height_wp,
+                self.energy_error_wp,
+                self.catch_basin_wp,
+                self.near_top_fast_wp,
+                self.whip_wp,
+                self.terminal_wp,
+            ],
+            device=self.device,
+        )
+        wp.synchronize()
+        return self.to_numpy()
+
+    def to_numpy(self) -> dict:
+        return {
+            "observation": self.obs_wp.numpy().reshape(self.nworld, OBS_DIM),
+            "reward": self.reward_wp.numpy(),
+            "strictScore": self.strict_score_wp.numpy(),
+            "meanTipHeight": self.mean_tip_height_wp.numpy(),
+            "energyError": self.energy_error_wp.numpy(),
+            "potential": self.potential_wp.numpy(),
+            "catchBasin": self.catch_basin_wp.numpy(),
+            "nearTopFast": self.near_top_fast_wp.numpy(),
+            "whip": self.whip_wp.numpy(),
+            "terminal": self.terminal_wp.numpy(),
+        }
+
+
+def run_kernel(qpos: np.ndarray, qvel: np.ndarray, last_action: np.ndarray, links: int, action_scale: float, device: str) -> dict:
+    runner = WarpScoreKernel(qpos.shape[0], links, action_scale, device)
+    qpos_wp = wp.array(qpos, dtype=wp.float32, device=device)
+    qvel_wp = wp.array(qvel, dtype=wp.float32, device=device)
+    return runner.score_from_warp_arrays(qpos_wp, qvel_wp, last_action)
 
 
 def max_abs_error(expected: np.ndarray, actual: np.ndarray) -> float:
@@ -207,6 +238,8 @@ def max_abs_error(expected: np.ndarray, actual: np.ndarray) -> float:
 
 
 def main():
+    from six_pendulum_mjwarp_env import score_batch
+
     parser = argparse.ArgumentParser(description="Parity-test six-pendulum score/obs math in a Warp kernel.")
     parser.add_argument("--nworld", type=int, default=512)
     parser.add_argument("--seed", type=int, default=426210)
@@ -220,11 +253,12 @@ def main():
     started = time.time()
     wp.init()
     qpos, qvel, last_action = deterministic_batch(args.nworld, args.action_scale, args.seed)
-    keys = ["observation", "reward", "strictScore", "meanTipHeight", "energyError", "potential", "catchBasin", "nearTopFast", "whip"]
+    keys = ["observation", "reward", "strictScore", "meanTipHeight", "energyError", "potential", "catchBasin", "nearTopFast", "whip", "terminal"]
     link_errors = []
     max_links = max(1, min(MAX_LINKS, args.max_links))
     for links in range(1, max_links + 1):
         expected = score_batch(qpos, qvel, last_action, links=links, action_scale=args.action_scale)
+        expected["terminal"] = (np.abs(qpos[:, 0]) > 2.35).astype(np.float32)
         actual = run_kernel(qpos, qvel, last_action, links, args.action_scale, args.device)
         errors = {key: max_abs_error(expected[key], actual[key]) for key in keys}
         link_errors.append(
@@ -260,8 +294,9 @@ def main():
             "catchBasin",
             "nearTopFast",
             "whip",
+            "terminal",
         ],
-        "integrationStatus": "score and observation math parity for links 1..6 only; reset, ctrl write, terminal, held-step, and puffer rollout integration still pending",
+        "integrationStatus": "score, observation, and cart terminal math parity for links 1..6; reset, ctrl write, held-step, and puffer rollout integration still pending",
     }
     args.write_result.parent.mkdir(parents=True, exist_ok=True)
     args.write_result.write_text(json.dumps(result, indent=2) + "\n")

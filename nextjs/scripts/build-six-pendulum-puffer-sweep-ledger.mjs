@@ -101,7 +101,7 @@ function sourceRow(entry, index) {
       : learned && downHeld < 1
         ? "Learned/plumbing row does not solve down-start; score forced to 0 because hold is under 1s."
         : file.includes("gpu-score-kernel")
-          ? "Links 1..6 score/observation Warp kernel matches NumPy scorer; environment integration still pending."
+          ? "Links 1..6 score/observation/terminal Warp kernel matches NumPy scorer and is wired into the env scorer."
           : "Current MJWarp/Puffer substrate evidence.",
   };
 }

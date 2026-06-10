@@ -100,6 +100,7 @@ class SixPendulumMJWarpPufferEnv(pufferlib.PufferEnv):
     ):
         import mujoco
         import mujoco_warp as mjw
+        from six_pendulum_mjwarp_gpu_kernels import WarpScoreKernel
 
         self.links = max(1, min(MAX_LINKS, int(links)))
         self.nworld = max(1, int(nworld))
@@ -115,6 +116,13 @@ class SixPendulumMJWarpPufferEnv(pufferlib.PufferEnv):
         self.mjm = mujoco.MjModel.from_xml_string(mjcf_xml)
         self.m = mjw.put_model(self.mjm)
         self.d = mjw.make_data(self.mjm, nworld=self.nworld)
+        self.score_kernel = WarpScoreKernel(
+            self.nworld,
+            self.links,
+            self.force_scale,
+            device=str(getattr(self.d.qpos, "device", "cpu")),
+            terminal_boundary=2.35,
+        )
         self.elapsed = np.zeros(self.nworld, dtype=np.int32)
         self.held_steps = np.zeros(self.nworld, dtype=np.int32)
         self.max_held_steps = np.zeros(self.nworld, dtype=np.int32)
@@ -127,6 +135,9 @@ class SixPendulumMJWarpPufferEnv(pufferlib.PufferEnv):
         self.truncations = np.zeros(self.nworld, dtype=bool)
         self.masks = np.ones(self.nworld, dtype=bool)
         super().__init__(buf=buf)
+
+    def _score_metrics(self):
+        return self.score_kernel.score_from_warp_arrays(self.d.qpos, self.d.qvel, self.last_action)
 
     def _reset_arrays(self, indices, pose: str):
         qpos = self.d.qpos.numpy()
@@ -171,8 +182,7 @@ class SixPendulumMJWarpPufferEnv(pufferlib.PufferEnv):
             self.rng = np.random.default_rng(seed)
         self._reset_arrays(np.arange(self.nworld), self.pose)
         self.mjw.forward(self.m, self.d)
-        wp.synchronize()
-        metrics = score_batch(self.d.qpos.numpy(), self.d.qvel.numpy(), self.last_action, self.links, self.force_scale)
+        metrics = self._score_metrics()
         self.prev_potential[:] = metrics["potential"]
         self.observations[:] = metrics["observation"]
         self.rewards.fill(0.0)
@@ -188,9 +198,8 @@ class SixPendulumMJWarpPufferEnv(pufferlib.PufferEnv):
         self.d.ctrl.assign(action.reshape(self.nworld, 1).astype(np.float32))
         self.last_action = action.astype(np.float32)
         self.mjw.step(self.m, self.d)
-        wp.synchronize()
         self.elapsed += 1
-        metrics = score_batch(self.d.qpos.numpy(), self.d.qvel.numpy(), self.last_action, self.links, self.force_scale)
+        metrics = self._score_metrics()
         self.observations[:] = metrics["observation"]
         potential_delta = np.clip(metrics["potential"] - self.prev_potential, -0.18, 0.28)
         self.prev_potential[:] = metrics["potential"]
@@ -201,14 +210,13 @@ class SixPendulumMJWarpPufferEnv(pufferlib.PufferEnv):
         is_held = metrics["strictScore"] > 82.0
         self.held_steps = np.where(is_held, self.held_steps + 1, 0)
         self.max_held_steps = np.maximum(self.max_held_steps, self.held_steps)
-        self.terminals[:] = np.abs(self.d.qpos.numpy()[:, 0]) > 2.35
+        self.terminals[:] = metrics["terminal"] > 0.5
         self.truncations[:] = self.elapsed >= self.horizon
         done = self.terminals | self.truncations
         if np.any(done):
             self._reset_arrays(np.flatnonzero(done), self.pose)
             self.mjw.forward(self.m, self.d)
-            wp.synchronize()
-            reset_metrics = score_batch(self.d.qpos.numpy(), self.d.qvel.numpy(), self.last_action, self.links, self.force_scale)
+            reset_metrics = self._score_metrics()
             self.prev_potential[np.flatnonzero(done)] = reset_metrics["potential"][np.flatnonzero(done)]
         return self.observations, self.rewards, self.terminals, self.truncations, self._infos(metrics)
 
@@ -269,6 +277,7 @@ def run_driver_smoke(
         "observationShape": list(obs.shape),
         "actionSpace": {"shape": list(env.single_action_space.shape), "low": -1.0, "high": 1.0},
         "forceScale": force_scale,
+        "scoreBackend": "warp-score-kernel",
         "rewardMean": float(np.mean(reward_sum)),
         "maxStrictScore": float(max_score),
         "maxHeldSeconds": float(max_held),
