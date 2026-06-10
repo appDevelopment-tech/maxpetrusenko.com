@@ -139,6 +139,9 @@ class SixPendulumMJWarpPufferEnv(pufferlib.PufferEnv):
     def _score_metrics(self):
         return self.score_kernel.score_from_warp_arrays(self.d.qpos, self.d.qvel, self.last_action)
 
+    def _score_metrics_current_action(self):
+        return self.score_kernel.score_from_current_last_action(self.d.qpos, self.d.qvel)
+
     def _reset_arrays(self, indices, pose: str):
         qpos = self.d.qpos.numpy()
         qvel = self.d.qvel.numpy()
@@ -193,13 +196,10 @@ class SixPendulumMJWarpPufferEnv(pufferlib.PufferEnv):
     def step(self, actions):
         import warp as wp
 
-        action = np.asarray(actions, dtype=np.float32).reshape(self.nworld, -1)[:, 0]
-        action = np.clip(action, -1.0, 1.0) * self.force_scale
-        self.d.ctrl.assign(action.reshape(self.nworld, 1).astype(np.float32))
-        self.last_action = action.astype(np.float32)
+        self.last_action = self.score_kernel.apply_actions(actions, self.d.ctrl)
         self.mjw.step(self.m, self.d)
         self.elapsed += 1
-        metrics = self._score_metrics()
+        metrics = self._score_metrics_current_action()
         self.observations[:] = metrics["observation"]
         potential_delta = np.clip(metrics["potential"] - self.prev_potential, -0.18, 0.28)
         self.prev_potential[:] = metrics["potential"]

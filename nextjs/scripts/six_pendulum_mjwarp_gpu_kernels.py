@@ -26,6 +26,20 @@ def wrap_angle(angle: float):
 
 
 @wp.kernel
+def action_to_ctrl_kernel(
+    actions: wp.array2d(dtype=wp.float32),
+    ctrl: wp.array2d(dtype=wp.float32),
+    last_action: wp.array(dtype=wp.float32),
+    action_scale: float,
+):
+    i = wp.tid()
+    normalized = wp.min(wp.max(actions[i, 0], -1.0), 1.0)
+    force = normalized * action_scale
+    ctrl[i, 0] = force
+    last_action[i] = force
+
+
+@wp.kernel
 def score_obs_kernel(
     qpos: wp.array2d(dtype=wp.float32),
     qvel: wp.array2d(dtype=wp.float32),
@@ -181,9 +195,24 @@ class WarpScoreKernel:
         self.near_top_fast_wp = wp.zeros(self.nworld, dtype=wp.float32, device=self.device)
         self.whip_wp = wp.zeros(self.nworld, dtype=wp.float32, device=self.device)
         self.terminal_wp = wp.zeros(self.nworld, dtype=wp.float32, device=self.device)
+        self.action_wp = wp.zeros((self.nworld, 1), dtype=wp.float32, device=self.device)
+
+    def apply_actions(self, actions: np.ndarray, ctrl_wp) -> np.ndarray:
+        self.action_wp.assign(np.asarray(actions, dtype=np.float32).reshape(self.nworld, 1))
+        wp.launch(
+            action_to_ctrl_kernel,
+            dim=self.nworld,
+            inputs=[self.action_wp, ctrl_wp, self.last_action_wp, float(self.action_scale)],
+            device=self.device,
+        )
+        wp.synchronize()
+        return self.last_action_wp.numpy()
 
     def score_from_warp_arrays(self, qpos_wp, qvel_wp, last_action: np.ndarray) -> dict:
         self.last_action_wp.assign(np.asarray(last_action, dtype=np.float32).reshape(self.nworld))
+        return self.score_from_current_last_action(qpos_wp, qvel_wp)
+
+    def score_from_current_last_action(self, qpos_wp, qvel_wp) -> dict:
         self.obs_wp.zero_()
         wp.launch(
             score_obs_kernel,
