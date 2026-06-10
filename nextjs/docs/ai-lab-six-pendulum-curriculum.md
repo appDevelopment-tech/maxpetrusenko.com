@@ -144,6 +144,16 @@ Local substrate result:
 - Model invariants: `nq=2`, `nv=2`, `nu=1`, timestep `0.0025`, gravity `[0, 0, -9.8]`, DOF damping `0`, DOF frictionloss `0`.
 - MJCF fix: visual geoms are now contact-disabled with `contype=0` and `conaffinity=0`; the six-pendulum task has no contacts, and this avoids MJWarp friction/contact warnings from decorative rail/cart/link geoms.
 
+Local environment-contract result:
+
+- Command: `npm run train:six-pendulum:puffer-mjwarp:local-env`
+- Artifact: `/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/training-checkpoints/puffer-mjwarp-local-env-contract.json`
+- Result: `env-contract-smoke-passed`, `links=1`, `nworld=4`, `steps=64`.
+- Reset contract now covers down-start and near-upright hold-start batches.
+- Observation contract is `[nworld, 33]`: cart position, cart velocity, previous action, and padded six-link sin/cos/velocity features.
+- Reward/score contract now separates shaped reward from strict score.
+- Down-start strict score stayed `0`; hold-start reached max strict score `99.73`, but the one-second gate still stayed false because the smoke ran only `0.16s`. This proves subsecond upright flashes are not counted as solved.
+
 Phase 1, one-link PufferPPO:
 
 - Environment: same MJCF constraints, gravity `9.8`, hinge friction `0`, cart track centered at `0`.
