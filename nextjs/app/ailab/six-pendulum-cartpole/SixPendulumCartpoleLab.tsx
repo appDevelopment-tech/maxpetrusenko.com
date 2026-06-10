@@ -32,11 +32,13 @@ type PendulumState = {
 
 const linkOptions = [1, 2, 3, 4, 5, 6] as const;
 const policy = trainedPolicy as TrainedPolicy;
+const SCORE_MAX_UPRIGHT_ANGLE = 0.16;
+const SCORE_MAX_CHAIN_BEND = 0.14;
 
 const policyNotes = [
   "Observation: cart x, cart velocity, six link angles, six angular velocities.",
   "Action: start with a small force set, then test continuous cart force.",
-  "Reward: upright chain, centered cart, low angular velocity, survival time.",
+  "Reward: dense swing-up shaping during training, strict visible score only when every link is upright and straight.",
   "Curriculum: solve one link, then two, then mixed one to six link episodes.",
   "Randomization: mass, force magnitude, initial angle, episode horizon.",
   "Evaluation: held out seeds, impulse recovery, lower link transfer, failure map.",
@@ -196,9 +198,19 @@ function stepState(state: PendulumState, mode: LabMode, links: number, manualFor
 }
 
 function scoreState(state: PendulumState): number {
+  const maxUprightError = state.theta.reduce((max, theta) => Math.max(max, Math.abs(theta)), 0);
+  const maxBendError = state.theta.reduce((max, theta, index) => {
+    if (index === 0) return max;
+    return Math.max(max, Math.abs(theta - state.theta[index - 1]));
+  }, 0);
+
+  if (maxUprightError > SCORE_MAX_UPRIGHT_ANGLE || maxBendError > SCORE_MAX_CHAIN_BEND) {
+    return 0;
+  }
+
   const angleError = state.theta.reduce((sum, theta, index) => sum + Math.abs(theta) * (index + 1), 0);
   const velocityError = state.omega.reduce((sum, omega) => sum + Math.abs(omega), 0);
-  return Math.round(clamp(100 - angleError * 1.7 - velocityError * 0.6 - Math.abs(state.cartX) * 3, 0, 100));
+  return Math.round(clamp(100 - angleError * 12 - maxBendError * 30 - velocityError * 2.5 - Math.abs(state.cartX) * 8, 0, 100));
 }
 
 function poseForMode(mode: LabMode, seeded = false): "hold" | "whip" | "down" {

@@ -11,13 +11,14 @@ const PAGE_DESCRIPTION =
   "Interactive six link cartpole lab with a Modal-trained browser policy checkpoint, Yacine timeline notes, control research, and a reconstruction plan.";
 const PAGE_URL = "/ailab/six-pendulum-cartpole";
 const DATE_PUBLISHED = "2026-06-09T00:00:00.000Z";
-const DATE_MODIFIED = "2026-06-09T00:00:00.000Z";
+const DATE_MODIFIED = "2026-06-10T00:00:00.000Z";
 
 const xFacts = [
   "Yacine posted the six pendulum cartpole solve at 00:50 UTC on June 9, 2026.",
   "He said the run used PufferPPO, MuJoCo Warp, several RTX 4090s, and a Puffer minGRU policy near one million parameters.",
   "The working trick was not just model size. It was environment speed, reward shaping, thousands of hyperparameter experiments, and randomized episode length.",
   "Later that day he posted a MuJoCo Playground reproduction at 120k steps per second, 200 million steps, and 27.8 minutes of training.",
+  "A scan of the public yacineMTB GitHub repositories did not find a released six-pendulum source repo, so this page treats the thread as the source of truth.",
 ] as const;
 
 const timeline = [
@@ -61,14 +62,29 @@ const researchNotes = [
     href: "https://arxiv.org/abs/2205.06231",
   },
   {
+    title: "Hardware repo for the benchmark",
+    body: "The Dynamics Lab multi-arm pendulum repository publishes CAD, manuals, and collected data for the multi-arm pendulum on a cart paper.",
+    href: "https://github.com/dynamicslab/MultiArm-Pendulum",
+  },
+  {
     title: "Chain pendulum dynamics are hard",
     body: "Lee, Leok, and McClamroch derive equations and control structure for a chain pendulum on a cart, which is the mechanical version behind the six link challenge.",
     href: "https://arxiv.org/abs/1211.4604",
   },
   {
-    title: "Swing up is different from hold",
-    body: "Inverted pendulum work separates the energy needed to swing up from the smaller corrections needed to stay upright. The six link version needs both behaviors.",
-    href: "https://journals.plos.org/plosone/article?id=10.1371%2Fjournal.pone.0280071",
+    title: "Energy swing up is the control prior",
+    body: "Astrom and Furuta's energy-control swing-up paper is the useful classical prior: first pump energy into the chain, then switch to stabilization near upright.",
+    href: "https://web.ece.ucsb.edu/~hespanha/ece229/references/AstromFurutaAUTOM00.pdf",
+  },
+  {
+    title: "PPO is the algorithm baseline",
+    body: "Schulman, Wolski, Dhariwal, Radford, and Klimov introduced PPO as a practical policy-gradient method for simulated control and robotics-style tasks.",
+    href: "https://arxiv.org/abs/1707.06347",
+  },
+  {
+    title: "PufferLib is the stack clue",
+    body: "The PufferLib paper and docs explain the fast vectorized RL path that matches the thread's PufferPPO and MinGRU clues.",
+    href: "https://arxiv.org/html/2406.12905v1",
   },
   {
     title: "MJWarp is the speed lever",
@@ -99,7 +115,7 @@ const buildPlan = [
   },
   {
     phase: "2. Reward",
-    body: "Score upright links, low angular velocity, centered cart position, low force cost, survival, and a separate swing up term so the policy learns the whip before the hold.",
+    body: "Use dense alignment and swing-up shaping during training, but visible score is zero unless every link is near upright and the serial chain is nearly straight.",
   },
   {
     phase: "3. Search",
@@ -187,7 +203,7 @@ export default function SixPendulumCartpolePage() {
             <p className="text-sm font-bold uppercase tracking-[0.18em] text-[#8cc7e8]">Implementation status</p>
             <h2 className="mt-4 font-serif text-3xl font-bold text-[#f7f1e6]">Modal-trained CEM checkpoint deployed.</h2>
             <p className="mt-4 text-base leading-relaxed text-[#dce6e9]">
-              The canvas runs a lightweight coupled physics approximation and a checked-in policy trained on Modal L4 with cross-entropy search over a time-basis plus feedback model. This is progress, not the final Yacine-level MuJoCo/PufferPPO solve. The next checkpoint should increase sustained hold time, then move the environment to MJWarp or MJX with PPO and recorded eval videos.
+              The canvas runs a lightweight coupled physics approximation and a checked-in policy trained on Modal L4 with cross-entropy search over a time-basis plus feedback model. This is progress, not the final Yacine-level MuJoCo/PufferPPO solve. Score is now strict: fallen, bent, or mostly-upright-but-not-straight chains get zero. The next checkpoint should move the environment to MJWarp or MJX with PPO and recorded eval videos.
             </p>
           </div>
         </section>

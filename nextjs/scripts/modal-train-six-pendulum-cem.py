@@ -24,6 +24,8 @@ def train_policy(initial_policy_json: str = "") -> str:
     feedback_count = 2 + links * 2
     param_count = knot_count + feedback_count
     force_scale = 32.0
+    score_max_upright_angle = 0.16
+    score_max_chain_bend = 0.14
     population = 8192
     elite_count = 192
     generations = 160
@@ -68,9 +70,17 @@ def train_policy(initial_policy_json: str = "") -> str:
         return torch.tanh(base + correction) * force_scale
 
     def app_score(cart_x, theta, omega):
+        max_upright_error = theta.abs().max(dim=1).values
+        max_bend_error = (theta[:, 1:] - theta[:, :-1]).abs().max(dim=1).values
+        strict_gate = (max_upright_error <= score_max_upright_angle) & (max_bend_error <= score_max_chain_bend)
         angle_error = (theta.abs() * link_weights).sum(dim=1)
         velocity_error = omega.abs().sum(dim=1)
-        return torch.clamp(100.0 - angle_error * 1.7 - velocity_error * 0.6 - cart_x.abs() * 3.0, 0.0, 100.0)
+        raw_score = torch.clamp(
+            100.0 - angle_error * 12.0 - max_bend_error * 30.0 - velocity_error * 2.5 - cart_x.abs() * 8.0,
+            0.0,
+            100.0,
+        )
+        return torch.where(strict_gate, raw_score, torch.zeros_like(raw_score))
 
     def step(cart_x, cart_v, theta, omega, force):
         link_drag = (torch.sin(theta) * link_weights).sum(dim=1) * 0.08
@@ -102,10 +112,14 @@ def train_policy(initial_policy_json: str = "") -> str:
             last = score
             late = tick / max(steps - 1, 1)
             hold_window = (tick > int(steps * 0.48)).float() if hasattr(tick, "float") else (1.0 if tick > int(steps * 0.48) else 0.0)
+            max_upright_error = theta.abs().max(dim=1).values
+            max_bend_error = (theta[:, 1:] - theta[:, :-1]).abs().max(dim=1).values
+            dense_alignment = torch.exp(-max_upright_error * 1.6 - max_bend_error * 2.4 - omega.abs().mean(dim=1) * 0.08)
             reward += (score / 100.0).pow(2) * (0.2 + late * 1.4)
             reward += (score > 82).float() * (0.6 + late * 2.5 + hold_window * 5.0)
             reward += (score > 92).float() * hold_window * 3.0
             reward += torch.exp(-omega.abs().mean(dim=1) * 0.14) * (score > 82).float() * hold_window
+            reward += dense_alignment * (0.03 + late * 0.08)
             reward -= cart_x.abs() * 0.025 + (force / force_scale).square() * 0.002
             held += (score > 82).float()
         reward += (last / 100.0).pow(4) * 180.0
@@ -170,6 +184,10 @@ def train_policy(initial_policy_json: str = "") -> str:
             "history": history,
             "validation": validation,
             "warmStarted": bool(initial_policy_json),
+            "strictScore": {
+                "maxUprightAngleRad": score_max_upright_angle,
+                "maxChainBendRad": score_max_chain_bend,
+            },
         },
         "knots": best_params[:knot_count].detach().cpu().tolist(),
         "feedback": best_params[knot_count:].detach().cpu().tolist(),
