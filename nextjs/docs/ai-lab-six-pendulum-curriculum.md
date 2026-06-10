@@ -237,13 +237,18 @@ Phase 1, one-link PufferPPO:
 - Reward: dense height/energy/whip shaping plus strict hold bonus. Strict score remains zero until at least one continuous upright second.
 - Policy: start small recurrent, then grow toward puffer MinGRU/PufferNet and the reported `~1m` parameter policy.
 - Sweep: run many PufferPPO/MJWarp experiments, report wallclock on x-axis and strict score on y-axis, and promote only held-out down-start checkpoints.
+- PufferPPO contract command: `npm run train:six-pendulum:puffer-mjwarp:pufferppo-contract`
+- PufferPPO contract artifact: `/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/training-checkpoints/puffer-mjwarp-pufferppo-contract.json`
+- Runtime inspect command: `npm run train:six-pendulum:puffer-mjwarp:pufferppo-runtime`
+- Runtime inspect result on 2026-06-10: `App creation failed: workspace billing cycle spend limit reached`.
+- Contract result: first sweep rows are one-link only, `nworld={4096,8192}`, `rollout={256,512}`, `forceScale={120,240}`, fixed horizon first, and randomized episode length locked until learned whip behavior appears.
 
 Puffer-style sweep ledger:
 
 - Command: `npm run six-pendulum:puffer-ledger`
 - Markdown: `/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/sweeps/puffer-mjwarp-one-link-sweep-ledger.md`
 - JSONL dots: `/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/sweeps/puffer-mjwarp-one-link-sweep-ledger.jsonl`
-- Result: learned policy rows solved held-out one-link down-start `0/9`. The energy teacher scaffold reaches one-link down-start hold `1.387s` with strict score `99.04`, but it is explicitly not counted as a learned policy solve.
+- Result: learned policy rows solved held-out one-link down-start `0/10`. The energy teacher scaffold reaches one-link down-start hold `1.387s` with strict score `99.04`, but it is explicitly not counted as a learned policy solve.
 - Queued rows now match the Yacine experiment shape: PufferPPO, Puffer MinGRU/PufferNet, about `1m` params, MJWarp GPU batching, fixed horizon first, randomized episode length only after whip behavior appears, and link-two promotion only after held-out one-link down-start passes the one-second gate.
 - Current blockers: Modal GPU execution is blocked by the workspace spend limit, and the current MJWarp env still uses CPU `.numpy()` state reads plus `wp.synchronize()` in the step loop. The real PufferPPO/MJWarp path must move observation, reward, reset, terminal, and strict-score math GPU-side before claiming Yacine-like speed.
 

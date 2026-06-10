@@ -12,6 +12,8 @@ const outputDir = process.argv[3] || defaultOutputDir;
 const pufferArtifacts = [
   "puffer-mjwarp-local-substrate-smoke.json",
   "puffer-mjwarp-local-env-contract.json",
+  "puffer-mjwarp-pufferppo-contract.json",
+  "puffer-mjwarp-pufferppo-runtime.json",
   "puffer-mjwarp-env-driver.json",
   "puffer-mjwarp-local-ppo-smoke.json",
   "puffer-mjwarp-local-ppo-hold-search.json",
@@ -65,6 +67,7 @@ function sourceRow(entry, index) {
   const algorithm = String(root.algorithm || "");
   const learned =
     algorithm.includes("behavior-clone") ||
+    algorithm.includes("dagger") ||
     (!algorithm.includes("teacher") && !file.includes("substrate") && !file.includes("contract") && !file.includes("env-driver"));
   const teacher = root.algorithm === "energy-pump-plus-stabilizer-teacher";
 
