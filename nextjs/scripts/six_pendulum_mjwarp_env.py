@@ -187,6 +187,7 @@ class SixPendulumMJWarpPufferEnv(pufferlib.PufferEnv):
         self.mjw.forward(self.m, self.d)
         metrics = self._score_metrics()
         self.prev_potential[:] = metrics["potential"]
+        self.score_kernel.reset_rollout_state(self.prev_potential, self.elapsed, self.held_steps, self.max_held_steps)
         self.observations[:] = metrics["observation"]
         self.rewards.fill(0.0)
         self.terminals.fill(False)
@@ -198,26 +199,23 @@ class SixPendulumMJWarpPufferEnv(pufferlib.PufferEnv):
 
         self.last_action = self.score_kernel.apply_actions(actions, self.d.ctrl)
         self.mjw.step(self.m, self.d)
-        self.elapsed += 1
         metrics = self._score_metrics_current_action()
+        rollout = self.score_kernel.post_step(self.pose == "hold", self.horizon)
         self.observations[:] = metrics["observation"]
-        potential_delta = np.clip(metrics["potential"] - self.prev_potential, -0.18, 0.28)
-        self.prev_potential[:] = metrics["potential"]
-        if self.pose == "hold":
-            self.rewards[:] = metrics["reward"]
-        else:
-            self.rewards[:] = metrics["reward"] + potential_delta.astype(np.float32) * 1.2
-        is_held = metrics["strictScore"] > 82.0
-        self.held_steps = np.where(is_held, self.held_steps + 1, 0)
-        self.max_held_steps = np.maximum(self.max_held_steps, self.held_steps)
+        self.rewards[:] = rollout["reward"]
+        self.prev_potential[:] = rollout["prevPotential"]
+        self.elapsed[:] = rollout["elapsed"]
+        self.held_steps[:] = rollout["heldSteps"]
+        self.max_held_steps[:] = rollout["maxHeldSteps"]
         self.terminals[:] = metrics["terminal"] > 0.5
-        self.truncations[:] = self.elapsed >= self.horizon
+        self.truncations[:] = rollout["truncation"] > 0.5
         done = self.terminals | self.truncations
         if np.any(done):
             self._reset_arrays(np.flatnonzero(done), self.pose)
             self.mjw.forward(self.m, self.d)
             reset_metrics = self._score_metrics()
             self.prev_potential[np.flatnonzero(done)] = reset_metrics["potential"][np.flatnonzero(done)]
+            self.score_kernel.reset_rollout_state(self.prev_potential, self.elapsed, self.held_steps, self.max_held_steps)
         return self.observations, self.rewards, self.terminals, self.truncations, self._infos(metrics)
 
     def _infos(self, metrics):
@@ -278,6 +276,7 @@ def run_driver_smoke(
         "actionSpace": {"shape": list(env.single_action_space.shape), "low": -1.0, "high": 1.0},
         "forceScale": force_scale,
         "scoreBackend": "warp-score-kernel",
+        "rolloutBackend": "warp-post-step-kernel",
         "rewardMean": float(np.mean(reward_sum)),
         "maxStrictScore": float(max_score),
         "maxHeldSeconds": float(max_held),

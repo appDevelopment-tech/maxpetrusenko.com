@@ -245,8 +245,8 @@ Phase 1, one-link PufferPPO:
 - GPU score-kernel smoke command: `npm run train:six-pendulum:puffer-mjwarp:gpu-score-smoke`
 - GPU score-kernel smoke artifact: `/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/training-checkpoints/puffer-mjwarp-gpu-score-kernel-smoke.json`
 - GPU score-kernel smoke result on 2026-06-10: passed on local Warp CPU for `512` worlds at each link count `1..6`. Max parity error vs the existing NumPy scorer was `7.62939453125e-06` across observation, reward, potential, strict score, multi-link cumsum, bend penalties, catch basin, near-top-fast, whip, and cart-terminal terms.
-- Env-driver integration result on 2026-06-10: `npm run train:six-pendulum:puffer-mjwarp:env-driver` now reports `scoreBackend: warp-score-kernel`; a separate six-link driver artifact also passed at `/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/training-checkpoints/puffer-mjwarp-env-driver-link6-kernel.json`.
-- Interpretation: action scaling, ctrl writes, reward, observation, strict score, and cart terminal are now computed through reusable Warp kernels in the env path. Reset sampling, truncation, held-step accumulation, potential-delta reward, and Puffer rollout integration still need to move on-device.
+- Env-driver integration result on 2026-06-10: `npm run train:six-pendulum:puffer-mjwarp:env-driver` now reports `scoreBackend: warp-score-kernel` and `rolloutBackend: warp-post-step-kernel`; a separate six-link driver artifact also passed at `/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/training-checkpoints/puffer-mjwarp-env-driver-link6-kernel.json`.
+- Interpretation: action scaling, ctrl writes, reward, observation, strict score, cart terminal, truncation, held/max-held accumulation, and potential-delta reward are now computed through reusable Warp kernels in the env path. Reset sampling, done-world reset sync, CPU metric copies, and Puffer rollout integration still need to move on-device.
 
 Puffer-style sweep ledger:
 
@@ -255,7 +255,7 @@ Puffer-style sweep ledger:
 - JSONL dots: `/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/sweeps/puffer-mjwarp-one-link-sweep-ledger.jsonl`
 - Result: learned policy rows solved held-out one-link down-start `0/10`. The energy teacher scaffold reaches one-link down-start hold `1.387s` with strict score `99.04`, but it is explicitly not counted as a learned policy solve.
 - Queued rows now match the Yacine experiment shape: PufferPPO, Puffer MinGRU/PufferNet, about `1m` params, MJWarp GPU batching, fixed horizon first, randomized episode length only after whip behavior appears, and link-two promotion only after held-out one-link down-start passes the one-second gate.
-- Current blockers: Modal GPU execution is blocked by the workspace spend limit, and the current MJWarp env still uses CPU reset sampling, CPU held-step/potential-delta bookkeeping, and CPU metric copies for the PufferEnv interface. The real PufferPPO/MJWarp path must move those remaining pieces GPU-side before claiming Yacine-like speed.
+- Current blockers: Modal GPU execution is blocked by the workspace spend limit, and the current MJWarp env still uses CPU reset sampling, done-world reset sync, and CPU metric copies for the PufferEnv interface. The real PufferPPO/MJWarp path must move those remaining pieces GPU-side before claiming Yacine-like speed.
 
 Phase 2, link scaling:
 

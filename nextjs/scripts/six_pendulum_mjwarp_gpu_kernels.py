@@ -145,6 +145,46 @@ def score_obs_kernel(
     terminal[i] = 1.0 if wp.abs(x) > terminal_boundary else 0.0
 
 
+@wp.kernel
+def post_step_kernel(
+    shaped_reward: wp.array(dtype=wp.float32),
+    potential: wp.array(dtype=wp.float32),
+    strict_score: wp.array(dtype=wp.float32),
+    terminal: wp.array(dtype=wp.float32),
+    pose_hold: int,
+    horizon: int,
+    prev_potential: wp.array(dtype=wp.float32),
+    elapsed: wp.array(dtype=wp.int32),
+    held_steps: wp.array(dtype=wp.int32),
+    max_held_steps: wp.array(dtype=wp.int32),
+    final_reward: wp.array(dtype=wp.float32),
+    truncation: wp.array(dtype=wp.float32),
+):
+    i = wp.tid()
+    step_count = elapsed[i] + 1
+    elapsed[i] = step_count
+
+    reward_value = shaped_reward[i]
+    if pose_hold == 0:
+        delta = wp.min(wp.max(potential[i] - prev_potential[i], -0.18), 0.28)
+        reward_value = reward_value + delta * 1.2
+    prev_potential[i] = potential[i]
+    final_reward[i] = reward_value
+
+    current_held = 0
+    if strict_score[i] > 82.0:
+        current_held = held_steps[i] + 1
+    held_steps[i] = current_held
+    max_held_steps[i] = wp.max(max_held_steps[i], current_held)
+
+    done = terminal[i] > 0.5 or step_count >= horizon
+    truncation[i] = 1.0 if step_count >= horizon and terminal[i] <= 0.5 else 0.0
+    if done:
+        elapsed[i] = 0
+        held_steps[i] = 0
+        max_held_steps[i] = 0
+
+
 def deterministic_batch(nworld: int, action_scale: float, seed: int) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
     rng = np.random.default_rng(seed)
     qpos = np.zeros((nworld, 1 + MAX_LINKS), dtype=np.float32)
@@ -196,6 +236,12 @@ class WarpScoreKernel:
         self.whip_wp = wp.zeros(self.nworld, dtype=wp.float32, device=self.device)
         self.terminal_wp = wp.zeros(self.nworld, dtype=wp.float32, device=self.device)
         self.action_wp = wp.zeros((self.nworld, 1), dtype=wp.float32, device=self.device)
+        self.prev_potential_wp = wp.zeros(self.nworld, dtype=wp.float32, device=self.device)
+        self.elapsed_wp = wp.zeros(self.nworld, dtype=wp.int32, device=self.device)
+        self.held_steps_wp = wp.zeros(self.nworld, dtype=wp.int32, device=self.device)
+        self.max_held_steps_wp = wp.zeros(self.nworld, dtype=wp.int32, device=self.device)
+        self.final_reward_wp = wp.zeros(self.nworld, dtype=wp.float32, device=self.device)
+        self.truncation_wp = wp.zeros(self.nworld, dtype=wp.float32, device=self.device)
 
     def apply_actions(self, actions: np.ndarray, ctrl_wp) -> np.ndarray:
         self.action_wp.assign(np.asarray(actions, dtype=np.float32).reshape(self.nworld, 1))
@@ -239,6 +285,49 @@ class WarpScoreKernel:
         )
         wp.synchronize()
         return self.to_numpy()
+
+    def reset_rollout_state(
+        self,
+        prev_potential: np.ndarray,
+        elapsed: np.ndarray | None = None,
+        held_steps: np.ndarray | None = None,
+        max_held_steps: np.ndarray | None = None,
+    ):
+        self.prev_potential_wp.assign(np.asarray(prev_potential, dtype=np.float32).reshape(self.nworld))
+        zeros = np.zeros(self.nworld, dtype=np.int32)
+        self.elapsed_wp.assign(zeros if elapsed is None else np.asarray(elapsed, dtype=np.int32).reshape(self.nworld))
+        self.held_steps_wp.assign(zeros if held_steps is None else np.asarray(held_steps, dtype=np.int32).reshape(self.nworld))
+        self.max_held_steps_wp.assign(zeros if max_held_steps is None else np.asarray(max_held_steps, dtype=np.int32).reshape(self.nworld))
+
+    def post_step(self, pose_hold: bool, horizon: int) -> dict:
+        wp.launch(
+            post_step_kernel,
+            dim=self.nworld,
+            inputs=[
+                self.reward_wp,
+                self.potential_wp,
+                self.strict_score_wp,
+                self.terminal_wp,
+                1 if pose_hold else 0,
+                int(horizon),
+                self.prev_potential_wp,
+                self.elapsed_wp,
+                self.held_steps_wp,
+                self.max_held_steps_wp,
+                self.final_reward_wp,
+                self.truncation_wp,
+            ],
+            device=self.device,
+        )
+        wp.synchronize()
+        return {
+            "reward": self.final_reward_wp.numpy(),
+            "truncation": self.truncation_wp.numpy(),
+            "elapsed": self.elapsed_wp.numpy(),
+            "heldSteps": self.held_steps_wp.numpy(),
+            "maxHeldSteps": self.max_held_steps_wp.numpy(),
+            "prevPotential": self.prev_potential_wp.numpy(),
+        }
 
     def to_numpy(self) -> dict:
         return {
@@ -325,7 +414,7 @@ def main():
             "whip",
             "terminal",
         ],
-        "integrationStatus": "score, observation, and cart terminal math parity for links 1..6; reset, ctrl write, held-step, and puffer rollout integration still pending",
+        "integrationStatus": "score, observation, cart terminal, action scaling, ctrl write, held-step, truncation, max-held, and potential-delta reward math have Warp kernels; reset sampling and Puffer rollout integration still pending",
     }
     args.write_result.parent.mkdir(parents=True, exist_ok=True)
     args.write_result.write_text(json.dumps(result, indent=2) + "\n")
