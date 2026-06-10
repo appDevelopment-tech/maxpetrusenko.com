@@ -9,15 +9,22 @@ image = modal.Image.debian_slim(python_version="3.11").pip_install("torch==2.7.1
 
 
 @app.function(image=image, gpu="L4", timeout=7200)
-def train_policy(initial_policy_json: str = "", smoke: bool = False) -> str:
+def train_policy(
+    initial_policy_json: str = "",
+    smoke: bool = False,
+    max_stage_links: int = 6,
+    generation_scale: float = 1.0,
+) -> str:
     import torch
 
     started = time.time()
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    torch.manual_seed(426120 if not smoke else 426121)
+    max_links = 6
+    safe_max_stage_links = max(1, min(max_links, int(max_stage_links)))
+    safe_generation_scale = max(0.25, float(generation_scale))
+    torch.manual_seed((426120 if not smoke else 426121) + safe_max_stage_links)
     torch.set_float32_matmul_precision("high")
 
-    max_links = 6
     dt = 0.025
     steps = 520 if smoke else 820
     knot_count = 48 if smoke else 72
@@ -28,6 +35,8 @@ def train_policy(initial_policy_json: str = "", smoke: bool = False) -> str:
     score_max_chain_bend = 0.14
     population = 1536 if smoke else 8192
     elite_count = 96 if smoke else 192
+    checkpoint_pool_count = 24 if smoke else 32
+    transition_blend = 0.72
     sigma = 0.95 if initial_policy_json else 1.45
     mean = torch.zeros(param_count, device=device)
     best_params = mean.clone()
@@ -44,14 +53,30 @@ def train_policy(initial_policy_json: str = "", smoke: bool = False) -> str:
                 mean[: min(knot_count, knots.numel())] = knots[:knot_count]
                 mean[knot_count : knot_count + min(feedback_count, feedback.numel())] = feedback[:feedback_count]
 
-    stages = [
-        {"links": 1, "generations": 8 if smoke else 36, "pose": "mixed", "random_horizon": False},
-        {"links": 2, "generations": 8 if smoke else 42, "pose": "mixed", "random_horizon": smoke},
-        {"links": 3, "generations": 0 if smoke else 48, "pose": "mixed", "random_horizon": True},
-        {"links": 4, "generations": 0 if smoke else 54, "pose": "down", "random_horizon": True},
-        {"links": 5, "generations": 0 if smoke else 60, "pose": "down", "random_horizon": True},
-        {"links": 6, "generations": 0 if smoke else 72, "pose": "down", "random_horizon": True},
+    base_stages = [
+        {"phase": "hold", "links": 1, "generations": 6 if smoke else 24, "pose": "hold", "random_horizon": False},
+        {"phase": "swing", "links": 1, "generations": 8 if smoke else 36, "pose": "mixed", "random_horizon": False},
+        {"phase": "hold", "links": 2, "generations": 8 if smoke else 36, "pose": "hold", "random_horizon": False},
+        {"phase": "swing", "links": 2, "generations": 8 if smoke else 42, "pose": "mixed", "random_horizon": smoke},
+        {"phase": "hold", "links": 3, "generations": 0 if smoke else 36, "pose": "hold", "random_horizon": False},
+        {"phase": "swing", "links": 3, "generations": 0 if smoke else 48, "pose": "mixed", "random_horizon": True},
+        {"phase": "hold", "links": 4, "generations": 0 if smoke else 40, "pose": "hold", "random_horizon": False},
+        {"phase": "swing", "links": 4, "generations": 0 if smoke else 54, "pose": "down", "random_horizon": True},
+        {"phase": "hold", "links": 5, "generations": 0 if smoke else 44, "pose": "hold", "random_horizon": False},
+        {"phase": "swing", "links": 5, "generations": 0 if smoke else 60, "pose": "down", "random_horizon": True},
+        {"phase": "hold", "links": 6, "generations": 0 if smoke else 48, "pose": "hold", "random_horizon": False},
+        {"phase": "swing", "links": 6, "generations": 0 if smoke else 72, "pose": "down", "random_horizon": True},
     ]
+    stages = []
+    for stage in base_stages:
+        if stage["links"] > safe_max_stage_links:
+            continue
+        stages.append(
+            {
+                **stage,
+                "generations": int(round(stage["generations"] * safe_generation_scale)),
+            }
+        )
 
     def active_mask(active_links):
         return (torch.arange(max_links, device=device).view(1, max_links) < active_links).float()
@@ -60,7 +85,9 @@ def train_policy(initial_policy_json: str = "", smoke: bool = False) -> str:
         mask = active_mask(active_links)
         down = torch.pi - link_index * 0.08
         upright = -0.08 + link_index * 0.018
-        if pose == "mixed":
+        if pose == "hold":
+            theta = upright.repeat(batch, 1)
+        elif pose == "mixed":
             selector = (torch.rand(batch, 1, device=device) > 0.42).float()
             theta = down * selector + upright * (1.0 - selector)
         else:
@@ -185,13 +212,27 @@ def train_policy(initial_policy_json: str = "", smoke: bool = False) -> str:
             elites = params[indices]
             mean = elites.mean(dim=0)
             sigma = max(sigma * 0.972, 0.075)
-            if values[0] > stage_best_fitness:
-                stage_best_fitness = values[0]
-                stage_best = elites[0].clone()
+            checkpoint_params = elites[: min(checkpoint_pool_count, elites.shape[0])]
+            checkpoint_reward, checkpoint_last, checkpoint_held, checkpoint_whip = evaluate(
+                checkpoint_params,
+                stage,
+                validation=True,
+            )
+            checkpoint_fitness = (
+                checkpoint_last
+                + checkpoint_held * (135.0 + stage["links"] * 30.0)
+                + checkpoint_whip * 8.0
+                + checkpoint_reward * 0.04
+            )
+            checkpoint_value, checkpoint_index = torch.max(checkpoint_fitness, dim=0)
+            if checkpoint_value > stage_best_fitness:
+                stage_best_fitness = checkpoint_value
+                stage_best = checkpoint_params[checkpoint_index].clone()
             if values[0] > best_fitness:
                 best_fitness = values[0]
             if generation % 8 == 0 or generation == stage["generations"] - 1:
                 line = {
+                    "phase": stage["phase"],
                     "stageLinks": stage["links"],
                     "generation": generation,
                     "bestFitness": float(values[0].detach().cpu()),
@@ -199,6 +240,10 @@ def train_policy(initial_policy_json: str = "", smoke: bool = False) -> str:
                     "eliteScore": float(last[indices[0]].detach().cpu()),
                     "eliteHeld": float(held[indices[0]].detach().cpu()),
                     "eliteWhip": float(whip[indices[0]].detach().cpu()),
+                    "checkpointFitness": float(checkpoint_value.detach().cpu()),
+                    "checkpointScore": float(checkpoint_last[checkpoint_index].detach().cpu()),
+                    "checkpointHeld": float(checkpoint_held[checkpoint_index].detach().cpu()),
+                    "checkpointWhip": float(checkpoint_whip[checkpoint_index].detach().cpu()),
                     "randomizedEpisodeLength": bool(stage["random_horizon"]),
                     "sigma": float(sigma),
                 }
@@ -206,10 +251,11 @@ def train_policy(initial_policy_json: str = "", smoke: bool = False) -> str:
                 history.append(line)
         if stage_best is not None:
             best_params = stage_best.clone()
-            mean = stage_best.clone()
+            mean = stage_best * transition_blend + mean * (1.0 - transition_blend)
         validation_params = (stage_best if stage_best is not None else mean).view(1, -1).repeat(512 if smoke else 1024, 1)
         reward, last, held, whip = evaluate(validation_params, stage, validation=True)
         validation = {
+            "phase": stage["phase"],
             "links": stage["links"],
             "reward": float(reward.mean().detach().cpu()),
             "score": float(last.mean().detach().cpu()),
@@ -222,11 +268,17 @@ def train_policy(initial_policy_json: str = "", smoke: bool = False) -> str:
         print(json.dumps({"validation": validation}), flush=True)
         validation_by_stage.append(validation)
 
-    final_stage = {"links": validation_by_stage[-1]["links"] if validation_by_stage else 1, "pose": "mixed", "random_horizon": False}
+    final_stage = {
+        "phase": "final-mixed",
+        "links": validation_by_stage[-1]["links"] if validation_by_stage else 1,
+        "pose": "mixed",
+        "random_horizon": False,
+    }
     validation_params = best_params.view(1, -1).repeat(1024 if not smoke else 512, 1)
     reward, last, held, whip = evaluate(validation_params, final_stage, validation=True)
     final_validation = {
         "links": final_stage["links"],
+        "phase": final_stage["phase"],
         "reward": float(reward.mean().detach().cpu()),
         "score": float(last.mean().detach().cpu()),
         "held": float(held.mean().detach().cpu()),
@@ -239,7 +291,7 @@ def train_policy(initial_policy_json: str = "", smoke: bool = False) -> str:
         "trainedAt": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         "algorithm": "modal-cross-entropy-curriculum",
         "environment": "six-link-browser-cartpole-curriculum-v1",
-        "seed": 426120 if not smoke else 426121,
+        "seed": (426120 if not smoke else 426121) + safe_max_stage_links,
         "modelType": "timeKnotFeedback",
         "knotCount": knot_count,
         "feedbackCount": feedback_count,
@@ -253,8 +305,13 @@ def train_policy(initial_policy_json: str = "", smoke: bool = False) -> str:
             "cudaRuntime": torch.version.cuda,
             "population": population,
             "eliteCount": elite_count,
+            "checkpointPoolCount": checkpoint_pool_count,
+            "checkpointSelection": "validation-aware-strict-score",
+            "transitionBlend": transition_blend,
             "elapsedSeconds": round(time.time() - started, 3),
             "smoke": smoke,
+            "maxStageLinks": safe_max_stage_links,
+            "generationScale": safe_generation_scale,
             "curriculum": stages,
             "history": history,
             "validationByStage": validation_by_stage,
@@ -277,9 +334,9 @@ def train_policy(initial_policy_json: str = "", smoke: bool = False) -> str:
 
 
 @app.local_entrypoint()
-def main(smoke: bool = False):
+def main(smoke: bool = False, max_stage_links: int = 6, generation_scale: float = 1.0):
     from pathlib import Path
 
     policy_path = Path("app/ailab/six-pendulum-cartpole/sixPendulumPolicy.json")
     initial = policy_path.read_text() if policy_path.exists() else ""
-    return train_policy.remote(initial, smoke)
+    return train_policy.remote(initial, smoke, max_stage_links, generation_scale)

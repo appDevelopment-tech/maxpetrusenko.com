@@ -220,9 +220,9 @@ export default function SixPendulumCartpolePage() {
 
           <div className="rounded-[8px] border border-[rgba(12,17,21,0.08)] bg-[#101820] p-6 text-[#f7f1e6]">
             <p className="text-sm font-bold uppercase tracking-[0.18em] text-[#8cc7e8]">Implementation status</p>
-            <h2 className="mt-4 font-serif text-3xl font-bold text-[#f7f1e6]">Curriculum smoke started.</h2>
+            <h2 className="mt-4 font-serif text-3xl font-bold text-[#f7f1e6]">Hold-first curriculum is live.</h2>
             <p className="mt-4 text-base leading-relaxed text-[#dce6e9]">
-              The canvas runs a lightweight coupled physics approximation and a checked-in policy trained on Modal L4 with cross-entropy search over a time-basis plus feedback model. This is progress, not the final Yacine-level MuJoCo/PufferPPO solve. Score is strict: fallen, bent, or mostly-upright-but-not-straight chains get zero. A new curriculum trainer now starts at one link, advances to two, and only then scales toward six. The first smoke produced real link-one strict hold signal and link-two whip signal, but not a link-two solve.
+              The canvas runs a lightweight coupled physics approximation and a checked-in policy trained on Modal L4 with cross-entropy search over a time-basis plus feedback model. This is progress, not the final Yacine-level MuJoCo/PufferPPO solve. Score is strict: fallen, bent, or mostly-upright-but-not-straight chains get zero. The newest trainer learns hold first, then swing, before adding links. Link-one swing validation reached 72.7 score with 0.114 held fraction; link two still fails validation and needs a better policy class or more robust search.
             </p>
           </div>
         </section>
