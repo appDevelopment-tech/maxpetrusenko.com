@@ -91,7 +91,7 @@ def build_contract(total_timesteps: int = 10_000_000) -> dict:
     representative = rows[-1]
     return {
         "schema": "six-pendulum-pufferppo-mjwarp-contract-v1",
-        "status": "pufferppo-contract-ready-score-kernel-parity-env-integration-missing",
+        "status": "pufferppo-contract-ready-device-rollout-smoke-puffer-integration-missing",
         "createdAtUnix": time.time(),
         "algorithm": "PufferPPO",
         "policyFamily": "PufferNet/MinGRU target, local smoke uses PufferLib Default+RNN API until PufferNet is wired",
@@ -121,11 +121,17 @@ def build_contract(total_timesteps: int = 10_000_000) -> dict:
             "artifact": "/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/training-checkpoints/puffer-mjwarp-gpu-score-kernel-smoke.json",
             "covered": "Links 1..6 observation, reward, potential, strict score, multi-link cumsum, bend penalties, catch basin, near-top-fast, whip flags, and cart terminal match the existing NumPy scorer.",
             "envIntegration": "SixPendulumMJWarpPufferEnv now uses Warp kernels for reset sampling/writes, action scaling, ctrl writes, score/reward/observation, cart terminal, truncation, held/max-held accumulation, and potential-delta reward; env-driver artifacts report resetBackend=warp-reset-kernel, scoreBackend=warp-score-kernel, and rolloutBackend=warp-post-step-kernel.",
-            "notCovered": "CPU done trigger, CPU metric copies for the current PufferEnv interface, and Puffer rollout integration.",
+            "deviceRollout": {
+                "command": "npm run train:six-pendulum:puffer-mjwarp:device-rollout",
+                "artifact": "/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/training-checkpoints/puffer-mjwarp-device-rollout.json",
+                "covered": "MJWarp loop can run reset/action/score/post-step kernels without per-step CPU metric reads; only summary arrays are copied after final synchronize.",
+                "caveat": "The action source is a deterministic scripted Warp kernel for substrate proof only. It is not a learned policy and does not count toward solve.",
+            },
+            "notCovered": "Puffer rollout integration, PufferPPO/MinGRU training attachment, Modal GPU execution, and CUDA graph/APIC capture.",
         },
         "gpuKernelBlocker": {
             "currentEnv": "scripts/six_pendulum_mjwarp_env.py",
-            "problem": "Current env still uses a CPU done trigger and CPU metric copies for the current PufferEnv interface.",
+            "problem": "The standalone device-rollout smoke removes per-step CPU metric reads, but the current PufferEnv interface still returns NumPy observations/rewards/dones each step.",
             "whyItBlocksYacineSpeed": "Those remaining CPU transfers and Python-side bookkeeping still defeat MJWarp batched GPU throughput and cannot reach wallclock-first PufferPPO speed.",
             "requiredBeforeRealSweep": [
                 "Replace the Python/PufferEnv CPU return interface with a Puffer-compatible rollout path that can keep tensors device-side.",

@@ -1,0 +1,137 @@
+#!/usr/bin/env python3
+import argparse
+import json
+import time
+from pathlib import Path
+
+import numpy as np
+
+from six_pendulum_mjwarp_gpu_kernels import DEFAULT_ACTION_SCALE, WarpScoreKernel
+
+
+DEFAULT_OUTPUT = Path(
+    "/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/training-checkpoints/puffer-mjwarp-device-rollout.json"
+)
+
+
+def run_device_rollout(
+    mjcf_xml: str,
+    links: int = 1,
+    nworld: int = 128,
+    steps: int = 256,
+    pose: str = "down",
+    force_scale: float = DEFAULT_ACTION_SCALE,
+    seed: int = 426210,
+) -> dict:
+    import mujoco
+    import mujoco_warp as mjw
+    import warp as wp
+
+    started = time.time()
+    mjm = mujoco.MjModel.from_xml_string(mjcf_xml)
+    model = mjw.put_model(mjm)
+    data = mjw.make_data(mjm, nworld=int(nworld))
+    device = str(getattr(data.qpos, "device", "cpu"))
+    runner = WarpScoreKernel(
+        nworld=nworld,
+        links=links,
+        action_scale=force_scale,
+        device=device,
+        terminal_boundary=2.35,
+    )
+    horizon = max(1, int(steps) + 1)
+    pose_hold = pose == "hold"
+
+    runner.reset_worlds(data.qpos, data.qvel, data.ctrl, pose, seed, reset_all=True, synchronize=False)
+    mjw.forward(model, data)
+    runner.score_device(data.qpos, data.qvel, synchronize=False)
+    runner.initialize_prev_potential_from_current(synchronize=False)
+
+    for step_index in range(int(steps)):
+        runner.apply_scripted_actions(data.ctrl, step_index, steps, synchronize=False)
+        mjw.step(model, data)
+        runner.score_device(data.qpos, data.qvel, synchronize=False)
+        runner.post_step_device(pose_hold, horizon, synchronize=False)
+        runner.reset_worlds(data.qpos, data.qvel, data.ctrl, pose, seed, reset_all=False, synchronize=False)
+        mjw.forward(model, data)
+        runner.score_device(data.qpos, data.qvel, synchronize=False)
+        runner.sync_reset_potential(synchronize=False)
+
+    wp.synchronize()
+    elapsed = time.time() - started
+    strict_score = runner.rollout_max_strict_score_wp.numpy()
+    max_held_steps = runner.rollout_max_held_steps_wp.numpy()
+    final_reward = runner.final_reward_wp.numpy()
+    reset_count = runner.reset_count_wp.numpy()
+    terminal = runner.terminal_wp.numpy()
+    truncation = runner.truncation_wp.numpy()
+    control_dt = float(mjm.opt.timestep)
+    simulated_steps = int(nworld) * int(steps)
+
+    return {
+        "schema": "six-pendulum-mjwarp-device-rollout-smoke-v1",
+        "status": "device-rollout-smoke-passed",
+        "links": int(links),
+        "nworld": int(nworld),
+        "steps": int(steps),
+        "pose": pose,
+        "forceScale": float(force_scale),
+        "seed": int(seed),
+        "device": device,
+        "elapsedSeconds": elapsed,
+        "simulatedSteps": simulated_steps,
+        "sps": simulated_steps / elapsed if elapsed > 0 else 0.0,
+        "controlDt": control_dt,
+        "scoreBackend": "warp-score-kernel",
+        "rolloutBackend": "warp-post-step-kernel-device-loop",
+        "resetBackend": "warp-reset-kernel",
+        "actionBackend": "warp-scripted-action-kernel",
+        "cpuMetricReadsPerStep": 0,
+        "cpuStateWritesPerStep": 0,
+        "cpuReads": "summary arrays only after final synchronize",
+        "maxStrictScore": float(np.max(strict_score)) if strict_score.size else 0.0,
+        "maxHeldSeconds": float(np.max(max_held_steps) * control_dt) if max_held_steps.size else 0.0,
+        "solvedOneSecond": bool(max_held_steps.size and np.max(max_held_steps) * control_dt >= 1.0),
+        "rewardMean": float(np.mean(final_reward)) if final_reward.size else 0.0,
+        "resetCountMean": float(np.mean(reset_count)) if reset_count.size else 0.0,
+        "resetCountMax": int(np.max(reset_count)) if reset_count.size else 0,
+        "terminalWorlds": int(np.sum(terminal > 0.5)) if terminal.size else 0,
+        "truncatedWorlds": int(np.sum(truncation > 0.5)) if truncation.size else 0,
+        "notes": [
+            "This is a device-rollout substrate smoke, not training and not a learned policy.",
+            "The action source is a deterministic Warp scripted-action kernel only to exercise ctrl writes through MJWarp.",
+            "Strict score still requires continuous upright hold; subsecond flashes do not count.",
+        ],
+    }
+
+
+def main():
+    parser = argparse.ArgumentParser(description="Run a six-pendulum MJWarp rollout smoke without per-step CPU metric reads.")
+    parser.add_argument("--links", type=int, default=1)
+    parser.add_argument("--nworld", type=int, default=128)
+    parser.add_argument("--steps", type=int, default=256)
+    parser.add_argument("--pose", choices=["down", "hold", "mixed"], default="down")
+    parser.add_argument("--force-scale", type=float, default=DEFAULT_ACTION_SCALE)
+    parser.add_argument("--seed", type=int, default=426210)
+    parser.add_argument("--write-result", type=Path, default=DEFAULT_OUTPUT)
+    args = parser.parse_args()
+
+    mjcf_path = Path(f"app/ailab/six-pendulum-cartpole/mjcf/cartpole_{args.links}_link.xml")
+    if not mjcf_path.exists():
+        raise FileNotFoundError(f"Missing MJCF file: {mjcf_path}")
+    result = run_device_rollout(
+        mjcf_xml=mjcf_path.read_text(),
+        links=args.links,
+        nworld=args.nworld,
+        steps=args.steps,
+        pose=args.pose,
+        force_scale=args.force_scale,
+        seed=args.seed,
+    )
+    args.write_result.parent.mkdir(parents=True, exist_ok=True)
+    args.write_result.write_text(json.dumps(result, indent=2) + "\n")
+    print(json.dumps(result, indent=2))
+
+
+if __name__ == "__main__":
+    main()

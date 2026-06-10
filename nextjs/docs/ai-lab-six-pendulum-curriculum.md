@@ -246,7 +246,12 @@ Phase 1, one-link PufferPPO:
 - GPU score-kernel smoke artifact: `/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/training-checkpoints/puffer-mjwarp-gpu-score-kernel-smoke.json`
 - GPU score-kernel smoke result on 2026-06-10: passed on local Warp CPU for `512` worlds at each link count `1..6`. Max parity error vs the existing NumPy scorer was `7.62939453125e-06` across observation, reward, potential, strict score, multi-link cumsum, bend penalties, catch basin, near-top-fast, whip, and cart-terminal terms.
 - Env-driver integration result on 2026-06-10: `npm run train:six-pendulum:puffer-mjwarp:env-driver` now reports `resetBackend: warp-reset-kernel`, `scoreBackend: warp-score-kernel`, and `rolloutBackend: warp-post-step-kernel`; a separate six-link driver artifact also passed at `/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/training-checkpoints/puffer-mjwarp-env-driver-link6-kernel.json`.
-- Interpretation: reset sampling/writes, action scaling, ctrl writes, reward, observation, strict score, cart terminal, truncation, held/max-held accumulation, and potential-delta reward are now computed through reusable Warp kernels in the env path. CPU done triggering, CPU metric copies, and Puffer rollout integration still need to move on-device.
+- Device-rollout smoke command: `npm run train:six-pendulum:puffer-mjwarp:device-rollout`
+- Device-rollout smoke artifact: `/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/training-checkpoints/puffer-mjwarp-device-rollout.json`
+- Six-link device-rollout smoke artifact: `/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/training-checkpoints/puffer-mjwarp-device-rollout-link6.json`
+- Device-rollout result on 2026-06-10: one-link ran `128` worlds for `256` steps and six-link ran `16` worlds for `32` steps with `cpuMetricReadsPerStep=0` and `cpuStateWritesPerStep=0`; summary arrays are copied only after final synchronize. Both use local Mac Warp CPU, so SPS is not the final GPU number.
+- Interpretation: reset sampling/writes, action scaling, ctrl writes, reward, observation, strict score, cart terminal, truncation, held/max-held accumulation, and potential-delta reward are now computed through reusable Warp kernels. A standalone MJWarp rollout can now keep metrics device-side per step. The remaining Yacine-speed blocker is attaching this path to PufferPPO/MinGRU without falling back to the NumPy-returning PufferEnv step interface, then running it on Modal/GPU with fixed shapes and graph capture.
+- Proof boundary: the device-rollout action source is a deterministic Warp scripted-action kernel for plumbing only. It is not a learned policy, not a score row, and not a solve.
 
 Puffer-style sweep ledger:
 
@@ -255,7 +260,7 @@ Puffer-style sweep ledger:
 - JSONL dots: `/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/sweeps/puffer-mjwarp-one-link-sweep-ledger.jsonl`
 - Result: learned policy rows solved held-out one-link down-start `0/10`. The energy teacher scaffold reaches one-link down-start hold `1.387s` with strict score `99.04`, but it is explicitly not counted as a learned policy solve.
 - Queued rows now match the Yacine experiment shape: PufferPPO, Puffer MinGRU/PufferNet, about `1m` params, MJWarp GPU batching, fixed horizon first, randomized episode length only after whip behavior appears, and link-two promotion only after held-out one-link down-start passes the one-second gate.
-- Current blockers: Modal GPU execution is blocked by the workspace spend limit, and the current MJWarp env still uses a CPU done trigger plus CPU metric copies for the PufferEnv interface. The real PufferPPO/MJWarp path must replace that return interface before claiming Yacine-like speed.
+- Current blockers: Modal GPU execution is blocked by the workspace spend limit, and the current Puffer-facing env still returns NumPy observations/rewards/dones each step. The standalone device-rollout smoke proves the no-per-step-CPU-metric path; the real PufferPPO/MJWarp path must attach that path to Puffer before claiming Yacine-like speed.
 
 Phase 2, link scaling:
 

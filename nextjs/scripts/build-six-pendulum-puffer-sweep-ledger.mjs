@@ -16,6 +16,8 @@ const pufferArtifacts = [
   "puffer-mjwarp-pufferppo-runtime.json",
   "puffer-mjwarp-gpu-score-kernel-smoke.json",
   "puffer-mjwarp-env-driver.json",
+  "puffer-mjwarp-device-rollout.json",
+  "puffer-mjwarp-device-rollout-link6.json",
   "puffer-mjwarp-local-ppo-smoke.json",
   "puffer-mjwarp-local-ppo-hold-search.json",
   "puffer-mjwarp-stabilizer-bc.json",
@@ -70,6 +72,7 @@ function sourceRow(entry, index) {
     file.includes("substrate") ||
     file.includes("contract") ||
     file.includes("env-driver") ||
+    file.includes("device-rollout") ||
     file.includes("gpu-score-kernel");
   const learned =
     algorithm.includes("behavior-clone") ||
@@ -102,6 +105,8 @@ function sourceRow(entry, index) {
         ? "Learned/plumbing row does not solve down-start; score forced to 0 because hold is under 1s."
         : file.includes("gpu-score-kernel")
           ? "Links 1..6 score/observation/terminal Warp kernel matches NumPy scorer and is wired into the env scorer."
+          : file.includes("device-rollout")
+            ? "Device-side MJWarp rollout smoke: scripted action kernel only, no per-step CPU metric reads, not a learned policy."
           : "Current MJWarp/Puffer substrate evidence.",
   };
 }

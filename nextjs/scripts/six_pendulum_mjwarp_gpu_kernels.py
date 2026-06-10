@@ -108,6 +108,15 @@ def sync_reset_potential_kernel(
 
 
 @wp.kernel
+def copy_float_kernel(
+    source: wp.array(dtype=wp.float32),
+    target: wp.array(dtype=wp.float32),
+):
+    i = wp.tid()
+    target[i] = source[i]
+
+
+@wp.kernel
 def action_to_ctrl_kernel(
     actions: wp.array2d(dtype=wp.float32),
     ctrl: wp.array2d(dtype=wp.float32),
@@ -117,6 +126,22 @@ def action_to_ctrl_kernel(
     i = wp.tid()
     normalized = wp.min(wp.max(actions[i, 0], -1.0), 1.0)
     force = normalized * action_scale
+    ctrl[i, 0] = force
+    last_action[i] = force
+
+
+@wp.kernel
+def scripted_action_to_ctrl_kernel(
+    ctrl: wp.array2d(dtype=wp.float32),
+    last_action: wp.array(dtype=wp.float32),
+    step_index: int,
+    total_steps: int,
+    action_scale: float,
+):
+    i = wp.tid()
+    phase = float(step_index) / wp.max(1.0, float(total_steps - 1))
+    force = wp.sin(phase * 12.566370614359172) * 18.0
+    force = wp.min(wp.max(force, -action_scale), action_scale)
     ctrl[i, 0] = force
     last_action[i] = force
 
@@ -239,6 +264,8 @@ def post_step_kernel(
     elapsed: wp.array(dtype=wp.int32),
     held_steps: wp.array(dtype=wp.int32),
     max_held_steps: wp.array(dtype=wp.int32),
+    rollout_max_held_steps: wp.array(dtype=wp.int32),
+    rollout_max_strict_score: wp.array(dtype=wp.float32),
     final_reward: wp.array(dtype=wp.float32),
     truncation: wp.array(dtype=wp.float32),
 ):
@@ -258,6 +285,8 @@ def post_step_kernel(
         current_held = held_steps[i] + 1
     held_steps[i] = current_held
     max_held_steps[i] = wp.max(max_held_steps[i], current_held)
+    rollout_max_held_steps[i] = wp.max(rollout_max_held_steps[i], max_held_steps[i])
+    rollout_max_strict_score[i] = wp.max(rollout_max_strict_score[i], strict_score[i])
 
     done = terminal[i] > 0.5 or step_count >= horizon
     truncation[i] = 1.0 if step_count >= horizon and terminal[i] <= 0.5 else 0.0
@@ -325,8 +354,10 @@ class WarpScoreKernel:
         self.reset_count_wp = wp.zeros(self.nworld, dtype=wp.int32, device=self.device)
         self.final_reward_wp = wp.zeros(self.nworld, dtype=wp.float32, device=self.device)
         self.truncation_wp = wp.zeros(self.nworld, dtype=wp.float32, device=self.device)
+        self.rollout_max_held_steps_wp = wp.zeros(self.nworld, dtype=wp.int32, device=self.device)
+        self.rollout_max_strict_score_wp = wp.zeros(self.nworld, dtype=wp.float32, device=self.device)
 
-    def reset_worlds(self, qpos_wp, qvel_wp, ctrl_wp, pose: str, seed: int, reset_all: bool = False):
+    def reset_worlds(self, qpos_wp, qvel_wp, ctrl_wp, pose: str, seed: int, reset_all: bool = False, synchronize: bool = True):
         pose_mode = 1 if pose == "hold" else 2 if pose == "mixed" else 0
         wp.launch(
             reset_state_kernel,
@@ -349,7 +380,8 @@ class WarpScoreKernel:
             ],
             device=self.device,
         )
-        wp.synchronize()
+        if synchronize:
+            wp.synchronize()
 
     def apply_actions(self, actions: np.ndarray, ctrl_wp) -> np.ndarray:
         self.action_wp.assign(np.asarray(actions, dtype=np.float32).reshape(self.nworld, 1))
@@ -362,11 +394,25 @@ class WarpScoreKernel:
         wp.synchronize()
         return self.last_action_wp.numpy()
 
+    def apply_scripted_actions(self, ctrl_wp, step_index: int, total_steps: int, synchronize: bool = False):
+        wp.launch(
+            scripted_action_to_ctrl_kernel,
+            dim=self.nworld,
+            inputs=[ctrl_wp, self.last_action_wp, int(step_index), int(total_steps), float(self.action_scale)],
+            device=self.device,
+        )
+        if synchronize:
+            wp.synchronize()
+
     def score_from_warp_arrays(self, qpos_wp, qvel_wp, last_action: np.ndarray) -> dict:
         self.last_action_wp.assign(np.asarray(last_action, dtype=np.float32).reshape(self.nworld))
         return self.score_from_current_last_action(qpos_wp, qvel_wp)
 
     def score_from_current_last_action(self, qpos_wp, qvel_wp) -> dict:
+        self.score_device(qpos_wp, qvel_wp, synchronize=True)
+        return self.to_numpy()
+
+    def score_device(self, qpos_wp, qvel_wp, synchronize: bool = False):
         self.obs_wp.zero_()
         wp.launch(
             score_obs_kernel,
@@ -391,8 +437,8 @@ class WarpScoreKernel:
             ],
             device=self.device,
         )
-        wp.synchronize()
-        return self.to_numpy()
+        if synchronize:
+            wp.synchronize()
 
     def reset_rollout_state(
         self,
@@ -407,16 +453,38 @@ class WarpScoreKernel:
         self.held_steps_wp.assign(zeros if held_steps is None else np.asarray(held_steps, dtype=np.int32).reshape(self.nworld))
         self.max_held_steps_wp.assign(zeros if max_held_steps is None else np.asarray(max_held_steps, dtype=np.int32).reshape(self.nworld))
 
-    def sync_reset_potential(self):
+    def sync_reset_potential(self, synchronize: bool = True):
         wp.launch(
             sync_reset_potential_kernel,
             dim=self.nworld,
             inputs=[self.potential_wp, self.terminal_wp, self.truncation_wp, self.prev_potential_wp],
             device=self.device,
         )
-        wp.synchronize()
+        if synchronize:
+            wp.synchronize()
+
+    def initialize_prev_potential_from_current(self, synchronize: bool = False):
+        wp.launch(
+            copy_float_kernel,
+            dim=self.nworld,
+            inputs=[self.potential_wp, self.prev_potential_wp],
+            device=self.device,
+        )
+        if synchronize:
+            wp.synchronize()
 
     def post_step(self, pose_hold: bool, horizon: int) -> dict:
+        self.post_step_device(pose_hold, horizon, synchronize=True)
+        return {
+            "reward": self.final_reward_wp.numpy(),
+            "truncation": self.truncation_wp.numpy(),
+            "elapsed": self.elapsed_wp.numpy(),
+            "heldSteps": self.held_steps_wp.numpy(),
+            "maxHeldSteps": self.max_held_steps_wp.numpy(),
+            "prevPotential": self.prev_potential_wp.numpy(),
+        }
+
+    def post_step_device(self, pose_hold: bool, horizon: int, synchronize: bool = False):
         wp.launch(
             post_step_kernel,
             dim=self.nworld,
@@ -431,20 +499,15 @@ class WarpScoreKernel:
                 self.elapsed_wp,
                 self.held_steps_wp,
                 self.max_held_steps_wp,
+                self.rollout_max_held_steps_wp,
+                self.rollout_max_strict_score_wp,
                 self.final_reward_wp,
                 self.truncation_wp,
             ],
             device=self.device,
         )
-        wp.synchronize()
-        return {
-            "reward": self.final_reward_wp.numpy(),
-            "truncation": self.truncation_wp.numpy(),
-            "elapsed": self.elapsed_wp.numpy(),
-            "heldSteps": self.held_steps_wp.numpy(),
-            "maxHeldSteps": self.max_held_steps_wp.numpy(),
-            "prevPotential": self.prev_potential_wp.numpy(),
-        }
+        if synchronize:
+            wp.synchronize()
 
     def to_numpy(self) -> dict:
         return {
