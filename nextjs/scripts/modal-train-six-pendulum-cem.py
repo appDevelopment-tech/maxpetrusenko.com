@@ -9,7 +9,7 @@ image = modal.Image.debian_slim(python_version="3.11").pip_install("torch==2.7.1
 
 
 @app.function(image=image, gpu="L4", timeout=7200)
-def train_policy() -> str:
+def train_policy(initial_policy_json: str = "") -> str:
     import torch
 
     started = time.time()
@@ -19,20 +19,29 @@ def train_policy() -> str:
 
     links = 6
     dt = 0.025
-    steps = 560
+    steps = 760
     knot_count = 56
     feedback_count = 2 + links * 2
     param_count = knot_count + feedback_count
     force_scale = 32.0
     population = 8192
     elite_count = 192
-    generations = 180
-    sigma = 1.5
+    generations = 160
+    sigma = 0.55 if initial_policy_json else 1.5
     mean = torch.zeros(param_count, device=device)
     best_score = torch.tensor(-1e9, device=device)
     best_params = mean.clone()
     link_weights = torch.arange(1, links + 1, device=device).float().view(1, links)
     link_index = torch.arange(links, device=device).float().view(1, links)
+
+    if initial_policy_json:
+        initial = json.loads(initial_policy_json)
+        if initial.get("modelType") == "timeKnotFeedback":
+            with torch.no_grad():
+                knots = torch.tensor(initial.get("knots", []), device=device).float()
+                feedback = torch.tensor(initial.get("feedback", []), device=device).float()
+                mean[: min(knot_count, knots.numel())] = knots[:knot_count]
+                mean[knot_count : knot_count + min(feedback_count, feedback.numel())] = feedback[:feedback_count]
 
     def make_initial(batch):
         theta = torch.pi - link_index * 0.08
@@ -92,12 +101,15 @@ def train_policy() -> str:
             score = app_score(cart_x, theta, omega)
             last = score
             late = tick / max(steps - 1, 1)
-            reward += (score / 100.0).pow(2) * (0.3 + late * 2.0)
-            reward += (score > 82).float() * (0.8 + late * 3.0)
+            hold_window = (tick > int(steps * 0.48)).float() if hasattr(tick, "float") else (1.0 if tick > int(steps * 0.48) else 0.0)
+            reward += (score / 100.0).pow(2) * (0.2 + late * 1.4)
+            reward += (score > 82).float() * (0.6 + late * 2.5 + hold_window * 5.0)
+            reward += (score > 92).float() * hold_window * 3.0
+            reward += torch.exp(-omega.abs().mean(dim=1) * 0.14) * (score > 82).float() * hold_window
             reward -= cart_x.abs() * 0.025 + (force / force_scale).square() * 0.002
             held += (score > 82).float()
-        reward += (last / 100.0).pow(4) * 220.0
-        reward += held * 0.25
+        reward += (last / 100.0).pow(4) * 180.0
+        reward += held * 0.55
         reward -= params[:, :knot_count].diff(dim=1).abs().mean(dim=1) * 0.15
         return reward, last, held / steps
 
@@ -157,6 +169,7 @@ def train_policy() -> str:
             "elapsedSeconds": round(time.time() - started, 3),
             "history": history,
             "validation": validation,
+            "warmStarted": bool(initial_policy_json),
         },
         "knots": best_params[:knot_count].detach().cpu().tolist(),
         "feedback": best_params[knot_count:].detach().cpu().tolist(),
@@ -166,4 +179,8 @@ def train_policy() -> str:
 
 @app.local_entrypoint()
 def main():
-    print(train_policy.remote())
+    from pathlib import Path
+
+    policy_path = Path("app/ailab/six-pendulum-cartpole/sixPendulumPolicy.json")
+    initial = policy_path.read_text() if policy_path.exists() else ""
+    return train_policy.remote(initial)
