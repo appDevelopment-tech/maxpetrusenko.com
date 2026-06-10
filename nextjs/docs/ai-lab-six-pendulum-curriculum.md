@@ -209,13 +209,27 @@ Checkpoint warmstart and mixed curriculum:
 - Mixed warmstart result: mixed training produced one-second-plus catch/hold inside rollouts on `6/8` updates, best `1.2s`; held-out pure down-start eval stayed `0s`.
 - Interpretation: the learned catch policy is real, and the reverse curriculum can exercise one-second holds. The missing skill is still swing-up from pure down-start. Do not unlock link two.
 
+Energy teacher scaffold for PufferPPO:
+
+- Commands:
+  - `npm run train:six-pendulum:puffer-mjwarp:energy-teacher`
+  - `npm run train:six-pendulum:puffer-mjwarp:energy-teacher-bc`
+- Artifacts:
+  - `/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/training-checkpoints/puffer-mjwarp-energy-teacher.json`
+  - `/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/training-checkpoints/puffer-mjwarp-energy-teacher-bc.json`
+- MJCF motor range is now `[-240, 240]`; existing envs still default to normalized force scale `32`, while the one-link teacher lane uses force scale `240`.
+- Teacher: Astrom/Furuta-style energy pumping with symmetry-breaking kick plus stabilizer catch. Tuned local gains: `kE=12`, `kv=0.6`, `kx=0.05`, `aMax=30`, `forcePerAcceleration=6.75`, catch angle `0.36`, catch rate `3.0`.
+- Teacher result: pure one-link down-start in MJWarp reached max strict score `99.04` and max held `1.3875s` over `10s`, so the swing-up/catch signal exists in the MJWarp environment.
+- Learned tiny-GRU BC result: teacher rollout loss fell to `0.00028`, but closed-loop held-out down-start stayed `0s`; no link-two promotion.
+- Interpretation: this is useful reward/curriculum scaffolding for the Yacine-style PufferPPO sweep, not a final learned policy. The next real reproduction step is many PufferPPO/MJWarp experiments with MinGRU-sized policies and wallclock-vs-score logging.
+
 Phase 1, one-link PufferPPO:
 
 - Environment: same MJCF constraints, gravity `9.8`, hinge friction `0`, cart track centered at `0`.
 - Observation: cart position, cart velocity, link absolute/relative angle encodings, angular velocities, previous action. Do not leak score-only terms into observation.
 - Reward: dense height/energy/whip shaping plus strict hold bonus. Strict score remains zero until at least one continuous upright second.
 - Policy: start small recurrent, then grow toward puffer MinGRU/PufferNet and the reported `~1m` parameter policy.
-- Sweep: report wallclock on x-axis and strict score on y-axis. Promote only held-out down-start checkpoints.
+- Sweep: run many PufferPPO/MJWarp experiments, report wallclock on x-axis and strict score on y-axis, and promote only held-out down-start checkpoints.
 
 Phase 2, link scaling:
 

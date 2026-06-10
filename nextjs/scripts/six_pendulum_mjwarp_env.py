@@ -9,14 +9,14 @@ import numpy as np
 import pufferlib
 
 
-ACTION_SCALE = 32.0
+DEFAULT_ACTION_SCALE = 32.0
 MAX_LINKS = 6
 OBS_DIM = 3 + MAX_LINKS * 5
 SCORE_MAX_UPRIGHT_ANGLE = 0.16
 SCORE_MAX_CHAIN_BEND = 0.14
 
 
-def score_batch(qpos, qvel, last_action, links: int) -> dict:
+def score_batch(qpos, qvel, last_action, links: int, action_scale: float = DEFAULT_ACTION_SCALE) -> dict:
     safe_links = max(1, min(MAX_LINKS, int(links)))
     relative = ((qpos[:, 1 : 1 + safe_links] + np.pi) % (2 * np.pi)) - np.pi
     absolute = np.cumsum(relative, axis=1)
@@ -54,13 +54,13 @@ def score_batch(qpos, qvel, last_action, links: int) -> dict:
     reward += np.where(near_top_fast, 0.18, 0.0)
     reward += np.where(catch_basin, 0.26, 0.0)
     reward -= np.abs(qpos[:, 0]) * 0.015
-    reward -= (last_action / ACTION_SCALE) ** 2 * 0.002
+    reward -= (last_action / action_scale) ** 2 * 0.002
     potential = mean_tip_height - 0.035 * energy_error - 0.025 * np.abs(qpos[:, 0])
 
     obs = np.zeros((qpos.shape[0], OBS_DIM), dtype=np.float32)
     obs[:, 0] = qpos[:, 0]
     obs[:, 1] = qvel[:, 0] / 5.0
-    obs[:, 2] = last_action / ACTION_SCALE
+    obs[:, 2] = last_action / action_scale
     cursor = 3
     for index in range(MAX_LINKS):
         if index < safe_links:
@@ -94,6 +94,7 @@ class SixPendulumMJWarpPufferEnv(pufferlib.PufferEnv):
         nworld: int = 4,
         horizon: int = 400,
         pose: str = "down",
+        force_scale: float = DEFAULT_ACTION_SCALE,
         seed: int | None = 426210,
         buf=None,
     ):
@@ -104,6 +105,7 @@ class SixPendulumMJWarpPufferEnv(pufferlib.PufferEnv):
         self.nworld = max(1, int(nworld))
         self.horizon = max(1, int(horizon))
         self.pose = pose
+        self.force_scale = float(force_scale)
         self.rng = np.random.default_rng(seed)
         self.num_agents = self.nworld
         self.single_observation_space = pufferlib.gymnasium.spaces.Box(low=-np.inf, high=np.inf, shape=(OBS_DIM,), dtype=np.float32)
@@ -170,7 +172,7 @@ class SixPendulumMJWarpPufferEnv(pufferlib.PufferEnv):
         self._reset_arrays(np.arange(self.nworld), self.pose)
         self.mjw.forward(self.m, self.d)
         wp.synchronize()
-        metrics = score_batch(self.d.qpos.numpy(), self.d.qvel.numpy(), self.last_action, self.links)
+        metrics = score_batch(self.d.qpos.numpy(), self.d.qvel.numpy(), self.last_action, self.links, self.force_scale)
         self.prev_potential[:] = metrics["potential"]
         self.observations[:] = metrics["observation"]
         self.rewards.fill(0.0)
@@ -182,13 +184,13 @@ class SixPendulumMJWarpPufferEnv(pufferlib.PufferEnv):
         import warp as wp
 
         action = np.asarray(actions, dtype=np.float32).reshape(self.nworld, -1)[:, 0]
-        action = np.clip(action, -1.0, 1.0) * ACTION_SCALE
+        action = np.clip(action, -1.0, 1.0) * self.force_scale
         self.d.ctrl.assign(action.reshape(self.nworld, 1).astype(np.float32))
         self.last_action = action.astype(np.float32)
         self.mjw.step(self.m, self.d)
         wp.synchronize()
         self.elapsed += 1
-        metrics = score_batch(self.d.qpos.numpy(), self.d.qvel.numpy(), self.last_action, self.links)
+        metrics = score_batch(self.d.qpos.numpy(), self.d.qvel.numpy(), self.last_action, self.links, self.force_scale)
         self.observations[:] = metrics["observation"]
         potential_delta = np.clip(metrics["potential"] - self.prev_potential, -0.18, 0.28)
         self.prev_potential[:] = metrics["potential"]
@@ -206,7 +208,7 @@ class SixPendulumMJWarpPufferEnv(pufferlib.PufferEnv):
             self._reset_arrays(np.flatnonzero(done), self.pose)
             self.mjw.forward(self.m, self.d)
             wp.synchronize()
-            reset_metrics = score_batch(self.d.qpos.numpy(), self.d.qvel.numpy(), self.last_action, self.links)
+            reset_metrics = score_batch(self.d.qpos.numpy(), self.d.qvel.numpy(), self.last_action, self.links, self.force_scale)
             self.prev_potential[np.flatnonzero(done)] = reset_metrics["potential"][np.flatnonzero(done)]
         return self.observations, self.rewards, self.terminals, self.truncations, self._infos(metrics)
 
@@ -228,9 +230,16 @@ class SixPendulumMJWarpPufferEnv(pufferlib.PufferEnv):
         return None
 
 
-def run_driver_smoke(mjcf_xml: str, links: int = 1, nworld: int = 4, steps: int = 128, pose: str = "down") -> dict:
+def run_driver_smoke(
+    mjcf_xml: str,
+    links: int = 1,
+    nworld: int = 4,
+    steps: int = 128,
+    pose: str = "down",
+    force_scale: float = DEFAULT_ACTION_SCALE,
+) -> dict:
     started = time.time()
-    env = SixPendulumMJWarpPufferEnv(mjcf_xml, links=links, nworld=nworld, horizon=steps + 1, pose=pose)
+    env = SixPendulumMJWarpPufferEnv(mjcf_xml, links=links, nworld=nworld, horizon=steps + 1, pose=pose, force_scale=force_scale)
     obs, infos = env.reset()
     max_score = 0.0
     max_held = 0.0
@@ -239,11 +248,11 @@ def run_driver_smoke(mjcf_xml: str, links: int = 1, nworld: int = 4, steps: int 
         if pose == "hold":
             qpos = env.d.qpos.numpy()
             qvel = env.d.qvel.numpy()
-            force = np.clip(-18.0 * qpos[:, 0] - 5.0 * qvel[:, 0], -ACTION_SCALE, ACTION_SCALE)
+            force = np.clip(-18.0 * qpos[:, 0] - 5.0 * qvel[:, 0], -force_scale, force_scale)
         else:
             phase = step_index / max(1, steps - 1)
             force = np.full(env.nworld, np.sin(phase * np.pi * 4.0) * 18.0, dtype=np.float32)
-        actions = np.asarray(force, dtype=np.float32).reshape(env.nworld, 1) / ACTION_SCALE
+        actions = np.asarray(force, dtype=np.float32).reshape(env.nworld, 1) / force_scale
         obs, rewards, terminals, truncations, infos = env.step(actions)
         reward_sum += rewards
         max_score = max(max_score, max(info["strictScore"] for info in infos))
@@ -259,6 +268,7 @@ def run_driver_smoke(mjcf_xml: str, links: int = 1, nworld: int = 4, steps: int 
         "elapsedSeconds": time.time() - started,
         "observationShape": list(obs.shape),
         "actionSpace": {"shape": list(env.single_action_space.shape), "low": -1.0, "high": 1.0},
+        "forceScale": force_scale,
         "rewardMean": float(np.mean(reward_sum)),
         "maxStrictScore": float(max_score),
         "maxHeldSeconds": float(max_held),
@@ -266,7 +276,7 @@ def run_driver_smoke(mjcf_xml: str, links: int = 1, nworld: int = 4, steps: int 
         "firstInfo": infos[0] if infos else {},
         "notes": [
             "This is an environment-driver smoke, not training.",
-            "Actions are normalized to [-1, 1] and scaled to cart force +/-32.",
+            f"Actions are normalized to [-1, 1] and scaled to cart force +/-{force_scale:g}.",
             "Strict score and one-second gate are preserved for lower-link promotion.",
         ],
     }
@@ -278,6 +288,7 @@ def main():
     parser.add_argument("--nworld", type=int, default=4)
     parser.add_argument("--steps", type=int, default=128)
     parser.add_argument("--pose", choices=["down", "hold", "mixed"], default="down")
+    parser.add_argument("--force-scale", type=float, default=DEFAULT_ACTION_SCALE)
     parser.add_argument(
         "--write-result",
         type=Path,
@@ -288,7 +299,7 @@ def main():
     mjcf_path = Path(f"app/ailab/six-pendulum-cartpole/mjcf/cartpole_{args.links}_link.xml")
     if not mjcf_path.exists():
         raise FileNotFoundError(f"Missing MJCF file: {mjcf_path}")
-    result = run_driver_smoke(mjcf_path.read_text(), args.links, args.nworld, args.steps, args.pose)
+    result = run_driver_smoke(mjcf_path.read_text(), args.links, args.nworld, args.steps, args.pose, args.force_scale)
     args.write_result.parent.mkdir(parents=True, exist_ok=True)
     args.write_result.write_text(json.dumps(result, indent=2) + "\n")
     print(json.dumps(result, indent=2))

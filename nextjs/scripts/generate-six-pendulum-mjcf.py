@@ -56,7 +56,7 @@ def build_model(links: int) -> ET.ElementTree:
         z_offset = length
 
     actuator = add(root, "actuator")
-    add(actuator, "motor", name="cart_force", joint="slider", gear="1", ctrllimited="true", ctrlrange="-32 32")
+    add(actuator, "motor", name="cart_force", joint="slider", gear="1", ctrllimited="true", ctrlrange="-240 240")
 
     sensor = add(root, "sensor")
     add(sensor, "jointpos", name="cart_x", joint="slider")
