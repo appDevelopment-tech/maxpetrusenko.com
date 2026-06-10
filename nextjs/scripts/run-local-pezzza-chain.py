@@ -5,8 +5,9 @@ from pathlib import Path
 
 SCRIPT_PATH = Path("scripts/modal-train-six-pendulum-pezzza-chain.py")
 OUTPUT_PATH = Path(
-    "/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/training-checkpoints/pezzza-chain-2link-local-mini.json"
+    "/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/training-checkpoints/pezzza-chain-2link-local-warm-mini.json"
 )
+INITIAL_POLICY_PATH = Path("app/ailab/six-pendulum-cartpole/sixPendulumPolicy.json")
 
 
 def load_module():
@@ -20,7 +21,7 @@ def load_module():
 
 def main():
     module = load_module()
-    result = module.train_policy.local(True, 426410, 2, 60, 256, 4)
+    result = module.train_policy.local(True, 426410, 2, 60, 256, 4, INITIAL_POLICY_PATH.read_text())
     OUTPUT_PATH.parent.mkdir(parents=True, exist_ok=True)
     OUTPUT_PATH.write_text(result)
     root = json.loads(result)

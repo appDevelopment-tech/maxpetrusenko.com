@@ -30,11 +30,12 @@ function profileLabel(training) {
   return "";
 }
 
-function maxHistoryHold(training) {
+function maxHistoryHold(training, targetLinks) {
   let maxHold = 0;
   for (const entry of training?.history || []) {
     const candidates = [entry, entry.down, entry.hold, entry.mixed].filter(Boolean);
     for (const candidate of candidates) {
+      if (targetLinks && candidate.links && candidate.links !== targetLinks) continue;
       maxHold = Math.max(
         maxHold,
         asNumber(candidate.maxHoldSeconds),
@@ -55,7 +56,7 @@ function strictScore(metrics, horizonSeconds) {
   const centerRatio = asNumber(metrics.centerRatio, 0.62);
   const smoothPenalty = asNumber(metrics.smoothPenalty);
   const railPenalty = Math.max(0, 0.62 - centerRatio) * 10;
-  return (
+  return Math.max(0,
     100 * solvedRate +
     10 * Math.min(maxHold, horizonSeconds) +
     5 * Math.min(maxHoldP10, horizonSeconds) -
@@ -92,9 +93,10 @@ function readRows() {
       const training = root.training || {};
       const validation = pickValidation(training, root);
       const horizonSeconds = asNumber(training.horizonSeconds, asNumber(root.steps) * asNumber(root.dt), 8);
+      const targetLinks = asNumber(root.links);
       const maxHold = Math.max(
         asNumber(validation.maxHoldSeconds, asNumber(validation.maxHeldSeconds)),
-        maxHistoryHold(training),
+        maxHistoryHold(training, targetLinks),
       );
       const metrics = {
         ...validation,

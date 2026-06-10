@@ -270,12 +270,18 @@ Local MPS mini-run:
 npm run train:six-pendulum:pezzza:chain2-local-mini
 ```
 
-- Artifact: `/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/training-checkpoints/pezzza-chain-2link-local-mini.json`
+- Cold artifact: `/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/training-checkpoints/pezzza-chain-2link-local-mini.json`
+- Warm-start artifact: `/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/training-checkpoints/pezzza-chain-2link-local-warm-mini.json`
 - Device: Apple MPS through local Torch.
-- Elapsed: `83.892s`.
-- Best intermediate signal: two-link hold stage reached `0.512s` mean max hold and `0.135` solved-one-second rate from near-upright.
-- Final two-link down-start validation: strict score `0`, mean max hold `0`, solved-one-second rate `0`.
-- Interpretation: local smoke proves the new two-link trainer runs without Modal, and the near-upright stabilizer has partial signal. It does not solve two-link down-start.
+- Cold elapsed: `83.892s`.
+- Warm-start elapsed: `82.444s`.
+- Warm start maps the proven one-link checkpoint into the two-link policy: interpolated time knots, first-link observation weights, softened second-link and relative-angle weights, and lower initial sigma.
+- Stage selection is local to each curriculum stage so a high one-link pretrain score cannot block the two-link checkpoint from being carried forward.
+- Cold intermediate two-link hold signal: `0.512s` mean max hold, `0.135` solved-one-second rate from near-upright.
+- Warm intermediate two-link hold signal after stage-local selection: `0.555s` mean max hold, `0.156` solved-one-second rate from near-upright.
+- Warm best normal-gravity down-start flash: `0.0104s`.
+- Warm final two-link down-start validation: strict score `0`, mean max hold `0.00241s`, solved-one-second rate `0`.
+- Interpretation: local smoke proves the new two-link trainer runs without Modal. The one-link warm start plus stage-local carry improves down-start transfer from zero to small flashes, but it still does not solve two-link down-start.
 
 Planned implementation:
 

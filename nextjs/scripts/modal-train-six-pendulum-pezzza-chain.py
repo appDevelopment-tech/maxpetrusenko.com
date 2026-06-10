@@ -17,6 +17,7 @@ def train_policy(
     control_hz: int = 240,
     population: int = 1024,
     generations: int = 24,
+    initial_policy_json: str = "",
 ) -> str:
     import torch
 
@@ -52,8 +53,70 @@ def train_policy(
     hold_angle = 0.16
     bend_angle = 0.14
 
-    mean = torch.zeros(param_count, device=device)
-    sigma = torch.tensor(1.2, device=device)
+    def build_warm_start(raw_json):
+        if not raw_json:
+            return None
+        try:
+            source = json.loads(raw_json)
+        except json.JSONDecodeError:
+            return None
+        if source.get("algorithm") != "modal-pezzza-style-evolution":
+            return None
+        if source.get("links") != 1 or not source.get("layers") or not source.get("knots"):
+            return None
+
+        warm = torch.zeros(param_count, device=device)
+        source_knots = torch.tensor(source["knots"], device=device, dtype=torch.float32)
+        knot_values = []
+        for index in range(knot_count):
+            position = index * max(0, source_knots.numel() - 1) / max(1, knot_count - 1)
+            left = int(math.floor(position))
+            right = min(left + 1, source_knots.numel() - 1)
+            mix = position - left
+            knot_values.append(source_knots[left] * (1.0 - mix) + source_knots[right] * mix)
+        warm[:knot_count] = torch.stack(knot_values)
+
+        source_w1 = torch.tensor(source["layers"][0]["weights"], device=device, dtype=torch.float32)
+        source_b1 = torch.tensor(source["layers"][0]["bias"], device=device, dtype=torch.float32)
+        source_w2 = torch.tensor(source["layers"][1]["weights"], device=device, dtype=torch.float32)
+        source_b2 = torch.tensor(source["layers"][1]["bias"], device=device, dtype=torch.float32)
+        source_hidden = min(source_b1.numel(), hidden, source_w2.shape[0])
+        dest_w1 = torch.zeros((input_count, hidden), device=device)
+        dest_b1 = torch.zeros(hidden, device=device)
+        dest_w2 = torch.zeros((hidden, output_count), device=device)
+        dest_b2 = torch.zeros(output_count, device=device)
+
+        last_action_index = input_count - 2
+        time_index = input_count - 1
+        direct_pairs = [(0, 0), (1, 1), (2, 2), (3, 3), (4, 4), (5, last_action_index), (6, time_index)]
+        for source_index, dest_index in direct_pairs:
+            dest_w1[dest_index, :source_hidden] = source_w1[source_index, :source_hidden]
+        if safe_links > 1:
+            second_link_offset = 2 + 3
+            dest_w1[second_link_offset + 0, :source_hidden] = source_w1[2, :source_hidden] * 0.35
+            dest_w1[second_link_offset + 1, :source_hidden] = source_w1[3, :source_hidden] * 0.35
+            dest_w1[second_link_offset + 2, :source_hidden] = source_w1[4, :source_hidden] * 0.35
+            relative_offset = 2 + safe_links * 3
+            dest_w1[relative_offset + 0, :source_hidden] = source_w1[2, :source_hidden] * 0.20
+            dest_w1[relative_offset + 1, :source_hidden] = source_w1[3, :source_hidden] * 0.20
+
+        dest_b1[:source_hidden] = source_b1[:source_hidden]
+        dest_w2[:source_hidden, 0] = source_w2[:source_hidden, 0]
+        dest_b2[0] = source_b2[0]
+
+        cursor = knot_count
+        warm[cursor : cursor + input_count * hidden] = dest_w1.reshape(-1)
+        cursor += input_count * hidden
+        warm[cursor : cursor + hidden] = dest_b1
+        cursor += hidden
+        warm[cursor : cursor + hidden * output_count] = dest_w2.reshape(-1)
+        cursor += hidden * output_count
+        warm[cursor : cursor + output_count] = dest_b2
+        return warm
+
+    warm_start = build_warm_start(initial_policy_json)
+    mean = warm_start.clone() if warm_start is not None else torch.zeros(param_count, device=device)
+    sigma = torch.tensor(0.55 if warm_start is not None else 1.2, device=device)
     best_params = mean.clone()
     best_selection = torch.tensor(-1e9, device=device)
 
@@ -266,6 +329,8 @@ def train_policy(
     experiment_dots = []
     randomized_horizon_ready = False
     for stage in stages:
+        stage_best_params = mean.clone()
+        stage_best_selection = torch.tensor(-1e9, device=device)
         for generation in range(stage["generations"]):
             stage_for_eval = {**stage, "randomHorizon": bool(stage.get("randomHorizon", False) and randomized_horizon_ready)}
             params = mean.view(1, -1) + torch.randn(safe_population, param_count, device=device) * sigma
@@ -274,11 +339,13 @@ def train_policy(
             elites = params[indices]
             mean = elites.mean(dim=0)
             sigma = torch.maximum(sigma * 0.965, torch.tensor(0.05, device=device))
+            if values[0] > stage_best_selection:
+                stage_best_selection = values[0]
+                stage_best_params = elites[0].clone()
             if values[0] > best_selection:
                 best_selection = values[0]
-                best_params = elites[0].clone()
             if generation % 4 == 0 or generation == stage["generations"] - 1:
-                eval_params = best_params.view(1, -1).repeat(96 if smoke else 256, 1)
+                eval_params = stage_best_params.view(1, -1).repeat(96 if smoke else 256, 1)
                 metrics = evaluate(eval_params, stage, validation=True)
                 summary = summarize(metrics, int(stage["links"]))
                 if int(stage["links"]) == safe_links and summary["whiplashSeconds"] >= 0.10 and summary["solvedOneSecondRate"] < 0.5:
@@ -291,7 +358,7 @@ def train_policy(
                     "randomizedHorizon": stage_for_eval["randomHorizon"],
                     "generation": generation,
                     "sigma": float(sigma.detach().cpu()),
-                    "bestSelection": float(best_selection.detach().cpu()),
+                    "bestSelection": float(stage_best_selection.detach().cpu()),
                     "eliteSelection": float(values[0].detach().cpu()),
                     "wallclockSeconds": round(time.time() - started, 3),
                     **summary,
@@ -319,6 +386,7 @@ def train_policy(
                         "metrics": summary,
                     }
                 )
+        best_params = stage_best_params.clone()
         mean = best_params * 0.70 + mean * 0.30
 
     final_stage = {"name": "validation-two-link-normal-down", "links": safe_links, "pose": "down", "gravity": 9.81, "cartDamping": 0.08, "hingeDamping": 0.03, "generations": 0, "randomHorizon": False}
@@ -356,6 +424,7 @@ def train_policy(
             "population": safe_population,
             "eliteCount": elite_count,
             "generations": safe_generations,
+            "warmStarted": warm_start is not None,
             "stages": stages,
             "history": history,
             "experimentDots": experiment_dots,
@@ -369,4 +438,4 @@ def train_policy(
 
 @app.local_entrypoint()
 def main(smoke: bool = True, links: int = 2, control_hz: int = 240, population: int = 1024, generations: int = 24):
-    return train_policy.remote(smoke, 426410, links, control_hz, population, generations)
+    return train_policy.remote(smoke, 426410, links, control_hz, population, generations, "")
