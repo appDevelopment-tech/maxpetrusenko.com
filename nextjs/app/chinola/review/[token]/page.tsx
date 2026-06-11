@@ -1,4 +1,4 @@
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { generateMetadata as buildMetadata, absoluteUrl } from "@/lib/seo/metadata";
 import { ChinolaReviewClient } from "@/components/chinola/ChinolaReviewClient";
 
@@ -7,6 +7,10 @@ const REVIEW_TOKENS = new Set([
   "maxim-fruit-v2",
   "maxim-flower-v1",
   "maxim-leaf-disease-v1",
+]);
+const REVIEW_TOKEN_REDIRECTS = new Map([
+  ["maxim-fruit-v1", "maxim-fruit-v2"],
+  ["maxim-wa-fruit-v1", "maxim-fruit-v2"],
 ]);
 
 type PageProps = {
@@ -28,11 +32,21 @@ function generateMetadataForToken(token: string) {
 
 export async function generateMetadata({ params }: PageProps) {
   const { token } = await params;
+  const redirectToken = REVIEW_TOKEN_REDIRECTS.get(token);
+  if (redirectToken) {
+    return generateMetadataForToken(redirectToken);
+  }
+
   return generateMetadataForToken(token);
 }
 
 export default async function ChinolaReviewPage({ params }: PageProps) {
   const { token } = await params;
+  const redirectToken = REVIEW_TOKEN_REDIRECTS.get(token);
+
+  if (redirectToken) {
+    redirect(`/chinola/review/${redirectToken}`);
+  }
 
   if (!REVIEW_TOKENS.has(token)) {
     notFound();

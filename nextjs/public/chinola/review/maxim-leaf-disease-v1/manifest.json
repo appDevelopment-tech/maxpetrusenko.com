@@ -3,7 +3,7 @@
   "title": "Maxim Drive leaf disease review",
   "eyebrow": "Chinola farm review",
   "headline": "Mark diseased leaf areas",
-  "instructions": "Draw boxes around clearly suspicious diseased leaf areas only: brown spots, yellowing, lesions, severe damage. Do not box every healthy leaf. Mark reviewed with no boxes when leaves look healthy or image is unclear.",
+  "instructions": "Draw boxes around clearly suspicious diseased leaf areas only: brown spots, yellowing, lesions, severe damage. Do not box every healthy leaf. Use No diseased leaf area + next when leaves look healthy or image is unclear.",
   "noTargetLabel": "No diseased leaf area",
   "primaryLabel": "leaf_disease",
   "boxCountLabel": "leaf disease boxes",

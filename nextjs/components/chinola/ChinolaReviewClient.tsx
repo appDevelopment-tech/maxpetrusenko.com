@@ -215,7 +215,7 @@ export function ChinolaReviewClient({ token }: { token: string }) {
           }
           setStatus(
             data.instructions ??
-              "Draw boxes around visible passion fruit. Mark unclear images as reviewed with no boxes."
+              "Draw boxes around visible passion fruit. Use No fruit visible + next when the frame has no fruit."
           );
         }
       }
@@ -330,7 +330,7 @@ export function ChinolaReviewClient({ token }: { token: string }) {
         boxes: [...review.boxes, draftBox],
       }));
       setSelectedBoxId(draftBox.id);
-      setStatus("Box added. Mark reviewed when this image looks right.");
+      setStatus("Box added. Use Reviewed + next when this image looks right.");
     }
 
     setDraftBox(null);
@@ -482,7 +482,7 @@ export function ChinolaReviewClient({ token }: { token: string }) {
           </h1>
           <p className="mt-2 max-w-[760px] text-sm leading-6 text-[var(--ink-soft)] md:text-base">
             {manifest.instructions ??
-              "Draw tight boxes around actual passion fruit. If an image is unclear or has no visible fruit, mark it reviewed with no boxes. Final submit stores a training-ready signal for Max."}
+              "Draw tight boxes around actual passion fruit. Use No fruit visible + next when an image has no visible fruit. Final submit stores a training-ready signal for Max."}
           </p>
         </div>
         <div className="grid gap-2 text-sm md:min-w-[280px]">

@@ -3,7 +3,7 @@
   "title": "Maxim Drive fruit review v2",
   "eyebrow": "Chinola farm review",
   "headline": "Review Gemini fruit candidates",
-  "instructions": "Review every candidate box. Keep only real visible passion fruit, delete boxes on leaves, grass, posts, shadows, flowers, or uncertain objects, and add any missed fruit. Mark reviewed with no boxes when no fruit is visible.",
+  "instructions": "Review every candidate box. Keep only real visible passion fruit, delete boxes on leaves, grass, posts, shadows, flowers, or uncertain objects, and add any missed fruit. Use No fruit visible + next when no fruit is visible.",
   "noTargetLabel": "No fruit visible",
   "primaryLabel": "passion_fruit",
   "boxCountLabel": "passion fruit boxes",
