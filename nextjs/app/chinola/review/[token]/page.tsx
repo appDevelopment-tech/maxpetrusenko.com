@@ -8,6 +8,9 @@ const REVIEW_TOKENS = new Set([
   "maxim-fruit-v2",
   "maxim-flower-v1",
   "maxim-leaf-disease-v1",
+  "maxim-wa-fruit-v1",
+  "maxim-wa-flower-v1",
+  "maxim-wa-leaf-disease-v1",
 ]);
 
 type PageProps = {

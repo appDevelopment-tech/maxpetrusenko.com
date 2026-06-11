@@ -247,6 +247,37 @@ export function ChinolaReviewClient({ token }: { token: string }) {
     setPendingImageId(null);
   }, [pendingImageId, visibleImages]);
 
+  useEffect(() => {
+    function handleKeyDown(event: KeyboardEvent) {
+      const target = event.target as HTMLElement | null;
+      const isTextInput =
+        target?.tagName === "INPUT" ||
+        target?.tagName === "TEXTAREA" ||
+        target?.isContentEditable;
+
+      if (isTextInput || !selectedBoxId || (event.key !== "Backspace" && event.key !== "Delete")) {
+        return;
+      }
+
+      event.preventDefault();
+      if (!activeImage) return;
+      setReviews((current) => {
+        const review = current[activeImage.id] ?? emptyReview(activeImage.id);
+        return {
+          ...current,
+          [activeImage.id]: {
+            ...review,
+            boxes: review.boxes.filter((box) => box.id !== selectedBoxId),
+          },
+        };
+      });
+      setSelectedBoxId(null);
+    }
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [activeImage, selectedBoxId]);
+
   function getPoint(event: PointerEvent<HTMLDivElement>) {
     const rect = imageFrameRef.current?.getBoundingClientRect();
     if (!rect) return null;
@@ -297,10 +328,9 @@ export function ChinolaReviewClient({ token }: { token: string }) {
       updateActiveReview((review) => ({
         ...review,
         boxes: [...review.boxes, draftBox],
-        reviewed: true,
       }));
       setSelectedBoxId(draftBox.id);
-      setStatus("Box added. Save progress when this image looks right.");
+      setStatus("Box added. Mark reviewed when this image looks right.");
     }
 
     setDraftBox(null);
@@ -353,9 +383,14 @@ export function ChinolaReviewClient({ token }: { token: string }) {
   }
 
   function clearBoxes() {
+    const currentImageId = activeImage?.id;
     updateActiveReview((review) => ({ ...review, boxes: [], reviewed: true }));
+    if (statusFilter === "open" && currentImageId) {
+      setStatusFilter("all");
+      setPendingImageId(currentImageId);
+    }
     setSelectedBoxId(null);
-    setStatus("Boxes cleared. This image is marked reviewed with no fruit boxes.");
+    setStatus(`Boxes cleared. This image is marked reviewed with ${manifest?.noTargetLabel?.toLowerCase() ?? "no target"}.`);
   }
 
   function updateSelectedLabel(label: ReviewLabel) {
@@ -583,43 +618,53 @@ export function ChinolaReviewClient({ token }: { token: string }) {
             </div>
           </div>
           <div
-            className="relative mx-auto max-w-full touch-none select-none overflow-hidden rounded-[8px] bg-black"
-            onPointerDown={handlePointerDown}
-            onPointerMove={handlePointerMove}
-            onPointerUp={handlePointerUp}
-            ref={imageFrameRef}
+            className="flex max-w-full items-center justify-center overflow-auto rounded-[8px] bg-black"
             style={{ maxHeight: imageMaxHeight }}
           >
-            <img
-              alt="Farm review frame"
-              className="block w-full object-contain"
-              draggable={false}
-              referrerPolicy="no-referrer"
-              src={activeImage.src}
-              style={{ maxHeight: imageMaxHeight }}
-            />
-            {[...activeReview.boxes, ...(draftBox ? [draftBox] : [])].map((box) => (
-              <button
-                aria-label={`${box.label} box`}
-                className={`absolute border-2 bg-transparent text-left ${
-                  box.id === selectedBoxId ? "border-[#c7f06b]" : "border-[#42c8ff]"
-                }`}
-                data-box-id={box.id}
-                key={box.id}
-                onClick={(event) => {
-                  event.stopPropagation();
-                  setSelectedBoxId(box.id);
-                  setActiveLabel(box.label);
-                }}
-                style={{
-                  left: `${box.x * 100}%`,
-                  top: `${box.y * 100}%`,
-                  width: `${box.width * 100}%`,
-                  height: `${box.height * 100}%`,
-                }}
-                type="button"
+            <div
+              className="relative inline-block max-w-full touch-none select-none"
+              onPointerDown={handlePointerDown}
+              onPointerMove={handlePointerMove}
+              onPointerUp={handlePointerUp}
+              ref={imageFrameRef}
+            >
+              <img
+                alt="Farm review frame"
+                className="block h-auto max-w-full object-contain"
+                draggable={false}
+                referrerPolicy="no-referrer"
+                src={activeImage.src}
+                style={{ maxHeight: imageMaxHeight }}
               />
-            ))}
+              {[...activeReview.boxes, ...(draftBox ? [draftBox] : [])].map((box) => (
+                <button
+                  aria-label={`${box.label} box`}
+                  className={`absolute border-2 bg-transparent text-left ${
+                    box.id === selectedBoxId ? "border-[#c7f06b]" : "border-[#42c8ff]"
+                  }`}
+                  data-box-id={box.id}
+                  key={box.id}
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    setSelectedBoxId(box.id);
+                    setActiveLabel(box.label);
+                  }}
+                  onPointerDown={(event) => {
+                    event.stopPropagation();
+                  }}
+                  onPointerUp={(event) => {
+                    event.stopPropagation();
+                  }}
+                  style={{
+                    left: `${box.x * 100}%`,
+                    top: `${box.y * 100}%`,
+                    width: `${box.width * 100}%`,
+                    height: `${box.height * 100}%`,
+                  }}
+                  type="button"
+                />
+              ))}
+            </div>
           </div>
         </div>
 
