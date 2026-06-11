@@ -115,6 +115,9 @@ export function ChinolaReviewClient({ token }: { token: string }) {
   const [reviewer, setReviewer] = useState("");
   const [status, setStatus] = useState("Loading farm images.");
   const [saving, setSaving] = useState(false);
+  const [pendingImageId, setPendingImageId] = useState<string | null>(null);
+  const [showFilmstrip, setShowFilmstrip] = useState(true);
+  const [showControls, setShowControls] = useState(true);
   const imageFrameRef = useRef<HTMLDivElement>(null);
 
   const images = useMemo(() => manifest?.images ?? [], [manifest]);
@@ -162,6 +165,15 @@ export function ChinolaReviewClient({ token }: { token: string }) {
     [folderImages, reviews]
   );
   const openCount = Math.max(0, images.length - reviewedCount);
+  const reviewGridColumns =
+    showFilmstrip && showControls
+      ? "240px minmax(0, 1fr) 280px"
+      : showFilmstrip
+        ? "240px minmax(0, 1fr)"
+        : showControls
+          ? "minmax(0, 1fr) 280px"
+          : "minmax(0, 1fr)";
+  const imageMaxHeight = showFilmstrip || showControls ? "76vh" : "84vh";
   const boxCount = useMemo(
     () =>
       Object.values(reviews).reduce(
@@ -226,6 +238,15 @@ export function ChinolaReviewClient({ token }: { token: string }) {
     setSelectedBoxId(null);
   }, [visibleImages.length]);
 
+  useEffect(() => {
+    if (!pendingImageId) return;
+    const nextIndex = visibleImages.findIndex((image) => image.id === pendingImageId);
+    if (nextIndex === -1) return;
+    setActiveIndex(nextIndex);
+    setSelectedBoxId(null);
+    setPendingImageId(null);
+  }, [pendingImageId, visibleImages]);
+
   function getPoint(event: PointerEvent<HTMLDivElement>) {
     const rect = imageFrameRef.current?.getBoundingClientRect();
     if (!rect) return null;
@@ -287,13 +308,38 @@ export function ChinolaReviewClient({ token }: { token: string }) {
   }
 
   function setCurrentReviewed(reviewed: boolean) {
+    const currentImageId = activeImage?.id;
     updateActiveReview((review) => ({ ...review, reviewed }));
+    if (reviewed && statusFilter === "open" && currentImageId) {
+      setStatusFilter("all");
+      setPendingImageId(currentImageId);
+    }
     setStatus(reviewed ? "Image marked reviewed." : "Image marked not reviewed.");
   }
 
   function markReviewedAndMoveNext() {
-    setCurrentReviewed(true);
-    setActiveIndex((current) => Math.min(visibleImages.length - 1, current + 1));
+    if (!activeImage) return;
+    const activeImageId = activeImage.id;
+    const activeGlobalIndex = images.findIndex((image) => image.id === activeImageId);
+    const orderedImages = [
+      ...images.slice(Math.max(0, activeGlobalIndex + 1)),
+      ...images.slice(0, Math.max(0, activeGlobalIndex)),
+    ];
+    const nextOpenImage = orderedImages.find((image) => !(reviews[image.id]?.reviewed ?? false));
+
+    updateActiveReview((review) => ({ ...review, reviewed: true }));
+
+    if (nextOpenImage) {
+      setActiveFolder(nextOpenImage.folder ?? nextOpenImage.album);
+      setStatusFilter("open");
+      setPendingImageId(nextOpenImage.id);
+      setStatus(`Image marked reviewed. Moved to next open frame in ${formatFolderName(nextOpenImage.folder ?? nextOpenImage.album)}.`);
+    } else {
+      setActiveFolder("all");
+      setStatusFilter("all");
+      setPendingImageId(activeImageId);
+      setStatus(`All ${images.length} images are reviewed. Submit final when ready.`);
+    }
     setSelectedBoxId(null);
   }
 
@@ -407,8 +453,11 @@ export function ChinolaReviewClient({ token }: { token: string }) {
         </div>
       </div>
 
-      <div className="grid gap-4 lg:grid-cols-[240px_1fr_280px]">
-        <aside className="max-h-[72vh] overflow-auto rounded-[8px] border border-[rgba(12,17,21,0.12)] bg-white/78 p-2">
+      <div
+        className="grid gap-4 lg:[grid-template-columns:var(--review-grid-columns)]"
+        style={{ "--review-grid-columns": reviewGridColumns } as React.CSSProperties}
+      >
+        {showFilmstrip ? <aside className="max-h-[72vh] overflow-auto rounded-[8px] border border-[rgba(12,17,21,0.12)] bg-white/78 p-2">
           <div className="px-2 py-2 text-xs font-bold uppercase tracking-[0.08em] text-[var(--muted)]">
             {visibleReviewedCount}/{folderImages.length} in folder
           </div>
@@ -507,12 +556,18 @@ export function ChinolaReviewClient({ token }: { token: string }) {
               );
             })}
           </div>
-        </aside>
+        </aside> : null}
 
         <div className="rounded-[8px] border border-[rgba(12,17,21,0.12)] bg-[#08100e] p-3 shadow-[0_18px_60px_rgba(12,17,21,0.16)]">
           <div className="mb-3 flex flex-wrap items-center justify-between gap-2 text-sm text-white">
             <span className="font-semibold">{activeImage.id}</span>
             <div className="flex flex-wrap gap-2">
+              <button className="rounded-[8px] bg-white/10 px-3 py-2" onClick={() => setShowFilmstrip((current) => !current)} type="button">
+                {showFilmstrip ? "Hide frames" : "Show frames"}
+              </button>
+              <button className="rounded-[8px] bg-white/10 px-3 py-2" onClick={() => setShowControls((current) => !current)} type="button">
+                {showControls ? "Hide controls" : "Show controls"}
+              </button>
               <button className="rounded-[8px] bg-white/10 px-3 py-2" onClick={() => move(-1)} type="button">
                 Prev
               </button>
@@ -528,18 +583,20 @@ export function ChinolaReviewClient({ token }: { token: string }) {
             </div>
           </div>
           <div
-            className="relative mx-auto max-h-[76vh] max-w-full touch-none select-none overflow-hidden rounded-[8px] bg-black"
+            className="relative mx-auto max-w-full touch-none select-none overflow-hidden rounded-[8px] bg-black"
             onPointerDown={handlePointerDown}
             onPointerMove={handlePointerMove}
             onPointerUp={handlePointerUp}
             ref={imageFrameRef}
+            style={{ maxHeight: imageMaxHeight }}
           >
             <img
               alt="Farm review frame"
-              className="block max-h-[76vh] w-full object-contain"
+              className="block w-full object-contain"
               draggable={false}
               referrerPolicy="no-referrer"
               src={activeImage.src}
+              style={{ maxHeight: imageMaxHeight }}
             />
             {[...activeReview.boxes, ...(draftBox ? [draftBox] : [])].map((box) => (
               <button
@@ -566,7 +623,7 @@ export function ChinolaReviewClient({ token }: { token: string }) {
           </div>
         </div>
 
-        <aside className="rounded-[8px] border border-[rgba(12,17,21,0.12)] bg-white/78 p-4">
+        {showControls ? <aside className="rounded-[8px] border border-[rgba(12,17,21,0.12)] bg-white/78 p-4">
           <h2 className="font-serif text-2xl font-semibold">Controls</h2>
           <div className="mt-4 grid gap-2">
             {labels.map((label) => (
@@ -634,7 +691,7 @@ export function ChinolaReviewClient({ token }: { token: string }) {
                 "Submit final writes the complete review signal. Max pulls that signal to train the next test model."}
             </span>
           </div>
-        </aside>
+        </aside> : null}
       </div>
     </section>
   );

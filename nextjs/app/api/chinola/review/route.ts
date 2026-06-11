@@ -7,6 +7,7 @@ const VALID_TOKENS = new Set([
   "farm-michael-7d4e9c",
   "kaggle-health-open-v1",
   "maxim-fruit-v1",
+  "maxim-fruit-v2",
   "maxim-flower-v1",
   "maxim-leaf-disease-v1",
 ]);
