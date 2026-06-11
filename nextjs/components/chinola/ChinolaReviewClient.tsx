@@ -337,19 +337,7 @@ export function ChinolaReviewClient({ token }: { token: string }) {
     setDrawStart(null);
   }
 
-  function setCurrentReviewed(reviewed: boolean) {
-    const currentImageId = activeImage?.id;
-    updateActiveReview((review) => ({ ...review, reviewed }));
-    if (reviewed && statusFilter === "open" && currentImageId) {
-      setStatusFilter("all");
-      setPendingImageId(currentImageId);
-    }
-    setStatus(reviewed ? "Image marked reviewed." : "Image marked not reviewed.");
-  }
-
-  function markReviewedAndMoveNext() {
-    if (!activeImage) return;
-    const activeImageId = activeImage.id;
+  function moveToNextOpenAfter(activeImageId: string) {
     const activeGlobalIndex = images.findIndex((image) => image.id === activeImageId);
     const orderedImages = [
       ...images.slice(Math.max(0, activeGlobalIndex + 1)),
@@ -373,6 +361,24 @@ export function ChinolaReviewClient({ token }: { token: string }) {
     setSelectedBoxId(null);
   }
 
+  function markReviewedAndMoveNext() {
+    if (!activeImage) return;
+    const activeImageId = activeImage.id;
+    updateActiveReview((review) => ({ ...review, reviewed: true }));
+    moveToNextOpenAfter(activeImageId);
+  }
+
+  function reopenCurrentImage() {
+    if (!activeImage) return;
+    const folder = activeImage.folder ?? activeImage.album;
+    updateActiveReview((review) => ({ ...review, reviewed: false }));
+    setActiveFolder(folder);
+    setStatusFilter("open");
+    setPendingImageId(activeImage.id);
+    setSelectedBoxId(null);
+    setStatus("Image reopened for review.");
+  }
+
   function deleteSelectedBox() {
     if (!selectedBoxId) return;
     updateActiveReview((review) => ({
@@ -383,14 +389,10 @@ export function ChinolaReviewClient({ token }: { token: string }) {
   }
 
   function clearBoxes() {
-    const currentImageId = activeImage?.id;
+    if (!activeImage) return;
+    const activeImageId = activeImage.id;
     updateActiveReview((review) => ({ ...review, boxes: [], reviewed: true }));
-    if (statusFilter === "open" && currentImageId) {
-      setStatusFilter("all");
-      setPendingImageId(currentImageId);
-    }
-    setSelectedBoxId(null);
-    setStatus(`Boxes cleared. This image is marked reviewed with ${manifest?.noTargetLabel?.toLowerCase() ?? "no target"}.`);
+    moveToNextOpenAfter(activeImageId);
   }
 
   function updateSelectedLabel(label: ReviewLabel) {
@@ -400,6 +402,19 @@ export function ChinolaReviewClient({ token }: { token: string }) {
       ...review,
       boxes: review.boxes.map((box) => (box.id === selectedBoxId ? { ...box, label } : box)),
     }));
+  }
+
+  function restartReview() {
+    if (!manifest || !window.confirm("Restart this review in this browser?")) return;
+    const seededReviews = seedReviewsFromManifest(manifest);
+    setReviews(seededReviews);
+    setActiveFolder("all");
+    setStatusFilter("open");
+    setActiveIndex(0);
+    setSelectedBoxId(null);
+    setPendingImageId(null);
+    window.localStorage.setItem(`chinola-review:${token}`, JSON.stringify(seededReviews));
+    setStatus("Review restarted in this browser.");
   }
 
   function buildPayload(complete = false) {
@@ -477,9 +492,12 @@ export function ChinolaReviewClient({ token }: { token: string }) {
             placeholder="Reviewer name"
             value={reviewer}
           />
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-3 gap-2">
             <button className="btn secondary" disabled={saving} onClick={() => saveProgress(false)} type="button">
               Save progress
+            </button>
+            <button className="btn secondary" disabled={saving} onClick={restartReview} type="button">
+              Restart review
             </button>
             <button className="btn primary" disabled={saving} onClick={() => saveProgress(true)} type="button">
               Submit final
@@ -609,12 +627,14 @@ export function ChinolaReviewClient({ token }: { token: string }) {
               <button className="rounded-[8px] bg-white/10 px-3 py-2" onClick={() => move(1)} type="button">
                 Next
               </button>
-              <button className="rounded-[8px] bg-[#c7f06b] px-3 py-2 font-bold text-[#142000]" onClick={() => setCurrentReviewed(true)} type="button">
-                Mark reviewed
-              </button>
               <button className="rounded-[8px] bg-[#c7f06b] px-3 py-2 font-bold text-[#142000]" onClick={markReviewedAndMoveNext} type="button">
                 Reviewed + next
               </button>
+              {activeReview.reviewed ? (
+                <button className="rounded-[8px] bg-white/10 px-3 py-2" onClick={reopenCurrentImage} type="button">
+                  Reopen image
+                </button>
+              ) : null}
             </div>
           </div>
           <div
@@ -691,7 +711,7 @@ export function ChinolaReviewClient({ token }: { token: string }) {
               Delete selected
             </button>
             <button className="btn secondary" onClick={clearBoxes} type="button">
-              {manifest.noTargetLabel ?? "No fruit visible"}
+              {(manifest.noTargetLabel ?? "No fruit visible") + " + next"}
             </button>
           </div>
           <div className="mt-5 max-h-[180px] overflow-auto rounded-[8px] bg-white/60 p-2">
