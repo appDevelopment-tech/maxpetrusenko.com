@@ -2,7 +2,12 @@ import { notFound } from "next/navigation";
 import { generateMetadata as buildMetadata, absoluteUrl } from "@/lib/seo/metadata";
 import { ChinolaReviewClient } from "@/components/chinola/ChinolaReviewClient";
 
-const REVIEW_TOKENS = new Set(["kaggle-health-open-v1"]);
+const REVIEW_TOKENS = new Set([
+  "kaggle-health-open-v1",
+  "maxim-fruit-v1",
+  "maxim-flower-v1",
+  "maxim-leaf-disease-v1",
+]);
 
 type PageProps = {
   params: Promise<{ token: string }>;

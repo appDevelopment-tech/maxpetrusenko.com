@@ -4,7 +4,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { PointerEvent } from "react";
 
-type ReviewLabel = "passion_fruit" | "not_fruit" | "unsure";
+type ReviewLabel = string;
 
 type FarmImage = {
   id: string;
@@ -18,6 +18,14 @@ type FarmImage = {
 type Manifest = {
   token: string;
   title: string;
+  eyebrow?: string;
+  headline?: string;
+  instructions?: string;
+  noTargetLabel?: string;
+  primaryLabel?: ReviewLabel;
+  boxCountLabel?: string;
+  submitNote?: string;
+  labels?: Array<{ value: ReviewLabel; label: string }>;
   sources: string[];
   images: FarmImage[];
 };
@@ -41,7 +49,7 @@ type ImageReview = {
 type ReviewState = Record<string, ImageReview>;
 type StatusFilter = "open" | "all" | "reviewed";
 
-const LABELS: Array<{ value: ReviewLabel; label: string }> = [
+const DEFAULT_LABELS: Array<{ value: ReviewLabel; label: string }> = [
   { value: "passion_fruit", label: "Passion fruit" },
   { value: "not_fruit", label: "Not fruit" },
   { value: "unsure", label: "Unsure" },
@@ -110,6 +118,11 @@ export function ChinolaReviewClient({ token }: { token: string }) {
   const imageFrameRef = useRef<HTMLDivElement>(null);
 
   const images = useMemo(() => manifest?.images ?? [], [manifest]);
+  const labels = useMemo(() => {
+    const configured = manifest?.labels?.length ? manifest.labels : DEFAULT_LABELS;
+    return configured;
+  }, [manifest]);
+  const primaryLabel = manifest?.primaryLabel ?? labels[0]?.value ?? "passion_fruit";
   const folders = useMemo(() => {
     const unique = new Map<string, string>();
     for (const image of images) {
@@ -152,10 +165,10 @@ export function ChinolaReviewClient({ token }: { token: string }) {
   const boxCount = useMemo(
     () =>
       Object.values(reviews).reduce(
-        (total, review) => total + review.boxes.filter((box) => box.label === "passion_fruit").length,
+        (total, review) => total + review.boxes.filter((box) => box.label === primaryLabel).length,
         0
       ),
-    [reviews]
+    [primaryLabel, reviews]
   );
 
   useEffect(() => {
@@ -167,6 +180,7 @@ export function ChinolaReviewClient({ token }: { token: string }) {
 
       if (cancelled) return;
       setManifest(data);
+      setActiveLabel(data.primaryLabel ?? data.labels?.[0]?.value ?? "passion_fruit");
 
       const localRaw = window.localStorage.getItem(`chinola-review:${token}`);
       if (localRaw) {
@@ -187,7 +201,10 @@ export function ChinolaReviewClient({ token }: { token: string }) {
           if (Object.keys(seededReviews).length) {
             setReviews(seededReviews);
           }
-          setStatus("Draw boxes around visible passion fruit. Mark unclear images as reviewed with no boxes.");
+          setStatus(
+            data.instructions ??
+              "Draw boxes around visible passion fruit. Mark unclear images as reviewed with no boxes."
+          );
         }
       }
     }
@@ -334,8 +351,8 @@ export function ChinolaReviewClient({ token }: { token: string }) {
       }
       setStatus(
         complete
-          ? `Submitted. ${data.reviewedCount} images reviewed, ${data.boxCount} passion fruit boxes ready for training.`
-          : `Saved. ${data.reviewedCount} images reviewed, ${data.boxCount} passion fruit boxes.`
+          ? `Submitted. ${data.reviewedCount} images reviewed, ${data.boxCount} ${manifest?.boxCountLabel ?? "passion fruit boxes"} ready for training.`
+          : `Saved. ${data.reviewedCount} images reviewed, ${data.boxCount} ${manifest?.boxCountLabel ?? "passion fruit boxes"}.`
       );
     } catch (error) {
       setStatus(error instanceof Error ? error.message : "Save failed.");
@@ -362,14 +379,14 @@ export function ChinolaReviewClient({ token }: { token: string }) {
       <div className="mb-4 grid gap-3 rounded-[8px] border border-[rgba(12,17,21,0.12)] bg-white/78 p-4 shadow-[0_16px_50px_rgba(12,17,21,0.08)] md:grid-cols-[1fr_auto] md:items-end">
         <div>
           <p className="text-xs font-bold uppercase tracking-[0.1em] text-[var(--accent-spirit)]">
-            Chinola training review
+            {manifest.eyebrow ?? "Chinola training review"}
           </p>
           <h1 className="mt-1 font-serif text-[clamp(1.9rem,4vw,3.25rem)] font-bold leading-[1.02] text-[var(--ink)]">
-            Mark visible passion fruit
+            {manifest.headline ?? manifest.title}
           </h1>
           <p className="mt-2 max-w-[760px] text-sm leading-6 text-[var(--ink-soft)] md:text-base">
-            Draw tight boxes around actual passion fruit. If an image is unclear or has no visible fruit,
-            mark it reviewed with no boxes. Final submit stores a training-ready signal for Max.
+            {manifest.instructions ??
+              "Draw tight boxes around actual passion fruit. If an image is unclear or has no visible fruit, mark it reviewed with no boxes. Final submit stores a training-ready signal for Max."}
           </p>
         </div>
         <div className="grid gap-2 text-sm md:min-w-[280px]">
@@ -552,7 +569,7 @@ export function ChinolaReviewClient({ token }: { token: string }) {
         <aside className="rounded-[8px] border border-[rgba(12,17,21,0.12)] bg-white/78 p-4">
           <h2 className="font-serif text-2xl font-semibold">Controls</h2>
           <div className="mt-4 grid gap-2">
-            {LABELS.map((label) => (
+            {labels.map((label) => (
               <button
                 className={`rounded-[8px] border px-3 py-2 text-left text-sm font-bold ${
                   activeLabel === label.value
@@ -572,7 +589,7 @@ export function ChinolaReviewClient({ token }: { token: string }) {
               Delete selected
             </button>
             <button className="btn secondary" onClick={clearBoxes} type="button">
-              No fruit visible
+              {manifest.noTargetLabel ?? "No fruit visible"}
             </button>
           </div>
           <div className="mt-5 max-h-[180px] overflow-auto rounded-[8px] bg-white/60 p-2">
@@ -597,7 +614,7 @@ export function ChinolaReviewClient({ token }: { token: string }) {
                     }}
                     type="button"
                   >
-                    {boxIndex + 1}. {LABELS.find((label) => label.value === box.label)?.label}
+                    {boxIndex + 1}. {labels.find((label) => label.value === box.label)?.label ?? box.label}
                   </button>
                 ))
               )}
@@ -608,12 +625,13 @@ export function ChinolaReviewClient({ token }: { token: string }) {
             <br />
             {reviewedCount}/{images.length} images reviewed
             <br />
-            {boxCount} passion fruit boxes
+            {boxCount} {manifest.boxCountLabel ?? "passion fruit boxes"}
             <br />
             {status}
             <br />
             <span className="text-xs text-[var(--muted)]">
-              Submit final writes the complete review signal. Max pulls that signal to train the next test model.
+              {manifest.submitNote ??
+                "Submit final writes the complete review signal. Max pulls that signal to train the next test model."}
             </span>
           </div>
         </aside>

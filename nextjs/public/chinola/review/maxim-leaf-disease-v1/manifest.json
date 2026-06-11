@@ -1,0 +1,269 @@
+{
+  "token": "maxim-leaf-disease-v1",
+  "title": "Maxim Drive leaf disease review",
+  "eyebrow": "Chinola farm review",
+  "headline": "Mark diseased leaf areas",
+  "instructions": "Draw boxes around clearly suspicious diseased leaf areas only: brown spots, yellowing, lesions, severe damage. Do not box every healthy leaf. Mark reviewed with no boxes when leaves look healthy or image is unclear.",
+  "noTargetLabel": "No diseased leaf area",
+  "primaryLabel": "leaf_disease",
+  "boxCountLabel": "leaf disease boxes",
+  "submitNote": "Submit final when this target-only review is complete. Max will export this token separately for training.",
+  "labels": [
+    {
+      "value": "leaf_disease",
+      "label": "Leaf disease area"
+    },
+    {
+      "value": "healthy_leaf",
+      "label": "Healthy leaf"
+    },
+    {
+      "value": "unsure",
+      "label": "Unsure"
+    }
+  ],
+  "sources": [
+    "Maxim Vorontsov Drive originals, 2026-06-08",
+    "Sampled at 0.2 fps from 2688x1512 MP4 originals"
+  ],
+  "images": [
+    {
+      "id": "drive-101002-or-101003-a_frame_00001",
+      "album": "maxim-drive-originals",
+      "folder": "drive-101002-or-101003-a",
+      "src": "/chinola/review/maxim-leaf-disease-v1/images/drive-101002-or-101003-a_frame_00001.jpg",
+      "thumb": "/chinola/review/maxim-leaf-disease-v1/thumbs/drive-101002-or-101003-a_frame_00001.jpg"
+    },
+    {
+      "id": "drive-101002-or-101003-a_frame_00002",
+      "album": "maxim-drive-originals",
+      "folder": "drive-101002-or-101003-a",
+      "src": "/chinola/review/maxim-leaf-disease-v1/images/drive-101002-or-101003-a_frame_00002.jpg",
+      "thumb": "/chinola/review/maxim-leaf-disease-v1/thumbs/drive-101002-or-101003-a_frame_00002.jpg"
+    },
+    {
+      "id": "drive-101002-or-101003-a_frame_00003",
+      "album": "maxim-drive-originals",
+      "folder": "drive-101002-or-101003-a",
+      "src": "/chinola/review/maxim-leaf-disease-v1/images/drive-101002-or-101003-a_frame_00003.jpg",
+      "thumb": "/chinola/review/maxim-leaf-disease-v1/thumbs/drive-101002-or-101003-a_frame_00003.jpg"
+    },
+    {
+      "id": "drive-101002-or-101003-a_frame_00004",
+      "album": "maxim-drive-originals",
+      "folder": "drive-101002-or-101003-a",
+      "src": "/chinola/review/maxim-leaf-disease-v1/images/drive-101002-or-101003-a_frame_00004.jpg",
+      "thumb": "/chinola/review/maxim-leaf-disease-v1/thumbs/drive-101002-or-101003-a_frame_00004.jpg"
+    },
+    {
+      "id": "drive-101002-or-101003-a_frame_00005",
+      "album": "maxim-drive-originals",
+      "folder": "drive-101002-or-101003-a",
+      "src": "/chinola/review/maxim-leaf-disease-v1/images/drive-101002-or-101003-a_frame_00005.jpg",
+      "thumb": "/chinola/review/maxim-leaf-disease-v1/thumbs/drive-101002-or-101003-a_frame_00005.jpg"
+    },
+    {
+      "id": "drive-101002-or-101003-a_frame_00006",
+      "album": "maxim-drive-originals",
+      "folder": "drive-101002-or-101003-a",
+      "src": "/chinola/review/maxim-leaf-disease-v1/images/drive-101002-or-101003-a_frame_00006.jpg",
+      "thumb": "/chinola/review/maxim-leaf-disease-v1/thumbs/drive-101002-or-101003-a_frame_00006.jpg"
+    },
+    {
+      "id": "drive-101002-or-101003-a_frame_00007",
+      "album": "maxim-drive-originals",
+      "folder": "drive-101002-or-101003-a",
+      "src": "/chinola/review/maxim-leaf-disease-v1/images/drive-101002-or-101003-a_frame_00007.jpg",
+      "thumb": "/chinola/review/maxim-leaf-disease-v1/thumbs/drive-101002-or-101003-a_frame_00007.jpg"
+    },
+    {
+      "id": "drive-101002-or-101003-b_frame_00001",
+      "album": "maxim-drive-originals",
+      "folder": "drive-101002-or-101003-b",
+      "src": "/chinola/review/maxim-leaf-disease-v1/images/drive-101002-or-101003-b_frame_00001.jpg",
+      "thumb": "/chinola/review/maxim-leaf-disease-v1/thumbs/drive-101002-or-101003-b_frame_00001.jpg"
+    },
+    {
+      "id": "drive-101002-or-101003-b_frame_00002",
+      "album": "maxim-drive-originals",
+      "folder": "drive-101002-or-101003-b",
+      "src": "/chinola/review/maxim-leaf-disease-v1/images/drive-101002-or-101003-b_frame_00002.jpg",
+      "thumb": "/chinola/review/maxim-leaf-disease-v1/thumbs/drive-101002-or-101003-b_frame_00002.jpg"
+    },
+    {
+      "id": "drive-101002-or-101003-b_frame_00003",
+      "album": "maxim-drive-originals",
+      "folder": "drive-101002-or-101003-b",
+      "src": "/chinola/review/maxim-leaf-disease-v1/images/drive-101002-or-101003-b_frame_00003.jpg",
+      "thumb": "/chinola/review/maxim-leaf-disease-v1/thumbs/drive-101002-or-101003-b_frame_00003.jpg"
+    },
+    {
+      "id": "drive-101002-or-101003-b_frame_00004",
+      "album": "maxim-drive-originals",
+      "folder": "drive-101002-or-101003-b",
+      "src": "/chinola/review/maxim-leaf-disease-v1/images/drive-101002-or-101003-b_frame_00004.jpg",
+      "thumb": "/chinola/review/maxim-leaf-disease-v1/thumbs/drive-101002-or-101003-b_frame_00004.jpg"
+    },
+    {
+      "id": "drive-101002-or-101003-b_frame_00005",
+      "album": "maxim-drive-originals",
+      "folder": "drive-101002-or-101003-b",
+      "src": "/chinola/review/maxim-leaf-disease-v1/images/drive-101002-or-101003-b_frame_00005.jpg",
+      "thumb": "/chinola/review/maxim-leaf-disease-v1/thumbs/drive-101002-or-101003-b_frame_00005.jpg"
+    },
+    {
+      "id": "drive-101002-or-101003-b_frame_00006",
+      "album": "maxim-drive-originals",
+      "folder": "drive-101002-or-101003-b",
+      "src": "/chinola/review/maxim-leaf-disease-v1/images/drive-101002-or-101003-b_frame_00006.jpg",
+      "thumb": "/chinola/review/maxim-leaf-disease-v1/thumbs/drive-101002-or-101003-b_frame_00006.jpg"
+    },
+    {
+      "id": "drive-101002-or-101003-b_frame_00007",
+      "album": "maxim-drive-originals",
+      "folder": "drive-101002-or-101003-b",
+      "src": "/chinola/review/maxim-leaf-disease-v1/images/drive-101002-or-101003-b_frame_00007.jpg",
+      "thumb": "/chinola/review/maxim-leaf-disease-v1/thumbs/drive-101002-or-101003-b_frame_00007.jpg"
+    },
+    {
+      "id": "drive-101002-or-101003-b_frame_00008",
+      "album": "maxim-drive-originals",
+      "folder": "drive-101002-or-101003-b",
+      "src": "/chinola/review/maxim-leaf-disease-v1/images/drive-101002-or-101003-b_frame_00008.jpg",
+      "thumb": "/chinola/review/maxim-leaf-disease-v1/thumbs/drive-101002-or-101003-b_frame_00008.jpg"
+    },
+    {
+      "id": "drive-101002-or-101003-b_frame_00009",
+      "album": "maxim-drive-originals",
+      "folder": "drive-101002-or-101003-b",
+      "src": "/chinola/review/maxim-leaf-disease-v1/images/drive-101002-or-101003-b_frame_00009.jpg",
+      "thumb": "/chinola/review/maxim-leaf-disease-v1/thumbs/drive-101002-or-101003-b_frame_00009.jpg"
+    },
+    {
+      "id": "drive-101002-or-101003-b_frame_00010",
+      "album": "maxim-drive-originals",
+      "folder": "drive-101002-or-101003-b",
+      "src": "/chinola/review/maxim-leaf-disease-v1/images/drive-101002-or-101003-b_frame_00010.jpg",
+      "thumb": "/chinola/review/maxim-leaf-disease-v1/thumbs/drive-101002-or-101003-b_frame_00010.jpg"
+    },
+    {
+      "id": "drive-101002-or-101003-b_frame_00011",
+      "album": "maxim-drive-originals",
+      "folder": "drive-101002-or-101003-b",
+      "src": "/chinola/review/maxim-leaf-disease-v1/images/drive-101002-or-101003-b_frame_00011.jpg",
+      "thumb": "/chinola/review/maxim-leaf-disease-v1/thumbs/drive-101002-or-101003-b_frame_00011.jpg"
+    },
+    {
+      "id": "drive-101002-or-101003-b_frame_00012",
+      "album": "maxim-drive-originals",
+      "folder": "drive-101002-or-101003-b",
+      "src": "/chinola/review/maxim-leaf-disease-v1/images/drive-101002-or-101003-b_frame_00012.jpg",
+      "thumb": "/chinola/review/maxim-leaf-disease-v1/thumbs/drive-101002-or-101003-b_frame_00012.jpg"
+    },
+    {
+      "id": "drive-101002-or-101003-b_frame_00013",
+      "album": "maxim-drive-originals",
+      "folder": "drive-101002-or-101003-b",
+      "src": "/chinola/review/maxim-leaf-disease-v1/images/drive-101002-or-101003-b_frame_00013.jpg",
+      "thumb": "/chinola/review/maxim-leaf-disease-v1/thumbs/drive-101002-or-101003-b_frame_00013.jpg"
+    },
+    {
+      "id": "drive-101029-latest_frame_00001",
+      "album": "maxim-drive-originals",
+      "folder": "drive-101029-latest",
+      "src": "/chinola/review/maxim-leaf-disease-v1/images/drive-101029-latest_frame_00001.jpg",
+      "thumb": "/chinola/review/maxim-leaf-disease-v1/thumbs/drive-101029-latest_frame_00001.jpg"
+    },
+    {
+      "id": "drive-101029-latest_frame_00002",
+      "album": "maxim-drive-originals",
+      "folder": "drive-101029-latest",
+      "src": "/chinola/review/maxim-leaf-disease-v1/images/drive-101029-latest_frame_00002.jpg",
+      "thumb": "/chinola/review/maxim-leaf-disease-v1/thumbs/drive-101029-latest_frame_00002.jpg"
+    },
+    {
+      "id": "drive-101029-latest_frame_00003",
+      "album": "maxim-drive-originals",
+      "folder": "drive-101029-latest",
+      "src": "/chinola/review/maxim-leaf-disease-v1/images/drive-101029-latest_frame_00003.jpg",
+      "thumb": "/chinola/review/maxim-leaf-disease-v1/thumbs/drive-101029-latest_frame_00003.jpg"
+    },
+    {
+      "id": "drive-101029-latest_frame_00004",
+      "album": "maxim-drive-originals",
+      "folder": "drive-101029-latest",
+      "src": "/chinola/review/maxim-leaf-disease-v1/images/drive-101029-latest_frame_00004.jpg",
+      "thumb": "/chinola/review/maxim-leaf-disease-v1/thumbs/drive-101029-latest_frame_00004.jpg"
+    },
+    {
+      "id": "drive-101029-latest_frame_00005",
+      "album": "maxim-drive-originals",
+      "folder": "drive-101029-latest",
+      "src": "/chinola/review/maxim-leaf-disease-v1/images/drive-101029-latest_frame_00005.jpg",
+      "thumb": "/chinola/review/maxim-leaf-disease-v1/thumbs/drive-101029-latest_frame_00005.jpg"
+    },
+    {
+      "id": "drive-101029-latest_frame_00006",
+      "album": "maxim-drive-originals",
+      "folder": "drive-101029-latest",
+      "src": "/chinola/review/maxim-leaf-disease-v1/images/drive-101029-latest_frame_00006.jpg",
+      "thumb": "/chinola/review/maxim-leaf-disease-v1/thumbs/drive-101029-latest_frame_00006.jpg"
+    },
+    {
+      "id": "drive-101029-latest_frame_00007",
+      "album": "maxim-drive-originals",
+      "folder": "drive-101029-latest",
+      "src": "/chinola/review/maxim-leaf-disease-v1/images/drive-101029-latest_frame_00007.jpg",
+      "thumb": "/chinola/review/maxim-leaf-disease-v1/thumbs/drive-101029-latest_frame_00007.jpg"
+    },
+    {
+      "id": "drive-101029-latest_frame_00008",
+      "album": "maxim-drive-originals",
+      "folder": "drive-101029-latest",
+      "src": "/chinola/review/maxim-leaf-disease-v1/images/drive-101029-latest_frame_00008.jpg",
+      "thumb": "/chinola/review/maxim-leaf-disease-v1/thumbs/drive-101029-latest_frame_00008.jpg"
+    },
+    {
+      "id": "drive-101029-latest_frame_00009",
+      "album": "maxim-drive-originals",
+      "folder": "drive-101029-latest",
+      "src": "/chinola/review/maxim-leaf-disease-v1/images/drive-101029-latest_frame_00009.jpg",
+      "thumb": "/chinola/review/maxim-leaf-disease-v1/thumbs/drive-101029-latest_frame_00009.jpg"
+    },
+    {
+      "id": "drive-101029-latest_frame_00010",
+      "album": "maxim-drive-originals",
+      "folder": "drive-101029-latest",
+      "src": "/chinola/review/maxim-leaf-disease-v1/images/drive-101029-latest_frame_00010.jpg",
+      "thumb": "/chinola/review/maxim-leaf-disease-v1/thumbs/drive-101029-latest_frame_00010.jpg"
+    },
+    {
+      "id": "drive-101029-latest_frame_00011",
+      "album": "maxim-drive-originals",
+      "folder": "drive-101029-latest",
+      "src": "/chinola/review/maxim-leaf-disease-v1/images/drive-101029-latest_frame_00011.jpg",
+      "thumb": "/chinola/review/maxim-leaf-disease-v1/thumbs/drive-101029-latest_frame_00011.jpg"
+    },
+    {
+      "id": "drive-101029-latest_frame_00012",
+      "album": "maxim-drive-originals",
+      "folder": "drive-101029-latest",
+      "src": "/chinola/review/maxim-leaf-disease-v1/images/drive-101029-latest_frame_00012.jpg",
+      "thumb": "/chinola/review/maxim-leaf-disease-v1/thumbs/drive-101029-latest_frame_00012.jpg"
+    },
+    {
+      "id": "drive-101029-latest_frame_00013",
+      "album": "maxim-drive-originals",
+      "folder": "drive-101029-latest",
+      "src": "/chinola/review/maxim-leaf-disease-v1/images/drive-101029-latest_frame_00013.jpg",
+      "thumb": "/chinola/review/maxim-leaf-disease-v1/thumbs/drive-101029-latest_frame_00013.jpg"
+    },
+    {
+      "id": "drive-101029-latest_frame_00014",
+      "album": "maxim-drive-originals",
+      "folder": "drive-101029-latest",
+      "src": "/chinola/review/maxim-leaf-disease-v1/images/drive-101029-latest_frame_00014.jpg",
+      "thumb": "/chinola/review/maxim-leaf-disease-v1/thumbs/drive-101029-latest_frame_00014.jpg"
+    }
+  ]
+}

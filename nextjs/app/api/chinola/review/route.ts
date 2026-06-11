@@ -3,12 +3,18 @@ import { getRequestContext } from "@cloudflare/next-on-pages";
 
 export const runtime = "edge";
 
-const VALID_TOKENS = new Set(["farm-michael-7d4e9c", "kaggle-health-open-v1"]);
+const VALID_TOKENS = new Set([
+  "farm-michael-7d4e9c",
+  "kaggle-health-open-v1",
+  "maxim-fruit-v1",
+  "maxim-flower-v1",
+  "maxim-leaf-disease-v1",
+]);
 const KEY_PREFIX = "chinola-review";
 
 type ReviewBox = {
   id: string;
-  label: "passion_fruit" | "not_fruit" | "unsure";
+  label: string;
   x: number;
   y: number;
   width: number;
