@@ -22,10 +22,12 @@ Subsecond flashes do not count. Trainer-only validation does not count if render
 ## Saved Artifacts
 
 - Lab page: `/ailab/six-pendulum-cartpole`
+- Per-link image ledger: `notes/six-pendulum-link-status-2026-06-12.md`
 - Renderer: `scripts/render_pezzza_chain_policy.py`
 - Local runner with renderer gate: `scripts/run-local-pezzza-chain.py`
 - Trainer: `scripts/modal-train-six-pendulum-pezzza-chain.py`
 - Current browser policy: `app/ailab/six-pendulum-cartpole/sixPendulumPolicy.json`
+- Per-link contact sheets: `public/ailab/six-pendulum/link-status/`
 - Four-link progress video: `public/ailab/six-pendulum/four-link-c23-reversehold-force56-center028-progress-0550s-20260612.mp4`
 - Four-link contact sheet: `public/ailab/six-pendulum/four-link-c23-reversehold-force56-center028-progress-0550s-20260612-contact-sheet.jpg`
 
