@@ -13,6 +13,8 @@ MAX_LINKS = 6
 OBS_DIM = 3 + MAX_LINKS * 5
 SCORE_MAX_UPRIGHT_ANGLE = 0.16
 SCORE_MAX_CHAIN_BEND = 0.14
+SOFT_RAIL_BOUNDARY = 2.35
+HARD_RAIL_BOUNDARY = 3.0
 
 
 def score_batch(qpos, qvel, last_action, links: int, action_scale: float = DEFAULT_ACTION_SCALE) -> dict:
@@ -46,20 +48,39 @@ def score_batch(qpos, qvel, last_action, links: int, action_scale: float = DEFAU
         ),
         0.0,
     )
-    dense_alignment = np.exp(-mean_upright_error * 1.15 - max_bend_error * 2.0 - mean_speed * 0.08)
+    alignment_phase = np.clip((mean_tip_height - 0.45) / 0.20, 0.0, 1.0)
+    alignment_weight = 0.35 + alignment_phase * 0.65
+    dense_alignment = np.exp(
+        -mean_upright_error * alignment_weight * 1.15 - max_bend_error * alignment_weight * 2.0 - mean_speed * 0.08
+    )
     whip = (np.abs(absolute[:, -1]) < 0.65) & (mean_speed > 1.0)
     low_height = 1.0 - mean_tip_height
+    abs_x = np.abs(qpos[:, 0])
+    soft_cart_fraction = abs_x / SOFT_RAIL_BOUNDARY
+    hard_cart_fraction = abs_x / HARD_RAIL_BOUNDARY
+    soft_rail_fraction = np.clip((abs_x - SOFT_RAIL_BOUNDARY) / (HARD_RAIL_BOUNDARY - SOFT_RAIL_BOUNDARY), 0.0, 1.0)
+    center_factor = np.maximum(0.0, 1.0 - soft_cart_fraction / 0.75)
+    catch_center_factor = np.maximum(0.0, 1.0 - soft_cart_fraction / 0.5)
+    toward_center = np.maximum(0.0, -(qpos[:, 0] * qvel[:, 0]) / SOFT_RAIL_BOUNDARY)
+    away_from_center = np.maximum(0.0, (qpos[:, 0] * qvel[:, 0]) / SOFT_RAIL_BOUNDARY)
+    energy_lift = np.maximum(0.0, 2.0 - energy_error)
     pump_reward = np.minimum(np.abs(qvel[:, 0]) * low_height, 3.0) * 0.08
     pump_reward += np.minimum(mean_speed * low_height, 3.0) * 0.04
-    reward = mean_tip_height * 0.3 + dense_alignment * 0.1 + (strict_score / 100.0) ** 2 * 2.5
+    pump_reward += center_factor * np.minimum(mean_speed * low_height, 3.0) * 0.08
+    pump_reward += center_factor * np.minimum(energy_lift * low_height, 2.0) * 0.18
+    pump_reward += np.minimum(toward_center * (0.3 + low_height), 2.0) * 0.22
+    strict_fraction = strict_score / 100.0
+    reward = mean_tip_height * 0.3 + dense_alignment * 0.1 + strict_fraction**2 * 3.25
     reward += pump_reward
     reward += np.where(whip, 0.2, 0.0)
-    reward += np.where(near_top_fast, 0.35, 0.0)
-    reward += np.where(catch_basin, 1.0, 0.0)
-    cart_fraction = np.abs(qpos[:, 0]) / 2.35
-    reward -= cart_fraction**2 * 0.25
-    reward -= np.maximum(cart_fraction - 0.8, 0.0) * 1.5
-    reward -= (last_action / action_scale) ** 2 * 0.015
+    reward += np.where(catch_basin, catch_center_factor * (1.15 + strict_fraction * 2.3), 0.0)
+    reward -= np.where(near_top_fast, 0.12 + np.minimum(mean_speed, 5.0) * 0.04, 0.0)
+    reward -= hard_cart_fraction**2 * 0.12
+    reward -= soft_rail_fraction**2 * 3.0
+    reward -= np.where(soft_cart_fraction > 0.35, np.minimum(away_from_center, 2.0) * 0.22, 0.0)
+    reward -= np.where(near_top_fast & (soft_rail_fraction > 0.0), soft_rail_fraction * 1.4, 0.0)
+    action_penalty = 0.004 + mean_tip_height * 0.011
+    reward -= (last_action / action_scale) ** 2 * action_penalty
     potential = mean_tip_height - 0.02 * energy_error - 0.01 * np.abs(qpos[:, 0])
 
     obs = np.zeros((qpos.shape[0], OBS_DIM), dtype=np.float32)
@@ -127,7 +148,7 @@ class SixPendulumMJWarpPufferEnv(pufferlib.PufferEnv):
             self.links,
             self.force_scale,
             device=str(getattr(self.d.qpos, "device", "cpu")),
-            terminal_boundary=2.35,
+            terminal_boundary=HARD_RAIL_BOUNDARY,
         )
         self.elapsed = np.zeros(self.nworld, dtype=np.int32)
         self.held_steps = np.zeros(self.nworld, dtype=np.int32)
@@ -272,7 +293,7 @@ def main():
     parser.add_argument("--links", type=int, default=1)
     parser.add_argument("--nworld", type=int, default=4)
     parser.add_argument("--steps", type=int, default=128)
-    parser.add_argument("--pose", choices=["down", "hold", "mixed", "down-heavy"], default="down")
+    parser.add_argument("--pose", choices=["down", "exact-down", "hold", "mixed", "down-heavy", "down-whip"], default="down")
     parser.add_argument("--force-scale", type=float, default=DEFAULT_ACTION_SCALE)
     parser.add_argument(
         "--write-result",

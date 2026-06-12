@@ -10,7 +10,11 @@ type TrainedPolicy = {
   policyVersion?: number;
   links?: number;
   inputCount?: number;
+  feedbackUsesTime?: boolean;
+  baseTopFade?: number;
   forceScale: number;
+  cartCenterSpring?: number;
+  policyClockSeconds?: number;
   controlHz?: number;
   horizonSeconds?: number;
   observation?: string[];
@@ -51,7 +55,7 @@ const policyNotes = [
   "Observation: cart x, cart velocity, previous action, and sin/cos angle features.",
   "Action: model-produced continuous cart force only.",
   "Reward: dense swing-up shaping during training, strict visible score only when every link is upright and straight.",
-  "Curriculum: solve one link from the hanging position, then two, then mixed one to six link episodes.",
+  "Curriculum: learned down-start is solved through three links; four links is the active failure boundary; five and six remain locked.",
   "Randomization: mass, force magnitude, initial angle, episode horizon.",
   "Evaluation: one second minimum consecutive strict hold, held out seeds, lower link transfer, failure map.",
 ] as const;
@@ -176,27 +180,47 @@ function runPezzzaChainPolicy(state: PendulumState, links: number): number | nul
   if (!Array.isArray(policy.knots) || !Array.isArray(policy.layers) || policy.layers.length < 2) return null;
 
   const activeLinks = Math.max(1, Math.min(links, policy.links ?? links));
+  const policyLinks = Math.max(1, Math.min(6, policy.links ?? activeLinks));
   const knotCount = policy.knotCount ?? policy.knots.length;
-  const horizonSeconds = policy.horizonSeconds ?? policy.training?.horizonSeconds ?? 7;
-  const tNorm = clamp(state.time / horizonSeconds, 0, 1);
+  const policyClockSeconds = policy.policyClockSeconds ?? policy.horizonSeconds ?? policy.training?.horizonSeconds ?? 7;
+  const tNorm = clamp(state.time / policyClockSeconds, 0, 1);
   const knotPosition = tNorm * Math.max(0, knotCount - 1);
   const left = Math.floor(knotPosition);
   const right = Math.min(left + 1, Math.max(0, knotCount - 1));
   const mix = knotPosition - left;
-  const base = (policy.knots[left] ?? 0) * (1 - mix) + (policy.knots[right] ?? policy.knots[left] ?? 0) * mix;
+  let base = (policy.knots[left] ?? 0) * (1 - mix) + (policy.knots[right] ?? policy.knots[left] ?? 0) * mix;
+  const baseTopFade = policy.baseTopFade ?? 0;
+  if (baseTopFade > 0) {
+    let uprightness = 0;
+    for (let index = 0; index < policyLinks; index += 1) {
+      uprightness += Math.cos(index < activeLinks ? (state.theta[index] ?? 0) : 0);
+    }
+    const fade = clamp((0.5 - uprightness / policyLinks) / 0.5, 0, 1);
+    base *= 1 - baseTopFade * (1 - fade);
+  }
   const inputs = [state.cartX / 2.4, state.cartV / 6];
-
-  for (let index = 0; index < activeLinks; index += 1) {
-    inputs.push(Math.sin(state.theta[index] ?? 0), Math.cos(state.theta[index] ?? 0), (state.omega[index] ?? 0) / 10);
-  }
-  for (let index = 1; index < activeLinks; index += 1) {
-    const relative = angleDelta(state.theta[index] ?? 0, state.theta[index - 1] ?? 0);
-    inputs.push(Math.sin(relative), Math.cos(relative));
-  }
-  inputs.push(state.lastAction / policy.forceScale, tNorm);
-
+  const expectedInputsWithoutFeedbackTime = 3 + policyLinks * 3 + Math.max(0, policyLinks - 1) * 2;
+  const expectedInputsWithFeedbackTime = expectedInputsWithoutFeedbackTime + 1;
   const hiddenLayer = policy.layers[0];
   const outputLayer = policy.layers[1];
+  const policyInputCount = policy.inputCount ?? hiddenLayer.weights.length;
+  const includeFeedbackTime = (policy.feedbackUsesTime ?? policyInputCount >= expectedInputsWithFeedbackTime) !== false;
+
+  for (let index = 0; index < policyLinks; index += 1) {
+    const theta = index < activeLinks ? (state.theta[index] ?? 0) : 0;
+    const omega = index < activeLinks ? (state.omega[index] ?? 0) : 0;
+    inputs.push(Math.sin(theta), Math.cos(theta), omega / 10);
+  }
+  for (let index = 1; index < policyLinks; index += 1) {
+    const theta = index < activeLinks ? (state.theta[index] ?? 0) : 0;
+    const previousTheta = index - 1 < activeLinks ? (state.theta[index - 1] ?? 0) : 0;
+    const relative = angleDelta(theta, previousTheta);
+    inputs.push(Math.sin(relative), Math.cos(relative));
+  }
+  inputs.push(state.lastAction / policy.forceScale);
+  if (includeFeedbackTime) {
+    inputs.push(tNorm);
+  }
   const hidden = hiddenLayer.bias.map((bias, outputIndex) => {
     const sum = inputs.reduce((value, input, inputIndex) => {
       return value + input * (hiddenLayer.weights[inputIndex]?.[outputIndex] ?? 0);
@@ -303,7 +327,8 @@ function stepPezzzaChainState(state: PendulumState, links: number, dt: number): 
   const gravity = 9.81;
   const cartDamping = 0.08;
   const hingeDamping = 0.03;
-  let cartForce = force - cartDamping * state.cartV - 0.35 * state.cartX;
+  const cartCenterSpring = policy.cartCenterSpring ?? 0.35;
+  let cartForce = force - cartDamping * state.cartV - cartCenterSpring * state.cartX;
   for (let index = 0; index < links; index += 1) {
     cartForce -= Math.sin(state.theta[index] ?? 0) * (index + 1) * 0.11;
   }

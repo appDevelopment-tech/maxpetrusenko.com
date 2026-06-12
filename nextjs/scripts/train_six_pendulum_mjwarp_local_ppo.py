@@ -789,7 +789,7 @@ def main():
     parser.add_argument("--eval-steps", type=int, default=480)
     parser.add_argument("--updates", type=int, default=3)
     parser.add_argument("--bc-epochs", type=int, default=600)
-    parser.add_argument("--pose", choices=["down", "hold", "mixed", "down-heavy"], default="hold")
+    parser.add_argument("--pose", choices=["down", "hold", "mixed", "down-heavy", "down-whip"], default="hold")
     parser.add_argument("--behavior-clone-stabilizer", action="store_true")
     parser.add_argument("--energy-teacher-eval", action="store_true")
     parser.add_argument("--behavior-clone-energy-teacher", action="store_true")

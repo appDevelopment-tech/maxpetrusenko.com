@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { absoluteUrl, generateMetadata } from "@/lib/seo/metadata";
 import { generateBreadcrumbSchema, generateWebPageSchema } from "@/lib/seo/structured-data";
@@ -11,7 +12,7 @@ const PAGE_DESCRIPTION =
   "Interactive six link cartpole lab with a Modal-trained browser policy checkpoint, Yacine timeline notes, control research, and a reconstruction plan.";
 const PAGE_URL = "/ailab/six-pendulum-cartpole";
 const DATE_PUBLISHED = "2026-06-09T00:00:00.000Z";
-const DATE_MODIFIED = "2026-06-10T00:00:00.000Z";
+const DATE_MODIFIED = "2026-06-12T00:00:00.000Z";
 
 const xFacts = [
   "Yacine posted the six pendulum cartpole solve at 00:50 UTC on June 9, 2026.",
@@ -61,7 +62,7 @@ const outsideQuestions = [
 const mediaFindings = [
   {
     title: "Hero solve",
-    body: "The clip starts from a bent whip posture, then score only appears during straight upright windows. That matches the strict public score gate.",
+    body: "The frame dump shows a deliberate side-load, reverse swing-up, first-try catch, then small side-to-side whip corrections. Score only appears during straight upright windows.",
   },
   {
     title: "Experiment cloud",
@@ -75,6 +76,10 @@ const mediaFindings = [
     title: "Phase traces",
     body: "The simulator-speed clip shows repeated green trajectory clusters. The useful behavior is a learned whip path followed by a hold, not random shaking.",
   },
+  {
+    title: "Frame archive",
+    body: "All 3,983 frames from the solve video are archived with an index and contact sheets, so trainer changes can be compared against the actual cart motion.",
+  },
 ] as const;
 
 const researchNotes = [
@@ -82,6 +87,11 @@ const researchNotes = [
     title: "Verified N=6 model-based solve",
     body: "m1el/inverted-pendulum publishes verified N-link dynamics plus seed-free controllability-aware trajectory optimization and TVLQR. The local reproduction passed nominal and perturbed N=6 verification.",
     href: "https://github.com/m1el/inverted-pendulum",
+  },
+  {
+    title: "N=7 public solves are model-based",
+    body: "The reviewed X seven-pendulum references use trajectory optimization, TVLQR, and LQR-style full-state feedback. They are useful motion priors, but they do not count as learned-policy RL evidence.",
+    href: "https://x.com/SquaredCubeRBX/status/2065041876588315072",
   },
   {
     title: "Exudyn N=5 RL baseline",
@@ -167,10 +177,16 @@ const experimentResults = [
     result: "Direct collocation plus TVLQR. Nominal verifier PASS at 0.364deg final error; perturbed challenge PASS 16/16.",
   },
   {
-    label: "Pezzza-style CEM",
-    run: "ap-Atp5F3zbazixndWxBHdeQp",
-    speed: "~721k SPS",
-    result: "Trainer strict score 187.95. Browser proof observed 8.043s from down; policy metadata validation reports 5.715s.",
+    label: "Learned N=3",
+    run: "ap-J1KrqgUMGFVCrH6IRIo4R5",
+    speed: "Modal L4, 642.5s",
+    result: "Exact down-start learned policy solved the strict one-second gate: 1.100s hold, solved rate 1.0, no manual force.",
+  },
+  {
+    label: "Learned N=4",
+    run: "ap-sLnka5zcPp3lhQQHUnmd8d",
+    speed: "Modal L4, 300.1s smoke",
+    result: "Progress checkpoint only: reverse-hold replay improved catch quality but strict exact down-start hold remains 0.550s with solved rate 0.0. Not counted as solved.",
   },
   {
     label: "Pezzza 480 Hz",
@@ -190,6 +206,12 @@ const experimentResults = [
     speed: "~282 to 825 SPS",
     result: "Strict score 0. TD3 can hold from near-upright, but down-start still fails.",
   },
+  {
+    label: "MJWarp TQC / VER",
+    run: "two local full bursts",
+    speed: "~1.1k SPS CPU",
+    result: "Replay captured a 0.8375s near-catch, but broad and positive-actor extraction regressed held-out down-start to 0.2725s and 0.25s. Strict gate still open.",
+  },
 ] as const;
 
 const modelProof = [
@@ -204,6 +226,16 @@ const modelProof = [
     metric: "16/16",
     body: "Same controls from random initial offsets of +/-10% pi and +/-0.5 rad/s. The official challenge reports robustness through +/-0.80 rad.",
     video: "/ailab/six-pendulum/m1el-n6-seedfree-perturbed-proof.mp4",
+  },
+] as const;
+
+const learnedPolicyProof = [
+  {
+    label: "Learned four-link progress",
+    metric: "0.550s",
+    body: "Modal c23 reverse-hold replay from exact down improved soft catch to 1.067s, catch to 0.900s, and near-strict to 0.783s, but solved rate is still 0.0 because the strict one-second hold gate is not met.",
+    video: "/ailab/six-pendulum/four-link-c23-reversehold-force56-center028-progress-0550s-20260612.mp4",
+    contactSheet: "/ailab/six-pendulum/four-link-c23-reversehold-force56-center028-progress-0550s-20260612-contact-sheet.jpg",
   },
 ] as const;
 
@@ -289,6 +321,38 @@ export default function SixPendulumCartpolePage() {
           </p>
         </section>
 
+        <section className="mt-10">
+          <p className="mb-4 text-sm font-bold uppercase tracking-[0.18em] text-[var(--muted)]">Learned policy progress</p>
+          <div className="grid gap-4 lg:grid-cols-2">
+            {learnedPolicyProof.map((item) => (
+              <div className="overflow-hidden rounded-[8px] border border-[rgba(12,17,21,0.10)] bg-white/70" key={item.label}>
+                <video
+                  className="aspect-video w-full bg-[#101820] object-contain"
+                  controls
+                  muted
+                  playsInline
+                  preload="metadata"
+                  src={item.video}
+                />
+                <div className="grid gap-4 p-5 md:grid-cols-[1fr_180px]">
+                  <div>
+                    <p className="text-xs font-bold uppercase tracking-[0.18em] text-[var(--muted)]">{item.label}</p>
+                    <h2 className="mt-2 font-serif text-3xl font-bold text-[var(--ink)]">{item.metric}</h2>
+                    <p className="mt-3 text-sm leading-relaxed text-[var(--ink-soft)]">{item.body}</p>
+                  </div>
+                  <Image
+                    alt={`${item.label} contact sheet`}
+                    className="aspect-video w-full rounded-[6px] border border-[rgba(12,17,21,0.08)] object-cover"
+                    height={540}
+                    src={item.contactSheet}
+                    width={960}
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
         <section className="mt-10 grid gap-4 md:grid-cols-2">
           <div className="rounded-[8px] border border-[rgba(12,17,21,0.08)] bg-white/70 p-6">
             <p className="text-sm font-bold uppercase tracking-[0.18em] text-[var(--muted)]">What the X thread says</p>
@@ -307,9 +371,12 @@ export default function SixPendulumCartpolePage() {
 
           <div className="rounded-[8px] border border-[rgba(12,17,21,0.08)] bg-[#101820] p-6 text-[#f7f1e6]">
             <p className="text-sm font-bold uppercase tracking-[0.18em] text-[#8cc7e8]">Implementation status</p>
-            <h2 className="mt-4 font-serif text-3xl font-bold text-[#f7f1e6]">Link one is solved in the browser proof.</h2>
+            <h2 className="mt-4 font-serif text-3xl font-bold text-[#f7f1e6]">Three links solved. Six-link RL gate is still open.</h2>
             <p className="mt-4 text-base leading-relaxed text-[#dce6e9]">
-              The canvas starts at one hanging pendulum, uses model force only, and keeps links two through six locked. The exported Pezzza-style evolutionary checkpoint now passes the local browser gate: 8.043 seconds observed from down, with policy metadata validation at 5.715 seconds. The full-gravity ablation stayed at zero, so the useful finding is curriculum plus whiplash/recovery shaping, not just more steps.
+              The canvas now loads the Modal-trained three-link chain checkpoint from June 12. It starts from exact down, uses only model-produced cart force, and passed the strict learned-policy gate at 1.100 seconds of continuous upright hold with solved rate 1.0.
+            </p>
+            <p className="mt-4 text-base leading-relaxed text-[#dce6e9]">
+              Four links reached 0.550 seconds under the browser-aligned exact-down strict score but does not count. Five and six links remain unsolved under the one-second learned-policy gate. The current finding is that reverse-hold replay improves catch quality without extending strict hold, so the next fix must rank calm strict hold above twitchy catch quality.
             </p>
           </div>
         </section>
@@ -406,10 +473,10 @@ export default function SixPendulumCartpolePage() {
         <section className="mt-10 rounded-[8px] border border-[rgba(12,17,21,0.08)] bg-white/70 p-6">
           <p className="text-sm font-bold uppercase tracking-[0.18em] text-[var(--muted)]">Next real training run</p>
           <h2 className="mt-4 max-w-[18ch] font-serif text-3xl font-bold leading-tight text-[var(--ink)] md:text-4xl">
-            Two links exist, but do not pass yet.
+            Four links are the active failure boundary.
           </h2>
           <p className="mt-4 max-w-[860px] text-base leading-relaxed text-[var(--ink-soft)]">
-            The useful artifact is not just a clip. The repo now has a strict score report where subsecond holds do not count, a Pezzza-style CEM trainer, a one-link browser proof, and two-link chain runs that still score zero on the down-start gate. The Yacine-aligned next lane is PufferPPO or close recurrent PPO on MuJoCo Warp/MuJoCo, with randomized horizon only after whip behavior appears.
+            The useful artifact is not just a clip. The repo now has a strict score report where subsecond holds do not count, a Pezzza-style CEM trainer, and a learned three-link proof that passes the down-start gate. The next Yacine-aligned lane is pushing four-link strict hold from 0.550 seconds past 1.000 seconds, then carrying the same catch-to-hold curriculum into five and six links.
           </p>
         </section>
       </article>

@@ -11,6 +11,8 @@ import warp as wp
 DEFAULT_ACTION_SCALE = 32.0
 MAX_LINKS = 6
 OBS_DIM = 3 + MAX_LINKS * 5
+SOFT_RAIL_BOUNDARY = 2.35
+HARD_RAIL_BOUNDARY = 3.0
 DEFAULT_OUTPUT = Path(
     "/Users/maxpetrusenko/Documents/Codex/2026-06-09/i-dont-see-our-work-on/outputs/training-checkpoints/puffer-mjwarp-gpu-score-kernel-smoke.json"
 )
@@ -62,8 +64,13 @@ def reset_state_kernel(
     if should_reset:
         count = reset_count[i] + 1
         reset_count[i] = count
-        qpos[i, 0] = rand_range(seed, i, 0, count, -0.045, 0.045)
-        qvel[i, 0] = rand_range(seed, i, 1, count, -0.05, 0.05)
+        exact_down = pose_mode == 5
+        if exact_down:
+            qpos[i, 0] = 0.0
+            qvel[i, 0] = 0.0
+        else:
+            qpos[i, 0] = rand_range(seed, i, 0, count, -0.045, 0.045)
+            qvel[i, 0] = rand_range(seed, i, 1, count, -0.05, 0.05)
         ctrl[i, 0] = 0.0
         last_action[i] = 0.0
         elapsed[i] = 0
@@ -81,7 +88,10 @@ def reset_state_kernel(
             if link < links:
                 angle = 0.0
                 velocity = 0.0
-                if pose_mode == 1:
+                if exact_down:
+                    angle = 3.141592653589793
+                    velocity = 0.0
+                elif pose_mode == 1:
                     angle = rand_range(seed, i, 10 + link, count, -0.035, 0.035) * float(link + 1)
                     velocity = rand_range(seed, i, 30 + link, count, -0.06, 0.06)
                 elif pose_mode == 2:
@@ -110,6 +120,9 @@ def reset_state_kernel(
                     else:
                         angle = rand_range(seed, i, 10 + link, count, -0.045, 0.045) * float(link + 1)
                         velocity = rand_range(seed, i, 30 + link, count, -0.08, 0.08)
+                elif pose_mode == 4:
+                    angle = 3.141592653589793 - float(link) * 0.05 + rand_range(seed, i, 10 + link, count, -0.1, 0.1)
+                    velocity = rand_range(seed, i, 30 + link, count, -1.65, 1.65)
                 else:
                     angle = 3.141592653589793 - float(link) * 0.05 + down_noise
                     velocity = rand_range(seed, i, 30 + link, count, -0.08, 0.08)
@@ -206,6 +219,7 @@ def score_obs_kernel(
     links: int,
     action_scale: float,
     terminal_boundary: float,
+    reward_mode: int,
     obs: wp.array(dtype=wp.float32),
     reward: wp.array(dtype=wp.float32),
     strict_score: wp.array(dtype=wp.float32),
@@ -276,24 +290,64 @@ def score_obs_kernel(
         score = 100.0 - weighted_upright_error * 12.0 - max_bend_error * 30.0 - sum_abs_velocity * 2.5 - wp.abs(x) * 8.0
         score = wp.min(wp.max(score, 0.0), 100.0)
 
-    dense_alignment = wp.exp(-mean_upright_error * 1.15 - max_bend_error * 2.0 - mean_speed * 0.08)
+    alignment_phase = wp.min(wp.max((height - 0.45) / 0.20, 0.0), 1.0)
+    alignment_weight = 0.35 + alignment_phase * 0.65
+    dense_alignment = wp.exp(
+        -mean_upright_error * alignment_weight * 1.15 - max_bend_error * alignment_weight * 2.0 - mean_speed * 0.08
+    )
     action_fraction = last_action[i] / action_scale
     low_height = 1.0 - height
+    abs_x = wp.abs(x)
+    soft_cart_fraction = abs_x / SOFT_RAIL_BOUNDARY
+    hard_cart_fraction = abs_x / terminal_boundary
+    soft_rail_span = wp.max(terminal_boundary - SOFT_RAIL_BOUNDARY, 1.0e-3)
+    soft_rail_fraction = wp.min(wp.max((abs_x - SOFT_RAIL_BOUNDARY) / soft_rail_span, 0.0), 1.0)
+    center_factor = wp.max(0.0, 1.0 - soft_cart_fraction / 0.75)
+    catch_center_factor = wp.max(0.0, 1.0 - soft_cart_fraction / 0.5)
+    toward_center = wp.max(0.0, -(x * xvel) / SOFT_RAIL_BOUNDARY)
+    away_from_center = wp.max(0.0, (x * xvel) / SOFT_RAIL_BOUNDARY)
+    energy_lift = wp.max(0.0, 2.0 - energy_gap)
     pump_reward = wp.min(wp.abs(xvel) * low_height, 3.0) * 0.08
     pump_reward += wp.min(mean_speed * low_height, 3.0) * 0.04
-    shaped_reward = height * 0.3 + dense_alignment * 0.1 + (score / 100.0) * (score / 100.0) * 2.5
+    pump_reward += center_factor * wp.min(mean_speed * low_height, 3.0) * 0.08
+    pump_reward += center_factor * wp.min(energy_lift * low_height, 2.0) * 0.18
+    pump_reward += wp.min(toward_center * (0.3 + low_height), 2.0) * 0.22
+    strict_fraction = score / 100.0
+    shaped_reward = height * 0.3 + dense_alignment * 0.1 + strict_fraction * strict_fraction * 3.25
     shaped_reward += pump_reward
     if is_whip:
         shaped_reward += 0.2
-    if is_near_top_fast:
-        shaped_reward += 0.35
     if in_catch_basin:
-        shaped_reward += 1.0
-    cart_fraction = wp.abs(x) / terminal_boundary
-    shaped_reward -= cart_fraction * cart_fraction * 0.25
-    if cart_fraction > 0.8:
-        shaped_reward -= (cart_fraction - 0.8) * 1.5
-    shaped_reward -= action_fraction * action_fraction * 0.015
+        shaped_reward += catch_center_factor * (1.15 + strict_fraction * 2.3)
+    if is_near_top_fast:
+        shaped_reward -= 0.12 + wp.min(mean_speed, 5.0) * 0.04
+    shaped_reward -= hard_cart_fraction * hard_cart_fraction * 0.12
+    shaped_reward -= soft_rail_fraction * soft_rail_fraction * 3.0
+    if soft_cart_fraction > 0.35:
+        shaped_reward -= wp.min(away_from_center, 2.0) * 0.22
+    if is_near_top_fast and soft_rail_fraction > 0.0:
+        shaped_reward -= soft_rail_fraction * 1.4
+    action_penalty = 0.004 + height * 0.011
+    shaped_reward -= action_fraction * action_fraction * action_penalty
+
+    if reward_mode == 1:
+        dense_height = height * 2.0 - 1.0
+        swing_speed = wp.min(mean_speed, 6.0)
+        centered = wp.max(0.0, 1.0 - soft_cart_fraction)
+        rail_penalty = soft_rail_fraction * soft_rail_fraction * 2.5
+        horizontal_window = 1.0 - wp.abs(wp.cos(running_angle))
+        reverse_whip = wp.max(0.0, -xvel * running_velocity) * horizontal_window
+        shaped_reward = dense_height * 0.55 + swing_speed * low_height * 0.18
+        shaped_reward += center_factor * wp.min(energy_lift, 2.0) * 0.24
+        shaped_reward += wp.min(reverse_whip, 4.0) * 0.10
+        shaped_reward += centered * dense_alignment * 0.12
+        if in_catch_basin:
+            shaped_reward += catch_center_factor * 0.85
+        if is_whip:
+            rail_penalty *= 0.35
+        shaped_reward -= wp.abs(xvel) * 0.018
+        shaped_reward -= rail_penalty
+        shaped_reward -= action_fraction * action_fraction * 0.006
 
     base = i * OBS_DIM
     obs[base] = x
@@ -336,7 +390,7 @@ def post_step_kernel(
     reward_value = shaped_reward[i]
     hit_terminal = terminal[i] > 0.5
     if hit_terminal:
-        reward_value -= 3.0
+        reward_value -= 5.0
     elif pose_hold == 0:
         delta = wp.min(wp.max(potential[i] - prev_potential[i], -0.25), 0.35)
         reward_value = reward_value + delta * 2.0
@@ -346,11 +400,11 @@ def post_step_kernel(
     if strict_score[i] > 82.0:
         current_held = held_steps[i] + 1
     if current_held > 0:
-        reward_value += wp.min(float(current_held), 400.0) * 0.001
+        reward_value += wp.min(float(current_held), 400.0) * 0.0015
     if current_held >= 40:
-        reward_value += 0.2
+        reward_value += 0.35
     if current_held >= 160:
-        reward_value += 0.4
+        reward_value += 0.8
     final_reward[i] = reward_value
     held_steps[i] = current_held
     max_held_steps[i] = wp.max(max_held_steps[i], current_held)
@@ -379,6 +433,77 @@ def record_rollout_obs_kernel(
     src = world * OBS_DIM + feature
     dst = (step_index * nworld + world) * OBS_DIM + feature
     obs_buffer[dst] = obs[src]
+
+
+@wp.kernel
+def record_rollout_state_kernel(
+    qpos: wp.array2d(dtype=wp.float32),
+    qvel: wp.array2d(dtype=wp.float32),
+    last_action: wp.array(dtype=wp.float32),
+    step_index: int,
+    nworld: int,
+    state_width: int,
+    qpos_buffer: wp.array(dtype=wp.float32),
+    qvel_buffer: wp.array(dtype=wp.float32),
+    last_action_buffer: wp.array(dtype=wp.float32),
+):
+    world, feature = wp.tid()
+    dst = (step_index * nworld + world) * state_width + feature
+    qpos_buffer[dst] = qpos[world, feature]
+    qvel_buffer[dst] = qvel[world, feature]
+    if feature == 0:
+        last_action_buffer[step_index * nworld + world] = last_action[world]
+
+
+@wp.kernel
+def reset_state_from_snapshot_kernel(
+    qpos: wp.array2d(dtype=wp.float32),
+    qvel: wp.array2d(dtype=wp.float32),
+    ctrl: wp.array2d(dtype=wp.float32),
+    terminal: wp.array(dtype=wp.float32),
+    truncation: wp.array(dtype=wp.float32),
+    last_action: wp.array(dtype=wp.float32),
+    elapsed: wp.array(dtype=wp.int32),
+    held_steps: wp.array(dtype=wp.int32),
+    max_held_steps: wp.array(dtype=wp.int32),
+    horizon_steps: wp.array(dtype=wp.int32),
+    reset_count: wp.array(dtype=wp.int32),
+    source_qpos: wp.array2d(dtype=wp.float32),
+    source_qvel: wp.array2d(dtype=wp.float32),
+    source_last_action: wp.array(dtype=wp.float32),
+    source_count: int,
+    state_width: int,
+    seed: int,
+    reset_all: int,
+    cycle_sources: int,
+    random_horizon_enabled: int,
+    min_horizon: int,
+    max_horizon: int,
+):
+    world = wp.tid()
+    should_reset = reset_all == 1 or terminal[world] > 0.5 or truncation[world] > 0.5
+    if should_reset:
+        count = reset_count[world] + 1
+        source_index = world % source_count
+        if cycle_sources == 0:
+            source_index = int(rand_unit(seed, world, 91, count) * float(source_count))
+        if source_index >= source_count:
+            source_index = source_count - 1
+        for feature in range(state_width):
+            qpos[world, feature] = source_qpos[source_index, feature]
+            qvel[world, feature] = source_qvel[source_index, feature]
+        reset_count[world] = count
+        ctrl[world, 0] = source_last_action[source_index]
+        last_action[world] = source_last_action[source_index]
+        terminal[world] = 0.0
+        truncation[world] = 0.0
+        elapsed[world] = 0
+        held_steps[world] = 0
+        max_held_steps[world] = 0
+        horizon_steps[world] = 0
+        if random_horizon_enabled == 1:
+            span = wp.max(0, max_horizon - min_horizon)
+            horizon_steps[world] = min_horizon + int(rand_unit(seed, world, 92, count) * float(span + 1))
 
 
 @wp.kernel
@@ -452,13 +577,15 @@ class WarpScoreKernel:
         links: int,
         action_scale: float = DEFAULT_ACTION_SCALE,
         device: str = "cpu",
-        terminal_boundary: float = 2.35,
+        terminal_boundary: float = HARD_RAIL_BOUNDARY,
+        reward_mode: str = "default",
     ):
         self.nworld = int(nworld)
         self.links = max(1, min(MAX_LINKS, int(links)))
         self.action_scale = float(action_scale)
         self.device = device
         self.terminal_boundary = float(terminal_boundary)
+        self.reward_mode = 1 if reward_mode == "dense-swingup" else 0
         self.last_action_wp = wp.zeros(self.nworld, dtype=wp.float32, device=self.device)
         self.obs_wp = wp.zeros(self.nworld * OBS_DIM, dtype=wp.float32, device=self.device)
         self.reward_wp = wp.zeros(self.nworld, dtype=wp.float32, device=self.device)
@@ -495,7 +622,19 @@ class WarpScoreKernel:
         min_horizon: int = 160,
         max_horizon: int = 512,
     ):
-        pose_mode = 1 if pose == "hold" else 2 if pose == "mixed" else 3 if pose == "down-heavy" else 0
+        pose_mode = (
+            1
+            if pose == "hold"
+            else 2
+            if pose == "mixed"
+            else 3
+            if pose == "down-heavy"
+            else 4
+            if pose == "down-whip"
+            else 5
+            if pose == "exact-down"
+            else 0
+        )
         wp.launch(
             reset_state_kernel,
             dim=self.nworld,
@@ -515,6 +654,56 @@ class WarpScoreKernel:
                 int(pose_mode),
                 int(seed),
                 1 if reset_all else 0,
+                1 if random_horizon else 0,
+                int(min_horizon),
+                int(max_horizon),
+            ],
+            device=self.device,
+        )
+        if synchronize:
+            wp.synchronize()
+
+    def reset_from_snapshots(
+        self,
+        qpos_wp,
+        qvel_wp,
+        ctrl_wp,
+        source_qpos_wp,
+        source_qvel_wp,
+        source_last_action_wp,
+        source_count: int,
+        state_width: int,
+        seed: int,
+        reset_all: bool = False,
+        synchronize: bool = True,
+        cycle_sources: bool = False,
+        random_horizon: bool = False,
+        min_horizon: int = 160,
+        max_horizon: int = 512,
+    ):
+        wp.launch(
+            reset_state_from_snapshot_kernel,
+            dim=self.nworld,
+            inputs=[
+                qpos_wp,
+                qvel_wp,
+                ctrl_wp,
+                self.terminal_wp,
+                self.truncation_wp,
+                self.last_action_wp,
+                self.elapsed_wp,
+                self.held_steps_wp,
+                self.max_held_steps_wp,
+                self.horizon_steps_wp,
+                self.reset_count_wp,
+                source_qpos_wp,
+                source_qvel_wp,
+                source_last_action_wp,
+                int(source_count),
+                int(state_width),
+                int(seed),
+                1 if reset_all else 0,
+                1 if cycle_sources else 0,
                 1 if random_horizon else 0,
                 int(min_horizon),
                 int(max_horizon),
@@ -585,6 +774,7 @@ class WarpScoreKernel:
                 int(self.links),
                 float(self.action_scale),
                 float(self.terminal_boundary),
+                int(self.reward_mode),
                 self.obs_wp,
                 self.reward_wp,
                 self.strict_score_wp,
@@ -718,7 +908,7 @@ def main():
     max_links = max(1, min(MAX_LINKS, args.max_links))
     for links in range(1, max_links + 1):
         expected = score_batch(qpos, qvel, last_action, links=links, action_scale=args.action_scale)
-        expected["terminal"] = (np.abs(qpos[:, 0]) > 2.35).astype(np.float32)
+        expected["terminal"] = (np.abs(qpos[:, 0]) > HARD_RAIL_BOUNDARY).astype(np.float32)
         actual = run_kernel(qpos, qvel, last_action, links, args.action_scale, args.device)
         errors = {key: max_abs_error(expected[key], actual[key]) for key in keys}
         link_errors.append(

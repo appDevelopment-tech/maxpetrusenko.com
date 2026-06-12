@@ -8,6 +8,7 @@ import numpy as np
 
 from six_pendulum_mjwarp_gpu_kernels import (
     DEFAULT_ACTION_SCALE,
+    HARD_RAIL_BOUNDARY,
     OBS_DIM,
     WarpScoreKernel,
     record_policy_scalars_kernel,
@@ -28,10 +29,95 @@ def build_deterministic_action_plan(steps: int, nworld: int, force_scale: float)
     return np.clip(force / float(force_scale), -1.0, 1.0).astype(np.float32)
 
 
-def build_torch_policy(obs_dim: int, hidden_dim: int, seed: int, recurrent: bool = False):
+def build_torch_policy(
+    obs_dim: int,
+    hidden_dim: int,
+    seed: int,
+    recurrent: bool = False,
+    policy_kind: str = "tiny-gru",
+):
     import torch
 
     torch.manual_seed(int(seed))
+    if policy_kind == "puffer-mingru":
+        class PufferMinGRUActorCritic(torch.nn.Module):
+            puffer_compatible = True
+            recurrent_family = "MinGRU-style"
+
+            def __init__(self):
+                super().__init__()
+                self.hidden_size = int(hidden_dim)
+                self.encoder = torch.nn.Sequential(
+                    torch.nn.Linear(int(obs_dim), int(hidden_dim)),
+                    torch.nn.LayerNorm(int(hidden_dim)),
+                    torch.nn.GELU(),
+                )
+                self.update_gate = torch.nn.Linear(int(hidden_dim) * 2, int(hidden_dim))
+                self.candidate = torch.nn.Linear(int(hidden_dim) * 2, int(hidden_dim))
+                self.actor = torch.nn.Sequential(
+                    torch.nn.LayerNorm(int(hidden_dim)),
+                    torch.nn.Linear(int(hidden_dim), 1),
+                )
+                self.critic = torch.nn.Sequential(
+                    torch.nn.LayerNorm(int(hidden_dim)),
+                    torch.nn.Linear(int(hidden_dim), 1),
+                )
+                self.log_std = torch.nn.Parameter(torch.tensor([-0.5], dtype=torch.float32))
+
+            def encode_observations(self, obs):
+                return self.encoder(obs)
+
+            def recurrent_step(self, encoded, hidden):
+                gate_input = torch.cat([encoded, hidden], dim=-1)
+                update = torch.sigmoid(self.update_gate(gate_input))
+                proposed = torch.tanh(self.candidate(gate_input))
+                return hidden + update * (proposed - hidden)
+
+            def decode_actions(self, hidden):
+                mean = self.actor(hidden).reshape(-1)
+                std = torch.exp(torch.clamp(self.log_std, -2.0, 0.5)).reshape(())
+                dist = torch.distributions.Normal(mean, std)
+                value = self.critic(hidden).reshape(-1).contiguous()
+                return dist, value
+
+            def forward(self, obs, hidden, deterministic: bool = True):
+                encoded = self.encode_observations(obs)
+                next_hidden = self.recurrent_step(encoded, hidden)
+                dist, value = self.decode_actions(next_hidden)
+                raw_action = dist.mean if deterministic else dist.sample()
+                action = torch.tanh(raw_action).contiguous()
+                logprob = self.squashed_logprob(dist, raw_action, action)
+                return action, logprob, value, next_hidden
+
+            def forward_eval(self, obs, state=None):
+                if state is None:
+                    hidden = torch.zeros(obs.shape[0], self.hidden_size, dtype=obs.dtype, device=obs.device)
+                else:
+                    hidden = state.get("mingru_h")
+                    if hidden is None:
+                        hidden = state.get("lstm_h")
+                    if hidden is None:
+                        hidden = torch.zeros(obs.shape[0], self.hidden_size, dtype=obs.dtype, device=obs.device)
+                action, _logprob, value, next_hidden = self.forward(obs, hidden, deterministic=True)
+                return action, value, {"mingru_h": next_hidden, "lstm_h": next_hidden}
+
+            def squashed_logprob(self, dist, raw_action, action):
+                return (dist.log_prob(raw_action) - torch.log(1.0 - action * action + 1e-6)).contiguous()
+
+            def evaluate_actions(self, obs, hidden, action):
+                encoded = self.encode_observations(obs)
+                next_hidden = self.recurrent_step(encoded, hidden)
+                dist, value = self.decode_actions(next_hidden)
+                clamped = torch.clamp(action.reshape(-1), -0.999, 0.999)
+                raw_action = 0.5 * (torch.log1p(clamped) - torch.log1p(-clamped))
+                logprob = self.squashed_logprob(dist, raw_action, clamped)
+                entropy = dist.entropy().reshape(-1).contiguous()
+                return logprob, entropy, value, next_hidden
+
+        policy = PufferMinGRUActorCritic()
+        policy.eval()
+        return policy
+
     if recurrent:
         class TinyRecurrentActorCritic(torch.nn.Module):
             def __init__(self):
@@ -224,6 +310,7 @@ def run_device_rollout(
     action_source: str = "scripted",
     action_plan: np.ndarray | None = None,
     policy_hidden_dim: int = 64,
+    policy_kind: str = "tiny-gru",
     recurrent_policy: bool = False,
     ppo_update_smoke: bool = False,
     ppo_update_epochs: int = 1,
@@ -242,7 +329,7 @@ def run_device_rollout(
         links=links,
         action_scale=force_scale,
         device=device,
-        terminal_boundary=2.35,
+        terminal_boundary=HARD_RAIL_BOUNDARY,
     )
     horizon = max(1, int(steps) + 1)
     random_horizon_enabled = bool(random_horizon)
@@ -256,12 +343,16 @@ def run_device_rollout(
     action_plan_shape = None
     torch_policy = None
     torch_policy_parameters = 0
+    torch_policy_puffer_compatible = False
     torch_interop = False
     if action_source == "torch-policy":
         import torch
 
-        torch_policy = build_torch_policy(OBS_DIM, policy_hidden_dim, seed, recurrent_policy)
+        if policy_kind == "puffer-mingru" and not recurrent_policy:
+            raise ValueError("--policy-kind puffer-mingru requires --recurrent-policy")
+        torch_policy = build_torch_policy(OBS_DIM, policy_hidden_dim, seed, recurrent_policy, policy_kind)
         torch_policy_parameters = int(sum(parameter.numel() for parameter in torch_policy.parameters()))
+        torch_policy_puffer_compatible = bool(getattr(torch_policy, "puffer_compatible", False))
         torch_interop = True
         torch_hidden = torch.zeros(int(nworld), int(policy_hidden_dim), dtype=torch.float32) if recurrent_policy else None
     if action_source == "buffer":
@@ -509,7 +600,16 @@ def run_device_rollout(
         "actionPlanCpuWritesPerStep": 0,
         "policyReadyActionInterface": bool(action_source in {"buffer", "torch-policy"}),
         "torchPolicyInterop": torch_interop,
+        "torchPolicyKind": policy_kind if action_source == "torch-policy" else "",
         "torchPolicyParameters": torch_policy_parameters,
+        "torchPolicyParameterTarget": 1_000_000 if action_source == "torch-policy" and policy_kind == "puffer-mingru" else 0,
+        "torchPolicyParameterTargetRatio": float(torch_policy_parameters / 1_000_000)
+        if action_source == "torch-policy" and policy_kind == "puffer-mingru"
+        else 0.0,
+        "torchPolicyPufferCompatible": torch_policy_puffer_compatible,
+        "torchPolicyContractMethods": ["encode_observations", "decode_actions", "forward_eval"]
+        if torch_policy_puffer_compatible
+        else [],
         "torchPolicyHiddenDim": int(policy_hidden_dim) if action_source == "torch-policy" else 0,
         "torchPolicyRecurrent": bool(recurrent_policy) if action_source == "torch-policy" else False,
         "torchPolicyHiddenShape": [int(nworld), int(policy_hidden_dim)] if action_source == "torch-policy" and recurrent_policy else [],
@@ -543,6 +643,7 @@ def run_device_rollout(
             "The torch-policy action source uses Torch/Warp tensor interop for policy output plumbing, but the policy is untrained.",
             "The recurrent torch-policy smoke records normalized actions, logprobs, and values for PPO-style rollout plumbing.",
             "The PPO update smoke performs one minibatch update from fixed recurrent buffers only.",
+            "The puffer-mingru policy kind targets the source-thread architecture shape: recurrent policy, Puffer-style encode/decode hooks, and about one million parameters.",
             "Strict score still requires continuous upright hold; subsecond flashes do not count.",
             "Randomized per-world horizons are opt-in and should stay disabled until a learned policy shows whip behavior.",
             "Rollout buffer recording is fixed-shape plumbing for a future trainer, not policy learning.",
@@ -555,7 +656,7 @@ def main():
     parser.add_argument("--links", type=int, default=1)
     parser.add_argument("--nworld", type=int, default=128)
     parser.add_argument("--steps", type=int, default=256)
-    parser.add_argument("--pose", choices=["down", "hold", "mixed", "down-heavy"], default="down")
+    parser.add_argument("--pose", choices=["down", "exact-down", "hold", "mixed", "down-heavy", "down-whip"], default="down")
     parser.add_argument("--force-scale", type=float, default=DEFAULT_ACTION_SCALE)
     parser.add_argument("--seed", type=int, default=426210)
     parser.add_argument("--random-horizon", action="store_true")
@@ -564,6 +665,7 @@ def main():
     parser.add_argument("--record-buffer", action="store_true")
     parser.add_argument("--action-source", choices=["scripted", "buffer", "torch-policy"], default="scripted")
     parser.add_argument("--policy-hidden-dim", type=int, default=64)
+    parser.add_argument("--policy-kind", choices=["tiny-gru", "puffer-mingru"], default="tiny-gru")
     parser.add_argument("--recurrent-policy", action="store_true")
     parser.add_argument("--ppo-update-smoke", action="store_true")
     parser.add_argument("--ppo-update-epochs", type=int, default=1)
@@ -587,6 +689,7 @@ def main():
         record_buffer=args.record_buffer,
         action_source=args.action_source,
         policy_hidden_dim=args.policy_hidden_dim,
+        policy_kind=args.policy_kind,
         recurrent_policy=args.recurrent_policy,
         ppo_update_smoke=args.ppo_update_smoke,
         ppo_update_epochs=args.ppo_update_epochs,
