@@ -28,6 +28,13 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(url, 301);
   }
 
+  const mediumPreviewMatch = nextUrl.pathname.match(/^\/medium\/([^/]+)\/?$/);
+  if (mediumPreviewMatch) {
+    const url = nextUrl.clone();
+    url.pathname = `/medium/${mediumPreviewMatch[1]}/index.html`;
+    return NextResponse.redirect(url, 307);
+  }
+
   return updateSupabaseSession(request);
 }
 
