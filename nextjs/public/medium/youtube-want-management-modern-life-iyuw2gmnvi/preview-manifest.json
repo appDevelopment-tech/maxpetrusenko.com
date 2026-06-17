@@ -1,0 +1,22 @@
+{
+  "slug": "youtube-want-management-modern-life-iyuw2gmnvi",
+  "title": "Modern Life Has No Empty Moments. That’s Why It Feels Empty.",
+  "publicUrl": "https://www.maxpetrusenko.com/medium/youtube-want-management-modern-life-iyuw2gmnvi/",
+  "outputPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/youtube-want-management-modern-life-iyuw2gmnvi/index.html",
+  "sourceUrl": "https://www.youtube.com/watch?v=IY-UW2gmnVI",
+  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-want-management-modern-life-iyuw2gmnvi/article-v3.md",
+  "exportedAt": "2026-06-12T22:43:28.894Z",
+  "status": "passed_adversarial_gate",
+  "copiedImages": [
+    {
+      "src": "assets/youtube-frames/selected/01-arthur-brooks-matrix-thesis.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-want-management-modern-life-iyuw2gmnvi/assets/youtube-frames/selected/01-arthur-brooks-matrix-thesis.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/youtube-want-management-modern-life-iyuw2gmnvi/assets/youtube-frames/selected/01-arthur-brooks-matrix-thesis.jpg"
+    }
+  ],
+  "ratings": {
+    "gemini": 9.55,
+    "gpt": 9.6,
+    "consensus": 9.55
+  }
+}
