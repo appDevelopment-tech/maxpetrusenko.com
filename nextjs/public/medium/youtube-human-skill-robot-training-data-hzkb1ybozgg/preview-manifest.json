@@ -1,0 +1,37 @@
+{
+  "slug": "youtube-human-skill-robot-training-data-hzkb1ybozgg",
+  "title": "Human Skill Is Becoming Robot Training Data",
+  "publicUrl": "https://www.maxpetrusenko.com/medium/youtube-human-skill-robot-training-data-hzkb1ybozgg/",
+  "outputPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/youtube-human-skill-robot-training-data-hzkb1ybozgg/index.html",
+  "sourceUrl": "https://www.youtube.com/watch?v=HzKb1YBOzgg",
+  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-human-skill-robot-training-data-hzkb1ybozgg/article-v3.md",
+  "exportedAt": "2026-06-27T22:28:46.803Z",
+  "status": "passed_adversarial_gate",
+  "copiedImages": [
+    {
+      "src": "assets/youtube-frames/selected/body-interface.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-human-skill-robot-training-data-hzkb1ybozgg/assets/youtube-frames/selected/body-interface.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-human-skill-robot-training-data-hzkb1ybozgg-1782599326800/assets/youtube-frames/selected/body-interface.jpg"
+    },
+    {
+      "src": "assets/youtube-frames/selected/robot-hand.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-human-skill-robot-training-data-hzkb1ybozgg/assets/youtube-frames/selected/robot-hand.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-human-skill-robot-training-data-hzkb1ybozgg-1782599326800/assets/youtube-frames/selected/robot-hand.jpg"
+    },
+    {
+      "src": "assets/youtube-frames/selected/craft-hands.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-human-skill-robot-training-data-hzkb1ybozgg/assets/youtube-frames/selected/craft-hands.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-human-skill-robot-training-data-hzkb1ybozgg-1782599326800/assets/youtube-frames/selected/craft-hands.jpg"
+    },
+    {
+      "src": "assets/youtube-frames/selected/transparent-solar.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-human-skill-robot-training-data-hzkb1ybozgg/assets/youtube-frames/selected/transparent-solar.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-human-skill-robot-training-data-hzkb1ybozgg-1782599326800/assets/youtube-frames/selected/transparent-solar.jpg"
+    }
+  ],
+  "ratings": {
+    "gemini": 9.6,
+    "gpt": 9.6,
+    "consensus": 9.6
+  }
+}
