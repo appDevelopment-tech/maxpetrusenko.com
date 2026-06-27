@@ -1,0 +1,32 @@
+{
+  "slug": "youtube-body-not-die-on-schedule-tsxvuyi0eia",
+  "title": "The Body Dies on Its Own Schedule",
+  "publicUrl": "https://www.maxpetrusenko.com/medium/youtube-body-not-die-on-schedule-tsxvuyi0eia/",
+  "outputPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/youtube-body-not-die-on-schedule-tsxvuyi0eia/index.html",
+  "sourceUrl": "https://www.youtube.com/watch?v=tsxvuYi0eiA",
+  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-body-not-die-on-schedule-tsxvuyi0eia/article-v2.md",
+  "exportedAt": "2026-06-27T16:31:02.713Z",
+  "status": "passed_adversarial_gate",
+  "copiedImages": [
+    {
+      "src": "assets/youtube-frames/selected/01-benchen-monastery.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-body-not-die-on-schedule-tsxvuyi0eia/assets/youtube-frames/selected/01-benchen-monastery.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-body-not-die-on-schedule-tsxvuyi0eia-1782577862709/assets/youtube-frames/selected/01-benchen-monastery.jpg"
+    },
+    {
+      "src": "assets/youtube-frames/selected/02-himalayan-pass.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-body-not-die-on-schedule-tsxvuyi0eia/assets/youtube-frames/selected/02-himalayan-pass.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-body-not-die-on-schedule-tsxvuyi0eia-1782577862709/assets/youtube-frames/selected/02-himalayan-pass.jpg"
+    },
+    {
+      "src": "assets/youtube-frames/selected/03-mountain-moon.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-body-not-die-on-schedule-tsxvuyi0eia/assets/youtube-frames/selected/03-mountain-moon.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-body-not-die-on-schedule-tsxvuyi0eia-1782577862709/assets/youtube-frames/selected/03-mountain-moon.jpg"
+    }
+  ],
+  "ratings": {
+    "gemini": 9.5,
+    "gpt": null,
+    "consensus": 9.5
+  }
+}
