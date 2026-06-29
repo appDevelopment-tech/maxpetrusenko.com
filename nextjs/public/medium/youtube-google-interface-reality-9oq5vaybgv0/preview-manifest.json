@@ -1,0 +1,48 @@
+{
+  "slug": "youtube-google-interface-reality-9oq5vaybgv0",
+  "title": "Google's AI Endgame Is the Interface",
+  "publicUrl": "https://www.maxpetrusenko.com/medium/youtube-google-interface-reality-9oq5vaybgv0/",
+  "outputPath": "/Users/maxpetrusenko/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/youtube-google-interface-reality-9oq5vaybgv0/index.html",
+  "sourceUrl": "https://www.youtube.com/watch?v=9OQ5vaYbGV0",
+  "articlePath": "/Users/maxpetrusenko/Desktop/Projects/medium-automation/articles/youtube-google-interface-reality-9oq5vaybgv0/article-v3.md",
+  "exportedAt": "2026-06-29T17:25:57.784Z",
+  "status": "published",
+  "publishMode": "published",
+  "copiedImages": [
+    {
+      "src": "assets/youtube-frames/selected/tpu-infrastructure.jpg",
+      "sourcePath": "/Users/maxpetrusenko/Desktop/Projects/medium-automation/articles/youtube-google-interface-reality-9oq5vaybgv0/assets/youtube-frames/selected/tpu-infrastructure.jpg",
+      "destinationPath": "/Users/maxpetrusenko/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-google-interface-reality-9oq5vaybgv0-1782753957769/assets/youtube-frames/selected/tpu-infrastructure.jpg"
+    },
+    {
+      "src": "assets/youtube-frames/selected/ask-gemini-overlay.jpg",
+      "sourcePath": "/Users/maxpetrusenko/Desktop/Projects/medium-automation/articles/youtube-google-interface-reality-9oq5vaybgv0/assets/youtube-frames/selected/ask-gemini-overlay.jpg",
+      "destinationPath": "/Users/maxpetrusenko/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-google-interface-reality-9oq5vaybgv0-1782753957769/assets/youtube-frames/selected/ask-gemini-overlay.jpg"
+    },
+    {
+      "src": "assets/youtube-frames/selected/antigravity-development-barrier.jpg",
+      "sourcePath": "/Users/maxpetrusenko/Desktop/Projects/medium-automation/articles/youtube-google-interface-reality-9oq5vaybgv0/assets/youtube-frames/selected/antigravity-development-barrier.jpg",
+      "destinationPath": "/Users/maxpetrusenko/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-google-interface-reality-9oq5vaybgv0-1782753957769/assets/youtube-frames/selected/antigravity-development-barrier.jpg"
+    },
+    {
+      "src": "assets/youtube-frames/selected/doom-live-demo.jpg",
+      "sourcePath": "/Users/maxpetrusenko/Desktop/Projects/medium-automation/articles/youtube-google-interface-reality-9oq5vaybgv0/assets/youtube-frames/selected/doom-live-demo.jpg",
+      "destinationPath": "/Users/maxpetrusenko/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-google-interface-reality-9oq5vaybgv0-1782753957769/assets/youtube-frames/selected/doom-live-demo.jpg"
+    },
+    {
+      "src": "assets/youtube-frames/selected/gemini-benchmark-table.jpg",
+      "sourcePath": "/Users/maxpetrusenko/Desktop/Projects/medium-automation/articles/youtube-google-interface-reality-9oq5vaybgv0/assets/youtube-frames/selected/gemini-benchmark-table.jpg",
+      "destinationPath": "/Users/maxpetrusenko/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-google-interface-reality-9oq5vaybgv0-1782753957769/assets/youtube-frames/selected/gemini-benchmark-table.jpg"
+    },
+    {
+      "src": "assets/youtube-frames/selected/html-canvas-demo.jpg",
+      "sourcePath": "/Users/maxpetrusenko/Desktop/Projects/medium-automation/articles/youtube-google-interface-reality-9oq5vaybgv0/assets/youtube-frames/selected/html-canvas-demo.jpg",
+      "destinationPath": "/Users/maxpetrusenko/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-google-interface-reality-9oq5vaybgv0-1782753957769/assets/youtube-frames/selected/html-canvas-demo.jpg"
+    }
+  ],
+  "ratings": {
+    "gemini": 8,
+    "gpt": null,
+    "consensus": 8
+  }
+}

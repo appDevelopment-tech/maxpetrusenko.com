@@ -1,0 +1,46 @@
+name: Weekly Medium Publish
+
+on:
+  schedule:
+    - cron: "30 13 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: weekly-medium-publish
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+    defaults:
+      run:
+        working-directory: nextjs
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: nextjs/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Verify predeploy
+        run: npm run verify:predeploy
+
+      - name: Build Pages output
+        run: npm run pages:build
+
+      - name: Deploy to Cloudflare Pages
+        run: npx wrangler pages deploy .vercel/output/static --project-name=maxpetrusenko-nextjs --branch=main

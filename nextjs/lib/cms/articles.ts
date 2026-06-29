@@ -16,6 +16,20 @@ function filterByPublishDate(articles: Article[]): Article[] {
 
 const LOCAL_ARTICLES_RAW: Article[] = [
   {
+    id: "local-medium-google-interface-reality",
+    slug: "youtube-google-interface-reality-9oq5vaybgv0",
+    title: "Google's AI Endgame Is the Interface",
+    excerpt:
+      "I/O 2026 made Gemini look like Google's attempt to own intent across Search, Android, Chrome, code, video, and every screen where a user decides what to do next.",
+    content:
+      "<p>This article is published on maxpetrusenko.com. Open the canonical route to read the full version.</p>",
+    image: "/medium/youtube-google-interface-reality-9oq5vaybgv0/assets/youtube-frames/selected/tpu-infrastructure.jpg",
+    link: "/medium/youtube-google-interface-reality-9oq5vaybgv0/",
+    publishedAt: "2026-06-29T16:13:38.130Z",
+    tags: ["Tech", "Google", "AI Interfaces", "Agents"],
+    author: { name: "Max Petrusenko" },
+  },
+  {
     id: "local-spirit-first-session",
     slug: "what-to-expect-first-tantra-session",
     title: "What to Expect in Your First Tantra Massage Session",
