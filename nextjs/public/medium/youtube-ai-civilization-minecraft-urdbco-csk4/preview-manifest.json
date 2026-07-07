@@ -1,0 +1,42 @@
+{
+  "slug": "youtube-ai-civilization-minecraft-urdbco-csk4",
+  "title": "Scientists Left 1,000 AIs Alone in Minecraft. The Scary Part Was the Tax Code",
+  "publicUrl": "https://www.maxpetrusenko.com/medium/youtube-ai-civilization-minecraft-urdbco-csk4/",
+  "outputPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/youtube-ai-civilization-minecraft-urdbco-csk4/index.html",
+  "sourceUrl": "https://www.youtube.com/watch?v=uRDBco-cSK4",
+  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-ai-civilization-minecraft-urdbco-csk4/article-v2.md",
+  "exportedAt": "2026-07-07T04:29:13.918Z",
+  "status": "passed_adversarial_gate",
+  "copiedImages": [
+    {
+      "src": "assets/youtube-frames/selected/01-tax-guard-minecraft-village.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-ai-civilization-minecraft-urdbco-csk4/assets/youtube-frames/selected/01-tax-guard-minecraft-village.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-ai-civilization-minecraft-urdbco-csk4-1783398553909/assets/youtube-frames/selected/01-tax-guard-minecraft-village.jpg"
+    },
+    {
+      "src": "assets/youtube-frames/selected/03-smallville-agent-map.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-ai-civilization-minecraft-urdbco-csk4/assets/youtube-frames/selected/03-smallville-agent-map.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-ai-civilization-minecraft-urdbco-csk4-1783398553909/assets/youtube-frames/selected/03-smallville-agent-map.jpg"
+    },
+    {
+      "src": "assets/youtube-frames/selected/04-agent-social-scene.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-ai-civilization-minecraft-urdbco-csk4/assets/youtube-frames/selected/04-agent-social-scene.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-ai-civilization-minecraft-urdbco-csk4-1783398553909/assets/youtube-frames/selected/04-agent-social-scene.jpg"
+    },
+    {
+      "src": "assets/youtube-frames/selected/05-agent-network-brain.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-ai-civilization-minecraft-urdbco-csk4/assets/youtube-frames/selected/05-agent-network-brain.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-ai-civilization-minecraft-urdbco-csk4-1783398553909/assets/youtube-frames/selected/05-agent-network-brain.jpg"
+    },
+    {
+      "src": "assets/youtube-frames/selected/06-chatdev-paper.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-ai-civilization-minecraft-urdbco-csk4/assets/youtube-frames/selected/06-chatdev-paper.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-ai-civilization-minecraft-urdbco-csk4-1783398553909/assets/youtube-frames/selected/06-chatdev-paper.jpg"
+    }
+  ],
+  "ratings": {
+    "gemini": 9.5,
+    "gpt": null,
+    "consensus": 9.5
+  }
+}
