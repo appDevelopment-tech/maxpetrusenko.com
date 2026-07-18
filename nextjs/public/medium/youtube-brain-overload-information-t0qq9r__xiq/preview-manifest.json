@@ -1,0 +1,52 @@
+{
+  "slug": "youtube-brain-overload-information-t0qq9r__xiq",
+  "title": "Your Brain Wasn’t Built to Hold This Much Information",
+  "publicUrl": "https://www.maxpetrusenko.com/medium/youtube-brain-overload-information-t0qq9r__xiq/",
+  "outputPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/youtube-brain-overload-information-t0qq9r__xiq/index.html",
+  "sourceUrl": "https://www.youtube.com/watch?v=t0qq9R__XiQ",
+  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-brain-overload-information-t0qq9r__xiq/article-v4.md",
+  "exportedAt": "2026-07-18T22:31:42.729Z",
+  "status": "passed_adversarial_gate",
+  "copiedImages": [
+    {
+      "src": "assets/youtube-frames/selected/01-add-on-house.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-brain-overload-information-t0qq9r__xiq/assets/youtube-frames/selected/01-add-on-house.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-brain-overload-information-t0qq9r__xiq-1784413902716/assets/youtube-frames/selected/01-add-on-house.jpg"
+    },
+    {
+      "src": "assets/youtube-frames/selected/02-oscar-envelope-error.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-brain-overload-information-t0qq9r__xiq/assets/youtube-frames/selected/02-oscar-envelope-error.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-brain-overload-information-t0qq9r__xiq-1784413902716/assets/youtube-frames/selected/02-oscar-envelope-error.jpg"
+    },
+    {
+      "src": "assets/youtube-frames/selected/03-pleasure-circuits.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-brain-overload-information-t0qq9r__xiq/assets/youtube-frames/selected/03-pleasure-circuits.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-brain-overload-information-t0qq9r__xiq-1784413902716/assets/youtube-frames/selected/03-pleasure-circuits.jpg"
+    },
+    {
+      "src": "assets/youtube-frames/selected/05-slot-machine-scroll.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-brain-overload-information-t0qq9r__xiq/assets/youtube-frames/selected/05-slot-machine-scroll.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-brain-overload-information-t0qq9r__xiq-1784413902716/assets/youtube-frames/selected/05-slot-machine-scroll.jpg"
+    },
+    {
+      "src": "assets/youtube-frames/selected/04-phone-anxiety-study.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-brain-overload-information-t0qq9r__xiq/assets/youtube-frames/selected/04-phone-anxiety-study.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-brain-overload-information-t0qq9r__xiq-1784413902716/assets/youtube-frames/selected/04-phone-anxiety-study.jpg"
+    },
+    {
+      "src": "assets/youtube-frames/selected/06-reclaim-attention-checklist.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-brain-overload-information-t0qq9r__xiq/assets/youtube-frames/selected/06-reclaim-attention-checklist.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-brain-overload-information-t0qq9r__xiq-1784413902716/assets/youtube-frames/selected/06-reclaim-attention-checklist.jpg"
+    },
+    {
+      "src": "assets/youtube-frames/selected/07-niksen.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-brain-overload-information-t0qq9r__xiq/assets/youtube-frames/selected/07-niksen.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-brain-overload-information-t0qq9r__xiq-1784413902716/assets/youtube-frames/selected/07-niksen.jpg"
+    }
+  ],
+  "ratings": {
+    "gemini": 9.58,
+    "gpt": null,
+    "consensus": 9.58
+  }
+}
