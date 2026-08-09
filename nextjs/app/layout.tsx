@@ -4,6 +4,7 @@ import { Footer } from "@/components/layout/Footer";
 import { RouteHero } from "@/components/layout/RouteHero";
 import { GoogleAnalytics } from "@/components/analytics/GoogleAnalytics";
 import { CloudflareAnalytics } from "@/components/analytics/CloudflareAnalytics";
+import { EngagementTracker } from "@/components/analytics/EngagementTracker";
 import { ConciergeWidget } from "@/components/concierge/ConciergeWidget";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { generatePersonSchema } from "@/lib/seo/structured-data";
@@ -44,6 +45,7 @@ export default function RootLayout({
       <body className={dmSans.className} suppressHydrationWarning>
         <GoogleAnalytics />
         <CloudflareAnalytics />
+        <EngagementTracker />
         <JsonLd type="Person" data={generatePersonSchema()} />
         <Header />
         <RouteHero />
