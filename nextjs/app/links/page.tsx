@@ -173,7 +173,7 @@ export default function LinksPage() {
               rel="noopener"
             >
               <div className="tile-meta">
-                <span className="tile-title">Presence Atelier</span>
+                <span className="tile-title">Spirituality &amp; Mindfold</span>
                 <span className="tile-desc">Practice notes, FAQs, and inquiry context.</span>
               </div>
               <span className="badge spirit">Visit</span>

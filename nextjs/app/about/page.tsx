@@ -37,7 +37,7 @@ export default function AboutPage() {
         <div className="hero-portrait-bg">
           <Image
             src="/images/DSC04778.jpg"
-            alt="Warm light at the Presence Atelier entrance"
+            alt="Warm light at the practice entrance"
             fill
             priority
             sizes="100vw"
@@ -97,7 +97,7 @@ export default function AboutPage() {
               </p>
             </div>
             <div className="dark-zone-card card-stripe-spirit">
-              <h3 className="font-serif text-[1.2rem] font-semibold text-[#e2e8f0]">Atelier</h3>
+              <h3 className="font-serif text-[1.2rem] font-semibold text-[#e2e8f0]">Spirituality &amp; Mindfold</h3>
               <p className="mt-3 text-sm leading-relaxed text-[var(--dark-zone-muted)]">
                 Private tantra and somatic sessions with boundaries first and
                 nervous-system pacing.

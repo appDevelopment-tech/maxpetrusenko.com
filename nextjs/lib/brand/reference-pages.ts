@@ -35,7 +35,7 @@ export const brandedReferencePages: BrandedReferencePageConfig[] = [
     slug: "who-is-max-petrusenko",
     title: "Who Is Max Petrusenko?",
     description:
-      "Authoritative profile page for Max Petrusenko: AI automation consultant, software builder, somatic practitioner, and founder of Mindfold and Presence Atelier.",
+      "Authoritative profile page for Max Petrusenko: AI automation consultant, software builder, somatic practitioner, and founder of Mindfold and Spirituality & Mindfold.",
     keywords: [
       "who is max petrusenko",
       "max petrusenko bio",
@@ -50,7 +50,7 @@ export const brandedReferencePages: BrandedReferencePageConfig[] = [
       "This is the shortest clean answer for branded search. One person, multiple lanes: AI automation and software on one side, somatic practice and Mindfold on the other.",
     question: "Who is Max Petrusenko?",
     answer:
-      "Max Petrusenko is an AI automation consultant, software builder, and somatic practitioner. He publishes tech systems work under his own name, offers private somatic sessions through Presence Atelier, and runs Mindfold blindfolded presence events. Presence Atelier private sessions are paused for now.",
+      "Max Petrusenko is an AI automation consultant, software builder, and somatic practitioner. He publishes tech systems work under his own name, offers private somatic sessions through Spirituality & Mindfold, and runs Mindfold blindfolded presence events. Private somatic sessions are paused for now.",
     displayAnswer:
       "AI automation consultant, software builder, somatic practitioner, and Mindfold founder. Tech, somatic, and event work all live here under one name.",
     quickFacts: [

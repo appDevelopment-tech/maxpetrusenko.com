@@ -172,7 +172,7 @@ export default function SpiritualityPage() {
                 target="_blank"
                 rel="noopener"
               >
-                View Atelier Site
+                View practice site
               </a>
             </div>
           </div>
@@ -348,7 +348,7 @@ export default function SpiritualityPage() {
               <div className="hero-actions" style={{ marginTop: 12 }}>
                 <a
                   className="btn secondary"
-                  href="mailto:hello@maxpetrusenko.com?subject=Atelier%20inquiry"
+                  href="mailto:hello@maxpetrusenko.com?subject=Spirituality%20inquiry"
                   target="_blank"
                   rel="noopener"
                 >

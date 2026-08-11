@@ -98,7 +98,7 @@ export default function SpiritualityArticlesIndexPage() {
 
             <header style={{ maxWidth: 860, margin: "0 auto" }}>
               <div className="eyebrow">
-                <span className="dot"></span> Presence Atelier Writing
+                <span className="dot"></span> Spirituality &amp; Mindfold Writing
               </div>
               <h1 className="text-display" style={{ marginBottom: 12 }}>
                 Spirituality Articles

@@ -106,7 +106,7 @@ export function generatePersonSchema() {
     description: "Creator of tech automation resources, tantra education, and somatic practice offerings.",
     worksFor: {
       "@type": "Organization",
-      name: "Presence Atelier",
+      name: "Spirituality & Mindfold",
       url: siteConfig.externalLinks.atelier,
     },
     sameAs: [
@@ -176,7 +176,7 @@ export function generateSpiritualityPersonSchema() {
     description: "Certified tantra massage and somatic energy work practitioner trained at Tantra Nectar University (Satyarti). Specializing in nervous system regulation, breathwork, shadow work, and trauma-informed bodywork.",
     worksFor: {
       "@type": "Organization",
-      name: "Presence Atelier",
+      name: "Spirituality & Mindfold",
       url: siteConfig.externalLinks.atelier,
     },
     sameAs: [
@@ -212,7 +212,7 @@ export function generateOrganizationSchema() {
   return {
     "@context": "https://schema.org",
     "@type": "Organization",
-    name: "Presence Atelier",
+    name: "Spirituality & Mindfold",
     url: siteConfig.externalLinks.atelier,
     logo: {
       "@type": "ImageObject",
@@ -285,7 +285,7 @@ export function generateProfessionalServiceSchema() {
   return {
     "@context": "https://schema.org",
     "@type": "WebPage",
-    "name": "Presence Atelier - Tantra-Informed Somatic Practice",
+    "name": "Spirituality & Mindfold - Tantra-Informed Somatic Practice",
     "description": "Tantra-informed somatic practice, energy work, breath, boundaries, and embodied awareness by request. Grounded in Tantra Nectar / Satyarti training and nervous-system regulation.",
     "url": `${siteConfig.url}/spirituality`,
     "logo": {
@@ -1043,7 +1043,7 @@ export function generateReviewSchema(testimonial: {
     "@type": "Review",
     itemReviewed: {
       "@type": "Service",
-      name: serviceName === "tantra" ? "Presence Atelier - Tantra-Informed Somatic Practice" :
+      name: serviceName === "tantra" ? "Spirituality & Mindfold - Tantra-Informed Somatic Practice" :
            serviceName === "tech" ? "AI & Automation Services" :
            "Mindfold Sanctuary - Sensory Journeys",
       url: serviceName === "tantra" ? `${siteConfig.url}/spirituality` :
@@ -1192,7 +1192,7 @@ export function generateProfessionalServiceSchemaByRequest() {
     "@context": "https://schema.org",
     "@type": "WebPage",
     "name": "Tantra-Informed Somatic Practice - Max Petrusenko",
-    "alternateName": "Presence Atelier",
+    "alternateName": "Spirituality & Mindfold",
     "description": "Tantra-informed somatic education and nervous-system practice by request. Boundaries-led sessions focused on breath, presence, regulation, and embodied awareness.",
     "url": `${siteConfig.url}/spirituality`,
     "telephone": "+1-786-543-6688",
@@ -1256,7 +1256,7 @@ export function generateProfessionalServiceSchemaMiami() {
   return {
     "@context": "https://schema.org",
     "@type": "WebPage",
-    "name": "Presence Atelier - Somatic Education & Energy Work",
+    "name": "Spirituality & Mindfold - Somatic Education & Energy Work",
     "alternateName": "Max Petrusenko - Somatic Education",
     "description": "Somatic education and energy work teaching in Fort Lauderdale, Florida. Educational workshops, student teachings, and nervous system training serving South Florida from West Palm Beach to the Keys.",
     "url": `${siteConfig.url}/spirituality`,
@@ -1288,14 +1288,14 @@ export function generateEnhancedPersonSchema() {
     "@context": "https://schema.org",
     "@type": "Person",
     name: siteConfig.author.name,
-    alternateName: ["Max", "Presence Atelier", "Max Petrusenko Tech"],
+    alternateName: ["Max", "Spirituality & Mindfold", "Max Petrusenko Tech"],
     url: siteConfig.url,
     image: PERSON_IMAGE_URL,
     description: "Tech builder and somatic practitioner specializing in AI automation, tantra-informed somatic practice, and nervous-system work by request.",
     jobTitle: "Tech Builder & Somatic Practitioner",
     worksFor: {
       "@type": "Organization",
-      name: "Presence Atelier",
+      name: "Spirituality & Mindfold",
       url: siteConfig.externalLinks.atelier,
     },
     birthPlace: {
@@ -1316,7 +1316,7 @@ export function generateEnhancedPersonSchema() {
       "https://www.crunchbase.com/organization/maxpetrusenko",
       "https://angel.co/u/maxpetrusenko",
       "https://www.gumroad.com/maxpetrusenko",
-      // Presence Atelier
+      // Spirituality & Mindfold
       siteConfig.externalLinks.atelier,
       "https://www.instagram.com/blindfold.miami",
       "https://patreon.com/mindfold",

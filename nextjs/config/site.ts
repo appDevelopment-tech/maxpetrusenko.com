@@ -34,7 +34,7 @@ export const siteConfig: SiteConfig = {
     patreon: "https://patreon.com/maxpetrusenko",
   },
   googleBusinessProfile: {
-    // Google Business Profile for Presence Atelier Miami
+    // Google Business Profile for Spirituality & Mindfold Miami
     // Category: Somatic Education & Energy Work Teaching
     // Address: 917 SW 18th Ct, Fort Lauderdale, FL 33315
     // Verify at: https://business.google.com/

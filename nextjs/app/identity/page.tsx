@@ -99,11 +99,11 @@ export default function IdentityPage() {
             <div className="dark-zone-card card-stripe-spirit">
               <h3 className="font-serif text-[1.25rem] font-semibold text-[#e2e8f0]">Secondary practice</h3>
               <p className="mt-3 text-sm leading-relaxed text-[var(--dark-zone-muted)]">
-                Private somatic bodywork through Presence Atelier, with sessions
+                Private somatic bodywork through Spirituality &amp; Mindfold, with sessions
                 shaped by request and boundaries-first framing.
               </p>
               <div className="mt-4 flex flex-wrap gap-2">
-                <span className="rounded-md bg-[rgba(14,97,93,0.15)] px-2.5 py-1 text-[0.7rem] font-semibold text-[#2eb8a8]">Atelier</span>
+                <span className="rounded-md bg-[rgba(14,97,93,0.15)] px-2.5 py-1 text-[0.7rem] font-semibold text-[#2eb8a8]">Spirituality</span>
                 <span className="rounded-md bg-[rgba(14,97,93,0.15)] px-2.5 py-1 text-[0.7rem] font-semibold text-[#2eb8a8]">By request</span>
                 <span className="rounded-md bg-[rgba(14,97,93,0.15)] px-2.5 py-1 text-[0.7rem] font-semibold text-[#2eb8a8]">Private sessions</span>
               </div>
@@ -139,7 +139,7 @@ export default function IdentityPage() {
             <div className="card">
               <h3>Somatic Bodywork (Secondary Practice)</h3>
               <p>
-                Through Presence Atelier, I offer private sessions focused on
+                Through Spirituality &amp; Mindfold, I offer private sessions focused on
                 regulation, boundaries, and somatic energy work. This is a
                 separate practice from my technical work.
               </p>
@@ -156,7 +156,7 @@ export default function IdentityPage() {
                 rel="noopener"
                 style={{ marginTop: 12 }}
               >
-                Visit Presence Atelier
+                Visit practice site
               </a>
             </div>
           </div>
@@ -188,7 +188,7 @@ export default function IdentityPage() {
               <ul className="list">
                 <li>My tech work and somatic work are separate practices</li>
                 <li>
-                  Presence Atelier is my private practice, not a studio or center
+                  My practice is private, not a studio or center
                 </li>
                 <li>I work remotely with clients globally</li>
                 <li>Private somatic sessions are by appointment only</li>

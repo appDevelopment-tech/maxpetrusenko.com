@@ -65,7 +65,7 @@ export const testimonials: Testimonial[] = [
   },
 
   // SPIRITUALITY TESTIMONIALS
-  // From Presence Atelier (atelier.maxpetrusenko.com)
+  // From Spirituality & Mindfold practice (atelier.maxpetrusenko.com)
   // 4.9/5 average sentiment across 217 transformations
 
   // Original testimonials

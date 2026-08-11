@@ -24,7 +24,7 @@ export const metadata = {
     template: "%s | Max Petrusenko",
   },
   description:
-    "Tech builder and somatic practitioner. Explore portfolio, atelier, and mindfold work.",
+    "Tech builder and somatic practitioner. Explore portfolio, spirituality, and mindfold work.",
   icons: {
     icon: "/favicon.svg",
     apple: "/apple-touch-icon.svg",
