@@ -27,7 +27,7 @@ const paths = [
   "/spirituality/articles",
   "/tech/claude-subagents",
   "/tech/mindfold",
-  "/tech/presence-atelier"
+  "/tech/spirituality-mindfold"
 ];
 
 const timeoutMs = Number(process.env.UI_SCAN_TIMEOUT_MS || 45000);

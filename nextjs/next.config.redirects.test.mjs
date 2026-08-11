@@ -23,6 +23,15 @@ test("includes permanent redirects for legacy homepage and mindfold aliases", as
         entry.permanent === true
     )
   );
+
+  assert.ok(
+    redirects.some(
+      (entry) =>
+        entry.source === "/tech/presence-atelier" &&
+        entry.destination === "/tech/spirituality-mindfold" &&
+        entry.permanent === true
+    )
+  );
 });
 
 test("allows instagram thumbnails for motion embeds", () => {

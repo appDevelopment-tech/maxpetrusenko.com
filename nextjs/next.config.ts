@@ -70,6 +70,16 @@ const nextConfig: NextConfig = {
         permanent: true, // 301 redirect
       },
       {
+        source: "/tech/presence-atelier",
+        destination: "/tech/spirituality-mindfold",
+        permanent: true, // 301 redirect
+      },
+      {
+        source: "/tech/presence-atelier/",
+        destination: "/tech/spirituality-mindfold",
+        permanent: true, // 301 redirect
+      },
+      {
         source: "/blog/spiritual-practices",
         destination: "/spirituality",
         permanent: true, // 301 redirect

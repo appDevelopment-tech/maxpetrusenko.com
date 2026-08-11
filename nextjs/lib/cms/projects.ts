@@ -56,8 +56,8 @@ export const projects: Project[] = [
     tags: ["AI", "Social Automation", "Replies", "Scheduling"],
   },
   {
-    id: "presence-atelier",
-    slug: "presence-atelier",
+    id: "spirituality-mindfold",
+    slug: "spirituality-mindfold",
     title: "Spirituality & Mindfold",
     description:
       "Tantra-informed somatic work by request. Deep rewiring and nervous system reset through embodied presence.",
