@@ -5,7 +5,6 @@ import { generateMetadata, absoluteUrl } from "@/lib/seo/metadata";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { DirectAnswer } from "@/components/seo/DirectAnswer";
 import { EmailCaptureInline } from "@/components/forms/EmailCaptureInline";
-import { SomaticIntakeTool } from "@/components/forms/SomaticIntakeTool";
 import { Testimonials } from "@/components/testimonials/Testimonials";
 import { FaqSection } from "@/components/shared/FaqSection";
 import {
@@ -313,10 +312,6 @@ export default function SpiritualityPage() {
               Join inquiry list
             </a>
           </div>
-        </section>
-
-        <section className="section ui-fade-up delay-3">
-          <SomaticIntakeTool />
         </section>
 
         <section className="section">
