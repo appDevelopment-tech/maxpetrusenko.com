@@ -1,15 +1,35 @@
 import Link from "next/link";
-import { generateMetadata, absoluteUrl } from "@/lib/seo/metadata";
+import type { Metadata } from "next";
+import { absoluteUrl } from "@/lib/seo/metadata";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { generateWebPageSchema, generateBreadcrumbSchema } from "@/lib/seo/structured-data";
 
-export const metadata = generateMetadata({
-  title: "AI Consulting Reddit",
+export const metadata: Metadata = {
+  title: { absolute: "AI Consulting Reddit" },
   description:
     "What people on Reddit actually ask about AI consulting: is it worth it, how much does it cost, and how do you pick a good consultant. Answered straight, with real proof.",
-  ogType: "website",
-  canonical: absoluteUrl("/ai-consulting-reddit"),
-});
+  alternates: { canonical: absoluteUrl("/ai-consulting-reddit") },
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: absoluteUrl("/ai-consulting-reddit"),
+    title: "AI Consulting Reddit",
+    description:
+      "What people on Reddit actually ask about AI consulting: is it worth it, how much does it cost, and how do you pick a good consultant.",
+    siteName: "Max Petrusenko",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "AI Consulting Reddit",
+    description:
+      "What people on Reddit actually ask about AI consulting: is it worth it, how much does it cost, and how do you pick a good consultant.",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true, "max-video-preview": -1, "max-image-preview": "large", "max-snippet": -1 },
+  },
+};
 
 const faqSchema = {
   "@context": "https://schema.org",
