@@ -276,6 +276,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.8,
     },
     {
+      url: `${baseUrl}/ai-consulting-reddit`,
+      lastModified: await getRouteLastModified(appDir, "/ai-consulting-reddit", fallbackLastModified),
+      changeFrequency: "monthly",
+      priority: 0.8,
+    },
+    {
       url: `${baseUrl}/tech/ai-automation`,
       lastModified: await getRouteLastModified(appDir, "/tech/ai-automation", fallbackLastModified),
       changeFrequency: "weekly",

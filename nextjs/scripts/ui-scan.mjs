@@ -21,6 +21,7 @@ const paths = [
   "/tech",
   "/tech/articles",
   "/tech/articles/openclaw-installation-playbook",
+  "/ai-consulting-reddit",
   "/mindfold",
   "/mindfold/events",
   "/spirituality",
