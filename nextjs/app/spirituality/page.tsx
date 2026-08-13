@@ -154,12 +154,21 @@ export default function SpiritualityPage() {
             </h1>
             <p className="blur-in blur-in-d2 mt-5 max-w-[460px] text-[1.05rem] leading-relaxed text-[var(--ink-soft)]">
               Tantra-informed somatic work for nervous-system regulation, intimacy,
-              and embodied presence. Sessions are not open for direct booking right now.
+              and embodied presence. Direct booking is paused — sessions are
+              available through Tantra Studio.
             </p>
             <div className="blur-in blur-in-d3 mt-8 flex flex-wrap gap-3">
               <a
                 className="inline-flex items-center gap-2 rounded-[10px] bg-[var(--ink)] px-7 py-3.5 text-[0.95rem] font-semibold text-[var(--sand)] shadow-[0_4px_16px_rgba(12,17,21,0.18)] transition hover:-translate-y-0.5 hover:shadow-[0_8px_28px_rgba(12,17,21,0.24)]"
-                href="https://wa.me/17865436688?text=Hi%20Max%2C%20I%27d%20like%20to%20join%20the%20inquiry%20list.%20I%27m%20exploring%3A%20____."
+                href="https://tantrastudio.app/sessions"
+                target="_blank"
+                rel="noopener"
+              >
+                Sessions via Tantra Studio
+              </a>
+              <a
+                className="inline-flex items-center gap-2 rounded-[10px] border-[1.5px] border-[var(--line)] bg-transparent px-7 py-3.5 text-[0.95rem] font-semibold text-[var(--ink)] transition hover:-translate-y-0.5 hover:border-[var(--accent-spirit)]"
+                href="https://wa.me/19542759666?text=Hi%20Max%2C%20I%27d%20like%20to%20join%20the%20inquiry%20list.%20I%27m%20exploring%3A%20____."
                 target="_blank"
                 rel="noopener"
               >
