@@ -17,9 +17,10 @@ import {
 } from "@/lib/seo/structured-data";
 
 export const metadata = generateMetadata({
-  title: "Spirituality - Tantra & Somatic Energy Work",
-  description: "Tantra-informed somatic work for nervous-system regulation, intimacy, and embodied presence. Private sessions are paused for now.",
+  title: "Tantra & Somatic Energy Work | Ubud, Bali • Miami, FL",
+  description: "Professional somatic sessions. Nervous system reset, deep repatterning, boundaries-first. Ubud, Bali and Miami, Florida. 4.9/5 client sentiment.",
   ogType: "website",
+  ogImage: "/images/og-spirituality.png",
   canonical: absoluteUrl("/spirituality"),
   keywords: [
     "tantra-informed somatic work",
@@ -154,20 +155,11 @@ export default function SpiritualityPage() {
             </h1>
             <p className="blur-in blur-in-d2 mt-5 max-w-[460px] text-[1.05rem] leading-relaxed text-[var(--ink-soft)]">
               Tantra-informed somatic work for nervous-system regulation, intimacy,
-              and embodied presence. Direct booking is paused — sessions are
-              available through Tantra Studio.
+              and embodied presence. Sessions are not open for direct booking right now.
             </p>
             <div className="blur-in blur-in-d3 mt-8 flex flex-wrap gap-3">
               <a
                 className="inline-flex items-center gap-2 rounded-[10px] bg-[var(--ink)] px-7 py-3.5 text-[0.95rem] font-semibold text-[var(--sand)] shadow-[0_4px_16px_rgba(12,17,21,0.18)] transition hover:-translate-y-0.5 hover:shadow-[0_8px_28px_rgba(12,17,21,0.24)]"
-                href="https://tantrastudio.app/sessions"
-                target="_blank"
-                rel="noopener"
-              >
-                Sessions via Tantra Studio
-              </a>
-              <a
-                className="inline-flex items-center gap-2 rounded-[10px] border-[1.5px] border-[var(--line)] bg-transparent px-7 py-3.5 text-[0.95rem] font-semibold text-[var(--ink)] transition hover:-translate-y-0.5 hover:border-[var(--accent-spirit)]"
                 href="https://wa.me/19542759666?text=Hi%20Max%2C%20I%27d%20like%20to%20join%20the%20inquiry%20list.%20I%27m%20exploring%3A%20____."
                 target="_blank"
                 rel="noopener"
@@ -180,7 +172,7 @@ export default function SpiritualityPage() {
                 target="_blank"
                 rel="noopener"
               >
-                View practice site
+                View Atelier Site
               </a>
             </div>
           </div>
@@ -199,7 +191,7 @@ export default function SpiritualityPage() {
         schemaType="WebPage"
         showUi={false}
         question="What is somatic energy work and who practices it near me?"
-        answer="Somatic energy work is a body-based practice using breathwork, conscious touch, and presence techniques for nervous system regulation and embodied awareness. Max Petrusenko holds a Tantra Massage Certification from Tantra Nectar University (Satyarti). No calendar slots are open right now. You can send an inquiry by text: +1-786-543-6688."
+        answer="Somatic energy work is a body-based practice using breathwork, conscious touch, and presence techniques for nervous system regulation and embodied awareness. Max Petrusenko holds a Tantra Massage Certification from Tantra Nectar University (Satyarti). No calendar slots are open right now. You can send an inquiry by text: +1-954-275-9666."
         displayAnswer="Somatic energy work for nervous system regulation and embodied awareness. Private sessions paused for now."
       />
 
@@ -313,7 +305,7 @@ export default function SpiritualityPage() {
             </p>
             <a
               className="btn primary"
-              href="https://wa.me/17865436688?text=Hi%20Max%2C%20I%27d%20like%20to%20join%20the%20inquiry%20list.%20I%27m%20exploring%3A%20____."
+              href="https://wa.me/19542759666?text=Hi%20Max%2C%20I%27d%20like%20to%20join%20the%20inquiry%20list.%20I%27m%20exploring%3A%20____."
               style={{ marginTop: 12 }}
               target="_blank"
               rel="noopener"
@@ -337,7 +329,7 @@ export default function SpiritualityPage() {
               <div className="hero-actions" style={{ marginTop: 12 }}>
                 <a
                   className="btn primary"
-                  href="https://wa.me/17865436688?text=Hi%20Max%2C%20I%27d%20like%20to%20join%20the%20inquiry%20list.%20I%27m%20exploring%3A%20____."
+                  href="https://wa.me/19542759666?text=Hi%20Max%2C%20I%27d%20like%20to%20join%20the%20inquiry%20list.%20I%27m%20exploring%3A%20____."
                   target="_blank"
                   rel="noopener"
                 >
@@ -352,7 +344,7 @@ export default function SpiritualityPage() {
               <div className="hero-actions" style={{ marginTop: 12 }}>
                 <a
                   className="btn secondary"
-                  href="mailto:hello@maxpetrusenko.com?subject=Spirituality%20inquiry"
+                  href="mailto:hello@maxpetrusenko.com?subject=Atelier%20inquiry"
                   target="_blank"
                   rel="noopener"
                 >
@@ -370,7 +362,7 @@ export default function SpiritualityPage() {
               <div className="hero-actions" style={{ marginTop: 12 }}>
                 <a
                   className="btn secondary"
-                  href="https://wa.me/17865436688?text=Hi%20Max%2C%20quick%20question%20about%20the%20practice%3A%20____."
+                  href="https://wa.me/19542759666?text=Hi%20Max%2C%20quick%20question%20about%20the%20practice%3A%20____."
                   target="_blank"
                   rel="noopener"
                 >
@@ -421,7 +413,7 @@ export default function SpiritualityPage() {
               </p>
               <a
                 className="btn secondary"
-                href="https://wa.me/17865436688?text=Hi%20Max%2C%20I%20have%20a%20few%20questions%20before%20booking."
+                href="https://wa.me/19542759666?text=Hi%20Max%2C%20I%20have%20a%20few%20questions%20before%20booking."
                 target="_blank"
                 rel="noopener"
                 style={{ marginTop: 12 }}
