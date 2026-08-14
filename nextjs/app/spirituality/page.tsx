@@ -116,8 +116,8 @@ export default function SpiritualityPage() {
       <JsonLd
         type="WebPage"
         data={generateWebPageSchema({
-          title: "Spirituality - Tantra & Somatic Energy Work",
-          description: "Tantra-informed somatic work for nervous-system regulation, intimacy, and embodied awareness. Private sessions are paused for now.",
+          title: "Tantra & Somatic Energy Work | Ubud, Bali • Miami, FL",
+          description: "Professional somatic sessions. Nervous system reset, deep repatterning, boundaries-first. Ubud, Bali and Miami, Florida. 4.9/5 client sentiment.",
           url: "/spirituality",
         })}
       />
