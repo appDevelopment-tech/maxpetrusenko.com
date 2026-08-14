@@ -106,7 +106,7 @@ export function generatePersonSchema() {
     description: "Creator of tech automation resources, tantra education, and somatic practice offerings.",
     worksFor: {
       "@type": "Organization",
-      name: "Spirituality & Mindfold",
+      name: "Presence Atelier",
       url: siteConfig.externalLinks.atelier,
     },
     sameAs: [
@@ -176,7 +176,7 @@ export function generateSpiritualityPersonSchema() {
     description: "Certified tantra massage and somatic energy work practitioner trained at Tantra Nectar University (Satyarti). Specializing in nervous system regulation, breathwork, shadow work, and trauma-informed bodywork.",
     worksFor: {
       "@type": "Organization",
-      name: "Spirituality & Mindfold",
+      name: "Presence Atelier",
       url: siteConfig.externalLinks.atelier,
     },
     sameAs: [
@@ -212,7 +212,7 @@ export function generateOrganizationSchema() {
   return {
     "@context": "https://schema.org",
     "@type": "Organization",
-    name: "Spirituality & Mindfold",
+    name: "Presence Atelier",
     url: siteConfig.externalLinks.atelier,
     logo: {
       "@type": "ImageObject",
@@ -285,7 +285,7 @@ export function generateProfessionalServiceSchema() {
   return {
     "@context": "https://schema.org",
     "@type": "WebPage",
-    "name": "Spirituality & Mindfold - Tantra-Informed Somatic Practice",
+    "name": "Presence Atelier - Tantra-Informed Somatic Practice",
     "description": "Tantra-informed somatic practice, energy work, breath, boundaries, and embodied awareness by request. Grounded in Tantra Nectar / Satyarti training and nervous-system regulation.",
     "url": `${siteConfig.url}/spirituality`,
     "logo": {
@@ -293,7 +293,7 @@ export function generateProfessionalServiceSchema() {
       "url": BRAND_LOGO_URL,
     },
     "image": BRAND_LOGO_URL,
-    "telephone": "+1-786-543-6688",
+    "telephone": "+1-954-275-9666",
     "aggregateRating": {
       "@type": "AggregateRating",
       "ratingValue": "4.9",
@@ -426,7 +426,7 @@ export function generateFAQSchema() {
         "name": "How do I book?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "The fastest way is WhatsApp: +1-786-543-6688. Email works too at hello@maxpetrusenko.com."
+          "text": "The fastest way is WhatsApp: +1-954-275-9666. Email works too at hello@maxpetrusenko.com."
         }
       },
       {
@@ -596,7 +596,7 @@ export function generateTechServiceSchema() {
       url: BRAND_LOGO_URL,
     },
     image: BRAND_LOGO_URL,
-    telephone: "+1-786-543-6688",
+    telephone: "+1-954-275-9666",
     email: "hello@maxpetrusenko.com",
     areaServed: ["Global", "Remote", "Worldwide", "By request"],
     hasOfferCatalog: {
@@ -880,7 +880,7 @@ export function generateEventSchema(data: {
     keywords: "blindfold, sensory deprivation, presence journey, meditation, somatic work, consciousness, mindfulness, group event, workshop",
     offers: {
       "@type": "Offer",
-      url: `https://wa.me/17865436688`,
+      url: `https://wa.me/19542759666`,
       price: "0",
       priceCurrency: "USD",
       description: "Contact for pricing and availability. Private and corporate events available.",
@@ -949,7 +949,7 @@ export function generateMindfoldEventSchema() {
         "@type": "Offer",
         name: "Group Journey",
         description: "Join a scheduled group Mindfold session. Dates announced via WhatsApp.",
-        url: "https://wa.me/17865436688?text=Hi%20Max%2C%20I%27m%20interested%20in%20the%20next%20Mindfold%20group%20journey.",
+        url: "https://wa.me/19542759666?text=Hi%20Max%2C%20I%27m%20interested%20in%20the%20next%20Mindfold%20group%20journey.",
         price: "0",
         priceCurrency: "USD",
         availability: "https://schema.org/Preorder",
@@ -959,7 +959,7 @@ export function generateMindfoldEventSchema() {
         "@type": "Offer",
         name: "Private / Corporate Event",
         description: "Custom Mindfold session for your team or small group. We align on setting and pacing together.",
-        url: "https://wa.me/17865436688?text=Hi%20Max%2C%20I%27d%20like%20to%20book%20a%20private%20Mindfold%20journey.",
+        url: "https://wa.me/19542759666?text=Hi%20Max%2C%20I%27d%20like%20to%20book%20a%20private%20Mindfold%20journey.",
         price: "0",
         priceCurrency: "USD",
         availability: "https://schema.org/Preorder",
@@ -977,7 +977,7 @@ export function generateMindfoldEventSchema() {
         "@type": "ReserveAction",
         target: {
           "@type": "EntryPoint",
-          urlTemplate: "https://wa.me/17865436688?text=Hi%20Max%2C%20I%27d%20like%20to%20join%20Mindfold.",
+          urlTemplate: "https://wa.me/19542759666?text=Hi%20Max%2C%20I%27d%20like%20to%20join%20Mindfold.",
           actionPlatform: ["http://schema.org/DesktopWebPlatform", "http://schema.org/MobileWebPlatform"],
         },
         result: {
@@ -1043,7 +1043,7 @@ export function generateReviewSchema(testimonial: {
     "@type": "Review",
     itemReviewed: {
       "@type": "Service",
-      name: serviceName === "tantra" ? "Spirituality & Mindfold - Tantra-Informed Somatic Practice" :
+      name: serviceName === "tantra" ? "Presence Atelier - Tantra-Informed Somatic Practice" :
            serviceName === "tech" ? "AI & Automation Services" :
            "Mindfold Sanctuary - Sensory Journeys",
       url: serviceName === "tantra" ? `${siteConfig.url}/spirituality` :
@@ -1192,10 +1192,10 @@ export function generateProfessionalServiceSchemaByRequest() {
     "@context": "https://schema.org",
     "@type": "WebPage",
     "name": "Tantra-Informed Somatic Practice - Max Petrusenko",
-    "alternateName": "Spirituality & Mindfold",
+    "alternateName": "Presence Atelier",
     "description": "Tantra-informed somatic education and nervous-system practice by request. Boundaries-led sessions focused on breath, presence, regulation, and embodied awareness.",
     "url": `${siteConfig.url}/spirituality`,
-    "telephone": "+1-786-543-6688",
+    "telephone": "+1-954-275-9666",
     "keywords": "tantra-informed somatic work, somatic education, energy work private practice, nervous system regulation, couples embodiment practice, somatic bodywork",
     "aggregateRating": {
       "@type": "AggregateRating",
@@ -1256,11 +1256,11 @@ export function generateProfessionalServiceSchemaMiami() {
   return {
     "@context": "https://schema.org",
     "@type": "WebPage",
-    "name": "Spirituality & Mindfold - Somatic Education & Energy Work",
+    "name": "Presence Atelier - Somatic Education & Energy Work",
     "alternateName": "Max Petrusenko - Somatic Education",
     "description": "Somatic education and energy work teaching in Fort Lauderdale, Florida. Educational workshops, student teachings, and nervous system training serving South Florida from West Palm Beach to the Keys.",
     "url": `${siteConfig.url}/spirituality`,
-    "telephone": "+1-786-543-6688",
+    "telephone": "+1-954-275-9666",
     "email": "hello@maxpetrusenko.com",
     "keywords": "tantra-informed somatic practice, somatic education, energy work, nervous system regulation, couples embodiment practice",
     "aggregateRating": {
@@ -1288,14 +1288,14 @@ export function generateEnhancedPersonSchema() {
     "@context": "https://schema.org",
     "@type": "Person",
     name: siteConfig.author.name,
-    alternateName: ["Max", "Spirituality & Mindfold", "Max Petrusenko Tech"],
+    alternateName: ["Max", "Presence Atelier", "Max Petrusenko Tech"],
     url: siteConfig.url,
     image: PERSON_IMAGE_URL,
     description: "Tech builder and somatic practitioner specializing in AI automation, tantra-informed somatic practice, and nervous-system work by request.",
     jobTitle: "Tech Builder & Somatic Practitioner",
     worksFor: {
       "@type": "Organization",
-      name: "Spirituality & Mindfold",
+      name: "Presence Atelier",
       url: siteConfig.externalLinks.atelier,
     },
     birthPlace: {
@@ -1316,7 +1316,7 @@ export function generateEnhancedPersonSchema() {
       "https://www.crunchbase.com/organization/maxpetrusenko",
       "https://angel.co/u/maxpetrusenko",
       "https://www.gumroad.com/maxpetrusenko",
-      // Spirituality & Mindfold
+      // Presence Atelier
       siteConfig.externalLinks.atelier,
       "https://www.instagram.com/blindfold.miami",
       "https://patreon.com/mindfold",
@@ -1377,7 +1377,7 @@ export function generateEnhancedPersonSchema() {
       },
     ],
     // Contact
-    telephone: "+1-786-543-6688",
+    telephone: "+1-954-275-9666",
     email: "hello@maxpetrusenko.com",
     // Availability
     availableChannel: {
@@ -1569,7 +1569,7 @@ export function generateCombinedFAQSchema() {
         name: "How do I join the inquiry list or consultation?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "For tantra/somatic sessions, WhatsApp +1-786-543-6688 is fastest. You can also email hello@maxpetrusenko.com. For tech consulting, email with your project details. I'll respond to align on timing and approach.",
+          text: "For tantra/somatic sessions, WhatsApp +1-954-275-9666 is fastest. You can also email hello@maxpetrusenko.com. For tech consulting, email with your project details. I'll respond to align on timing and approach.",
         },
       },
     ],
