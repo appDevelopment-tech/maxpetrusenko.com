@@ -64,9 +64,9 @@ export function RouteHero() {
       </div>
       <div className="relative z-[3] mx-auto w-full max-w-[1080px] px-4 py-20 md:px-6">
         <p className="blur-in section-eyebrow text-[var(--muted)]">Max Petrusenko</p>
-        <h1 className="clip-reveal clip-reveal-d1 mt-3 font-serif text-[clamp(2rem,4vw,3rem)] font-semibold leading-tight text-[var(--ink)]">
+        <p aria-hidden="true" className="clip-reveal clip-reveal-d1 mt-3 font-serif text-[clamp(2rem,4vw,3rem)] font-semibold leading-tight text-[var(--ink)]">
           {title}
-        </h1>
+        </p>
       </div>
     </section>
   );

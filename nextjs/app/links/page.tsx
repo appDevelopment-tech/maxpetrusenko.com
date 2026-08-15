@@ -33,9 +33,9 @@ export default function LinksPage() {
       <div className="container">
         <section className="section ui-fade-up delay-3">
           <div className="section-head">
-            <h2>Book a call</h2>
+            <h1>Links</h1>
             <span className="section-note">
-              Schedule directly — no back-and-forth needed.
+              All the ways to connect with Max Petrusenko.
             </span>
           </div>
           <div className="tiles">
