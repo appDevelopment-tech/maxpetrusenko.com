@@ -10,7 +10,7 @@ export const metadata = generateMetadata({
   description: "Complete guide to integrating ChatGPT API into your products. Learn authentication, prompt engineering, function calling, RAG implementation, fine-tuning, and production considerations.",
   ogType: "article",
   canonical: absoluteUrl("/tech/articles/chatgpt-api-integration"),
-  ogImage: "/images/article-covers/tech-chatgpt-api.svg",
+  ogImage: "/images/article-covers/tech-chatgpt-api.png",
   keywords: ["ChatGPT", "OpenAI API", "prompt engineering", "RAG", "function calling", "fine-tuning"],
 });
 

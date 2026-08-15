@@ -10,7 +10,7 @@ export const metadata = generateMetadata({
   description: "Complete guide to configuring Claude Code with custom sub-agents, skills, and workflows for development teams. Learn how to set up multi-agent systems, create custom skills, and train your team for maximum productivity.",
   ogType: "article",
   canonical: absoluteUrl("/tech/articles/claude-code-setup"),
-  ogImage: "/images/article-covers/tech-claude-code-setup.svg",
+  ogImage: "/images/article-covers/tech-claude-code-setup.png",
   keywords: ["Claude Code", "Anthropic", "AI development", "sub-agents", "custom skills", "multi-agent systems"],
 });
 

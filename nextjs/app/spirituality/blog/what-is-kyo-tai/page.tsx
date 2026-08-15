@@ -11,7 +11,7 @@ export const metadata = generateMetadata({
     "Kyo-tai is Max Petrusenko's name for a two-body somatic practice that blends contact improvisation, bodywork, pressure, rhythm, and energetic transmission inside a consent-led container.",
   ogType: "article",
   canonical: absoluteUrl("/spirituality/blog/what-is-kyo-tai"),
-  ogImage: "/images/article-covers/spirit-kyo-tai.svg",
+  ogImage: "/images/article-covers/spirit-kyo-tai.png",
   keywords: [
     "Kyo-tai",
     "somatic practice",

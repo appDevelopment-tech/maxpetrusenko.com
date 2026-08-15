@@ -10,7 +10,7 @@ export const metadata = generateMetadata({
   description: "Discover how tantra massage by request helps release trauma and regulate the nervous system through somatic touch, breathwork, and conscious presence. Evidence-based approach to PTSD recovery.",
   ogType: "article",
   canonical: absoluteUrl("/spirituality/articles/tantra-trauma-ptsd"),
-  ogImage: "/images/article-covers/spirit-trauma-ptsd.svg",
+  ogImage: "/images/article-covers/spirit-trauma-ptsd.png",
 });
 
 export default function TantraTraumaArticle() {

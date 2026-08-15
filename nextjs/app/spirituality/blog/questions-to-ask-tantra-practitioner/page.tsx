@@ -11,7 +11,7 @@ export const metadata = generateMetadata({
     "A practical screening guide for choosing a tantra practitioner: consent process, boundaries, trauma literacy, hygiene, and integration support.",
   ogType: "article",
   canonical: absoluteUrl("/spirituality/blog/questions-to-ask-tantra-practitioner"),
-  ogImage: "/images/article-covers/spirit-questions-screening.svg",
+  ogImage: "/images/article-covers/spirit-questions-screening.png",
   keywords: [
     "how to choose tantra practitioner",
     "tantra boundaries",

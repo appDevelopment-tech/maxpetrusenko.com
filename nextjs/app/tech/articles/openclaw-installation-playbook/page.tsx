@@ -16,7 +16,7 @@ export const metadata = generateMetadata({
     "OpenClaw setup guide for teams: Microsoft Teams integration, Helm and Kubernetes rollout, Railway and Dokploy deployment, permissions, and post-install validation.",
   ogType: "article",
   canonical: absoluteUrl("/tech/articles/openclaw-installation-playbook"),
-  ogImage: "/images/article-covers/tech-openclaw-playbook.svg",
+  ogImage: "/images/article-covers/tech-openclaw-playbook.png",
   keywords: [
     "OpenClaw install",
     "OpenClaw setup",

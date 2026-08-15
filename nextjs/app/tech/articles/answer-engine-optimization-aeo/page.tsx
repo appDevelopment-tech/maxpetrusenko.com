@@ -10,7 +10,7 @@ export const metadata = generateMetadata({
   description: "Practical AEO guide for 2026: how to audit answer-engine readiness, structure pages for citation, and improve visibility in ChatGPT, Claude, Perplexity, and AI search.",
   ogType: "article",
   canonical: absoluteUrl("/tech/articles/answer-engine-optimization-aeo"),
-  ogImage: "/images/article-covers/tech-aeo-guide.svg",
+  ogImage: "/images/article-covers/tech-aeo-guide.png",
   keywords: ["AEO", "Answer Engine Optimization", "GEO", "Generative Engine Optimization", "AI SEO", "ChatGPT optimization", "Claude optimization", "AI search"],
 });
 

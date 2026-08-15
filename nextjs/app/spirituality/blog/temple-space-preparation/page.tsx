@@ -11,7 +11,7 @@ export const metadata = generateMetadata({
     "A behind-the-scenes view of how session environment, scent, sound, temperature, and pacing affect nervous-system safety and session quality.",
   ogType: "article",
   canonical: absoluteUrl("/spirituality/blog/temple-space-preparation"),
-  ogImage: "/images/article-covers/spirit-temple-space.svg",
+  ogImage: "/images/article-covers/spirit-temple-space.png",
   keywords: [
     "session preparation tantra",
     "somatic safety container",

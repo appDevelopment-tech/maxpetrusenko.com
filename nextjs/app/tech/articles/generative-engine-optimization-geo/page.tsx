@@ -16,7 +16,7 @@ export const metadata = generateMetadata({
     "Practical GEO framework and roadmap for 2026: entity clarity, citation-ready pages, internal linking, and the implementation sequence that turns impressions into qualified leads.",
   ogType: "article",
   canonical: absoluteUrl("/tech/articles/generative-engine-optimization-geo"),
-  ogImage: "/images/article-covers/tech-geo-framework.svg",
+  ogImage: "/images/article-covers/tech-geo-framework.png",
   keywords: [
     "Generative Engine Optimization",
     "GEO",

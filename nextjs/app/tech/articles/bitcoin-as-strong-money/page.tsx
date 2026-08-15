@@ -16,7 +16,7 @@ export const metadata = generateMetadata({
     "Why Bitcoin is treated differently from generic crypto: fixed supply, self-custody, neutral settlement, and the tradeoffs that still matter.",
   ogType: "article",
   canonical: absoluteUrl("/tech/articles/bitcoin-as-strong-money"),
-  ogImage: "/images/article-covers/tech-bitcoin-strong-money.svg",
+  ogImage: "/images/article-covers/tech-bitcoin-strong-money.png",
   keywords: [
     "Bitcoin",
     "strong money",

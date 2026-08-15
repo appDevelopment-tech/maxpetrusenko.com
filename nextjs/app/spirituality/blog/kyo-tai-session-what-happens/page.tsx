@@ -11,7 +11,7 @@ export const metadata = generateMetadata({
     "A practical guide to a Kyo-tai session: consent, pressure, pacing, energetic intensity, and integration in Max Petrusenko's two-body somatic practice.",
   ogType: "article",
   canonical: absoluteUrl("/spirituality/blog/kyo-tai-session-what-happens"),
-  ogImage: "/images/article-covers/spirit-kyo-tai-session.svg",
+  ogImage: "/images/article-covers/spirit-kyo-tai-session.png",
   keywords: [
     "Kyo-tai session",
     "somatic session",

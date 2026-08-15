@@ -10,7 +10,7 @@ export const metadata = generateMetadata({
   description: "Complete guide to building production-grade automations with n8n. Learn API integration patterns, error handling, retry logic, custom nodes, and monitoring for reliable business workflows.",
   ogType: "article",
   canonical: absoluteUrl("/tech/articles/n8n-workflow-automation"),
-  ogImage: "/images/article-covers/tech-n8n-workflow.svg",
+  ogImage: "/images/article-covers/tech-n8n-workflow.png",
   keywords: ["n8n", "workflow automation", "API integration", "no-code", "business automation", "webhooks"],
 });
 

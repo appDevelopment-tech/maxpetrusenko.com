@@ -46,7 +46,7 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
     description: article.excerpt,
     ogType: "article",
     canonical: canonicalUrl,
-    ogImage: article.image || "/images/og-default.svg",
+    ogImage: article.image || "/images/og-home.png",
     keywords: article.tags,
     noindex: !isCanonicalOnBlog,
   });

@@ -10,7 +10,7 @@ export const metadata = generateMetadata({
   description: "How AI answer engines like ChatGPT, Claude, and Perplexity evaluate and score websites. Learn the factors that influence AI citation, attribution, and recommendation in 2025.",
   ogType: "article",
   canonical: absoluteUrl("/tech/articles/generative-ai-score-websites"),
-  ogImage: "/images/article-covers/tech-generative-ai-score.svg",
+  ogImage: "/images/article-covers/tech-generative-ai-score.png",
   keywords: ["AI score", "website scoring", "AEO", "GEO", "AI evaluation", "answer engines", "ChatGPT", "Claude", "Perplexity"],
 });
 

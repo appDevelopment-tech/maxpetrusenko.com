@@ -10,7 +10,7 @@ export const metadata = generateMetadata({
   description: "Nervous about your first tantra session? This guide walks you through everything from arrival to integration. Learn what to expect, how to prepare, and why first-timers are welcome by request.",
   ogType: "article",
   canonical: absoluteUrl("/spirituality/blog/what-to-expect-first-tantra-session"),
-  ogImage: "/images/article-covers/spirit-first-session.svg",
+  ogImage: "/images/article-covers/spirit-first-session.png",
 });
 
 export default function FirstTantraSessionBlogPost() {

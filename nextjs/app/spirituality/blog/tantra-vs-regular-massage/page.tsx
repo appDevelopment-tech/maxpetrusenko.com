@@ -11,7 +11,7 @@ export const metadata = generateMetadata({
     "A direct comparison of tantra massage and regular massage: intention, process, boundaries, nervous-system effect, and integration.",
   ogType: "article",
   canonical: absoluteUrl("/spirituality/blog/tantra-vs-regular-massage"),
-  ogImage: "/images/article-covers/spirit-vs-massage.svg",
+  ogImage: "/images/article-covers/spirit-vs-massage.png",
   keywords: [
     "tantra massage vs regular massage",
     "somatic bodywork",

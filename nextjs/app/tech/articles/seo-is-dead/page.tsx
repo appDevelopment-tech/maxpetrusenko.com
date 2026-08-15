@@ -16,7 +16,7 @@ export const metadata = generateMetadata({
     "SEO is not dead in 2026. It split into classic search optimization and answer-engine visibility. Learn the practical operating model for both.",
   ogType: "article",
   canonical: absoluteUrl("/tech/articles/seo-is-dead"),
-  ogImage: "/images/article-covers/tech-seo-split.svg",
+  ogImage: "/images/article-covers/tech-seo-split.png",
   keywords: [
     "SEO is dead",
     "AEO",

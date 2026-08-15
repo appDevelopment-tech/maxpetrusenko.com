@@ -25,7 +25,7 @@ export const siteConfig: SiteConfig = {
     linkedin: "https://linkedin.com/in/max-petrusenko-40574b4a/",
     medium: "https://medium.com/@max.petrusenko",
     instagram: "https://instagram.com/blindfold.miami",
-    whatsapp: "https://wa.me/17865436688",
+    whatsapp: "https://wa.me/19542759666",
     twitter: "https://x.com/petrusenko_max",
   },
   externalLinks: {
@@ -34,7 +34,7 @@ export const siteConfig: SiteConfig = {
     patreon: "https://patreon.com/maxpetrusenko",
   },
   googleBusinessProfile: {
-    // Google Business Profile for Spirituality & Mindfold Miami
+    // Google Business Profile for Presence Atelier Miami
     // Category: Somatic Education & Energy Work Teaching
     // Address: 917 SW 18th Ct, Fort Lauderdale, FL 33315
     // Verify at: https://business.google.com/
@@ -64,7 +64,7 @@ export const FEATURED_ARTICLE_IDS = [
 export const SEO_DEFAULTS = {
   title: siteConfig.name,
   description: siteConfig.description,
-  ogImage: "/images/og-default.svg",
+  ogImage: "/images/og-home.png",
   twitterHandle: siteConfig.author.twitter,
 };
 

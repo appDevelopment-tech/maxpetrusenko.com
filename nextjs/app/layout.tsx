@@ -7,6 +7,7 @@ import { CloudflareAnalytics } from "@/components/analytics/CloudflareAnalytics"
 import { ConciergeWidget } from "@/components/concierge/ConciergeWidget";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { generatePersonSchema } from "@/lib/seo/structured-data";
+import { siteConfig } from "@/config/site";
 import "@/styles/globals.css";
 
 import type { Viewport } from "next";
@@ -19,15 +20,22 @@ export const viewport: Viewport = {
 };
 
 export const metadata = {
+  metadataBase: new URL(siteConfig.url),
   title: {
     default: "Max Petrusenko | Presence & Product",
     template: "%s | Max Petrusenko",
   },
   description:
-    "Tech builder and somatic practitioner. Explore portfolio, spirituality, and mindfold work.",
+    "Two practices. Choose your path. Tech automation and somatic energy work.",
   icons: {
-    icon: "/favicon.svg",
-    apple: "/apple-touch-icon.svg",
+    icon: [
+      { url: "/favicon-16.png", sizes: "16x16", type: "image/png" },
+      { url: "/favicon-32.png", sizes: "32x32", type: "image/png" },
+      { url: "/favicon-48.png", sizes: "48x48", type: "image/png" },
+      { url: "/favicon-96.png", sizes: "96x96", type: "image/png" },
+      { url: "/favicon.ico" },
+    ],
+    apple: "/apple-touch-icon.png",
   },
 };
 
