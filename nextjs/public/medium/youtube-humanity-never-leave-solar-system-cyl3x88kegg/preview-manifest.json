@@ -1,0 +1,39 @@
+{
+  "slug": "youtube-humanity-never-leave-solar-system-cyl3x88kegg",
+  "title": "You Will Never Leave the Solar System",
+  "publicUrl": "https://www.maxpetrusenko.com/medium/youtube-humanity-never-leave-solar-system-cyl3x88kegg/",
+  "outputPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/youtube-humanity-never-leave-solar-system-cyl3x88kegg/index.html",
+  "sourceUrl": null,
+  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-humanity-never-leave-solar-system-cyl3x88kegg/article-v2.md",
+  "articleHash": "ae13b74b310dc59aec01f99fb0005d8240e5a65a88f05f2cd85aab8240ef55bc",
+  "exportedAt": "2026-08-16T05:48:27.625Z",
+  "status": "needs_review",
+  "publishMode": "preview",
+  "copiedImages": [
+    {
+      "src": "assets/oort-cloud.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-humanity-never-leave-solar-system-cyl3x88kegg/assets/oort-cloud.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-humanity-never-leave-solar-system-cyl3x88kegg-1786859307621/assets/oort-cloud.jpg"
+    },
+    {
+      "src": "assets/dust-barrier.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-humanity-never-leave-solar-system-cyl3x88kegg/assets/dust-barrier.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-humanity-never-leave-solar-system-cyl3x88kegg-1786859307621/assets/dust-barrier.jpg"
+    },
+    {
+      "src": "assets/alpha-centauri.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-humanity-never-leave-solar-system-cyl3x88kegg/assets/alpha-centauri.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-humanity-never-leave-solar-system-cyl3x88kegg-1786859307621/assets/alpha-centauri.jpg"
+    },
+    {
+      "src": "assets/conclusion.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-humanity-never-leave-solar-system-cyl3x88kegg/assets/conclusion.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-humanity-never-leave-solar-system-cyl3x88kegg-1786859307621/assets/conclusion.jpg"
+    }
+  ],
+  "ratings": {
+    "gemini": null,
+    "gpt": null,
+    "consensus": null
+  }
+}
