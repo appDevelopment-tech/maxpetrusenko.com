@@ -1,0 +1,39 @@
+{
+  "slug": "youtube-phone-dreams-hrzc6na62bo",
+  "title": "Your Phone Gets Hours a Day and Still Barely Shows Up in Dreams",
+  "publicUrl": "https://www.maxpetrusenko.com/medium/youtube-phone-dreams-hrzc6na62bo/",
+  "outputPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/youtube-phone-dreams-hrzc6na62bo/index.html",
+  "sourceUrl": null,
+  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-phone-dreams-hrzc6na62bo/article-v14.md",
+  "articleHash": "9aba210f97615fe0497c35cc6b1695b40321bd381388ccbd35bfbc80072feadc",
+  "exportedAt": "2026-08-16T05:25:09.704Z",
+  "status": "blocked_review_after_five_quality_passes",
+  "publishMode": "preview",
+  "copiedImages": [
+    {
+      "src": "assets/youtube-frames/selected/01-phone-in-public.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-phone-dreams-hrzc6na62bo/assets/youtube-frames/selected/01-phone-in-public.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-phone-dreams-hrzc6na62bo-1786857909700/assets/youtube-frames/selected/01-phone-in-public.jpg"
+    },
+    {
+      "src": "assets/youtube-frames/selected/02-attention-economy-chart.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-phone-dreams-hrzc6na62bo/assets/youtube-frames/selected/02-attention-economy-chart.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-phone-dreams-hrzc6na62bo-1786857909700/assets/youtube-frames/selected/02-attention-economy-chart.jpg"
+    },
+    {
+      "src": "assets/youtube-frames/selected/03-notification-script-interruption.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-phone-dreams-hrzc6na62bo/assets/youtube-frames/selected/03-notification-script-interruption.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-phone-dreams-hrzc6na62bo-1786857909700/assets/youtube-frames/selected/03-notification-script-interruption.jpg"
+    },
+    {
+      "src": "assets/youtube-frames/selected/04-phone-as-prop.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-phone-dreams-hrzc6na62bo/assets/youtube-frames/selected/04-phone-as-prop.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-phone-dreams-hrzc6na62bo-1786857909700/assets/youtube-frames/selected/04-phone-as-prop.jpg"
+    }
+  ],
+  "ratings": {
+    "gemini": 7.4,
+    "gpt": null,
+    "consensus": 7.4
+  }
+}
