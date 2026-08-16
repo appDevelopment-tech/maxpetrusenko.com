@@ -1,89 +1,89 @@
 {
   "slug": "youtube-seven-dimensions-explained-gpfxmhwv8w",
-  "title": "Why Seven Dimensions Make Ordinary Certainty Look Too Small",
+  "title": "You Can Be Completely Right and Still Miss the Truth",
   "publicUrl": "https://www.maxpetrusenko.com/medium/youtube-seven-dimensions-explained-gpfxmhwv8w/",
   "outputPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/youtube-seven-dimensions-explained-gpfxmhwv8w/index.html",
   "sourceUrl": "https://www.youtube.com/watch?v=-gPFxMHWV8w",
-  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-seven-dimensions-explained-gpfxmhwv8w/article-v14.md",
-  "articleHash": "4c626acedc2b92b9489a2f6cb81875d23dde4b7f5f5ff16adb2b1bbc9902cbed",
-  "exportedAt": "2026-08-15T02:25:48.797Z",
-  "status": "needs_human_resolution_below_target",
+  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-seven-dimensions-explained-gpfxmhwv8w/article-v16.md",
+  "articleHash": "6be7d9372e9f7115d84046948069ae4b2fb4d385268d017362670efeae38c85e",
+  "exportedAt": "2026-08-16T04:29:46.063Z",
+  "status": "passed_gate_rating_9_0_of_9_5_target",
   "publishMode": "preview",
   "copiedImages": [
     {
       "src": "assets/youtube-frames/selected-v5/01-axis-human.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-seven-dimensions-explained-gpfxmhwv8w/assets/youtube-frames/selected-v5/01-axis-human.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-seven-dimensions-explained-gpfxmhwv8w-1786760748785/assets/youtube-frames/selected-v5/01-axis-human.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-seven-dimensions-explained-gpfxmhwv8w-1786854586045/assets/youtube-frames/selected-v5/01-axis-human.jpg"
     },
     {
       "src": "assets/youtube-frames/selected-v5/03-one-dimensional-line.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-seven-dimensions-explained-gpfxmhwv8w/assets/youtube-frames/selected-v5/03-one-dimensional-line.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-seven-dimensions-explained-gpfxmhwv8w-1786760748785/assets/youtube-frames/selected-v5/03-one-dimensional-line.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-seven-dimensions-explained-gpfxmhwv8w-1786854586045/assets/youtube-frames/selected-v5/03-one-dimensional-line.jpg"
     },
     {
       "src": "assets/youtube-frames/selected-v5/05-flatland-house.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-seven-dimensions-explained-gpfxmhwv8w/assets/youtube-frames/selected-v5/05-flatland-house.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-seven-dimensions-explained-gpfxmhwv8w-1786760748785/assets/youtube-frames/selected-v5/05-flatland-house.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-seven-dimensions-explained-gpfxmhwv8w-1786854586045/assets/youtube-frames/selected-v5/05-flatland-house.jpg"
     },
     {
       "src": "assets/youtube-frames/selected-v5/06-body-in-cube.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-seven-dimensions-explained-gpfxmhwv8w/assets/youtube-frames/selected-v5/06-body-in-cube.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-seven-dimensions-explained-gpfxmhwv8w-1786760748785/assets/youtube-frames/selected-v5/06-body-in-cube.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-seven-dimensions-explained-gpfxmhwv8w-1786854586045/assets/youtube-frames/selected-v5/06-body-in-cube.jpg"
     },
     {
       "src": "assets/youtube-frames/selected-v5/07-eye-depth-reconstruction.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-seven-dimensions-explained-gpfxmhwv8w/assets/youtube-frames/selected-v5/07-eye-depth-reconstruction.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-seven-dimensions-explained-gpfxmhwv8w-1786760748785/assets/youtube-frames/selected-v5/07-eye-depth-reconstruction.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-seven-dimensions-explained-gpfxmhwv8w-1786854586045/assets/youtube-frames/selected-v5/07-eye-depth-reconstruction.jpg"
     },
     {
       "src": "assets/youtube-frames/selected-v5/08-timeline-editor.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-seven-dimensions-explained-gpfxmhwv8w/assets/youtube-frames/selected-v5/08-timeline-editor.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-seven-dimensions-explained-gpfxmhwv8w-1786760748785/assets/youtube-frames/selected-v5/08-timeline-editor.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-seven-dimensions-explained-gpfxmhwv8w-1786854586045/assets/youtube-frames/selected-v5/08-timeline-editor.jpg"
     },
     {
       "src": "assets/youtube-frames/selected-v5/09-spacetime-curve.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-seven-dimensions-explained-gpfxmhwv8w/assets/youtube-frames/selected-v5/09-spacetime-curve.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-seven-dimensions-explained-gpfxmhwv8w-1786760748785/assets/youtube-frames/selected-v5/09-spacetime-curve.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-seven-dimensions-explained-gpfxmhwv8w-1786854586045/assets/youtube-frames/selected-v5/09-spacetime-curve.jpg"
     },
     {
       "src": "assets/youtube-frames/selected-v5/10-five-d-tree.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-seven-dimensions-explained-gpfxmhwv8w/assets/youtube-frames/selected-v5/10-five-d-tree.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-seven-dimensions-explained-gpfxmhwv8w-1786760748785/assets/youtube-frames/selected-v5/10-five-d-tree.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-seven-dimensions-explained-gpfxmhwv8w-1786854586045/assets/youtube-frames/selected-v5/10-five-d-tree.jpg"
     },
     {
       "src": "assets/youtube-frames/selected-v5/11-blue-fractal-branching.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-seven-dimensions-explained-gpfxmhwv8w/assets/youtube-frames/selected-v5/11-blue-fractal-branching.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-seven-dimensions-explained-gpfxmhwv8w-1786760748785/assets/youtube-frames/selected-v5/11-blue-fractal-branching.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-seven-dimensions-explained-gpfxmhwv8w-1786854586045/assets/youtube-frames/selected-v5/11-blue-fractal-branching.jpg"
     },
     {
       "src": "assets/youtube-frames/selected-v5/12-cosmic-landscape.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-seven-dimensions-explained-gpfxmhwv8w/assets/youtube-frames/selected-v5/12-cosmic-landscape.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-seven-dimensions-explained-gpfxmhwv8w-1786760748785/assets/youtube-frames/selected-v5/12-cosmic-landscape.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-seven-dimensions-explained-gpfxmhwv8w-1786854586045/assets/youtube-frames/selected-v5/12-cosmic-landscape.jpg"
     },
     {
       "src": "assets/youtube-frames/selected-v5/13-anatomy-local-rules.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-seven-dimensions-explained-gpfxmhwv8w/assets/youtube-frames/selected-v5/13-anatomy-local-rules.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-seven-dimensions-explained-gpfxmhwv8w-1786760748785/assets/youtube-frames/selected-v5/13-anatomy-local-rules.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-seven-dimensions-explained-gpfxmhwv8w-1786854586045/assets/youtube-frames/selected-v5/13-anatomy-local-rules.jpg"
     },
     {
       "src": "assets/youtube-frames/selected-v5/14-tunnel-geometry.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-seven-dimensions-explained-gpfxmhwv8w/assets/youtube-frames/selected-v5/14-tunnel-geometry.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-seven-dimensions-explained-gpfxmhwv8w-1786760748785/assets/youtube-frames/selected-v5/14-tunnel-geometry.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-seven-dimensions-explained-gpfxmhwv8w-1786854586045/assets/youtube-frames/selected-v5/14-tunnel-geometry.jpg"
     },
     {
       "src": "assets/youtube-frames/selected-v5/15-abstract-fold.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-seven-dimensions-explained-gpfxmhwv8w/assets/youtube-frames/selected-v5/15-abstract-fold.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-seven-dimensions-explained-gpfxmhwv8w-1786760748785/assets/youtube-frames/selected-v5/15-abstract-fold.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-seven-dimensions-explained-gpfxmhwv8w-1786854586045/assets/youtube-frames/selected-v5/15-abstract-fold.jpg"
     },
     {
       "src": "assets/youtube-frames/selected-v5/17-light-burst.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-seven-dimensions-explained-gpfxmhwv8w/assets/youtube-frames/selected-v5/17-light-burst.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-seven-dimensions-explained-gpfxmhwv8w-1786760748785/assets/youtube-frames/selected-v5/17-light-burst.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-seven-dimensions-explained-gpfxmhwv8w-1786854586045/assets/youtube-frames/selected-v5/17-light-burst.jpg"
     }
   ],
   "ratings": {
-    "gemini": 8.8,
+    "gemini": 9,
     "gpt": null,
-    "consensus": 8.8
+    "consensus": 9
   }
 }
