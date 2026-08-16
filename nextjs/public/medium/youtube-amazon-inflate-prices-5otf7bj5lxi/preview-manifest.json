@@ -1,0 +1,44 @@
+{
+  "slug": "youtube-amazon-inflate-prices-5otf7bj5lxi",
+  "title": "The Same Toy Is $27.99 Everywhere. That Is Not a Coincidence.",
+  "publicUrl": "https://www.maxpetrusenko.com/medium/youtube-amazon-inflate-prices-5otf7bj5lxi/",
+  "outputPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/youtube-amazon-inflate-prices-5otf7bj5lxi/index.html",
+  "sourceUrl": null,
+  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-amazon-inflate-prices-5otf7bj5lxi/article-v4.md",
+  "articleHash": "d8e06fbb675b15a26e092993f7c3c949eb1719b8dc394426a0b30dde99a1fd5f",
+  "exportedAt": "2026-08-16T06:02:20.483Z",
+  "status": "needs_review",
+  "publishMode": "preview",
+  "copiedImages": [
+    {
+      "src": "assets/frame-opening-shopping.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-amazon-inflate-prices-5otf7bj5lxi/assets/frame-opening-shopping.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-amazon-inflate-prices-5otf7bj5lxi-1786860140475/assets/frame-opening-shopping.jpg"
+    },
+    {
+      "src": "assets/frame-emails-evidence.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-amazon-inflate-prices-5otf7bj5lxi/assets/frame-emails-evidence.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-amazon-inflate-prices-5otf7bj5lxi-1786860140475/assets/frame-emails-evidence.jpg"
+    },
+    {
+      "src": "assets/frame-seller-warehouse.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-amazon-inflate-prices-5otf7bj5lxi/assets/frame-seller-warehouse.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-amazon-inflate-prices-5otf7bj5lxi-1786860140475/assets/frame-seller-warehouse.jpg"
+    },
+    {
+      "src": "assets/frame-algorithm.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-amazon-inflate-prices-5otf7bj5lxi/assets/frame-algorithm.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-amazon-inflate-prices-5otf7bj5lxi-1786860140475/assets/frame-algorithm.jpg"
+    },
+    {
+      "src": "assets/frame-ending-statues.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-amazon-inflate-prices-5otf7bj5lxi/assets/frame-ending-statues.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-amazon-inflate-prices-5otf7bj5lxi-1786860140475/assets/frame-ending-statues.jpg"
+    }
+  ],
+  "ratings": {
+    "gemini": null,
+    "gpt": null,
+    "consensus": null
+  }
+}
