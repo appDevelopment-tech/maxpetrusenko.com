@@ -1,0 +1,49 @@
+{
+  "slug": "youtube-sam-altman-worry-openai-_eytkvzqbnq",
+  "title": "You Should Be Worried About Sam Altman",
+  "publicUrl": "https://www.maxpetrusenko.com/medium/youtube-sam-altman-worry-openai-_eytkvzqbnq/",
+  "outputPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/youtube-sam-altman-worry-openai-_eytkvzqbnq/index.html",
+  "sourceUrl": "https://www.youtube.com/watch?v=_eYTkvZqbnQ",
+  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-sam-altman-worry-openai-_eytkvzqbnq/article-v8.md",
+  "articleHash": "86334b113739a53d40e7c41bb97362256f6a37fb2e3c073756d767f39d76485e",
+  "exportedAt": "2026-08-16T05:25:50.866Z",
+  "status": "passed_adversarial_gate",
+  "publishMode": "preview",
+  "copiedImages": [
+    {
+      "src": "assets/youtube-frames/selected/01-fired-newsroom.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-sam-altman-worry-openai-_eytkvzqbnq/assets/youtube-frames/selected/01-fired-newsroom.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-sam-altman-worry-openai-_eytkvzqbnq-1786857950864/assets/youtube-frames/selected/01-fired-newsroom.jpg"
+    },
+    {
+      "src": "assets/youtube-frames/selected/02-nonprofit-kill-switch.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-sam-altman-worry-openai-_eytkvzqbnq/assets/youtube-frames/selected/02-nonprofit-kill-switch.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-sam-altman-worry-openai-_eytkvzqbnq-1786857950864/assets/youtube-frames/selected/02-nonprofit-kill-switch.jpg"
+    },
+    {
+      "src": "assets/youtube-frames/selected/03-government-in-exile.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-sam-altman-worry-openai-_eytkvzqbnq/assets/youtube-frames/selected/03-government-in-exile.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-sam-altman-worry-openai-_eytkvzqbnq-1786857950864/assets/youtube-frames/selected/03-government-in-exile.jpg"
+    },
+    {
+      "src": "assets/youtube-frames/selected/04-dossier.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-sam-altman-worry-openai-_eytkvzqbnq/assets/youtube-frames/selected/04-dossier.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-sam-altman-worry-openai-_eytkvzqbnq-1786857950864/assets/youtube-frames/selected/04-dossier.jpg"
+    },
+    {
+      "src": "assets/youtube-frames/selected/05-employee-letter.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-sam-altman-worry-openai-_eytkvzqbnq/assets/youtube-frames/selected/05-employee-letter.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-sam-altman-worry-openai-_eytkvzqbnq-1786857950864/assets/youtube-frames/selected/05-employee-letter.jpg"
+    },
+    {
+      "src": "assets/youtube-frames/selected/06-who-decides.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-sam-altman-worry-openai-_eytkvzqbnq/assets/youtube-frames/selected/06-who-decides.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-sam-altman-worry-openai-_eytkvzqbnq-1786857950864/assets/youtube-frames/selected/06-who-decides.jpg"
+    }
+  ],
+  "ratings": {
+    "gemini": 9.5,
+    "gpt": 9.5,
+    "consensus": 9.5
+  }
+}
