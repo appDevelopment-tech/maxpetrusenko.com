@@ -1,0 +1,29 @@
+{
+  "slug": "youtube-lorem-ipsum-mystery-kl1pdqzqhm4",
+  "title": "The Weird Text in Every Design App Was Born on Page 36 of a 1914 Book",
+  "publicUrl": "https://www.maxpetrusenko.com/medium/youtube-lorem-ipsum-mystery-kl1pdqzqhm4/",
+  "outputPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/youtube-lorem-ipsum-mystery-kl1pdqzqhm4/index.html",
+  "sourceUrl": "https://www.youtube.com/watch?v=kL1PDqzqhM4",
+  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-lorem-ipsum-mystery-kl1pdqzqhm4/article-v11.md",
+  "articleHash": "c6b08e5aae08fa2cfb4029fbd9e0d1b76863e3fb12483a57fb7867a677334198",
+  "exportedAt": "2026-08-16T05:29:11.673Z",
+  "status": "passed_article_phase_pending_preview_and_medium_approval",
+  "publishMode": "preview",
+  "copiedImages": [
+    {
+      "src": "assets/youtube-frames/selected/00-source-thumbnail.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-lorem-ipsum-mystery-kl1pdqzqhm4/assets/youtube-frames/selected/00-source-thumbnail.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-lorem-ipsum-mystery-kl1pdqzqhm4-1786858151671/assets/youtube-frames/selected/00-source-thumbnail.jpg"
+    },
+    {
+      "src": "assets/youtube-frames/selected/02-library-interview.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-lorem-ipsum-mystery-kl1pdqzqhm4/assets/youtube-frames/selected/02-library-interview.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-lorem-ipsum-mystery-kl1pdqzqhm4-1786858151671/assets/youtube-frames/selected/02-library-interview.jpg"
+    }
+  ],
+  "ratings": {
+    "gemini": 8,
+    "gpt": null,
+    "consensus": 8
+  }
+}
