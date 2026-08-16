@@ -1,0 +1,39 @@
+{
+  "slug": "youtube-think-clearly-genius-mjtgkm-h__m",
+  "title": "Why Smart People Make Stupid Decisions When They Misread the System",
+  "publicUrl": "https://www.maxpetrusenko.com/medium/youtube-think-clearly-genius-mjtgkm-h__m/",
+  "outputPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/youtube-think-clearly-genius-mjtgkm-h__m/index.html",
+  "sourceUrl": "https://www.youtube.com/watch?v=mjTgkm-h__M",
+  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-think-clearly-genius-mjtgkm-h__m/article-v11.md",
+  "articleHash": "d4fb9fb8e6aaae387d4189a28b5982181ca857f46a44eaaa679d25feaed6a369",
+  "exportedAt": "2026-08-16T05:27:09.212Z",
+  "status": "pending_human_resolution",
+  "publishMode": "preview",
+  "copiedImages": [
+    {
+      "src": "assets/youtube-frames/selected/00-source-thumbnail.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-think-clearly-genius-mjtgkm-h__m/assets/youtube-frames/selected/00-source-thumbnail.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-think-clearly-genius-mjtgkm-h__m-1786858029203/assets/youtube-frames/selected/00-source-thumbnail.jpg"
+    },
+    {
+      "src": "assets/youtube-frames/selected/02-clear-system.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-think-clearly-genius-mjtgkm-h__m/assets/youtube-frames/selected/02-clear-system.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-think-clearly-genius-mjtgkm-h__m-1786858029203/assets/youtube-frames/selected/02-clear-system.jpg"
+    },
+    {
+      "src": "assets/youtube-frames/selected/05-chaotic-system.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-think-clearly-genius-mjtgkm-h__m/assets/youtube-frames/selected/05-chaotic-system.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-think-clearly-genius-mjtgkm-h__m-1786858029203/assets/youtube-frames/selected/05-chaotic-system.jpg"
+    },
+    {
+      "src": "assets/youtube-frames/selected/04-iphone-simple-system.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-think-clearly-genius-mjtgkm-h__m/assets/youtube-frames/selected/04-iphone-simple-system.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-think-clearly-genius-mjtgkm-h__m-1786858029203/assets/youtube-frames/selected/04-iphone-simple-system.jpg"
+    }
+  ],
+  "ratings": {
+    "gemini": 8,
+    "gpt": null,
+    "consensus": 8
+  }
+}
