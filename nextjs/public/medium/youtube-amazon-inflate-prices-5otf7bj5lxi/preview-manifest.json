@@ -4,41 +4,41 @@
   "publicUrl": "https://www.maxpetrusenko.com/medium/youtube-amazon-inflate-prices-5otf7bj5lxi/",
   "outputPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/youtube-amazon-inflate-prices-5otf7bj5lxi/index.html",
   "sourceUrl": null,
-  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-amazon-inflate-prices-5otf7bj5lxi/article-v4.md",
-  "articleHash": "d8e06fbb675b15a26e092993f7c3c949eb1719b8dc394426a0b30dde99a1fd5f",
-  "exportedAt": "2026-08-16T06:02:20.483Z",
-  "status": "needs_review",
+  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-amazon-inflate-prices-5otf7bj5lxi/article-v5.md",
+  "articleHash": "697a7c3c1277d58f6c56a82269f56775bfe9ac153d6f7aa10c18d9b01bc2e431",
+  "exportedAt": "2026-08-16T07:26:17.586Z",
+  "status": "passed_opus_gate_no_caps",
   "publishMode": "preview",
   "copiedImages": [
     {
-      "src": "assets/frame-opening-shopping.jpg",
-      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-amazon-inflate-prices-5otf7bj5lxi/assets/frame-opening-shopping.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-amazon-inflate-prices-5otf7bj5lxi-1786860140475/assets/frame-opening-shopping.jpg"
+      "src": "assets/frame-opening-godzilla-page.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-amazon-inflate-prices-5otf7bj5lxi/assets/frame-opening-godzilla-page.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-amazon-inflate-prices-5otf7bj5lxi-1786865177580/assets/frame-opening-godzilla-page.jpg"
     },
     {
-      "src": "assets/frame-emails-evidence.jpg",
-      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-amazon-inflate-prices-5otf7bj5lxi/assets/frame-emails-evidence.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-amazon-inflate-prices-5otf7bj5lxi-1786860140475/assets/frame-emails-evidence.jpg"
+      "src": "assets/frame-court-doc.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-amazon-inflate-prices-5otf7bj5lxi/assets/frame-court-doc.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-amazon-inflate-prices-5otf7bj5lxi-1786865177580/assets/frame-court-doc.jpg"
     },
     {
-      "src": "assets/frame-seller-warehouse.jpg",
-      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-amazon-inflate-prices-5otf7bj5lxi/assets/frame-seller-warehouse.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-amazon-inflate-prices-5otf7bj5lxi-1786860140475/assets/frame-seller-warehouse.jpg"
+      "src": "assets/frame-brainflakes-results.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-amazon-inflate-prices-5otf7bj5lxi/assets/frame-brainflakes-results.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-amazon-inflate-prices-5otf7bj5lxi-1786865177580/assets/frame-brainflakes-results.jpg"
     },
     {
-      "src": "assets/frame-algorithm.jpg",
-      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-amazon-inflate-prices-5otf7bj5lxi/assets/frame-algorithm.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-amazon-inflate-prices-5otf7bj5lxi-1786860140475/assets/frame-algorithm.jpg"
+      "src": "assets/frame-price-update-ui.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-amazon-inflate-prices-5otf7bj5lxi/assets/frame-price-update-ui.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-amazon-inflate-prices-5otf7bj5lxi-1786865177580/assets/frame-price-update-ui.jpg"
     },
     {
-      "src": "assets/frame-ending-statues.jpg",
-      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-amazon-inflate-prices-5otf7bj5lxi/assets/frame-ending-statues.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-amazon-inflate-prices-5otf7bj5lxi-1786860140475/assets/frame-ending-statues.jpg"
+      "src": "assets/frame-ending-godzilla-box.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-amazon-inflate-prices-5otf7bj5lxi/assets/frame-ending-godzilla-box.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-amazon-inflate-prices-5otf7bj5lxi-1786865177580/assets/frame-ending-godzilla-box.jpg"
     }
   ],
   "ratings": {
-    "gemini": null,
+    "gemini": 8.7,
     "gpt": null,
-    "consensus": null
+    "consensus": 8.7
   }
 }
