@@ -4,26 +4,26 @@
   "publicUrl": "https://www.maxpetrusenko.com/medium/youtube-lorem-ipsum-mystery-kl1pdqzqhm4/",
   "outputPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/youtube-lorem-ipsum-mystery-kl1pdqzqhm4/index.html",
   "sourceUrl": "https://www.youtube.com/watch?v=kL1PDqzqhM4",
-  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-lorem-ipsum-mystery-kl1pdqzqhm4/article-v14.md",
-  "articleHash": "6b19d4247d823852a481547dd62c55407c12bfa5066d023b58c09fe9cb2ea4d2",
-  "exportedAt": "2026-08-17T02:26:08.591Z",
+  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-lorem-ipsum-mystery-kl1pdqzqhm4/article-medium.md",
+  "articleHash": "95ce0e76c75a2ab3721a08e1385b2ab2ad10d40dc0d792d762cddb53c6bb59a2",
+  "exportedAt": "2026-08-17T04:21:20.244Z",
   "status": "passed_all_gates_preview_deployed_pending_max_review_approval",
   "publishMode": "preview",
   "copiedImages": [
     {
       "src": "assets/youtube-frames/selected/00-source-thumbnail.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-lorem-ipsum-mystery-kl1pdqzqhm4/assets/youtube-frames/selected/00-source-thumbnail.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-lorem-ipsum-mystery-kl1pdqzqhm4-1786933568587/assets/youtube-frames/selected/00-source-thumbnail.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-lorem-ipsum-mystery-kl1pdqzqhm4-1786940480242/assets/youtube-frames/selected/00-source-thumbnail.jpg"
     },
     {
       "src": "assets/youtube-frames/selected/01-mcclintock-correction.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-lorem-ipsum-mystery-kl1pdqzqhm4/assets/youtube-frames/selected/01-mcclintock-correction.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-lorem-ipsum-mystery-kl1pdqzqhm4-1786933568587/assets/youtube-frames/selected/01-mcclintock-correction.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-lorem-ipsum-mystery-kl1pdqzqhm4-1786940480242/assets/youtube-frames/selected/01-mcclintock-correction.jpg"
     }
   ],
   "ratings": {
-    "gemini": 9,
+    "gemini": 9.1,
     "gpt": null,
-    "consensus": 9
+    "consensus": 9.1
   }
 }
