@@ -6,39 +6,39 @@
   "sourceUrl": "https://www.youtube.com/watch?v=_eYTkvZqbnQ",
   "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-sam-altman-worry-openai-_eytkvzqbnq/article-v11.md",
   "articleHash": "370151ed4dd089dc34db88549e60e96210892cac6565691d8640254cc3b360cf",
-  "exportedAt": "2026-08-17T02:35:43.930Z",
+  "exportedAt": "2026-08-17T02:39:21.540Z",
   "status": "passed_opus_gate_no_caps",
   "publishMode": "preview",
   "copiedImages": [
     {
       "src": "assets/youtube-frames/selected/up-02-kill-switch-card.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-sam-altman-worry-openai-_eytkvzqbnq/assets/youtube-frames/selected/up-02-kill-switch-card.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-sam-altman-worry-openai-_eytkvzqbnq-1786934143928/assets/youtube-frames/selected/up-02-kill-switch-card.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-sam-altman-worry-openai-_eytkvzqbnq-1786934361538/assets/youtube-frames/selected/up-02-kill-switch-card.jpg"
     },
     {
       "src": "assets/youtube-frames/selected/up-03-board-scene.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-sam-altman-worry-openai-_eytkvzqbnq/assets/youtube-frames/selected/up-03-board-scene.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-sam-altman-worry-openai-_eytkvzqbnq-1786934143928/assets/youtube-frames/selected/up-03-board-scene.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-sam-altman-worry-openai-_eytkvzqbnq-1786934361538/assets/youtube-frames/selected/up-03-board-scene.jpg"
     },
     {
       "src": "assets/youtube-frames/selected/up-04-board-crowd.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-sam-altman-worry-openai-_eytkvzqbnq/assets/youtube-frames/selected/up-04-board-crowd.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-sam-altman-worry-openai-_eytkvzqbnq-1786934143928/assets/youtube-frames/selected/up-04-board-crowd.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-sam-altman-worry-openai-_eytkvzqbnq-1786934361538/assets/youtube-frames/selected/up-04-board-crowd.jpg"
     },
     {
       "src": "assets/youtube-frames/selected/up-05-saturday-card.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-sam-altman-worry-openai-_eytkvzqbnq/assets/youtube-frames/selected/up-05-saturday-card.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-sam-altman-worry-openai-_eytkvzqbnq-1786934143928/assets/youtube-frames/selected/up-05-saturday-card.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-sam-altman-worry-openai-_eytkvzqbnq-1786934361538/assets/youtube-frames/selected/up-05-saturday-card.jpg"
     },
     {
       "src": "assets/youtube-frames/selected/up-06-lone-figure.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-sam-altman-worry-openai-_eytkvzqbnq/assets/youtube-frames/selected/up-06-lone-figure.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-sam-altman-worry-openai-_eytkvzqbnq-1786934143928/assets/youtube-frames/selected/up-06-lone-figure.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-sam-altman-worry-openai-_eytkvzqbnq-1786934361538/assets/youtube-frames/selected/up-06-lone-figure.jpg"
     }
   ],
   "ratings": {
-    "gemini": 9.6,
-    "gpt": 9.5,
-    "consensus": 9.6
+    "gemini": 9.5,
+    "gpt": null,
+    "consensus": 9.5
   }
 }
