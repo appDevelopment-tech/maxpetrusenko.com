@@ -4,26 +4,31 @@
   "publicUrl": "https://www.maxpetrusenko.com/medium/youtube-use-hermes-right-now-qqegio4juxg/",
   "outputPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/youtube-use-hermes-right-now-qqegio4juxg/index.html",
   "sourceUrl": null,
-  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-use-hermes-right-now-qqegio4juxg/article-medium.md",
-  "articleHash": "9e2035672217b028243481ca53c70198ca20dc7c7cba63efd64b99c1584722af",
-  "exportedAt": "2026-08-17T06:04:54.475Z",
+  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-use-hermes-right-now-qqegio4juxg/article-v3.md",
+  "articleHash": "7735e8054f9a8bc3d7774281b8d841ce0f1980a23e1684c17bf29b7295a69991",
+  "exportedAt": "2026-08-17T06:37:05.157Z",
   "status": "opus_pass",
   "publishMode": "preview",
   "copiedImages": [
     {
-      "src": "assets/youtube-frames/selected/terminal-01.jpg",
-      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-use-hermes-right-now-qqegio4juxg/assets/youtube-frames/selected/terminal-01.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-use-hermes-right-now-qqegio4juxg-1786946694471/assets/youtube-frames/selected/terminal-01.jpg"
+      "src": "assets/youtube-frames/selected/terminal-03.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-use-hermes-right-now-qqegio4juxg/assets/youtube-frames/selected/terminal-03.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-use-hermes-right-now-qqegio4juxg-1786948625147/assets/youtube-frames/selected/terminal-03.jpg"
     },
     {
       "src": "assets/youtube-frames/selected/terminal-02.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-use-hermes-right-now-qqegio4juxg/assets/youtube-frames/selected/terminal-02.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-use-hermes-right-now-qqegio4juxg-1786946694471/assets/youtube-frames/selected/terminal-02.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-use-hermes-right-now-qqegio4juxg-1786948625147/assets/youtube-frames/selected/terminal-02.jpg"
+    },
+    {
+      "src": "assets/youtube-frames/selected/terminal-01.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-use-hermes-right-now-qqegio4juxg/assets/youtube-frames/selected/terminal-01.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-use-hermes-right-now-qqegio4juxg-1786948625147/assets/youtube-frames/selected/terminal-01.jpg"
     },
     {
       "src": "assets/youtube-frames/selected/terminal-03.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-use-hermes-right-now-qqegio4juxg/assets/youtube-frames/selected/terminal-03.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-use-hermes-right-now-qqegio4juxg-1786946694471/assets/youtube-frames/selected/terminal-03.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-use-hermes-right-now-qqegio4juxg-1786948625147/assets/youtube-frames/selected/terminal-03.jpg"
     }
   ],
   "ratings": {
