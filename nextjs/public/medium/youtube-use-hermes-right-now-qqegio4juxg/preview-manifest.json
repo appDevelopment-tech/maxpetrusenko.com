@@ -4,14 +4,30 @@
   "publicUrl": "https://www.maxpetrusenko.com/medium/youtube-use-hermes-right-now-qqegio4juxg/",
   "outputPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/youtube-use-hermes-right-now-qqegio4juxg/index.html",
   "sourceUrl": null,
-  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-use-hermes-right-now-qqegio4juxg/article-v2.md",
-  "articleHash": "d3b20f6a1e9ef3cb4d86cc807f20ba4df4869f77bc5b62d1134ed00dc086824b",
-  "exportedAt": "2026-08-17T05:56:54.734Z",
-  "status": "preview_deployed_waiting_max_schedule_approval",
+  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-use-hermes-right-now-qqegio4juxg/article-medium.md",
+  "articleHash": "9e2035672217b028243481ca53c70198ca20dc7c7cba63efd64b99c1584722af",
+  "exportedAt": "2026-08-17T06:04:54.475Z",
+  "status": "opus_pass",
   "publishMode": "preview",
-  "copiedImages": [],
+  "copiedImages": [
+    {
+      "src": "assets/youtube-frames/selected/terminal-01.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-use-hermes-right-now-qqegio4juxg/assets/youtube-frames/selected/terminal-01.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-use-hermes-right-now-qqegio4juxg-1786946694471/assets/youtube-frames/selected/terminal-01.jpg"
+    },
+    {
+      "src": "assets/youtube-frames/selected/terminal-02.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-use-hermes-right-now-qqegio4juxg/assets/youtube-frames/selected/terminal-02.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-use-hermes-right-now-qqegio4juxg-1786946694471/assets/youtube-frames/selected/terminal-02.jpg"
+    },
+    {
+      "src": "assets/youtube-frames/selected/terminal-03.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-use-hermes-right-now-qqegio4juxg/assets/youtube-frames/selected/terminal-03.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-use-hermes-right-now-qqegio4juxg-1786946694471/assets/youtube-frames/selected/terminal-03.jpg"
+    }
+  ],
   "ratings": {
-    "gemini": 9.1,
+    "gemini": 9.3,
     "gpt": null,
     "consensus": null
   }

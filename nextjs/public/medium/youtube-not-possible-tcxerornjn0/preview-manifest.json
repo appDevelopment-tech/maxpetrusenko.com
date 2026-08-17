@@ -4,20 +4,35 @@
   "publicUrl": "https://www.maxpetrusenko.com/medium/youtube-not-possible-tcxerornjn0/",
   "outputPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/youtube-not-possible-tcxerornjn0/index.html",
   "sourceUrl": null,
-  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-not-possible-tcxerornjn0/article-v6.md",
-  "articleHash": "373617ef55299ea9fa57470afced9ec1d240048df844638b953603c27e473c5f",
-  "exportedAt": "2026-08-17T05:43:52.817Z",
+  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-not-possible-tcxerornjn0/article-medium.md",
+  "articleHash": "85e9581132dcdcc0e292478679f7fd088d4f0c2babb63c44bdd2c6f61a703c87",
+  "exportedAt": "2026-08-17T06:04:54.572Z",
   "status": "preview_deployed_waiting_max_schedule_approval",
   "publishMode": "preview",
   "copiedImages": [
     {
       "src": "assets/youtube-frames/selected/01-hero.svg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-not-possible-tcxerornjn0/assets/youtube-frames/selected/01-hero.svg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-not-possible-tcxerornjn0-1786945432816/assets/youtube-frames/selected/01-hero.svg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-not-possible-tcxerornjn0-1786946694570/assets/youtube-frames/selected/01-hero.svg"
+    },
+    {
+      "src": "assets/youtube-frames/selected/02-bridge.svg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-not-possible-tcxerornjn0/assets/youtube-frames/selected/02-bridge.svg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-not-possible-tcxerornjn0-1786946694570/assets/youtube-frames/selected/02-bridge.svg"
+    },
+    {
+      "src": "assets/youtube-frames/selected/03-memory.svg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-not-possible-tcxerornjn0/assets/youtube-frames/selected/03-memory.svg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-not-possible-tcxerornjn0-1786946694570/assets/youtube-frames/selected/03-memory.svg"
+    },
+    {
+      "src": "assets/youtube-frames/selected/04-render.svg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-not-possible-tcxerornjn0/assets/youtube-frames/selected/04-render.svg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-not-possible-tcxerornjn0-1786946694570/assets/youtube-frames/selected/04-render.svg"
     }
   ],
   "ratings": {
-    "gemini": 8.7,
+    "gemini": 9.2,
     "gpt": null,
     "consensus": null
   }
