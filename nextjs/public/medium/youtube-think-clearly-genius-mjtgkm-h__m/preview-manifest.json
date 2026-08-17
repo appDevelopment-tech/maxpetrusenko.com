@@ -4,26 +4,26 @@
   "publicUrl": "https://www.maxpetrusenko.com/medium/youtube-think-clearly-genius-mjtgkm-h__m/",
   "outputPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/youtube-think-clearly-genius-mjtgkm-h__m/index.html",
   "sourceUrl": "https://www.youtube.com/watch?v=mjTgkm-h__M",
-  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-think-clearly-genius-mjtgkm-h__m/article-v13.md",
-  "articleHash": "8c280a0428ceb3510202d8494f51e229748eb8d252c46121824a6ecaba3bbf11",
-  "exportedAt": "2026-08-17T01:41:15.071Z",
+  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-think-clearly-genius-mjtgkm-h__m/article-v14.md",
+  "articleHash": "7fb81165af3bf00bdccde8de844f486e8b101c4ec73d3b85b2b4911643d18f5a",
+  "exportedAt": "2026-08-17T02:29:39.372Z",
   "status": "preview_deployed_awaiting_approval",
   "publishMode": "preview",
   "copiedImages": [
     {
       "src": "assets/web/cynefin-2022-diagram.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-think-clearly-genius-mjtgkm-h__m/assets/web/cynefin-2022-diagram.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-think-clearly-genius-mjtgkm-h__m-1786930875067/assets/web/cynefin-2022-diagram.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-think-clearly-genius-mjtgkm-h__m-1786933779368/assets/web/cynefin-2022-diagram.jpg"
     },
     {
       "src": "assets/youtube-frames/selected/05-reasons-confusion.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-think-clearly-genius-mjtgkm-h__m/assets/youtube-frames/selected/05-reasons-confusion.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-think-clearly-genius-mjtgkm-h__m-1786930875067/assets/youtube-frames/selected/05-reasons-confusion.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-think-clearly-genius-mjtgkm-h__m-1786933779368/assets/youtube-frames/selected/05-reasons-confusion.jpg"
     }
   ],
   "ratings": {
-    "gemini": 8.8,
+    "gemini": 9,
     "gpt": null,
-    "consensus": 8.8
+    "consensus": 9
   }
 }
