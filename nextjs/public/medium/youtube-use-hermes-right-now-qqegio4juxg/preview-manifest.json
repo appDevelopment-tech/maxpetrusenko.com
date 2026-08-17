@@ -4,14 +4,14 @@
   "publicUrl": "https://www.maxpetrusenko.com/medium/youtube-use-hermes-right-now-qqegio4juxg/",
   "outputPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/youtube-use-hermes-right-now-qqegio4juxg/index.html",
   "sourceUrl": null,
-  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-use-hermes-right-now-qqegio4juxg/article-medium.md",
-  "articleHash": "df87ba4c74c5676b710756d83c87603c185936a7509d24f981b16f7fab072e31",
-  "exportedAt": "2026-08-17T05:47:05.474Z",
-  "status": "needs_review",
+  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-use-hermes-right-now-qqegio4juxg/article-v2.md",
+  "articleHash": "d3b20f6a1e9ef3cb4d86cc807f20ba4df4869f77bc5b62d1134ed00dc086824b",
+  "exportedAt": "2026-08-17T05:56:54.734Z",
+  "status": "preview_deployed_waiting_max_schedule_approval",
   "publishMode": "preview",
   "copiedImages": [],
   "ratings": {
-    "gemini": null,
+    "gemini": 9.1,
     "gpt": null,
     "consensus": null
   }
