@@ -4,31 +4,36 @@
   "publicUrl": "https://www.maxpetrusenko.com/medium/youtube-humanity-never-leave-solar-system-cyl3x88kegg/",
   "outputPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/youtube-humanity-never-leave-solar-system-cyl3x88kegg/index.html",
   "sourceUrl": "https://www.youtube.com/watch?v=Cyl3X88KEgg",
-  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-humanity-never-leave-solar-system-cyl3x88kegg/article-v3.md",
-  "articleHash": "a3ab7aff3335c4193761623c1a920b8465fe8d8e48d6dcb61312c89c4c00fe6d",
-  "exportedAt": "2026-08-16T07:26:17.488Z",
+  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-humanity-never-leave-solar-system-cyl3x88kegg/article-v4.md",
+  "articleHash": "826a509ee19e20a7282b9e39573562c58e5e4ceac48c0d53da0abd86a9995b7d",
+  "exportedAt": "2026-08-17T01:38:01.372Z",
   "status": "preview_deployed_awaiting_approval",
   "publishMode": "preview",
   "copiedImages": [
     {
+      "src": "assets/hero-voyager-edge.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-humanity-never-leave-solar-system-cyl3x88kegg/assets/hero-voyager-edge.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-humanity-never-leave-solar-system-cyl3x88kegg-1786930681365/assets/hero-voyager-edge.jpg"
+    },
+    {
       "src": "assets/oort-cloud-2.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-humanity-never-leave-solar-system-cyl3x88kegg/assets/oort-cloud-2.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-humanity-never-leave-solar-system-cyl3x88kegg-1786865177482/assets/oort-cloud-2.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-humanity-never-leave-solar-system-cyl3x88kegg-1786930681365/assets/oort-cloud-2.jpg"
     },
     {
       "src": "assets/dust-barrier-2.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-humanity-never-leave-solar-system-cyl3x88kegg/assets/dust-barrier-2.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-humanity-never-leave-solar-system-cyl3x88kegg-1786865177482/assets/dust-barrier-2.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-humanity-never-leave-solar-system-cyl3x88kegg-1786930681365/assets/dust-barrier-2.jpg"
     },
     {
       "src": "assets/alpha-centauri.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-humanity-never-leave-solar-system-cyl3x88kegg/assets/alpha-centauri.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-humanity-never-leave-solar-system-cyl3x88kegg-1786865177482/assets/alpha-centauri.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-humanity-never-leave-solar-system-cyl3x88kegg-1786930681365/assets/alpha-centauri.jpg"
     },
     {
       "src": "assets/conclusion-2.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-humanity-never-leave-solar-system-cyl3x88kegg/assets/conclusion-2.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-humanity-never-leave-solar-system-cyl3x88kegg-1786865177482/assets/conclusion-2.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-humanity-never-leave-solar-system-cyl3x88kegg-1786930681365/assets/conclusion-2.jpg"
     }
   ],
   "ratings": {
