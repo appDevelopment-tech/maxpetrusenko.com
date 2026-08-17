@@ -4,36 +4,36 @@
   "publicUrl": "https://www.maxpetrusenko.com/medium/youtube-phone-dreams-hrzc6na62bo/",
   "outputPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/youtube-phone-dreams-hrzc6na62bo/index.html",
   "sourceUrl": null,
-  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-phone-dreams-hrzc6na62bo/article-v16.md",
-  "articleHash": "f121d2d881cc6988fe1ff90b2f40c6bc26b8fb6045bf37300cf34edd735feabf",
-  "exportedAt": "2026-08-17T02:57:25.340Z",
+  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-phone-dreams-hrzc6na62bo/article-medium.md",
+  "articleHash": "5c2aec7054962f3200a4d13a0873b96c227502aa9ef2bbf9811a2db7e5129951",
+  "exportedAt": "2026-08-17T04:21:32.056Z",
   "status": "preview_ready_pending_approval",
   "publishMode": "preview",
   "copiedImages": [
     {
       "src": "assets/youtube-frames/selected/01-data-center.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-phone-dreams-hrzc6na62bo/assets/youtube-frames/selected/01-data-center.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-phone-dreams-hrzc6na62bo-1786935445335/assets/youtube-frames/selected/01-data-center.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-phone-dreams-hrzc6na62bo-1786940492051/assets/youtube-frames/selected/01-data-center.jpg"
     },
     {
       "src": "assets/youtube-frames/selected/02-attention-chart.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-phone-dreams-hrzc6na62bo/assets/youtube-frames/selected/02-attention-chart.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-phone-dreams-hrzc6na62bo-1786935445335/assets/youtube-frames/selected/02-attention-chart.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-phone-dreams-hrzc6na62bo-1786940492051/assets/youtube-frames/selected/02-attention-chart.jpg"
     },
     {
       "src": "assets/youtube-frames/selected/03-notification-script-interruption.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-phone-dreams-hrzc6na62bo/assets/youtube-frames/selected/03-notification-script-interruption.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-phone-dreams-hrzc6na62bo-1786935445335/assets/youtube-frames/selected/03-notification-script-interruption.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-phone-dreams-hrzc6na62bo-1786940492051/assets/youtube-frames/selected/03-notification-script-interruption.jpg"
     },
     {
       "src": "assets/youtube-frames/selected/04-notification-lock.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-phone-dreams-hrzc6na62bo/assets/youtube-frames/selected/04-notification-lock.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-phone-dreams-hrzc6na62bo-1786935445335/assets/youtube-frames/selected/04-notification-lock.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-phone-dreams-hrzc6na62bo-1786940492051/assets/youtube-frames/selected/04-notification-lock.jpg"
     }
   ],
   "ratings": {
-    "gemini": 8.6,
+    "gemini": 8.8,
     "gpt": null,
-    "consensus": 8.6
+    "consensus": 8.8
   }
 }
