@@ -4,45 +4,40 @@
   "publicUrl": "https://www.maxpetrusenko.com/medium/youtube-american-war-machine-t0oqriimva/",
   "outputPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/youtube-american-war-machine-t0oqriimva/index.html",
   "sourceUrl": null,
-  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-american-war-machine-t0oqriimva/article-v2.md",
-  "articleHash": "cb6b021f928f01989ccb5dc52ec312dd841d7c25f8ea56e6cf97a6a7fd832c55",
-  "exportedAt": "2026-08-17T06:37:31.271Z",
+  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-american-war-machine-t0oqriimva/article-medium.md",
+  "articleHash": "3099d3a24673ed3dbd07607acbf5cbd29712c062274c3351e4fe9fb059a5f670",
+  "exportedAt": "2026-08-18T07:01:33.382Z",
   "status": "preview_deployed_waiting_max_schedule_approval",
   "publishMode": "preview",
   "copiedImages": [
     {
       "src": "assets/youtube-frames/selected/awm-map-01.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-american-war-machine-t0oqriimva/assets/youtube-frames/selected/awm-map-01.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-american-war-machine-t0oqriimva-1786948651266/assets/youtube-frames/selected/awm-map-01.jpg"
-    },
-    {
-      "src": "assets/youtube-frames/selected/awm-map-02.jpg",
-      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-american-war-machine-t0oqriimva/assets/youtube-frames/selected/awm-map-02.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-american-war-machine-t0oqriimva-1786948651266/assets/youtube-frames/selected/awm-map-02.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-american-war-machine-t0oqriimva-1787036493377/assets/youtube-frames/selected/awm-map-01.jpg"
     },
     {
       "src": "assets/youtube-frames/selected/awm-map-03.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-american-war-machine-t0oqriimva/assets/youtube-frames/selected/awm-map-03.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-american-war-machine-t0oqriimva-1786948651266/assets/youtube-frames/selected/awm-map-03.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-american-war-machine-t0oqriimva-1787036493377/assets/youtube-frames/selected/awm-map-03.jpg"
     },
     {
       "src": "assets/youtube-frames/selected/awm-map-04.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-american-war-machine-t0oqriimva/assets/youtube-frames/selected/awm-map-04.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-american-war-machine-t0oqriimva-1786948651266/assets/youtube-frames/selected/awm-map-04.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-american-war-machine-t0oqriimva-1787036493377/assets/youtube-frames/selected/awm-map-04.jpg"
     },
     {
       "src": "assets/youtube-frames/selected/awm-map-05.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-american-war-machine-t0oqriimva/assets/youtube-frames/selected/awm-map-05.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-american-war-machine-t0oqriimva-1786948651266/assets/youtube-frames/selected/awm-map-05.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-american-war-machine-t0oqriimva-1787036493377/assets/youtube-frames/selected/awm-map-05.jpg"
     },
     {
       "src": "assets/youtube-frames/selected/awm-map-06.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-american-war-machine-t0oqriimva/assets/youtube-frames/selected/awm-map-06.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-american-war-machine-t0oqriimva-1786948651266/assets/youtube-frames/selected/awm-map-06.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-american-war-machine-t0oqriimva-1787036493377/assets/youtube-frames/selected/awm-map-06.jpg"
     }
   ],
   "ratings": {
-    "gemini": 9.2,
+    "gemini": 9.4,
     "gpt": null,
     "consensus": null
   }
