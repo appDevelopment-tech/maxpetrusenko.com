@@ -18,6 +18,7 @@ Exit 0 = every ld+json block in every html file parses. Exit 1 = invalid.
 """
 import glob
 import json
+import os
 import re
 import sys
 
@@ -46,7 +47,21 @@ def main(argv) -> int:
     roots = argv or ["."]
     files = []
     for root in roots:
-        files += sorted(glob.glob(root.rstrip("/") + "/**/*.html", recursive=True))
+        if os.path.isfile(root):
+            # Accept explicit html FILE paths too (a mis-wired CI step that
+            # passes a file path must still be checked, not silently skipped).
+            if root.endswith(".html"):
+                files.append(root)
+        else:
+            files += sorted(glob.glob(root.rstrip("/") + "/**/*.html", recursive=True))
+    files = sorted(set(files))
+    if not files:
+        print(
+            f"check-jsonld: FAIL — no html files found under {roots} "
+            "(misconfigured path? fix the CI invocation)",
+            file=sys.stderr,
+        )
+        return 1
     bad = []
     for f in files:
         for i, e in check_file(f):
