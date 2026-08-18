@@ -43,5 +43,9 @@ jobs:
       - name: Build Pages output
         run: npm run pages:build
 
+      - name: Validate JSON-LD
+        working-directory: .
+        run: python3 scripts/check-jsonld.py .
+
       - name: Deploy to Cloudflare Pages
         run: npx wrangler pages deploy .vercel/output/static --project-name=maxpetrusenko-nextjs --branch=main
