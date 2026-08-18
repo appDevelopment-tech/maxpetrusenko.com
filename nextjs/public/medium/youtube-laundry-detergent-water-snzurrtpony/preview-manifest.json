@@ -1,0 +1,39 @@
+{
+  "slug": "youtube-laundry-detergent-water-snzurrtpony",
+  "title": "Your Laundry Detergent Is Selling You the Feeling of Clean",
+  "publicUrl": "https://www.maxpetrusenko.com/medium/youtube-laundry-detergent-water-snzurrtpony/",
+  "outputPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/youtube-laundry-detergent-water-snzurrtpony/index.html",
+  "sourceUrl": "https://www.youtube.com/watch?v=SNzuRrTpONY",
+  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-laundry-detergent-water-snzurrtpony/article-v9.md",
+  "articleHash": "0563672ef9a9a0dbe05d97aa596e951ee5c0001fd9537428f4603b278f178caa",
+  "exportedAt": "2026-08-18T09:23:57.506Z",
+  "status": "ready_for_preview",
+  "publishMode": "preview",
+  "copiedImages": [
+    {
+      "src": "assets/youtube-frames/selected/01-detergent-shelf.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-laundry-detergent-water-snzurrtpony/assets/youtube-frames/selected/01-detergent-shelf.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-laundry-detergent-water-snzurrtpony-1787045037503/assets/youtube-frames/selected/01-detergent-shelf.jpg"
+    },
+    {
+      "src": "assets/youtube-frames/selected/02-castile-soap.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-laundry-detergent-water-snzurrtpony/assets/youtube-frames/selected/02-castile-soap.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-laundry-detergent-water-snzurrtpony-1787045037503/assets/youtube-frames/selected/02-castile-soap.jpg"
+    },
+    {
+      "src": "assets/youtube-frames/selected/04-recipe-steps.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-laundry-detergent-water-snzurrtpony/assets/youtube-frames/selected/04-recipe-steps.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-laundry-detergent-water-snzurrtpony-1787045037503/assets/youtube-frames/selected/04-recipe-steps.jpg"
+    },
+    {
+      "src": "assets/youtube-frames/selected/05-washer-drum.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-laundry-detergent-water-snzurrtpony/assets/youtube-frames/selected/05-washer-drum.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-laundry-detergent-water-snzurrtpony-1787045037503/assets/youtube-frames/selected/05-washer-drum.jpg"
+    }
+  ],
+  "ratings": {
+    "gemini": 9.5,
+    "gpt": null,
+    "consensus": 9.5
+  }
+}

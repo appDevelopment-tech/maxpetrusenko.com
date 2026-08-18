@@ -4,29 +4,31 @@
   "publicUrl": "https://www.maxpetrusenko.com/medium/youtube-monster-head-cognitive-biases-hwzjwzni_dc/",
   "outputPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/youtube-monster-head-cognitive-biases-hwzjwzni_dc/index.html",
   "sourceUrl": "https://www.youtube.com/watch?v=hwzJwZni_Dc",
-  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-monster-head-cognitive-biases-hwzjwzni_dc/article-v4.md",
-  "exportedAt": "2026-06-29T22:33:29.176Z",
-  "status": "passed_adversarial_gate",
+  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-monster-head-cognitive-biases-hwzjwzni_dc/article-medium.md",
+  "articleHash": "ba9072aec28bb09166f4342cd1d6565852438ca0568939b3cb898f03a417aa6c",
+  "exportedAt": "2026-08-18T09:23:57.116Z",
+  "status": "needs_human_resolution_after_v7_second_revision",
+  "publishMode": "preview",
   "copiedImages": [
     {
       "src": "assets/youtube-frames/selected/02-brain-map-clean.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-monster-head-cognitive-biases-hwzjwzni_dc/assets/youtube-frames/selected/02-brain-map-clean.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-monster-head-cognitive-biases-hwzjwzni_dc-1782772409173/assets/youtube-frames/selected/02-brain-map-clean.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-monster-head-cognitive-biases-hwzjwzni_dc-1787045037112/assets/youtube-frames/selected/02-brain-map-clean.jpg"
     },
     {
       "src": "assets/youtube-frames/selected/05-plane-clean.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-monster-head-cognitive-biases-hwzjwzni_dc/assets/youtube-frames/selected/05-plane-clean.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-monster-head-cognitive-biases-hwzjwzni_dc-1782772409173/assets/youtube-frames/selected/05-plane-clean.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-monster-head-cognitive-biases-hwzjwzni_dc-1787045037112/assets/youtube-frames/selected/05-plane-clean.jpg"
     },
     {
       "src": "assets/youtube-frames/selected/06-social-fire.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-monster-head-cognitive-biases-hwzjwzni_dc/assets/youtube-frames/selected/06-social-fire.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-monster-head-cognitive-biases-hwzjwzni_dc-1782772409173/assets/youtube-frames/selected/06-social-fire.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-monster-head-cognitive-biases-hwzjwzni_dc-1787045037112/assets/youtube-frames/selected/06-social-fire.jpg"
     }
   ],
   "ratings": {
-    "gemini": 9.5,
+    "gemini": 6,
     "gpt": null,
-    "consensus": 9.5
+    "consensus": 6
   }
 }

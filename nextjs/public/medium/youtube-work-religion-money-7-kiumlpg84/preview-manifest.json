@@ -1,0 +1,39 @@
+{
+  "slug": "youtube-work-religion-money-7-kiumlpg84",
+  "title": "Work Will Take Everything From You",
+  "publicUrl": "https://www.maxpetrusenko.com/medium/youtube-work-religion-money-7-kiumlpg84/",
+  "outputPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/youtube-work-religion-money-7-kiumlpg84/index.html",
+  "sourceUrl": "https://www.youtube.com/watch?v=7-KiUMLpg84",
+  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-work-religion-money-7-kiumlpg84/article-v8.md",
+  "articleHash": "de870a98d9f902633f1d0753745f1dce384819a94db1829e4030f59706347f75",
+  "exportedAt": "2026-08-18T09:23:55.939Z",
+  "status": "passed_adversarial_gate",
+  "publishMode": "preview",
+  "copiedImages": [
+    {
+      "src": "assets/youtube-frames/selected/01-amazon-wristband.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-work-religion-money-7-kiumlpg84/assets/youtube-frames/selected/01-amazon-wristband.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-work-religion-money-7-kiumlpg84-1787045035934/assets/youtube-frames/selected/01-amazon-wristband.jpg"
+    },
+    {
+      "src": "assets/youtube-frames/selected/02-calvin-work-virtue.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-work-religion-money-7-kiumlpg84/assets/youtube-frames/selected/02-calvin-work-virtue.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-work-religion-money-7-kiumlpg84-1787045035934/assets/youtube-frames/selected/02-calvin-work-virtue.jpg"
+    },
+    {
+      "src": "assets/youtube-frames/selected/04-dentsu-overwork.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-work-religion-money-7-kiumlpg84/assets/youtube-frames/selected/04-dentsu-overwork.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-work-religion-money-7-kiumlpg84-1787045035934/assets/youtube-frames/selected/04-dentsu-overwork.jpg"
+    },
+    {
+      "src": "assets/youtube-frames/selected/06-personal-burnout.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-work-religion-money-7-kiumlpg84/assets/youtube-frames/selected/06-personal-burnout.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-work-religion-money-7-kiumlpg84-1787045035934/assets/youtube-frames/selected/06-personal-burnout.jpg"
+    }
+  ],
+  "ratings": {
+    "gemini": 9.1,
+    "gpt": null,
+    "consensus": 9.1
+  }
+}

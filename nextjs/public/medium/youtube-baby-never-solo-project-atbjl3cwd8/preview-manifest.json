@@ -1,0 +1,44 @@
+{
+  "slug": "youtube-baby-never-solo-project-atbjl3cwd8",
+  "title": "A Baby Was Never a Solo Project",
+  "publicUrl": "https://www.maxpetrusenko.com/medium/youtube-baby-never-solo-project-atbjl3cwd8/",
+  "outputPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/youtube-baby-never-solo-project-atbjl3cwd8/index.html",
+  "sourceUrl": "https://www.youtube.com/watch?v=atbj_l3cWD8",
+  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-baby-never-solo-project-atbjl3cwd8/article-v9.md",
+  "articleHash": "b254cd6ff3ec5522dae1faa8baeb45565b8e2751828318ad0255f40fe0a6f0c5",
+  "exportedAt": "2026-08-18T09:23:58.783Z",
+  "status": "passed_article_phase_exact_hash",
+  "publishMode": "preview",
+  "copiedImages": [
+    {
+      "src": "assets/youtube-frames/selected/01-modern-nursery.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-baby-never-solo-project-atbjl3cwd8/assets/youtube-frames/selected/01-modern-nursery.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-baby-never-solo-project-atbjl3cwd8-1787045038778/assets/youtube-frames/selected/01-modern-nursery.jpg"
+    },
+    {
+      "src": "assets/youtube-frames/selected/02-brain-tradeoff.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-baby-never-solo-project-atbjl3cwd8/assets/youtube-frames/selected/02-brain-tradeoff.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-baby-never-solo-project-atbjl3cwd8-1787045038778/assets/youtube-frames/selected/02-brain-tradeoff.jpg"
+    },
+    {
+      "src": "assets/youtube-frames/selected/03-alloparenting-circle.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-baby-never-solo-project-atbjl3cwd8/assets/youtube-frames/selected/03-alloparenting-circle.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-baby-never-solo-project-atbjl3cwd8-1787045038778/assets/youtube-frames/selected/03-alloparenting-circle.jpg"
+    },
+    {
+      "src": "assets/youtube-frames/selected/04-transport-response.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-baby-never-solo-project-atbjl3cwd8/assets/youtube-frames/selected/04-transport-response.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-baby-never-solo-project-atbjl3cwd8-1787045038778/assets/youtube-frames/selected/04-transport-response.jpg"
+    },
+    {
+      "src": "assets/youtube-frames/selected/05-grandmother-foraging.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-baby-never-solo-project-atbjl3cwd8/assets/youtube-frames/selected/05-grandmother-foraging.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-baby-never-solo-project-atbjl3cwd8-1787045038778/assets/youtube-frames/selected/05-grandmother-foraging.jpg"
+    }
+  ],
+  "ratings": {
+    "gemini": 9.5,
+    "gpt": null,
+    "consensus": 9.5
+  }
+}

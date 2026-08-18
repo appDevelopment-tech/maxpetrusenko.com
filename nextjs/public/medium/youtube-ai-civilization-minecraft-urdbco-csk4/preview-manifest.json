@@ -4,39 +4,36 @@
   "publicUrl": "https://www.maxpetrusenko.com/medium/youtube-ai-civilization-minecraft-urdbco-csk4/",
   "outputPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/youtube-ai-civilization-minecraft-urdbco-csk4/index.html",
   "sourceUrl": "https://www.youtube.com/watch?v=uRDBco-cSK4",
-  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-ai-civilization-minecraft-urdbco-csk4/article-v2.md",
-  "exportedAt": "2026-07-07T04:29:13.918Z",
-  "status": "passed_adversarial_gate",
+  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-ai-civilization-minecraft-urdbco-csk4/article-v9.md",
+  "articleHash": "96837a9e983c681f8dd72f6a9c97ff0d3261b3704170908baac54f8342358884",
+  "exportedAt": "2026-08-18T09:23:58.986Z",
+  "status": "needs_human_resolution",
+  "publishMode": "preview",
   "copiedImages": [
     {
       "src": "assets/youtube-frames/selected/01-tax-guard-minecraft-village.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-ai-civilization-minecraft-urdbco-csk4/assets/youtube-frames/selected/01-tax-guard-minecraft-village.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-ai-civilization-minecraft-urdbco-csk4-1783398553909/assets/youtube-frames/selected/01-tax-guard-minecraft-village.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-ai-civilization-minecraft-urdbco-csk4-1787045038981/assets/youtube-frames/selected/01-tax-guard-minecraft-village.jpg"
     },
     {
       "src": "assets/youtube-frames/selected/03-smallville-agent-map.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-ai-civilization-minecraft-urdbco-csk4/assets/youtube-frames/selected/03-smallville-agent-map.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-ai-civilization-minecraft-urdbco-csk4-1783398553909/assets/youtube-frames/selected/03-smallville-agent-map.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-ai-civilization-minecraft-urdbco-csk4-1787045038981/assets/youtube-frames/selected/03-smallville-agent-map.jpg"
     },
     {
       "src": "assets/youtube-frames/selected/04-agent-social-scene.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-ai-civilization-minecraft-urdbco-csk4/assets/youtube-frames/selected/04-agent-social-scene.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-ai-civilization-minecraft-urdbco-csk4-1783398553909/assets/youtube-frames/selected/04-agent-social-scene.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-ai-civilization-minecraft-urdbco-csk4-1787045038981/assets/youtube-frames/selected/04-agent-social-scene.jpg"
     },
     {
       "src": "assets/youtube-frames/selected/05-agent-network-brain.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-ai-civilization-minecraft-urdbco-csk4/assets/youtube-frames/selected/05-agent-network-brain.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-ai-civilization-minecraft-urdbco-csk4-1783398553909/assets/youtube-frames/selected/05-agent-network-brain.jpg"
-    },
-    {
-      "src": "assets/youtube-frames/selected/06-chatdev-paper.jpg",
-      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-ai-civilization-minecraft-urdbco-csk4/assets/youtube-frames/selected/06-chatdev-paper.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-ai-civilization-minecraft-urdbco-csk4-1783398553909/assets/youtube-frames/selected/06-chatdev-paper.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-ai-civilization-minecraft-urdbco-csk4-1787045038981/assets/youtube-frames/selected/05-agent-network-brain.jpg"
     }
   ],
   "ratings": {
-    "gemini": 9.5,
+    "gemini": 8.5,
     "gpt": null,
-    "consensus": 9.5
+    "consensus": 8.5
   }
 }

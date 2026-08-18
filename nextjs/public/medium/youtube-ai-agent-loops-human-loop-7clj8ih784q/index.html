@@ -1,37 +1,88 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex,nofollow">
-  <title>AI Agent Loops Are Expensive Guess Machines Without a Score</title>
+  <meta name="article:status" content="preview">
+  <meta name="source-article-sha256" content="54debbf4bd2f280b9fee80138fedb0914c21ccf21995a9abfec95d3f23f566af">
+  <link rel="canonical" href="https://www.maxpetrusenko.com/medium/youtube-ai-agent-loops-human-loop-7clj8ih784q/">
+  <title>AI Agent Loops Fail When They Grade Their Own Work</title>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; font-size: 18px; line-height: 1.7; color: #1a1a1a; max-width: 740px; margin: 0 auto; padding: 40px 20px 80px; }
-    h1 { font-size: 2.4em; font-weight: 700; line-height: 1.2; margin: 0 0 16px; letter-spacing: -0.02em; }
-    h2 { font-size: 1.5em; font-weight: 600; margin: 48px 0 16px; }
-    h3 { font-size: 1.2em; font-weight: 600; margin: 32px 0 12px; }
-    p { margin: 0 0 24px; }
-    a { color: #0066cc; text-decoration: none; }
-    a:hover { text-decoration: underline; }
-    img { max-width: 100%; height: auto; border-radius: 4px; margin: 24px 0; }
-    .subtitle { font-size: 1.25em; color: #555; margin: 0 0 8px; font-style: italic; line-height: 1.5; }
-    .direct-answer { background: #f5f5f5; border-left: 4px solid #333; padding: 16px 20px; margin: 24px 0 32px; font-size: 1.05em; }
-    hr { border: none; border-top: 1px solid #e0e0e0; margin: 40px 0; }
-    ul, ol { margin: 0 0 24px 24px; }
-    li { margin: 0 0 8px; }
-    pre { background: #f5f5f5; padding: 16px; border-radius: 4px; overflow-x: auto; font-size: 0.9em; line-height: 1.5; }
-    strong { font-weight: 700; }
-    em { font-style: italic; }
+    :root {
+      color-scheme: light;
+      --paper: #f7f1e7;
+      --ink: #221f1a;
+      --muted: #6d6255;
+      --rule: #d9cbbb;
+      --accent: #8a3f1b;
+      --panel: #fffaf2;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: radial-gradient(circle at top left, #fff7e6 0, #f7f1e7 34%, #eee5d7 100%);
+      color: var(--ink);
+      font-family: Georgia, 'Times New Roman', serif;
+      line-height: 1.66;
+    }
+    main {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 48px 22px 84px;
+    }
+    h1 {
+      margin: 0 0 22px;
+      font-size: clamp(38px, 7vw, 58px);
+      line-height: 0.98;
+      letter-spacing: 0;
+    }
+    h2 {
+      margin: 48px 0 14px;
+      font-size: clamp(25px, 4vw, 33px);
+      line-height: 1.13;
+      letter-spacing: 0;
+    }
+    h3 {
+      margin: 34px 0 12px;
+      font-size: 23px;
+      line-height: 1.2;
+      letter-spacing: 0;
+    }
+    p, li {
+      font-size: 20px;
+      margin: 0 0 20px;
+    }
+    ul { padding-left: 24px; margin: 0 0 28px; }
+    li { margin-bottom: 8px; }
+    a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+    blockquote {
+      margin: 30px 0;
+      padding: 4px 0 4px 22px;
+      border-left: 4px solid var(--accent);
+      color: #433b32;
+      font-style: italic;
+      background: linear-gradient(90deg, rgba(138,63,27,0.06), rgba(138,63,27,0));
+    }
+    blockquote p { margin: 0; font-size: 22px; }
+    figure { margin: 0 0 34px; }
+    img { display: block; width: 100%; height: auto; border-radius: 6px; box-shadow: 0 18px 44px rgba(42, 32, 20, 0.16); }
+    hr { border: 0; border-top: 1px solid var(--rule); margin: 42px 0; }
+    code { background: #eadfce; padding: 2px 5px; border-radius: 4px; font-size: 0.9em; }
+    em { color: #4a4138; }
+    @media (max-width: 620px) {
+      main { padding: 28px 18px 64px; }
+      p, li { font-size: 18px; }
+      blockquote p { font-size: 19px; }
+    }
   </style>
 </head>
 <body>
-  <h1>AI Agent Loops Are Expensive Guess Machines Without a Score</h1>
-  <p class="subtitle">A $1.3M token burn reveals the hidden rule: the critic must live outside the loop, or the loop grades its own homework and calls it done.</p>
-  <h1>AI Agent Loops Are Expensive Guess Machines Without a Score</h1>
-<p><em>A $1.3M token burn reveals the hidden rule: the critic must live outside the loop, or the loop grades its own homework and calls it done.</em></p>
+  <main>
+<h1>AI Agent Loops Fail When They Grade Their Own Work</h1>
+<p><em>Greg Isenberg’s guest showed the useful pattern: a bounded PR, Greptile scoring above 4/5, and a five-turn stop rule before autonomy becomes cleanup.</em> (<a href="https://www.youtube.com/watch?v=7clJ8IH784Q" target="_blank" rel="noopener noreferrer">https://www.youtube.com/watch?v=7clJ8IH784Q</a>)</p>
 <p><strong>Direct answer:</strong> An AI agent loop is useful when the agent can act, inspect a result, receive a clear signal, and try again inside a bounded lane. It turns into expensive slop when the task still depends on taste, hidden product context, or decisions outside the repo’s evidence.</p>
-<p><img src="assets/generated-infographics/human-control-loop.png" alt="A generated diagram shows an AI agent loop with a human control point, an output artifact, and feedback returning through a bounded lane." loading="lazy"></p>
+<figure><img src="/medium/youtube-ai-agent-loops-human-loop-7clj8ih784q/assets/generated-infographics/human-control-loop.png" alt="A generated diagram shows an AI agent loop with a human control point, an output artifact, and feedback returning through a bounded lane."></figure>
 <p>Everyone wants the magic loop now.</p>
 <p>One command. One spec file. One agent. The machine plans, builds, reviews itself, fixes itself, pushes again, keeps going, and returns with the finished thing while the human does something more glamorous than babysitting a terminal.</p>
 <p>That is the dream version.</p>
@@ -44,7 +95,7 @@
 <p>The whiteboard version is intentionally primitive: “me and you,” an AI agent, a result box, and arrows between them. The value is in the arrow that comes back. A result stops being a terminal artifact and becomes evidence for the next turn.</p>
 <p>In the ordinary version, the human owns the comeback arrow. You see the result. You notice the missing context. You decide whether the agent should refactor, delete, test, rewrite, or stop.</p>
 <p>In the agent-run version, the human fires once. The agent reads the result, judges it, feeds that judgment back into itself, and continues. The speakers name the recent versions directly: Ralph loops, Ralph Wiggum, and slash-goal style workflows. They are useful for prototypes and experiments. They are dangerous when the details matter and the token budget is real.</p>
-<p><img src="assets/youtube-frames/cropped/11-40-human-in-loop-whiteboard-crop.jpg" alt="A cropped source frame from the whiteboard removes presenter faces and shows the human-in-the-loop diagram." loading="lazy"></p>
+<figure><img src="/medium/youtube-ai-agent-loops-human-loop-7clj8ih784q/assets/youtube-frames/cropped/11-40-human-in-loop-whiteboard-crop.jpg" alt="A cropped source frame from the whiteboard removes presenter faces and shows the human-in-the-loop diagram."></figure>
 <p>That small shift changes the whole risk profile.</p>
 <p>A human-in-the-loop workflow is a bicycle with power assist. An autonomous agent loop is a car with the accelerator taped down and a note on the windshield that says “arrive at product-market fit.” The second one sounds exciting until you remember roads have turns.</p>
 <p>The innovation lives in deciding what deserves to be looped.</p>
@@ -57,8 +108,8 @@
 <p>Slop here means output with the wrong relationship to reality. The UI may look fine. The prose may read fine. The agent produces enough surface area that progress looks visible, while the underlying decisions drift away from the human’s intent.</p>
 <p>Cleanup costs more than the model bill.</p>
 <p>A full-stack app built in the wrong direction has the social cost of a bad meeting and the technical cost of a bad migration. Someone has to read it, understand it, unwind it, rescue the good pieces, and restore trust in the workflow.</p>
-<p>That is why token budget becomes a central warning. Mic says the builders praising wide-open loops often have unusual constraints: more access, more harnesses, more budget. He cites Peter burning $1.3 million worth of tokens in a month, then immediately softens the posture: loops have use cases, and the economics change for builders with ordinary budgets.</p>
-<p><img src="assets/generated-infographics/open-ended-loop-failure.png" alt="A generated diagram shows an open-ended AI loop spiraling into duplicated artifacts, warning signals, and token piles outside the lane." loading="lazy"></p>
+<p>That is why token budget becomes a central warning. The builders praising wide-open loops often have unusual constraints: more access, more harnesses, more budget. The $1.3 million token-burn anecdote is the warning label, not the operating manual. Loops have use cases, but the economics change for builders with ordinary budgets.</p>
+<figure><img src="/medium/youtube-ai-agent-loops-human-loop-7clj8ih784q/assets/generated-infographics/open-ended-loop-failure.png" alt="A generated diagram shows an open-ended AI loop spiraling into duplicated artifacts, warning signals, and token piles outside the lane."></figure>
 <p>The colder rule: autonomy is economics before aesthetics.</p>
 <h2>Experiments can tolerate loops because taste stays outside the target</h2>
 <p>There is one friendly case before code review: throwaway experimentation.</p>
@@ -69,10 +120,10 @@
 <h2>The loop needs a score</h2>
 <p>The practical version appears in code review.</p>
 <p>Before the loop, the diagram is familiar. Code moves from Cursor to GitHub. A pull request waits for review. A human or review tool finds issues. Someone fixes them.</p>
-<p><img src="assets/youtube-frames/cropped/13-20-code-review-before-whiteboard-crop.jpg" alt="A cropped source frame shows the code-review workflow before the feedback loop is closed." loading="lazy"></p>
+<figure><img src="/medium/youtube-ai-agent-loops-human-loop-7clj8ih784q/assets/youtube-frames/cropped/13-20-code-review-before-whiteboard-crop.jpg" alt="A cropped source frame shows the code-review workflow before the feedback loop is closed."></figure>
 <p>He adds the loop he actually runs: Cursor, GitHub, and Greptile.</p>
 <p>He pushes AI-generated code to GitHub. Greptile reviews the pull request and produces feedback: missed issue, security concern, broken edge case. The key feature is the score out of five. Mic’s rule sends code live only once the score is greater than four out of five. If the review lands below that threshold, a skill he calls “Grep loop” sends the feedback back into Cursor. Cursor fixes the issues, pushes again, and the loop continues.</p>
-<p><img src="assets/generated-infographics/external-critic-loop.png" alt="A generated diagram shows a bounded code-review loop with an external critic, repair pass, review gate, and stop barrier." loading="lazy"></p>
+<figure><img src="/medium/youtube-ai-agent-loops-human-loop-7clj8ih784q/assets/generated-infographics/external-critic-loop.png" alt="A generated diagram shows a bounded code-review loop with an external critic, repair pass, review gate, and stop barrier."></figure>
 <p>The stop rule is just as important as the score. The loop stops after five turns or when the PR reaches five out of five. Mic’s phrasing is simple: it is closed-off, goal-oriented, and driven by a feedback engine.</p>
 <p>This works because code review has something open-ended app generation lacks: a scoring surface.</p>
 <p>A scoring surface is any external signal the agent can act against instead of inventing the whole product vision. Tests pass or fail. A reviewer names a risky function. A PR gets a score. A security warning points to a line. The loop can chase those signals because the target is visible.</p>
@@ -82,17 +133,14 @@
 <p>Good loops make work smaller before they make it faster.</p>
 <h2>The research version says the same thing in colder language</h2>
 <p>Mic’s whiteboard version is casual. The serious engineering literature has started arriving at the same shape.</p>
-<p>Anthropic’s agent guidance argues that the most reliable agent systems tend to use simple, composable patterns rather than ornate autonomous frameworks. The important distinction is between workflows, where code routes the model through known steps, and agents, where the model chooses its own path through tools and feedback. That distinction matches the core tension in this piece: the more freedom the agent gets, the more the environment needs rails, observability, and a reason to trust the next turn. <a href="https://www.anthropic.com/research/building-effective-agents" target="_blank" rel="noopener">Anthropic, “Building effective agents”</a></p>
-<p>OpenAI’s Agents SDK frames production agents as models wrapped in instructions, tools, handoffs, guardrails, and structured outputs. The boring nouns matter. A loop without guardrails is just recurrence. A loop with handoffs, tracing, and explicit output shape becomes inspectable infrastructure. <a href="https://openai.github.io/openai-agents-python/agents/" target="_blank" rel="noopener">OpenAI Agents SDK</a> <a href="https://openai.github.io/openai-agents-python/tracing/" target="_blank" rel="noopener">OpenAI tracing docs</a></p>
-<p>LangGraph’s human-in-the-loop docs make the human checkpoint durable: an agent can pause, wait for approval, and resume from the checkpoint rather than replay the whole run. That is the grown-up version of “pull over often.” The point is not that a human clicks approve forever. The point is that the system treats approval as part of the runtime, not as a Slack message after the accident. <a href="https://docs.langchain.com/oss/python/langchain/frontend/human-in-the-loop" target="_blank" rel="noopener">LangChain HITL docs</a></p>
-<p>Greptile’s own code-review framing also supports the same pattern. Its public docs describe an AI code-review agent that analyzes pull requests with repository context and returns summary, inline feedback, and suggested fixes. That is a critic surface. The loop only becomes useful when the critic has enough context to disagree with the writer. <a href="https://www.greptile.com/docs/developer-quick-reference" target="_blank" rel="noopener">Greptile developer quick reference</a></p>
+<p>Anthropic’s agent guidance argues that the most reliable agent systems tend to use simple, composable patterns rather than ornate autonomous frameworks. The important distinction is between workflows, where code routes the model through known steps, and agents, where the model chooses its own path through tools and feedback. That distinction matches the core tension in this piece: the more freedom the agent gets, the more the environment needs rails, observability, and a reason to trust the next turn. <a href="https://www.anthropic.com/research/building-effective-agents" target="_blank" rel="noopener noreferrer">Anthropic, “Building effective agents”</a></p>
+<p>OpenAI’s Agents SDK frames production agents as models wrapped in instructions, tools, handoffs, guardrails, and structured outputs. The boring nouns matter. A loop without guardrails is just recurrence. A loop with handoffs, tracing, and explicit output shape becomes inspectable infrastructure. <a href="https://openai.github.io/openai-agents-python/agents/" target="_blank" rel="noopener noreferrer">OpenAI Agents SDK</a> <a href="https://openai.github.io/openai-agents-python/tracing/" target="_blank" rel="noopener noreferrer">OpenAI tracing docs</a></p>
+<p>LangGraph’s human-in-the-loop docs make the human checkpoint durable: an agent can pause, wait for approval, and resume from the checkpoint rather than replay the whole run. That is the grown-up version of “pull over often.” The point is not that a human clicks approve forever. The point is that the system treats approval as part of the runtime, not as a Slack message after the accident. <a href="https://docs.langchain.com/oss/python/langchain/frontend/human-in-the-loop" target="_blank" rel="noopener noreferrer">LangChain HITL docs</a></p>
+<p>Greptile’s own code-review framing also supports the same pattern. Its public docs describe an AI code-review agent that analyzes pull requests with repository context and returns summary, inline feedback, and suggested fixes. That is a critic surface. The loop only becomes useful when the critic has enough context to disagree with the writer. <a href="https://www.greptile.com/docs/developer-quick-reference" target="_blank" rel="noopener noreferrer">Greptile developer quick reference</a></p>
 <h2>The best loops are small enough to be boring</h2>
 <p>My distillation from Mic’s code-review loop is a four-part test.</p>
 <p>A useful loop has four parts:</p>
-<p>1. A bounded artifact.</p>
-<p>2. A critic with a stable rubric.</p>
-<p>3. A turn limit.</p>
-<p>4. A human stop condition.</p>
+<p>1. A bounded artifact. 2. A critic with a stable rubric. 3. A turn limit. 4. A human stop condition.</p>
 <p>Remove any one of those and the loop starts acting like a story generator.</p>
 <p>A bounded artifact keeps the loop from expanding the battlefield. “Fix this PR until the reviewer score improves” is bounded. “Make the app better” is a fog machine.</p>
 <p>A stable critic keeps the loop from grading its own homework. The critic can be a test suite, a code-review agent, a browser assertion, or a human review. The key is that the signal lives outside the writer agent’s immediate impulse.</p>
@@ -106,7 +154,7 @@
 <p>Some work becomes autonomous as soon as the feedback gets formal enough. If a test can catch the failure, if a score can guide the edit, if the artifact is narrow, the human can move farther away.</p>
 <p>Other work stays human-shaped because the feedback is social, strategic, or taste-based. A founder deciding what the product should become goes beyond known requirements. They are choosing among futures. The “correct” answer might depend on a customer call, a brand instinct, an unwritten fear, or a private constraint.</p>
 <p>An agent can help expose those choices. It can draft options, simulate consequences, inspect code, generate prototypes, and find contradictions. The loop becomes dangerous when it converts that uncertainty into fake certainty.</p>
-<p><img src="assets/youtube-frames/cropped/18-40-human-loop-final-whiteboard-crop.jpg" alt="A cropped source frame returns to the central control system: human, prompt, AI agent, and result." loading="lazy"></p>
+<figure><img src="/medium/youtube-ai-agent-loops-human-loop-7clj8ih784q/assets/youtube-frames/cropped/18-40-human-loop-final-whiteboard-crop.jpg" alt="A cropped source frame returns to the central control system: human, prompt, AI agent, and result."></figure>
 <p>Greg’s road-trip analogy lands because it brings the abstraction back to a body. A startup loop with zero feedback is like pressing go on full self-driving from Miami to Charleston. The halfway stop disappears. The cute diner on the side of the road disappears. The route keeps moving after reality offers a reason to change course. The train has left the station.</p>
 <p>That is the right model for AI loops in product work.</p>
 <p>Let the agent drive a stretch of highway. Make it pull over often. Look at the map yourself.</p>
@@ -132,14 +180,9 @@
 <p>The human keeps the map.</p>
 <p>The agent takes the next hill.</p>
 <h2>The receipt matters</h2>
-<p>A useful loop leaves a trail a senior engineer can audit: the patch it wrote, the review it answered, and the next change it made. That is why the Cursor -> GitHub -> Greptile example is more interesting than another autonomy demo. The artifacts are visible.</p>
+<p>A useful loop leaves a trail a senior engineer can audit: the patch it wrote, the review it answered, and the next change it made. That is why the Cursor -&gt; GitHub -&gt; Greptile example is more interesting than another autonomy demo. The artifacts are visible.</p>
 <p>The cheap test is not whether the loop feels smart. It is whether the next human has less work.</p>
 <p>Start with one workflow, one critic, one turn limit, and one named owner. Track three numbers: review minutes saved, defects caught before merge, and cleanup created after merge. A loop that improves the first two while shrinking the third earns another lane. A loop that expands cleanup gets shut off.</p>
-<h2>Sources</h2>
-<p>- Greg Isenberg, conversation with Ras Mic/Ross Mike, “WTF Is an ‘AI Agent Loop’? Genius or Hype?”, YouTube, June 9, 2026: https://www.youtube.com/watch?v=7clJ8IH784Q</p>
-<p>- Anthropic, “Building effective agents,” December 19, 2024: https://www.anthropic.com/research/building-effective-agents</p>
-<p>- OpenAI Agents SDK docs, agents and tracing: https://openai.github.io/openai-agents-python/agents/ and https://openai.github.io/openai-agents-python/tracing/</p>
-<p>- LangChain docs, Human-in-the-Loop: https://docs.langchain.com/oss/python/langchain/frontend/human-in-the-loop</p>
-<p>- Greptile developer quick reference: https://www.greptile.com/docs/developer-quick-reference</p>
+  </main>
 </body>
 </html>

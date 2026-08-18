@@ -4,46 +4,46 @@
   "publicUrl": "https://www.maxpetrusenko.com/medium/youtube-gaming-market-breaking-eo5w2s-h5di/",
   "outputPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/youtube-gaming-market-breaking-eo5w2s-h5di/index.html",
   "sourceUrl": null,
-  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-gaming-market-breaking-eo5w2s-h5di/article-v6.md",
-  "articleHash": "fe18a237eeed0cdcef3485fb452358b4f9c45a0e8fbf8d3fb7a4270abb56b5aa",
-  "exportedAt": "2026-08-17T02:51:32.189Z",
+  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-gaming-market-breaking-eo5w2s-h5di/article-medium.md",
+  "articleHash": "ce67689679f2a21e590205440d9118e4d3d140f14fbd39f42c3c486874ba892d",
+  "exportedAt": "2026-08-18T09:23:58.097Z",
   "status": "passed_opus_gate_no_caps",
   "publishMode": "preview",
   "copiedImages": [
     {
       "src": "assets/youtube-frames/selected/00-ps5-product.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-gaming-market-breaking-eo5w2s-h5di/assets/youtube-frames/selected/00-ps5-product.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-gaming-market-breaking-eo5w2s-h5di-1786935092183/assets/youtube-frames/selected/00-ps5-product.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-gaming-market-breaking-eo5w2s-h5di-1787045038090/assets/youtube-frames/selected/00-ps5-product.jpg"
     },
     {
       "src": "assets/youtube-frames/selected/01-rack-scale.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-gaming-market-breaking-eo5w2s-h5di/assets/youtube-frames/selected/01-rack-scale.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-gaming-market-breaking-eo5w2s-h5di-1786935092183/assets/youtube-frames/selected/01-rack-scale.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-gaming-market-breaking-eo5w2s-h5di-1787045038090/assets/youtube-frames/selected/01-rack-scale.jpg"
     },
     {
       "src": "assets/youtube-frames/selected/02-ddr5-price-table.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-gaming-market-breaking-eo5w2s-h5di/assets/youtube-frames/selected/02-ddr5-price-table.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-gaming-market-breaking-eo5w2s-h5di-1786935092183/assets/youtube-frames/selected/02-ddr5-price-table.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-gaming-market-breaking-eo5w2s-h5di-1787045038090/assets/youtube-frames/selected/02-ddr5-price-table.jpg"
     },
     {
       "src": "assets/youtube-frames/selected/03-trendforce-memory.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-gaming-market-breaking-eo5w2s-h5di/assets/youtube-frames/selected/03-trendforce-memory.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-gaming-market-breaking-eo5w2s-h5di-1786935092183/assets/youtube-frames/selected/03-trendforce-memory.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-gaming-market-breaking-eo5w2s-h5di-1787045038090/assets/youtube-frames/selected/03-trendforce-memory.jpg"
     },
     {
       "src": "assets/youtube-frames/selected/04-wii-chart.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-gaming-market-breaking-eo5w2s-h5di/assets/youtube-frames/selected/04-wii-chart.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-gaming-market-breaking-eo5w2s-h5di-1786935092183/assets/youtube-frames/selected/04-wii-chart.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-gaming-market-breaking-eo5w2s-h5di-1787045038090/assets/youtube-frames/selected/04-wii-chart.jpg"
     },
     {
       "src": "assets/youtube-frames/selected/05-key-card.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-gaming-market-breaking-eo5w2s-h5di/assets/youtube-frames/selected/05-key-card.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-gaming-market-breaking-eo5w2s-h5di-1786935092183/assets/youtube-frames/selected/05-key-card.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-gaming-market-breaking-eo5w2s-h5di-1787045038090/assets/youtube-frames/selected/05-key-card.jpg"
     }
   ],
   "ratings": {
-    "gemini": 8.5,
+    "gemini": 8.9,
     "gpt": null,
-    "consensus": 8.5
+    "consensus": 8.9
   }
 }

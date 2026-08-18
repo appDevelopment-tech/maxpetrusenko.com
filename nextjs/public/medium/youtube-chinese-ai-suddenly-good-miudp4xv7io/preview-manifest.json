@@ -1,0 +1,39 @@
+{
+  "slug": "youtube-chinese-ai-suddenly-good-miudp4xv7io",
+  "title": "Why Chinese AI Got So Good Without the Best Chips",
+  "publicUrl": "https://www.maxpetrusenko.com/medium/youtube-chinese-ai-suddenly-good-miudp4xv7io/",
+  "outputPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/youtube-chinese-ai-suddenly-good-miudp4xv7io/index.html",
+  "sourceUrl": "https://www.youtube.com/watch?v=MIudp4xv7Io",
+  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-chinese-ai-suddenly-good-miudp4xv7io/article-medium.md",
+  "articleHash": "f0bbac401f1a76dd80be04091e0282a44ec4908542e8f344affe30caf69f248a",
+  "exportedAt": "2026-08-18T09:23:58.380Z",
+  "status": "passed_adversarial_gate",
+  "publishMode": "preview",
+  "copiedImages": [
+    {
+      "src": "assets/youtube-frames/selected/alpha-go-move-37.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-chinese-ai-suddenly-good-miudp4xv7io/assets/youtube-frames/selected/alpha-go-move-37.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-chinese-ai-suddenly-good-miudp4xv7io-1787045038378/assets/youtube-frames/selected/alpha-go-move-37.jpg"
+    },
+    {
+      "src": "assets/youtube-frames/selected/memory-compression.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-chinese-ai-suddenly-good-miudp4xv7io/assets/youtube-frames/selected/memory-compression.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-chinese-ai-suddenly-good-miudp4xv7io-1787045038378/assets/youtube-frames/selected/memory-compression.jpg"
+    },
+    {
+      "src": "assets/youtube-frames/selected/deepseek-playbook.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-chinese-ai-suddenly-good-miudp4xv7io/assets/youtube-frames/selected/deepseek-playbook.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-chinese-ai-suddenly-good-miudp4xv7io-1787045038378/assets/youtube-frames/selected/deepseek-playbook.jpg"
+    },
+    {
+      "src": "assets/youtube-frames/selected/consumer-data-pipeline.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-chinese-ai-suddenly-good-miudp4xv7io/assets/youtube-frames/selected/consumer-data-pipeline.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-chinese-ai-suddenly-good-miudp4xv7io-1787045038378/assets/youtube-frames/selected/consumer-data-pipeline.jpg"
+    }
+  ],
+  "ratings": {
+    "gemini": 7.9,
+    "gpt": 9.1,
+    "consensus": 7.9
+  }
+}

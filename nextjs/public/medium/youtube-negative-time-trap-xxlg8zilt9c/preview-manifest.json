@@ -1,0 +1,32 @@
+{
+  "slug": "youtube-negative-time-trap-xxlg8zilt9c",
+  "title": "Physicists Found Negative Time. The Time Machine Is the Trap",
+  "publicUrl": "https://www.maxpetrusenko.com/medium/youtube-negative-time-trap-xxlg8zilt9c/",
+  "outputPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/youtube-negative-time-trap-xxlg8zilt9c/index.html",
+  "sourceUrl": "https://www.youtube.com/watch?v=XxLG8Zilt9c",
+  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-negative-time-trap-xxlg8zilt9c/article-v5.md",
+  "exportedAt": "2026-07-01T04:31:20.179Z",
+  "status": "passed_adversarial_gate",
+  "copiedImages": [
+    {
+      "src": "assets/youtube-frames/selected/01-quantum-lab-table.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-negative-time-trap-xxlg8zilt9c/assets/youtube-frames/selected/01-quantum-lab-table.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-negative-time-trap-xxlg8zilt9c-1782880280177/assets/youtube-frames/selected/01-quantum-lab-table.jpg"
+    },
+    {
+      "src": "assets/youtube-frames/selected/02-atom-transition-diagram.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-negative-time-trap-xxlg8zilt9c/assets/youtube-frames/selected/02-atom-transition-diagram.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-negative-time-trap-xxlg8zilt9c-1782880280177/assets/youtube-frames/selected/02-atom-transition-diagram.jpg"
+    },
+    {
+      "src": "assets/youtube-frames/selected/03-science-discussion.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-negative-time-trap-xxlg8zilt9c/assets/youtube-frames/selected/03-science-discussion.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-negative-time-trap-xxlg8zilt9c-1782880280177/assets/youtube-frames/selected/03-science-discussion.jpg"
+    }
+  ],
+  "ratings": {
+    "gemini": 9.5,
+    "gpt": 9.5,
+    "consensus": 9.5
+  }
+}

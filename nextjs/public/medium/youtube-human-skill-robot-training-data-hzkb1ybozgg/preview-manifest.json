@@ -4,34 +4,21 @@
   "publicUrl": "https://www.maxpetrusenko.com/medium/youtube-human-skill-robot-training-data-hzkb1ybozgg/",
   "outputPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/youtube-human-skill-robot-training-data-hzkb1ybozgg/index.html",
   "sourceUrl": "https://www.youtube.com/watch?v=HzKb1YBOzgg",
-  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-human-skill-robot-training-data-hzkb1ybozgg/article-v4.md",
-  "exportedAt": "2026-06-27T22:34:38.668Z",
-  "status": "passed_adversarial_gate",
+  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-human-skill-robot-training-data-hzkb1ybozgg/article-v9.md",
+  "articleHash": "5f5fa00eb0cafaca31c8a9e59be2a4738028e6a1e87697906d66f6c38af50284",
+  "exportedAt": "2026-08-18T09:23:57.708Z",
+  "status": "passed_external_claude_exact_hash_article_phase",
+  "publishMode": "preview",
   "copiedImages": [
     {
       "src": "assets/youtube-frames/selected/body-interface.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-human-skill-robot-training-data-hzkb1ybozgg/assets/youtube-frames/selected/body-interface.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-human-skill-robot-training-data-hzkb1ybozgg-1782599678663/assets/youtube-frames/selected/body-interface.jpg"
-    },
-    {
-      "src": "assets/youtube-frames/selected/robot-hand.jpg",
-      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-human-skill-robot-training-data-hzkb1ybozgg/assets/youtube-frames/selected/robot-hand.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-human-skill-robot-training-data-hzkb1ybozgg-1782599678663/assets/youtube-frames/selected/robot-hand.jpg"
-    },
-    {
-      "src": "assets/youtube-frames/selected/craft-hands.jpg",
-      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-human-skill-robot-training-data-hzkb1ybozgg/assets/youtube-frames/selected/craft-hands.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-human-skill-robot-training-data-hzkb1ybozgg-1782599678663/assets/youtube-frames/selected/craft-hands.jpg"
-    },
-    {
-      "src": "assets/youtube-frames/selected/transparent-solar.jpg",
-      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-human-skill-robot-training-data-hzkb1ybozgg/assets/youtube-frames/selected/transparent-solar.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-human-skill-robot-training-data-hzkb1ybozgg-1782599678663/assets/youtube-frames/selected/transparent-solar.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-human-skill-robot-training-data-hzkb1ybozgg-1787045037706/assets/youtube-frames/selected/body-interface.jpg"
     }
   ],
   "ratings": {
-    "gemini": 9.6,
-    "gpt": 9.6,
-    "consensus": 9.6
+    "gemini": 9.5,
+    "gpt": 9.5,
+    "consensus": 9.5
   }
 }

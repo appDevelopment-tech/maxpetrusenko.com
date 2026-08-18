@@ -1,0 +1,34 @@
+{
+  "slug": "youtube-ai-bought-robot-car-ipamktb5csq",
+  "title": "AI Safety Gets Real When the Model Can Spend Money",
+  "publicUrl": "https://www.maxpetrusenko.com/medium/youtube-ai-bought-robot-car-ipamktb5csq/",
+  "outputPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/youtube-ai-bought-robot-car-ipamktb5csq/index.html",
+  "sourceUrl": "https://www.youtube.com/watch?v=IPaMKTb5csQ",
+  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-ai-bought-robot-car-ipamktb5csq/article-medium.md",
+  "articleHash": "8f4390d2b43e958a42c85060b92a946741fabe0e9041e0719a2dd8cdcd3881b7",
+  "exportedAt": "2026-08-18T09:23:59.083Z",
+  "status": "ready_for_preview",
+  "publishMode": "preview",
+  "copiedImages": [
+    {
+      "src": "assets/youtube-frames/selected/01-robot-body.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-ai-bought-robot-car-ipamktb5csq/assets/youtube-frames/selected/01-robot-body.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-ai-bought-robot-car-ipamktb5csq-1787045039079/assets/youtube-frames/selected/01-robot-body.jpg"
+    },
+    {
+      "src": "assets/youtube-frames/selected/02-robot-car.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-ai-bought-robot-car-ipamktb5csq/assets/youtube-frames/selected/02-robot-car.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-ai-bought-robot-car-ipamktb5csq-1787045039079/assets/youtube-frames/selected/02-robot-car.jpg"
+    },
+    {
+      "src": "assets/youtube-frames/selected/03-driver-choice.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-ai-bought-robot-car-ipamktb5csq/assets/youtube-frames/selected/03-driver-choice.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-ai-bought-robot-car-ipamktb5csq-1787045039079/assets/youtube-frames/selected/03-driver-choice.jpg"
+    }
+  ],
+  "ratings": {
+    "gemini": 9.5,
+    "gpt": null,
+    "consensus": 9.5
+  }
+}

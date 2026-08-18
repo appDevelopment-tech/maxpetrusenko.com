@@ -4,29 +4,31 @@
   "publicUrl": "https://www.maxpetrusenko.com/medium/youtube-body-not-die-on-schedule-tsxvuyi0eia/",
   "outputPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/youtube-body-not-die-on-schedule-tsxvuyi0eia/index.html",
   "sourceUrl": "https://www.youtube.com/watch?v=tsxvuYi0eiA",
-  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-body-not-die-on-schedule-tsxvuyi0eia/article-v2.md",
-  "exportedAt": "2026-06-27T16:31:02.713Z",
-  "status": "passed_adversarial_gate",
+  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-body-not-die-on-schedule-tsxvuyi0eia/article-medium.md",
+  "articleHash": "8d3c7bda57ed14bcae5e054cecc503e7ccdcdaf5d6b59362e0fbb41683dfb743",
+  "exportedAt": "2026-08-18T09:23:58.682Z",
+  "status": "blocked_by_read_next_403",
+  "publishMode": "preview",
   "copiedImages": [
     {
       "src": "assets/youtube-frames/selected/01-benchen-monastery.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-body-not-die-on-schedule-tsxvuyi0eia/assets/youtube-frames/selected/01-benchen-monastery.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-body-not-die-on-schedule-tsxvuyi0eia-1782577862709/assets/youtube-frames/selected/01-benchen-monastery.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-body-not-die-on-schedule-tsxvuyi0eia-1787045038676/assets/youtube-frames/selected/01-benchen-monastery.jpg"
     },
     {
       "src": "assets/youtube-frames/selected/02-himalayan-pass.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-body-not-die-on-schedule-tsxvuyi0eia/assets/youtube-frames/selected/02-himalayan-pass.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-body-not-die-on-schedule-tsxvuyi0eia-1782577862709/assets/youtube-frames/selected/02-himalayan-pass.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-body-not-die-on-schedule-tsxvuyi0eia-1787045038676/assets/youtube-frames/selected/02-himalayan-pass.jpg"
     },
     {
       "src": "assets/youtube-frames/selected/03-mountain-moon.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-body-not-die-on-schedule-tsxvuyi0eia/assets/youtube-frames/selected/03-mountain-moon.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-body-not-die-on-schedule-tsxvuyi0eia-1782577862709/assets/youtube-frames/selected/03-mountain-moon.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-body-not-die-on-schedule-tsxvuyi0eia-1787045038676/assets/youtube-frames/selected/03-mountain-moon.jpg"
     }
   ],
   "ratings": {
-    "gemini": 9.5,
+    "gemini": 7,
     "gpt": null,
-    "consensus": 9.5
+    "consensus": 7
   }
 }

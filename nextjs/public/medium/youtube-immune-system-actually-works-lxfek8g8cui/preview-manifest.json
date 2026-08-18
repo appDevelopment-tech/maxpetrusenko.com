@@ -1,0 +1,49 @@
+{
+  "slug": "youtube-immune-system-actually-works-lxfek8g8cui",
+  "title": "Your Immune System Is Not a Shield. It Is a Controlled Civil War",
+  "publicUrl": "https://www.maxpetrusenko.com/medium/youtube-immune-system-actually-works-lxfek8g8cui/",
+  "outputPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/youtube-immune-system-actually-works-lxfek8g8cui/index.html",
+  "sourceUrl": "https://www.youtube.com/watch?v=lXfEK8G8CUI",
+  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-immune-system-actually-works-lxfek8g8cui/article-medium.md",
+  "articleHash": "3b7cc3ca567276b879f19b7ef4b17e911482bcf0262917681962b410c0e8f89a",
+  "exportedAt": "2026-08-18T09:23:57.611Z",
+  "status": "passed_adversarial_gate",
+  "publishMode": "preview",
+  "copiedImages": [
+    {
+      "src": "assets/youtube-frames/selected/01-breach.png",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-immune-system-actually-works-lxfek8g8cui/assets/youtube-frames/selected/01-breach.png",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-immune-system-actually-works-lxfek8g8cui-1787045037601/assets/youtube-frames/selected/01-breach.png"
+    },
+    {
+      "src": "assets/youtube-frames/selected/02-first-responders.png",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-immune-system-actually-works-lxfek8g8cui/assets/youtube-frames/selected/02-first-responders.png",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-immune-system-actually-works-lxfek8g8cui-1787045037601/assets/youtube-frames/selected/02-first-responders.png"
+    },
+    {
+      "src": "assets/youtube-frames/selected/03-inflammation-battlefield.png",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-immune-system-actually-works-lxfek8g8cui/assets/youtube-frames/selected/03-inflammation-battlefield.png",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-immune-system-actually-works-lxfek8g8cui-1787045037601/assets/youtube-frames/selected/03-inflammation-battlefield.png"
+    },
+    {
+      "src": "assets/youtube-frames/selected/04-information-relay.png",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-immune-system-actually-works-lxfek8g8cui/assets/youtube-frames/selected/04-information-relay.png",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-immune-system-actually-works-lxfek8g8cui-1787045037601/assets/youtube-frames/selected/04-information-relay.png"
+    },
+    {
+      "src": "assets/youtube-frames/selected/05-targeted-response.png",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-immune-system-actually-works-lxfek8g8cui/assets/youtube-frames/selected/05-targeted-response.png",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-immune-system-actually-works-lxfek8g8cui-1787045037601/assets/youtube-frames/selected/05-targeted-response.png"
+    },
+    {
+      "src": "assets/youtube-frames/selected/06-memory.png",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-immune-system-actually-works-lxfek8g8cui/assets/youtube-frames/selected/06-memory.png",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-immune-system-actually-works-lxfek8g8cui-1787045037601/assets/youtube-frames/selected/06-memory.png"
+    }
+  ],
+  "ratings": {
+    "gemini": 9.55,
+    "gpt": null,
+    "consensus": 9.55
+  }
+}
