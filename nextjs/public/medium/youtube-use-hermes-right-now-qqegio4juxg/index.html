@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex,nofollow">
   <meta name="article:status" content="preview">
-  <meta name="source-article-sha256" content="4ac766418a8a0df308215369ad44c743d77b7b89910815f3eec1d181607a1c8c">
+  <meta name="source-article-sha256" content="ca5a5e63e048e74f217592ded8f06bb0c735864a3bb92bac4fb95e7c76f64204">
   <link rel="canonical" href="https://www.maxpetrusenko.com/medium/youtube-use-hermes-right-now-qqegio4juxg/">
   <title>Hermes: The Runtime Behind the Prompt</title>
   <style>
@@ -80,16 +80,16 @@
 <body>
   <main>
 <h1>Hermes: The Runtime Behind the Prompt</h1>
-<p><em>A personal agent lives in what it remembers, schedules, and can be stopped. The choice of runtime is a decision about supervision, not a brand preference.</em> (<a href="https://hermes-agent.nousresearch.com/docs" target="_blank" rel="noopener noreferrer">Hermes Agent documentation</a>) (<a href="https://github.com/openclaw/openclaw" target="_blank" rel="noopener noreferrer">OpenClaw repository</a>) (<a href="https://arxiv.org/abs/2308.03688" target="_blank" rel="noopener noreferrer">AgentBench</a>) (<a href="https://arxiv.org/abs/2311.12983" target="_blank" rel="noopener noreferrer">GAIA benchmark</a>) (<a href="https://www.swebench.com/" target="_blank" rel="noopener noreferrer">SWE-bench</a>)</p>
-<figure><img src="/medium/youtube-use-hermes-right-now-qqegio4juxg/assets/youtube-frames/selected/terminal-03.jpg" alt="Hermes Agent runtime showing tool and skill orchestration in a terminal"></figure>
+<p><em>A personal agent lives in what it remembers, schedules, and can be stopped. The choice of runtime is a decision about supervision, not a brand preference.</em></p>
+<figure><img src="/medium/youtube-use-hermes-right-now-qqegio4juxg/assets/concepts/continuity-gap.jpg" alt="Continuity gap diagram showing state flowing between prompts"></figure>
 <p><em>Hermes Agent runtime view: tools become visible, inspectable work rather than a hidden demo.</em></p>
 <blockquote><p>A personal AI agent runtime connects a model to tools, memory, schedules, and communication channels so it can carry work across sessions. Hermes Agent and OpenClaw take different approaches to that problem. The choice matters less as a popularity contest than as a decision about control, observability, and the cost of a mistake.</p></blockquote>
 <p>The screen is full of tabs: a terminal and a browser, a chat window and a scheduler, plus a half-finished note about the task that was supposed to connect them. This is the ordinary shape of “automation” for most people. The model can write a command, and the human still has to remember where the command belongs, what state it assumes, and whether it should run again tomorrow.</p>
 <p>The pitch for switching to a personal agent runtime usually starts with a seductive idea: change tools, get a better life. The stronger reading is less comfortable because the product is not the model’s clever answer. It is the runtime around that answer: the part that remembers and waits, calls tools and talks to you, and can be stopped.</p>
 <p>That is why the choice deserves more attention than another model leaderboard. A personal agent becomes useful when it survives the gap between one prompt and the next.</p>
-<figure><img src="/medium/youtube-use-hermes-right-now-qqegio4juxg/assets/youtube-frames/selected/terminal-02.jpg" alt="Hermes Agent memory conversation in the terminal"></figure>
+<figure><img src="/medium/youtube-use-hermes-right-now-qqegio4juxg/assets/concepts/supervision-budget.jpg" alt="Supervision budget triangle showing state authority and recovery"></figure>
 <h2>The missing layer between chat and work</h2>
-<figure><img src="/medium/youtube-use-hermes-right-now-qqegio4juxg/assets/youtube-frames/selected/terminal-01.jpg" alt="Hermes Agent TUI with skills and runtime status"></figure>
+<figure><img src="/medium/youtube-use-hermes-right-now-qqegio4juxg/assets/concepts/the-brake.jpg" alt="The brake diagram showing a human checkpoint before real-world action"></figure>
 <p>A chat session is optimized for response, and work is optimized for continuity. Those are different jobs, and Hermes Agent describes itself as a personal AI assistant with persistent memory, skills, tool use; scheduled tasks; and gateway integrations. Its documentation exposes the pieces that make an agent operational: a configurable model provider and tool system, reusable skill instructions and context management, plus channels for interacting outside a single terminal. The OpenClaw project presents a similar category from a different direction, with an extensible personal assistant that connects models to tools and messaging surfaces.</p>
 <p>Neither description guarantees a good outcome, and a runtime can have every integration and still create more supervision than it removes. The test is whether its state is legible when something goes wrong.</p>
 <p>Consider a small job: every weekday morning, collect new items from a set of feeds, summarize only the changes, save the result and send it to one channel. The model is the easy part, while the hard questions are operational. The operational questions are which credentials are available; where the last successful checkpoint is; what happens after a timeout; whether “send” means draft, queue, or publish; and who owns the schedule. An agent that cannot answer those questions is a chatbot with a cron entry.</p>
@@ -105,7 +105,6 @@
 <p>The third is a <strong>failure test</strong>: disconnect one dependency. Let a request time out and feed the agent an ambiguous instruction, and a benchmark score rarely tells you what happens here. AgentBench, GAIA, and SWE-bench measure different kinds of task performance, and their scores are useful only inside their task definitions. They do not measure whether your morning digest duplicated a message or whether a stale browser session published the wrong draft.</p>
 <p>That gap explains why benchmark comparisons can mislead because they measure capability under a protocol. Personal runtimes are judged in a messy environment with credentials, schedules, partial state, and consequences.</p>
 <h2>Hermes is attractive for the same reason it is demanding</h2>
-<figure><img src="/medium/youtube-use-hermes-right-now-qqegio4juxg/assets/youtube-frames/selected/terminal-03.jpg" alt="Hermes Agent delegated research task running in a terminal"></figure>
 <p>Hermes’s appeal is its operator shape because skills turn repeated procedures into named, reusable guidance. Memory lets work continue across conversations, while cron makes time part of the interface, and gateways connect the assistant to channels beyond a single shell. These features make the system feel less like a chat page and more like a small personal operations layer.</p>
 <p>They also increase the number of things you must govern. A stored skill can be wrong, while memory can be stale and a scheduled task can run with yesterday’s assumption. A gateway can make a message easier to send than to review. The more capable the runtime becomes, the less acceptable it is to treat configuration as invisible magic.</p>
 <p>The practical starting point is deliberately boring:</p>
@@ -121,6 +120,8 @@
 <p>The larger paradox is that more autonomy can demand more deliberate design. Once an agent can remember, schedule, and communicate, casual configuration becomes a form of delegation. That is true whether the runtime is Hermes, OpenClaw, or something built from scripts and an API.</p>
 <p>The right first move is therefore small and observable. Give one runtime one job, one permission boundary, and one failure report. Then decide whether the time it returns is worth the attention it consumes.</p>
 <p>For a useful next read, try <a href="https://medium.com/@max.petrusenko/hermes-agent-learn-to-brake-before-you-learn-to-drive" target="_blank" rel="noopener noreferrer">Hermes Agent: Learn to Brake Before You Learn to Drive</a>, another piece about designing personal agents around safe delegation.</p>
+<h2>Sources</h2>
+<p><a href="https://hermes-agent.nousresearch.com/docs" target="_blank" rel="noopener noreferrer">Hermes Agent documentation</a> · <a href="https://github.com/openclaw/openclaw" target="_blank" rel="noopener noreferrer">OpenClaw repository</a> · <a href="https://arxiv.org/abs/2308.03688" target="_blank" rel="noopener noreferrer">AgentBench</a> · <a href="https://arxiv.org/abs/2311.12983" target="_blank" rel="noopener noreferrer">GAIA benchmark</a> · <a href="https://www.swebench.com/" target="_blank" rel="noopener noreferrer">SWE-bench</a></p>
 <h2>About the author</h2>
 <p>Max Petrusenko writes about AI systems, software, and the human decisions hidden inside technical workflows. Read more at <a href="https://www.maxpetrusenko.com/" target="_blank" rel="noopener noreferrer">maxpetrusenko.com</a> or follow <a href="https://x.com/maxpetrusenko" target="_blank" rel="noopener noreferrer">@maxpetrusenko</a>.</p>
   </main>
