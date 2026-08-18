@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex,nofollow">
   <meta name="article:status" content="preview">
-  <meta name="source-article-sha256" content="2e74b2cf55d0b6ab7513f92a18f786c9788886cf70a04b99ed968028a476b395">
+  <meta name="source-article-sha256" content="11dfc94a57e79dff96b272aff54786a39242cd77ff57584aa8849df17ac02e77">
   <link rel="canonical" href="https://www.maxpetrusenko.com/medium/youtube-use-hermes-right-now-qqegio4juxg/">
   <title>Hermes: The Runtime Behind the Prompt</title>
   <style>
@@ -87,9 +87,7 @@
 <p>The screen is full of tabs: a terminal and a browser, a chat window and a scheduler, plus a half-finished note about the task that was supposed to connect them. This is the ordinary shape of “automation” for most people. The model can write a command, and the human still has to remember where the command belongs, what state it assumes, and whether it should run again tomorrow.</p>
 <p>The pitch for switching to a personal agent runtime usually starts with a seductive idea: change tools, get a better life. The stronger reading is less comfortable because the product is not the model’s clever answer. It is the runtime around that answer: the part that remembers and waits, calls tools and talks to you, and can be stopped.</p>
 <p>That is why the choice deserves more attention than another model leaderboard. A personal agent becomes useful when it survives the gap between one prompt and the next.</p>
-<figure><img src="/medium/youtube-use-hermes-right-now-qqegio4juxg/assets/concepts/supervision-budget.jpg" alt="Supervision budget triangle showing state authority and recovery"></figure>
 <h2>The missing layer between chat and work</h2>
-<figure><img src="/medium/youtube-use-hermes-right-now-qqegio4juxg/assets/concepts/the-brake.jpg" alt="The brake diagram showing a human checkpoint before real-world action"></figure>
 <p>A chat session is optimized for response, and work is optimized for continuity. Those are different jobs, and Hermes Agent describes itself as a personal AI assistant with persistent memory, skills, tool use; scheduled tasks; and gateway integrations. Its documentation exposes the pieces that make an agent operational: a configurable model provider and tool system, reusable skill instructions and context management, plus channels for interacting outside a single terminal. The OpenClaw project presents a similar category from a different direction, with an extensible personal assistant that connects models to tools and messaging surfaces.</p>
 <p>Neither description guarantees a good outcome, and a runtime can have every integration and still create more supervision than it removes. The test is whether its state is legible when something goes wrong.</p>
 <p>Consider a small job: every weekday morning, collect new items from a set of feeds, summarize only the changes, save the result and send it to one channel. The model is the easy part, while the hard questions are operational. The operational questions are which credentials are available; where the last successful checkpoint is; what happens after a timeout; whether “send” means draft, queue, or publish; and who owns the schedule. An agent that cannot answer those questions is a chatbot with a cron entry.</p>
