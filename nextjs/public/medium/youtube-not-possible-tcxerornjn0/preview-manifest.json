@@ -4,31 +4,31 @@
   "publicUrl": "https://www.maxpetrusenko.com/medium/youtube-not-possible-tcxerornjn0/",
   "outputPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/youtube-not-possible-tcxerornjn0/index.html",
   "sourceUrl": null,
-  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-not-possible-tcxerornjn0/article-medium.md",
-  "articleHash": "be2f0a0771d701e2cd3836c711f00a2d361799d35c803f33ebda74cdf845dc09",
-  "exportedAt": "2026-08-18T16:38:43.548Z",
+  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-not-possible-tcxerornjn0/article-v9.md",
+  "articleHash": "be810929b060a7a950f2ee0e2ec950f38f9a3db085f5d63eacbd1400cbf2473f",
+  "exportedAt": "2026-08-19T03:40:06.764Z",
   "status": "preview_deployed_waiting_max_schedule_approval",
   "publishMode": "preview",
   "copiedImages": [
     {
       "src": "assets/youtube-frames/selected/01-hero.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-not-possible-tcxerornjn0/assets/youtube-frames/selected/01-hero.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-not-possible-tcxerornjn0-1787071123546/assets/youtube-frames/selected/01-hero.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-not-possible-tcxerornjn0-1787110806758/assets/youtube-frames/selected/01-hero.jpg"
     },
     {
       "src": "assets/youtube-frames/selected/02-bridge.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-not-possible-tcxerornjn0/assets/youtube-frames/selected/02-bridge.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-not-possible-tcxerornjn0-1787071123546/assets/youtube-frames/selected/02-bridge.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-not-possible-tcxerornjn0-1787110806758/assets/youtube-frames/selected/02-bridge.jpg"
     },
     {
       "src": "assets/youtube-frames/selected/03-memory.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-not-possible-tcxerornjn0/assets/youtube-frames/selected/03-memory.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-not-possible-tcxerornjn0-1787071123546/assets/youtube-frames/selected/03-memory.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-not-possible-tcxerornjn0-1787110806758/assets/youtube-frames/selected/03-memory.jpg"
     },
     {
       "src": "assets/youtube-frames/selected/04-render.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-not-possible-tcxerornjn0/assets/youtube-frames/selected/04-render.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-not-possible-tcxerornjn0-1787071123546/assets/youtube-frames/selected/04-render.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-not-possible-tcxerornjn0-1787110806758/assets/youtube-frames/selected/04-render.jpg"
     }
   ],
   "ratings": {
