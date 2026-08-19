@@ -1,34 +1,29 @@
 {
   "slug": "youtube-europe-fusion-reactor-bpuakw1dyek",
-  "title": "Europe’s Fusion Bet Is Finally Becoming an Engineering Problem",
+  "title": "The Oil Crisis That Never Arrived",
   "publicUrl": "https://www.maxpetrusenko.com/medium/youtube-europe-fusion-reactor-bpuakw1dyek/",
   "outputPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/youtube-europe-fusion-reactor-bpuakw1dyek/index.html",
   "sourceUrl": null,
-  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-europe-fusion-reactor-bpuakw1dyek/article-v5.md",
-  "articleHash": "5eae726851e9c512cb57571c26d41c3740c8ed5aa4ba005c46f54b359b213d93",
-  "exportedAt": "2026-08-19T05:51:16.325Z",
+  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-china-quietly-saved-world-bka0bkb6zo0/article-medium.md",
+  "articleHash": "66729b0be29f61a279029a930676895bbe08e8b7c1922d1eef0a1280816f5925",
+  "exportedAt": "2026-08-19T06:10:59.396Z",
   "status": "preview_deployed_waiting_max_schedule_approval",
   "publishMode": "preview",
   "copiedImages": [
     {
-      "src": "images/hero-overlay.jpg",
-      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-europe-fusion-reactor-bpuakw1dyek/images/hero-overlay.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-europe-fusion-reactor-bpuakw1dyek-1787118676322/images/hero-overlay.jpg"
+      "src": "assets/hero-overlay.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-china-quietly-saved-world-bka0bkb6zo0/assets/hero-overlay.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-europe-fusion-reactor-bpuakw1dyek-1787119859394/assets/hero-overlay.jpg"
     },
     {
-      "src": "images/body-frame-1.jpg",
-      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-europe-fusion-reactor-bpuakw1dyek/images/body-frame-1.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-europe-fusion-reactor-bpuakw1dyek-1787118676322/images/body-frame-1.jpg"
+      "src": "assets/body-frame-1.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-china-quietly-saved-world-bka0bkb6zo0/assets/body-frame-1.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-europe-fusion-reactor-bpuakw1dyek-1787119859394/assets/body-frame-1.jpg"
     },
     {
-      "src": "images/body-frame-2.jpg",
-      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-europe-fusion-reactor-bpuakw1dyek/images/body-frame-2.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-europe-fusion-reactor-bpuakw1dyek-1787118676322/images/body-frame-2.jpg"
-    },
-    {
-      "src": "images/body-frame-3.jpg",
-      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-europe-fusion-reactor-bpuakw1dyek/images/body-frame-3.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-europe-fusion-reactor-bpuakw1dyek-1787118676322/images/body-frame-3.jpg"
+      "src": "assets/body-frame-2.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-china-quietly-saved-world-bka0bkb6zo0/assets/body-frame-2.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-europe-fusion-reactor-bpuakw1dyek-1787119859394/assets/body-frame-2.jpg"
     }
   ],
   "ratings": {
