@@ -4,16 +4,26 @@
   "publicUrl": "https://www.maxpetrusenko.com/medium/youtube-use-hermes-right-now-qqegio4juxg/",
   "outputPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/youtube-use-hermes-right-now-qqegio4juxg/index.html",
   "sourceUrl": null,
-  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-use-hermes-right-now-qqegio4juxg/article-medium.md",
-  "articleHash": "11dfc94a57e79dff96b272aff54786a39242cd77ff57584aa8849df17ac02e77",
-  "exportedAt": "2026-08-18T17:27:57.716Z",
+  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-use-hermes-right-now-qqegio4juxg/article-v6.md",
+  "articleHash": "ca5a5e63e048e74f217592ded8f06bb0c735864a3bb92bac4fb95e7c76f64204",
+  "exportedAt": "2026-08-19T04:10:49.286Z",
   "status": "opus_pass",
   "publishMode": "preview",
   "copiedImages": [
     {
-      "src": "assets/youtube-frames/selected/hero-hermes4.jpg",
-      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-use-hermes-right-now-qqegio4juxg/assets/youtube-frames/selected/hero-hermes4.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-use-hermes-right-now-qqegio4juxg-1787074077715/assets/youtube-frames/selected/hero-hermes4.jpg"
+      "src": "assets/concepts/continuity-gap.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-use-hermes-right-now-qqegio4juxg/assets/concepts/continuity-gap.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-use-hermes-right-now-qqegio4juxg-1787112649281/assets/concepts/continuity-gap.jpg"
+    },
+    {
+      "src": "assets/concepts/supervision-budget.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-use-hermes-right-now-qqegio4juxg/assets/concepts/supervision-budget.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-use-hermes-right-now-qqegio4juxg-1787112649281/assets/concepts/supervision-budget.jpg"
+    },
+    {
+      "src": "assets/concepts/the-brake.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-use-hermes-right-now-qqegio4juxg/assets/concepts/the-brake.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-use-hermes-right-now-qqegio4juxg-1787112649281/assets/concepts/the-brake.jpg"
     }
   ],
   "ratings": {
