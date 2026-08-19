@@ -1,32 +1,34 @@
 {
   "slug": "youtube-negative-time-trap-xxlg8zilt9c",
-  "title": "Physicists Found Negative Time. The Time Machine Is the Trap",
+  "title": "Physicists Found Negative Time. Don't Build a Time Machine Around It",
   "publicUrl": "https://www.maxpetrusenko.com/medium/youtube-negative-time-trap-xxlg8zilt9c/",
   "outputPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/youtube-negative-time-trap-xxlg8zilt9c/index.html",
   "sourceUrl": "https://www.youtube.com/watch?v=XxLG8Zilt9c",
-  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-negative-time-trap-xxlg8zilt9c/article-v5.md",
-  "exportedAt": "2026-07-01T04:31:20.179Z",
+  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-negative-time-trap-xxlg8zilt9c/article-v12.md",
+  "articleHash": "5150eb12ee1779968159d34fa0ff81ca78ea4e8cefc5ce72143eb69fc5cbf629",
+  "exportedAt": "2026-08-19T04:20:48.062Z",
   "status": "passed_adversarial_gate",
+  "publishMode": "preview",
   "copiedImages": [
     {
       "src": "assets/youtube-frames/selected/01-quantum-lab-table.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-negative-time-trap-xxlg8zilt9c/assets/youtube-frames/selected/01-quantum-lab-table.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-negative-time-trap-xxlg8zilt9c-1782880280177/assets/youtube-frames/selected/01-quantum-lab-table.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-negative-time-trap-xxlg8zilt9c-1787113248060/assets/youtube-frames/selected/01-quantum-lab-table.jpg"
     },
     {
       "src": "assets/youtube-frames/selected/02-atom-transition-diagram.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-negative-time-trap-xxlg8zilt9c/assets/youtube-frames/selected/02-atom-transition-diagram.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-negative-time-trap-xxlg8zilt9c-1782880280177/assets/youtube-frames/selected/02-atom-transition-diagram.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-negative-time-trap-xxlg8zilt9c-1787113248060/assets/youtube-frames/selected/02-atom-transition-diagram.jpg"
     },
     {
       "src": "assets/youtube-frames/selected/03-science-discussion.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-negative-time-trap-xxlg8zilt9c/assets/youtube-frames/selected/03-science-discussion.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-negative-time-trap-xxlg8zilt9c-1782880280177/assets/youtube-frames/selected/03-science-discussion.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-negative-time-trap-xxlg8zilt9c-1787113248060/assets/youtube-frames/selected/03-science-discussion.jpg"
     }
   ],
   "ratings": {
-    "gemini": 9.5,
+    "gemini": 8,
     "gpt": 9.5,
-    "consensus": 9.5
+    "consensus": 8
   }
 }

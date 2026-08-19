@@ -4,26 +4,26 @@
   "publicUrl": "https://www.maxpetrusenko.com/medium/youtube-oligarchy-paperwork-4s25ffbfw4m/",
   "outputPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/youtube-oligarchy-paperwork-4s25ffbfw4m/index.html",
   "sourceUrl": "https://www.youtube.com/watch?v=4S25FfbFw4M",
-  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-oligarchy-paperwork-4s25ffbfw4m/article-v7.md",
-  "articleHash": "758de138bc17ccf05f803e68261def02eca43f5fa09fa5b2665eb3bbfd60f15d",
-  "exportedAt": "2026-08-18T09:23:56.833Z",
+  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-oligarchy-paperwork-4s25ffbfw4m/article-v9.md",
+  "articleHash": "fbc86b2c29519b97d9305ed1ecf1e4aef4de4b5284db4e7ad1daa0968b9ada70",
+  "exportedAt": "2026-08-19T04:20:48.109Z",
   "status": "passed_adversarial_gate",
   "publishMode": "preview",
   "copiedImages": [
     {
       "src": "assets/youtube-frames/selected/01-source-code.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-oligarchy-paperwork-4s25ffbfw4m/assets/youtube-frames/selected/01-source-code.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-oligarchy-paperwork-4s25ffbfw4m-1787045036828/assets/youtube-frames/selected/01-source-code.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-oligarchy-paperwork-4s25ffbfw4m-1787113248106/assets/youtube-frames/selected/01-source-code.jpg"
     },
     {
       "src": "assets/youtube-frames/selected/02-policy-paper.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-oligarchy-paperwork-4s25ffbfw4m/assets/youtube-frames/selected/02-policy-paper.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-oligarchy-paperwork-4s25ffbfw4m-1787045036828/assets/youtube-frames/selected/02-policy-paper.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-oligarchy-paperwork-4s25ffbfw4m-1787113248106/assets/youtube-frames/selected/02-policy-paper.jpg"
     },
     {
       "src": "assets/youtube-frames/selected/03-gilded-age.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-oligarchy-paperwork-4s25ffbfw4m/assets/youtube-frames/selected/03-gilded-age.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-oligarchy-paperwork-4s25ffbfw4m-1787045036828/assets/youtube-frames/selected/03-gilded-age.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-oligarchy-paperwork-4s25ffbfw4m-1787113248106/assets/youtube-frames/selected/03-gilded-age.jpg"
     }
   ],
   "ratings": {
