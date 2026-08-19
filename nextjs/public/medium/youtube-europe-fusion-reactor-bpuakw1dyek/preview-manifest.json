@@ -6,24 +6,24 @@
   "sourceUrl": null,
   "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-china-quietly-saved-world-bka0bkb6zo0/article-medium.md",
   "articleHash": "66729b0be29f61a279029a930676895bbe08e8b7c1922d1eef0a1280816f5925",
-  "exportedAt": "2026-08-19T06:10:59.396Z",
+  "exportedAt": "2026-08-19T06:16:46.198Z",
   "status": "preview_deployed_waiting_max_schedule_approval",
   "publishMode": "preview",
   "copiedImages": [
     {
       "src": "assets/hero-overlay.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-china-quietly-saved-world-bka0bkb6zo0/assets/hero-overlay.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-europe-fusion-reactor-bpuakw1dyek-1787119859394/assets/hero-overlay.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-europe-fusion-reactor-bpuakw1dyek-1787120206192/assets/hero-overlay.jpg"
     },
     {
       "src": "assets/body-frame-1.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-china-quietly-saved-world-bka0bkb6zo0/assets/body-frame-1.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-europe-fusion-reactor-bpuakw1dyek-1787119859394/assets/body-frame-1.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-europe-fusion-reactor-bpuakw1dyek-1787120206192/assets/body-frame-1.jpg"
     },
     {
       "src": "assets/body-frame-2.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-china-quietly-saved-world-bka0bkb6zo0/assets/body-frame-2.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-europe-fusion-reactor-bpuakw1dyek-1787119859394/assets/body-frame-2.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-europe-fusion-reactor-bpuakw1dyek-1787120206192/assets/body-frame-2.jpg"
     }
   ],
   "ratings": {
