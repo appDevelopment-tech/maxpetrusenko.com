@@ -3,32 +3,36 @@
   "title": "The Oil Crisis That Never Arrived",
   "publicUrl": "https://www.maxpetrusenko.com/medium/youtube-china-quietly-saved-world-bka0bkb6zo0/",
   "outputPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/youtube-china-quietly-saved-world-bka0bkb6zo0/index.html",
-  "sourceUrl": "https://www.youtube.com/watch?v=BkA0bkb6ZO0",
-  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-china-quietly-saved-world-bka0bkb6zo0/article-v5.md",
-  "articleHash": "98b62f461a90cf47673e84fe664e5f4a2fa9b0c2d111ccc40f411239d9625617",
-  "exportedAt": "2026-08-19T05:45:56.929Z",
-  "status": "needs_human_resolution",
+  "sourceUrl": null,
+  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-china-quietly-saved-world-bka0bkb6zo0/article-medium.md",
+  "articleHash": "66729b0be29f61a279029a930676895bbe08e8b7c1922d1eef0a1280816f5925",
+  "exportedAt": "2026-08-19T06:18:35.256Z",
+  "status": "preview_deployed_waiting_max_schedule_approval",
   "publishMode": "preview",
   "copiedImages": [
     {
       "src": "assets/hero-overlay.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-china-quietly-saved-world-bka0bkb6zo0/assets/hero-overlay.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-china-quietly-saved-world-bka0bkb6zo0-1787118356926/assets/hero-overlay.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-china-quietly-saved-world-bka0bkb6zo0-1787120315252/assets/hero-overlay.jpg"
     },
     {
       "src": "assets/body-frame-1.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-china-quietly-saved-world-bka0bkb6zo0/assets/body-frame-1.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-china-quietly-saved-world-bka0bkb6zo0-1787118356926/assets/body-frame-1.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-china-quietly-saved-world-bka0bkb6zo0-1787120315252/assets/body-frame-1.jpg"
     },
     {
       "src": "assets/body-frame-2.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-china-quietly-saved-world-bka0bkb6zo0/assets/body-frame-2.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-china-quietly-saved-world-bka0bkb6zo0-1787118356926/assets/body-frame-2.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-china-quietly-saved-world-bka0bkb6zo0-1787120315252/assets/body-frame-2.jpg"
     }
   ],
   "ratings": {
-    "gemini": 7,
+    "gemini": {
+      "score": 8.3,
+      "honest": true,
+      "note": "final file unrated for new hash; structure gate PASS; publish requires re-rate"
+    },
     "gpt": null,
-    "consensus": 7
+    "consensus": null
   }
 }
