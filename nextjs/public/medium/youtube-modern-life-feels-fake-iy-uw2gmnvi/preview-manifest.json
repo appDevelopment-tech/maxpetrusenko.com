@@ -4,16 +4,16 @@
   "publicUrl": "https://www.maxpetrusenko.com/medium/youtube-modern-life-feels-fake-iy-uw2gmnvi/",
   "outputPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/youtube-modern-life-feels-fake-iy-uw2gmnvi/index.html",
   "sourceUrl": "https://www.youtube.com/watch?v=IY-UW2gmnVI",
-  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-modern-life-feels-fake-iy-uw2gmnvi/article-medium.md",
-  "articleHash": "45fa9b1f14a2538ad598dbebb5242bd8db0373f06e5f5aebd97d3e500b916017",
-  "exportedAt": "2026-08-18T09:23:57.212Z",
+  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-modern-life-feels-fake-iy-uw2gmnvi/article-v11.md",
+  "articleHash": "7eabdfa2859643015aacddd6503e543582a56c76018823ee28801ae37ccd40ab",
+  "exportedAt": "2026-08-19T03:40:06.831Z",
   "status": "needs_human_resolution",
   "publishMode": "preview",
   "copiedImages": [
     {
-      "src": "assets/youtube-frames/selected/01-arthur-brooks-source-frame.jpg",
-      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-modern-life-feels-fake-iy-uw2gmnvi/assets/youtube-frames/selected/01-arthur-brooks-source-frame.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-modern-life-feels-fake-iy-uw2gmnvi-1787045037210/assets/youtube-frames/selected/01-arthur-brooks-source-frame.jpg"
+      "src": "assets/hero-overlay.svg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-modern-life-feels-fake-iy-uw2gmnvi/assets/hero-overlay.svg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-modern-life-feels-fake-iy-uw2gmnvi-1787110806830/assets/hero-overlay.svg"
     }
   ],
   "ratings": {
