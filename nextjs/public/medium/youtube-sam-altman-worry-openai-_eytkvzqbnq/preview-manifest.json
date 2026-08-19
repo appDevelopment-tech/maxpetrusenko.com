@@ -4,41 +4,41 @@
   "publicUrl": "https://www.maxpetrusenko.com/medium/youtube-sam-altman-worry-openai-_eytkvzqbnq/",
   "outputPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/youtube-sam-altman-worry-openai-_eytkvzqbnq/index.html",
   "sourceUrl": "https://www.youtube.com/watch?v=_eYTkvZqbnQ",
-  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-sam-altman-worry-openai-_eytkvzqbnq/article-v12.md",
-  "articleHash": "8912bd61b744f0f37550c4a0b06317e97e70838992e934629f243ff7a7469b6e",
-  "exportedAt": "2026-08-19T04:10:49.423Z",
+  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-sam-altman-worry-openai-_eytkvzqbnq/article-v13.md",
+  "articleHash": "eb7445bae385a4e93e7877444abef7db896fc63284d75d98f91c66e296b5174a",
+  "exportedAt": "2026-08-19T04:16:22.800Z",
   "status": "passed_opus_gate_no_caps",
   "publishMode": "preview",
   "copiedImages": [
     {
       "src": "assets/hero-kill-switch.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-sam-altman-worry-openai-_eytkvzqbnq/assets/hero-kill-switch.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-sam-altman-worry-openai-_eytkvzqbnq-1787112649413/assets/hero-kill-switch.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-sam-altman-worry-openai-_eytkvzqbnq-1787112982795/assets/hero-kill-switch.jpg"
     },
     {
       "src": "assets/youtube-frames/selected/up-02-kill-switch-card.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-sam-altman-worry-openai-_eytkvzqbnq/assets/youtube-frames/selected/up-02-kill-switch-card.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-sam-altman-worry-openai-_eytkvzqbnq-1787112649413/assets/youtube-frames/selected/up-02-kill-switch-card.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-sam-altman-worry-openai-_eytkvzqbnq-1787112982795/assets/youtube-frames/selected/up-02-kill-switch-card.jpg"
     },
     {
       "src": "assets/youtube-frames/selected/up-03-board-scene.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-sam-altman-worry-openai-_eytkvzqbnq/assets/youtube-frames/selected/up-03-board-scene.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-sam-altman-worry-openai-_eytkvzqbnq-1787112649413/assets/youtube-frames/selected/up-03-board-scene.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-sam-altman-worry-openai-_eytkvzqbnq-1787112982795/assets/youtube-frames/selected/up-03-board-scene.jpg"
     },
     {
       "src": "assets/youtube-frames/selected/up-04-board-crowd.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-sam-altman-worry-openai-_eytkvzqbnq/assets/youtube-frames/selected/up-04-board-crowd.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-sam-altman-worry-openai-_eytkvzqbnq-1787112649413/assets/youtube-frames/selected/up-04-board-crowd.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-sam-altman-worry-openai-_eytkvzqbnq-1787112982795/assets/youtube-frames/selected/up-04-board-crowd.jpg"
     },
     {
       "src": "assets/youtube-frames/selected/up-05-saturday-card.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-sam-altman-worry-openai-_eytkvzqbnq/assets/youtube-frames/selected/up-05-saturday-card.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-sam-altman-worry-openai-_eytkvzqbnq-1787112649413/assets/youtube-frames/selected/up-05-saturday-card.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-sam-altman-worry-openai-_eytkvzqbnq-1787112982795/assets/youtube-frames/selected/up-05-saturday-card.jpg"
     },
     {
       "src": "assets/youtube-frames/selected/up-06-lone-figure.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-sam-altman-worry-openai-_eytkvzqbnq/assets/youtube-frames/selected/up-06-lone-figure.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-sam-altman-worry-openai-_eytkvzqbnq-1787112649413/assets/youtube-frames/selected/up-06-lone-figure.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-sam-altman-worry-openai-_eytkvzqbnq-1787112982795/assets/youtube-frames/selected/up-06-lone-figure.jpg"
     }
   ],
   "ratings": {

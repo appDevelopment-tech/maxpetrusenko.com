@@ -4,36 +4,36 @@
   "publicUrl": "https://www.maxpetrusenko.com/medium/youtube-humanity-never-leave-solar-system-cyl3x88kegg/",
   "outputPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/youtube-humanity-never-leave-solar-system-cyl3x88kegg/index.html",
   "sourceUrl": "https://www.youtube.com/watch?v=Cyl3X88KEgg",
-  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-humanity-never-leave-solar-system-cyl3x88kegg/article-v5.md",
-  "articleHash": "832dc18d165937f732259a56c1c3baa1a47a32c71f398ae4c848d733033fece8",
-  "exportedAt": "2026-08-19T04:10:49.357Z",
+  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-humanity-never-leave-solar-system-cyl3x88kegg/article-v6.md",
+  "articleHash": "6c636d6717e2b54097ad49b5a1dcdf3617b0fed1721d6e78497905bca8f570a0",
+  "exportedAt": "2026-08-19T04:16:22.738Z",
   "status": "preview_deployed_awaiting_approval",
   "publishMode": "preview",
   "copiedImages": [
     {
       "src": "assets/hero-voyager-edge.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-humanity-never-leave-solar-system-cyl3x88kegg/assets/hero-voyager-edge.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-humanity-never-leave-solar-system-cyl3x88kegg-1787112649348/assets/hero-voyager-edge.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-humanity-never-leave-solar-system-cyl3x88kegg-1787112982734/assets/hero-voyager-edge.jpg"
     },
     {
       "src": "assets/oort-cloud-2.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-humanity-never-leave-solar-system-cyl3x88kegg/assets/oort-cloud-2.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-humanity-never-leave-solar-system-cyl3x88kegg-1787112649348/assets/oort-cloud-2.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-humanity-never-leave-solar-system-cyl3x88kegg-1787112982734/assets/oort-cloud-2.jpg"
     },
     {
       "src": "assets/dust-barrier-2.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-humanity-never-leave-solar-system-cyl3x88kegg/assets/dust-barrier-2.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-humanity-never-leave-solar-system-cyl3x88kegg-1787112649348/assets/dust-barrier-2.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-humanity-never-leave-solar-system-cyl3x88kegg-1787112982734/assets/dust-barrier-2.jpg"
     },
     {
       "src": "assets/alpha-centauri.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-humanity-never-leave-solar-system-cyl3x88kegg/assets/alpha-centauri.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-humanity-never-leave-solar-system-cyl3x88kegg-1787112649348/assets/alpha-centauri.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-humanity-never-leave-solar-system-cyl3x88kegg-1787112982734/assets/alpha-centauri.jpg"
     },
     {
       "src": "assets/conclusion-2.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-humanity-never-leave-solar-system-cyl3x88kegg/assets/conclusion-2.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-humanity-never-leave-solar-system-cyl3x88kegg-1787112649348/assets/conclusion-2.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-humanity-never-leave-solar-system-cyl3x88kegg-1787112982734/assets/conclusion-2.jpg"
     }
   ],
   "ratings": {
