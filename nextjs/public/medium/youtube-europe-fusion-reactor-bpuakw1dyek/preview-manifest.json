@@ -1,0 +1,39 @@
+{
+  "slug": "youtube-europe-fusion-reactor-bpuakw1dyek",
+  "title": "Europe’s Fusion Bet Is Finally Becoming an Engineering Problem",
+  "publicUrl": "https://www.maxpetrusenko.com/medium/youtube-europe-fusion-reactor-bpuakw1dyek/",
+  "outputPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/youtube-europe-fusion-reactor-bpuakw1dyek/index.html",
+  "sourceUrl": null,
+  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-europe-fusion-reactor-bpuakw1dyek/article-v1.md",
+  "articleHash": "a32b316607ee4dea90d7d754924be53b84c23ec80c2a1d18f117d00e0293997b",
+  "exportedAt": "2026-08-19T03:25:43.464Z",
+  "status": "ready_for_preview",
+  "publishMode": "preview",
+  "copiedImages": [
+    {
+      "src": "images/hero.png",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-europe-fusion-reactor-bpuakw1dyek/images/hero.png",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-europe-fusion-reactor-bpuakw1dyek-1787109943462/images/hero.png"
+    },
+    {
+      "src": "images/stellarator.png",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-europe-fusion-reactor-bpuakw1dyek/images/stellarator.png",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-europe-fusion-reactor-bpuakw1dyek-1787109943462/images/stellarator.png"
+    },
+    {
+      "src": "images/milestones.png",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-europe-fusion-reactor-bpuakw1dyek/images/milestones.png",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-europe-fusion-reactor-bpuakw1dyek-1787109943462/images/milestones.png"
+    }
+  ],
+  "ratings": {
+    "gemini": {
+      "score": 9.2,
+      "writingScore": 9.3,
+      "trustScore": 9.1,
+      "note": "Strong source-grounded explainer; preview gate prepared. Rating below 9.5 because visuals and full external research gate remain limited."
+    },
+    "gpt": null,
+    "consensus": null
+  }
+}
