@@ -1,0 +1,39 @@
+{
+  "slug": "youtube-microplastics-wmayvwnx4vY",
+  "title": "You Are Scared of the Wrong Microplastics",
+  "publicUrl": "https://www.maxpetrusenko.com/medium/youtube-microplastics-wmayvwnx4vY/",
+  "outputPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/youtube-microplastics-wmayvwnx4vY/index.html",
+  "sourceUrl": "https://www.youtube.com/watch?v=wmAYvwnx4vY",
+  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-microplastics-wmayvwnx4vY/article-v1.md",
+  "articleHash": "e4465174fbb11c4899c05d5acd6567945c764742bfe6c52ad532697edcb5dcd3",
+  "exportedAt": "2026-08-19T03:04:50.628Z",
+  "status": "ready_for_preview",
+  "publishMode": "preview",
+  "copiedImages": [
+    {
+      "src": "./assets/hero-scale.png",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-microplastics-wmayvwnx4vY/assets/hero-scale.png",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-microplastics-wmayvwnx4vY-1787108690626/assets/hero-scale.png"
+    },
+    {
+      "src": "./assets/sources-breakdown.png",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-microplastics-wmayvwnx4vY/assets/sources-breakdown.png",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-microplastics-wmayvwnx4vY-1787108690626/assets/sources-breakdown.png"
+    },
+    {
+      "src": "./assets/count-vs-mass.png",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-microplastics-wmayvwnx4vY/assets/count-vs-mass.png",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-microplastics-wmayvwnx4vY-1787108690626/assets/count-vs-mass.png"
+    },
+    {
+      "src": "./assets/regulation-mismatch.png",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-microplastics-wmayvwnx4vY/assets/regulation-mismatch.png",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-microplastics-wmayvwnx4vY-1787108690626/assets/regulation-mismatch.png"
+    }
+  ],
+  "ratings": {
+    "gemini": 9.5,
+    "gpt": null,
+    "consensus": 9.5
+  }
+}
