@@ -5,15 +5,30 @@
   "outputPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/youtube-ai-world-war-gw_hnd7m00m/index.html",
   "sourceUrl": "https://www.youtube.com/watch?v=Gw_hnD7m00M",
   "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-ai-world-war-gw_hnd7m00m/article-medium.md",
-  "articleHash": "6537832305a155fc4dc967ff1ee545c55b4cdae4c21853c29904173954ba71d2",
-  "exportedAt": "2026-08-19T05:02:40.816Z",
+  "articleHash": "d8eee8f4f8f5ad585eb2b5f5fd1f8d221e921155fe5ea6f664ead953165e78f1",
+  "exportedAt": "2026-08-19T05:47:48.490Z",
   "status": "preview_deployed_waiting_max_schedule_approval",
   "publishMode": "preview",
   "copiedImages": [
     {
       "src": "assets/hero-overlay.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-ai-world-war-gw_hnd7m00m/assets/hero-overlay.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-ai-world-war-gw_hnd7m00m-1787115760813/assets/hero-overlay.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-ai-world-war-gw_hnd7m00m-1787118468488/assets/hero-overlay.jpg"
+    },
+    {
+      "src": "images/body-frame-1.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-ai-world-war-gw_hnd7m00m/images/body-frame-1.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-ai-world-war-gw_hnd7m00m-1787118468488/images/body-frame-1.jpg"
+    },
+    {
+      "src": "images/body-frame-2.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-ai-world-war-gw_hnd7m00m/images/body-frame-2.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-ai-world-war-gw_hnd7m00m-1787118468488/images/body-frame-2.jpg"
+    },
+    {
+      "src": "images/body-frame-3.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-ai-world-war-gw_hnd7m00m/images/body-frame-3.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-ai-world-war-gw_hnd7m00m-1787118468488/images/body-frame-3.jpg"
     }
   ],
   "ratings": {
