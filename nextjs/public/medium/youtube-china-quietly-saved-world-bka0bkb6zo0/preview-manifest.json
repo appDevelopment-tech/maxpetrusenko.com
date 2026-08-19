@@ -5,25 +5,25 @@
   "outputPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/youtube-china-quietly-saved-world-bka0bkb6zo0/index.html",
   "sourceUrl": null,
   "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-china-quietly-saved-world-bka0bkb6zo0/article-medium.md",
-  "articleHash": "f97b068ca3279fe885d0afaea297f0c0d5b9ee5bfbad5282deb478e1f1c8c966",
-  "exportedAt": "2026-08-19T06:35:02.716Z",
+  "articleHash": "4b3738e08a270d5081685f7442564fbc7b7f900b793074a407b8dfa348a31fe8",
+  "exportedAt": "2026-08-19T07:51:45.757Z",
   "status": "preview_deployed_waiting_max_schedule_approval",
   "publishMode": "preview",
   "copiedImages": [
     {
       "src": "assets/hero-overlay.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-china-quietly-saved-world-bka0bkb6zo0/assets/hero-overlay.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-china-quietly-saved-world-bka0bkb6zo0-1787121302713/assets/hero-overlay.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-china-quietly-saved-world-bka0bkb6zo0-1787125905752/assets/hero-overlay.jpg"
     },
     {
       "src": "assets/body-frame-1.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-china-quietly-saved-world-bka0bkb6zo0/assets/body-frame-1.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-china-quietly-saved-world-bka0bkb6zo0-1787121302713/assets/body-frame-1.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-china-quietly-saved-world-bka0bkb6zo0-1787125905752/assets/body-frame-1.jpg"
     },
     {
       "src": "assets/body-frame-2.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-china-quietly-saved-world-bka0bkb6zo0/assets/body-frame-2.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-china-quietly-saved-world-bka0bkb6zo0-1787121302713/assets/body-frame-2.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-china-quietly-saved-world-bka0bkb6zo0-1787125905752/assets/body-frame-2.jpg"
     }
   ],
   "ratings": {
