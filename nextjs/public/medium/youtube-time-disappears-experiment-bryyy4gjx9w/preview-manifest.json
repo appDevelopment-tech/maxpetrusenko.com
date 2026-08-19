@@ -5,20 +5,25 @@
   "outputPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/youtube-time-disappears-experiment-bryyy4gjx9w/index.html",
   "sourceUrl": null,
   "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-time-disappears-experiment-bryyy4gjx9w/article-v5.md",
-  "articleHash": "a948bb5db66de2b8bd2883f825ad51633754291940b36ebd2e8c7be8dbf501e8",
-  "exportedAt": "2026-08-19T04:55:42.974Z",
+  "articleHash": "189a4a5352f1c72c56d24b5a03c7574f48e6d88f36bf9e306761ed9ed4b8bddc",
+  "exportedAt": "2026-08-19T05:02:40.871Z",
   "status": "preview_deployed_waiting_max_schedule_approval",
   "publishMode": "preview",
   "copiedImages": [
     {
+      "src": "images/hero-overlay.png",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-time-disappears-experiment-bryyy4gjx9w/images/hero-overlay.png",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-time-disappears-experiment-bryyy4gjx9w-1787115760869/images/hero-overlay.png"
+    },
+    {
       "src": "images/sectors-time.png",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-time-disappears-experiment-bryyy4gjx9w/images/sectors-time.png",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-time-disappears-experiment-bryyy4gjx9w-1787115342972/images/sectors-time.png"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-time-disappears-experiment-bryyy4gjx9w-1787115760869/images/sectors-time.png"
     },
     {
       "src": "images/clocks-time.png",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-time-disappears-experiment-bryyy4gjx9w/images/clocks-time.png",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-time-disappears-experiment-bryyy4gjx9w-1787115342972/images/clocks-time.png"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-time-disappears-experiment-bryyy4gjx9w-1787115760869/images/clocks-time.png"
     }
   ],
   "ratings": {

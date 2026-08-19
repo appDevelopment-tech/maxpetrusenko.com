@@ -5,20 +5,20 @@
   "outputPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/youtube-easiest-way-make-world-smarter-xrcwwzxj8gk/index.html",
   "sourceUrl": null,
   "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-easiest-way-make-world-smarter-xrcwwzxj8gk/article-v3.md",
-  "articleHash": "61bfa15a7b651b95f7529ecf504e331b5fcf391e490954eea5af574fdaf1bf7d",
-  "exportedAt": "2026-08-19T04:55:43.145Z",
+  "articleHash": "74be84918f8e9e74b69308c2ec81ffe15e22d80e001dc414647a5e96f342a6b3",
+  "exportedAt": "2026-08-19T05:02:40.926Z",
   "status": "preview_deployed_waiting_max_schedule_approval",
   "publishMode": "preview",
   "copiedImages": [
     {
-      "src": "images/hero-salt-iodine.png",
-      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-easiest-way-make-world-smarter-xrcwwzxj8gk/images/hero-salt-iodine.png",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-easiest-way-make-world-smarter-xrcwwzxj8gk-1787115343142/images/hero-salt-iodine.png"
+      "src": "images/hero-overlay.png",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-easiest-way-make-world-smarter-xrcwwzxj8gk/images/hero-overlay.png",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-easiest-way-make-world-smarter-xrcwwzxj8gk-1787115760924/images/hero-overlay.png"
     },
     {
       "src": "images/iodine-dose-visual.png",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-easiest-way-make-world-smarter-xrcwwzxj8gk/images/iodine-dose-visual.png",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-easiest-way-make-world-smarter-xrcwwzxj8gk-1787115343142/images/iodine-dose-visual.png"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-easiest-way-make-world-smarter-xrcwwzxj8gk-1787115760924/images/iodine-dose-visual.png"
     }
   ],
   "ratings": {

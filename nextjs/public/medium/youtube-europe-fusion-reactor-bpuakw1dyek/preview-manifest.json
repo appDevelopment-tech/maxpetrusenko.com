@@ -5,25 +5,25 @@
   "outputPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/youtube-europe-fusion-reactor-bpuakw1dyek/index.html",
   "sourceUrl": null,
   "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-europe-fusion-reactor-bpuakw1dyek/article-v5.md",
-  "articleHash": "8933532c07d0a8e4f13ff466e30d2ec26c59aa2af736485a028316af82eb45a3",
-  "exportedAt": "2026-08-19T04:55:43.029Z",
+  "articleHash": "7640d64433e504420fe99cfac3ada3bd595ec9533652c55a66d450bcad6f2f80",
+  "exportedAt": "2026-08-19T05:02:40.955Z",
   "status": "needs_human_resolution",
   "publishMode": "preview",
   "copiedImages": [
     {
-      "src": "images/hero-frame-v4.jpg",
-      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-europe-fusion-reactor-bpuakw1dyek/images/hero-frame-v4.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-europe-fusion-reactor-bpuakw1dyek-1787115343026/images/hero-frame-v4.jpg"
+      "src": "images/hero-overlay.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-europe-fusion-reactor-bpuakw1dyek/images/hero-overlay.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-europe-fusion-reactor-bpuakw1dyek-1787115760952/images/hero-overlay.jpg"
     },
     {
       "src": "images/stellarator.png",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-europe-fusion-reactor-bpuakw1dyek/images/stellarator.png",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-europe-fusion-reactor-bpuakw1dyek-1787115343026/images/stellarator.png"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-europe-fusion-reactor-bpuakw1dyek-1787115760952/images/stellarator.png"
     },
     {
       "src": "images/milestones.png",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-europe-fusion-reactor-bpuakw1dyek/images/milestones.png",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-europe-fusion-reactor-bpuakw1dyek-1787115343026/images/milestones.png"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-europe-fusion-reactor-bpuakw1dyek-1787115760952/images/milestones.png"
     }
   ],
   "ratings": {

@@ -4,12 +4,18 @@
   "publicUrl": "https://www.maxpetrusenko.com/medium/youtube-most-controversial-idea-physics-oi91ke_wocs/",
   "outputPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/youtube-most-controversial-idea-physics-oi91ke_wocs/index.html",
   "sourceUrl": "https://www.youtube.com/watch?v=oI91Ke_wOCs",
-  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-most-controversial-idea-physics-oi91ke_wocs/article-v8.md",
-  "articleHash": "24d54ad356222279799c28db2da57ac8783f961b89f4e66ae5d5dc64a986e26e",
-  "exportedAt": "2026-08-19T04:07:09.584Z",
+  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-most-controversial-idea-physics-oi91ke_wocs/article-medium.md",
+  "articleHash": "9fbd41beee1af859067f8f9bd6f3b1a1f7bfdf2fd776e16bd857b16c42495e09",
+  "exportedAt": "2026-08-19T05:02:40.843Z",
   "status": "preview_deployed_waiting_max_schedule_approval",
   "publishMode": "preview",
-  "copiedImages": [],
+  "copiedImages": [
+    {
+      "src": "assets/hero-overlay.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-most-controversial-idea-physics-oi91ke_wocs/assets/hero-overlay.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-most-controversial-idea-physics-oi91ke_wocs-1787115760842/assets/hero-overlay.jpg"
+    }
+  ],
   "ratings": {
     "gemini": 9.5,
     "gpt": null,

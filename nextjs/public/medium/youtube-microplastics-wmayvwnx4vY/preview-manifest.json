@@ -4,31 +4,36 @@
   "publicUrl": "https://www.maxpetrusenko.com/medium/youtube-microplastics-wmayvwnx4vY/",
   "outputPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/youtube-microplastics-wmayvwnx4vY/index.html",
   "sourceUrl": "https://www.youtube.com/watch?v=wmAYvwnx4vY",
-  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-microplastics-wmayvwnx4vY/article-v4.md",
-  "articleHash": "a6b8051a9f0c55492bd55699184332f6b926320a38385ac54ecbcaad6b3ca18f",
-  "exportedAt": "2026-08-19T04:09:43.087Z",
+  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-microplastics-wmayvwnx4vY/article-medium.md",
+  "articleHash": "ca72d7c0bad91127efbd5ac40e7f07b8044a31c27b7e67b1b53256018dbaa120",
+  "exportedAt": "2026-08-19T05:02:40.787Z",
   "status": "ready_for_preview",
   "publishMode": "preview",
   "copiedImages": [
     {
+      "src": "assets/hero-overlay.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-microplastics-wmayvwnx4vY/assets/hero-overlay.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-microplastics-wmayvwnx4vY-1787115760780/assets/hero-overlay.jpg"
+    },
+    {
       "src": "./assets/sources-breakdown.png",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-microplastics-wmayvwnx4vY/assets/sources-breakdown.png",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-microplastics-wmayvwnx4vY-1787112583081/assets/sources-breakdown.png"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-microplastics-wmayvwnx4vY-1787115760780/assets/sources-breakdown.png"
     },
     {
       "src": "./assets/count-vs-mass.png",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-microplastics-wmayvwnx4vY/assets/count-vs-mass.png",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-microplastics-wmayvwnx4vY-1787112583081/assets/count-vs-mass.png"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-microplastics-wmayvwnx4vY-1787115760780/assets/count-vs-mass.png"
     },
     {
       "src": "./assets/regulation-mismatch.png",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-microplastics-wmayvwnx4vY/assets/regulation-mismatch.png",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-microplastics-wmayvwnx4vY-1787112583081/assets/regulation-mismatch.png"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-microplastics-wmayvwnx4vY-1787115760780/assets/regulation-mismatch.png"
     }
   ],
   "ratings": {
-    "gemini": 9.5,
+    "gemini": 9.1,
     "gpt": null,
-    "consensus": 9.5
+    "consensus": 9.1
   }
 }
