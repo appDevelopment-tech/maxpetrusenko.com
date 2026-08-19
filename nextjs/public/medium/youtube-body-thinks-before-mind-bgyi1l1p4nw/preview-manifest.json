@@ -4,61 +4,61 @@
   "publicUrl": "https://www.maxpetrusenko.com/medium/youtube-body-thinks-before-mind-bgyi1l1p4nw/",
   "outputPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/youtube-body-thinks-before-mind-bgyi1l1p4nw/index.html",
   "sourceUrl": "https://www.youtube.com/watch?v=bgyI1L1p4Nw",
-  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-body-thinks-before-mind-bgyi1l1p4nw/article-v7.md",
-  "articleHash": "a84dacacc98ee3733a1d160d946d5d2f5dbb01bcc5c743428d9c94fc6ba8e6c0",
-  "exportedAt": "2026-08-19T04:07:17.086Z",
+  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-body-thinks-before-mind-bgyi1l1p4nw/article-v8.md",
+  "articleHash": "e2fa59ad4afa6ff906721d880c9e79b869f55fb1cadc1af72c34e437ac018cba",
+  "exportedAt": "2026-08-19T04:21:31.305Z",
   "status": "reopened_by_max_title_review_title_fixed_locally_needs_medium_update",
   "publishMode": "preview",
   "copiedImages": [
     {
-      "src": "assets/generated-bitmap-v1/hidden-body-signals-hero.png",
-      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-body-thinks-before-mind-bgyi1l1p4nw/assets/generated-bitmap-v1/hidden-body-signals-hero.png",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-body-thinks-before-mind-bgyi1l1p4nw-1787112437030/assets/generated-bitmap-v1/hidden-body-signals-hero.png"
+      "src": "assets/generated-bitmap-v1/hidden-body-signals-hero-overlay.png",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-body-thinks-before-mind-bgyi1l1p4nw/assets/generated-bitmap-v1/hidden-body-signals-hero-overlay.png",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-body-thinks-before-mind-bgyi1l1p4nw-1787113291242/assets/generated-bitmap-v1/hidden-body-signals-hero-overlay.png"
     },
     {
       "src": "assets/youtube-frames/selected-v3/01-ghost-machine-paper.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-body-thinks-before-mind-bgyi1l1p4nw/assets/youtube-frames/selected-v3/01-ghost-machine-paper.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-body-thinks-before-mind-bgyi1l1p4nw-1787112437030/assets/youtube-frames/selected-v3/01-ghost-machine-paper.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-body-thinks-before-mind-bgyi1l1p4nw-1787113291242/assets/youtube-frames/selected-v3/01-ghost-machine-paper.jpg"
     },
     {
       "src": "assets/youtube-frames/selected-v3/03-spectrogram-response.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-body-thinks-before-mind-bgyi1l1p4nw/assets/youtube-frames/selected-v3/03-spectrogram-response.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-body-thinks-before-mind-bgyi1l1p4nw-1787112437030/assets/youtube-frames/selected-v3/03-spectrogram-response.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-body-thinks-before-mind-bgyi1l1p4nw-1787113291242/assets/youtube-frames/selected-v3/03-spectrogram-response.jpg"
     },
     {
       "src": "assets/youtube-frames/selected-v3/04-hippocampus-diagram.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-body-thinks-before-mind-bgyi1l1p4nw/assets/youtube-frames/selected-v3/04-hippocampus-diagram.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-body-thinks-before-mind-bgyi1l1p4nw-1787112437030/assets/youtube-frames/selected-v3/04-hippocampus-diagram.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-body-thinks-before-mind-bgyi1l1p4nw-1787113291242/assets/youtube-frames/selected-v3/04-hippocampus-diagram.jpg"
     },
     {
       "src": "assets/youtube-frames/selected-v3/05-surgical-sleep-mri.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-body-thinks-before-mind-bgyi1l1p4nw/assets/youtube-frames/selected-v3/05-surgical-sleep-mri.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-body-thinks-before-mind-bgyi1l1p4nw-1787112437030/assets/youtube-frames/selected-v3/05-surgical-sleep-mri.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-body-thinks-before-mind-bgyi1l1p4nw-1787113291242/assets/youtube-frames/selected-v3/05-surgical-sleep-mri.jpg"
     },
     {
       "src": "assets/youtube-frames/selected-v3/07-epic-dream-illustration.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-body-thinks-before-mind-bgyi1l1p4nw/assets/youtube-frames/selected-v3/07-epic-dream-illustration.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-body-thinks-before-mind-bgyi1l1p4nw-1787112437030/assets/youtube-frames/selected-v3/07-epic-dream-illustration.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-body-thinks-before-mind-bgyi1l1p4nw-1787113291242/assets/youtube-frames/selected-v3/07-epic-dream-illustration.jpg"
     },
     {
       "src": "assets/generated-bitmap-v1/tumor-control-network.png",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-body-thinks-before-mind-bgyi1l1p4nw/assets/generated-bitmap-v1/tumor-control-network.png",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-body-thinks-before-mind-bgyi1l1p4nw-1787112437030/assets/generated-bitmap-v1/tumor-control-network.png"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-body-thinks-before-mind-bgyi1l1p4nw-1787113291242/assets/generated-bitmap-v1/tumor-control-network.png"
     },
     {
       "src": "assets/youtube-frames/selected-v3/09-embo-tumor-paper.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-body-thinks-before-mind-bgyi1l1p4nw/assets/youtube-frames/selected-v3/09-embo-tumor-paper.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-body-thinks-before-mind-bgyi1l1p4nw-1787112437030/assets/youtube-frames/selected-v3/09-embo-tumor-paper.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-body-thinks-before-mind-bgyi1l1p4nw-1787113291242/assets/youtube-frames/selected-v3/09-embo-tumor-paper.jpg"
     },
     {
       "src": "assets/youtube-frames/selected-v3/10-cancer-cell-graphic.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-body-thinks-before-mind-bgyi1l1p4nw/assets/youtube-frames/selected-v3/10-cancer-cell-graphic.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-body-thinks-before-mind-bgyi1l1p4nw-1787112437030/assets/youtube-frames/selected-v3/10-cancer-cell-graphic.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-body-thinks-before-mind-bgyi1l1p4nw-1787113291242/assets/youtube-frames/selected-v3/10-cancer-cell-graphic.jpg"
     },
     {
       "src": "assets/generated-bitmap-v1/axon-regrowth-organoid.png",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-body-thinks-before-mind-bgyi1l1p4nw/assets/generated-bitmap-v1/axon-regrowth-organoid.png",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-body-thinks-before-mind-bgyi1l1p4nw-1787112437030/assets/generated-bitmap-v1/axon-regrowth-organoid.png"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-body-thinks-before-mind-bgyi1l1p4nw-1787113291242/assets/generated-bitmap-v1/axon-regrowth-organoid.png"
     }
   ],
   "ratings": {

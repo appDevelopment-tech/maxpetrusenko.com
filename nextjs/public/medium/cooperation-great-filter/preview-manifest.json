@@ -4,16 +4,16 @@
   "publicUrl": "https://www.maxpetrusenko.com/medium/cooperation-great-filter/",
   "outputPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/cooperation-great-filter/index.html",
   "sourceUrl": null,
-  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/cooperation-great-filter/article-v2.md",
-  "articleHash": "a89e5b2e729324ccab559553659f629f6abc875557be4c15df8b9d5314ecd06c",
-  "exportedAt": "2026-08-19T04:06:19.464Z",
+  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/cooperation-great-filter/article-v1.md",
+  "articleHash": "ffa2e937bf1946dacf3859159b4fd9923fbffc584a62fe8853255b9cad6c639c",
+  "exportedAt": "2026-08-19T04:21:14.239Z",
   "status": "needs_review",
   "publishMode": "preview",
   "copiedImages": [
     {
-      "src": "./cooperation-filter-medium-hero.png",
-      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/cooperation-great-filter/cooperation-filter-medium-hero.png",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-cooperation-great-filter-1787112379458/cooperation-filter-medium-hero.png"
+      "src": "cooperation-filter-medium-hero-overlay.png",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/cooperation-great-filter/cooperation-filter-medium-hero-overlay.png",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-cooperation-great-filter-1787113274238/cooperation-filter-medium-hero-overlay.png"
     }
   ],
   "ratings": {

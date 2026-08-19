@@ -5,40 +5,40 @@
   "outputPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/youtube-ai-agent-loops-human-loop-7clj8ih784q/index.html",
   "sourceUrl": null,
   "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-ai-agent-loops-human-loop-7clj8ih784q/article-v34.md",
-  "articleHash": "de122f8fd803fd211fd4f7acce36cd1e4b9f55132b004ece089be7ae735abbcf",
-  "exportedAt": "2026-08-19T04:06:19.375Z",
+  "articleHash": "47a73103e0f7034c64b8fca6dd6f7ea71dc9bcfdec7cc7b3ca1439d995242a9f",
+  "exportedAt": "2026-08-19T04:21:14.110Z",
   "status": "passed_article_phase_external_claude_gate",
   "publishMode": "preview",
   "copiedImages": [
     {
-      "src": "assets/generated-infographics/human-control-loop.png",
-      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-ai-agent-loops-human-loop-7clj8ih784q/assets/generated-infographics/human-control-loop.png",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-ai-agent-loops-human-loop-7clj8ih784q-1787112379330/assets/generated-infographics/human-control-loop.png"
+      "src": "assets/generated-infographics/human-control-loop-overlay.png",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-ai-agent-loops-human-loop-7clj8ih784q/assets/generated-infographics/human-control-loop-overlay.png",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-ai-agent-loops-human-loop-7clj8ih784q-1787113274073/assets/generated-infographics/human-control-loop-overlay.png"
     },
     {
       "src": "assets/youtube-frames/cropped/11-40-human-in-loop-whiteboard-crop.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-ai-agent-loops-human-loop-7clj8ih784q/assets/youtube-frames/cropped/11-40-human-in-loop-whiteboard-crop.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-ai-agent-loops-human-loop-7clj8ih784q-1787112379330/assets/youtube-frames/cropped/11-40-human-in-loop-whiteboard-crop.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-ai-agent-loops-human-loop-7clj8ih784q-1787113274073/assets/youtube-frames/cropped/11-40-human-in-loop-whiteboard-crop.jpg"
     },
     {
       "src": "assets/generated-infographics/open-ended-loop-failure.png",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-ai-agent-loops-human-loop-7clj8ih784q/assets/generated-infographics/open-ended-loop-failure.png",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-ai-agent-loops-human-loop-7clj8ih784q-1787112379330/assets/generated-infographics/open-ended-loop-failure.png"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-ai-agent-loops-human-loop-7clj8ih784q-1787113274073/assets/generated-infographics/open-ended-loop-failure.png"
     },
     {
       "src": "assets/youtube-frames/cropped/13-20-code-review-before-whiteboard-crop.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-ai-agent-loops-human-loop-7clj8ih784q/assets/youtube-frames/cropped/13-20-code-review-before-whiteboard-crop.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-ai-agent-loops-human-loop-7clj8ih784q-1787112379330/assets/youtube-frames/cropped/13-20-code-review-before-whiteboard-crop.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-ai-agent-loops-human-loop-7clj8ih784q-1787113274073/assets/youtube-frames/cropped/13-20-code-review-before-whiteboard-crop.jpg"
     },
     {
       "src": "assets/generated-infographics/external-critic-loop.png",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-ai-agent-loops-human-loop-7clj8ih784q/assets/generated-infographics/external-critic-loop.png",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-ai-agent-loops-human-loop-7clj8ih784q-1787112379330/assets/generated-infographics/external-critic-loop.png"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-ai-agent-loops-human-loop-7clj8ih784q-1787113274073/assets/generated-infographics/external-critic-loop.png"
     },
     {
       "src": "assets/youtube-frames/cropped/18-40-human-loop-final-whiteboard-crop.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-ai-agent-loops-human-loop-7clj8ih784q/assets/youtube-frames/cropped/18-40-human-loop-final-whiteboard-crop.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-ai-agent-loops-human-loop-7clj8ih784q-1787112379330/assets/youtube-frames/cropped/18-40-human-loop-final-whiteboard-crop.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-ai-agent-loops-human-loop-7clj8ih784q-1787113274073/assets/youtube-frames/cropped/18-40-human-loop-final-whiteboard-crop.jpg"
     }
   ],
   "ratings": {
