@@ -4,26 +4,21 @@
   "publicUrl": "https://www.maxpetrusenko.com/medium/youtube-body-not-die-on-schedule-tsxvuyi0eia/",
   "outputPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/youtube-body-not-die-on-schedule-tsxvuyi0eia/index.html",
   "sourceUrl": "https://www.youtube.com/watch?v=tsxvuYi0eiA",
-  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-body-not-die-on-schedule-tsxvuyi0eia/article-medium.md",
-  "articleHash": "8d3c7bda57ed14bcae5e054cecc503e7ccdcdaf5d6b59362e0fbb41683dfb743",
-  "exportedAt": "2026-08-18T09:23:58.682Z",
+  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-body-not-die-on-schedule-tsxvuyi0eia/article-v11.md",
+  "articleHash": "1b9b9365ee4777f5cbdff5a5d71c92d7fea35a60e60f1370bbeb2c9f7aaddb4d",
+  "exportedAt": "2026-08-19T04:07:21.882Z",
   "status": "blocked_by_read_next_403",
   "publishMode": "preview",
   "copiedImages": [
     {
       "src": "assets/youtube-frames/selected/01-benchen-monastery.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-body-not-die-on-schedule-tsxvuyi0eia/assets/youtube-frames/selected/01-benchen-monastery.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-body-not-die-on-schedule-tsxvuyi0eia-1787045038676/assets/youtube-frames/selected/01-benchen-monastery.jpg"
-    },
-    {
-      "src": "assets/youtube-frames/selected/02-himalayan-pass.jpg",
-      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-body-not-die-on-schedule-tsxvuyi0eia/assets/youtube-frames/selected/02-himalayan-pass.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-body-not-die-on-schedule-tsxvuyi0eia-1787045038676/assets/youtube-frames/selected/02-himalayan-pass.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-body-not-die-on-schedule-tsxvuyi0eia-1787112441878/assets/youtube-frames/selected/01-benchen-monastery.jpg"
     },
     {
       "src": "assets/youtube-frames/selected/03-mountain-moon.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-body-not-die-on-schedule-tsxvuyi0eia/assets/youtube-frames/selected/03-mountain-moon.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-body-not-die-on-schedule-tsxvuyi0eia-1787045038676/assets/youtube-frames/selected/03-mountain-moon.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-body-not-die-on-schedule-tsxvuyi0eia-1787112441878/assets/youtube-frames/selected/03-mountain-moon.jpg"
     }
   ],
   "ratings": {
