@@ -1,0 +1,29 @@
+{
+  "slug": "youtube-easiest-way-make-world-smarter-xrcwwzxj8gk",
+  "title": "The Easiest Way to Make the World Smarter Was Already in Your Kitchen",
+  "publicUrl": "https://www.maxpetrusenko.com/medium/youtube-easiest-way-make-world-smarter-xrcwwzxj8gk/",
+  "outputPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/youtube-easiest-way-make-world-smarter-xrcwwzxj8gk/index.html",
+  "sourceUrl": null,
+  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-easiest-way-make-world-smarter-xrcwwzxj8gk/article-v2.md",
+  "articleHash": "61bfa15a7b651b95f7529ecf504e331b5fcf391e490954eea5af574fdaf1bf7d",
+  "exportedAt": "2026-08-19T03:45:06.880Z",
+  "status": "blocked_opus_below_threshold",
+  "publishMode": "preview",
+  "copiedImages": [
+    {
+      "src": "images/hero-salt-iodine.png",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-easiest-way-make-world-smarter-xrcwwzxj8gk/images/hero-salt-iodine.png",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-easiest-way-make-world-smarter-xrcwwzxj8gk-1787111106877/images/hero-salt-iodine.png"
+    },
+    {
+      "src": "images/iodine-dose-visual.png",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-easiest-way-make-world-smarter-xrcwwzxj8gk/images/iodine-dose-visual.png",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-easiest-way-make-world-smarter-xrcwwzxj8gk-1787111106877/images/iodine-dose-visual.png"
+    }
+  ],
+  "ratings": {
+    "gemini": null,
+    "gpt": null,
+    "consensus": null
+  }
+}
