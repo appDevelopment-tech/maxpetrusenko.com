@@ -4,26 +4,26 @@
   "publicUrl": "https://www.maxpetrusenko.com/medium/youtube-easiest-way-make-world-smarter-xrcwwzxj8gk/",
   "outputPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/youtube-easiest-way-make-world-smarter-xrcwwzxj8gk/index.html",
   "sourceUrl": "https://www.youtube.com/watch?v=XRcwwZXJ8gk",
-  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-easiest-way-make-world-smarter-xrcwwzxj8gk/article-v3.md",
-  "articleHash": "994c0a68683b33ed0ece126b07c003aa3465ffb6c689db82c74c6a66f8f7feb8",
-  "exportedAt": "2026-08-19T06:25:20.306Z",
+  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-easiest-way-make-world-smarter-xrcwwzxj8gk/article-medium.md",
+  "articleHash": "e2f072e62c4511c47f3c938680801fe7dfc10731581c02aca36450f912b48a24",
+  "exportedAt": "2026-08-19T06:30:44.154Z",
   "status": "preview_exported_waiting_max_schedule_approval",
   "publishMode": "preview",
   "copiedImages": [
     {
       "src": "images/hero-overlay.png",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-easiest-way-make-world-smarter-xrcwwzxj8gk/images/hero-overlay.png",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-easiest-way-make-world-smarter-xrcwwzxj8gk-1787120720303/images/hero-overlay.png"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-easiest-way-make-world-smarter-xrcwwzxj8gk-1787121044150/images/hero-overlay.png"
     },
     {
       "src": "images/body-frame-1.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-easiest-way-make-world-smarter-xrcwwzxj8gk/images/body-frame-1.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-easiest-way-make-world-smarter-xrcwwzxj8gk-1787120720303/images/body-frame-1.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-easiest-way-make-world-smarter-xrcwwzxj8gk-1787121044150/images/body-frame-1.jpg"
     },
     {
       "src": "images/body-frame-2.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-easiest-way-make-world-smarter-xrcwwzxj8gk/images/body-frame-2.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-easiest-way-make-world-smarter-xrcwwzxj8gk-1787120720303/images/body-frame-2.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-easiest-way-make-world-smarter-xrcwwzxj8gk-1787121044150/images/body-frame-2.jpg"
     }
   ],
   "ratings": {
