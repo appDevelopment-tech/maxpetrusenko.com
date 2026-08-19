@@ -4,34 +4,36 @@
   "publicUrl": "https://www.maxpetrusenko.com/medium/youtube-deepseek-v4-what-not-to-read-xjupuobpt-4/",
   "outputPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/youtube-deepseek-v4-what-not-to-read-xjupuobpt-4/index.html",
   "sourceUrl": "https://www.youtube.com/watch?v=XJUpuOBpT-4",
-  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-deepseek-v4-what-not-to-read-xjupuobpt-4/article-v8.md",
-  "exportedAt": "2026-07-07T10:21:10.703Z",
+  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-deepseek-v4-what-not-to-read-xjupuobpt-4/article-v5.md",
+  "articleHash": "9e706b43851fea1066b6ad2aff207b0976acb0605504c61190feb6967e1cdc82",
+  "exportedAt": "2026-08-19T04:07:33.433Z",
   "status": "passed_adversarial_gate",
+  "publishMode": "preview",
   "copiedImages": [
     {
       "src": "assets/youtube-frames/selected/01-deepseek-v4-specs.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-deepseek-v4-what-not-to-read-xjupuobpt-4/assets/youtube-frames/selected/01-deepseek-v4-specs.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-deepseek-v4-what-not-to-read-xjupuobpt-4-1783419670694/assets/youtube-frames/selected/01-deepseek-v4-specs.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-deepseek-v4-what-not-to-read-xjupuobpt-4-1787112453415/assets/youtube-frames/selected/01-deepseek-v4-specs.jpg"
     },
     {
       "src": "assets/youtube-frames/selected/02-compressed-attention-pathways.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-deepseek-v4-what-not-to-read-xjupuobpt-4/assets/youtube-frames/selected/02-compressed-attention-pathways.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-deepseek-v4-what-not-to-read-xjupuobpt-4-1783419670694/assets/youtube-frames/selected/02-compressed-attention-pathways.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-deepseek-v4-what-not-to-read-xjupuobpt-4-1787112453415/assets/youtube-frames/selected/02-compressed-attention-pathways.jpg"
     },
     {
       "src": "assets/youtube-frames/selected/03-searching-long-context.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-deepseek-v4-what-not-to-read-xjupuobpt-4/assets/youtube-frames/selected/03-searching-long-context.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-deepseek-v4-what-not-to-read-xjupuobpt-4-1783419670694/assets/youtube-frames/selected/03-searching-long-context.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-deepseek-v4-what-not-to-read-xjupuobpt-4-1787112453415/assets/youtube-frames/selected/03-searching-long-context.jpg"
     },
     {
       "src": "assets/youtube-frames/selected/04-mhc-paper-evidence.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-deepseek-v4-what-not-to-read-xjupuobpt-4/assets/youtube-frames/selected/04-mhc-paper-evidence.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-deepseek-v4-what-not-to-read-xjupuobpt-4-1783419670694/assets/youtube-frames/selected/04-mhc-paper-evidence.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-deepseek-v4-what-not-to-read-xjupuobpt-4-1787112453415/assets/youtube-frames/selected/04-mhc-paper-evidence.jpg"
     },
     {
       "src": "assets/youtube-frames/selected/05-anticipatory-routing-paper.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-deepseek-v4-what-not-to-read-xjupuobpt-4/assets/youtube-frames/selected/05-anticipatory-routing-paper.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-deepseek-v4-what-not-to-read-xjupuobpt-4-1783419670694/assets/youtube-frames/selected/05-anticipatory-routing-paper.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-deepseek-v4-what-not-to-read-xjupuobpt-4-1787112453415/assets/youtube-frames/selected/05-anticipatory-routing-paper.jpg"
     }
   ],
   "ratings": {
