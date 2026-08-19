@@ -4,12 +4,18 @@
   "publicUrl": "https://www.maxpetrusenko.com/medium/youtube-ai-world-war-gw_hnd7m00m/",
   "outputPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/youtube-ai-world-war-gw_hnd7m00m/index.html",
   "sourceUrl": "https://www.youtube.com/watch?v=Gw_hnD7m00M",
-  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-ai-world-war-gw_hnd7m00m/article-v3.md",
-  "articleHash": "85e7bd476176fca29beeee7b8920003d023749e025e6afac92bea46d6dddb319",
-  "exportedAt": "2026-08-19T03:46:17.531Z",
+  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-ai-world-war-gw_hnd7m00m/article-v7.md",
+  "articleHash": "84b6ab16655f8617941c45b4148b9d0348c65336f9450f4e98e3f526545c1d9e",
+  "exportedAt": "2026-08-19T04:55:42.912Z",
   "status": "preview_deployed_waiting_max_schedule_approval",
   "publishMode": "preview",
-  "copiedImages": [],
+  "copiedImages": [
+    {
+      "src": "images/hero-frame-v4.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-ai-world-war-gw_hnd7m00m/images/hero-frame-v4.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-ai-world-war-gw_hnd7m00m-1787115342909/images/hero-frame-v4.jpg"
+    }
+  ],
   "ratings": {
     "gemini": 8.9,
     "gpt": null,
