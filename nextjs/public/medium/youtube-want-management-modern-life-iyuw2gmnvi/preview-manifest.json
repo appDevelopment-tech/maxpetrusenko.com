@@ -5,15 +5,15 @@
   "outputPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/youtube-want-management-modern-life-iyuw2gmnvi/index.html",
   "sourceUrl": "https://www.youtube.com/watch?v=IY-UW2gmnVI",
   "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-want-management-modern-life-iyuw2gmnvi/article-v4.md",
-  "articleHash": "329ae944674d9bb0edb2120e80d998b4903332f306b240547e6846e92cf22b38",
-  "exportedAt": "2026-08-19T03:40:06.860Z",
+  "articleHash": "ed8730540d4b48aea4172c16d0daec28d9f43f480f8ae78470c7e780f1c4f7ee",
+  "exportedAt": "2026-08-19T03:44:41.944Z",
   "status": "passed_adversarial_gate",
   "publishMode": "preview",
   "copiedImages": [
     {
-      "src": "assets/hero-overlay.svg",
-      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-want-management-modern-life-iyuw2gmnvi/assets/hero-overlay.svg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-want-management-modern-life-iyuw2gmnvi-1787110806859/assets/hero-overlay.svg"
+      "src": "assets/youtube-frames/selected/01-arthur-brooks-matrix-thesis.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-want-management-modern-life-iyuw2gmnvi/assets/youtube-frames/selected/01-arthur-brooks-matrix-thesis.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-want-management-modern-life-iyuw2gmnvi-1787111081941/assets/youtube-frames/selected/01-arthur-brooks-matrix-thesis.jpg"
     }
   ],
   "ratings": {
