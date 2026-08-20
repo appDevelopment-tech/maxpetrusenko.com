@@ -17,12 +17,21 @@ export const metadata: Metadata = {
     description:
       "What people on Reddit actually ask about AI consulting: is it worth it, how much does it cost, and how do you pick a good consultant.",
     siteName: "Max Petrusenko",
+    images: [
+      {
+        url: absoluteUrl("/images/og-home.png"),
+        width: 1200,
+        height: 630,
+        alt: "AI Consulting Reddit",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "AI Consulting Reddit",
     description:
       "What people on Reddit actually ask about AI consulting: is it worth it, how much does it cost, and how do you pick a good consultant.",
+    images: [absoluteUrl("/images/og-home.png")],
   },
   robots: {
     index: true,
