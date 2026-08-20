@@ -1,0 +1,100 @@
+name: SEO Indexing Gate
+
+# Pre-prod gate: catches GSC-style indexing errors (canonical mismatch
+# "Alternate page with proper canonical tag", noindex, robots blocks,
+# sitemap 404s, thin content, JSON-LD/favicon/og issues) BEFORE a deploy.
+#
+#   push → main : runs LOCAL dir-check on the built Pages output (no network,
+#                 no Cloudflare rate-limit risk). Blocks on errors.
+#   workflow_dispatch : runs LIVE crawl of the production site after deploy.
+#
+# Usage: python3 .github/scripts/web-seo-check.py --dir <out> --url <base>
+#        or --url <base> for live mode. Exit 0 = pass, 1 = errors, 2 = warnings.
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'nextjs/**'
+      - 'public/**'
+      - '.github/scripts/web-seo-check.py'
+      - '.github/workflows/seo-indexing-gate.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: seo-indexing-gate-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  SITE_URL: https://www.maxpetrusenko.com
+
+jobs:
+  local-build-check:
+    name: Local build SEO check (pre-deploy)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: nextjs
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: nextjs/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Pages output
+        run: npm run pages:build
+
+      - name: Run SEO indexing gate (dir mode)
+        working-directory: .
+        run: |
+          python3 .github/scripts/web-seo-check.py \
+            --dir nextjs/.vercel/output/static \
+            --url ${{ env.SITE_URL }} \
+            --json /tmp/seo-report.json
+        # exit 1 blocks; exit 2 (warnings) reported but allowed
+
+      - name: Run SEO indexing gate — atelier subdomain (dir mode)
+        working-directory: .
+        run: |
+          python3 .github/scripts/web-seo-check.py \
+            --dir atelier \
+            --url https://atelier.maxpetrusenko.com \
+            --json /tmp/seo-report-atelier.json
+        # exit 1 blocks; exit 2 (warnings) reported but allowed
+
+      - name: Upload SEO report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: seo-report
+          path: /tmp/seo-report.json
+
+  live-check:
+    name: Live site SEO check (post-deploy)
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run SEO indexing gate (live mode)
+        run: |
+          python3 .github/scripts/web-seo-check.py \
+            --url ${{ env.SITE_URL }} \
+            --delay 0.3 \
+            --json /tmp/seo-live-report.json
+        # serial crawl + 503 retry (Cloudflare rate-limit safe)
