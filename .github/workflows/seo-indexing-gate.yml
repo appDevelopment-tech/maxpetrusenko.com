@@ -63,8 +63,11 @@ jobs:
           python3 .github/scripts/web-seo-check.py \
             --dir nextjs/.vercel/output/static \
             --url ${{ env.SITE_URL }} \
+            --skip-sitemap-files \
             --json /tmp/seo-report.json
         # exit 1 blocks; exit 2 (warnings) reported but allowed
+        # --skip-sitemap-files: Next.js worker build doesn't mirror every route
+        # as a flat file; live mode (workflow_dispatch) verifies sitemap URLs.
 
       - name: Run SEO indexing gate — atelier subdomain (dir mode)
         working-directory: .
