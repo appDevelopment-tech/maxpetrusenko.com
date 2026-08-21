@@ -4,26 +4,31 @@
   "publicUrl": "https://www.maxpetrusenko.com/medium/youtube-gps-jamming-clue-space-tz23g-uxcga/",
   "outputPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/youtube-gps-jamming-clue-space-tz23g-uxcga/index.html",
   "sourceUrl": "https://www.youtube.com/watch?v=tz23G_UXCGA",
-  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-gps-jamming-clue-space-tz23g-uxcga/article-medium.md",
-  "articleHash": "78496b3ef5cbaa4d4390efa9dfdcbddb0f4cfd0c4dbe8aa9c709a68a601e0f51",
-  "exportedAt": "2026-08-21T07:22:35.549Z",
+  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-gps-jamming-clue-space-tz23g-uxcga/article-v12.md",
+  "articleHash": "f7cde396a3aad66aae6875988e565149e6ff00e5f85f93afe22c1de099cfb13b",
+  "exportedAt": "2026-08-21T07:42:17.227Z",
   "status": "ready",
   "publishMode": "preview",
   "copiedImages": [
     {
       "src": "assets/youtube-frames/selected/01-continental-signal-drops-overlay.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-gps-jamming-clue-space-tz23g-uxcga/assets/youtube-frames/selected/01-continental-signal-drops-overlay.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-gps-jamming-clue-space-tz23g-uxcga-1787296955544/assets/youtube-frames/selected/01-continental-signal-drops-overlay.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-gps-jamming-clue-space-tz23g-uxcga-1787298137223/assets/youtube-frames/selected/01-continental-signal-drops-overlay.jpg"
+    },
+    {
+      "src": "assets/youtube-frames/selected/01-continental-signal-drops.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-gps-jamming-clue-space-tz23g-uxcga/assets/youtube-frames/selected/01-continental-signal-drops.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-gps-jamming-clue-space-tz23g-uxcga-1787298137223/assets/youtube-frames/selected/01-continental-signal-drops.jpg"
     },
     {
       "src": "assets/youtube-frames/selected/03-jamming-map-europe.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-gps-jamming-clue-space-tz23g-uxcga/assets/youtube-frames/selected/03-jamming-map-europe.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-gps-jamming-clue-space-tz23g-uxcga-1787296955544/assets/youtube-frames/selected/03-jamming-map-europe.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-gps-jamming-clue-space-tz23g-uxcga-1787298137223/assets/youtube-frames/selected/03-jamming-map-europe.jpg"
     },
     {
       "src": "assets/youtube-frames/selected/04-gnss-constellation.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-gps-jamming-clue-space-tz23g-uxcga/assets/youtube-frames/selected/04-gnss-constellation.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-gps-jamming-clue-space-tz23g-uxcga-1787296955544/assets/youtube-frames/selected/04-gnss-constellation.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-gps-jamming-clue-space-tz23g-uxcga-1787298137223/assets/youtube-frames/selected/04-gnss-constellation.jpg"
     }
   ],
   "ratings": {

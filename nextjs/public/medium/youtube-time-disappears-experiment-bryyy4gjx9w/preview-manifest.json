@@ -4,26 +4,26 @@
   "publicUrl": "https://www.maxpetrusenko.com/medium/youtube-time-disappears-experiment-bryyy4gjx9w/",
   "outputPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/youtube-time-disappears-experiment-bryyy4gjx9w/index.html",
   "sourceUrl": null,
-  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-time-disappears-experiment-bryyy4gjx9w/article-medium.md",
-  "articleHash": "8e4b47a0a6c5bedbacf6a68f015ffa3ebdc7fe49f5f262b072b4eb13187a6b0b",
-  "exportedAt": "2026-08-21T06:38:12.262Z",
+  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-time-disappears-experiment-bryyy4gjx9w/article-v5.md",
+  "articleHash": "b4fe8ee86bd767b8e189b9119eadb15d2b7c7783a89df9aabacfd7dc2965cf3e",
+  "exportedAt": "2026-08-21T07:41:04.769Z",
   "status": "preview_exported_unrated_new_hash",
   "publishMode": "preview",
   "copiedImages": [
     {
-      "src": "assets/hero-overlay.jpg",
-      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-time-disappears-experiment-bryyy4gjx9w/assets/hero-overlay.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-time-disappears-experiment-bryyy4gjx9w-1787294292253/assets/hero-overlay.jpg"
+      "src": "images/hero-overlay.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-time-disappears-experiment-bryyy4gjx9w/images/hero-overlay.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-time-disappears-experiment-bryyy4gjx9w-1787298064765/images/hero-overlay.jpg"
     },
     {
       "src": "images/body-frame-1.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-time-disappears-experiment-bryyy4gjx9w/images/body-frame-1.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-time-disappears-experiment-bryyy4gjx9w-1787294292253/images/body-frame-1.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-time-disappears-experiment-bryyy4gjx9w-1787298064765/images/body-frame-1.jpg"
     },
     {
       "src": "images/body-frame-2.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-time-disappears-experiment-bryyy4gjx9w/images/body-frame-2.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-time-disappears-experiment-bryyy4gjx9w-1787294292253/images/body-frame-2.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-time-disappears-experiment-bryyy4gjx9w-1787298064765/images/body-frame-2.jpg"
     }
   ],
   "ratings": {
