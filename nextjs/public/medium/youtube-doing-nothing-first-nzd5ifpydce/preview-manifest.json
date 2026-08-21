@@ -4,21 +4,21 @@
   "publicUrl": "https://www.maxpetrusenko.com/medium/youtube-doing-nothing-first-nzd5ifpydce/",
   "outputPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/youtube-doing-nothing-first-nzd5ifpydce/index.html",
   "sourceUrl": "https://www.youtube.com/watch?v=NZD5IFpyDcE",
-  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-doing-nothing-first-nzd5ifpydce/article-v13.md",
-  "articleHash": "c0fbfa226cfbb04fef17dbcc290bb66d6089bc6e24600ef74f47d8ab96a04a68",
-  "exportedAt": "2026-08-21T07:41:04.851Z",
+  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-doing-nothing-first-nzd5ifpydce/article-v14.md",
+  "articleHash": "7d3769c98089a7f7574aedd859f34b311dc248058d6a0d4bbaf103b944053a70",
+  "exportedAt": "2026-08-21T09:03:32.369Z",
   "status": "needs_review_notified_approval_channel_blocked",
   "publishMode": "preview",
   "copiedImages": [
     {
       "src": "assets/hero-overlay.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-doing-nothing-first-nzd5ifpydce/assets/hero-overlay.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-doing-nothing-first-nzd5ifpydce-1787298064849/assets/hero-overlay.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-doing-nothing-first-nzd5ifpydce-1787303012367/assets/hero-overlay.jpg"
     }
   ],
   "ratings": {
-    "gemini": 7,
+    "gemini": 9.5,
     "gpt": null,
-    "consensus": 7
+    "consensus": 9.5
   }
 }
