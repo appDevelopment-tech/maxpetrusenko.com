@@ -1,0 +1,41 @@
+{
+  "slug": "negative-time",
+  "title": "Physicists Found Negative Time. Don't Build a Time Machine Around It",
+  "publicUrl": "https://www.maxpetrusenko.com/medium/negative-time/",
+  "outputPath": "/Users/maxpetrusenko/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/negative-time/index.html",
+  "sourceUrl": "https://www.youtube.com/watch?v=XxLG8Zilt9c",
+  "articlePath": "/Users/maxpetrusenko/Desktop/Projects/reviews/negative-time-article-v3.md",
+  "articleHash": "b5dcf18a5b5c8eeebe774a3da8427c4f6e9dae01b05d411352216a4203de435e",
+  "exportedAt": "2026-08-25T00:00:00.000Z",
+  "status": "gate_passed",
+  "publishMode": "preview",
+  "tags": [
+    "Physics",
+    "Quantum Physics",
+    "Science Communication",
+    "Critical Thinking",
+    "Media Literacy"
+  ],
+  "copiedImages": [
+    {
+      "src": "assets/hero-overlay.jpg",
+      "sourcePath": "/Users/maxpetrusenko/Desktop/Projects/reviews/assets/hero-overlay.jpg",
+      "destinationPath": "/Users/maxpetrusenko/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/negative-time/assets/hero-overlay.jpg"
+    },
+    {
+      "src": "assets/atom-models.jpg",
+      "sourcePath": "/Users/maxpetrusenko/Desktop/Projects/reviews/assets/atom-models.jpg",
+      "destinationPath": "/Users/maxpetrusenko/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/negative-time/assets/atom-models.jpg"
+    },
+    {
+      "src": "assets/experiment-apparatus.jpg",
+      "sourcePath": "/Users/maxpetrusenko/Desktop/Projects/reviews/assets/experiment-apparatus.jpg",
+      "destinationPath": "/Users/maxpetrusenko/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/negative-time/assets/experiment-apparatus.jpg"
+    },
+    {
+      "src": "assets/atom-excitation.jpg",
+      "sourcePath": "/Users/maxpetrusenko/Desktop/Projects/reviews/assets/atom-excitation.jpg",
+      "destinationPath": "/Users/maxpetrusenko/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/negative-time/assets/atom-excitation.jpg"
+    }
+  ]
+}
