@@ -6,6 +6,7 @@ import { GoogleAnalytics } from "@/components/analytics/GoogleAnalytics";
 import { CloudflareAnalytics } from "@/components/analytics/CloudflareAnalytics";
 import { ConciergeWidget } from "@/components/concierge/ConciergeWidget";
 import { JsonLd } from "@/components/seo/JsonLd";
+import Script from "next/script";
 import { generatePersonSchema } from "@/lib/seo/structured-data";
 import { siteConfig } from "@/config/site";
 import "@/styles/globals.css";
@@ -57,6 +58,10 @@ export default function RootLayout({
         <RouteHero />
         <main className="page">{children}</main>
         <Footer />
+        <Script
+          src="https://news.google.com/swg/js/v1/publisher.js"
+          strategy="afterInteractive"
+        />
         <ConciergeWidget />
       </body>
     </html>

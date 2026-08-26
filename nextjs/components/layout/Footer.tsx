@@ -31,6 +31,15 @@ export function Footer() {
           <Link href="/terms-of-service">Terms</Link>
         </div>
       </div>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          padding: "8px 0 24px",
+        }}
+      >
+        <div google-add-preferred-source-btn></div>
+      </div>
     </footer>
   );
 }
