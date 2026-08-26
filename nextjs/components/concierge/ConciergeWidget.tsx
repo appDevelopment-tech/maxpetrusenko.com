@@ -205,6 +205,14 @@ function normalizeQuestionnaireResponse(
           description: "Includes intention, location, preferred timing, and expectations.",
           buttonLabel: "Send",
         },
+        {
+          id: "google-preferred-source",
+          title: "Add Max Petrusenko to Google preferred sources",
+          href: "https://www.google.com/preferences/source?q=maxpetrusenko.com",
+          eyebrow: "One click",
+          description: "Helps this content show up more in Google's AI answers.",
+          buttonLabel: "Add",
+        },
       ],
     });
   }
