@@ -1,0 +1,24 @@
+{
+  "slug": "work-takes-everything",
+  "title": "Work Will Take Everything From You",
+  "publicUrl": "https://www.maxpetrusenko.com/medium/work-takes-everything/",
+  "outputPath": "/Users/maxpetrusenko/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/work-takes-everything/index.html",
+  "sourceUrl": null,
+  "articlePath": "/Users/maxpetrusenko/Desktop/Projects/social-poster/data/article-workspace/articles/work-takes-everything/article-medium.md",
+  "articleHash": "58eae89ab9ca6d250ff058639db2e5042d3e139d30202c97f7015704a1421cf1",
+  "exportedAt": "2026-08-27T08:46:47.402Z",
+  "status": "needs_review",
+  "publishMode": "preview",
+  "copiedImages": [
+    {
+      "src": "assets/hero-overlay.jpg",
+      "sourcePath": "/Users/maxpetrusenko/Desktop/Projects/social-poster/data/article-workspace/articles/work-takes-everything/assets/hero-overlay.jpg",
+      "destinationPath": "/Users/maxpetrusenko/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-work-takes-everything-1787820407396/assets/hero-overlay.jpg"
+    }
+  ],
+  "ratings": {
+    "gemini": null,
+    "gpt": null,
+    "consensus": null
+  }
+}
