@@ -4,31 +4,36 @@
   "publicUrl": "https://www.maxpetrusenko.com/medium/youtube-oligarchy-paperwork-4s25ffbfw4m/",
   "outputPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/youtube-oligarchy-paperwork-4s25ffbfw4m/index.html",
   "sourceUrl": "https://www.youtube.com/watch?v=4S25FfbFw4M",
-  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-oligarchy-paperwork-4s25ffbfw4m/article-v10.md",
-  "articleHash": "f6fab8e0db71c7d8aff2f22ba567eada06f8a8d72c6c76538c50bc4f958a2c6d",
-  "exportedAt": "2026-08-21T07:41:05.152Z",
-  "status": "passed_adversarial_gate",
+  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-oligarchy-paperwork-4s25ffbfw4m/article-medium.md",
+  "articleHash": "b3126a96801e448c5a6334b866914ec02049f8bdfcf8e78723c75519ac374dad",
+  "exportedAt": "2026-08-27T09:24:15.966Z",
+  "status": "v14 final pass: corrected subtitle accuracy (stolen -> copied briefcase), added explicit interpretive-model hedge, structure gate PASS, hero visible + wired, exported + served locally",
   "publishMode": "preview",
   "copiedImages": [
     {
+      "src": "assets/hero-overlay.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-oligarchy-paperwork-4s25ffbfw4m/assets/hero-overlay.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-oligarchy-paperwork-4s25ffbfw4m-1787822655960/assets/hero-overlay.jpg"
+    },
+    {
       "src": "assets/youtube-frames/selected/01-source-code.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-oligarchy-paperwork-4s25ffbfw4m/assets/youtube-frames/selected/01-source-code.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-oligarchy-paperwork-4s25ffbfw4m-1787298065147/assets/youtube-frames/selected/01-source-code.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-oligarchy-paperwork-4s25ffbfw4m-1787822655960/assets/youtube-frames/selected/01-source-code.jpg"
     },
     {
       "src": "assets/youtube-frames/selected/02-policy-paper.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-oligarchy-paperwork-4s25ffbfw4m/assets/youtube-frames/selected/02-policy-paper.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-oligarchy-paperwork-4s25ffbfw4m-1787298065147/assets/youtube-frames/selected/02-policy-paper.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-oligarchy-paperwork-4s25ffbfw4m-1787822655960/assets/youtube-frames/selected/02-policy-paper.jpg"
     },
     {
       "src": "assets/youtube-frames/selected/03-gilded-age.jpg",
       "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-oligarchy-paperwork-4s25ffbfw4m/assets/youtube-frames/selected/03-gilded-age.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-oligarchy-paperwork-4s25ffbfw4m-1787298065147/assets/youtube-frames/selected/03-gilded-age.jpg"
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-oligarchy-paperwork-4s25ffbfw4m-1787822655960/assets/youtube-frames/selected/03-gilded-age.jpg"
     }
   ],
   "ratings": {
-    "gemini": 9.55,
-    "gpt": 9.55,
-    "consensus": 9.55
+    "gemini": null,
+    "gpt": null,
+    "consensus": null
   }
 }
