@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="article:status" content="preview">
+  <meta name="source-article-sha256" content="5771d7f8bab2204afcc7c2c5e21a01e45899c3fa487de980746b066a60cba987">
+  <link rel="canonical" href="https://www.maxpetrusenko.com/medium/not-ready-for-biocomputing/">
+  <title>The Computer Made From a Real Person&#39;s Skin</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --paper: #f7f1e7;
+      --ink: #221f1a;
+      --muted: #6d6255;
+      --rule: #d9cbbb;
+      --accent: #8a3f1b;
+      --panel: #fffaf2;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: radial-gradient(circle at top left, #fff7e6 0, #f7f1e7 34%, #eee5d7 100%);
+      color: var(--ink);
+      font-family: Georgia, 'Times New Roman', serif;
+      line-height: 1.66;
+    }
+    main {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 48px 22px 84px;
+    }
+    h1 {
+      margin: 0 0 22px;
+      font-size: clamp(38px, 7vw, 58px);
+      line-height: 0.98;
+      letter-spacing: 0;
+    }
+    h2 {
+      margin: 48px 0 14px;
+      font-size: clamp(25px, 4vw, 33px);
+      line-height: 1.13;
+      letter-spacing: 0;
+    }
+    h3 {
+      margin: 34px 0 12px;
+      font-size: 23px;
+      line-height: 1.2;
+      letter-spacing: 0;
+    }
+    p, li {
+      font-size: 20px;
+      margin: 0 0 20px;
+    }
+    ul { padding-left: 24px; margin: 0 0 28px; }
+    li { margin-bottom: 8px; }
+    a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+    blockquote {
+      margin: 30px 0;
+      padding: 4px 0 4px 22px;
+      border-left: 4px solid var(--accent);
+      color: #433b32;
+      font-style: italic;
+      background: linear-gradient(90deg, rgba(138,63,27,0.06), rgba(138,63,27,0));
+    }
+    blockquote p { margin: 0; font-size: 22px; }
+    figure { margin: 0 0 34px; }
+    img { display: block; width: 100%; height: auto; border-radius: 6px; box-shadow: 0 18px 44px rgba(42, 32, 20, 0.16); }
+    hr { border: 0; border-top: 1px solid var(--rule); margin: 42px 0; }
+    code { background: #eadfce; padding: 2px 5px; border-radius: 4px; font-size: 0.9em; }
+    em { color: #4a4138; }
+    @media (max-width: 620px) {
+      main { padding: 28px 18px 64px; }
+      p, li { font-size: 18px; }
+      blockquote p { font-size: 19px; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+<h1>The Computer Made From a Real Person&#39;s Skin</h1>
+<p><em>Human neurons grown from one person&#39;s skin are doing real computational work, and nothing we have measures whether they feel.</em></p>
+<figure><img src="/medium/not-ready-for-biocomputing/assets/hero-overlay.png" alt="The hero: a dish of living neurons wired to electrodes"></figure>
+<blockquote><p>Biocomputing runs computation on living human neurons. Cortical Labs taught about 800,000 cells to play Pong in 2022, and a CL-1 demo runs Doom on 200,000 human neurons. The pitch is efficiency, since a brain draws roughly 20 watts. What no current test settles is whether tissue like this has morally relevant experience.</p></blockquote>
+<h2>The machine with nobody at the controls</h2>
+<p>A computer in a laboratory in Melbourne is running Doom with no one at the controls. <a href="https://corticallabs.com/" target="_blank" rel="noopener noreferrer">Cortical Labs</a> cultivated its processor from human skin cells reprogrammed into living neurons. The device and the game are real, and the tissue steering the character down the corridor began as a person&#39;s skin.</p>
+<p>The fear that stuck over the last few years was humans becoming machines, chips in heads, software that thinks like us. What sits in that lab is the other shape of that fear. We took a real person&#39;s skin cells, turned them into something that computes, and have no reliable test for whether that tissue has any experience at all.</p>
+<h2>The energy bottleneck driving biocomputing</h2>
+<p>Frontier AI models require compute that roughly doubles every six months, which outruns regional grid capacity. Big companies are buying up reactors and locking in electricity years ahead. The human brain draws about 20 watts, which makes biological computation attractive as an efficiency benchmark. The comparison with AI training is worth a caveat: a brain and a model-training run are different workloads, so the gap is an inspiration rather than a measured equivalence. Still, <a href="https://www.frontiersin.org/journals/science/articles/10.3389/fsci.2023.1017235/full" target="_blank" rel="noopener noreferrer">the organoid intelligence</a> field exists precisely to exploit that gap, and <a href="https://spectrum.ieee.org/biological-computer-for-sale" target="_blank" rel="noopener noreferrer">IEEE Spectrum</a> reported that Cortical Labs sells the CL-1 for about $35,000 as the first code-deployable biological computer.</p>
+<h2>From skin to circuit: the three leaps</h2>
+<ul>
+<li><strong>2008, robotic embodiment.</strong> A team cultured rat neurons on a planar electrode grid and wired them to a small robot named Gordon that moved on its own. The neurons lay flat, gripping their neighbors, and the robot wandered.</li>
+<li><strong>2006 and 2012, reprogrammed cells.</strong> Shinya Yamanaka showed that four transcription factors reset an ordinary adult cell back to a stem-like state, so it could become a neuron without any brain being dissected. <a href="https://www.nobelprize.org/prizes/medicine/2012/summary/" target="_blank" rel="noopener noreferrer">The work</a> won the 2012 Nobel Prize.</li>
+<li><strong>2022, the organized culture.</strong> Cortical Labs grew about 800,000 cells, part mouse and part human, on planar arrays and trained them to keep a ball in play. <a href="https://www.sciencedirect.com/science/article/pii/S0896627322008066" target="_blank" rel="noopener noreferrer">The results</a> were published in Neuron.</li>
+</ul>
+<h2>How a dish learns to play Doom</h2>
+<p>In 2022, the experimenters structured feedback so successful paddle movements were followed by more predictable stimulation and failures by unpredictable stimulation, and the neurons adapted in ways consistent with improved task performance. Whether that should be described as minimizing surprise, learning, or something more is where interpretation begins. The training owes its design to the free energy principle that Karl Friston formalized, and it leans on the same gradient that <a href="https://www.amazon.com/Hidden-Spring-Journey-Source-Consciousness/dp/0393542017" target="_blank" rel="noopener noreferrer">Mark Solms</a> built a theory of consciousness on.</p>
+<p>One catch slowed the work for a long time. You can grow tissue in three dimensions or you can talk to it, but doing both at once was hard, because the chip that reads the cells is a flat grid. So the 2022 cells were flattened, and the brain&#39;s real shape went missing. The CL-1 machine that plays Doom used about 200,000 of these neurons, and the demo that drew attention ran on that smaller configuration rather than the fuller platform capacity.</p>
+<figure><img src="/medium/not-ready-for-biocomputing/assets/body-neurons.jpg" alt="Cultured neuron dendrites under a microscope"></figure>
+<h2>The Doom machine, and the code that settles the doubt</h2>
+<p>Sean Cole, the developer behind the demo, <a href="https://github.com/SeanCole02/doom-neuron" target="_blank" rel="noopener noreferrer">released the code</a>, and it reveals a machine inside the machine. A normal chip runs an AI that watches the game and decides when to reward and when to punish, the neurons sit in the middle, and a translator passes messages both ways, so the perception and the learning rule live on the silicon while the cells supply the live substrate that rule acts on. Replacing the neural signal with random noise reportedly broke the learned behavior, which is at least evidence that the cultured neurons were contributing nontrivially to the loop. It stops short of measuring how much computation they supplied.</p>
+<figure><img src="/medium/not-ready-for-biocomputing/assets/body-cl1.jpg" alt="The Cortical Labs CL-1 interface and its game viewer"></figure>
+<h2>Intelligence versus sentience: the unknown substrate</h2>
+<p>Solving problems does not require feeling. A silicon network can solve complex equations and remain completely unconscious, while a simple biological cluster might sustain primitive affective states without much intelligence at all. The question to hold is whether anyone is inside that tissue.</p>
+<p>One theory of consciousness, associated with Mark Solms, links feeling to basic homeostatic regulation and affective states. That does not mean a dish minimizing prediction error is conscious; it means the experiment brushes against a theory for which current science has no decisive test. Solms places consciousness in the brainstem&#39;s affective machinery, in the push to keep the body in a safe zone, and the cells in the dish are trained with the same push toward a predictable state. If Solms is right about where feeling starts, the dish is touching the thing feeling is said to come from. If he is wrong, the dish is just doing work. We cannot tell which, and the inability to tell is the point.</p>
+<figure><img src="/medium/not-ready-for-biocomputing/assets/body-datacenter.jpg" alt="The neural activity panel wired to the Doom simulation"></figure>
+<h2>The detection problem</h2>
+<p>In 2006, <a href="https://www.nature.com/news/2006/060904/full/news060904-11.html" target="_blank" rel="noopener noreferrer">Adrian Owen</a> put a woman everyone had written off into a brain scanner, after she had been labeled vegetative from a car accident, and asked her to imagine playing tennis. Her brain activity followed the imagery instructions in a way that provided evidence of preserved awareness despite the clinical diagnosis. Later work found that a meaningful share of patients written off the same way are still conscious, and if we can miss a whole person lying in front of us, the chance of spotting experience in a clump of cells is small.</p>
+<p>Many animals perform sophisticated sensory processing using architectures very different from ours, so human-like anatomy cannot be the only thing we look for. The observable behavior is ambiguous: when the noise in a dish gets too loud, the cells dial their response down, like something blocking out a painful signal, and something that feels nothing would do the same. Backing away from a bad signal looks identical to suffering from the outside, and no external test separates the two. David Chalmers named this the hard problem: map every cell in a brain and you still have no account of how any of it turns into a feeling.</p>
+<h2>The moral uncertainty test</h2>
+<p>The gap that matters is that we can measure useful computation before we have any reliable test for morally relevant experience. Until that changes, a rough protocol beats an unspoken assumption. Before using living neural tissue computationally, ask:</p>
+<ul>
+<li>Is the system only metabolically alive, or also behaviorally adaptive?</li>
+<li>Does it show learning beyond trivial signal response?</li>
+<li>What architecture associated with nociception, affect, or integration is present?</li>
+<li>What evidence would count against sentience?</li>
+<li>Who has authority to stop the experiment if the evidence becomes ambiguous?</li>
+<li>What level of uncertainty should trigger precaution?</li>
+</ul>
+<h2>Where the rules trail the science</h2>
+<p>The governance around this is thinner than the capability. The <a href="https://www.ncbi.nlm.nih.gov/sites/books/NBK572233/" target="_blank" rel="noopener noreferrer">National Academies</a> found the oversight system is a patchwork built for human tissue, stem cells, animals, and human subjects, with few mechanisms that holistically address neural organoids. The <a href="https://www.nuffieldbioethics.org/news-blog/nuffield-council-on-bioethics-say-need-for-governance-of-neural-organoids-further-demonstrates-why-the-uk-must-strengthen-anticipatory-regulation/" target="_blank" rel="noopener noreferrer">Nuffield Council on Bioethics</a> has called for governance of neural organoids and for the UK to strengthen anticipatory regulation, and the field&#39;s own <a href="https://doi.org/10.3389/fsci.2023.1068159" target="_blank" rel="noopener noreferrer">Baltimore Declaration</a> sets principles without enforcement. Meanwhile the capability has moved from a paper to a marketable product. FinalSpark, a Swiss company founded in 2014, <a href="https://finalspark.com/neuroplatform/" target="_blank" rel="noopener noreferrer">rents living neurons</a> over the internet for a monthly fee, pitching the same efficiency story we started with, though the million-fold energy advantage is a marketing estimate, a wattage comparison rather than a measurement on the same workload.</p>
+<p>The same science could give us real models of disease, drug testing on human tissue closer to us than a mouse, and a way to cut some animal testing, and that should not be dragged down by a stunt with Doom. It also should not be waved through on the assumption that sentience is far away.</p>
+<p>For almost the whole history of the universe there was matter and no one around to feel it, then some of that matter arranged itself into something new and started to feel, an event we treated as the rarest thing, the product of billions of years. We are now trying to reproduce that event on purpose in a lab. The game will keep playing either way, and what we cannot see is whether anything in that living tissue is having an experience at all.</p>
+<p>For a useful next read → <a href="https://medium.com/dare-to-be-better/why-bad-people-win-dark-triad-psychology-explains-success-and-how-good-people-can-compete-b21de7ee0e93" target="_blank" rel="noopener noreferrer">Why Bad People Win: Dark Triad Psychology Explains Success (And How Good People Can Compete)</a></p>
+<h2>Sources</h2>
+<ul>
+<li><a href="https://corticallabs.com/" target="_blank" rel="noopener noreferrer">Cortical Labs</a>: the company and the CL-1 biological computer</li>
+<li><a href="https://www.sciencedirect.com/science/article/pii/S0896627322008066" target="_blank" rel="noopener noreferrer">Kagan et al., 2022, Neuron</a>: in vitro neurons learn and exhibit sentience in a simulated game-world</li>
+<li><a href="https://www.nature.com/articles/s41467-023-41020-3" target="_blank" rel="noopener noreferrer">Kagan et al., 2023, Nature Communications</a>: critical dynamics in embodied in vitro neural networks</li>
+<li><a href="https://www.frontiersin.org/journals/science/articles/10.3389/fsci.2023.1017235/full" target="_blank" rel="noopener noreferrer">Organoid intelligence (OI): the new frontier</a>: Frontiers in Science, 2023</li>
+<li><a href="https://spectrum.ieee.org/biological-computer-for-sale" target="_blank" rel="noopener noreferrer">IEEE Spectrum: biological computer for sale</a></li>
+<li><a href="https://finalspark.com/neuroplatform/" target="_blank" rel="noopener noreferrer">FinalSpark Neuroplatform</a></li>
+<li><a href="https://github.com/SeanCole02/doom-neuron" target="_blank" rel="noopener noreferrer">Doom demo source</a>: released code for the CL-1 Doom demo</li>
+<li><a href="https://www.amazon.com/Hidden-Spring-Journey-Source-Consciousness/dp/0393542017" target="_blank" rel="noopener noreferrer">Mark Solms, The Hidden Spring</a></li>
+<li><a href="https://www.nature.com/news/2006/060904/full/news060904-11.html" target="_blank" rel="noopener noreferrer">Adrian Owen, 2006, detecting awareness in the vegetative state</a></li>
+<li><a href="https://www.ncbi.nlm.nih.gov/sites/books/NBK572233/" target="_blank" rel="noopener noreferrer">National Academies: oversight of human neural organoids</a></li>
+<li><a href="https://www.nuffieldbioethics.org/news-blog/nuffield-council-on-bioethics-say-need-for-governance-of-neural-organoids-further-demonstrates-why-the-uk-must-strengthen-anticipatory-regulation/" target="_blank" rel="noopener noreferrer">Nuffield Council on Bioethics: governance of neural organoids</a></li>
+<li><a href="https://doi.org/10.3389/fsci.2023.1068159" target="_blank" rel="noopener noreferrer">The Baltimore Declaration</a></li>
+</ul>
+<h2>About the author</h2>
+<p>Max Petrusenko writes about AI agents, safety controls, and the incentives that decide whether powerful tools stay usable; follow on <a href="https://medium.com/@max.petrusenko" target="_blank" rel="noopener noreferrer">Medium</a>, <a href="https://x.com/petrusenko_max" target="_blank" rel="noopener noreferrer">X</a>, or <a href="https://www.linkedin.com/in/max-petrusenko-40574b4a" target="_blank" rel="noopener noreferrer">LinkedIn</a>.</p>
+  </main>
+</body>
+</html>

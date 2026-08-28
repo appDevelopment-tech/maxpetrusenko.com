@@ -1,0 +1,43 @@
+{
+  "slug": "not-ready-for-biocomputing",
+  "title": "The Computer Made From a Real Person's Skin",
+  "publicUrl": "https://www.maxpetrusenko.com/medium/not-ready-for-biocomputing/",
+  "outputPath": "/Users/maxpetrusenko/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/not-ready-for-biocomputing/index.html",
+  "sourceUrl": "https://www.youtube.com/watch?v=uKhsbQcFVwQ",
+  "articlePath": "/Users/maxpetrusenko/Desktop/Projects/social-poster/data/article-workspace/articles/not-ready-for-biocomputing/article-v2.md",
+  "articleHash": "5771d7f8bab2204afcc7c2c5e21a01e45899c3fa487de980746b066a60cba987",
+  "exportedAt": "2026-08-28T09:29:36.810Z",
+  "status": "needs_review",
+  "publishMode": "preview",
+  "copiedImages": [
+    {
+      "src": "assets/hero-overlay.png",
+      "sourcePath": "/Users/maxpetrusenko/Desktop/Projects/social-poster/data/article-workspace/articles/not-ready-for-biocomputing/assets/hero-overlay.png",
+      "destinationPath": "/Users/maxpetrusenko/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-not-ready-for-biocomputing-1787909376801/assets/hero-overlay.png"
+    },
+    {
+      "src": "assets/body-neurons.jpg",
+      "sourcePath": "/Users/maxpetrusenko/Desktop/Projects/social-poster/data/article-workspace/articles/not-ready-for-biocomputing/assets/body-neurons.jpg",
+      "destinationPath": "/Users/maxpetrusenko/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-not-ready-for-biocomputing-1787909376801/assets/body-neurons.jpg"
+    },
+    {
+      "src": "assets/body-cl1.jpg",
+      "sourcePath": "/Users/maxpetrusenko/Desktop/Projects/social-poster/data/article-workspace/articles/not-ready-for-biocomputing/assets/body-cl1.jpg",
+      "destinationPath": "/Users/maxpetrusenko/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-not-ready-for-biocomputing-1787909376801/assets/body-cl1.jpg"
+    },
+    {
+      "src": "assets/body-datacenter.jpg",
+      "sourcePath": "/Users/maxpetrusenko/Desktop/Projects/social-poster/data/article-workspace/articles/not-ready-for-biocomputing/assets/body-datacenter.jpg",
+      "destinationPath": "/Users/maxpetrusenko/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-not-ready-for-biocomputing-1787909376801/assets/body-datacenter.jpg"
+    }
+  ],
+  "ratings": {
+    "gemini": {
+      "writingScore": null,
+      "trustScore": null,
+      "blockers": []
+    },
+    "gpt": null,
+    "consensus": null
+  }
+}
