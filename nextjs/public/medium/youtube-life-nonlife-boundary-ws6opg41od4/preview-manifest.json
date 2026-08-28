@@ -4,41 +4,21 @@
   "publicUrl": "https://www.maxpetrusenko.com/medium/youtube-life-nonlife-boundary-ws6opg41od4/",
   "outputPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/youtube-life-nonlife-boundary-ws6opg41od4/index.html",
   "sourceUrl": "https://www.youtube.com/watch?v=Ws6Opg41oD4",
-  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-life-nonlife-boundary-ws6opg41od4/article-v9.md",
-  "articleHash": "6b67555160be84395fa4e5e5935f4318bbe27d25ca4204d4b01822825fe12311",
-  "exportedAt": "2026-08-21T07:41:05.028Z",
-  "status": "passed_adversarial_gate",
+  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-life-nonlife-boundary-ws6opg41od4/article-v10.md",
+  "articleHash": "eddcc09e55a224f136f3a13bec32f3c2a3e97b98dad3be7e56bf4e275579cda1",
+  "exportedAt": "2026-08-28T07:51:26.713Z",
+  "status": "revised_applying_review_feedback_awaiting_gpt56_rating",
   "publishMode": "preview",
   "copiedImages": [
     {
-      "src": "assets/youtube-frames/selected/01-impossible-life-forms.jpg",
-      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-life-nonlife-boundary-ws6opg41od4/assets/youtube-frames/selected/01-impossible-life-forms.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-life-nonlife-boundary-ws6opg41od4-1787298065023/assets/youtube-frames/selected/01-impossible-life-forms.jpg"
-    },
-    {
-      "src": "assets/youtube-frames/selected/02-fungal-network.jpg",
-      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-life-nonlife-boundary-ws6opg41od4/assets/youtube-frames/selected/02-fungal-network.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-life-nonlife-boundary-ws6opg41od4-1787298065023/assets/youtube-frames/selected/02-fungal-network.jpg"
-    },
-    {
-      "src": "assets/youtube-frames/selected/03-cell-like-droplets.jpg",
-      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-life-nonlife-boundary-ws6opg41od4/assets/youtube-frames/selected/03-cell-like-droplets.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-life-nonlife-boundary-ws6opg41od4-1787298065023/assets/youtube-frames/selected/03-cell-like-droplets.jpg"
-    },
-    {
-      "src": "assets/youtube-frames/selected/04-universe-cell.jpg",
-      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-life-nonlife-boundary-ws6opg41od4/assets/youtube-frames/selected/04-universe-cell.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-life-nonlife-boundary-ws6opg41od4-1787298065023/assets/youtube-frames/selected/04-universe-cell.jpg"
-    },
-    {
-      "src": "assets/youtube-frames/selected/05-expanded-genetic-alphabet.jpg",
-      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-life-nonlife-boundary-ws6opg41od4/assets/youtube-frames/selected/05-expanded-genetic-alphabet.jpg",
-      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-life-nonlife-boundary-ws6opg41od4-1787298065023/assets/youtube-frames/selected/05-expanded-genetic-alphabet.jpg"
+      "src": "assets/hero-overlay.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-life-nonlife-boundary-ws6opg41od4/assets/hero-overlay.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-life-nonlife-boundary-ws6opg41od4-1787903486710/assets/hero-overlay.jpg"
     }
   ],
   "ratings": {
-    "gemini": 9.5,
-    "gpt": 9.5,
-    "consensus": 9.5
+    "gemini": null,
+    "gpt": null,
+    "consensus": null
   }
 }
