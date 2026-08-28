@@ -1,0 +1,24 @@
+{
+  "slug": "happiness-guide-drugs",
+  "title": "No Pill Fills All Six Cups of Happiness",
+  "publicUrl": "https://www.maxpetrusenko.com/medium/happiness-guide-drugs/",
+  "outputPath": "/Users/maxpetrusenko/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/happiness-guide-drugs/index.html",
+  "sourceUrl": null,
+  "articlePath": "/Users/maxpetrusenko/Desktop/Projects/medium-automation/articles/happiness-guide-drugs/article-medium.md",
+  "articleHash": "e213c5b432d6f912b578da921dbc8c4944f6d559dad4513bd51b34fa538b9b36",
+  "exportedAt": "2026-08-28T09:12:11.580Z",
+  "status": "needs_review",
+  "publishMode": "preview",
+  "copiedImages": [
+    {
+      "src": "assets/hero-overlay.png",
+      "sourcePath": "/Users/maxpetrusenko/Desktop/Projects/medium-automation/articles/happiness-guide-drugs/assets/hero-overlay.png",
+      "destinationPath": "/Users/maxpetrusenko/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-happiness-guide-drugs-1787908331577/assets/hero-overlay.png"
+    }
+  ],
+  "ratings": {
+    "gemini": null,
+    "gpt": null,
+    "consensus": null
+  }
+}
