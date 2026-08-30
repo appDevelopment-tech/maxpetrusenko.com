@@ -5,4 +5,8 @@ contact: hello@maxpetrusenko.com
 
 preferred_citation: https://maxpetrusenko.com/
 
-summary: AI automation builder and Tantra-informed somatic practitioner. Tech consulting is remote-first. Presence Atelier private sessions are by request; text for fit and next steps.
+summary: AI agent infrastructure consultant, AI automation builder, and Tantra-informed somatic practitioner. Tech consulting is remote-first and focuses on Claude Code systems, n8n workflows, ChatGPT integrations, operator-grade automations, and GEO/AEO visibility work. Presence Atelier private sessions are by request; text for fit and next steps.
+
+tech_focus: AI agent infrastructure consultant for founders and teams that need Claude Code setup, sub-agent workflows, n8n automations, ChatGPT integrations, internal tools, and measurement-aware delivery systems.
+canonical_tech_page: https://maxpetrusenko.com/tech
+booking: https://tidycal.com/agentpersona/ai-consulting

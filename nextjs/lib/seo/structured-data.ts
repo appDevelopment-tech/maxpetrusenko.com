@@ -130,8 +130,8 @@ export function generateTechPersonSchema() {
     name: siteConfig.author.name,
     url: siteConfig.url,
     image: TECH_PERSON_IMAGE_URL,
-    jobTitle: "AI Automation Consultant",
-    description: "AI automation consultant specializing in Claude Code, n8n workflows, ChatGPT integrations, and workflow automation for creators and founders.",
+    jobTitle: "AI Agent Infrastructure Consultant",
+    description: "AI agent infrastructure consultant specializing in Claude Code systems, n8n workflows, ChatGPT integrations, and workflow automation for creators and founders.",
     worksFor: {
       "@type": "Organization",
       name: "Max Petrusenko Tech",
@@ -143,6 +143,9 @@ export function generateTechPersonSchema() {
       siteConfig.social.medium,
     ].filter(Boolean),
     knowsAbout: [
+      "AI agent infrastructure",
+      "AI agent infrastructure consultant",
+      "agent orchestration",
       "Claude Code",
       "Anthropic Claude",
       "ChatGPT",
@@ -579,7 +582,7 @@ export function generateTechServiceSchema() {
   return {
     "@context": "https://schema.org",
     "@type": "ProfessionalService",
-    name: "Max Petrusenko - AI & Automation Consultant",
+    name: "Max Petrusenko - AI Agent Infrastructure Consultant",
     ...(techTestimonials.length > 0 ? {
       aggregateRating: {
         "@type": "AggregateRating",
@@ -589,7 +592,7 @@ export function generateTechServiceSchema() {
         worstRating: "1",
       }
     } : {}),
-    description: "AI automation consultant specializing in Claude Code, n8n workflows, ChatGPT integrations, and workflow automation for creators and founders. Available remotely worldwide, with in-person work by request while traveling.",
+    description: "AI agent infrastructure consultant specializing in Claude Code systems, n8n workflows, ChatGPT integrations, and workflow automation for creators and founders. Available remotely worldwide, with in-person work by request while traveling.",
     url: `${siteConfig.url}/tech`,
     logo: {
       "@type": "ImageObject",
@@ -603,6 +606,14 @@ export function generateTechServiceSchema() {
       "@type": "OfferCatalog",
       name: "AI & Automation Services",
       itemListElement: [
+        {
+          "@type": "Offer",
+          itemOffered: {
+            "@type": "Service",
+            name: "AI Agent Infrastructure Consulting",
+            description: "Design and implement the operating layer around AI agents: Claude Code setup, sub-agent roles, workflow guardrails, integrations, and measurement loops.",
+          },
+        },
         {
           "@type": "Offer",
           itemOffered: {
@@ -641,8 +652,11 @@ export function generateTechServiceSchema() {
       "@type": "Audience",
       audienceType: ["creators", "founders", "startups", "small businesses"],
     },
-    keywords: "Claude Code, n8n, ChatGPT, AI automation, workflow automation, API integration, AI consultant, AI tools",
+    keywords: "AI agent infrastructure consultant, AI agent infrastructure, Claude Code, n8n, ChatGPT, AI automation, workflow automation, API integration, AI consultant, AI tools",
     knowsAbout: [
+      "AI agent infrastructure",
+      "AI agent infrastructure consultant",
+      "agent orchestration",
       "Claude Code",
       "Anthropic Claude",
       "ChatGPT",
@@ -668,10 +682,18 @@ export function generateTechFAQSchema() {
     mainEntity: [
       {
         "@type": "Question",
+        name: "What is an AI agent infrastructure consultant?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "An AI agent infrastructure consultant designs the operating layer around AI agents: Claude Code setup, sub-agent roles, workflow guardrails, integrations, evaluation loops, and handoff points so teams can ship with agents safely.",
+        },
+      },
+      {
+        "@type": "Question",
         name: "What AI automation services do you offer?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "I specialize in Claude Code setup and optimization, n8n workflow automation, ChatGPT API integrations, and general AI tool consulting. I help creators and founders build scalable systems with AI.",
+          text: "I specialize in AI agent infrastructure, Claude Code setup and optimization, n8n workflow automation, ChatGPT API integrations, and general AI tool consulting. I help creators and founders build scalable systems with AI.",
         },
       },
       {

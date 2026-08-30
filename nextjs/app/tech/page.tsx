@@ -18,8 +18,8 @@ import {
 } from "@/lib/seo/structured-data";
 
 export const metadata = generateMetadata({
-  title: "Tech",
-  description: "AI automation consultant specializing in Claude Code, n8n workflows, and ChatGPT integrations. Available remotely worldwide, with private work by request while traveling.",
+  title: "AI Agent Infrastructure Consultant",
+  description: "AI agent infrastructure consultant for Claude Code systems, n8n workflows, ChatGPT integrations, and operator-grade automation. Remote-first builds for founders and teams.",
   ogType: "website",
   canonical: absoluteUrl("/tech"),
 });
@@ -121,8 +121,8 @@ export default async function TechPage() {
       <JsonLd
         type="WebPage"
         data={generateWebPageSchema({
-          title: "Tech - Calm, outcome-first products",
-          description: "I build tools and experiences for creators and founders.",
+          title: "AI Agent Infrastructure Consultant - Max Petrusenko",
+          description: "Max Petrusenko builds AI agent infrastructure, Claude Code systems, n8n workflows, ChatGPT integrations, and operator-grade automations for founders and teams.",
           url: "/tech",
         })}
       />
@@ -161,23 +161,27 @@ export default async function TechPage() {
         <section className="relative z-[3] mx-auto w-full max-w-[1080px] px-4 py-28 md:px-6 md:py-32">
           <div>
             <p className="blur-in inline-flex items-center rounded-full border border-[rgba(15,126,169,0.2)] px-4 py-1 text-xs font-semibold text-[var(--accent-tech)]">
-              Open for automation builds
+              AI agent infrastructure consultant
             </p>
             <h1 className="clip-reveal clip-reveal-d1 mt-5 max-w-[12ch] font-serif text-[clamp(2.35rem,4.8vw,3.75rem)] font-bold leading-[1.06] tracking-tight text-[var(--ink)]">
-              Calm systems for faster delivery.
+              AI agent infrastructure for faster delivery.
             </h1>
             <p className="blur-in blur-in-d2 mt-5 max-w-[460px] text-[1.05rem] leading-relaxed text-[var(--ink-soft)]">
-              I build AI automation, internal tools, and operator workflows for
-              founders and teams who want less drag and more momentum.
+              I build Claude Code systems, agent workflows, internal tools, and
+              automation infrastructure for founders and teams who want less drag
+              and more momentum.
             </p>
             <div className="blur-in blur-in-d3 mt-8 flex flex-wrap gap-3">
               <a
                 className="inline-flex items-center gap-2 rounded-[10px] bg-[var(--ink)] px-7 py-3.5 text-[0.95rem] font-semibold text-[var(--sand)] shadow-[0_4px_16px_rgba(12,17,21,0.18)] transition hover:-translate-y-0.5 hover:shadow-[0_8px_28px_rgba(12,17,21,0.24)]"
-                href="mailto:hello@maxpetrusenko.com?subject=Tech%20collab"
+                href="https://tidycal.com/agentpersona/ai-consulting?utm_source=linkedin&utm_medium=social&utm_campaign=ai_agent_infrastructure_consultant&utm_content=tech_hero_cta"
+                data-track="tech_hero_booking_ai_agent_infrastructure"
+                target="_blank"
+                rel="noopener"
               >
                 Book a strategy call &rarr;
               </a>
-              <Link className="inline-flex items-center gap-2 rounded-[10px] border-[1.5px] border-[var(--line)] bg-transparent px-7 py-3.5 text-[0.95rem] font-semibold text-[var(--ink)] transition hover:-translate-y-0.5 hover:border-[var(--accent-tech)]" href="/proof">
+              <Link className="inline-flex items-center gap-2 rounded-[10px] border-[1.5px] border-[var(--line)] bg-transparent px-7 py-3.5 text-[0.95rem] font-semibold text-[var(--ink)] transition hover:-translate-y-0.5 hover:border-[var(--accent-tech)]" href="/proof?utm_source=linkedin&utm_medium=social&utm_campaign=ai_agent_infrastructure_consultant&utm_content=tech_hero_proof" data-track="tech_hero_proof_ai_agent_infrastructure">
                 Explore my work
               </Link>
             </div>
@@ -188,9 +192,9 @@ export default async function TechPage() {
       <DirectAnswer
         schemaType="WebPage"
         showUi={false}
-        question="What AI automation services does Max Petrusenko offer?"
-        answer="Max Petrusenko helps founders and teams ship AI automations and internal tools in weeks, not months. His work focuses on Claude Code, n8n, and custom agent pipelines that reduce ops load, speed delivery, and replace fragile SaaS workflows. Engagements are hands-on, outcome-driven, and production-ready. A recent Claude Code implementation saved $253k annually with 3x faster feature delivery."
-        displayAnswer="Max Petrusenko designs and ships AI automations, internal tools, and agent workflows for founders and teams. Core work centers on Claude Code, n8n, and custom pipelines built to cut ops load, speed delivery, and replace brittle manual workflows."
+        question="What does Max Petrusenko do as an AI agent infrastructure consultant?"
+        answer="Max Petrusenko helps founders and teams ship AI agent infrastructure in weeks, not months. His work focuses on Claude Code systems, n8n workflows, ChatGPT integrations, and custom agent pipelines that reduce ops load, speed delivery, and replace fragile SaaS workflows. Engagements are hands-on, outcome-driven, and production-ready. A recent Claude Code implementation saved $253k annually with 3x faster feature delivery."
+        displayAnswer="Max Petrusenko designs and ships AI agent infrastructure, internal tools, and automation workflows for founders and teams. Core work centers on Claude Code, n8n, ChatGPT integrations, and custom pipelines built to cut ops load, speed delivery, and replace brittle manual workflows."
       />
 
       <section className="dark-zone mt-8 py-16 px-4 md:py-20">
@@ -201,8 +205,8 @@ export default async function TechPage() {
             Build the system, not another bottleneck
           </h2>
           <p className="mt-2 max-w-[560px] text-[var(--dark-zone-muted)]">
-            Product shaping, automation delivery, and workflow design for teams that
-            want cleaner ops and faster shipping.
+            Product shaping, automation delivery, and AI agent infrastructure for teams
+            that want cleaner ops and faster shipping.
           </p>
 
           <div className="mt-10 grid gap-6 md:grid-cols-2">
@@ -239,6 +243,7 @@ export default async function TechPage() {
                 Hands-on implementation across product, automation, and delivery.
               </p>
               <div className="mt-4 flex flex-wrap gap-2">
+                <span className="rounded-md bg-[rgba(15,126,169,0.15)] px-2.5 py-1 text-[0.7rem] font-semibold text-[var(--accent-tech)]">AI Agent Infrastructure</span>
                 <span className="rounded-md bg-[rgba(15,126,169,0.15)] px-2.5 py-1 text-[0.7rem] font-semibold text-[var(--accent-tech)]">Claude Code</span>
                 <span className="rounded-md bg-[rgba(15,126,169,0.15)] px-2.5 py-1 text-[0.7rem] font-semibold text-[var(--accent-tech)]">n8n</span>
                 <span className="rounded-md bg-[rgba(15,126,169,0.15)] px-2.5 py-1 text-[0.7rem] font-semibold text-[var(--accent-tech)]">ChatGPT API</span>
@@ -282,11 +287,11 @@ export default async function TechPage() {
           </div>
           <div className="cards-3 grid">
             <div className="card">
-              <h3>Claude Code Setup</h3>
+              <h3>AI Agent Infrastructure</h3>
               <ul className="list" style={{ marginTop: 12, marginBottom: 16 }}>
-                <li>Sub-agent configuration</li>
+                <li>Claude Code and sub-agent configuration</li>
+                <li>Agent workflow design and guardrails</li>
                 <li>Custom skills development</li>
-                <li>Workflow integration</li>
                 <li>Team training</li>
               </ul>
               <p className="text-sm text-muted">
@@ -333,7 +338,8 @@ export default async function TechPage() {
             </p>
             <a
               className="btn primary"
-              href="mailto:hello@maxpetrusenko.com?subject=Tech%20collab"
+              href="mailto:hello@maxpetrusenko.com?subject=AI%20agent%20infrastructure%20consulting"
+              data-track="tech_services_mailto_ai_agent_infrastructure"
               style={{ marginTop: 12 }}
             >
               Get Started
@@ -352,17 +358,18 @@ export default async function TechPage() {
           </div>
           <div className="cards-3 grid">
             <div className="card card-with-actions">
-              <h3>Claude Code</h3>
+              <h3>Claude Code + Agent Infrastructure</h3>
               <p>
                 Setup and optimization for development teams. Sub-agent
                 configuration, custom skills, workflow integration, and
-                multi-agent systems.
+                multi-agent systems with clear operating guardrails.
               </p>
               <div className="card-actions-spacer"></div>
               <div className="hero-actions" style={{ marginTop: 16 }}>
                 <a
                   className="btn secondary"
                   href="/tech/articles/claude-code-setup"
+                  data-track="tech_services_claude_code_guide"
                 >
                   Read guide
                 </a>
@@ -380,6 +387,7 @@ export default async function TechPage() {
                 <a
                   className="btn secondary"
                   href="https://n8n.io"
+                  data-track="tech_services_n8n_outbound"
                   target="_blank"
                   rel="noopener"
                 >
@@ -399,6 +407,7 @@ export default async function TechPage() {
                 <a
                   className="btn secondary"
                   href="mailto:hello@maxpetrusenko.com?subject=ChatGPT%20integration"
+                  data-track="tech_services_chatgpt_mailto"
                   target="_blank"
                   rel="noopener"
                 >
@@ -901,6 +910,11 @@ export default async function TechPage() {
           <FaqSection
             columns={3}
             items={[
+              {
+                question: "What is an AI agent infrastructure consultant?",
+                answer:
+                  "An AI agent infrastructure consultant designs the operating layer around AI agents: Claude Code setup, sub-agent roles, workflow guardrails, evaluation loops, integrations, and handoff points so teams can ship with agents without creating a brittle mess.",
+              },
               {
                 question: "What AI tools do you specialize in?",
                 answer:
