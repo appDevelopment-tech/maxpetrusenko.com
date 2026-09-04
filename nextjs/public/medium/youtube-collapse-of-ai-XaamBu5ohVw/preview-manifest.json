@@ -1,0 +1,34 @@
+{
+  "slug": "youtube-collapse-of-ai-XaamBu5ohVw",
+  "title": "The $730 Billion Bet to Replace You Just Priced What You're Worth",
+  "publicUrl": "https://www.maxpetrusenko.com/medium/youtube-collapse-of-ai-XaamBu5ohVw/",
+  "outputPath": "/tmp/maxsite-youtube-collapse-of-ai-XaamBu5ohVw/nextjs/public/medium/youtube-collapse-of-ai-XaamBu5ohVw/index.html",
+  "sourceUrl": null,
+  "articlePath": "/Users/maxpetrusenko/Desktop/Projects/medium-automation/articles/youtube-collapse-of-ai-XaamBu5ohVw/article-medium.md",
+  "articleHash": "1e6ce7fa9706de463c17312603db44938e056fa9021b647bf65dba4b8b242971",
+  "exportedAt": "2026-09-04T22:03:56.826Z",
+  "status": "needs_review",
+  "publishMode": "preview",
+  "copiedImages": [
+    {
+      "src": "assets/hero-overlay.jpg",
+      "sourcePath": "/Users/maxpetrusenko/Desktop/Projects/medium-automation/articles/youtube-collapse-of-ai-XaamBu5ohVw/assets/hero-overlay.jpg",
+      "destinationPath": "/tmp/maxsite-youtube-collapse-of-ai-XaamBu5ohVw/nextjs/public/medium/.tmp-youtube-collapse-of-ai-XaamBu5ohVw-1788559436821/assets/hero-overlay.jpg"
+    },
+    {
+      "src": "assets/body-tokenmaxxing.jpg",
+      "sourcePath": "/Users/maxpetrusenko/Desktop/Projects/medium-automation/articles/youtube-collapse-of-ai-XaamBu5ohVw/assets/body-tokenmaxxing.jpg",
+      "destinationPath": "/tmp/maxsite-youtube-collapse-of-ai-XaamBu5ohVw/nextjs/public/medium/.tmp-youtube-collapse-of-ai-XaamBu5ohVw-1788559436821/assets/body-tokenmaxxing.jpg"
+    },
+    {
+      "src": "assets/body-graybeards.jpg",
+      "sourcePath": "/Users/maxpetrusenko/Desktop/Projects/medium-automation/articles/youtube-collapse-of-ai-XaamBu5ohVw/assets/body-graybeards.jpg",
+      "destinationPath": "/tmp/maxsite-youtube-collapse-of-ai-XaamBu5ohVw/nextjs/public/medium/.tmp-youtube-collapse-of-ai-XaamBu5ohVw-1788559436821/assets/body-graybeards.jpg"
+    }
+  ],
+  "ratings": {
+    "gemini": null,
+    "gpt": null,
+    "consensus": null
+  }
+}
