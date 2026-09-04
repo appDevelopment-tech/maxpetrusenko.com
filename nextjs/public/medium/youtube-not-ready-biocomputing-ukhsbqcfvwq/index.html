@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="article:status" content="preview">
+  <meta name="source-article-sha256" content="fc12e41721d73bb34f53636b82f5d436d823a3cf8f2f1a076a107dcc5525d4a8">
+  <link rel="canonical" href="https://www.maxpetrusenko.com/medium/youtube-not-ready-biocomputing-ukhsbqcfvwq/">
+  <title>The Computer in the Dish Is Not the Future We Were Promised</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --paper: #f7f1e7;
+      --ink: #221f1a;
+      --muted: #6d6255;
+      --rule: #d9cbbb;
+      --accent: #8a3f1b;
+      --panel: #fffaf2;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: radial-gradient(circle at top left, #fff7e6 0, #f7f1e7 34%, #eee5d7 100%);
+      color: var(--ink);
+      font-family: Georgia, 'Times New Roman', serif;
+      line-height: 1.66;
+    }
+    main {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 48px 22px 84px;
+    }
+    h1 {
+      margin: 0 0 22px;
+      font-size: clamp(38px, 7vw, 58px);
+      line-height: 0.98;
+      letter-spacing: 0;
+    }
+    h2 {
+      margin: 48px 0 14px;
+      font-size: clamp(25px, 4vw, 33px);
+      line-height: 1.13;
+      letter-spacing: 0;
+    }
+    h3 {
+      margin: 34px 0 12px;
+      font-size: 23px;
+      line-height: 1.2;
+      letter-spacing: 0;
+    }
+    p, li {
+      font-size: 20px;
+      margin: 0 0 20px;
+    }
+    ul { padding-left: 24px; margin: 0 0 28px; }
+    li { margin-bottom: 8px; }
+    a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+    blockquote {
+      margin: 30px 0;
+      padding: 4px 0 4px 22px;
+      border-left: 4px solid var(--accent);
+      color: #433b32;
+      font-style: italic;
+      background: linear-gradient(90deg, rgba(138,63,27,0.06), rgba(138,63,27,0));
+    }
+    blockquote p { margin: 0; font-size: 22px; }
+    figure { margin: 0 0 34px; }
+    img { display: block; width: 100%; height: auto; border-radius: 6px; box-shadow: 0 18px 44px rgba(42, 32, 20, 0.16); }
+    hr { border: 0; border-top: 1px solid var(--rule); margin: 42px 0; }
+    code { background: #eadfce; padding: 2px 5px; border-radius: 4px; font-size: 0.9em; }
+    em { color: #4a4138; }
+    @media (max-width: 620px) {
+      main { padding: 28px 18px 64px; }
+      p, li { font-size: 18px; }
+      blockquote p { font-size: 19px; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+<h1>The Computer in the Dish Is Not the Future We Were Promised</h1>
+<p><em>A living network can learn a task with almost no power. The hard question is what we owe it while it learns.</em></p>
+<figure><img src="/medium/youtube-not-ready-biocomputing-ukhsbqcfvwq/assets/hero-overlay.jpg" alt="Biocomputing neural network"></figure>
+<blockquote><p><strong>TL;DR:</strong> Biocomputing connects living neurons to electrodes so their activity can be read and shaped. Experiments such as DishBrain show that cultured neurons can improve at a goal-directed task when feedback rewards predictable activity. The result is a new computing substrate and a new ethical problem: useful behavior does leaves consciousness unresolved while demanding better evidence and governance.</p></blockquote>
+<p>The screen shows a crude first-person shooter. A corridor. A target. A burst of movement. The game is running on a bed of living cells, not a conventional processor. Cortical Labs calls the system CL1. Its neurons came from reprogrammed human skin cells and learned the basics of movement and shooting in roughly a week, according to the company’s public description and reporting from <a href="https://www.nature.com/articles/d41586-025-00755-1" target="_blank" rel="noopener noreferrer">Nature</a>.</p>
+<p>That demonstration is easy to misunderstand. It is not a tiny person trapped inside a computer. It is not proof that a dish has a private world. It is evidence that living neural tissue can be coupled to an artificial environment, receive structured feedback, and change its activity in ways that improve performance. That distinction matters because the same methods can produce better disease models and lower-energy computation, while the language used to sell them can outrun the science.</p>
+<p>The useful question is not whether a dish is “alive” in the abstract. It is what kind of information-processing system the dish is, what it can actually do, and what evidence would justify treating it as more than a tool.</p>
+<h2>A brain’s energy budget changes the computing argument</h2>
+<p>A human brain consumes about 20 watts at rest, while modern AI data centers draw power at industrial scale. The <a href="https://www.energy.gov/articles/doe-releases-new-report-evaluating-increases-electricity-use-data-centers" target="_blank" rel="noopener noreferrer">U.S. Department of Energy</a> projects that data centers could consume as much as 9% of U.S. electricity by 2030. The <a href="https://www.iea.org/reports/electricity-2024" target="_blank" rel="noopener noreferrer">International Energy Agency</a> also identifies data centers and AI as major sources of new electricity demand.</p>
+<p>Neurons offer a different engineering bargain. They are slow, noisy, and difficult to standardize, yet they learn from sparse signals and adapt continuously. A conventional model often needs enormous datasets and repeated training runs. Biological networks arrive with evolution’s learning machinery already installed. That does not make them magical or automatically superior. It makes them worth testing where adaptability and energy matter more than clock speed.</p>
+<p>The road to a neuron-computer had three enabling steps.</p>
+<p>1. In 2008, researchers connected cultured rat neurons to a robot and showed that the network’s activity could influence movement. The paper is available through <a href="https://ieeexplore.ieee.org/document/4633714" target="_blank" rel="noopener noreferrer">IEEE</a>. 2. Shinya Yamanaka’s induced pluripotent stem-cell work showed that mature cells could be reprogrammed into a flexible state. The <a href="https://www.nobelprize.org/prizes/medicine/2012/yamanaka/facts/" target="_blank" rel="noopener noreferrer">Nobel Prize</a> summarizes the discovery and its significance. 3. Organoid research showed that stem-cell-derived neural tissue can self-organize in three dimensions. <a href="https://www.nature.com/articles/s41583-020-0362-8" target="_blank" rel="noopener noreferrer">Nature Reviews Neuroscience</a> explains both the promise and the limits of these models.</p>
+<p>Together, those advances made it possible to build neural cultures from accessible human cells, place them over electrode arrays, and exchange signals with software.</p>
+<h2>DishBrain learned without understanding Pong</h2>
+<p>The 2022 DishBrain study, published in <a href="https://www.cell.com/neuron/fulltext/S0896-6273(22" target="_blank" rel="noopener noreferrer">Neuron</a>00806-6), used roughly 800,000 mouse and human neurons on a microelectrode array. The system received electrical signals representing the location of a Pong ball. Its output controlled the paddle. When the paddle missed, the network received unpredictable stimulation. When it returned the ball, the feedback became more orderly.</p>
+<p>That setup exploits a basic property of neural systems: feedback changes future activity. The researchers connected their method to the <a href="https://www.nature.com/articles/nrn2787" target="_blank" rel="noopener noreferrer">free-energy principle</a>, a theoretical account in which biological systems reduce surprising states. The cells did not need a symbolic concept of Pong. They needed a loop in which some activity patterns produced a more stable signal than others.</p>
+<p>This is the first reader-transfer that matters for anyone building AI: a system can improve at a task before it has anything like a human explanation of the task. The same warning applies to machine learning. Better behavior is evidence of adaptation, not evidence of an inner narrative.</p>
+<p>A 2023 commentary in <a href="https://www.nature.com/articles/s41587-023-01756-z" target="_blank" rel="noopener noreferrer">Nature Biotechnology</a> argued that organoid intelligence should be discussed with care. The distinction between measurable learning, sentience, and consciousness is not a semantic detail. It determines which experiments require welfare safeguards and which claims can responsibly appear in a press release.</p>
+<h2>The flat chip is the hidden compromise</h2>
+<p>A three-dimensional organoid resembles developing tissue more closely than a flat sheet of cells. But electrodes need access. A flat array can read and stimulate the cells it touches; a rounded organoid hides most of its network from the interface. Researchers therefore face a trade-off between biological organization and electrical control.</p>
+<p>That trade-off appears across the field. <a href="https://nap.nationalacademies.org/catalog/26078/the-emerging-field-of-human-neural-organoids-scientific-opportunities-and-ethical-challenges" target="_blank" rel="noopener noreferrer">The National Academies</a> describes neural organoids as valuable models with important technical and ethical limitations. <a href="https://www.isscr.org/guidelines" target="_blank" rel="noopener noreferrer">The ISSCR guidelines</a> call for proportionate oversight as human stem-cell models become more complex.</p>
+<p>The consequence is practical. A demonstration on a flat culture may show closed-loop learning without showing brain-like cognition. An organoid may better represent tissue development without being easy to interrogate. Anyone comparing results needs to ask which capability the apparatus makes possible and which capability its interface prevents.</p>
+<h2>CL1 makes the ethical question harder, not clearer</h2>
+<p>Cortical Labs says CL1 uses about 200,000 human neurons derived from reprogrammed cells. The system links activity to a game environment and uses feedback to shape performance. <a href="https://corticallabs.com/cl1/" target="_blank" rel="noopener noreferrer">Cortical Labs’ product page</a> describes the platform, while <a href="https://www.nature.com/articles/d41586-025-00755-1" target="_blank" rel="noopener noreferrer">Nature’s report</a> places it in the context of the company’s earlier work.</p>
+<p>The marketing image is irresistible: human-derived neurons playing Doom. It is also a poor ethical unit of analysis. A video game supplies a vivid metaphor, but it cannot tell us whether the culture experiences anything. “Sentience” has been used in this area in narrower technical senses, and that ambiguity triggered criticism from researchers. <a href="https://theconversation.com/brain-cells-in-a-dish-learned-to-play-pong-but-that-doesnt-mean-they-are-conscious-191615" target="_blank" rel="noopener noreferrer">The Conversation</a> lays out why learning behavior alone cannot establish consciousness.</p>
+<p>Three claims must stay separate:</p>
+<ul>
+<li><strong>Learning:</strong> activity changes in response to feedback and improves a measured task.</li>
+<li><strong>Biological relevance:</strong> the tissue reproduces some features of human development or disease.</li>
+<li><strong>Experience:</strong> the system has a subjective point of view.</li>
+</ul>
+<p>The first can be experimentally demonstrated. The second requires careful validation. The third remains an open question, and a compelling demo does not close it.</p>
+<h2>The best use may be less theatrical</h2>
+<p>Neural cultures could help researchers study epilepsy, neurodegeneration, and drug toxicity in human-derived tissue. <a href="https://ncats.nih.gov/research/research-activities/organ-on-a-chip" target="_blank" rel="noopener noreferrer">The National Institutes of Health</a> supports organ-on-chip and related human-model approaches because they can expose biological responses that animal models miss. <a href="https://www.congress.gov/bill/117th-congress/senate-bill/5002" target="_blank" rel="noopener noreferrer">The FDA Modernization Act 2.0</a> also removed a federal requirement that new drugs be tested on animals before clinical trials, increasing interest in validated alternatives.</p>
+<p>That promise creates a test for the field. If a Pong or Doom demo attracts attention but cannot improve reproducibility, disease modeling, or treatment decisions, it is a showcase. If the same platform produces robust human-relevant measurements, the game is only an interface for a more consequential instrument.</p>
+<p>The right evaluation stack is straightforward:</p>
+<p>1. Publish the electrode layout, cell provenance, stimulation protocol, training schedule, and failure cases. 2. Compare the biological system with strong electronic and computational baselines at equal task difficulty and energy accounting. 3. Test whether performance transfers across cultures, batches, tasks, and laboratories. 4. Pre-register welfare indicators and stopping rules for increasingly complex neural models. 5. Separate promotional language from the evidence needed to justify it.</p>
+<h2>What should happen next</h2>
+<p>The field does not need a verdict that living computers are either miracles or monsters. It needs measurements that survive contact with skeptical replication. That means treating energy efficiency as an engineering claim, learning as a behavioral claim, and consciousness as a question requiring independent evidence.</p>
+<p>For builders, the primary action is to demand the full interface specification before believing a demo. For researchers, it is to publish negative results and clear limits. For regulators and funders, it is to tie support to transparent provenance, welfare review, and reproducible benchmarks. The <a href="https://oecd.ai/en/ai-principles" target="_blank" rel="noopener noreferrer">OECD’s work on responsible innovation</a> offers a useful governance baseline, but neural systems need domain-specific additions.</p>
+<p>The screen in the lab is unsettling because it compresses several futures into one image. A cheaper computer, a better disease model, and a possible welfare subject can occupy the same dish. The technology is real. Its meaning depends on evidence still missing.</p>
+<p><a href="https://maxpetrusenko.com/" target="_blank" rel="noopener noreferrer">Read next: Why AI’s energy problem is becoming an infrastructure problem.</a></p>
+<hr>
+<p>About the author</p>
+<p>Max Petrusenko writes about AI agents, safety controls, and the incentives that decide whether powerful tools stay usable. Find him on <a href="https://medium.com/@maxpetrusenko" target="_blank" rel="noopener noreferrer">Medium</a>, <a href="https://x.com/maxpetrusenko" target="_blank" rel="noopener noreferrer">X</a>, and <a href="https://www.linkedin.com/in/maxpetrusenko/" target="_blank" rel="noopener noreferrer">LinkedIn</a>.</p>
+<p><strong>If this gave you a sharper way to think about biocomputing, re-share it with someone who is building or funding the next generation of AI infrastructure.</strong></p>
+  </main>
+</body>
+</html>
