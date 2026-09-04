@@ -1,0 +1,29 @@
+{
+  "slug": "youtube-company-ruining-fruit-nygnp0s0zq",
+  "title": "The Fruit Aisle Is Quietly Losing Its Taste",
+  "publicUrl": "https://www.maxpetrusenko.com/medium/youtube-company-ruining-fruit-nygnp0s0zq/",
+  "outputPath": "/Users/maxpetrusenko/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/youtube-company-ruining-fruit-nygnp0s0zq/index.html",
+  "sourceUrl": null,
+  "articlePath": "/Users/maxpetrusenko/Desktop/Projects/medium-automation/articles/youtube-company-ruining-fruit-nygnp0s0zq/article-medium.md",
+  "articleHash": "c604560c212cbb6342e70b7b92383f601e32709099715e7e742f05ac024aed45",
+  "exportedAt": "2026-09-04T20:13:23.841Z",
+  "status": "needs_review",
+  "publishMode": "preview",
+  "copiedImages": [
+    {
+      "src": "assets/hero-overlay.jpg",
+      "sourcePath": "/Users/maxpetrusenko/Desktop/Projects/medium-automation/articles/youtube-company-ruining-fruit-nygnp0s0zq/assets/hero-overlay.jpg",
+      "destinationPath": "/Users/maxpetrusenko/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-company-ruining-fruit-nygnp0s0zq-1788552803838/assets/hero-overlay.jpg"
+    },
+    {
+      "src": "assets/body-tomatoes.jpg",
+      "sourcePath": "/Users/maxpetrusenko/Desktop/Projects/medium-automation/articles/youtube-company-ruining-fruit-nygnp0s0zq/assets/body-tomatoes.jpg",
+      "destinationPath": "/Users/maxpetrusenko/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-company-ruining-fruit-nygnp0s0zq-1788552803838/assets/body-tomatoes.jpg"
+    }
+  ],
+  "ratings": {
+    "gemini": null,
+    "gpt": null,
+    "consensus": null
+  }
+}
