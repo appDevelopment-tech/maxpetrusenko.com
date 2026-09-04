@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="article:status" content="preview">
+  <meta name="source-article-sha256" content="b228723c7f8060b2cde448819cd9c8027067155d6960dd69032ed1c6943d1522">
+  <link rel="canonical" href="https://www.maxpetrusenko.com/medium/youtube-switch-to-linux-9sdku5vdqeq/">
+  <title>The Linux Desktop Finally Became Interesting</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --paper: #f7f1e7;
+      --ink: #221f1a;
+      --muted: #6d6255;
+      --rule: #d9cbbb;
+      --accent: #8a3f1b;
+      --panel: #fffaf2;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: radial-gradient(circle at top left, #fff7e6 0, #f7f1e7 34%, #eee5d7 100%);
+      color: var(--ink);
+      font-family: Georgia, 'Times New Roman', serif;
+      line-height: 1.66;
+    }
+    main {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 48px 22px 84px;
+    }
+    h1 {
+      margin: 0 0 22px;
+      font-size: clamp(38px, 7vw, 58px);
+      line-height: 0.98;
+      letter-spacing: 0;
+    }
+    h2 {
+      margin: 48px 0 14px;
+      font-size: clamp(25px, 4vw, 33px);
+      line-height: 1.13;
+      letter-spacing: 0;
+    }
+    h3 {
+      margin: 34px 0 12px;
+      font-size: 23px;
+      line-height: 1.2;
+      letter-spacing: 0;
+    }
+    p, li {
+      font-size: 20px;
+      margin: 0 0 20px;
+    }
+    ul { padding-left: 24px; margin: 0 0 28px; }
+    li { margin-bottom: 8px; }
+    a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+    blockquote {
+      margin: 30px 0;
+      padding: 4px 0 4px 22px;
+      border-left: 4px solid var(--accent);
+      color: #433b32;
+      font-style: italic;
+      background: linear-gradient(90deg, rgba(138,63,27,0.06), rgba(138,63,27,0));
+    }
+    blockquote p { margin: 0; font-size: 22px; }
+    figure { margin: 0 0 34px; }
+    img { display: block; width: 100%; height: auto; border-radius: 6px; box-shadow: 0 18px 44px rgba(42, 32, 20, 0.16); }
+    hr { border: 0; border-top: 1px solid var(--rule); margin: 42px 0; }
+    code { background: #eadfce; padding: 2px 5px; border-radius: 4px; font-size: 0.9em; }
+    em { color: #4a4138; }
+    @media (max-width: 620px) {
+      main { padding: 28px 18px 64px; }
+      p, li { font-size: 18px; }
+      blockquote p { font-size: 19px; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+<h1>The Linux Desktop Finally Became Interesting</h1>
+<p><em>The operating system stopped asking for loyalty and started making a case for your attention.</em></p>
+<p>At 1:33 into a Linux setup, the word “Arch” usually makes a new user reach for the escape key. Arch Linux has a reputation for turning installation into an exam. You choose the partitions, assemble the system, and learn enough command-line vocabulary to wonder whether the computer is testing you.</p>
+<p>Then Omarchy appears and removes the exam.</p>
+<p>David Heinemeier Hansson built Omarchy as an opinionated Linux desktop around Arch. Its appeal is larger than a new distribution, though. It turns Linux from a box of parts into a point of view: keyboard-driven windows, deliberate defaults, a dark visual language, fast launchers, and a system that feels designed instead of inherited. <a href="https://omarchy.org/" target="_blank" rel="noopener noreferrer">Omarchy’s own documentation</a> describes the project directly, while <a href="https://wiki.archlinux.org/title/Main_page" target="_blank" rel="noopener noreferrer">Arch’s documentation</a> shows the machinery underneath.</p>
+<p>The shift matters because an operating system is the room where your work happens. Most people inherit that room from a laptop purchase. Omarchy asks a more interesting question: what if the room made you want to sit down?</p>
+<blockquote><p>Linux becomes approachable when the first experience is a finished environment rather than a pile of decisions.</p></blockquote>
+<h2>The old Linux bargain</h2>
+<p>Linux has always offered control, with an entry fee attached.</p>
+<p>The traditional bargain was clear. You received a system with enormous choice, transparent tools, and a community that could explain almost anything. In exchange, you accepted documentation hunts, inconsistent hardware support, unfamiliar package managers, and the occasional afternoon spent repairing a configuration file.</p>
+<p>That bargain made sense for people who wanted to learn the machine. It made less sense for someone who simply wanted a calm computer.</p>
+<p>The desktop share remains small compared with Windows and macOS, according to <a href="https://gs.statcounter.com/os-market-share/desktop/worldwide/" target="_blank" rel="noopener noreferrer">StatCounter’s worldwide desktop operating-system data</a>. Market share alone does not measure quality, but it explains the psychological problem. A small ecosystem produces fewer default paths. Fewer default paths make every decision feel like a research project. That friction keeps the ecosystem small.</p>
+<p>Omarchy attacks the loop at the front door. It chooses a window manager, a terminal, shortcuts, menus, applications, themes, and update behavior for you. The result is still Linux. The first hour simply feels less like assembling furniture from a diagram.</p>
+<h2>A desktop with a point of view</h2>
+<p>Omarchy’s most visible choice is its tiling workflow. Windows arrange themselves instead of piling up on top of one another. A keyboard shortcut moves you between workspaces. Another opens a launcher. The system keeps the hands near the keyboard and makes the screen’s layout part of the work rather than an obstacle between tasks.</p>
+<p>This is close to the experience described by <a href="https://hyprland.org/" target="_blank" rel="noopener noreferrer">Hyprland</a>, the Wayland compositor used in many modern Linux setups, but Omarchy packages the idea as a complete environment. You do not begin by comparing twelve compositors. You begin with a working desktop and decide whether its opinion suits you.</p>
+<p>That distinction is important. Product design often hides its best work inside defaults. Apple decided that a trackpad should scroll naturally. Windows decided where a taskbar belongs. Linux distributions traditionally exposed the decisions. Omarchy makes the decisions visible, then gives you the files and commands to change them.</p>
+<p>The opinionated layer is also the risk. A system designed around one person’s taste can feel liberating on Monday and irritating on Wednesday. The fix is not to pretend the taste is universal. The fix is to treat the default as a starting position.</p>
+<h2>The part that changed: games</h2>
+<p>Linux gaming used to be the quickest way to end an optimistic desktop experiment.</p>
+<p>Steam’s <a href="https://store.steampowered.com/hwsurvey/Steam-Hardware-Software-Survey-Welcome-to-Steam?platform=linux" target="_blank" rel="noopener noreferrer">hardware and software survey</a> still shows Linux as a minority platform. That is the honest baseline. Yet the experience has moved because Valve’s Proton project translates many Windows games for Linux. <a href="https://github.com/ValveSoftware/Proton" target="_blank" rel="noopener noreferrer">Proton is open source on GitHub</a>, and its development has turned compatibility from a scattered hobby into infrastructure with a major commercial sponsor.</p>
+<p>The practical difference is visible in the setup sequence. Install Steam. Choose a game. Let Proton handle the translation layer. When it works, the operating system disappears and the game becomes the test.</p>
+<p>When it fails, the old Linux bargain returns. Anti-cheat systems, launchers, drivers, and multiplayer services can still break the path. ProtonDB, an independent community database, records those rough edges through user reports. The sensible expectation is broad compatibility, not universal compatibility.</p>
+<p>That limitation makes Omarchy’s pitch more credible, not less. A desktop that says every game works is selling a fantasy. A desktop that makes the successful cases easy and leaves an escape hatch for the rest is useful.</p>
+<h2>Windows inside Linux is an escape hatch</h2>
+<p>Omarchy’s workflow can open a Windows environment when a particular application needs it. That does not make Windows irrelevant. It makes the choice less binary.</p>
+<p>Microsoft’s <a href="https://learn.microsoft.com/en-us/windows/wsl/about" target="_blank" rel="noopener noreferrer">WSL documentation</a> made a similar compromise in the other direction: Linux tools inside Windows. Virtual machines and containers follow the same pattern. People want the tools and workflows associated with another system without moving every part of their life into it.</p>
+<p>The mature desktop is becoming a set of layers. Linux can be the fast, focused surface. A Windows virtual machine can handle a stubborn application. A browser can handle the service that does not care which operating system sits below it. Steam can provide the games that work through Proton.</p>
+<p>That arrangement is less romantic than switching permanently. It is also more realistic. A computer is a tool collection, not a citizenship test.</p>
+<h2>The hardware question</h2>
+<p>The cleanest Omarchy experience starts with hardware that respects Linux.</p>
+<p><a href="https://frame.work/linux" target="_blank" rel="noopener noreferrer">Framework’s Linux guidance</a> is a useful example because the company documents Linux support as part of the product rather than treating it as an unofficial experiment. System76 takes the same approach with its Linux laptops and desktops through <a href="https://system76.com/pop/" target="_blank" rel="noopener noreferrer">Pop!_OS</a>, while Ubuntu publishes an official <a href="https://ubuntu.com/desktop/docs/en/latest/tutorial/install-ubuntu-desktop/" target="_blank" rel="noopener noreferrer">desktop installation guide</a>.</p>
+<p>That does not mean you need a new laptop. It means you should check the boring things before you install: Wi-Fi chipset, graphics card, sleep behavior, fingerprint reader, external display, and the availability of a recovery image. Linux hardware support is much better when the hardware vendor or community documents the exact model.</p>
+<p>A spare desktop is a good first test. So is a second SSD. So is a live USB that lets you test networking and graphics before touching the internal drive. The fastest way to lose enthusiasm is to turn curiosity into an irreversible afternoon.</p>
+<h2>The missing test</h2>
+<p>Before switching, run the three-part desk test.</p>
+<p><strong>Work.</strong> Open the editor, terminal, browser tabs, cloud drive, and meeting software you use every week. Check fonts, camera, microphone, screen sharing, and file formats.</p>
+<p><strong>Play.</strong> Check the games you actually play, not the games you wish you played. Search <a href="https://www.protondb.com/" target="_blank" rel="noopener noreferrer">ProtonDB</a> and read recent reports. Multiplayer anti-cheat is the usual dividing line.</p>
+<p><strong>Recover.</strong> Create a rollback path. Keep the current drive untouched, make a bootable installer, and write down how to restore the original system. A reversible experiment produces better information than a dramatic leap.</p>
+<p>This is the useful model: <strong>the compatibility budget</strong>. Every switch spends some budget on a missing driver, a different shortcut, a substitute application, or a workaround. Spend that budget where the new system gives something back. If the only return is a different wallpaper, stay put. If the return is a faster workflow and a computer you enjoy using, the trade may be worth it.</p>
+<h2>What Omarchy is really selling</h2>
+<p>Omarchy does not prove that Linux has won the desktop. The numbers do not support that conclusion, and the rough edges have not vanished.</p>
+<p>It proves something smaller and more consequential. Linux can now present a coherent first impression without hiding its underlying control. The project gives a curious user an attractive default, a keyboard-centered workflow, a modern gaming path, and a way to inspect or replace nearly every choice.</p>
+<p>That combination changes the emotional sequence. Curiosity arrives before configuration, and configuration can become exploration instead of punishment.</p>
+<p>The best reason to try Linux is not that Windows or macOS has become morally unacceptable. It is that a computer should occasionally feel like a place you chose.</p>
+<p>Start with a spare drive, test your real workload, and keep the exit route. Then let the desktop earn the switch one ordinary task at a time.</p>
+<h2>About the author</h2>
+<p><em><a href="http://maxpetrusenko.com/links" target="_blank" rel="noopener noreferrer">Max Petrusenko</a> writes about technology, science, and culture. Follow him on <a href="https://medium.com/@max.petrusenko" target="_blank" rel="noopener noreferrer">Medium</a>, <a href="https://x.com/petrusenko_max" target="_blank" rel="noopener noreferrer">X</a>, and <a href="https://maxpetrusenko.substack.com/" target="_blank" rel="noopener noreferrer">Substack</a>.</em></p>
+<p>Read next: <a href="https://maxpetrusenko.com/" target="_blank" rel="noopener noreferrer">Why Your Life Feels Empty Even When You’re Never Bored</a></p>
+  </main>
+</body>
+</html>
