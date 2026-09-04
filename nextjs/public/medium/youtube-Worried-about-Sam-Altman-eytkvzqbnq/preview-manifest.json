@@ -1,0 +1,24 @@
+{
+  "slug": "youtube-Worried-about-Sam-Altman-eytkvzqbnq",
+  "title": "Medium article preview",
+  "publicUrl": "https://www.maxpetrusenko.com/medium/youtube-Worried-about-Sam-Altman-eytkvzqbnq/",
+  "outputPath": "/Users/maxpetrusenko/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/youtube-Worried-about-Sam-Altman-eytkvzqbnq/index.html",
+  "sourceUrl": null,
+  "articlePath": "/Users/maxpetrusenko/Desktop/Projects/medium-automation/articles/youtube-Worried-about-Sam-Altman-eytkvzqbnq/article-medium.md",
+  "articleHash": "48012179af652c9ad41db100ef3296b086bda3d3a2b3f7f70d91bdbb5afdfffa",
+  "exportedAt": "2026-09-04T22:50:47.277Z",
+  "status": "gate-pending",
+  "publishMode": "preview",
+  "copiedImages": [
+    {
+      "src": "assets/hero-overlay.jpg",
+      "sourcePath": "/Users/maxpetrusenko/Desktop/Projects/medium-automation/articles/youtube-Worried-about-Sam-Altman-eytkvzqbnq/assets/hero-overlay.jpg",
+      "destinationPath": "/Users/maxpetrusenko/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-Worried-about-Sam-Altman-eytkvzqbnq-1788562247273/assets/hero-overlay.jpg"
+    }
+  ],
+  "ratings": {
+    "gemini": 7.8,
+    "gpt": null,
+    "consensus": null
+  }
+}
