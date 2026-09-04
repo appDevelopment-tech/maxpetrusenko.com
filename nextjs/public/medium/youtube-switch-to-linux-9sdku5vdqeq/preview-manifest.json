@@ -5,11 +5,17 @@
   "outputPath": "/Users/maxpetrusenko/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/youtube-switch-to-linux-9sdku5vdqeq/index.html",
   "sourceUrl": null,
   "articlePath": "/Users/maxpetrusenko/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-switch-to-linux-9sdku5vdqeq/article-v1.md",
-  "articleHash": "b228723c7f8060b2cde448819cd9c8027067155d6960dd69032ed1c6943d1522",
-  "exportedAt": "2026-09-04T18:37:11.950Z",
+  "articleHash": "e1340dc638c3fe52422ba4e776958e6efb6c78a4eadbe1e758de638f43e43c44",
+  "exportedAt": "2026-09-04T18:48:30.763Z",
   "status": "needs_review",
   "publishMode": "preview",
-  "copiedImages": [],
+  "copiedImages": [
+    {
+      "src": "assets/hero-linux.jpg",
+      "sourcePath": "/Users/maxpetrusenko/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-switch-to-linux-9sdku5vdqeq/assets/hero-linux.jpg",
+      "destinationPath": "/Users/maxpetrusenko/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-switch-to-linux-9sdku5vdqeq-1788547710761/assets/hero-linux.jpg"
+    }
+  ],
   "ratings": {
     "gemini": null,
     "gpt": null,
