@@ -1,29 +1,29 @@
 {
   "slug": "youtube-simple-question-socialism-couldnt-answer-mMHyhneAxXY",
-  "title": "Two Berlins, Two Feedback Loops",
+  "title": "One Berlin Had Full Shelves. The Other Didn't.",
   "publicUrl": "https://www.maxpetrusenko.com/medium/youtube-simple-question-socialism-couldnt-answer-mMHyhneAxXY/",
-  "outputPath": "/tmp/mpc-deploy4/nextjs/public/medium/youtube-simple-question-socialism-couldnt-answer-mMHyhneAxXY/index.html",
+  "outputPath": "/tmp/mpc-deploy5/nextjs/public/medium/youtube-simple-question-socialism-couldnt-answer-mMHyhneAxXY/index.html",
   "sourceUrl": null,
   "articlePath": "/Users/maxpetrusenko/Desktop/Projects/medium-automation/articles/youtube-simple-question-socialism-couldnt-answer-mMHyhneAxXY/article-medium.md",
-  "articleHash": "e987c79435658ad1cda1f7d97c7115526448c84c3e9208c102f50bde7986243c",
-  "exportedAt": "2026-09-04T18:03:01.857Z",
+  "articleHash": "4ce2770f17f96b285bf373f10d9c5a8c4846f6a0c457359e475b6d952a37ce48",
+  "exportedAt": "2026-09-04T18:12:28.190Z",
   "status": "needs_review",
   "publishMode": "preview",
   "copiedImages": [
     {
       "src": "assets/hero-overlay.jpg",
       "sourcePath": "/Users/maxpetrusenko/Desktop/Projects/medium-automation/articles/youtube-simple-question-socialism-couldnt-answer-mMHyhneAxXY/assets/hero-overlay.jpg",
-      "destinationPath": "/tmp/mpc-deploy4/nextjs/public/medium/.tmp-youtube-simple-question-socialism-couldnt-answer-mMHyhneAxXY-1788544981852/assets/hero-overlay.jpg"
+      "destinationPath": "/tmp/mpc-deploy5/nextjs/public/medium/.tmp-youtube-simple-question-socialism-couldnt-answer-mMHyhneAxXY-1788545548187/assets/hero-overlay.jpg"
     },
     {
       "src": "assets/youtube-frames/selected/berlin-map.jpg",
       "sourcePath": "/Users/maxpetrusenko/Desktop/Projects/medium-automation/articles/youtube-simple-question-socialism-couldnt-answer-mMHyhneAxXY/assets/youtube-frames/selected/berlin-map.jpg",
-      "destinationPath": "/tmp/mpc-deploy4/nextjs/public/medium/.tmp-youtube-simple-question-socialism-couldnt-answer-mMHyhneAxXY-1788544981852/assets/youtube-frames/selected/berlin-map.jpg"
+      "destinationPath": "/tmp/mpc-deploy5/nextjs/public/medium/.tmp-youtube-simple-question-socialism-couldnt-answer-mMHyhneAxXY-1788545548187/assets/youtube-frames/selected/berlin-map.jpg"
     },
     {
       "src": "assets/youtube-frames/selected/planning-documents.jpg",
       "sourcePath": "/Users/maxpetrusenko/Desktop/Projects/medium-automation/articles/youtube-simple-question-socialism-couldnt-answer-mMHyhneAxXY/assets/youtube-frames/selected/planning-documents.jpg",
-      "destinationPath": "/tmp/mpc-deploy4/nextjs/public/medium/.tmp-youtube-simple-question-socialism-couldnt-answer-mMHyhneAxXY-1788544981852/assets/youtube-frames/selected/planning-documents.jpg"
+      "destinationPath": "/tmp/mpc-deploy5/nextjs/public/medium/.tmp-youtube-simple-question-socialism-couldnt-answer-mMHyhneAxXY-1788545548187/assets/youtube-frames/selected/planning-documents.jpg"
     }
   ],
   "ratings": {
