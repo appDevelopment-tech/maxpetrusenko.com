@@ -5,11 +5,17 @@
   "outputPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/youtube-body-transplant-toples-lfvctmt5ydy/index.html",
   "sourceUrl": null,
   "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-body-transplant-toples-lfvctmt5ydy/article-v1.md",
-  "articleHash": "3c3701d1385635c7556d712fe4550cfe4c8e111cce690fc503247d773685a829",
-  "exportedAt": "2026-09-04T18:37:03.638Z",
+  "articleHash": "ef8034e87783ff9622b86dc5824b853e065d7dd3b704c596a33969ef1a55d248",
+  "exportedAt": "2026-09-04T18:41:29.543Z",
   "status": "needs_review",
   "publishMode": "preview",
-  "copiedImages": [],
+  "copiedImages": [
+    {
+      "src": "assets/hero-body-transplant.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-body-transplant-toples-lfvctmt5ydy/assets/hero-body-transplant.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-body-transplant-toples-lfvctmt5ydy-1788547289541/assets/hero-body-transplant.jpg"
+    }
+  ],
   "ratings": {
     "gemini": null,
     "gpt": null,
