@@ -1,19 +1,19 @@
 {
   "slug": "youtube-ozempic-5ggagpjdri8",
-  "title": "The Strange Side Effect People Keep Discovering on Ozempic",
+  "title": "Does Ozempic Make People Drink Less?",
   "publicUrl": "https://www.maxpetrusenko.com/medium/youtube-ozempic-5ggagpjdri8/",
-  "outputPath": "/Users/maxpetrusenko/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/youtube-ozempic-5ggagpjdri8/index.html",
+  "outputPath": "/tmp/mpc-tl/nextjs/public/medium/youtube-ozempic-5ggagpjdri8/index.html",
   "sourceUrl": "https://www.youtube.com/watch?v=5ggaGPJDri8",
-  "articlePath": "/Users/maxpetrusenko/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-ozempic-5ggagpjdri8/article-v2.md",
-  "articleHash": "fefb509c3c95d70fbc5367475dc87db688121fde873306a2ccbaf8c9ae8fadc7",
-  "exportedAt": "2026-09-04T19:04:10.386Z",
+  "articlePath": "/Users/maxpetrusenko/Desktop/Projects/medium-automation/articles/youtube-ozempic-5ggagpjdri8/article-v2.md",
+  "articleHash": "edf4f8cf224f3c80ad7d302fb34c7a2b9d38de8d653ed9e6b277d2bd61abb5cd",
+  "exportedAt": "2026-09-04T20:20:31.855Z",
   "status": "needs_review",
   "publishMode": "preview",
   "copiedImages": [
     {
-      "src": "assets/hero-gila-monster.jpg",
-      "sourcePath": "/Users/maxpetrusenko/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-ozempic-5ggagpjdri8/assets/hero-gila-monster.jpg",
-      "destinationPath": "/Users/maxpetrusenko/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-ozempic-5ggagpjdri8-1788548650384/assets/hero-gila-monster.jpg"
+      "src": "assets/hero-overlay.jpg",
+      "sourcePath": "/Users/maxpetrusenko/Desktop/Projects/medium-automation/articles/youtube-ozempic-5ggagpjdri8/assets/hero-overlay.jpg",
+      "destinationPath": "/tmp/mpc-tl/nextjs/public/medium/.tmp-youtube-ozempic-5ggagpjdri8-1788553231853/assets/hero-overlay.jpg"
     }
   ],
   "ratings": {
