@@ -1,35 +1,43 @@
 {
   "slug": "youtube-ai-scammers-dont-hang-up-lk3jcuitec",
-  "title": "The Voice on the Phone Is the Least Interesting Part of the Scam",
+  "title": "The Call That Knows Your Mother's Name",
   "publicUrl": "https://www.maxpetrusenko.com/medium/youtube-ai-scammers-dont-hang-up-lk3jcuitec/",
   "outputPath": "/Users/maxpetrusenko/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/youtube-ai-scammers-dont-hang-up-lk3jcuitec/index.html",
   "sourceUrl": "https://www.youtube.com/watch?v=lk3jCuITwcE",
-  "articlePath": "/Users/maxpetrusenko/Desktop/Projects/medium-automation/articles/youtube-ai-scammers-dont-hang-up-lk3jcuitec/article-v1.md",
-  "articleHash": "f485e424bc6687bd7dccc3d624d9fcfcfdfab5559c55cc29e21cb3ce4f73430a",
-  "exportedAt": "2026-09-04T18:20:02.021Z",
+  "articlePath": "/Users/maxpetrusenko/Desktop/Projects/medium-automation/articles/youtube-ai-scammers-dont-hang-up-lk3jcuitec/article-v2.md",
+  "articleHash": "05ce2797e5d4a132911ad370f61cb6aec2b7aac4c6ca118b2a29b826f9593667",
+  "exportedAt": "2026-09-04T20:01:13.195Z",
   "status": "needs_review",
   "publishMode": "preview",
   "copiedImages": [
     {
-      "src": "assets/hero-phone-call.jpg",
-      "sourcePath": "/Users/maxpetrusenko/Desktop/Projects/medium-automation/articles/youtube-ai-scammers-dont-hang-up-lk3jcuitec/assets/hero-phone-call.jpg",
-      "destinationPath": "/Users/maxpetrusenko/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-ai-scammers-dont-hang-up-lk3jcuitec-1788546002018/assets/hero-phone-call.jpg"
+      "src": "assets/hero-overlay.jpg",
+      "sourcePath": "/Users/maxpetrusenko/Desktop/Projects/medium-automation/articles/youtube-ai-scammers-dont-hang-up-lk3jcuitec/assets/hero-overlay.jpg",
+      "destinationPath": "/Users/maxpetrusenko/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-ai-scammers-dont-hang-up-lk3jcuitec-1788552073193/assets/hero-overlay.jpg"
     }
   ],
   "ratings": {
     "gemini": {
-      "overallRating": 8.2,
+      "overallRating": 8.3,
       "verdict": "pass",
-      "titleClickability": 8.4,
-      "subtitleClickability": 7.8,
+      "titleClickability": 8.7,
+      "subtitleClickability": 8.2,
       "scores": {
         "hook": 8.5,
-        "evidence": 8,
-        "structure": 8.2,
+        "evidence": 7.8,
+        "structure": 8.5,
         "actionability": 8.8,
-        "voice": 8
+        "voice": 8.3
       },
-      "capsApplied": [],
+      "gpt56Luna": {
+        "overall": 8.3,
+        "evidence": 7.8,
+        "title": 8.7,
+        "subtitle": 8.2,
+        "image": 8,
+        "titleClaimMatch": 8.4,
+        "titleSpoilsTwist": false
+      },
       "titleSpoilsTwist": false,
       "subtitleSpoilsTwist": false
     },
