@@ -2,33 +2,28 @@
   "slug": "youtube-simple-question-socialism-couldnt-answer-mMHyhneAxXY",
   "title": "Two Berlins, Two Feedback Loops",
   "publicUrl": "https://www.maxpetrusenko.com/medium/youtube-simple-question-socialism-couldnt-answer-mMHyhneAxXY/",
-  "outputPath": "/tmp/mpc-deploy3/nextjs/public/medium/youtube-simple-question-socialism-couldnt-answer-mMHyhneAxXY/index.html",
+  "outputPath": "/tmp/mpc-deploy4/nextjs/public/medium/youtube-simple-question-socialism-couldnt-answer-mMHyhneAxXY/index.html",
   "sourceUrl": null,
   "articlePath": "/Users/maxpetrusenko/Desktop/Projects/medium-automation/articles/youtube-simple-question-socialism-couldnt-answer-mMHyhneAxXY/article-medium.md",
-  "articleHash": "a5f5cca3351282d3f83070fd0dc55b5feb4338b1b9a97fe3f957592031eacc96",
-  "exportedAt": "2026-09-04T17:07:11.856Z",
+  "articleHash": "e987c79435658ad1cda1f7d97c7115526448c84c3e9208c102f50bde7986243c",
+  "exportedAt": "2026-09-04T18:03:01.857Z",
   "status": "needs_review",
   "publishMode": "preview",
   "copiedImages": [
     {
       "src": "assets/hero-overlay.jpg",
       "sourcePath": "/Users/maxpetrusenko/Desktop/Projects/medium-automation/articles/youtube-simple-question-socialism-couldnt-answer-mMHyhneAxXY/assets/hero-overlay.jpg",
-      "destinationPath": "/tmp/mpc-deploy3/nextjs/public/medium/.tmp-youtube-simple-question-socialism-couldnt-answer-mMHyhneAxXY-1788541631850/assets/hero-overlay.jpg"
-    },
-    {
-      "src": "assets/youtube-frames/selected/feudal-manor.jpg",
-      "sourcePath": "/Users/maxpetrusenko/Desktop/Projects/medium-automation/articles/youtube-simple-question-socialism-couldnt-answer-mMHyhneAxXY/assets/youtube-frames/selected/feudal-manor.jpg",
-      "destinationPath": "/tmp/mpc-deploy3/nextjs/public/medium/.tmp-youtube-simple-question-socialism-couldnt-answer-mMHyhneAxXY-1788541631850/assets/youtube-frames/selected/feudal-manor.jpg"
-    },
-    {
-      "src": "assets/youtube-frames/selected/planning-documents.jpg",
-      "sourcePath": "/Users/maxpetrusenko/Desktop/Projects/medium-automation/articles/youtube-simple-question-socialism-couldnt-answer-mMHyhneAxXY/assets/youtube-frames/selected/planning-documents.jpg",
-      "destinationPath": "/tmp/mpc-deploy3/nextjs/public/medium/.tmp-youtube-simple-question-socialism-couldnt-answer-mMHyhneAxXY-1788541631850/assets/youtube-frames/selected/planning-documents.jpg"
+      "destinationPath": "/tmp/mpc-deploy4/nextjs/public/medium/.tmp-youtube-simple-question-socialism-couldnt-answer-mMHyhneAxXY-1788544981852/assets/hero-overlay.jpg"
     },
     {
       "src": "assets/youtube-frames/selected/berlin-map.jpg",
       "sourcePath": "/Users/maxpetrusenko/Desktop/Projects/medium-automation/articles/youtube-simple-question-socialism-couldnt-answer-mMHyhneAxXY/assets/youtube-frames/selected/berlin-map.jpg",
-      "destinationPath": "/tmp/mpc-deploy3/nextjs/public/medium/.tmp-youtube-simple-question-socialism-couldnt-answer-mMHyhneAxXY-1788541631850/assets/youtube-frames/selected/berlin-map.jpg"
+      "destinationPath": "/tmp/mpc-deploy4/nextjs/public/medium/.tmp-youtube-simple-question-socialism-couldnt-answer-mMHyhneAxXY-1788544981852/assets/youtube-frames/selected/berlin-map.jpg"
+    },
+    {
+      "src": "assets/youtube-frames/selected/planning-documents.jpg",
+      "sourcePath": "/Users/maxpetrusenko/Desktop/Projects/medium-automation/articles/youtube-simple-question-socialism-couldnt-answer-mMHyhneAxXY/assets/youtube-frames/selected/planning-documents.jpg",
+      "destinationPath": "/tmp/mpc-deploy4/nextjs/public/medium/.tmp-youtube-simple-question-socialism-couldnt-answer-mMHyhneAxXY-1788544981852/assets/youtube-frames/selected/planning-documents.jpg"
     }
   ],
   "ratings": {
