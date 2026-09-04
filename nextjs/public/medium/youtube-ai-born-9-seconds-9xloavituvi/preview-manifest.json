@@ -1,0 +1,24 @@
+{
+  "slug": "youtube-ai-born-9-seconds-9xloavituvi",
+  "title": "The AI That Learned to Survive Before It Learned Why",
+  "publicUrl": "https://www.maxpetrusenko.com/medium/youtube-ai-born-9-seconds-9xloavituvi/",
+  "outputPath": "/tmp/maxsite-youtube-ai-born-9-seconds-9xloavituvi/nextjs/public/medium/youtube-ai-born-9-seconds-9xloavituvi/index.html",
+  "sourceUrl": "https://www.youtube.com/watch?v=9XlOaVItUgI",
+  "articlePath": "/Users/maxpetrusenko/Desktop/Projects/medium-automation/articles/youtube-ai-born-9-seconds-9xloavituvi/article-medium.md",
+  "articleHash": "b40d74e86bd06a777031251981666aa548c0a02d43f51d10ed75e4389df8e4ba",
+  "exportedAt": "2026-09-04T22:17:18.369Z",
+  "status": "needs_review",
+  "publishMode": "preview",
+  "copiedImages": [
+    {
+      "src": "assets/hero-overlay.jpg",
+      "sourcePath": "/Users/maxpetrusenko/Desktop/Projects/medium-automation/articles/youtube-ai-born-9-seconds-9xloavituvi/assets/hero-overlay.jpg",
+      "destinationPath": "/tmp/maxsite-youtube-ai-born-9-seconds-9xloavituvi/nextjs/public/medium/.tmp-youtube-ai-born-9-seconds-9xloavituvi-1788560238367/assets/hero-overlay.jpg"
+    }
+  ],
+  "ratings": {
+    "gemini": null,
+    "gpt": null,
+    "consensus": null
+  }
+}
