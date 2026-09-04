@@ -1,0 +1,39 @@
+{
+  "slug": "youtube-ai-scammers-dont-hang-up-lk3jcuitec",
+  "title": "The Voice on the Phone Is the Least Interesting Part of the Scam",
+  "publicUrl": "https://www.maxpetrusenko.com/medium/youtube-ai-scammers-dont-hang-up-lk3jcuitec/",
+  "outputPath": "/Users/maxpetrusenko/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/youtube-ai-scammers-dont-hang-up-lk3jcuitec/index.html",
+  "sourceUrl": "https://www.youtube.com/watch?v=lk3jCuITwcE",
+  "articlePath": "/Users/maxpetrusenko/Desktop/Projects/medium-automation/articles/youtube-ai-scammers-dont-hang-up-lk3jcuitec/article-v1.md",
+  "articleHash": "f485e424bc6687bd7dccc3d624d9fcfcfdfab5559c55cc29e21cb3ce4f73430a",
+  "exportedAt": "2026-09-04T18:20:02.021Z",
+  "status": "needs_review",
+  "publishMode": "preview",
+  "copiedImages": [
+    {
+      "src": "assets/hero-phone-call.jpg",
+      "sourcePath": "/Users/maxpetrusenko/Desktop/Projects/medium-automation/articles/youtube-ai-scammers-dont-hang-up-lk3jcuitec/assets/hero-phone-call.jpg",
+      "destinationPath": "/Users/maxpetrusenko/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-ai-scammers-dont-hang-up-lk3jcuitec-1788546002018/assets/hero-phone-call.jpg"
+    }
+  ],
+  "ratings": {
+    "gemini": {
+      "overallRating": 8.2,
+      "verdict": "pass",
+      "titleClickability": 8.4,
+      "subtitleClickability": 7.8,
+      "scores": {
+        "hook": 8.5,
+        "evidence": 8,
+        "structure": 8.2,
+        "actionability": 8.8,
+        "voice": 8
+      },
+      "capsApplied": [],
+      "titleSpoilsTwist": false,
+      "subtitleSpoilsTwist": false
+    },
+    "gpt": null,
+    "consensus": null
+  }
+}
