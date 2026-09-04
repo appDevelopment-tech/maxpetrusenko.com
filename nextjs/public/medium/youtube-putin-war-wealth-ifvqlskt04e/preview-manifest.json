@@ -1,0 +1,24 @@
+{
+  "slug": "youtube-putin-war-wealth-ifvqlskt04e",
+  "title": "How Putin’s War Pay Is Creating New Wealth in Russia",
+  "publicUrl": "https://www.maxpetrusenko.com/medium/youtube-putin-war-wealth-ifvqlskt04e/",
+  "outputPath": "/tmp/maxsite-youtube-putin-war-wealth-ifvqlskt04e/nextjs/public/medium/youtube-putin-war-wealth-ifvqlskt04e/index.html",
+  "sourceUrl": null,
+  "articlePath": "/Users/maxpetrusenko/Desktop/Projects/medium-automation/articles/youtube-putin-war-wealth-ifvqlskt04e/article-medium.md",
+  "articleHash": "984e5b4f483642c4fe27d86139e864d975b282e814109da9e48322c6c8f1131b",
+  "exportedAt": "2026-09-04T22:04:40.586Z",
+  "status": "gate-pending",
+  "publishMode": "preview",
+  "copiedImages": [
+    {
+      "src": "assets/hero-overlay.jpg",
+      "sourcePath": "/Users/maxpetrusenko/Desktop/Projects/medium-automation/articles/youtube-putin-war-wealth-ifvqlskt04e/assets/hero-overlay.jpg",
+      "destinationPath": "/tmp/maxsite-youtube-putin-war-wealth-ifvqlskt04e/nextjs/public/medium/.tmp-youtube-putin-war-wealth-ifvqlskt04e-1788559480583/assets/hero-overlay.jpg"
+    }
+  ],
+  "ratings": {
+    "gemini": null,
+    "gpt": null,
+    "consensus": null
+  }
+}
