@@ -1,0 +1,34 @@
+{
+  "slug": "your-agents-md-was-written-for-a-worse-model",
+  "title": "Your AGENTS.md Was Written for a Worse Model",
+  "publicUrl": "https://www.maxpetrusenko.com/medium/your-agents-md-was-written-for-a-worse-model/",
+  "outputPath": "/Users/maxpetrusenko/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/your-agents-md-was-written-for-a-worse-model/index.html",
+  "sourceUrl": null,
+  "articlePath": "/Users/maxpetrusenko/Desktop/Projects/medium-automation/articles/your-agents-md-was-written-for-a-worse-model/article-medium.md",
+  "articleHash": "2d4eec11964fe5c4b3fd06e81a9fe4f5b9b08b61b8ea27cbe8df78450894d7a7",
+  "exportedAt": "2026-09-06T13:10:16.698Z",
+  "status": "needs_review",
+  "publishMode": "preview",
+  "copiedImages": [
+    {
+      "src": "assets/hero-overlay.png",
+      "sourcePath": "/Users/maxpetrusenko/Desktop/Projects/medium-automation/articles/your-agents-md-was-written-for-a-worse-model/assets/hero-overlay.png",
+      "destinationPath": "/Users/maxpetrusenko/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-your-agents-md-was-written-for-a-worse-model-1788700216690/assets/hero-overlay.png"
+    },
+    {
+      "src": "assets/figure-skill-descriptions.png",
+      "sourcePath": "/Users/maxpetrusenko/Desktop/Projects/medium-automation/articles/your-agents-md-was-written-for-a-worse-model/assets/figure-skill-descriptions.png",
+      "destinationPath": "/Users/maxpetrusenko/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-your-agents-md-was-written-for-a-worse-model-1788700216690/assets/figure-skill-descriptions.png"
+    },
+    {
+      "src": "assets/figure-agentsmd-context.png",
+      "sourcePath": "/Users/maxpetrusenko/Desktop/Projects/medium-automation/articles/your-agents-md-was-written-for-a-worse-model/assets/figure-agentsmd-context.png",
+      "destinationPath": "/Users/maxpetrusenko/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-your-agents-md-was-written-for-a-worse-model-1788700216690/assets/figure-agentsmd-context.png"
+    }
+  ],
+  "ratings": {
+    "gemini": null,
+    "gpt": null,
+    "consensus": null
+  }
+}

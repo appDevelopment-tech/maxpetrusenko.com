@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="article:status" content="preview">
+  <meta name="source-article-sha256" content="2d4eec11964fe5c4b3fd06e81a9fe4f5b9b08b61b8ea27cbe8df78450894d7a7">
+  <link rel="canonical" href="https://www.maxpetrusenko.com/medium/your-agents-md-was-written-for-a-worse-model/">
+  <title>Your AGENTS.md Was Written for a Worse Model</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --paper: #f7f1e7;
+      --ink: #221f1a;
+      --muted: #6d6255;
+      --rule: #d9cbbb;
+      --accent: #8a3f1b;
+      --panel: #fffaf2;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: radial-gradient(circle at top left, #fff7e6 0, #f7f1e7 34%, #eee5d7 100%);
+      color: var(--ink);
+      font-family: Georgia, 'Times New Roman', serif;
+      line-height: 1.66;
+    }
+    main {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 48px 22px 84px;
+    }
+    h1 {
+      margin: 0 0 22px;
+      font-size: clamp(38px, 7vw, 58px);
+      line-height: 0.98;
+      letter-spacing: 0;
+    }
+    h2 {
+      margin: 48px 0 14px;
+      font-size: clamp(25px, 4vw, 33px);
+      line-height: 1.13;
+      letter-spacing: 0;
+    }
+    h3 {
+      margin: 34px 0 12px;
+      font-size: 23px;
+      line-height: 1.2;
+      letter-spacing: 0;
+    }
+    p, li {
+      font-size: 20px;
+      margin: 0 0 20px;
+    }
+    ul { padding-left: 24px; margin: 0 0 28px; }
+    li { margin-bottom: 8px; }
+    a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+    blockquote {
+      margin: 30px 0;
+      padding: 4px 0 4px 22px;
+      border-left: 4px solid var(--accent);
+      color: #433b32;
+      font-style: italic;
+      background: linear-gradient(90deg, rgba(138,63,27,0.06), rgba(138,63,27,0));
+    }
+    blockquote p { margin: 0; font-size: 22px; }
+    figure { margin: 0 0 34px; }
+    img { display: block; width: 100%; height: auto; border-radius: 6px; box-shadow: 0 18px 44px rgba(42, 32, 20, 0.16); }
+    hr { border: 0; border-top: 1px solid var(--rule); margin: 42px 0; }
+    code { background: #eadfce; padding: 2px 5px; border-radius: 4px; font-size: 0.9em; }
+    em { color: #4a4138; }
+    @media (max-width: 620px) {
+      main { padding: 28px 18px 64px; }
+      p, li { font-size: 18px; }
+      blockquote p { font-size: 19px; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+<h2>Your AGENTS.md Was Written for a Worse Model</h2>
+<h3>GPT-6 Astra exposes a new kind of technical debt: instructions that survived the problems they were meant to fix.</h3>
+<figure><img src="/medium/your-agents-md-was-written-for-a-worse-model/assets/hero-overlay.png" alt="File icons forming constellations in a dark, star-filled field"></figure>
+<blockquote><p>Every instruction in your AGENTS.md was written to fix a real failure. When the model improves, the failure can vanish while the rule survives. That is prompt debt: a behavioral compensation promoted into permanent policy. The fix is a narrower job for the file, combining invariants, hidden constraints, and permission boundaries with a definition of done.</p></blockquote>
+<p>Every time a coding agent fails in a memorable way, somebody adds a rule. It edits too much, so <code>AGENTS.md</code> says to touch only necessary files. It skips verification, so another line says to always run the full test suite. It changes a dependency without asking, so dependency changes become approval-only. It wanders through the repository, so you prescribe exactly which documents it must read first.</p>
+<p>Each rule was reasonable when written.</p>
+<p>Then the model changed.</p>
+<p>``<code>text OLD: Read A → Edit B → Test C NEW: Boundaries → Permissions → Definition of done </code>``</p>
+<p>GPT-6 Astra is substantially better at following instructions than previous coding models, and that improvement changes the economics of prompting. A weaker model may ignore an overbroad rule. A stronger one may follow it perfectly. That means an instruction written to compensate for an older model can become friction in a newer one. Upgrading the model without auditing its instructions preserves old weaknesses as permanent policy inside the new system.</p>
+<p>The model got better. Your prompt stack did not.</p>
+<h2>Every failure leaves a fossil</h2>
+<p>Software accumulates technical debt when yesterday&#39;s local workaround becomes tomorrow&#39;s architectural constraint. Agent instructions accumulate the same way.</p>
+<p>Imagine that an older coding model routinely forgot to verify its changes. You add:</p>
+<p>``<code>text Always run the entire test suite after every change. </code>``</p>
+<p>At the time, that may improve reliability. A year later, the model already identifies affected tests and verifies its work, but the instruction remains. Now a one-word copy fix can trigger twenty minutes of integration testing. Nothing is malfunctioning, and the agent is following your repository correctly. The problem is that an old behavioral compensation has been promoted into permanent engineering policy.</p>
+<p>That is prompt debt.</p>
+<p>A rule solves a real problem. The problem disappears. The rule survives.</p>
+<figure><img src="/medium/your-agents-md-was-written-for-a-worse-model/assets/figure-skill-descriptions.png" alt="Skill description example: a vague &quot;use for databases&quot; description versus a specific &quot;use when adding a migration&quot; one"></figure>
+<h2>Skills have a routing cost before they have an execution cost</h2>
+<p>Skills look cheap because their full contents are loaded only when needed. The <a href="https://agentskills.io/home" target="_blank" rel="noopener noreferrer">Agent Skills format</a> describes progressive disclosure as loading a skill&#39;s name and description first, then the full file only when a task matches.</p>
+<p>But before the model can decide which skill it needs, it has to recognize the available choices, which means skill names and descriptions already compete for attention.</p>
+<p>Consider a repository with separate skills for:</p>
+<ul>
+<li>database migrations</li>
+<li>PostgreSQL</li>
+<li>schema design</li>
+<li>backend persistence</li>
+<li>query performance</li>
+<li>recovery</li>
+</ul>
+<p>Now give each one a description like:</p>
+<blockquote><p>Use this for database work, SQL, migrations, schemas, queries, persistence, models, storage, or backend operations.</p></blockquote>
+<p>A simple query change may appear relevant to half the skill library. The agent now has a classification problem before it has a coding problem.</p>
+<p>The better pattern is still progressive disclosure. OpenAI&#39;s <a href="https://learn.chatgpt.com/docs/build-skills" target="_blank" rel="noopener noreferrer">skills documentation</a> makes the same case: the full guidance belongs in supporting files that arrive only when a task needs them.</p>
+<p>``<code>text database/ ├── router.md └── references/ ├── migrations.md ├── performance.md └── recovery.md </code>``</p>
+<p>The root file only needs enough information to route the task. For example: schema change leads to migrations.md, slow query to performance.md, restore or data loss to recovery.md. The detailed guidance still exists and simply arrives when the task gives the agent a reason to read it. That is a better use of context than loading operational knowledge speculatively.</p>
+<figure><img src="/medium/your-agents-md-was-written-for-a-worse-model/assets/figure-agentsmd-context.png" alt="AGENTS.md context example: reading every doc before each edit versus reading only the one the task needs"></figure>
+<h2>AGENTS.md should preserve what code cannot explain</h2>
+<p>Repository-level instructions are different because they follow the agent into almost every task. Repository files like AGENTS.md load into a session the way <a href="https://code.claude.com/docs/en/memory" target="_blank" rel="noopener noreferrer">Claude Code&#39;s memory docs</a> describe: as standing context that shapes each run. That makes them expensive when they are wrong, stale, or unnecessarily broad.</p>
+<p>A useful test is:</p>
+<blockquote><p>Would a capable engineer inspecting this repository be able to infer this safely and cheaply?</p></blockquote>
+<p>If yes, the rule may not belong in <code>AGENTS.md</code>; if no, it probably does.</p>
+<p>Compare these two instructions. The first is repository-specific knowledge the model may not safely infer:</p>
+<p>```text KEEP</p>
+<p>Generated API clients in /src/sdk are immutable. Edit the generator source instead. ```</p>
+<p>Now compare with a workflow that may make sense for an architectural refactor but does not for a one-word typo fix:</p>
+<p>```text MOVE OR REMOVE</p>
+<p>Before making any change: 1. Read ARCHITECTURE.md 2. Inspect the repository map 3. Review all package documentation 4. Identify downstream dependencies ```</p>
+<p>Persistent instructions should mostly encode three things: invariants that must remain true, hidden constraints the codebase does not make obvious, and autonomy boundaries where the agent may proceed and where it genuinely needs a human decision. That is a much narrower job than teaching the model how to perform software engineering.</p>
+<h2>Better models make permission more important</h2>
+<p>Stronger instruction following creates a less obvious failure mode. The agent can respect your boundaries so carefully that it stops where you expected it to continue.</p>
+<p>Suppose it implements a change and one affected local test fails because of that implementation. It replies: <code>auth_spec.ts</code> is failing. Should I fix it?</p>
+<p>The model knows how to repair the test, but it does not know whether the repair belongs inside the authority you gave it. This is where a permission grant is more useful than another procedure.</p>
+<p>```text Local tests use disposable fixtures and have no production access.</p>
+<p>Run affected tests, fix regressions caused by the requested change, and rerun them without asking for approval at each step. ```</p>
+<p>That tells the agent three things it cannot necessarily infer: the environment is safe, remediation is within scope, and it is allowed to continue. This produces a more useful decision boundary than blanket rules such as &quot;never expand scope.&quot;</p>
+<p>A practical ownership map looks like this:</p>
+<p>| Human approval | Agent can usually continue | | --- | --- | | Delete production data | Fix a test broken by its own change | | Change authentication policy | Update nearby local types | | Break a public API contract | Format modified files | | Introduce a migration with operational risk | Rerun affected local tests |</p>
+<p>The distinction is consequence. Not every adjacent action deserves the same approval boundary.</p>
+<h2>Define completion before procedure</h2>
+<p>Old-style prompts often describe the path:</p>
+<p>``<code>text Read these files. Modify these modules. Run this command. Inspect this output. Run these tests. </code>``</p>
+<p>That can help when the workflow is genuinely fragile, but a capable agent often benefits more from a clear endpoint.</p>
+<p>Compare <code>Implement the avatar endpoint.</code> with:</p>
+<p>```text Implement the avatar endpoint.</p>
+<p>Run the affected local tests, inspect the returned payload, fix regressions caused by this change, and stop when the requested behavior works or an external blocker requires a decision from me. ```</p>
+<p>The second prompt does not tell the model which file to inspect first. It tells the model what finished means. That distinction becomes more important as models gain enough judgment to choose their own path through a repository. The human sets the destination and the dangerous edges, and the agent handles the route.</p>
+<h2>The instruction hierarchy should be intentional</h2>
+<p>A clean agent setup separates three layers.</p>
+<p>```text AGENTS.md ↓ Repository invariants Safety boundaries Global permissions</p>
+<p>Skills ↓ Specialized workflows Loaded only when relevant</p>
+<p>Task prompt ↓ Immediate objective Local constraints Definition of done ```</p>
+<p>Problems appear when these layers collapse into each other. A one-off task workflow gets promoted into <code>AGENTS.md</code>, a global safety rule gets buried inside a skill the model may never load, a skill becomes an encyclopedia, and a task prompt repeats repository knowledge the model already has. The more capable the model becomes, the more expensive that duplication can become.</p>
+<h2>Audit prompt debt whenever the model changes</h2>
+<p>A model upgrade should trigger an instruction audit. The trigger is not that every old instruction is wrong; the assumptions behind them may simply have changed. A useful audit is four passes.</p>
+<h3>Inventory historical compensations</h3>
+<p>Gather the instructions that shape agent behavior:</p>
+<ul>
+<li><code>AGENTS.md</code></li>
+<li>skill descriptions</li>
+<li>skill bodies</li>
+<li>system-level repository prompts</li>
+<li>repeated task-template instructions</li>
+</ul>
+<p>For each rule, identify why it exists and what failure originally caused someone to write it.</p>
+<h3>Separate invariants from rituals</h3>
+<p>Ask whether a capable engineer could infer this safely and cheaply from the repository. If yes, test whether the rule can be removed; if no, preserve it. Especially keep rules involving production risk, generated artifacts, hidden infrastructure behavior, and non-obvious operational constraints.</p>
+<h3>Turn heavy skills into routers</h3>
+<p>If a skill covers several workflows, make the entry point small. Load migration instructions only for migrations, recovery procedures only when recovery is relevant. Keep the specialized knowledge without forcing all of it into every nearby task.</p>
+<h3>Review prohibitions as decision boundaries</h3>
+<p>Rules like <code>NEVER touch X</code>, <code>ALWAYS ask before Y</code>, and <code>ONLY modify Z</code> may still be correct, but inspect the consequence they are protecting. Sometimes the better rule is that you may modify X during local development and ask before changing X in production, or you may fix regressions introduced by your own change and ask before expanding into unrelated behavior.</p>
+<p>The goal is not maximal autonomy. The goal is to put human attention where the consequences justify it.</p>
+<h2>What should survive every upgrade</h2>
+<p>Some instructions should remain even as models improve. A deployment may require an undocumented legacy flag, generated files may look editable even though changes will be overwritten, a local environment may resemble production while using disposable fixtures, and a migration may need compatibility across two running application versions. Those are high-value instructions because intelligence alone does not reveal them reliably.</p>
+<p>The useful filter is information value. If the instruction captures something the model cannot safely discover, keep it. If it merely describes how an older model needed to be walked through an ordinary engineering task, reconsider it. Prompt debt does not come from having many instructions. It comes from instructions whose original purpose has expired.</p>
+<p>The old approach to coding agents was to describe more of the route. As the models get better, the more useful architecture is becoming simpler: preserve the invariants, define the permissions, and specify what done means. Then let the agent work out the middle, and when the next model arrives, audit the rules before adding new ones.</p>
+<hr>
+<p>Read next: <a href="https://medium.com/@max.petrusenko/the-41-tool-agent-stack-starts-with-the-brake-ab59794c8e70" target="_blank" rel="noopener noreferrer">The 41-Tool Agent Stack Starts With the Brake</a></p>
+<hr>
+<p>Max Petrusenko writes about <a href="https://maxpetrusenko.com" target="_blank" rel="noopener noreferrer">AI agents</a>, safety controls, and the incentives that decide whether powerful tools stay usable. Read more on <a href="https://medium.com/@max.petrusenko" target="_blank" rel="noopener noreferrer">Medium</a>, <a href="https://x.com/maxpetrusenko" target="_blank" rel="noopener noreferrer">X</a>, and <a href="https://www.linkedin.com/in/maxpetrusenko/" target="_blank" rel="noopener noreferrer">LinkedIn</a>.</p>
+<p>If this changed how you think about your agent instructions, pass it on to someone who is still carrying the old rules.</p>
+  </main>
+</body>
+</html>
