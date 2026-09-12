@@ -114,10 +114,42 @@ jobs:
 
       # ---------------------------------------------------------------------
       # Structured-data gate. Offline; reads the built artifacts + the local
-      # policy file only. Strictness lives in sd-gate.toml (report_only = true
-      # for the wiring lane).
+      # policy file only. Strictness lives in sd-gate.toml and this repo now
+      # ENFORCES (report_only = false), so an error-band finding fails this job.
       # ---------------------------------------------------------------------
-      - name: Run structured-data gate (dir mode)
+            - name: Negative control - the gate must reject a known-bad fixture
+        run: |
+          # Proves the gate is still load-bearing. A validator that quietly stopped
+          # failing would pass every other step in this workflow and protect nothing.
+          # Self-contained on purpose: the fixture is copied to a scratch dir and the
+          # check is pointed at that copy, so it cannot depend on how a repo path
+          # resolves from a workflow step (a relative --dir resolves against the
+          # config's own directory, which silently reads nothing and exits 2).
+          # Requires exit 1 AND a real error-band line: exit 2 alone means the run
+          # broke or read nothing, which is NOT the same as rejecting bad markup.
+          rm -rf /tmp/sd-negative && mkdir -p /tmp/sd-negative
+          cp "$GITHUB_WORKSPACE/tests/fixtures/sd-negative/broken.html" /tmp/sd-negative/index.html
+          set +e
+          python3 .github/scripts/sd-check.py \
+            --config .github/scripts/sd-gate.toml \
+            --dir /tmp/sd-negative > /tmp/neg.txt 2>&1
+          code=$?
+          set -e
+          if [ "$code" -ne 1 ]; then
+            echo "::error::negative control FAILED - expected exit 1 on a deliberately broken fixture, got $code"
+            cat /tmp/neg.txt
+            exit 1
+          fi
+          if ! grep -q '\[E\] context-missing' /tmp/neg.txt; then
+            echo "::error::negative control FAILED - exited 1 without the expected context-missing error"
+            cat /tmp/neg.txt
+            exit 1
+          fi
+          echo "negative control OK - the gate exited 1 on a deliberately broken fixture"
+          grep -E '\[E\] context-missing|summary: error=' /tmp/neg.txt | head -3
+
+      # ---------------------------------------------------------------------
+- name: Run structured-data gate (dir mode)
         working-directory: .
         run: |
           python3 .github/scripts/sd-check.py \
