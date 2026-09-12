@@ -1,0 +1,26 @@
+{
+  "blocks": 1,
+  "content": {
+    "Organization.name": "Presence Atelier",
+    "Person.description": "Creator of tech automation resources, tantra education, and somatic practice offerings.",
+    "Person.name": "Max Petrusenko"
+  },
+  "content_digest": "3b758e40268e699f91b0d66dc106dddd28eeefe9609e26596c4cbe23dfaf0138",
+  "route": "/medium/youtube-body-thinks-before-mind-bgyi1l1p4nw",
+  "shape": {
+    "canonical": "https://www.maxpetrusenko.com/medium/youtube-body-thinks-before-mind-bgyi1l1p4nw/",
+    "ids": [],
+    "required_present": {
+      "Organization": [],
+      "Person": [
+        "name"
+      ]
+    },
+    "types": [
+      "Organization",
+      "Person"
+    ],
+    "values": {}
+  },
+  "shape_digest": "c173a8992a8a33a0fa3c3bab091b63c6fd3bb4836016f89eec2efd63266e1566"
+}

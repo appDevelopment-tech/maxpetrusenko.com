@@ -1,0 +1,26 @@
+{
+  "blocks": 1,
+  "content": {
+    "Organization.name": "Presence Atelier",
+    "Person.description": "Creator of tech automation resources, tantra education, and somatic practice offerings.",
+    "Person.name": "Max Petrusenko"
+  },
+  "content_digest": "3b758e40268e699f91b0d66dc106dddd28eeefe9609e26596c4cbe23dfaf0138",
+  "route": "/medium/youtube-monster-head-cognitive-biases-hwzjwzni_dc",
+  "shape": {
+    "canonical": "https://www.maxpetrusenko.com/medium/youtube-monster-head-cognitive-biases-hwzjwzni_dc/",
+    "ids": [],
+    "required_present": {
+      "Organization": [],
+      "Person": [
+        "name"
+      ]
+    },
+    "types": [
+      "Organization",
+      "Person"
+    ],
+    "values": {}
+  },
+  "shape_digest": "96d7cfa6e805570dfa9ef98b9502f548c09bf3dc333f63971c2ed5e00b3f85df"
+}

@@ -62,7 +62,7 @@ export const projects: Project[] = [
     description:
       "Tantra-informed somatic work by request. Deep rewiring and nervous system reset through embodied presence.",
     image: "/images/atelier.svg",
-    link: "https://atelier.maxpetrusenko.com",
+    link: "/spirituality",
     status: "live",
     category: "product",
     tags: ["Somatic", "Tantra", "Coaching", "private practice"],

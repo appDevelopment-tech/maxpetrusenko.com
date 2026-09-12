@@ -1,0 +1,26 @@
+{
+  "blocks": 1,
+  "content": {
+    "Organization.name": "Presence Atelier",
+    "Person.description": "Creator of tech automation resources, tantra education, and somatic practice offerings.",
+    "Person.name": "Max Petrusenko"
+  },
+  "content_digest": "3b758e40268e699f91b0d66dc106dddd28eeefe9609e26596c4cbe23dfaf0138",
+  "route": "/medium/youtube-most-controversial-idea-physics-oi91ke_wocs",
+  "shape": {
+    "canonical": "https://www.maxpetrusenko.com/medium/youtube-most-controversial-idea-physics-oi91ke_wocs/",
+    "ids": [],
+    "required_present": {
+      "Organization": [],
+      "Person": [
+        "name"
+      ]
+    },
+    "types": [
+      "Organization",
+      "Person"
+    ],
+    "values": {}
+  },
+  "shape_digest": "ab423e00a5d8dd60ce0c797ab43c83496655ffe25808af75a3a26a77580d0f68"
+}

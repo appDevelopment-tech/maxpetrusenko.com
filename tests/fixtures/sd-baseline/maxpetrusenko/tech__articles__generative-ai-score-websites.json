@@ -1,0 +1,54 @@
+{
+  "blocks": 5,
+  "content": {
+    "ListItem.name": "Generative AI Score for Websites",
+    "Organization.name": "Max Petrusenko Tech",
+    "Person.description": "AI automation consultant specializing in Claude Code, n8n workflows, ChatGPT integrations, and workflow automation for creators and founders.",
+    "Person.name": "Max Petrusenko",
+    "TechArticle.description": "How AI answer engines like ChatGPT, Claude, and Perplexity evaluate and score websites. Learn the factors that influence AI citation, attribution, and recommendation in 2025.",
+    "TechArticle.headline": "Generative AI Score for Websites - What AI Engines Value",
+    "WebPage.description": "How AI answer engines like ChatGPT, Claude, and Perplexity evaluate and score websites. Learn the factors that influence AI citation and attribution.",
+    "WebPage.name": "Generative AI Score for Websites - What AI Engines Value"
+  },
+  "content_digest": "90c258c4b7870589777f87fb07bcb0db5c05aa7005c7419a066acbaca0e067fe",
+  "route": "/tech/articles/generative-ai-score-websites",
+  "shape": {
+    "canonical": "https://www.maxpetrusenko.com/tech/articles/generative-ai-score-websites",
+    "ids": [],
+    "required_present": {
+      "BreadcrumbList": [
+        "itemListElement"
+      ],
+      "ListItem": [
+        "position",
+        "position",
+        "position",
+        "position"
+      ],
+      "Organization": [],
+      "Person": [
+        "name",
+        "name",
+        "name"
+      ],
+      "WebPage": []
+    },
+    "types": [
+      "BreadcrumbList",
+      "ListItem",
+      "ListItem",
+      "ListItem",
+      "ListItem",
+      "Organization",
+      "Organization",
+      "Organization",
+      "Person",
+      "Person",
+      "Person",
+      "TechArticle",
+      "WebPage"
+    ],
+    "values": {}
+  },
+  "shape_digest": "f1cfefe41987c748eaa4420eeb7df5bfc9b9511cf8b0e576c9a6e0dd7514e746"
+}

@@ -1,0 +1,26 @@
+{
+  "blocks": 1,
+  "content": {
+    "Organization.name": "Presence Atelier",
+    "Person.description": "Creator of tech automation resources, tantra education, and somatic practice offerings.",
+    "Person.name": "Max Petrusenko"
+  },
+  "content_digest": "3b758e40268e699f91b0d66dc106dddd28eeefe9609e26596c4cbe23dfaf0138",
+  "route": "/chinola/review/kaggle-health-open-v1",
+  "shape": {
+    "canonical": "https://www.maxpetrusenko.com/chinola/review/kaggle-health-open-v1",
+    "ids": [],
+    "required_present": {
+      "Organization": [],
+      "Person": [
+        "name"
+      ]
+    },
+    "types": [
+      "Organization",
+      "Person"
+    ],
+    "values": {}
+  },
+  "shape_digest": "db9792f1475d33b0a3ce511802a4f02503c481e9cbd8ad227dd2ca8e2a061a5c"
+}

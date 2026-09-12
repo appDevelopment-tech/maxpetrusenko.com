@@ -1,0 +1,26 @@
+{
+  "blocks": 1,
+  "content": {
+    "Organization.name": "Presence Atelier",
+    "Person.description": "Creator of tech automation resources, tantra education, and somatic practice offerings.",
+    "Person.name": "Max Petrusenko"
+  },
+  "content_digest": "3b758e40268e699f91b0d66dc106dddd28eeefe9609e26596c4cbe23dfaf0138",
+  "route": "/medium/youtube-reach-pluto-fly-sun-sod3ofduytw",
+  "shape": {
+    "canonical": "https://www.maxpetrusenko.com/medium/youtube-reach-pluto-fly-sun-sod3ofduytw/",
+    "ids": [],
+    "required_present": {
+      "Organization": [],
+      "Person": [
+        "name"
+      ]
+    },
+    "types": [
+      "Organization",
+      "Person"
+    ],
+    "values": {}
+  },
+  "shape_digest": "61c1974775bcaff0c70856935acb8f0066c80f3659d9bab9c7473a3495bf4121"
+}

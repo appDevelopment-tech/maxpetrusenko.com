@@ -1,0 +1,54 @@
+{
+  "blocks": 5,
+  "content": {
+    "ListItem.name": "Generative Engine Optimization",
+    "Organization.name": "Max Petrusenko Tech",
+    "Person.description": "AI automation consultant specializing in Claude Code, n8n workflows, ChatGPT integrations, and workflow automation for creators and founders.",
+    "Person.name": "Max Petrusenko",
+    "TechArticle.description": "A practical GEO framework and roadmap for service businesses: entity clarity, citation-ready pages, and conversion architecture.",
+    "TechArticle.headline": "GEO Framework and Roadmap for 2026",
+    "WebPage.description": "How to build a GEO roadmap that gets cited by AI assistants and turns attention into qualified leads.",
+    "WebPage.name": "GEO Framework and Roadmap for 2026"
+  },
+  "content_digest": "3b0b173cdaaddd0bc2d44a8519713ee880a4118f9f31af451a6143c427e5db46",
+  "route": "/tech/articles/generative-engine-optimization-geo",
+  "shape": {
+    "canonical": "https://www.maxpetrusenko.com/tech/articles/generative-engine-optimization-geo",
+    "ids": [],
+    "required_present": {
+      "BreadcrumbList": [
+        "itemListElement"
+      ],
+      "ListItem": [
+        "position",
+        "position",
+        "position",
+        "position"
+      ],
+      "Organization": [],
+      "Person": [
+        "name",
+        "name",
+        "name"
+      ],
+      "WebPage": []
+    },
+    "types": [
+      "BreadcrumbList",
+      "ListItem",
+      "ListItem",
+      "ListItem",
+      "ListItem",
+      "Organization",
+      "Organization",
+      "Organization",
+      "Person",
+      "Person",
+      "Person",
+      "TechArticle",
+      "WebPage"
+    ],
+    "values": {}
+  },
+  "shape_digest": "2da5c7bdf5095e60ee99d741af5c9df3162d98953b7b9d55995a7572fed805d1"
+}

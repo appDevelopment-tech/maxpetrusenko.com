@@ -1,0 +1,47 @@
+{
+  "blocks": 3,
+  "content": {
+    "ListItem.name": "n8n Workflow Automation",
+    "Organization.name": "Max Petrusenko",
+    "Person.description": "Creator of tech automation resources, tantra education, and somatic practice offerings.",
+    "Person.name": "Max Petrusenko",
+    "TechArticle.description": "Complete guide to building production-grade automations with n8n. API integration patterns, error handling, retry logic, custom nodes.",
+    "TechArticle.headline": "n8n Workflow Automation: From Zero to Production"
+  },
+  "content_digest": "bdf0dc14b5e6558c7bd8506e8297ea9c143b6779f0f1c9b5e726f5eb7ab0a0e2",
+  "route": "/tech/articles/n8n-workflow-automation",
+  "shape": {
+    "canonical": "https://www.maxpetrusenko.com/tech/articles/n8n-workflow-automation",
+    "ids": [],
+    "required_present": {
+      "BreadcrumbList": [
+        "itemListElement"
+      ],
+      "ListItem": [
+        "position",
+        "position",
+        "position",
+        "position"
+      ],
+      "Organization": [],
+      "Person": [
+        "name",
+        "name"
+      ]
+    },
+    "types": [
+      "BreadcrumbList",
+      "ListItem",
+      "ListItem",
+      "ListItem",
+      "ListItem",
+      "Organization",
+      "Organization",
+      "Person",
+      "Person",
+      "TechArticle"
+    ],
+    "values": {}
+  },
+  "shape_digest": "f67bc6c80a181bd3efd8d21bed62837596e3c7d1131c92dbd0d0f980f44c701f"
+}

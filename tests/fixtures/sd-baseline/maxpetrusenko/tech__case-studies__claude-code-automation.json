@@ -1,0 +1,54 @@
+{
+  "blocks": 5,
+  "content": {
+    "ListItem.name": "Claude Code Automation Case Study",
+    "Organization.name": "Max Petrusenko Tech",
+    "Person.description": "AI automation consultant specializing in Claude Code, n8n workflows, ChatGPT integrations, and workflow automation for creators and founders.",
+    "Person.name": "Max Petrusenko",
+    "TechArticle.description": "How a Series B startup saved $253k annually through Claude Code automation. 3x faster feature delivery, 73% fewer bugs, and zero regressions across 127 PRs.",
+    "TechArticle.headline": "Case Study: $253k Saved with Claude Code Automation",
+    "WebPage.description": "How a Series B startup saved $253k annually through Claude Code automation. 3x faster feature delivery, 73% fewer bugs, and zero regressions across 127 PRs.",
+    "WebPage.name": "Case Study: $253k Saved with Claude Code Automation"
+  },
+  "content_digest": "9c744521a241f4274a4a724c4aadfd66bffb18e76dc78a52126dd9c987c90295",
+  "route": "/tech/case-studies/claude-code-automation",
+  "shape": {
+    "canonical": "https://www.maxpetrusenko.com/tech/case-studies/claude-code-automation",
+    "ids": [],
+    "required_present": {
+      "BreadcrumbList": [
+        "itemListElement"
+      ],
+      "ListItem": [
+        "position",
+        "position",
+        "position",
+        "position"
+      ],
+      "Organization": [],
+      "Person": [
+        "name",
+        "name",
+        "name"
+      ],
+      "WebPage": []
+    },
+    "types": [
+      "BreadcrumbList",
+      "ListItem",
+      "ListItem",
+      "ListItem",
+      "ListItem",
+      "Organization",
+      "Organization",
+      "Organization",
+      "Person",
+      "Person",
+      "Person",
+      "TechArticle",
+      "WebPage"
+    ],
+    "values": {}
+  },
+  "shape_digest": "791eadbdc4e1399c9f6333c2ec2b37ac504ea21d0118216164de6435e29fcc27"
+}

@@ -1,0 +1,94 @@
+{
+  "blocks": 6,
+  "content": {
+    "ListItem.name": "Claude Code Consultant",
+    "OfferCatalog.name": "AI & Automation Services",
+    "Organization.name": "Max Petrusenko Tech",
+    "Person.description": "AI automation consultant specializing in Claude Code, n8n workflows, ChatGPT integrations, and workflow automation for creators and founders.",
+    "Person.name": "Max Petrusenko",
+    "ProfessionalService.description": "AI automation consultant specializing in Claude Code, n8n workflows, ChatGPT integrations, and workflow automation for creators and founders. Available remotely worldwide, with in-person work by request while traveling.",
+    "ProfessionalService.name": "Max Petrusenko - AI & Automation Consultant",
+    "Question.name": "What does a Claude Code consultant do?",
+    "Service.description": "Shape the right product, design calm UX flows, and ship outcomes that matter.",
+    "Service.name": "Product & UX Consulting",
+    "WebPage.description": "Get your team productive with Claude Code fast. Sub-agent configuration, custom skills, workflow integration.",
+    "WebPage.name": "Claude Code Consultant - Setup, Configuration & Team Training"
+  },
+  "content_digest": "4a5ef5a23fe6ed648e6adace4fd1b04680e05d1c5eca73717fff2407716b89eb",
+  "route": "/claude-code-consultant",
+  "shape": {
+    "canonical": "https://www.maxpetrusenko.com/claude-code-consultant",
+    "ids": [],
+    "required_present": {
+      "Answer": [
+        "text"
+      ],
+      "BreadcrumbList": [
+        "itemListElement"
+      ],
+      "FAQPage": [
+        "mainEntity"
+      ],
+      "ImageObject": [
+        "url"
+      ],
+      "ListItem": [
+        "position",
+        "position",
+        "position"
+      ],
+      "Offer": [],
+      "OfferCatalog": [
+        "itemListElement",
+        "name"
+      ],
+      "Organization": [],
+      "Person": [
+        "name",
+        "name"
+      ],
+      "ProfessionalService": [
+        "name"
+      ],
+      "Question": [
+        "acceptedAnswer",
+        "name"
+      ],
+      "Service": [
+        "name",
+        "name",
+        "name",
+        "name"
+      ],
+      "WebPage": []
+    },
+    "types": [
+      "Answer",
+      "Audience",
+      "BreadcrumbList",
+      "FAQPage",
+      "ImageObject",
+      "ListItem",
+      "ListItem",
+      "ListItem",
+      "Offer",
+      "Offer",
+      "Offer",
+      "Offer",
+      "OfferCatalog",
+      "Organization",
+      "Organization",
+      "Person",
+      "Person",
+      "ProfessionalService",
+      "Question",
+      "Service",
+      "Service",
+      "Service",
+      "Service",
+      "WebPage"
+    ],
+    "values": {}
+  },
+  "shape_digest": "8975689ed111da7509b62fba2bb3ce44b82893abbeb15c13609315e2e8574067"
+}

@@ -1,0 +1,26 @@
+{
+  "blocks": 1,
+  "content": {
+    "Organization.name": "Presence Atelier",
+    "Person.description": "Creator of tech automation resources, tantra education, and somatic practice offerings.",
+    "Person.name": "Max Petrusenko"
+  },
+  "content_digest": "3b758e40268e699f91b0d66dc106dddd28eeefe9609e26596c4cbe23dfaf0138",
+  "route": "/medium/youtube-china-quietly-saved-world-bka0bkb6zo0",
+  "shape": {
+    "canonical": "https://www.maxpetrusenko.com/medium/youtube-china-quietly-saved-world-bka0bkb6zo0/",
+    "ids": [],
+    "required_present": {
+      "Organization": [],
+      "Person": [
+        "name"
+      ]
+    },
+    "types": [
+      "Organization",
+      "Person"
+    ],
+    "values": {}
+  },
+  "shape_digest": "7fcf56bfe1bf94c05bce55a5a3201caa29ac1505c2bb0c3e72585f2266c98d41"
+}

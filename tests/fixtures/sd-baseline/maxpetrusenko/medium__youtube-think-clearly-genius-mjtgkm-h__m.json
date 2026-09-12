@@ -1,0 +1,26 @@
+{
+  "blocks": 1,
+  "content": {
+    "Organization.name": "Presence Atelier",
+    "Person.description": "Creator of tech automation resources, tantra education, and somatic practice offerings.",
+    "Person.name": "Max Petrusenko"
+  },
+  "content_digest": "3b758e40268e699f91b0d66dc106dddd28eeefe9609e26596c4cbe23dfaf0138",
+  "route": "/medium/youtube-think-clearly-genius-mjtgkm-h__m",
+  "shape": {
+    "canonical": "https://www.maxpetrusenko.com/medium/youtube-think-clearly-genius-mjtgkm-h__m/",
+    "ids": [],
+    "required_present": {
+      "Organization": [],
+      "Person": [
+        "name"
+      ]
+    },
+    "types": [
+      "Organization",
+      "Person"
+    ],
+    "values": {}
+  },
+  "shape_digest": "0a51f2d6c2847bfbea475d591adb033e7205feef5ef54b669e11e778e9f045d2"
+}

@@ -63,16 +63,6 @@ export function JsonLd({ type, data }: JsonLdProps) {
       "@type": "TechArticle",
       ...data,
     },
-    AggregateRating: {
-      "@context": "https://schema.org",
-      "@type": "AggregateRating",
-      ...data,
-    },
-    Review: {
-      "@context": "https://schema.org",
-      "@type": "Review",
-      ...data,
-    },
     Event: {
       "@context": "https://schema.org",
       "@type": "Event",

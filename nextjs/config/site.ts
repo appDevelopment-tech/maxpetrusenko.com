@@ -29,7 +29,13 @@ export const siteConfig: SiteConfig = {
     twitter: "https://x.com/petrusenko_max",
   },
   externalLinks: {
-    atelier: "https://atelier.maxpetrusenko.com",
+    // `atelier` removed 2026-09-12: atelier.maxpetrusenko.com was torn down
+    // (Pages project deleted, custom domain unbound) and the DNS record now
+    // returns HTTP 403 "1014 CNAME cross-user banned". The Presence Atelier
+    // practice is still Max's own and is described live on /spirituality (see
+    // public/llm.txt: "Spirituality / Presence Atelier: .../spirituality"), so
+    // its structured-data url points there. The brand name stays; the dead
+    // host must not come back as an outbound link.
     gumroad: "https://maxpetrusenko.gumroad.com/",
     patreon: "https://patreon.com/maxpetrusenko",
   },

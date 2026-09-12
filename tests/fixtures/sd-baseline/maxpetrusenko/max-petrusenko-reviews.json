@@ -1,0 +1,76 @@
+{
+  "blocks": 6,
+  "content": {
+    "ItemList.description": "Central review and proof page for Max Petrusenko with testimonials across tech, somatic work, and Mindfold, plus case-study and trust routes.",
+    "ItemList.name": "Max Petrusenko Reviews reference links",
+    "ListItem.name": "Who Is Max",
+    "Organization.name": "Presence Atelier",
+    "Person.description": "Creator of tech automation resources, tantra education, and somatic practice offerings.",
+    "Person.name": "Max Petrusenko",
+    "Question.name": "Where can I find reviews for Max Petrusenko?",
+    "WebPage.description": "Central review and proof page for Max Petrusenko with testimonials across tech, somatic work, and Mindfold, plus case-study and trust routes.",
+    "WebPage.name": "Max Petrusenko Reviews"
+  },
+  "content_digest": "34e59c2ab03b156f0cfb83db56d0c45cdea085b0be5541c10c5ff3ea136c8124",
+  "route": "/max-petrusenko-reviews",
+  "shape": {
+    "canonical": "https://www.maxpetrusenko.com/max-petrusenko-reviews",
+    "ids": [],
+    "required_present": {
+      "Answer": [
+        "text"
+      ],
+      "BreadcrumbList": [
+        "itemListElement"
+      ],
+      "FAQPage": [
+        "mainEntity"
+      ],
+      "ItemList": [
+        "itemListElement"
+      ],
+      "ListItem": [
+        "position",
+        "position",
+        "position",
+        "position",
+        "position",
+        "position",
+        "position",
+        "position"
+      ],
+      "Organization": [],
+      "Person": [
+        "name",
+        "name"
+      ],
+      "Question": [
+        "acceptedAnswer",
+        "name"
+      ],
+      "WebPage": []
+    },
+    "types": [
+      "Answer",
+      "BreadcrumbList",
+      "FAQPage",
+      "ItemList",
+      "ListItem",
+      "ListItem",
+      "ListItem",
+      "ListItem",
+      "ListItem",
+      "ListItem",
+      "ListItem",
+      "ListItem",
+      "Organization",
+      "Organization",
+      "Person",
+      "Person",
+      "Question",
+      "WebPage"
+    ],
+    "values": {}
+  },
+  "shape_digest": "b442c834bef79df0749096c465c86ee2eee4d7bd39ddd27fa5dfc3116ca4d3f6"
+}

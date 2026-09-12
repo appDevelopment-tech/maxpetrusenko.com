@@ -1,0 +1,26 @@
+{
+  "blocks": 1,
+  "content": {
+    "Organization.name": "Presence Atelier",
+    "Person.description": "Creator of tech automation resources, tantra education, and somatic practice offerings.",
+    "Person.name": "Max Petrusenko"
+  },
+  "content_digest": "3b758e40268e699f91b0d66dc106dddd28eeefe9609e26596c4cbe23dfaf0138",
+  "route": "/medium/youtube-lorem-ipsum-mystery-kl1pdqzqhm4",
+  "shape": {
+    "canonical": "https://www.maxpetrusenko.com/medium/youtube-lorem-ipsum-mystery-kl1pdqzqhm4/",
+    "ids": [],
+    "required_present": {
+      "Organization": [],
+      "Person": [
+        "name"
+      ]
+    },
+    "types": [
+      "Organization",
+      "Person"
+    ],
+    "values": {}
+  },
+  "shape_digest": "a89bae1a7c3fff09e6d2000c768a959ac4e6a952a9171558020d8d1637325a1d"
+}

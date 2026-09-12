@@ -1,0 +1,26 @@
+{
+  "blocks": 1,
+  "content": {
+    "Organization.name": "Presence Atelier",
+    "Person.description": "Creator of tech automation resources, tantra education, and somatic practice offerings.",
+    "Person.name": "Max Petrusenko"
+  },
+  "content_digest": "3b758e40268e699f91b0d66dc106dddd28eeefe9609e26596c4cbe23dfaf0138",
+  "route": "/medium/youtube-easiest-way-make-world-smarter-xrcwwzxj8gk",
+  "shape": {
+    "canonical": "https://www.maxpetrusenko.com/medium/youtube-easiest-way-make-world-smarter-xrcwwzxj8gk/",
+    "ids": [],
+    "required_present": {
+      "Organization": [],
+      "Person": [
+        "name"
+      ]
+    },
+    "types": [
+      "Organization",
+      "Person"
+    ],
+    "values": {}
+  },
+  "shape_digest": "41dc24a1335618e899fb90edcbd8a5e226300108c78dfd452ad24446b21c7e01"
+}

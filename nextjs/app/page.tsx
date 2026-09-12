@@ -2,7 +2,6 @@ import Image from "next/image";
 import Link from "next/link";
 import dynamic from "next/dynamic";
 import { redirect } from "next/navigation";
-import { siteConfig } from "@/config/site";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { DirectAnswer } from "@/components/seo/DirectAnswer";
 import { generateMetadata, absoluteUrl } from "@/lib/seo/metadata";
@@ -15,7 +14,6 @@ import {
   generateTechServiceSchema,
   generateHomeFAQSchema,
   generateEnhancedPersonSchema,
-  generateAggregateRatingSchema,
 } from "@/lib/seo/structured-data";
 import { fetchArticles, isLocalArticle } from "@/lib/cms/articles";
 import { homeFaqEntries } from "@/lib/seo/home-faq";
@@ -93,7 +91,23 @@ export default async function HomePage({ searchParams }: HomePageProps) {
       <JsonLd type="ProfessionalService" data={generateTechServiceSchema()} />
       <JsonLd type="FAQPage" data={generateHomeFAQSchema()} />
       <JsonLd type="Person" data={generateEnhancedPersonSchema()} />
-      <JsonLd type="AggregateRating" data={generateAggregateRatingSchema("all")} />
+      {/*
+        Ratings: the homepage emits NO AggregateRating at all. It previously
+        emitted three — a WebPage one from generateProfessionalServiceSchema(),
+        a ProfessionalService one from generateTechServiceSchema(), and a bare
+        root-level AggregateRating ("Max Petrusenko" / Organization) — and all
+        three rated Max on Max's own site. Google's review-snippet policy makes
+        that ineligible: "If the entity that's being reviewed controls the
+        reviews about itself, their pages that use LocalBusiness or any other
+        type of Organization structured data are ineligible for star review
+        feature." Each one also carried a hardcoded 4.9 that no user supplied.
+        The generators are deleted, not just uncalled; the absence is asserted
+        by nextjs/lib/seo/structured-data.contract.test.mjs.
+
+        NOTE: the visible "4.9/5 client experience rating" stat card further
+        down this page is page copy and was deliberately NOT touched by that
+        change. Whether it stays is a separate editorial decision.
+      */}
 
       <div className="hero-portrait-wrap">
         <div className="hero-portrait-bg">
@@ -301,14 +315,6 @@ export default async function HomePage({ searchParams }: HomePageProps) {
                   <Link href="/spirituality" className="rounded-xl border border-[rgba(12,17,21,0.09)] bg-white px-4 py-3 text-sm font-semibold transition hover:border-[rgba(14,97,93,0.3)]">
                     Somatic and tantra resources
                   </Link>
-                  <a
-                    href={siteConfig.externalLinks.atelier}
-                    target="_blank"
-                    rel="noopener"
-                    className="rounded-xl border border-[rgba(12,17,21,0.09)] bg-white px-4 py-3 text-sm font-semibold transition hover:border-[rgba(210,163,93,0.35)]"
-                  >
-                    Spirituality &amp; Mindfold (subdomain)
-                  </a>
                 </div>
               </div>
             </div>

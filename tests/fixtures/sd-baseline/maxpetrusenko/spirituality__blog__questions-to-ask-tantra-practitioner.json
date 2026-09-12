@@ -1,0 +1,56 @@
+{
+  "blocks": 3,
+  "content": {
+    "Article.description": "A screening checklist for safety, boundaries, and professional quality before booking tantra work.",
+    "Article.headline": "5 Questions to Ask Before Booking a Tantra Practitioner",
+    "ListItem.name": "Questions to Ask a Tantra Practitioner",
+    "Organization.name": "Max Petrusenko",
+    "Person.description": "Creator of tech automation resources, tantra education, and somatic practice offerings.",
+    "Person.name": "Max Petrusenko"
+  },
+  "content_digest": "d7fa8efa9ff5914b1b5bdca81ac01691ef45cb1ae99e60991b4ec7b096be0b4e",
+  "route": "/spirituality/blog/questions-to-ask-tantra-practitioner",
+  "shape": {
+    "canonical": "https://www.maxpetrusenko.com/spirituality/blog/questions-to-ask-tantra-practitioner",
+    "ids": [
+      "https://www.maxpetrusenko.com/spirituality/blog/questions-to-ask-tantra-practitioner"
+    ],
+    "required_present": {
+      "Article": [],
+      "BreadcrumbList": [
+        "itemListElement"
+      ],
+      "ImageObject": [
+        "url"
+      ],
+      "ListItem": [
+        "position",
+        "position",
+        "position",
+        "position"
+      ],
+      "Organization": [],
+      "Person": [
+        "name",
+        "name"
+      ],
+      "WebPage": []
+    },
+    "types": [
+      "Article",
+      "BreadcrumbList",
+      "ImageObject",
+      "ListItem",
+      "ListItem",
+      "ListItem",
+      "ListItem",
+      "Organization",
+      "Organization",
+      "Person",
+      "Person",
+      "WebPage"
+    ],
+    "values": {}
+  },
+  "shape_digest": "171d37efdb132d50fa051ca79735788d5bc028070a58b8ed6240847280e8618d"
+}

@@ -1,0 +1,128 @@
+{
+  "blocks": 7,
+  "content": {
+    "ListItem.name": "Tech",
+    "OfferCatalog.name": "AI & Automation Services",
+    "Organization.name": "Max Petrusenko Tech",
+    "Person.description": "AI automation consultant specializing in Claude Code, n8n workflows, ChatGPT integrations, and workflow automation for creators and founders.",
+    "Person.name": "Max Petrusenko",
+    "ProfessionalService.description": "AI automation consultant specializing in Claude Code, n8n workflows, ChatGPT integrations, and workflow automation for creators and founders. Available remotely worldwide, with in-person work by request while traveling.",
+    "ProfessionalService.name": "Max Petrusenko - AI & Automation Consultant",
+    "Question.name": "What tools do you work with besides Claude and n8n?",
+    "Service.description": "Shape the right product, design calm UX flows, and ship outcomes that matter.",
+    "Service.name": "Product & UX Consulting",
+    "WebPage.description": "Max Petrusenko helps founders and teams ship AI automations and internal tools in weeks, not months. His work focuses on Claude Code, n8n, and custom agent pipelines that reduce ops load, speed delivery, and replace fragile SaaS workflows. Engagements are hands-on, outcome-driven, and production-ready. A recent Claude Code implementation saved $253k annually with 3x faster feature delivery.",
+    "WebPage.name": "What AI automation services does Max Petrusenko offer?"
+  },
+  "content_digest": "a6b6b9b0cb2b9546e37a21fa8ca999bedfca6a7e913a1468406924e0ecbb785d",
+  "route": "/tech",
+  "shape": {
+    "canonical": "https://www.maxpetrusenko.com/tech",
+    "ids": [],
+    "required_present": {
+      "Answer": [
+        "text",
+        "text",
+        "text",
+        "text",
+        "text",
+        "text",
+        "text",
+        "text"
+      ],
+      "BreadcrumbList": [
+        "itemListElement"
+      ],
+      "FAQPage": [
+        "mainEntity"
+      ],
+      "ImageObject": [
+        "url"
+      ],
+      "ListItem": [
+        "position",
+        "position"
+      ],
+      "Offer": [],
+      "OfferCatalog": [
+        "itemListElement",
+        "name"
+      ],
+      "Organization": [],
+      "Person": [
+        "name",
+        "name"
+      ],
+      "ProfessionalService": [
+        "name"
+      ],
+      "Question": [
+        "acceptedAnswer",
+        "acceptedAnswer",
+        "acceptedAnswer",
+        "acceptedAnswer",
+        "acceptedAnswer",
+        "acceptedAnswer",
+        "acceptedAnswer",
+        "acceptedAnswer",
+        "name",
+        "name",
+        "name",
+        "name",
+        "name",
+        "name",
+        "name",
+        "name"
+      ],
+      "Service": [
+        "name",
+        "name",
+        "name",
+        "name"
+      ],
+      "WebPage": []
+    },
+    "types": [
+      "Answer",
+      "Answer",
+      "Answer",
+      "Answer",
+      "Answer",
+      "Answer",
+      "Answer",
+      "Answer",
+      "Audience",
+      "BreadcrumbList",
+      "FAQPage",
+      "ImageObject",
+      "ListItem",
+      "ListItem",
+      "Offer",
+      "Offer",
+      "Offer",
+      "Offer",
+      "OfferCatalog",
+      "Organization",
+      "Organization",
+      "Person",
+      "Person",
+      "ProfessionalService",
+      "Question",
+      "Question",
+      "Question",
+      "Question",
+      "Question",
+      "Question",
+      "Question",
+      "Question",
+      "Service",
+      "Service",
+      "Service",
+      "Service",
+      "WebPage",
+      "WebPage"
+    ],
+    "values": {}
+  },
+  "shape_digest": "99fee1082ff22954821ecd3d96fea01752bc8197d22b8a57c652278fa6e11362"
+}

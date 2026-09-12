@@ -1,6 +1,5 @@
 import Link from "next/link";
 import Image from "next/image";
-import { siteConfig } from "@/config/site";
 import { generateMetadata, absoluteUrl } from "@/lib/seo/metadata";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { DirectAnswer } from "@/components/seo/DirectAnswer";
@@ -166,14 +165,13 @@ export default function SpiritualityPage() {
               >
                 Join inquiry list
               </a>
-              <a
-                className="inline-flex items-center gap-2 rounded-[10px] border-[1.5px] border-[var(--line)] bg-transparent px-7 py-3.5 text-[0.95rem] font-semibold text-[var(--ink)] transition hover:-translate-y-0.5 hover:border-[var(--accent-spirit)]"
-                href={siteConfig.externalLinks.atelier}
-                target="_blank"
-                rel="noopener"
-              >
-                View Atelier Site
-              </a>
+              {/* The "View Atelier Site" button was removed 2026-09-12: it
+                  pointed at atelier.maxpetrusenko.com, which is torn down
+                  (HTTP 403), and this page IS Presence Atelier's live home
+                  (declared in public/.ai.txt: "Brand: Presence Atelier /
+                  Website: https://www.maxpetrusenko.com/spirituality"), so the
+                  button was a self-link to a dead host. The live CTA above
+                  ("Join inquiry list") is unaffected. */}
             </div>
           </div>
         </section>

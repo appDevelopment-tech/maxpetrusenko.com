@@ -1,0 +1,41 @@
+{
+  "blocks": 3,
+  "content": {
+    "ListItem.name": "Performance",
+    "Organization.name": "Presence Atelier",
+    "Person.description": "Creator of tech automation resources, tantra education, and somatic practice offerings.",
+    "Person.name": "Max Petrusenko",
+    "WebPage.description": "Where tech and somatic practice meet: nervous system regulation and energy management for founders.",
+    "WebPage.name": "Performance - Regulation, Energy & Sustainability for Builders"
+  },
+  "content_digest": "d566a3c4c770e49410cca905c817acd2eccc765e13ddd5b4eb9910f271a8e1a9",
+  "route": "/performance",
+  "shape": {
+    "canonical": "https://www.maxpetrusenko.com/performance",
+    "ids": [],
+    "required_present": {
+      "BreadcrumbList": [
+        "itemListElement"
+      ],
+      "ListItem": [
+        "position",
+        "position"
+      ],
+      "Organization": [],
+      "Person": [
+        "name"
+      ],
+      "WebPage": []
+    },
+    "types": [
+      "BreadcrumbList",
+      "ListItem",
+      "ListItem",
+      "Organization",
+      "Person",
+      "WebPage"
+    ],
+    "values": {}
+  },
+  "shape_digest": "a44996acda9a5a2b66955201b11725ccd863c0a8e6e0341fc19a30a4b1c49ec0"
+}

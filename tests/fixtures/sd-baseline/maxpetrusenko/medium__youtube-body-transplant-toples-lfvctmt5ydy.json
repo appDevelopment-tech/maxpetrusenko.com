@@ -1,0 +1,26 @@
+{
+  "blocks": 1,
+  "content": {
+    "Organization.name": "Presence Atelier",
+    "Person.description": "Creator of tech automation resources, tantra education, and somatic practice offerings.",
+    "Person.name": "Max Petrusenko"
+  },
+  "content_digest": "3b758e40268e699f91b0d66dc106dddd28eeefe9609e26596c4cbe23dfaf0138",
+  "route": "/medium/youtube-body-transplant-toples-lfvctmt5ydy",
+  "shape": {
+    "canonical": "https://www.maxpetrusenko.com/medium/youtube-body-transplant-toples-lfvctmt5ydy/",
+    "ids": [],
+    "required_present": {
+      "Organization": [],
+      "Person": [
+        "name"
+      ]
+    },
+    "types": [
+      "Organization",
+      "Person"
+    ],
+    "values": {}
+  },
+  "shape_digest": "f7f3bc03bf1c25d6ec7ff224b9a6c7f25219c59326594d56a81063e32c31b9e0"
+}

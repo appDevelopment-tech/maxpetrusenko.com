@@ -1,10 +1,57 @@
 import { siteConfig } from "@/config/site";
-import { testimonials } from "@/lib/cms/testimonials";
 import { buildHomeFaqMainEntity } from "@/lib/seo/home-faq";
 
-const BRAND_LOGO_URL = `${siteConfig.url}/images/brand-mark.svg`;
+/**
+ * Organization/publisher logo target.
+ *
+ * MUST be a raster image on the canonical host: Google's logo guidance wants a
+ * crawlable PNG/JPG/GIF of at least 112x112 px, and rule 18 (`image-reachability`)
+ * flags `Organization.logo` pointing at an SVG. The SVG source of truth stays at
+ * `/images/brand-mark.svg` for the SVG-only surfaces that reference it; this
+ * constant is the raster twin consumed by JSON-LD.
+ *
+ * Regenerate with: qlmanage -t -s 512 -o <tmp> public/images/brand-mark.svg
+ */
+const BRAND_LOGO_URL = `${siteConfig.url}/images/brand-mark.png`;
 const PERSON_IMAGE_URL = `${siteConfig.url}/images/DSC05871.jpg`;
 const TECH_PERSON_IMAGE_URL = `${siteConfig.url}/images/tech-portrait.jpg`;
+
+/**
+ * Live web presence of the Presence Atelier practice.
+ *
+ * atelier.maxpetrusenko.com was torn down 2026-09-12 (Pages project deleted,
+ * custom domain unbound) and its leftover DNS record answers HTTP 403
+ * "1014 CNAME cross-user banned", so the host must not appear in this module at
+ * all. The practice itself is still Max's own and is described live on
+ * /spirituality — `public/.ai.txt` already declares the mapping:
+ *
+ *     Brand: Presence Atelier
+ *     Website: https://www.maxpetrusenko.com/spirituality
+ *
+ * (also `public/llm.txt`: "Spirituality / Presence Atelier: .../spirituality").
+ * Every Presence Atelier `url` therefore points here: the brand name stays, the
+ * dead host is gone, and no new host is invented.
+ */
+const PRESENCE_ATELIER_URL = `${siteConfig.url}/spirituality`;
+
+/**
+ * Organization logo for nested Organization nodes.
+ *
+ * A bare URL, which is the form Google's own current Organization example uses
+ * ("logo": "https://www.example.com/images/logo.png" —
+ * https://developers.google.com/search/docs/appearance/structured-data/organization)
+ * and which schema.org accepts for `logo` alongside ImageObject. What Google's
+ * guidance actually constrains is the ASSET: >=112x112 px (brand-mark.png is
+ * 512x512), a crawlable/indexable URL on the site's own host, and a supported
+ * raster format. `structured-data.contract.test.mjs` (rule 18) asserts all
+ * three, and it accepts either form (`typeof logo === "string" ? logo : logo.url`).
+ *
+ * Why not an inline ImageObject here: these are nested stubs repeated on every
+ * page, and an ImageObject would add a type to every page's shape for no extra
+ * signal. Google does not require the object form. (Article `publisher.logo`
+ * stays an ImageObject — that comes from Article's guidance, not this one.)
+ */
+const ORGANIZATION_LOGO = BRAND_LOGO_URL;
 
 /**
  * Generate JSON-LD structured data for WebPage
@@ -107,7 +154,8 @@ export function generatePersonSchema() {
     worksFor: {
       "@type": "Organization",
       name: "Presence Atelier",
-      url: siteConfig.externalLinks.atelier,
+      url: PRESENCE_ATELIER_URL,
+      logo: ORGANIZATION_LOGO,
     },
     sameAs: [
       siteConfig.social.github,
@@ -136,6 +184,7 @@ export function generateTechPersonSchema() {
       "@type": "Organization",
       name: "Max Petrusenko Tech",
       url: `${siteConfig.url}/tech`,
+      logo: ORGANIZATION_LOGO,
     },
     sameAs: [
       siteConfig.social.github,
@@ -177,11 +226,11 @@ export function generateSpiritualityPersonSchema() {
     worksFor: {
       "@type": "Organization",
       name: "Presence Atelier",
-      url: siteConfig.externalLinks.atelier,
+      url: PRESENCE_ATELIER_URL,
+      logo: ORGANIZATION_LOGO,
     },
     sameAs: [
       siteConfig.social.instagram,
-      siteConfig.externalLinks.atelier,
     ].filter(Boolean),
     knowsAbout: [
       "Tantra Massage",
@@ -213,11 +262,13 @@ export function generateOrganizationSchema() {
     "@context": "https://schema.org",
     "@type": "Organization",
     name: "Presence Atelier",
-    url: siteConfig.externalLinks.atelier,
-    logo: {
-      "@type": "ImageObject",
-      url: BRAND_LOGO_URL,
-    },
+    url: PRESENCE_ATELIER_URL,
+    // Same representation as every other Organization.logo in this module
+    // (a bare URL). An ImageObject here described the SAME entity in a second
+    // form, which sd-check reported as `duplicate-type-conflict` on the routes
+    // where this root node and the `worksFor` stub coexist (/somatic,
+    // /spirituality). One entity, one logo representation.
+    logo: ORGANIZATION_LOGO,
     image: BRAND_LOGO_URL,
     founder: {
       "@type": "Person",
@@ -280,8 +331,6 @@ const SERVICE_LOCATIONS = {
  * anchoring the practice as a commercial/local service.
  */
 export function generateProfessionalServiceSchema() {
-  const spiritualityTestimonials = testimonials.filter((t) => t.type === "spirituality");
-
   return {
     "@context": "https://schema.org",
     "@type": "WebPage",
@@ -294,13 +343,14 @@ export function generateProfessionalServiceSchema() {
     },
     "image": BRAND_LOGO_URL,
     "telephone": "+1-954-275-9666",
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": "4.9",
-      "reviewCount": spiritualityTestimonials.length.toString(),
-      "bestRating": "5",
-      "worstRating": "1",
-    },
+    // NOTE: no `aggregateRating` here, and none anywhere else in this module.
+    // This node is a WebPage, and a rating on a WebPage is not a
+    // review-snippet pattern. The business rating that used to live here — and
+    // on `generateTechServiceSchema()`, and in the deleted
+    // `generateAggregateRatingSchema()` — was self-serving, so Google's
+    // review-snippet policy makes it ineligible: a site cannot earn a star
+    // result for rating its own Organization/ProfessionalService. The absence
+    // is asserted by `structured-data.contract.test.mjs`.
     "hasOfferCatalog": {
       "@type": "OfferCatalog",
       "name": "Tantra-informed somatic practice pathways",
@@ -571,24 +621,22 @@ export { SERVICE_LOCATIONS };
 /**
  * Generate JSON-LD structured data for Tech/AI ProfessionalService
  * Optimized for AI discoverability - Claude Code, n8n, ChatGPT integrations
- * Now includes AggregateRating for social proof
+ *
+ * NOTE: no `aggregateRating` here, deliberately. This node rates Max's own
+ * business, on Max's own site, from a hardcoded literal. Google's
+ * review-snippet policy is explicit that self-serving reviews are ineligible:
+ * "If the entity that's being reviewed controls the reviews about itself,
+ * their pages that use LocalBusiness or any other type of Organization
+ * structured data are ineligible for star review feature", and "Ratings must
+ * be sourced directly from users." ProfessionalService is a LocalBusiness
+ * subtype, so a star result was never achievable. The absence is asserted by
+ * `nextjs/lib/seo/structured-data.contract.test.mjs`.
  */
 export function generateTechServiceSchema() {
-  const techTestimonials = testimonials.filter((t) => t.type === "tech");
-
   return {
     "@context": "https://schema.org",
     "@type": "ProfessionalService",
     name: "Max Petrusenko - AI & Automation Consultant",
-    ...(techTestimonials.length > 0 ? {
-      aggregateRating: {
-        "@type": "AggregateRating",
-        ratingValue: "4.9",
-        reviewCount: techTestimonials.length.toString(),
-        bestRating: "5",
-        worstRating: "1",
-      }
-    } : {}),
     description: "AI automation consultant specializing in Claude Code, n8n workflows, ChatGPT integrations, and workflow automation for creators and founders. Available remotely worldwide, with in-person work by request while traveling.",
     url: `${siteConfig.url}/tech`,
     logo: {
@@ -814,6 +862,7 @@ export function generateTechArticleSchema(data: {
     publisher: {
       "@type": "Organization",
       name: siteConfig.name,
+      logo: ORGANIZATION_LOGO,
     },
   };
 }
@@ -1022,140 +1071,6 @@ export function generateScheduleActionSchema(_serviceType: "tantra" | "tech" | "
 }
 
 /**
- * ============================================================================
- * REVIEW & RATING SCHEMA
- * ============================================================================
- */
-
-/**
- * Generate individual Review schema from a testimonial
- * Used alongside AggregateRating for comprehensive social proof
- */
-export function generateReviewSchema(testimonial: {
-  quote: string;
-  author: string;
-  role?: string;
-  location?: string;
-  type: "tech" | "spirituality" | "mindfold";
-}, serviceName: string) {
-  return {
-    "@context": "https://schema.org",
-    "@type": "Review",
-    itemReviewed: {
-      "@type": "Service",
-      name: serviceName === "tantra" ? "Presence Atelier - Tantra-Informed Somatic Practice" :
-           serviceName === "tech" ? "AI & Automation Services" :
-           "Mindfold Sanctuary - Sensory Journeys",
-      url: serviceName === "tantra" ? `${siteConfig.url}/spirituality` :
-           serviceName === "tech" ? `${siteConfig.url}/tech` :
-           `${siteConfig.url}/mindfold/events`,
-    },
-    reviewRating: {
-      "@type": "Rating",
-      ratingValue: "5",
-      bestRating: "5",
-      worstRating: "1",
-    },
-    author: {
-      "@type": "Person",
-      name: testimonial.author,
-      ...(testimonial.role && { description: testimonial.role }),
-    },
-    reviewBody: testimonial.quote,
-    publisher: {
-      "@type": "Organization",
-      name: siteConfig.name,
-    },
-    reviewAspect: testimonial.type === "spirituality" ? "tantra massage, somatic energy work, nervous system reset" :
-                  testimonial.type === "tech" ? "AI automation, Claude Code, n8n workflows" :
-                  "blindfold journey, sensory deprivation, presence work",
-  };
-}
-
-/**
- * Generate all Review schemas for a service type
- * Returns an array of individual review schemas
- */
-export function generateAllReviewsSchema(serviceType: "tech" | "spirituality" | "mindfold") {
-  const { testimonials } = require("@/lib/cms/testimonials");
-  const filtered = testimonials.filter((t: { type: string }) => t.type === serviceType);
-
-  return filtered.map((t: { quote: string; author: string; role?: string; location?: string; type: string }) =>
-    generateReviewSchema(t as Parameters<typeof generateReviewSchema>[0], serviceType)
-  );
-}
-
-/**
- * Generate AggregateRating schema from testimonials
- * Adds social proof and E-E-A-T signals for SEO
- */
-export function generateAggregateRatingSchema(serviceType: "spirituality" | "tech" | "mindfold" | "all") {
-  // Filter testimonials by type
-  const filteredTestimonials = serviceType === "all"
-    ? testimonials
-    : testimonials.filter((t) => t.type === serviceType);
-
-  // Convert testimonials to Review schema format
-  const reviews = filteredTestimonials.map((t) => ({
-    "@type": "Review",
-    author: {
-      "@type": "Person",
-      name: t.author,
-    },
-    reviewRating: {
-      "@type": "Rating",
-      ratingValue: "5",
-      bestRating: "5",
-    },
-    reviewBody: t.quote,
-    ...(t.role && { description: t.role }),
-  }));
-
-  // Calculate stats
-  const reviewCount = filteredTestimonials.length;
-  const avgRating = 4.9; // Based on 4.9/5 client sentiment from website
-
-  return {
-    "@context": "https://schema.org",
-    "@type": "AggregateRating",
-    ratingValue: avgRating.toString(),
-    reviewCount: reviewCount.toString(),
-    bestRating: "5",
-    worstRating: "1",
-    itemReviewed: {
-      "@type": "Organization",
-      name: serviceType === "all" ? "Max Petrusenko" : `Max Petrusenko - ${serviceType}`,
-    },
-  };
-}
-
-/**
- * Generate full ItemList with reviews for rich snippets
- */
-export function generateItemListWithReviewsSchema(
-  items: Array<{ name: string; description: string; url: string }>,
-  serviceType: "spirituality" | "tech" | "mindfold" | "all"
-) {
-  const rating = generateAggregateRatingSchema(serviceType);
-
-  return {
-    "@context": "https://schema.org",
-    "@type": "ItemList",
-    itemListElement: items.map((item, index) => ({
-      "@type": "ListItem",
-      position: index + 1,
-      item: {
-        "@type": "Service",
-        name: item.name,
-        description: item.description,
-        url: `${siteConfig.url}${item.url}`,
-        aggregateRating: rating,
-      },
-    })),
-  };
-}
-
-/**
  * Update Organization schema with Google Business Profile
  * Add this to your Google Business Profile once verified
  */
@@ -1171,105 +1086,6 @@ export function generateOrganizationWithGBP() {
         `https://business.google.com/${GOOGLE_BUSINESS_PROFILE_ID}`,
       ],
     }),
-    aggregateRating: generateAggregateRatingSchema("spirituality"),
-  };
-}
-
-/**
- * ============================================================================
- * PRIVATE PRACTICE SCHEMA
- * ============================================================================
- */
-
-/**
- * Generate JSON-LD structured data for private practice as a WebPage.
- * Avoid LocalBusiness/ProfessionalService schema for this posture.
- */
-export function generateProfessionalServiceSchemaByRequest() {
-  const reviewCount = testimonials.filter((t) => t.type === "spirituality").length.toString();
-
-  return {
-    "@context": "https://schema.org",
-    "@type": "WebPage",
-    "name": "Tantra-Informed Somatic Practice - Max Petrusenko",
-    "alternateName": "Presence Atelier",
-    "description": "Tantra-informed somatic education and nervous-system practice by request. Boundaries-led sessions focused on breath, presence, regulation, and embodied awareness.",
-    "url": `${siteConfig.url}/spirituality`,
-    "telephone": "+1-954-275-9666",
-    "keywords": "tantra-informed somatic work, somatic education, energy work private practice, nervous system regulation, couples embodiment practice, somatic bodywork",
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": "4.9",
-      "reviewCount": reviewCount,
-      "bestRating": "5",
-      "worstRating": "1"
-    },
-    "hasOfferCatalog": {
-      "@type": "OfferCatalog",
-      "name": "Somatic education and practice by request",
-      "itemListElement": [
-        {
-          "@type": "Offer",
-          "itemOffered": {
-            "@type": "Service",
-            "name": "Nervous System Reset - Tantra-Informed Somatic Practice",
-            "description": "Boundaries-led somatic practice by request for nervous system regulation and conscious presence."
-          }
-        },
-        {
-          "@type": "Offer",
-          "itemOffered": {
-            "@type": "Service",
-            "name": "Deep Repatterning - Somatic Energy Work",
-            "description": "Longer arc for deep rewiring and transformation through somatic energy work by request."
-          }
-        },
-        {
-          "@type": "Offer",
-          "itemOffered": {
-            "@type": "Service",
-            "name": "Couples Tantra Practice",
-            "description": "Partners seeking to deepen connection through tantra-informed somatic practice."
-          }
-        }
-      ]
-    },
-    "audience": {
-      "@type": "Audience",
-      "audienceType": ["men", "women", "couples", "LGBTQ+", "digital nomads", "founders", "creators"]
-    },
-    "availableChannel": {
-      "@type": "ServiceChannel",
-      "serviceType": "tantra-informed somatic practice, breathwork, energy work, embodiment education",
-      "serviceUrl": `${siteConfig.url}/spirituality`
-    }
-  };
-}
-
-/**
- * Generate JSON-LD structured data for somatic education as a WebPage.
- * Not a local-service schema.
- */
-export function generateProfessionalServiceSchemaMiami() {
-  const reviewCount = testimonials.filter((t) => t.type === "spirituality").length.toString();
-
-  return {
-    "@context": "https://schema.org",
-    "@type": "WebPage",
-    "name": "Presence Atelier - Somatic Education & Energy Work",
-    "alternateName": "Max Petrusenko - Somatic Education",
-    "description": "Somatic education and energy work teaching in Fort Lauderdale, Florida. Educational workshops, student teachings, and nervous system training serving South Florida from West Palm Beach to the Keys.",
-    "url": `${siteConfig.url}/spirituality`,
-    "telephone": "+1-954-275-9666",
-    "email": "hello@maxpetrusenko.com",
-    "keywords": "tantra-informed somatic practice, somatic education, energy work, nervous system regulation, couples embodiment practice",
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": "4.9",
-      "reviewCount": reviewCount,
-      "bestRating": "5",
-      "worstRating": "1"
-    }
   };
 }
 
@@ -1296,7 +1112,8 @@ export function generateEnhancedPersonSchema() {
     worksFor: {
       "@type": "Organization",
       name: "Presence Atelier",
-      url: siteConfig.externalLinks.atelier,
+      url: PRESENCE_ATELIER_URL,
+      logo: ORGANIZATION_LOGO,
     },
     birthPlace: {
       "@type": "Place",
@@ -1316,8 +1133,8 @@ export function generateEnhancedPersonSchema() {
       "https://www.crunchbase.com/organization/maxpetrusenko",
       "https://angel.co/u/maxpetrusenko",
       "https://www.gumroad.com/maxpetrusenko",
-      // Presence Atelier
-      siteConfig.externalLinks.atelier,
+      // Presence Atelier's live profile (the atelier.maxpetrusenko.com
+      // subdomain was torn down 2026-09-12; its URL is not repeated here)
       "https://www.instagram.com/blindfold.miami",
       "https://patreon.com/mindfold",
       // Writing
@@ -1374,6 +1191,7 @@ export function generateEnhancedPersonSchema() {
         "@type": "Organization",
         name: "Mindfold Sanctuary",
         url: `${siteConfig.url}/mindfold/events`,
+        logo: ORGANIZATION_LOGO,
       },
     ],
     // Contact

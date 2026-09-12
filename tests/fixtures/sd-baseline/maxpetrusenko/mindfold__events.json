@@ -1,0 +1,116 @@
+{
+  "blocks": 5,
+  "content": {
+    "Event.description": "Group sensory subtraction workshop to expand perception and deepen presence. Blindfolded movement and contact exercises in a safe container with clear boundaries. Learn to feel without seeing. Join solo or with friends. Corporate and private sessions available.",
+    "Event.name": "Mindfold Sanctuary - Blindfolded Presence Journey",
+    "ListItem.name": "Mindfold",
+    "Offer.description": "Custom Mindfold session for your team or small group. We align on setting and pacing together.",
+    "Offer.name": "Private / Corporate Event",
+    "Organization.name": "Presence Atelier",
+    "Person.description": "Creator of tech automation resources, tantra education, and somatic practice offerings.",
+    "Person.name": "Max Petrusenko",
+    "Place.description": "Location shared after RSVP. Private events available at your venue.",
+    "Place.name": "Various locations by request",
+    "Question.name": "Where are events held?",
+    "Reservation.name": "Mindfold Sanctuary Reservation",
+    "Waiver.description": "Required waiver before attending Mindfold events",
+    "Waiver.name": "Mindfold Sanctuary Waiver",
+    "WebPage.description": "Blindfolded presence journeys and events. All links for upcoming Mindfold experiences.",
+    "WebPage.name": "Mindfold Sanctuary | Events"
+  },
+  "content_digest": "1c95a44bf9957874961c99ea5228a3188db4d1c1e9d20c42f94da43d76415244",
+  "route": "/mindfold/events",
+  "shape": {
+    "canonical": "https://www.maxpetrusenko.com/mindfold/events",
+    "ids": [],
+    "required_present": {
+      "Answer": [
+        "text",
+        "text",
+        "text",
+        "text",
+        "text"
+      ],
+      "BreadcrumbList": [
+        "itemListElement"
+      ],
+      "Event": [
+        "location",
+        "name",
+        "startDate"
+      ],
+      "FAQPage": [
+        "mainEntity"
+      ],
+      "ListItem": [
+        "position",
+        "position"
+      ],
+      "Offer": [
+        "price",
+        "price",
+        "priceCurrency",
+        "priceCurrency"
+      ],
+      "Organization": [],
+      "Person": [
+        "name",
+        "name",
+        "name"
+      ],
+      "Place": [
+        "name"
+      ],
+      "Question": [
+        "acceptedAnswer",
+        "acceptedAnswer",
+        "acceptedAnswer",
+        "acceptedAnswer",
+        "acceptedAnswer",
+        "name",
+        "name",
+        "name",
+        "name",
+        "name"
+      ],
+      "WebPage": []
+    },
+    "types": [
+      "Answer",
+      "Answer",
+      "Answer",
+      "Answer",
+      "Answer",
+      "Audience",
+      "BreadcrumbList",
+      "EntryPoint",
+      "EntryPoint",
+      "Event",
+      "FAQPage",
+      "InformAction",
+      "ListItem",
+      "ListItem",
+      "Offer",
+      "Offer",
+      "Organization",
+      "Person",
+      "Person",
+      "Person",
+      "Place",
+      "Question",
+      "Question",
+      "Question",
+      "Question",
+      "Question",
+      "Reservation",
+      "ReserveAction",
+      "Waiver",
+      "WebPage"
+    ],
+    "values": {
+      "Offer.price": "0",
+      "Offer.priceCurrency": "USD"
+    }
+  },
+  "shape_digest": "eead15a6d4c0927d7e03202e7db9b128739cec5a80fe1fd2e429ee9f0c2abea6"
+}

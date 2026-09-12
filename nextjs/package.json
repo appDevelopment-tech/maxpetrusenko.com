@@ -70,10 +70,14 @@
     "six-pendulum:compare": "node scripts/summarize-six-pendulum-experiments.mjs",
     "six-pendulum:puffer-ledger": "node scripts/build-six-pendulum-puffer-sweep-ledger.mjs",
     "crm:import:whatsapp": "node scripts/import-whatsapp-contacts.mjs",
-    "verify:predeploy": "npm run guard:dev-server && npm run lint && npm run build && npm run test",
+    "sd:contract": "node --import ./scripts/register-ts-tests.mjs --test lib/seo/structured-data.contract.test.mjs",
+    "sd:check": "python3 ../.github/scripts/sd-check.py --config ../.github/scripts/sd-gate.toml --json /tmp/sd-report.json",
+    "sd:parity": "node scripts/check-sd-surface-parity.mjs --surface static=.vercel/output/static --surface 'fallback=.vercel/output/functions/**/*prerender-fallback.html' --report-only --json /tmp/sd-parity.json",
+    "verify:predeploy": "npm run guard:dev-server && npm run lint && npm run build && npm run test && npm run sd:contract",
+    "verify:postbuild": "npm run sd:check && npm run sd:parity",
     "pages:build": "npm run guard:dev-server && npx @cloudflare/next-on-pages",
     "preview": "npm run pages:build && wrangler pages dev",
-    "deploy": "npm run verify:predeploy && npm run pages:build && node scripts/deploy.mjs"
+    "deploy": "npm run verify:predeploy && npm run pages:build && npm run verify:postbuild && node scripts/deploy.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "^0.10.0",

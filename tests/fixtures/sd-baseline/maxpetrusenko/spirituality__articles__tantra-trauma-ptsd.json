@@ -1,0 +1,56 @@
+{
+  "blocks": 3,
+  "content": {
+    "Article.description": "Discover how tantra massage helps release trauma and regulate the nervous system through somatic touch and breathwork.",
+    "Article.headline": "Tantra Massage for Trauma & PTSD: How Somatic Touch Rewires Your Nervous System",
+    "ListItem.name": "Tantra for Trauma & PTSD",
+    "Organization.name": "Max Petrusenko",
+    "Person.description": "Creator of tech automation resources, tantra education, and somatic practice offerings.",
+    "Person.name": "Max Petrusenko"
+  },
+  "content_digest": "8b1a80019afd6be49c1dff1f4f966e974efeed497ccb2bbd85e59c0b1feb2acb",
+  "route": "/spirituality/articles/tantra-trauma-ptsd",
+  "shape": {
+    "canonical": "https://www.maxpetrusenko.com/spirituality/articles/tantra-trauma-ptsd",
+    "ids": [
+      "https://www.maxpetrusenko.com/spirituality/articles/tantra-trauma-ptsd"
+    ],
+    "required_present": {
+      "Article": [],
+      "BreadcrumbList": [
+        "itemListElement"
+      ],
+      "ImageObject": [
+        "url"
+      ],
+      "ListItem": [
+        "position",
+        "position",
+        "position",
+        "position"
+      ],
+      "Organization": [],
+      "Person": [
+        "name",
+        "name"
+      ],
+      "WebPage": []
+    },
+    "types": [
+      "Article",
+      "BreadcrumbList",
+      "ImageObject",
+      "ListItem",
+      "ListItem",
+      "ListItem",
+      "ListItem",
+      "Organization",
+      "Organization",
+      "Person",
+      "Person",
+      "WebPage"
+    ],
+    "values": {}
+  },
+  "shape_digest": "140e9ee6946d8e2e959b17fb2ca64d407899db1318c165f7a9a5591f7d6c8a16"
+}

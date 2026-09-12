@@ -65,7 +65,8 @@ export const testimonials: Testimonial[] = [
   },
 
   // SPIRITUALITY TESTIMONIALS
-  // From Spirituality & Mindfold practice (atelier.maxpetrusenko.com)
+  // From Spirituality & Mindfold practice (live page: maxpetrusenko.com/spirituality;
+  // the atelier.maxpetrusenko.com subdomain was torn down 2026-09-12)
   // 4.9/5 average sentiment across 217 transformations
 
   // Original testimonials

@@ -1,13 +1,8 @@
 import Link from "next/link";
 import { BrandedReferencePage } from "@/components/brand/BrandedReferencePage";
-import { JsonLd } from "@/components/seo/JsonLd";
 import { Testimonials } from "@/components/testimonials/Testimonials";
 import { brandedReferencePageMap } from "@/lib/brand/reference-pages";
 import { absoluteUrl, generateMetadata } from "@/lib/seo/metadata";
-import {
-  generateAggregateRatingSchema,
-  generateAllReviewsSchema,
-} from "@/lib/seo/structured-data";
 
 const config = brandedReferencePageMap["max-petrusenko-reviews"];
 
@@ -20,23 +15,16 @@ export const metadata = generateMetadata({
 });
 
 export default function MaxPetrusenkoReviewsPage() {
-  const techReviews = generateAllReviewsSchema("tech");
-  const spiritualityReviews = generateAllReviewsSchema("spirituality");
-  const mindfoldReviews = generateAllReviewsSchema("mindfold");
-
+  // NOTE: this route used to emit a bare `AggregateRating` with
+  // `itemReviewed: Organization "Max Petrusenko"`, plus one hardcoded-5-star
+  // `Review` node per testimonial. All of it was self-serving markup about Max
+  // on Max's own site, which Google's review-snippet policy declares ineligible
+  // ("If the entity that's being reviewed controls the reviews about itself,
+  // their pages that use LocalBusiness or any other type of Organization
+  // structured data are ineligible for star review feature"). It is gone. The
+  // testimonials below remain *visible* page copy; only the JSON-LD was removed.
   return (
     <>
-      <JsonLd type="AggregateRating" data={generateAggregateRatingSchema("all")} />
-      {techReviews.map((review: Record<string, unknown>, index: number) => (
-        <JsonLd key={`tech-${index}`} type="Review" data={review} />
-      ))}
-      {spiritualityReviews.map((review: Record<string, unknown>, index: number) => (
-        <JsonLd key={`spirit-${index}`} type="Review" data={review} />
-      ))}
-      {mindfoldReviews.map((review: Record<string, unknown>, index: number) => (
-        <JsonLd key={`mindfold-${index}`} type="Review" data={review} />
-      ))}
-
       <BrandedReferencePage config={config}>
         <section className="section">
           <div className="section-head">

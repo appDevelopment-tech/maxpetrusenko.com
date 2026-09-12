@@ -149,15 +149,13 @@ export default function IdentityPage() {
                 <li>Boundary work & relational clarity</li>
                 <li>Private sessions paused for now</li>
               </ul>
-              <a
+              <Link
                 className="btn secondary"
-                href={siteConfig.externalLinks.atelier}
-                target="_blank"
-                rel="noopener"
+                href="/spirituality"
                 style={{ marginTop: 12 }}
               >
                 Visit practice site
-              </a>
+              </Link>
             </div>
           </div>
         </section>

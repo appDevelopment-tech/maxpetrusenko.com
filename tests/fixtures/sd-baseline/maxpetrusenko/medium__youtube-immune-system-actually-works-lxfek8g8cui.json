@@ -1,0 +1,26 @@
+{
+  "blocks": 1,
+  "content": {
+    "Organization.name": "Presence Atelier",
+    "Person.description": "Creator of tech automation resources, tantra education, and somatic practice offerings.",
+    "Person.name": "Max Petrusenko"
+  },
+  "content_digest": "3b758e40268e699f91b0d66dc106dddd28eeefe9609e26596c4cbe23dfaf0138",
+  "route": "/medium/youtube-immune-system-actually-works-lxfek8g8cui",
+  "shape": {
+    "canonical": "https://www.maxpetrusenko.com/medium/youtube-immune-system-actually-works-lxfek8g8cui/",
+    "ids": [],
+    "required_present": {
+      "Organization": [],
+      "Person": [
+        "name"
+      ]
+    },
+    "types": [
+      "Organization",
+      "Person"
+    ],
+    "values": {}
+  },
+  "shape_digest": "03bec29093eaba16e248532d6c66ec8e1d22fb0392f82f3bc8e72646dc67b1ad"
+}

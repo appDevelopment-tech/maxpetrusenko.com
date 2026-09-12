@@ -1,0 +1,26 @@
+{
+  "blocks": 1,
+  "content": {
+    "Organization.name": "Presence Atelier",
+    "Person.description": "Creator of tech automation resources, tantra education, and somatic practice offerings.",
+    "Person.name": "Max Petrusenko"
+  },
+  "content_digest": "3b758e40268e699f91b0d66dc106dddd28eeefe9609e26596c4cbe23dfaf0138",
+  "route": "/medium/youtube-harari-mass-delusion-i4l1fr-t3ze",
+  "shape": {
+    "canonical": "https://www.maxpetrusenko.com/medium/youtube-harari-mass-delusion-i4l1fr-t3ze/",
+    "ids": [],
+    "required_present": {
+      "Organization": [],
+      "Person": [
+        "name"
+      ]
+    },
+    "types": [
+      "Organization",
+      "Person"
+    ],
+    "values": {}
+  },
+  "shape_digest": "064b9f39f02ec0a6d86cad6663bf97ec65cfb90cb4dc5206b4395cbe965d5798"
+}
