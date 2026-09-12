@@ -43,9 +43,13 @@ on:
   # pull_request: proof-of-execution.  This workflow is the read-only gate:
   # permissions are contents: read, `local-build-check` builds + validates but
   # never deploys, and `live-check` is guarded to workflow_dispatch only.  So a
-  # PR can run the real gate with no chance of touching production.  Path-scoped
-  # to the same set as the push trigger.
+  # PR can run the real gate with no chance of touching production.  Deliberately
+  # NOT path-filtered: this job is the repository's required status check, and a
+  # required check that only runs on matching paths blocks every merge on the PRs
+  # it skips, because the check never appears and the PR waits forever.
   pull_request:
+
+concurrency:
   group: seo-indexing-gate-${{ github.ref }}
   cancel-in-progress: true
 
