@@ -2,7 +2,18 @@ import { siteConfig } from "@/config/site";
 import { testimonials } from "@/lib/cms/testimonials";
 import { buildHomeFaqMainEntity } from "@/lib/seo/home-faq";
 
-const BRAND_LOGO_URL = `${siteConfig.url}/images/brand-mark.svg`;
+/**
+ * Organization/publisher logo target.
+ *
+ * MUST be a raster image on the canonical host: Google's logo guidance wants a
+ * crawlable PNG/JPG/GIF of at least 112x112 px, and rule 18 (`image-reachability`)
+ * flags `Organization.logo` pointing at an SVG. The SVG source of truth stays at
+ * `/images/brand-mark.svg` for the SVG-only surfaces that reference it; this
+ * constant is the raster twin consumed by JSON-LD.
+ *
+ * Regenerate with: qlmanage -t -s 512 -o <tmp> public/images/brand-mark.svg
+ */
+const BRAND_LOGO_URL = `${siteConfig.url}/images/brand-mark.png`;
 const PERSON_IMAGE_URL = `${siteConfig.url}/images/DSC05871.jpg`;
 const TECH_PERSON_IMAGE_URL = `${siteConfig.url}/images/tech-portrait.jpg`;
 
@@ -280,8 +291,6 @@ const SERVICE_LOCATIONS = {
  * anchoring the practice as a commercial/local service.
  */
 export function generateProfessionalServiceSchema() {
-  const spiritualityTestimonials = testimonials.filter((t) => t.type === "spirituality");
-
   return {
     "@context": "https://schema.org",
     "@type": "WebPage",
@@ -294,13 +303,14 @@ export function generateProfessionalServiceSchema() {
     },
     "image": BRAND_LOGO_URL,
     "telephone": "+1-954-275-9666",
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": "4.9",
-      "reviewCount": spiritualityTestimonials.length.toString(),
-      "bestRating": "5",
-      "worstRating": "1",
-    },
+    // NOTE: no `aggregateRating` here. This node is a WebPage — a rating on a
+    // WebPage is not a review-snippet pattern, and rule 8 (at-most-one
+    // AggregateRating per entity per page) is the wrong place to carry a
+    // business rating. The page-level rating belongs on the entity that
+    // actually collects reviews; see `generateTechServiceSchema()`
+    // (ProfessionalService) and `generateAggregateRatingSchema()`.
+    // Removing it also clears rule 16 (`rating-consistency`) on /spirituality and
+    // on /, where it claimed reviews with no Review nodes on the page.
     "hasOfferCatalog": {
       "@type": "OfferCatalog",
       "name": "Tantra-informed somatic practice pathways",
@@ -1077,7 +1087,10 @@ export function generateReviewSchema(testimonial: {
  * Returns an array of individual review schemas
  */
 export function generateAllReviewsSchema(serviceType: "tech" | "spirituality" | "mindfold") {
-  const { testimonials } = require("@/lib/cms/testimonials");
+  // NOTE: this used to be `const { testimonials } = require("@/lib/cms/testimonials")`.
+  // `require` is not defined in ESM scope, so the function threw under `node --test`
+  // (and under any ESM loader) while quietly working inside the webpack bundle.
+  // `testimonials` is already imported at the top of this module — use it.
   const filtered = testimonials.filter((t: { type: string }) => t.type === serviceType);
 
   return filtered.map((t: { quote: string; author: string; role?: string; location?: string; type: string }) =>

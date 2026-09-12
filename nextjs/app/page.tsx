@@ -15,7 +15,6 @@ import {
   generateTechServiceSchema,
   generateHomeFAQSchema,
   generateEnhancedPersonSchema,
-  generateAggregateRatingSchema,
 } from "@/lib/seo/structured-data";
 import { fetchArticles, isLocalArticle } from "@/lib/cms/articles";
 import { homeFaqEntries } from "@/lib/seo/home-faq";
@@ -93,7 +92,16 @@ export default async function HomePage({ searchParams }: HomePageProps) {
       <JsonLd type="ProfessionalService" data={generateTechServiceSchema()} />
       <JsonLd type="FAQPage" data={generateHomeFAQSchema()} />
       <JsonLd type="Person" data={generateEnhancedPersonSchema()} />
-      <JsonLd type="AggregateRating" data={generateAggregateRatingSchema("all")} />
+      {/*
+        Rule 8: at most ONE AggregateRating per entity per page. The homepage
+        previously emitted three (WebPage from generateProfessionalServiceSchema,
+        ProfessionalService from generateTechServiceSchema, and a bare
+        root-level AggregateRating). The bare root node is gone — an
+        AggregateRating is not a standalone entity, it belongs on the thing
+        being rated — and the WebPage copy is gone from the generator. The one
+        that stays rides on the ProfessionalService node above, which is the
+        entity on this page that actually collects reviews.
+      */}
 
       <div className="hero-portrait-wrap">
         <div className="hero-portrait-bg">
