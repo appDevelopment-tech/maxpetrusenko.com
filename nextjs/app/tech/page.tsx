@@ -14,7 +14,6 @@ import {
   generateBreadcrumbSchema,
   generateTechServiceSchema,
   generateTechFAQSchema,
-  generateTechPersonSchema,
 } from "@/lib/seo/structured-data";
 
 export const metadata = generateMetadata({
@@ -141,7 +140,6 @@ export default async function TechPage() {
         type="FAQPage"
         data={generateTechFAQSchema()}
       />
-      <JsonLd type="Person" data={generateTechPersonSchema()} />
 
       {/* Hero portrait background */}
       <div className="hero-portrait-wrap">

@@ -12,7 +12,6 @@ import {
   generateBreadcrumbSchema,
   generateProfessionalServiceSchema,
   generateFAQSchema,
-  generateSpiritualityPersonSchema,
 } from "@/lib/seo/structured-data";
 
 export const metadata = generateMetadata({
@@ -127,7 +126,6 @@ export default function SpiritualityPage() {
           { name: "Spirituality", url: "/spirituality" },
         ])}
       />
-      <JsonLd type="Person" data={generateSpiritualityPersonSchema()} />
 
       {/* Hero portrait background */}
       <div className="hero-portrait-wrap">

@@ -1,16 +1,16 @@
 {
-  "blocks": 5,
+  "blocks": 4,
   "content": {
     "ListItem.name": "SEO Is Dead",
-    "Organization.name": "Max Petrusenko Tech",
-    "Person.description": "AI automation consultant specializing in Claude Code, n8n workflows, ChatGPT integrations, and workflow automation for creators and founders.",
+    "Organization.name": "Max Petrusenko",
+    "Person.description": "Creator of tech automation resources, tantra education, and somatic practice offerings.",
     "Person.name": "Max Petrusenko",
     "TechArticle.description": "Why SEO still works, what changed with AI answers, and how to run a dual strategy.",
     "TechArticle.headline": "Is SEO Dead in 2026? No - It Split Into Search + Answers",
     "WebPage.description": "A practical model for balancing rankings, citations, and conversion.",
     "WebPage.name": "Is SEO Dead in 2026? No - It Split Into Search + Answers"
   },
-  "content_digest": "1eb69d223323550b1c9a5d4f5d5ae169d5d4c0ab6fbb712f250ba8bdf9366d1b",
+  "content_digest": "3df55ef55e1556779aaacc4ae8e27850058ad7a65b225f4097d80c6d31b4e037",
   "route": "/tech/articles/seo-is-dead",
   "shape": {
     "canonical": "https://www.maxpetrusenko.com/tech/articles/seo-is-dead",
@@ -28,7 +28,6 @@
       "Organization": [],
       "Person": [
         "name",
-        "name",
         "name"
       ],
       "WebPage": []
@@ -41,8 +40,6 @@
       "ListItem",
       "Organization",
       "Organization",
-      "Organization",
-      "Person",
       "Person",
       "Person",
       "TechArticle",
@@ -50,5 +47,5 @@
     ],
     "values": {}
   },
-  "shape_digest": "5c501c953f7f8d4a3cd0dd2d6c1d2ddbce2a2188e52ed5cee454e1ba66d6296c"
+  "shape_digest": "5b7caa413c423a0f249a0c153ddcaf9168badcddd44796d81c8097f6379bda21"
 }

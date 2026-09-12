@@ -4,98 +4,92 @@
     {
       "first_seen": "2026-09-12",
       "path": "$",
+      "route": "/ai-workflow-automation",
+      "rule": "content-snapshot"
+    },
+    {
+      "first_seen": "2026-09-12",
+      "path": "$",
+      "route": "/claude-code-consultant",
+      "rule": "content-snapshot"
+    },
+    {
+      "first_seen": "2026-09-12",
+      "path": "$",
+      "route": "/n8n-automation",
+      "rule": "content-snapshot"
+    },
+    {
+      "first_seen": "2026-09-12",
+      "path": "$",
+      "route": "/spirituality",
+      "rule": "content-snapshot"
+    },
+    {
+      "first_seen": "2026-09-12",
+      "path": "$",
+      "route": "/tech",
+      "rule": "content-snapshot"
+    },
+    {
+      "first_seen": "2026-09-12",
+      "path": "$",
+      "route": "/tech/ai-automation",
+      "rule": "content-snapshot"
+    },
+    {
+      "first_seen": "2026-09-12",
+      "path": "$",
+      "route": "/tech/articles/answer-engine-optimization-aeo",
+      "rule": "content-snapshot"
+    },
+    {
+      "first_seen": "2026-09-12",
+      "path": "$",
+      "route": "/tech/articles/bitcoin-as-strong-money",
+      "rule": "content-snapshot"
+    },
+    {
+      "first_seen": "2026-09-12",
+      "path": "$",
+      "route": "/tech/articles/generative-ai-score-websites",
+      "rule": "content-snapshot"
+    },
+    {
+      "first_seen": "2026-09-12",
+      "path": "$",
+      "route": "/tech/articles/generative-engine-optimization-geo",
+      "rule": "content-snapshot"
+    },
+    {
+      "first_seen": "2026-09-12",
+      "path": "$",
+      "route": "/tech/articles/openclaw-installation-playbook",
+      "rule": "content-snapshot"
+    },
+    {
+      "first_seen": "2026-09-12",
+      "path": "$",
+      "route": "/tech/articles/seo-is-dead",
+      "rule": "content-snapshot"
+    },
+    {
+      "first_seen": "2026-09-12",
+      "path": "$",
+      "route": "/tech/case-studies",
+      "rule": "content-snapshot"
+    },
+    {
+      "first_seen": "2026-09-12",
+      "path": "$",
+      "route": "/tech/case-studies/claude-code-automation",
+      "rule": "content-snapshot"
+    },
+    {
+      "first_seen": "2026-09-12",
+      "path": "$",
       "route": "/",
       "rule": "coverage"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "block[0] <-> block[4]",
-      "route": "/ai-workflow-automation",
-      "rule": "duplicate-type-conflict"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "block[0] <-> block[4]",
-      "route": "/claude-code-consultant",
-      "rule": "duplicate-type-conflict"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "block[0] <-> block[3].organizer",
-      "route": "/mindfold/events",
-      "rule": "duplicate-type-conflict"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "block[0] <-> block[4]",
-      "route": "/n8n-automation",
-      "rule": "duplicate-type-conflict"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "block[0] <-> block[6]",
-      "route": "/spirituality",
-      "rule": "duplicate-type-conflict"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "block[0] <-> block[5]",
-      "route": "/tech",
-      "rule": "duplicate-type-conflict"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "block[0] <-> block[4]",
-      "route": "/tech/ai-automation",
-      "rule": "duplicate-type-conflict"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "block[0] <-> block[4]",
-      "route": "/tech/articles/answer-engine-optimization-aeo",
-      "rule": "duplicate-type-conflict"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "block[0] <-> block[4]",
-      "route": "/tech/articles/bitcoin-as-strong-money",
-      "rule": "duplicate-type-conflict"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "block[0] <-> block[4]",
-      "route": "/tech/articles/generative-ai-score-websites",
-      "rule": "duplicate-type-conflict"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "block[0] <-> block[4]",
-      "route": "/tech/articles/generative-engine-optimization-geo",
-      "rule": "duplicate-type-conflict"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "block[0] <-> block[4]",
-      "route": "/tech/articles/openclaw-installation-playbook",
-      "rule": "duplicate-type-conflict"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "block[0] <-> block[4]",
-      "route": "/tech/articles/seo-is-dead",
-      "rule": "duplicate-type-conflict"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "block[0] <-> block[3]",
-      "route": "/tech/case-studies",
-      "rule": "duplicate-type-conflict"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "block[0] <-> block[4]",
-      "route": "/tech/case-studies/claude-code-automation",
-      "rule": "duplicate-type-conflict"
     },
     {
       "first_seen": "2026-09-12",
@@ -387,18 +381,6 @@
     },
     {
       "first_seen": "2026-09-12",
-      "path": "block[4].worksFor.contactPoint",
-      "route": "/ai-workflow-automation",
-      "rule": "missing-recommended"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "block[4].worksFor.sameAs",
-      "route": "/ai-workflow-automation",
-      "rule": "missing-recommended"
-    },
-    {
-      "first_seen": "2026-09-12",
       "path": "block[0].worksFor.contactPoint",
       "route": "/blog",
       "rule": "missing-recommended"
@@ -712,18 +694,6 @@
     {
       "first_seen": "2026-09-12",
       "path": "block[3].serviceType",
-      "route": "/claude-code-consultant",
-      "rule": "missing-recommended"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "block[4].worksFor.contactPoint",
-      "route": "/claude-code-consultant",
-      "rule": "missing-recommended"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "block[4].worksFor.sameAs",
       "route": "/claude-code-consultant",
       "rule": "missing-recommended"
     },
@@ -2205,6 +2175,12 @@
     },
     {
       "first_seen": "2026-09-12",
+      "path": "block[3].organizer.sameAs",
+      "route": "/mindfold/events",
+      "rule": "missing-recommended"
+    },
+    {
+      "first_seen": "2026-09-12",
       "path": "block[3].performer.sameAs",
       "route": "/mindfold/events",
       "rule": "missing-recommended"
@@ -2416,18 +2392,6 @@
     {
       "first_seen": "2026-09-12",
       "path": "block[3].serviceType",
-      "route": "/n8n-automation",
-      "rule": "missing-recommended"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "block[4].worksFor.contactPoint",
-      "route": "/n8n-automation",
-      "rule": "missing-recommended"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "block[4].worksFor.sameAs",
       "route": "/n8n-automation",
       "rule": "missing-recommended"
     },
@@ -2949,13 +2913,31 @@
     },
     {
       "first_seen": "2026-09-12",
-      "path": "block[6].worksFor.contactPoint",
+      "path": "block[6].dateModified",
       "route": "/spirituality",
       "rule": "missing-recommended"
     },
     {
       "first_seen": "2026-09-12",
-      "path": "block[6].worksFor.sameAs",
+      "path": "block[6].datePublished",
+      "route": "/spirituality",
+      "rule": "missing-recommended"
+    },
+    {
+      "first_seen": "2026-09-12",
+      "path": "block[6].inLanguage",
+      "route": "/spirituality",
+      "rule": "missing-recommended"
+    },
+    {
+      "first_seen": "2026-09-12",
+      "path": "block[6].isPartOf",
+      "route": "/spirituality",
+      "rule": "missing-recommended"
+    },
+    {
+      "first_seen": "2026-09-12",
+      "path": "block[6].url",
       "route": "/spirituality",
       "rule": "missing-recommended"
     },
@@ -2991,36 +2973,6 @@
     },
     {
       "first_seen": "2026-09-12",
-      "path": "block[8].dateModified",
-      "route": "/spirituality",
-      "rule": "missing-recommended"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "block[8].datePublished",
-      "route": "/spirituality",
-      "rule": "missing-recommended"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "block[8].inLanguage",
-      "route": "/spirituality",
-      "rule": "missing-recommended"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "block[8].isPartOf",
-      "route": "/spirituality",
-      "rule": "missing-recommended"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "block[8].url",
-      "route": "/spirituality",
-      "rule": "missing-recommended"
-    },
-    {
-      "first_seen": "2026-09-12",
       "path": "block[0].worksFor.contactPoint",
       "route": "/spirituality/articles",
       "rule": "missing-recommended"
@@ -3747,43 +3699,31 @@
     },
     {
       "first_seen": "2026-09-12",
-      "path": "block[5].worksFor.contactPoint",
+      "path": "block[5].dateModified",
       "route": "/tech",
       "rule": "missing-recommended"
     },
     {
       "first_seen": "2026-09-12",
-      "path": "block[5].worksFor.sameAs",
+      "path": "block[5].datePublished",
       "route": "/tech",
       "rule": "missing-recommended"
     },
     {
       "first_seen": "2026-09-12",
-      "path": "block[6].dateModified",
+      "path": "block[5].inLanguage",
       "route": "/tech",
       "rule": "missing-recommended"
     },
     {
       "first_seen": "2026-09-12",
-      "path": "block[6].datePublished",
+      "path": "block[5].isPartOf",
       "route": "/tech",
       "rule": "missing-recommended"
     },
     {
       "first_seen": "2026-09-12",
-      "path": "block[6].inLanguage",
-      "route": "/tech",
-      "rule": "missing-recommended"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "block[6].isPartOf",
-      "route": "/tech",
-      "rule": "missing-recommended"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "block[6].url",
+      "path": "block[5].url",
       "route": "/tech",
       "rule": "missing-recommended"
     },
@@ -3993,18 +3933,6 @@
     },
     {
       "first_seen": "2026-09-12",
-      "path": "block[4].worksFor.contactPoint",
-      "route": "/tech/ai-automation",
-      "rule": "missing-recommended"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "block[4].worksFor.sameAs",
-      "route": "/tech/ai-automation",
-      "rule": "missing-recommended"
-    },
-    {
-      "first_seen": "2026-09-12",
       "path": "block[0].worksFor.contactPoint",
       "route": "/tech/articles",
       "rule": "missing-recommended"
@@ -4095,18 +4023,6 @@
     },
     {
       "first_seen": "2026-09-12",
-      "path": "block[4].worksFor.contactPoint",
-      "route": "/tech/articles/answer-engine-optimization-aeo",
-      "rule": "missing-recommended"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "block[4].worksFor.sameAs",
-      "route": "/tech/articles/answer-engine-optimization-aeo",
-      "rule": "missing-recommended"
-    },
-    {
-      "first_seen": "2026-09-12",
       "path": "block[0].worksFor.contactPoint",
       "route": "/tech/articles/bitcoin-as-strong-money",
       "rule": "missing-recommended"
@@ -4162,18 +4078,6 @@
     {
       "first_seen": "2026-09-12",
       "path": "block[3].isPartOf",
-      "route": "/tech/articles/bitcoin-as-strong-money",
-      "rule": "missing-recommended"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "block[4].worksFor.contactPoint",
-      "route": "/tech/articles/bitcoin-as-strong-money",
-      "rule": "missing-recommended"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "block[4].worksFor.sameAs",
       "route": "/tech/articles/bitcoin-as-strong-money",
       "rule": "missing-recommended"
     },
@@ -4335,18 +4239,6 @@
     },
     {
       "first_seen": "2026-09-12",
-      "path": "block[4].worksFor.contactPoint",
-      "route": "/tech/articles/generative-ai-score-websites",
-      "rule": "missing-recommended"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "block[4].worksFor.sameAs",
-      "route": "/tech/articles/generative-ai-score-websites",
-      "rule": "missing-recommended"
-    },
-    {
-      "first_seen": "2026-09-12",
       "path": "block[0].worksFor.contactPoint",
       "route": "/tech/articles/generative-engine-optimization-geo",
       "rule": "missing-recommended"
@@ -4402,18 +4294,6 @@
     {
       "first_seen": "2026-09-12",
       "path": "block[3].isPartOf",
-      "route": "/tech/articles/generative-engine-optimization-geo",
-      "rule": "missing-recommended"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "block[4].worksFor.contactPoint",
-      "route": "/tech/articles/generative-engine-optimization-geo",
-      "rule": "missing-recommended"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "block[4].worksFor.sameAs",
       "route": "/tech/articles/generative-engine-optimization-geo",
       "rule": "missing-recommended"
     },
@@ -4527,18 +4407,6 @@
     },
     {
       "first_seen": "2026-09-12",
-      "path": "block[4].worksFor.contactPoint",
-      "route": "/tech/articles/openclaw-installation-playbook",
-      "rule": "missing-recommended"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "block[4].worksFor.sameAs",
-      "route": "/tech/articles/openclaw-installation-playbook",
-      "rule": "missing-recommended"
-    },
-    {
-      "first_seen": "2026-09-12",
       "path": "block[0].worksFor.contactPoint",
       "route": "/tech/articles/seo-is-dead",
       "rule": "missing-recommended"
@@ -4594,18 +4462,6 @@
     {
       "first_seen": "2026-09-12",
       "path": "block[3].isPartOf",
-      "route": "/tech/articles/seo-is-dead",
-      "rule": "missing-recommended"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "block[4].worksFor.contactPoint",
-      "route": "/tech/articles/seo-is-dead",
-      "rule": "missing-recommended"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "block[4].worksFor.sameAs",
       "route": "/tech/articles/seo-is-dead",
       "rule": "missing-recommended"
     },
@@ -4641,18 +4497,6 @@
     },
     {
       "first_seen": "2026-09-12",
-      "path": "block[3].worksFor.contactPoint",
-      "route": "/tech/case-studies",
-      "rule": "missing-recommended"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "block[3].worksFor.sameAs",
-      "route": "/tech/case-studies",
-      "rule": "missing-recommended"
-    },
-    {
-      "first_seen": "2026-09-12",
       "path": "block[0].worksFor.contactPoint",
       "route": "/tech/case-studies/claude-code-automation",
       "rule": "missing-recommended"
@@ -4708,18 +4552,6 @@
     {
       "first_seen": "2026-09-12",
       "path": "block[3].isPartOf",
-      "route": "/tech/case-studies/claude-code-automation",
-      "rule": "missing-recommended"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "block[4].worksFor.contactPoint",
-      "route": "/tech/case-studies/claude-code-automation",
-      "rule": "missing-recommended"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "block[4].worksFor.sameAs",
       "route": "/tech/case-studies/claude-code-automation",
       "rule": "missing-recommended"
     },
@@ -4839,19 +4671,13 @@
     },
     {
       "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/tantra-massage-ubud",
-      "rule": "no-markup"
-    },
-    {
-      "first_seen": "2026-09-12",
       "path": "block[3]",
       "route": "/ai-consulting-reddit",
       "rule": "policy-finding"
     },
     {
       "first_seen": "2026-09-12",
-      "path": "block[5]",
+      "path": "block[4]",
       "route": "/ai-workflow-automation",
       "rule": "policy-finding"
     },
@@ -4863,7 +4689,7 @@
     },
     {
       "first_seen": "2026-09-12",
-      "path": "block[5]",
+      "path": "block[4]",
       "route": "/claude-code-consultant",
       "rule": "policy-finding"
     },
@@ -4917,7 +4743,7 @@
     },
     {
       "first_seen": "2026-09-12",
-      "path": "block[5]",
+      "path": "block[4]",
       "route": "/n8n-automation",
       "rule": "policy-finding"
     },
@@ -5067,12 +4893,6 @@
     },
     {
       "first_seen": "2026-09-12",
-      "path": "block[0].worksFor",
-      "route": "/spirituality",
-      "rule": "repeat-identical"
-    },
-    {
-      "first_seen": "2026-09-12",
       "path": "block[0]",
       "route": "/who-is-max-petrusenko",
       "rule": "repeat-identical"
@@ -5086,55 +4906,7 @@
     {
       "first_seen": "2026-09-12",
       "path": "$",
-      "route": "/about",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/admin/concierge",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/ai-consulting-reddit",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
       "route": "/ai-workflow-automation",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/blog",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/blog/consciousness-tech",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/chinola",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/chinola/review/farm-michael-7d4e9c",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/chinola/review/kaggle-health-open-v1",
       "rule": "shape-digest"
     },
     {
@@ -5146,613 +4918,13 @@
     {
       "first_seen": "2026-09-12",
       "path": "$",
-      "route": "/consciousness-assistant",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/couples-tantra-massage",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/explore/hero-2",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/explore/hero-3",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/identity",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/inbox",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/inbox/sign-in",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/links",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/max-petrusenko-aeo-geo",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/max-petrusenko-ai-automation",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/max-petrusenko-mindfold",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/max-petrusenko-reviews",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/max-petrusenko-somatic",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/medium/cooperation-great-filter",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/medium/medicine-is-learning-to-listen-before-we-have-words",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/medium/negative-time",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/medium/not-ready-for-biocomputing",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/medium/work-takes-everything",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/medium/your-agents-md-was-written-for-a-worse-model",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/medium/youtube-ai-agent-loops-human-loop-7clj8ih784q",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/medium/youtube-ai-born-9-seconds-9xloavituvi",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/medium/youtube-ai-bought-robot-car-ipamktb5csq",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/medium/youtube-ai-civilization-minecraft-urdbco-csk4",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/medium/youtube-ai-scammers-dont-hang-up-lk3jcuitec",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/medium/youtube-ai-world-war-gw_hnd7m00m",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/medium/youtube-amazon-inflate-prices-5otf7bj5lxi",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/medium/youtube-american-war-machine-t0oqriimva",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/medium/youtube-baby-never-solo-project-atbjl3cwd8",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/medium/youtube-biggest-trading-loss-oln5sktcx9e",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/medium/youtube-body-not-die-on-schedule-tsxvuyi0eia",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/medium/youtube-body-thinks-before-mind-bgyi1l1p4nw",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/medium/youtube-body-transplant-toples-lfvctmt5ydy",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/medium/youtube-brain-overload-information-t0qq9r__xiq",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/medium/youtube-brainwashing-feed-boring-sbwtelpwvl4",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/medium/youtube-china-quietly-saved-world-bka0bkb6zo0",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/medium/youtube-chinese-ai-suddenly-good-miudp4xv7io",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/medium/youtube-collapse-of-ai-xaambu5ohvw",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/medium/youtube-company-ruining-fruit-nygnp0s0zq",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/medium/youtube-deepseek-v4-what-not-to-read-xjupuobpt-4",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/medium/youtube-diamond-scam-collapsing-qf78spqj37o",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/medium/youtube-doing-nothing-first-nzd5ifpydce",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/medium/youtube-easiest-way-make-world-smarter-xrcwwzxj8gk",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/medium/youtube-europe-fusion-reactor-bpuakw1dyek",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/medium/youtube-gaming-market-breaking-eo5w2s-h5di",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/medium/youtube-google-interface-reality-9oq5vaybgv0",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/medium/youtube-gottman-5-to-1-couples-hqa06hmcayo",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/medium/youtube-government-scam-rules-u4odaxoqrt8",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/medium/youtube-gps-jamming-clue-space-tz23g-uxcga",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/medium/youtube-happiness-drugs-guide-zcamgnowzvk",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/medium/youtube-harari-mass-delusion-i4l1fr-t3ze",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/medium/youtube-human-skill-robot-training-data-hzkb1ybozgg",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/medium/youtube-humanity-never-leave-solar-system-cyl3x88kegg",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/medium/youtube-immune-system-actually-works-lxfek8g8cui",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/medium/youtube-laundry-detergent-water-snzurrtpony",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/medium/youtube-life-nonlife-boundary-ws6opg41od4",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/medium/youtube-lorem-ipsum-mystery-kl1pdqzqhm4",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/medium/youtube-microplastics-wmayvwnx4vy",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/medium/youtube-modern-life-feels-fake-iy-uw2gmnvi",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/medium/youtube-modern-middle-east-bloehymgc78",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/medium/youtube-monster-head-cognitive-biases-hwzjwzni_dc",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/medium/youtube-most-controversial-idea-physics-oi91ke_wocs",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/medium/youtube-negative-time-trap-xxlg8zilt9c",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/medium/youtube-not-possible-tcxerornjn0",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/medium/youtube-not-ready-biocomputing-ukhsbqcfvwq",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/medium/youtube-oligarchy-paperwork-4s25ffbfw4m",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/medium/youtube-ozempic-5ggagpjdri8",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/medium/youtube-phone-dreams-hrzc6na62bo",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/medium/youtube-psychedelic-commercialization-5meo-dmt-9m-3vuxxxfa",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/medium/youtube-putin-war-wealth-ifvqlskt04e",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/medium/youtube-reach-pluto-fly-sun-sod3ofduytw",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/medium/youtube-real-reason-us-cant-beat-iran-ddbysg0alw",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/medium/youtube-sam-altman-worry-openai-_eytkvzqbnq",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/medium/youtube-seven-dimensions-explained-gpfxmhwv8w",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/medium/youtube-simple-question-socialism-couldnt-answer-mmhyhneaxxy",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/medium/youtube-switch-to-linux-9sdku5vdqeq",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/medium/youtube-think-clearly-genius-mjtgkm-h__m",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/medium/youtube-time-disappears-experiment-bryyy4gjx9w",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/medium/youtube-use-hermes-right-now-qqegio4juxg",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/medium/youtube-want-management-modern-life-iyuw2gmnvi",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/medium/youtube-why-you-dont-trust-tap-water-wchwqnoe95w",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/medium/youtube-work-religion-money-7-kiumlpg84",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/medium/youtube-worried-about-sam-altman-eytkvzqbnq",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/mindfold/events",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
       "route": "/n8n-automation",
       "rule": "shape-digest"
     },
     {
       "first_seen": "2026-09-12",
       "path": "$",
-      "route": "/performance",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/privacy-policy",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/proof",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/socialmedia",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/somatic",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/somatic/approach",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/somatic/modalities",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/somatic/training",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
       "route": "/spirituality",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/spirituality/articles",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/spirituality/articles/tantra-trauma-ptsd",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/spirituality/blog",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/spirituality/blog/kyo-tai-session-what-happens",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/spirituality/blog/questions-to-ask-tantra-practitioner",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/spirituality/blog/tantra-vs-regular-massage",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/spirituality/blog/temple-space-preparation",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/spirituality/blog/what-is-kyo-tai",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/spirituality/blog/what-to-expect-first-tantra-session",
       "rule": "shape-digest"
     },
     {
@@ -5770,12 +4942,6 @@
     {
       "first_seen": "2026-09-12",
       "path": "$",
-      "route": "/tech/articles",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
       "route": "/tech/articles/answer-engine-optimization-aeo",
       "rule": "shape-digest"
     },
@@ -5788,18 +4954,6 @@
     {
       "first_seen": "2026-09-12",
       "path": "$",
-      "route": "/tech/articles/chatgpt-api-integration",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/tech/articles/claude-code-setup",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
       "route": "/tech/articles/generative-ai-score-websites",
       "rule": "shape-digest"
     },
@@ -5807,12 +4961,6 @@
       "first_seen": "2026-09-12",
       "path": "$",
       "route": "/tech/articles/generative-engine-optimization-geo",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/tech/articles/n8n-workflow-automation",
       "rule": "shape-digest"
     },
     {
@@ -5837,18 +4985,6 @@
       "first_seen": "2026-09-12",
       "path": "$",
       "route": "/tech/case-studies/claude-code-automation",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/terms-of-service",
-      "rule": "shape-digest"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "$",
-      "route": "/who-is-max-petrusenko",
       "rule": "shape-digest"
     },
     {
@@ -6495,12 +5631,6 @@
     },
     {
       "first_seen": "2026-09-12",
-      "path": "block[4].description",
-      "route": "/tech/articles/bitcoin-as-strong-money",
-      "rule": "visible-content"
-    },
-    {
-      "first_seen": "2026-09-12",
       "path": "block[0].description",
       "route": "/tech/articles/chatgpt-api-integration",
       "rule": "visible-content"
@@ -6519,18 +5649,6 @@
     },
     {
       "first_seen": "2026-09-12",
-      "path": "block[4].description",
-      "route": "/tech/articles/generative-ai-score-websites",
-      "rule": "visible-content"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "block[4].description",
-      "route": "/tech/articles/generative-engine-optimization-geo",
-      "rule": "visible-content"
-    },
-    {
-      "first_seen": "2026-09-12",
       "path": "block[0].description",
       "route": "/tech/articles/n8n-workflow-automation",
       "rule": "visible-content"
@@ -6543,19 +5661,7 @@
     },
     {
       "first_seen": "2026-09-12",
-      "path": "block[4].description",
-      "route": "/tech/articles/openclaw-installation-playbook",
-      "rule": "visible-content"
-    },
-    {
-      "first_seen": "2026-09-12",
       "path": "block[0].description",
-      "route": "/tech/articles/seo-is-dead",
-      "rule": "visible-content"
-    },
-    {
-      "first_seen": "2026-09-12",
-      "path": "block[4].description",
       "route": "/tech/articles/seo-is-dead",
       "rule": "visible-content"
     },
@@ -6572,7 +5678,7 @@
       "rule": "visible-content"
     }
   ],
-  "generated_at": "2026-09-12T18:24:59Z",
+  "generated_at": "2026-09-12T19:01:46Z",
   "mode": "dir",
   "routes": {
     "/about": {
@@ -6713,12 +5819,12 @@
       "shape_digest": "8b25cc57a914a0fb15786cddf4d8f123f6f9189f64234ad1f5545f0d53737d6c"
     },
     "/ai-workflow-automation": {
-      "blocks": 6,
+      "blocks": 5,
       "content": {
         "ListItem.name": "AI Workflow Automation",
         "OfferCatalog.name": "AI & Automation Services",
-        "Organization.name": "Max Petrusenko Tech",
-        "Person.description": "AI automation consultant specializing in Claude Code, n8n workflows, ChatGPT integrations, and workflow automation for creators and founders.",
+        "Organization.name": "Presence Atelier",
+        "Person.description": "Creator of tech automation resources, tantra education, and somatic practice offerings.",
         "Person.name": "Max Petrusenko",
         "ProfessionalService.description": "AI automation consultant specializing in Claude Code, n8n workflows, ChatGPT integrations, and workflow automation for creators and founders. Available remotely worldwide, with in-person work by request while traveling.",
         "ProfessionalService.name": "Max Petrusenko - AI & Automation Consultant",
@@ -6728,7 +5834,7 @@
         "WebPage.description": "Automate with AI: content pipelines, data enrichment, document processing.",
         "WebPage.name": "AI Workflow Automation - ChatGPT & Claude Integration Services"
       },
-      "content_digest": "d8ea60d2d9ff46d16bf5bca18ec1d923400d7805a86c879645c27911eb933780",
+      "content_digest": "19181b166af9897d8b02578523684c01d6b8b102ed2ddc1910a34520914698a5",
       "shape": {
         "canonical": "https://www.maxpetrusenko.com/ai-workflow-automation",
         "ids": [],
@@ -6757,7 +5863,6 @@
           ],
           "Organization": [],
           "Person": [
-            "name",
             "name"
           ],
           "ProfessionalService": [
@@ -6790,8 +5895,6 @@
           "Offer",
           "OfferCatalog",
           "Organization",
-          "Organization",
-          "Person",
           "Person",
           "ProfessionalService",
           "Question",
@@ -6803,7 +5906,7 @@
         ],
         "values": {}
       },
-      "shape_digest": "d0768caacd47059dfba7913374b50915ffafa7a880e69b10038f4853f238add3"
+      "shape_digest": "4b8acdf18dc71615871ba1a206db7c7eac041852a425a3fcd481081d1024927a"
     },
     "/blog": {
       "blocks": 3,
@@ -6992,12 +6095,12 @@
       "shape_digest": "db9792f1475d33b0a3ce511802a4f02503c481e9cbd8ad227dd2ca8e2a061a5c"
     },
     "/claude-code-consultant": {
-      "blocks": 6,
+      "blocks": 5,
       "content": {
         "ListItem.name": "Claude Code Consultant",
         "OfferCatalog.name": "AI & Automation Services",
-        "Organization.name": "Max Petrusenko Tech",
-        "Person.description": "AI automation consultant specializing in Claude Code, n8n workflows, ChatGPT integrations, and workflow automation for creators and founders.",
+        "Organization.name": "Presence Atelier",
+        "Person.description": "Creator of tech automation resources, tantra education, and somatic practice offerings.",
         "Person.name": "Max Petrusenko",
         "ProfessionalService.description": "AI automation consultant specializing in Claude Code, n8n workflows, ChatGPT integrations, and workflow automation for creators and founders. Available remotely worldwide, with in-person work by request while traveling.",
         "ProfessionalService.name": "Max Petrusenko - AI & Automation Consultant",
@@ -7007,7 +6110,7 @@
         "WebPage.description": "Get your team productive with Claude Code fast. Sub-agent configuration, custom skills, workflow integration.",
         "WebPage.name": "Claude Code Consultant - Setup, Configuration & Team Training"
       },
-      "content_digest": "4a5ef5a23fe6ed648e6adace4fd1b04680e05d1c5eca73717fff2407716b89eb",
+      "content_digest": "4a0ad0da39126c8fb363868fe05f672e0751e49cea0fb600aa4d2cb1b9efaff5",
       "shape": {
         "canonical": "https://www.maxpetrusenko.com/claude-code-consultant",
         "ids": [],
@@ -7036,7 +6139,6 @@
           ],
           "Organization": [],
           "Person": [
-            "name",
             "name"
           ],
           "ProfessionalService": [
@@ -7069,8 +6171,6 @@
           "Offer",
           "OfferCatalog",
           "Organization",
-          "Organization",
-          "Person",
           "Person",
           "ProfessionalService",
           "Question",
@@ -7082,7 +6182,7 @@
         ],
         "values": {}
       },
-      "shape_digest": "8975689ed111da7509b62fba2bb3ce44b82893abbeb15c13609315e2e8574067"
+      "shape_digest": "59d64019d5b7c5175faa8e2379aa709eb9fea447807b9ca553e771f87fa4b843"
     },
     "/consciousness-assistant": {
       "blocks": 4,
@@ -9581,12 +8681,12 @@
       "shape_digest": "eead15a6d4c0927d7e03202e7db9b128739cec5a80fe1fd2e429ee9f0c2abea6"
     },
     "/n8n-automation": {
-      "blocks": 6,
+      "blocks": 5,
       "content": {
         "ListItem.name": "n8n Automation",
         "OfferCatalog.name": "AI & Automation Services",
-        "Organization.name": "Max Petrusenko Tech",
-        "Person.description": "AI automation consultant specializing in Claude Code, n8n workflows, ChatGPT integrations, and workflow automation for creators and founders.",
+        "Organization.name": "Presence Atelier",
+        "Person.description": "Creator of tech automation resources, tantra education, and somatic practice offerings.",
         "Person.name": "Max Petrusenko",
         "ProfessionalService.description": "AI automation consultant specializing in Claude Code, n8n workflows, ChatGPT integrations, and workflow automation for creators and founders. Available remotely worldwide, with in-person work by request while traveling.",
         "ProfessionalService.name": "Max Petrusenko - AI & Automation Consultant",
@@ -9596,7 +8696,7 @@
         "WebPage.description": "Automate your business with n8n. Custom workflow design, API integrations, data pipelines.",
         "WebPage.name": "n8n Automation Consultant - Workflow Design & API Integration"
       },
-      "content_digest": "52f6c92bc31c88357d3d6107d6be3587fe11ab54a9aa07df4a445e07bb625e96",
+      "content_digest": "0422060d51ac9dcb210ab9848b4dbb860cd138b814aedcbc6eaaf57ed2bfe436",
       "shape": {
         "canonical": "https://www.maxpetrusenko.com/n8n-automation",
         "ids": [],
@@ -9625,7 +8725,6 @@
           ],
           "Organization": [],
           "Person": [
-            "name",
             "name"
           ],
           "ProfessionalService": [
@@ -9658,8 +8757,6 @@
           "Offer",
           "OfferCatalog",
           "Organization",
-          "Organization",
-          "Person",
           "Person",
           "ProfessionalService",
           "Question",
@@ -9671,7 +8768,7 @@
         ],
         "values": {}
       },
-      "shape_digest": "64b993d06cc578af3fb5e8452054e01393b749cb80d2981795b61dd6910f8726"
+      "shape_digest": "b952cb141899200640c18ada361ce71262686387ac43d9fae9f97ff2eb6a4687"
     },
     "/performance": {
       "blocks": 3,
@@ -10004,13 +9101,13 @@
       "shape_digest": "53572b4765417f61f1628c6c193d763ea3ee1831ee469aae88cf63626f4094ff"
     },
     "/spirituality": {
-      "blocks": 9,
+      "blocks": 8,
       "content": {
         "ListItem.name": "Spirituality",
         "OfferCatalog.name": "Tantra-informed somatic practice pathways",
         "Organization.description": "AI engineer, somatic practitioner, and consciousness technology writer. Bridging agentic coding, contemplative neuroscience, and eastern philosophy.",
         "Organization.name": "Presence Atelier",
-        "Person.description": "Certified tantra massage and somatic energy work practitioner trained at Tantra Nectar University (Satyarti). Specializing in nervous system regulation, breathwork, shadow work, and trauma-informed bodywork.",
+        "Person.description": "Creator of tech automation resources, tantra education, and somatic practice offerings.",
         "Person.name": "Max Petrusenko",
         "Question.name": "What is breathwork for nervous system regulation?",
         "Service.description": "Partners seeking to deepen connection and communication through somatic practice and tantric techniques.",
@@ -10018,7 +9115,7 @@
         "WebPage.description": "Somatic energy work is a body-based practice using breathwork, conscious touch, and presence techniques for nervous system regulation and embodied awareness. Max Petrusenko holds a Tantra Massage Certification from Tantra Nectar University (Satyarti). No calendar slots are open right now. You can send an inquiry by text: +1-954-275-9666.",
         "WebPage.name": "What is somatic energy work and who practices it near me?"
       },
-      "content_digest": "04ca14c72f71b18693bc642b63a320c81383deb211e67c194a8206080d143780",
+      "content_digest": "1316087a2b9899fb8c59d60a849d61314c2218ca39f48153daf9318082ac8610",
       "shape": {
         "canonical": "https://www.maxpetrusenko.com/spirituality",
         "ids": [],
@@ -10062,7 +9159,6 @@
           ],
           "Organization": [],
           "Person": [
-            "name",
             "name",
             "name"
           ],
@@ -10141,8 +9237,6 @@
           "OfferCatalog",
           "Organization",
           "Organization",
-          "Organization",
-          "Person",
           "Person",
           "Person",
           "Question",
@@ -10174,7 +9268,7 @@
         ],
         "values": {}
       },
-      "shape_digest": "b7cbd684e47e31d1a0e0fb793ac961ca8f37e1fa60b90d0948bcb4b15adddfb9"
+      "shape_digest": "3635cde58ebab89474a9513e16c858cc54735a0ae297477a4c0642b18d93153a"
     },
     "/spirituality/articles": {
       "blocks": 3,
@@ -10659,12 +9753,12 @@
       "shape_digest": "e42ccd8aa7a9a09686469c3d395216d5e97b30acfce0e5f05dd83a1a18b4e8b6"
     },
     "/tech": {
-      "blocks": 7,
+      "blocks": 6,
       "content": {
         "ListItem.name": "Tech",
         "OfferCatalog.name": "AI & Automation Services",
-        "Organization.name": "Max Petrusenko Tech",
-        "Person.description": "AI automation consultant specializing in Claude Code, n8n workflows, ChatGPT integrations, and workflow automation for creators and founders.",
+        "Organization.name": "Presence Atelier",
+        "Person.description": "Creator of tech automation resources, tantra education, and somatic practice offerings.",
         "Person.name": "Max Petrusenko",
         "ProfessionalService.description": "AI automation consultant specializing in Claude Code, n8n workflows, ChatGPT integrations, and workflow automation for creators and founders. Available remotely worldwide, with in-person work by request while traveling.",
         "ProfessionalService.name": "Max Petrusenko - AI & Automation Consultant",
@@ -10674,7 +9768,7 @@
         "WebPage.description": "Max Petrusenko helps founders and teams ship AI automations and internal tools in weeks, not months. His work focuses on Claude Code, n8n, and custom agent pipelines that reduce ops load, speed delivery, and replace fragile SaaS workflows. Engagements are hands-on, outcome-driven, and production-ready. A recent Claude Code implementation saved $253k annually with 3x faster feature delivery.",
         "WebPage.name": "What AI automation services does Max Petrusenko offer?"
       },
-      "content_digest": "a6b6b9b0cb2b9546e37a21fa8ca999bedfca6a7e913a1468406924e0ecbb785d",
+      "content_digest": "e49ddf773bd6c36cfb34075e4bb354b02ebdf5ae05a5024b3fcf4d0fbea4b025",
       "shape": {
         "canonical": "https://www.maxpetrusenko.com/tech",
         "ids": [],
@@ -10709,7 +9803,6 @@
           ],
           "Organization": [],
           "Person": [
-            "name",
             "name"
           ],
           "ProfessionalService": [
@@ -10762,8 +9855,6 @@
           "Offer",
           "OfferCatalog",
           "Organization",
-          "Organization",
-          "Person",
           "Person",
           "ProfessionalService",
           "Question",
@@ -10783,15 +9874,15 @@
         ],
         "values": {}
       },
-      "shape_digest": "99fee1082ff22954821ecd3d96fea01752bc8197d22b8a57c652278fa6e11362"
+      "shape_digest": "fa38fb92b9f8f5072c3cbf1102b5704ee3f6d52f11461e97056e39f20ffefbf3"
     },
     "/tech/ai-automation": {
-      "blocks": 5,
+      "blocks": 4,
       "content": {
         "ListItem.name": "AI Automation",
         "OfferCatalog.name": "AI & Automation Services",
-        "Organization.name": "Max Petrusenko Tech",
-        "Person.description": "AI automation consultant specializing in Claude Code, n8n workflows, ChatGPT integrations, and workflow automation for creators and founders.",
+        "Organization.name": "Presence Atelier",
+        "Person.description": "Creator of tech automation resources, tantra education, and somatic practice offerings.",
         "Person.name": "Max Petrusenko",
         "ProfessionalService.description": "AI automation consultant specializing in Claude Code, n8n workflows, ChatGPT integrations, and workflow automation for creators and founders. Available remotely worldwide, with in-person work by request while traveling.",
         "ProfessionalService.name": "Max Petrusenko - AI & Automation Consultant",
@@ -10800,7 +9891,7 @@
         "WebPage.description": "AI automation consulting for content workflows and business process automation.",
         "WebPage.name": "AI Automation Services"
       },
-      "content_digest": "1ead6a08da96e1ba3392d37d00b0cb20036700cdfa0082daa6f679cbacbe5d63",
+      "content_digest": "c6100cdb08b16426cd1014e6e1deef561f4c118b01232950ae74b21a37a0e202",
       "shape": {
         "canonical": "https://www.maxpetrusenko.com/tech/ai-automation",
         "ids": [],
@@ -10823,7 +9914,6 @@
           ],
           "Organization": [],
           "Person": [
-            "name",
             "name"
           ],
           "ProfessionalService": [
@@ -10850,8 +9940,6 @@
           "Offer",
           "OfferCatalog",
           "Organization",
-          "Organization",
-          "Person",
           "Person",
           "ProfessionalService",
           "Service",
@@ -10862,7 +9950,7 @@
         ],
         "values": {}
       },
-      "shape_digest": "ceb0d9463e3218e7a5187ef569cd2c468c4de4fd7f7bf37899cb5cdc2904d56e"
+      "shape_digest": "02e4b76321c04ccbb4cd80c6e2a98a8918fd0cc8194b09a99538dc89e526df3d"
     },
     "/tech/articles": {
       "blocks": 3,
@@ -10907,18 +9995,18 @@
       "shape_digest": "ea3f5361934794a1993e0561c6108af0236cdd7ac14a88468e2c3a2210af6820"
     },
     "/tech/articles/answer-engine-optimization-aeo": {
-      "blocks": 5,
+      "blocks": 4,
       "content": {
         "ListItem.name": "Answer Engine Optimization Guide",
-        "Organization.name": "Max Petrusenko Tech",
-        "Person.description": "AI automation consultant specializing in Claude Code, n8n workflows, ChatGPT integrations, and workflow automation for creators and founders.",
+        "Organization.name": "Max Petrusenko",
+        "Person.description": "Creator of tech automation resources, tantra education, and somatic practice offerings.",
         "Person.name": "Max Petrusenko",
         "TechArticle.description": "Practical AEO guide for 2026: audit answer-engine readiness, improve structured extraction, and increase citation visibility in AI search.",
         "TechArticle.headline": "Answer Engine Optimization (AEO) Guide for 2026",
         "WebPage.description": "Practical AEO guide for 2026: audit answer-engine readiness and structure pages for AI citation.",
         "WebPage.name": "Answer Engine Optimization (AEO) Guide for 2026"
       },
-      "content_digest": "cc5aea10275c201246cd7229ac1184d07b2c09901132b4b974869dddab1b8a87",
+      "content_digest": "372515f0262d272ff28adff7a047b896aad4cf52bfe274d0c4a93717e0d8eabc",
       "shape": {
         "canonical": "https://www.maxpetrusenko.com/tech/articles/answer-engine-optimization-aeo",
         "ids": [],
@@ -10935,7 +10023,6 @@
           "Organization": [],
           "Person": [
             "name",
-            "name",
             "name"
           ],
           "WebPage": []
@@ -10948,8 +10035,6 @@
           "ListItem",
           "Organization",
           "Organization",
-          "Organization",
-          "Person",
           "Person",
           "Person",
           "TechArticle",
@@ -10957,21 +10042,21 @@
         ],
         "values": {}
       },
-      "shape_digest": "b8a61719eb52f65e138cd49320059365b517ae1752d0f8cda4c55d5fbd21d39d"
+      "shape_digest": "fca5c3c13b39370f9f526cb37be54044fc3d72270125567e2997af606ec3cc45"
     },
     "/tech/articles/bitcoin-as-strong-money": {
-      "blocks": 5,
+      "blocks": 4,
       "content": {
         "ListItem.name": "Bitcoin as Strong Money",
-        "Organization.name": "Max Petrusenko Tech",
-        "Person.description": "AI automation consultant specializing in Claude Code, n8n workflows, ChatGPT integrations, and workflow automation for creators and founders.",
+        "Organization.name": "Max Petrusenko",
+        "Person.description": "Creator of tech automation resources, tantra education, and somatic practice offerings.",
         "Person.name": "Max Petrusenko",
         "TechArticle.description": "A practical case for why people treat Bitcoin as strong money rather than generic crypto speculation.",
         "TechArticle.headline": "Bitcoin as Strong Money",
         "WebPage.description": "Why Bitcoin stands apart from generic crypto: scarcity, neutrality, settlement, and tradeoffs.",
         "WebPage.name": "Bitcoin as Strong Money"
       },
-      "content_digest": "6cae56aa69ab1c1d0794bddd56d85e7c37638412fc573afb8a0898f7b542574d",
+      "content_digest": "578149d8ffe6f32e12241e0907b275c820af7227d4f8001f8a2103fdb6942a35",
       "shape": {
         "canonical": "https://www.maxpetrusenko.com/tech/articles/bitcoin-as-strong-money",
         "ids": [],
@@ -10988,7 +10073,6 @@
           "Organization": [],
           "Person": [
             "name",
-            "name",
             "name"
           ],
           "WebPage": []
@@ -11001,8 +10085,6 @@
           "ListItem",
           "Organization",
           "Organization",
-          "Organization",
-          "Person",
           "Person",
           "Person",
           "TechArticle",
@@ -11010,7 +10092,7 @@
         ],
         "values": {}
       },
-      "shape_digest": "83280b453b42d45aa68cef1c8152fa8760a9bccda320aba499a913f8a3c74d8e"
+      "shape_digest": "0d79a3228db503187adfb0449527102306cb6f44023ebc3b41f2e51cfde15925"
     },
     "/tech/articles/chatgpt-api-integration": {
       "blocks": 3,
@@ -11105,18 +10187,18 @@
       "shape_digest": "ef721dd2a66dd8cedbcbe3f6215613137f3b0359546cc8ffca771f0459f751f1"
     },
     "/tech/articles/generative-ai-score-websites": {
-      "blocks": 5,
+      "blocks": 4,
       "content": {
         "ListItem.name": "Generative AI Score for Websites",
-        "Organization.name": "Max Petrusenko Tech",
-        "Person.description": "AI automation consultant specializing in Claude Code, n8n workflows, ChatGPT integrations, and workflow automation for creators and founders.",
+        "Organization.name": "Max Petrusenko",
+        "Person.description": "Creator of tech automation resources, tantra education, and somatic practice offerings.",
         "Person.name": "Max Petrusenko",
         "TechArticle.description": "How AI answer engines like ChatGPT, Claude, and Perplexity evaluate and score websites. Learn the factors that influence AI citation, attribution, and recommendation in 2025.",
         "TechArticle.headline": "Generative AI Score for Websites - What AI Engines Value",
         "WebPage.description": "How AI answer engines like ChatGPT, Claude, and Perplexity evaluate and score websites. Learn the factors that influence AI citation and attribution.",
         "WebPage.name": "Generative AI Score for Websites - What AI Engines Value"
       },
-      "content_digest": "90c258c4b7870589777f87fb07bcb0db5c05aa7005c7419a066acbaca0e067fe",
+      "content_digest": "f803f1b4e9023b483f1a206580bdedca6037c5695cab7239eeeb16f23430ef12",
       "shape": {
         "canonical": "https://www.maxpetrusenko.com/tech/articles/generative-ai-score-websites",
         "ids": [],
@@ -11133,7 +10215,6 @@
           "Organization": [],
           "Person": [
             "name",
-            "name",
             "name"
           ],
           "WebPage": []
@@ -11146,8 +10227,6 @@
           "ListItem",
           "Organization",
           "Organization",
-          "Organization",
-          "Person",
           "Person",
           "Person",
           "TechArticle",
@@ -11155,21 +10234,21 @@
         ],
         "values": {}
       },
-      "shape_digest": "f1cfefe41987c748eaa4420eeb7df5bfc9b9511cf8b0e576c9a6e0dd7514e746"
+      "shape_digest": "b00ea50a2782e29cd7a022fe9286f83c6f3a209cf4226cd4c2e2e5e7aba0ae97"
     },
     "/tech/articles/generative-engine-optimization-geo": {
-      "blocks": 5,
+      "blocks": 4,
       "content": {
         "ListItem.name": "Generative Engine Optimization",
-        "Organization.name": "Max Petrusenko Tech",
-        "Person.description": "AI automation consultant specializing in Claude Code, n8n workflows, ChatGPT integrations, and workflow automation for creators and founders.",
+        "Organization.name": "Max Petrusenko",
+        "Person.description": "Creator of tech automation resources, tantra education, and somatic practice offerings.",
         "Person.name": "Max Petrusenko",
         "TechArticle.description": "A practical GEO framework and roadmap for service businesses: entity clarity, citation-ready pages, and conversion architecture.",
         "TechArticle.headline": "GEO Framework and Roadmap for 2026",
         "WebPage.description": "How to build a GEO roadmap that gets cited by AI assistants and turns attention into qualified leads.",
         "WebPage.name": "GEO Framework and Roadmap for 2026"
       },
-      "content_digest": "3b0b173cdaaddd0bc2d44a8519713ee880a4118f9f31af451a6143c427e5db46",
+      "content_digest": "527965a934f7591d182664c275e1e64e2534582270f5ffadfe6935aa1f766d36",
       "shape": {
         "canonical": "https://www.maxpetrusenko.com/tech/articles/generative-engine-optimization-geo",
         "ids": [],
@@ -11186,7 +10265,6 @@
           "Organization": [],
           "Person": [
             "name",
-            "name",
             "name"
           ],
           "WebPage": []
@@ -11199,8 +10277,6 @@
           "ListItem",
           "Organization",
           "Organization",
-          "Organization",
-          "Person",
           "Person",
           "Person",
           "TechArticle",
@@ -11208,7 +10284,7 @@
         ],
         "values": {}
       },
-      "shape_digest": "2da5c7bdf5095e60ee99d741af5c9df3162d98953b7b9d55995a7572fed805d1"
+      "shape_digest": "7648ae26542299e7d1874146f9741529af1c0c535fb747209db4f7099fc006c6"
     },
     "/tech/articles/n8n-workflow-automation": {
       "blocks": 3,
@@ -11257,18 +10333,18 @@
       "shape_digest": "f67bc6c80a181bd3efd8d21bed62837596e3c7d1131c92dbd0d0f980f44c701f"
     },
     "/tech/articles/openclaw-installation-playbook": {
-      "blocks": 5,
+      "blocks": 4,
       "content": {
         "ListItem.name": "OpenClaw Installation Playbook",
-        "Organization.name": "Max Petrusenko Tech",
-        "Person.description": "AI automation consultant specializing in Claude Code, n8n workflows, ChatGPT integrations, and workflow automation for creators and founders.",
+        "Organization.name": "Max Petrusenko",
+        "Person.description": "Creator of tech automation resources, tantra education, and somatic practice offerings.",
         "Person.name": "Max Petrusenko",
         "TechArticle.description": "Environment prep, secure deployment, and rollout guardrails for OpenClaw installations across common deployment targets.",
         "TechArticle.headline": "OpenClaw Installation Guide 2026",
         "WebPage.description": "A field-tested OpenClaw install sequence with deployment targets and operational guardrails.",
         "WebPage.name": "OpenClaw Installation Guide 2026"
       },
-      "content_digest": "9b624546006a3ad851bb056ba19c4844025ecef384dacd9c497183cc935ae592",
+      "content_digest": "e1bed1aad17e3cc823cea7d78358ec9254714bab0f2cf5f7bba2202fd5f47ec9",
       "shape": {
         "canonical": "https://www.maxpetrusenko.com/tech/articles/openclaw-installation-playbook",
         "ids": [],
@@ -11285,7 +10361,6 @@
           "Organization": [],
           "Person": [
             "name",
-            "name",
             "name"
           ],
           "WebPage": []
@@ -11298,8 +10373,6 @@
           "ListItem",
           "Organization",
           "Organization",
-          "Organization",
-          "Person",
           "Person",
           "Person",
           "TechArticle",
@@ -11307,21 +10380,21 @@
         ],
         "values": {}
       },
-      "shape_digest": "581ddfea7f3d7005976a02cbddd5dc21c0e40b0eb0ba2c8241666009f48f841d"
+      "shape_digest": "070d7be7014fe2e85b513c4d14d53c6f3167ca786db316de46ed28c7d0a85d72"
     },
     "/tech/articles/seo-is-dead": {
-      "blocks": 5,
+      "blocks": 4,
       "content": {
         "ListItem.name": "SEO Is Dead",
-        "Organization.name": "Max Petrusenko Tech",
-        "Person.description": "AI automation consultant specializing in Claude Code, n8n workflows, ChatGPT integrations, and workflow automation for creators and founders.",
+        "Organization.name": "Max Petrusenko",
+        "Person.description": "Creator of tech automation resources, tantra education, and somatic practice offerings.",
         "Person.name": "Max Petrusenko",
         "TechArticle.description": "Why SEO still works, what changed with AI answers, and how to run a dual strategy.",
         "TechArticle.headline": "Is SEO Dead in 2026? No - It Split Into Search + Answers",
         "WebPage.description": "A practical model for balancing rankings, citations, and conversion.",
         "WebPage.name": "Is SEO Dead in 2026? No - It Split Into Search + Answers"
       },
-      "content_digest": "1eb69d223323550b1c9a5d4f5d5ae169d5d4c0ab6fbb712f250ba8bdf9366d1b",
+      "content_digest": "3df55ef55e1556779aaacc4ae8e27850058ad7a65b225f4097d80c6d31b4e037",
       "shape": {
         "canonical": "https://www.maxpetrusenko.com/tech/articles/seo-is-dead",
         "ids": [],
@@ -11338,7 +10411,6 @@
           "Organization": [],
           "Person": [
             "name",
-            "name",
             "name"
           ],
           "WebPage": []
@@ -11351,8 +10423,6 @@
           "ListItem",
           "Organization",
           "Organization",
-          "Organization",
-          "Person",
           "Person",
           "Person",
           "TechArticle",
@@ -11360,19 +10430,19 @@
         ],
         "values": {}
       },
-      "shape_digest": "5c501c953f7f8d4a3cd0dd2d6c1d2ddbce2a2188e52ed5cee454e1ba66d6296c"
+      "shape_digest": "5b7caa413c423a0f249a0c153ddcaf9168badcddd44796d81c8097f6379bda21"
     },
     "/tech/case-studies": {
-      "blocks": 4,
+      "blocks": 3,
       "content": {
         "ListItem.name": "Case Studies",
-        "Organization.name": "Max Petrusenko Tech",
-        "Person.description": "AI automation consultant specializing in Claude Code, n8n workflows, ChatGPT integrations, and workflow automation for creators and founders.",
+        "Organization.name": "Presence Atelier",
+        "Person.description": "Creator of tech automation resources, tantra education, and somatic practice offerings.",
         "Person.name": "Max Petrusenko",
         "WebPage.description": "Detailed case studies from AI automation and software development projects.",
         "WebPage.name": "Case Studies - Project Outcomes"
       },
-      "content_digest": "741b1b6b1fb9dbfc9ffe8cdf532bb228f638857bc51cc1f75152a451b5d5fe68",
+      "content_digest": "85e44a16d35eaf7aaad072a05c1331a01c9a0e45220fe48676d945b60a211b3e",
       "shape": {
         "canonical": "https://www.maxpetrusenko.com/tech/case-studies",
         "ids": [],
@@ -11387,7 +10457,6 @@
           ],
           "Organization": [],
           "Person": [
-            "name",
             "name"
           ],
           "WebPage": []
@@ -11398,28 +10467,26 @@
           "ListItem",
           "ListItem",
           "Organization",
-          "Organization",
-          "Person",
           "Person",
           "WebPage"
         ],
         "values": {}
       },
-      "shape_digest": "37cea986e638b049e966417fdfcd00c4ea2cce1e95fdbb07f664ce9e5abd9b79"
+      "shape_digest": "b7655aa79b5e4637b112b045b88b49eb78500ece856f75859420b15b47c293f6"
     },
     "/tech/case-studies/claude-code-automation": {
-      "blocks": 5,
+      "blocks": 4,
       "content": {
         "ListItem.name": "Claude Code Automation Case Study",
-        "Organization.name": "Max Petrusenko Tech",
-        "Person.description": "AI automation consultant specializing in Claude Code, n8n workflows, ChatGPT integrations, and workflow automation for creators and founders.",
+        "Organization.name": "Max Petrusenko",
+        "Person.description": "Creator of tech automation resources, tantra education, and somatic practice offerings.",
         "Person.name": "Max Petrusenko",
         "TechArticle.description": "How a Series B startup saved $253k annually through Claude Code automation. 3x faster feature delivery, 73% fewer bugs, and zero regressions across 127 PRs.",
         "TechArticle.headline": "Case Study: $253k Saved with Claude Code Automation",
         "WebPage.description": "How a Series B startup saved $253k annually through Claude Code automation. 3x faster feature delivery, 73% fewer bugs, and zero regressions across 127 PRs.",
         "WebPage.name": "Case Study: $253k Saved with Claude Code Automation"
       },
-      "content_digest": "9c744521a241f4274a4a724c4aadfd66bffb18e76dc78a52126dd9c987c90295",
+      "content_digest": "e0799104adb411c0d6a1797d3f623e3a4153206b65ea6b130d249c87743acd7f",
       "shape": {
         "canonical": "https://www.maxpetrusenko.com/tech/case-studies/claude-code-automation",
         "ids": [],
@@ -11436,7 +10503,6 @@
           "Organization": [],
           "Person": [
             "name",
-            "name",
             "name"
           ],
           "WebPage": []
@@ -11449,8 +10515,6 @@
           "ListItem",
           "Organization",
           "Organization",
-          "Organization",
-          "Person",
           "Person",
           "Person",
           "TechArticle",
@@ -11458,7 +10522,7 @@
         ],
         "values": {}
       },
-      "shape_digest": "791eadbdc4e1399c9f6333c2ec2b37ac504ea21d0118216164de6435e29fcc27"
+      "shape_digest": "ae8e76cfadee8ef2781f4bd0aa6c9164bedb2c239b52b5a1e08e1ad71520d258"
     },
     "/terms-of-service": {
       "blocks": 3,

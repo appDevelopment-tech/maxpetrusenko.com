@@ -1,11 +1,11 @@
 {
-  "blocks": 9,
+  "blocks": 8,
   "content": {
     "ListItem.name": "Spirituality",
     "OfferCatalog.name": "Tantra-informed somatic practice pathways",
     "Organization.description": "AI engineer, somatic practitioner, and consciousness technology writer. Bridging agentic coding, contemplative neuroscience, and eastern philosophy.",
     "Organization.name": "Presence Atelier",
-    "Person.description": "Certified tantra massage and somatic energy work practitioner trained at Tantra Nectar University (Satyarti). Specializing in nervous system regulation, breathwork, shadow work, and trauma-informed bodywork.",
+    "Person.description": "Creator of tech automation resources, tantra education, and somatic practice offerings.",
     "Person.name": "Max Petrusenko",
     "Question.name": "What is breathwork for nervous system regulation?",
     "Service.description": "Partners seeking to deepen connection and communication through somatic practice and tantric techniques.",
@@ -13,7 +13,7 @@
     "WebPage.description": "Somatic energy work is a body-based practice using breathwork, conscious touch, and presence techniques for nervous system regulation and embodied awareness. Max Petrusenko holds a Tantra Massage Certification from Tantra Nectar University (Satyarti). No calendar slots are open right now. You can send an inquiry by text: +1-954-275-9666.",
     "WebPage.name": "What is somatic energy work and who practices it near me?"
   },
-  "content_digest": "04ca14c72f71b18693bc642b63a320c81383deb211e67c194a8206080d143780",
+  "content_digest": "1316087a2b9899fb8c59d60a849d61314c2218ca39f48153daf9318082ac8610",
   "route": "/spirituality",
   "shape": {
     "canonical": "https://www.maxpetrusenko.com/spirituality",
@@ -58,7 +58,6 @@
       ],
       "Organization": [],
       "Person": [
-        "name",
         "name",
         "name"
       ],
@@ -137,8 +136,6 @@
       "OfferCatalog",
       "Organization",
       "Organization",
-      "Organization",
-      "Person",
       "Person",
       "Person",
       "Question",
@@ -170,5 +167,5 @@
     ],
     "values": {}
   },
-  "shape_digest": "b7cbd684e47e31d1a0e0fb793ac961ca8f37e1fa60b90d0948bcb4b15adddfb9"
+  "shape_digest": "3635cde58ebab89474a9513e16c858cc54735a0ae297477a4c0642b18d93153a"
 }

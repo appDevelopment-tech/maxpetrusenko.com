@@ -1,16 +1,16 @@
 {
-  "blocks": 5,
+  "blocks": 4,
   "content": {
     "ListItem.name": "OpenClaw Installation Playbook",
-    "Organization.name": "Max Petrusenko Tech",
-    "Person.description": "AI automation consultant specializing in Claude Code, n8n workflows, ChatGPT integrations, and workflow automation for creators and founders.",
+    "Organization.name": "Max Petrusenko",
+    "Person.description": "Creator of tech automation resources, tantra education, and somatic practice offerings.",
     "Person.name": "Max Petrusenko",
     "TechArticle.description": "Environment prep, secure deployment, and rollout guardrails for OpenClaw installations across common deployment targets.",
     "TechArticle.headline": "OpenClaw Installation Guide 2026",
     "WebPage.description": "A field-tested OpenClaw install sequence with deployment targets and operational guardrails.",
     "WebPage.name": "OpenClaw Installation Guide 2026"
   },
-  "content_digest": "9b624546006a3ad851bb056ba19c4844025ecef384dacd9c497183cc935ae592",
+  "content_digest": "e1bed1aad17e3cc823cea7d78358ec9254714bab0f2cf5f7bba2202fd5f47ec9",
   "route": "/tech/articles/openclaw-installation-playbook",
   "shape": {
     "canonical": "https://www.maxpetrusenko.com/tech/articles/openclaw-installation-playbook",
@@ -28,7 +28,6 @@
       "Organization": [],
       "Person": [
         "name",
-        "name",
         "name"
       ],
       "WebPage": []
@@ -41,8 +40,6 @@
       "ListItem",
       "Organization",
       "Organization",
-      "Organization",
-      "Person",
       "Person",
       "Person",
       "TechArticle",
@@ -50,5 +47,5 @@
     ],
     "values": {}
   },
-  "shape_digest": "581ddfea7f3d7005976a02cbddd5dc21c0e40b0eb0ba2c8241666009f48f841d"
+  "shape_digest": "070d7be7014fe2e85b513c4d14d53c6f3167ca786db316de46ed28c7d0a85d72"
 }

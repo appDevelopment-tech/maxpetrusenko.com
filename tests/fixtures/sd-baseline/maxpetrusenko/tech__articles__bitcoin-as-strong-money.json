@@ -1,16 +1,16 @@
 {
-  "blocks": 5,
+  "blocks": 4,
   "content": {
     "ListItem.name": "Bitcoin as Strong Money",
-    "Organization.name": "Max Petrusenko Tech",
-    "Person.description": "AI automation consultant specializing in Claude Code, n8n workflows, ChatGPT integrations, and workflow automation for creators and founders.",
+    "Organization.name": "Max Petrusenko",
+    "Person.description": "Creator of tech automation resources, tantra education, and somatic practice offerings.",
     "Person.name": "Max Petrusenko",
     "TechArticle.description": "A practical case for why people treat Bitcoin as strong money rather than generic crypto speculation.",
     "TechArticle.headline": "Bitcoin as Strong Money",
     "WebPage.description": "Why Bitcoin stands apart from generic crypto: scarcity, neutrality, settlement, and tradeoffs.",
     "WebPage.name": "Bitcoin as Strong Money"
   },
-  "content_digest": "6cae56aa69ab1c1d0794bddd56d85e7c37638412fc573afb8a0898f7b542574d",
+  "content_digest": "578149d8ffe6f32e12241e0907b275c820af7227d4f8001f8a2103fdb6942a35",
   "route": "/tech/articles/bitcoin-as-strong-money",
   "shape": {
     "canonical": "https://www.maxpetrusenko.com/tech/articles/bitcoin-as-strong-money",
@@ -28,7 +28,6 @@
       "Organization": [],
       "Person": [
         "name",
-        "name",
         "name"
       ],
       "WebPage": []
@@ -41,8 +40,6 @@
       "ListItem",
       "Organization",
       "Organization",
-      "Organization",
-      "Person",
       "Person",
       "Person",
       "TechArticle",
@@ -50,5 +47,5 @@
     ],
     "values": {}
   },
-  "shape_digest": "83280b453b42d45aa68cef1c8152fa8760a9bccda320aba499a913f8a3c74d8e"
+  "shape_digest": "0d79a3228db503187adfb0449527102306cb6f44023ebc3b41f2e51cfde15925"
 }

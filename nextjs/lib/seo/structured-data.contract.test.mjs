@@ -87,28 +87,21 @@ const OFFHOST_URL_ALLOWLIST = new Set([
   "www.ishafoundation.org", // memberOf: Isha Foundation
 ]);
 
-// External identity profiles. `sameAs` is *for* off-host references; these are
-// the ones currently referenced, mostly by generateEnhancedPersonSchema().
+// External identity profiles. `sameAs` is *for* off-host references.
+//
+// Narrowed when the four Person variants collapsed into one: this set used to
+// list 19 hosts because `generateEnhancedPersonSchema()` shipped a long
+// unverified `sameAs` list on the homepage. That generator is gone and the
+// canonical Person references exactly the five `siteConfig.social` hosts below.
+// A stale allowlist entry is how an unverified profile URL gets re-blessed, so
+// the set is kept equal to what is actually referenced -- add a host here only
+// together with the generator that uses it.
 const EXTERNAL_PROFILE_HOSTS = new Set([
-  "about.me",
-  "angel.co",
-  "codepen.io",
-  "dev.to",
-  "github.com",
-  "instagram.com",
-  "linkedin.com",
-  "linktr.ee",
-  "medium.com",
-  "patreon.com",
-  "stackoverflow.com",
-  "substack.com",
-  "vimeo.com",
-  "www.crunchbase.com",
-  "www.gumroad.com",
-  "www.instagram.com",
-  "www.pinterest.com",
-  "www.youtube.com",
-  "x.com",
+  "github.com", // siteConfig.social.github
+  "instagram.com", // siteConfig.social.instagram
+  "linkedin.com", // siteConfig.social.linkedin
+  "medium.com", // siteConfig.social.medium
+  "x.com", // siteConfig.social.twitter
 ]);
 
 // ---------------------------------------------------------------------------
@@ -183,8 +176,6 @@ const FIXTURES = {
     author: "Max Petrusenko",
   }],
   generatePersonSchema: [],
-  generateTechPersonSchema: [],
-  generateSpiritualityPersonSchema: [],
   generateOrganizationSchema: [],
   generateBreadcrumbSchema: [[{ name: "Home", url: "/" }, { name: "Tech", url: "/tech" }]],
   generateItemListSchema: [[{ name: "Tech", url: "/tech" }], { name: "List", description: "Description" }],
@@ -225,7 +216,6 @@ const FIXTURES = {
   // NOTE: takes a leading RELATIVE path; the generator prefixes siteConfig.url.
   generateScheduleActionSchema: ["tech"],
   generateOrganizationWithGBP: [],
-  generateEnhancedPersonSchema: [],
   // NOTE: relative path — the generator prefixes siteConfig.url.
   generateSpeakableSchema: [{ url: "/tech", speakableTexts: ["h2"] }],
   generateServiceSpeakableSchema: [],
@@ -561,7 +551,6 @@ function homepagePayload() {
     schemas.generateProfessionalServiceSchema(),
     schemas.generateTechServiceSchema(),
     schemas.generateHomeFAQSchema(),
-    schemas.generateEnhancedPersonSchema(),
   ];
 }
 
