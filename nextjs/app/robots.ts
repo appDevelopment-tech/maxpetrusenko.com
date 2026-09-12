@@ -5,6 +5,11 @@ import { siteConfig } from "@/config/site";
  * Robots.txt generation
  *
  * Allows all crawlers including AI crawlers and provides sitemap location.
+ *
+ * Asset policy (rule 18): /_next/image serves the responsive srcset used by every
+ * page hero, and /_next/static/* is the JS/CSS the renderer needs. Both MUST stay
+ * crawlable — disallowing /_next/ would stop crawlers fetching the exact assets the
+ * markup points at. Only genuinely private areas are disallowed.
  * AI crawlers are explicitly allowed for AI discovery in ChatGPT, Claude, Perplexity,
  * Google AI, Apple, and other AI-powered search engines.
  *
@@ -19,100 +24,100 @@ export default function robots(): MetadataRoute.Robots {
       // General crawlers
       {
         userAgent: "*",
-        allow: "/",
-        disallow: ["/api/", "/_next/", "/static/"],
+        allow: ["/", "/_next/image", "/_next/static/"],
+        disallow: ["/api/", "/inbox", "/workspace", "/admin", "/auth"],
       },
       // AI Crawlers - Explicitly allow for AI discovery
       {
         userAgent: "GPTBot",
-        allow: "/",
-        disallow: ["/api/", "/_next/"],
+        allow: ["/", "/_next/image", "/_next/static/"],
+        disallow: ["/api/", "/inbox", "/workspace", "/admin", "/auth"],
       },
       {
         userAgent: "ChatGPT-User",
-        allow: "/",
-        disallow: ["/api/", "/_next/"],
+        allow: ["/", "/_next/image", "/_next/static/"],
+        disallow: ["/api/", "/inbox", "/workspace", "/admin", "/auth"],
       },
       {
         userAgent: "Claude-Web",
-        allow: "/",
-        disallow: ["/api/", "/_next/"],
+        allow: ["/", "/_next/image", "/_next/static/"],
+        disallow: ["/api/", "/inbox", "/workspace", "/admin", "/auth"],
       },
       {
         userAgent: "anthropic-ai",
-        allow: "/",
-        disallow: ["/api/", "/_next/"],
+        allow: ["/", "/_next/image", "/_next/static/"],
+        disallow: ["/api/", "/inbox", "/workspace", "/admin", "/auth"],
       },
       {
         userAgent: "PerplexityBot",
-        allow: "/",
-        disallow: ["/api/", "/_next/"],
+        allow: ["/", "/_next/image", "/_next/static/"],
+        disallow: ["/api/", "/inbox", "/workspace", "/admin", "/auth"],
       },
       {
         userAgent: "Google-Extended",
-        allow: "/",
-        disallow: ["/api/", "/_next/"],
+        allow: ["/", "/_next/image", "/_next/static/"],
+        disallow: ["/api/", "/inbox", "/workspace", "/admin", "/auth"],
       },
       {
         userAgent: "CCBot",
-        allow: "/",
-        disallow: ["/api/", "/_next/"],
+        allow: ["/", "/_next/image", "/_next/static/"],
+        disallow: ["/api/", "/inbox", "/workspace", "/admin", "/auth"],
       },
       {
         userAgent: "FacebookBot",
-        allow: "/",
-        disallow: ["/api/", "/_next/"],
+        allow: ["/", "/_next/image", "/_next/static/"],
+        disallow: ["/api/", "/inbox", "/workspace", "/admin", "/auth"],
       },
       {
         userAgent: "Amazonbot",
-        allow: "/",
-        disallow: ["/api/", "/_next/"],
+        allow: ["/", "/_next/image", "/_next/static/"],
+        disallow: ["/api/", "/inbox", "/workspace", "/admin", "/auth"],
       },
       // Additional AI crawlers
       {
         userAgent: "Applebot-Extended",
-        allow: "/",
-        disallow: ["/api/", "/_next/"],
+        allow: ["/", "/_next/image", "/_next/static/"],
+        disallow: ["/api/", "/inbox", "/workspace", "/admin", "/auth"],
       },
       {
         userAgent: "Bytespider",
-        allow: "/",
-        disallow: ["/api/", "/_next/"],
+        allow: ["/", "/_next/image", "/_next/static/"],
+        disallow: ["/api/", "/inbox", "/workspace", "/admin", "/auth"],
       },
       {
         userAgent: "Diffbot",
-        allow: "/",
-        disallow: ["/api/", "/_next/"],
+        allow: ["/", "/_next/image", "/_next/static/"],
+        disallow: ["/api/", "/inbox", "/workspace", "/admin", "/auth"],
       },
       {
         userAgent: "YouBot",
-        allow: "/",
-        disallow: ["/api/", "/_next/"],
+        allow: ["/", "/_next/image", "/_next/static/"],
+        disallow: ["/api/", "/inbox", "/workspace", "/admin", "/auth"],
       },
       {
         userAgent: "omgili",
-        allow: "/",
-        disallow: ["/api/", "/_next/"],
+        allow: ["/", "/_next/image", "/_next/static/"],
+        disallow: ["/api/", "/inbox", "/workspace", "/admin", "/auth"],
       },
       {
         userAgent: "Webzio-Extended",
-        allow: "/",
-        disallow: ["/api/", "/_next/"],
+        allow: ["/", "/_next/image", "/_next/static/"],
+        disallow: ["/api/", "/inbox", "/workspace", "/admin", "/auth"],
       },
       {
         userAgent: "Anthropic-ChatGPT",
-        allow: "/",
-        disallow: ["/api/", "/_next/"],
+        allow: ["/", "/_next/image", "/_next/static/"],
+        disallow: ["/api/", "/inbox", "/workspace", "/admin", "/auth"],
       },
       {
         userAgent: "GoogleOther",
-        allow: "/",
-        disallow: ["/api/", "/_next/"],
+        allow: ["/", "/_next/image", "/_next/static/"],
+        disallow: ["/api/", "/inbox", "/workspace", "/admin", "/auth"],
       },
       {
         userAgent: "GoogleOther-Inspection",
-        allow: "/",
-        disallow: ["/api/", "/_next/"],
+        allow: ["/", "/_next/image", "/_next/static/"],
+        disallow: ["/api/", "/inbox", "/workspace", "/admin", "/auth"],
       },
       // Allow AI guidance files specifically
       {
