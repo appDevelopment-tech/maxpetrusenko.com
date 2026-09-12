@@ -78,8 +78,10 @@ const HOST_BOUND_PROPS = [
 ];
 
 // These may legitimately leave the host, but only to an allowlisted destination.
+// `atelier.maxpetrusenko.com` was removed 2026-09-12: the subdomain is torn down
+// (HTTP 403) and no reference to it may remain, so this allowlist must not be
+// able to bless a reintroduction.
 const OFFHOST_URL_ALLOWLIST = new Set([
-  "atelier.maxpetrusenko.com", // the somatic backlink subdomain (still Max's)
   "wa.me", // WhatsApp inquiry entry points
   "form.jotform.com", // Mindfold waiver form
   "www.ishafoundation.org", // memberOf: Isha Foundation
@@ -90,7 +92,6 @@ const OFFHOST_URL_ALLOWLIST = new Set([
 const EXTERNAL_PROFILE_HOSTS = new Set([
   "about.me",
   "angel.co",
-  "atelier.maxpetrusenko.com",
   "codepen.io",
   "dev.to",
   "github.com",
@@ -489,7 +490,11 @@ test("contract: Organization logo is a raster asset on the canonical host", () =
 });
 
 test("contract: the raster brand logo asset really exists, is PNG and big enough", () => {
-  const logoUrl = schemas.generateOrganizationSchema().logo.url;
+  // `logo` may be a bare URL or an ImageObject — schema.org allows both and the
+  // rule-18 test above accepts either — so read whichever form this generator
+  // emits rather than assuming the object. The assertions below are unchanged.
+  const rawLogo = schemas.generateOrganizationSchema().logo;
+  const logoUrl = typeof rawLogo === "string" ? rawLogo : rawLogo.url;
   const relative = logoUrl.slice(CANONICAL_ORIGIN.length);
   const assetPath = path.join(NEXTJS_ROOT, "public", relative.replace(/^\//, ""));
 

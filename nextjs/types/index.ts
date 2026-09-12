@@ -99,7 +99,6 @@ export interface SocialLinks {
 }
 
 export interface ExternalLinks {
-  atelier: string;
   gumroad: string;
   patreon: string;
 }

@@ -166,18 +166,13 @@ export default function LinksPage() {
             <h2>Spirituality & Mindfold</h2>
           </div>
           <div className="tiles">
-            <a
-              className="tile"
-              href={siteConfig.externalLinks.atelier}
-              target="_blank"
-              rel="noopener"
-            >
+            <Link className="tile" href="/spirituality">
               <div className="tile-meta">
                 <span className="tile-title">Spirituality &amp; Mindfold</span>
                 <span className="tile-desc">Practice notes, FAQs, and inquiry context.</span>
               </div>
               <span className="badge spirit">Visit</span>
-            </a>
+            </Link>
             <a
               className="tile"
               href="https://wa.me/19542759666?text=Hi%20Max%2C%20I%27d%20like%20to%20join%20the%20inquiry%20list.%20I%27m%20exploring%3A%20____."

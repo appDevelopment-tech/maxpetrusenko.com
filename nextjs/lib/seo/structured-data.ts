@@ -17,6 +17,43 @@ const PERSON_IMAGE_URL = `${siteConfig.url}/images/DSC05871.jpg`;
 const TECH_PERSON_IMAGE_URL = `${siteConfig.url}/images/tech-portrait.jpg`;
 
 /**
+ * Live web presence of the Presence Atelier practice.
+ *
+ * atelier.maxpetrusenko.com was torn down 2026-09-12 (Pages project deleted,
+ * custom domain unbound) and its leftover DNS record answers HTTP 403
+ * "1014 CNAME cross-user banned", so the host must not appear in this module at
+ * all. The practice itself is still Max's own and is described live on
+ * /spirituality — `public/.ai.txt` already declares the mapping:
+ *
+ *     Brand: Presence Atelier
+ *     Website: https://www.maxpetrusenko.com/spirituality
+ *
+ * (also `public/llm.txt`: "Spirituality / Presence Atelier: .../spirituality").
+ * Every Presence Atelier `url` therefore points here: the brand name stays, the
+ * dead host is gone, and no new host is invented.
+ */
+const PRESENCE_ATELIER_URL = `${siteConfig.url}/spirituality`;
+
+/**
+ * Organization logo for nested Organization nodes.
+ *
+ * A bare URL, which is the form Google's own current Organization example uses
+ * ("logo": "https://www.example.com/images/logo.png" —
+ * https://developers.google.com/search/docs/appearance/structured-data/organization)
+ * and which schema.org accepts for `logo` alongside ImageObject. What Google's
+ * guidance actually constrains is the ASSET: >=112x112 px (brand-mark.png is
+ * 512x512), a crawlable/indexable URL on the site's own host, and a supported
+ * raster format. `structured-data.contract.test.mjs` (rule 18) asserts all
+ * three, and it accepts either form (`typeof logo === "string" ? logo : logo.url`).
+ *
+ * Why not an inline ImageObject here: these are nested stubs repeated on every
+ * page, and an ImageObject would add a type to every page's shape for no extra
+ * signal. Google does not require the object form. (Article `publisher.logo`
+ * stays an ImageObject — that comes from Article's guidance, not this one.)
+ */
+const ORGANIZATION_LOGO = BRAND_LOGO_URL;
+
+/**
  * Generate JSON-LD structured data for WebPage
  */
 export function generateWebPageSchema(data: {
@@ -117,7 +154,8 @@ export function generatePersonSchema() {
     worksFor: {
       "@type": "Organization",
       name: "Presence Atelier",
-      url: siteConfig.externalLinks.atelier,
+      url: PRESENCE_ATELIER_URL,
+      logo: ORGANIZATION_LOGO,
     },
     sameAs: [
       siteConfig.social.github,
@@ -146,6 +184,7 @@ export function generateTechPersonSchema() {
       "@type": "Organization",
       name: "Max Petrusenko Tech",
       url: `${siteConfig.url}/tech`,
+      logo: ORGANIZATION_LOGO,
     },
     sameAs: [
       siteConfig.social.github,
@@ -187,11 +226,11 @@ export function generateSpiritualityPersonSchema() {
     worksFor: {
       "@type": "Organization",
       name: "Presence Atelier",
-      url: siteConfig.externalLinks.atelier,
+      url: PRESENCE_ATELIER_URL,
+      logo: ORGANIZATION_LOGO,
     },
     sameAs: [
       siteConfig.social.instagram,
-      siteConfig.externalLinks.atelier,
     ].filter(Boolean),
     knowsAbout: [
       "Tantra Massage",
@@ -223,11 +262,13 @@ export function generateOrganizationSchema() {
     "@context": "https://schema.org",
     "@type": "Organization",
     name: "Presence Atelier",
-    url: siteConfig.externalLinks.atelier,
-    logo: {
-      "@type": "ImageObject",
-      url: BRAND_LOGO_URL,
-    },
+    url: PRESENCE_ATELIER_URL,
+    // Same representation as every other Organization.logo in this module
+    // (a bare URL). An ImageObject here described the SAME entity in a second
+    // form, which sd-check reported as `duplicate-type-conflict` on the routes
+    // where this root node and the `worksFor` stub coexist (/somatic,
+    // /spirituality). One entity, one logo representation.
+    logo: ORGANIZATION_LOGO,
     image: BRAND_LOGO_URL,
     founder: {
       "@type": "Person",
@@ -821,6 +862,7 @@ export function generateTechArticleSchema(data: {
     publisher: {
       "@type": "Organization",
       name: siteConfig.name,
+      logo: ORGANIZATION_LOGO,
     },
   };
 }
@@ -1070,7 +1112,8 @@ export function generateEnhancedPersonSchema() {
     worksFor: {
       "@type": "Organization",
       name: "Presence Atelier",
-      url: siteConfig.externalLinks.atelier,
+      url: PRESENCE_ATELIER_URL,
+      logo: ORGANIZATION_LOGO,
     },
     birthPlace: {
       "@type": "Place",
@@ -1090,8 +1133,8 @@ export function generateEnhancedPersonSchema() {
       "https://www.crunchbase.com/organization/maxpetrusenko",
       "https://angel.co/u/maxpetrusenko",
       "https://www.gumroad.com/maxpetrusenko",
-      // Presence Atelier
-      siteConfig.externalLinks.atelier,
+      // Presence Atelier's live profile (the atelier.maxpetrusenko.com
+      // subdomain was torn down 2026-09-12; its URL is not repeated here)
       "https://www.instagram.com/blindfold.miami",
       "https://patreon.com/mindfold",
       // Writing
@@ -1148,6 +1191,7 @@ export function generateEnhancedPersonSchema() {
         "@type": "Organization",
         name: "Mindfold Sanctuary",
         url: `${siteConfig.url}/mindfold/events`,
+        logo: ORGANIZATION_LOGO,
       },
     ],
     // Contact
