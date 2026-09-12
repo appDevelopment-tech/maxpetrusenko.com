@@ -41,6 +41,26 @@ on:
       - '.github/scripts/schema-org-types.txt'
       - '.github/workflows/seo-indexing-gate.yml'
   workflow_dispatch:
+  # pull_request: proof-of-execution.  This workflow is the read-only gate:
+  # permissions are contents: read, `local-build-check` builds + validates but
+  # never deploys, and `live-check` is guarded to workflow_dispatch only.  So a
+  # PR can run the real gate with no chance of touching production.  Path-scoped
+  # to the same set as the push trigger.
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'nextjs/**'
+      - 'public/**'
+      - 'atelier/**'
+      - 'tests/fixtures/sd-baseline/**'
+      - 'tests/fixtures/sd-coverage/**'
+      - '.github/scripts/web-seo-check.py'
+      - '.github/scripts/sd-check.py'
+      - '.github/scripts/sd-policy.toml'
+      - '.github/scripts/sd-gate.toml'
+      - '.github/scripts/schema-org-types.txt'
+      - '.github/workflows/seo-indexing-gate.yml'
 
 concurrency:
   group: seo-indexing-gate-${{ github.ref }}
