@@ -88,7 +88,7 @@ allowed_hosts = ["www.maxpetrusenko.com", "wa.me"]
 # LANE MANDATE: this repo runs report-only for the whole wiring lane. Findings
 # never produce exit 1; internal failures still exit 2 (§A5.3). Band promotion is
 # an integration decision (§D1/R3) and is recorded in [bands] below.
-report_only = true
+report_only = false
 strict = false
 
 # markup_optional -- routes that may legitimately carry NO JSON-LD (rule E
@@ -114,6 +114,18 @@ strict = false
 #                          carries the practice's structured data.
 markup_optional = ["/tantra-massage-ubud"]
 
+# coverage_optional -- routes that can be in the coverage manifest (the sitemap) but
+# can NEVER have a baseline entry, because the build does not emit a file for them.
+# Absence of this key means every manifest route must have a baseline record.
+# Matched the same way as markup_optional, and PRINTED as a skip with the matched
+# pattern -- a suppression a reader cannot see is indistinguishable from a rule that
+# silently stopped working.
+#
+# Scoped to THIS direction only.  A baseline route that vanishes from the build is
+# still an error even with a "/*" pattern here: "no baseline record is possible by
+# construction" cannot justify a route that stopped being built.
+coverage_optional = ["/"]
+
 # Per-rule band overrides. Empty on purpose: nothing is promoted yet, and a
 # promotion must be a one-line diff here rather than an edit to a workflow.
 #
@@ -133,39 +145,26 @@ markup_optional = ["/tantra-massage-ubud"]
 #
 # summary line: error=1 warn=878 info=32 routes_checked=129 routes_expected=130
 #
-# THE RESIDUAL, STATED PLAINLY -- and why report_only stays true.
-# The one remaining error-band finding is `coverage`, direction 2
-# (manifest -> baseline), for the homepage "/".
-#   * WHAT THE RULE COMPARES: `check_coverage()` compares the coverage MANIFEST
-#     against the BASELINE INDEX (both directions), not against the surface walk.
-#     Direction 2 = every manifest route that has no baseline entry.
-#   * WHY "/" CAN NEVER SATISFY IT: "/" is in the manifest deliberately
-#     (tests/fixtures/sd-coverage/maxpetrusenko-routes.xml documents the reason),
-#     and it cannot be baselined because the build emits no HTML for it.
-#     app/page.tsx awaits fetchArticles(), which calls parseMediumRSS() over the
-#     network, so the route is a DYNAMIC function: it lands as
-#     `.vercel/output/functions/index.func` and there is no
-#     `index.html` in `.vercel/output/static` and no `*prerender-fallback.html`
-#     for it either -- verified on this build. A dir-mode gate that reads HTML
-#     files therefore cannot read the homepage, in any configuration.
-#   * NO EXEMPTION KEY EXISTS: `sd-check.py --list-config-contract` enumerates
-#     every recognised [gate] key, and the ONLY route-level exemption is
-#     `markup_optional`, which affects `no-markup` alone. Writing an
-#     unrecognised key here would be a silent no-op that LOOKS like a fix, which
-#     is worse than the finding.
-#   * THE HONEST FIX IS VALIDATOR-SIDE: a `coverage_optional` route list
-#     alongside `markup_optional`, matched the same way and printed as a skip in
-#     the report's notes. That is a change to the manager canonical
-#     `sd-check.py`/config contract and is routed separately. It is NOT
-#     faked here: inventing a baseline entry for a page the build cannot emit, or
-#     deleting "/" from the expected-route manifest, would both hide a real gap
-#     rather than close it.
-#   * SO report_only STAYS TRUE. The error band is 1, not 0, and flipping now
-#     would make every run of this gate fail on a finding that no change in this
-#     repo can clear -- the opposite of what the flip is for. The homepage's
-#     markup is not unguarded meanwhile: it is asserted at source level by
-#     nextjs/lib/seo/structured-data.contract.test.mjs, which calls
-#     generatePersonSchema() and composes the exact homepage block set.
+# THE 1.5.1 KEY CLOSED THE RESIDUAL -- so report_only is now FALSE.
+#
+# Kept as history, because the reasoning is the point:
+#   * The band was 1 and the only finding was `coverage /`.  That rule compares the
+#     coverage manifest (the sitemap) against the baseline.  "/" is a dynamic Next.js
+#     function -- this build emits .vercel/output/functions/index.func and never a
+#     static html file -- so no baseline record for it is possible BY CONSTRUCTION.
+#     An unfixable error is worse than no gate: it teaches everyone to read a red
+#     band as noise.
+#   * `markup_optional` affects `no-markup` alone, so no route-level key could express
+#     this.  The honest fix was validator-side -- never a hand-written baseline entry
+#     for a page the build cannot emit, and never deleting "/" from the sitemap where
+#     it belongs.
+#   * Validator 1.5.1 adds `coverage_optional`, matched like `markup_optional` and
+#     PRINTED as a skip.  Declared below.
+#   * Measured after declaring it: error=0 warn=878 info=32 routes_checked=129
+#     routes_expected=130.  With a zero error band, report_only flips to FALSE --
+#     band promotion is an integration decision and this records what justified it.
+#     strict stays false: ~878 warn-band findings must not block a deploy.
+
 [bands]
 
 # NOTE: wa.me is in allowed_hosts (not reference_allowlist) because the two

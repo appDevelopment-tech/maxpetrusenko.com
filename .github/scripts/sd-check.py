@@ -211,7 +211,32 @@ REPORT_SCHEMA_VERSION = 1
 #            error-style route (0 routes checked, files real) is reported as an
 #            explicit skip instead.
 #        Finding shape unchanged; report_schema_version stays 1.
-VALIDATOR_VERSION = "1.5.0"
+#
+#   1.5.1 (2026-09-12):
+#        * NEW `[gate].coverage_optional = ["<pattern>", ...]` -- the declared
+#          route-level exemption for the `coverage` rule, matched by exactly the
+#          mechanism `markup_optional` already uses (`route_matches_any`: the
+#          same dialect, the same precedence, the same pattern semantics).
+#          It suppresses the coverage finding for a COVERAGE-MANIFEST route
+#          that has no baseline entry -- the direction where "no baseline
+#          record is possible by construction" is a stateable reason (the mp
+#          surface's `/` is a dynamic Next.js function: the build emits
+#          `.vercel/output/functions/index.func`, there is no `static/index.html`
+#          and no fallback, so no baseline record for it can exist).  The other
+#          direction is NOT suppressed and cannot be: a route that IS in the
+#          baseline and then vanishes from the walk is a regression, and
+#          "optional for coverage" states nothing about it.  See
+#          `check_coverage`.
+#        * The suppression PRINTS: every skipped route emits an info-band note
+#          naming the route, the matched pattern and the reason, in the report's
+#          `notes` array as well as in the human-readable output -- the same
+#          contract `markup_optional` carries (a suppression a reader cannot see
+#          is the silent-pass defect class this project exists to remove).
+#        * `coverage_optional` is exposed by `--list-config-contract` and it is
+#          EMPTY by default: it changes nothing for any config that does not
+#          name a route, so no consumer's error band moves on the re-vendor.
+#        Finding shape unchanged; report_schema_version stays 1.
+VALIDATOR_VERSION = "1.5.1"
 
 # --------------------------------------------------------------------------
 # Band / mode catalogue  (§A3)
@@ -255,7 +280,7 @@ RULE_SPECS: "dict[str, tuple[str, str, str]]" = {
     "shape-digest":           (E, "dir", "Shape digest matches the baseline"),
     "content-snapshot":       (W, "dir", "Content snapshot matches the baseline"),
     "volatile-allowlist":     (OBS, "dir", "Volatile-field allowlist / array-order semantics"),
-    "coverage":               (E, "dir", "Coverage assertion, both directions"),
+    "coverage":               (E, "dir", "Coverage assertion, both directions (see [gate].coverage_optional)"),
     "no-markup":              (E, "dir+live", "Every walked route carries JSON-LD (see [gate].markup_optional)"),
     "surface-parity":         (E, "dir", "Block count and @type multiset parity across surfaces"),
     # --- post-deploy -------------------------------------------------------
@@ -1314,6 +1339,7 @@ GATE_KEY_CONTRACT: "tuple[tuple[str, str, str], ...]" = (
     ("rules", "default", "absence means every rule for the mode runs"),
     ("bands", "default", "absence means each rule keeps its declared band"),
     ("markup_optional", "default", "absence means every walked route must carry JSON-LD"),
+    ("coverage_optional", "default", "absence means every coverage-manifest route must have a baseline entry"),
     ("zero_trace", "default", "absence makes brand-zerotrace inert"),
     ("foreign_brands", "default", "absence makes foreign-brand inert"),
     ("self_owned_entities", "default", "absence makes self-serving-rating inert"),
@@ -1351,6 +1377,11 @@ class Gate:
         # default, so every walked route is required to carry markup unless a
         # repo says otherwise; error-style routes are excluded structurally.
         self.markup_optional: "list[str]" = []
+        # Coverage-manifest routes that may legitimately have NO baseline entry
+        # (1.5.1).  Empty by default, so every manifest route is still required
+        # to be recorded in the baseline unless a repo says otherwise; matched
+        # by the same `route_matches_any` dialect as `markup_optional`.
+        self.coverage_optional: "list[str]" = []
         self.volatile: "list[str]" = []
         self.rules: "list[str]" = []
         self.bands: "dict[str, str]" = {}
@@ -1405,6 +1436,7 @@ class Gate:
         g.foreign_brands = [str(s) for s in as_list(gate.get("foreign_brands"))]
         g.self_owned_entities = [str(s) for s in as_list(gate.get("self_owned_entities"))]
         g.markup_optional = [str(s) for s in as_list(gate.get("markup_optional"))]
+        g.coverage_optional = [str(s) for s in as_list(gate.get("coverage_optional"))]
         g.volatile = [str(s) for s in as_list(gate.get("volatile"))]
         g.rules = [str(s) for s in as_list(gate.get("rules"))]
         g.adapter_version = gate.get("adapter_version")
@@ -2986,6 +3018,40 @@ class Validator:
 
     # -------------------------------------------------------------- rule 24
     def check_coverage(self) -> None:
+        """Rule 24 / `coverage` (band E): the manifest, the walk and the baseline.
+
+        Two directions, and they are NOT symmetrical:
+
+          direction 1 -- a BASELINE route with no extraction in this run.  This
+            is a regression signal ("a route that was recorded has stopped being
+            served or stopped being walked") and it is never suppressed.  A
+            route the baseline knows about cannot be declared
+            `coverage_optional` on the grounds that no baseline record for it
+            can exist; it already has one.
+
+          direction 2 -- a COVERAGE-MANIFEST route with no baseline entry.  This
+            is the direction `[gate].coverage_optional` (1.5.1) exempts, because
+            this is the only direction where "no baseline record is possible by
+            construction" is a stateable reason: a dynamically-rendered function
+            route (on the mp surface, `/` is emitted as
+            `.vercel/output/functions/index.func`, with no `static/index.html`
+            and no fallback) has no artifact for `--update-baseline` to record,
+            so the manifest will always list a route the baseline can never
+            hold.
+
+        THE EXEMPTION IS NEVER SILENT.  A suppressed route emits an info-band
+        note naming the route, the matched pattern and the reason it is
+        declared, into the report's `notes` AND the human-readable output -- the
+        same contract `[gate].markup_optional` carries for rule 30.  An
+        exemption a reader cannot see is indistinguishable from a manifest that
+        quietly stopped being compared: the exact silent-pass class this rule
+        exists to close.  `coverage_optional` is empty by default, so this
+        changes nothing for a repo that names no route.
+
+        Neither direction changes `routes_checked` / `routes_expected`: the
+        exemption removes a FINDING, not a route.  A reader can still see the
+        count difference the manifest implies.
+        """
         manifest_routes: "set[str]" = set()
         if self.gate.coverage_manifest:
             mp = self.gate.resolve(self.gate.coverage_manifest)
@@ -3020,13 +3086,24 @@ class Validator:
                              "baseline route produced no extraction in this run",
                              evidence="baseline route %s missing from the surface walk" % route,
                              band_override=band_override)
-        # direction 2: a manifest route with no baseline entry
+        # direction 2: a manifest route with no baseline entry.  The only
+        # direction `[gate].coverage_optional` may exempt (1.5.1); the skip is
+        # PRINTED, never silent.
         for route in sorted(manifest_routes):
-            if route not in self.baseline.routes:
-                self.rep.add("coverage", route, "$",
-                             "coverage-manifest route has no baseline entry",
-                             evidence="route %s absent from the baseline index" % route,
-                             band_override=band_override)
+            if route in self.baseline.routes:
+                continue
+            pat = route_matches_any(route, self.gate.coverage_optional)
+            if pat:
+                self.rep.note(
+                    "coverage: route %s is in the coverage manifest with no baseline "
+                    "entry and is declared coverage_optional (pattern %r); no baseline "
+                    "record for it is possible by construction (dynamic function route); "
+                    "not a finding" % (route, pat))
+                continue
+            self.rep.add("coverage", route, "$",
+                         "coverage-manifest route has no baseline entry",
+                         evidence="route %s absent from the baseline index" % route,
+                         band_override=band_override)
 
     # --------------------------------------------------------------- parity
     def check_surface_parity(self) -> None:
