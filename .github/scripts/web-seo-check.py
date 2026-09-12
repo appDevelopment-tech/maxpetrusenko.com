@@ -45,6 +45,25 @@ from pathlib import Path
 UA = "Mozilla/5.0 (compatible; web-seo-check/1.0; +https://maxpetrusenko.com)"
 TIMEOUT = 30
 MAX_REDIRECTS = 5
+
+# Signatures of an edge/WAF block page (Cloudflare and friends), as opposed to a
+# response the origin itself produced. Used to keep "we were blocked" from being
+# reported as "the site has no sitemap" -- a false indexing error that makes a live
+# check fail on every run and trains its reader to ignore it.
+EDGE_BLOCK_MARKERS = (
+    "sorry, you have been blocked",
+    "attention required",
+    "cloudflare ray id",
+    "error code: 10",
+    "just a moment",
+    "enable javascript and cookies to continue",
+)
+
+
+def is_edge_block(body_text: str) -> bool:
+    """True when a response body is an edge/WAF block page rather than origin content."""
+    low = (body_text or "")[:4000].lower()
+    return any(marker in low for marker in EDGE_BLOCK_MARKERS)
 DEFAULT_DELAY = 0.25
 SOFT_404_MARKERS = re.compile(
     r"(page not found|404 not found|this page could not be found|"
@@ -96,6 +115,16 @@ class Checker:
         na = self.normalize(a).rstrip("/")
         nb = self.normalize(b).rstrip("/")
         return na == nb
+
+    def seo_key(self, url):
+        """Route key for sitemap-membership tests.
+
+        The static host serves BOTH `/page` and `/page.html`, and sitemap.xml
+        lists the clean form while the built file is `<page>.html`, so a raw
+        string/`same_page` comparison would never match. Strip the `.html`
+        suffix and the trailing slash, exactly as the canonical check does.
+        """
+        return re.sub(r"\.html$", "", self.normalize(url).rstrip("/"))
 
     def host_of(self, url):
         try:
@@ -293,14 +322,41 @@ class Checker:
         elif canon.startswith("http://"):
             self.warn("canonical-http", url, f"canonical uses http:// not https://: {canon}")
 
-    def check_robots(self, url, meta, html=""):
-        """Check 4: no noindex on sitemap URLs."""
+    def check_robots(self, url, meta, html="", in_sitemap=True):
+        """Check 4: no noindex on sitemap URLs.
+
+        The rule is the CONFLICT, not the noindex: a page that says `noindex`
+        AND is listed in sitemap.xml can never index, so the sitemap is lying.
+        A page that says `noindex` and is NOT in the sitemap is the correct way
+        to keep a page out of the index, and is not a finding.
+
+        This used to fire on any noindex page at all -- `in_sitemap` did not
+        exist -- so the message named a condition the code never tested, and the
+        only escape was adding the route's directory to run_dir's
+        EXCLUDE_PARTS. That made the gate red for every legitimately unlisted
+        page: correctly "remove the page from the sitemap AND noindex it"
+        turned this gate from green to red even though the page was no longer in
+        sitemap.xml. Live mode still defaults to True because it only ever
+        crawls URLs read out of the sitemap.
+
+        Mirrored from TantraStudio's .github/scripts/web-seo-check.py commit
+        873aa99 ("fix(seo): noindex check must test sitemap membership"), which
+        is where the defect was found.
+        """
         noindex = False
         for r in meta["robots"]:
             if "noindex" in r:
                 noindex = True
-        if noindex:
+        if not noindex:
+            return
+        if in_sitemap:
             self.err("noindex", url, "page has robots noindex but is in sitemap — will never index")
+        else:
+            self.info(
+                "noindex-unlisted",
+                url,
+                "page has robots noindex and is correctly absent from sitemap.xml — not a finding",
+            )
 
     def check_title_desc(self, url, meta, html=""):
         """Check 7: title + description present, sane lengths, dup detection later."""
@@ -546,10 +602,24 @@ class Checker:
 
         # sitemap.xml
         sitemap_url = f"{base}/sitemap.xml"
-        st, final, text = self.fetch_text(sitemap_url)
+        st, final, sitemap_headers, sitemap_body = self.fetch(sitemap_url)
+        text = sitemap_body.decode("utf-8", errors="replace") if sitemap_body else ""
         urls = []
         if st == 0:
             self.err("sitemap-fetch", sitemap_url, "network error fetching sitemap.xml")
+        elif st in (401, 403, 429) and is_edge_block(text):
+            # A WAF/edge block aimed at the machine running this check is NOT the claim
+            # "this site has no sitemap". Reported as an observation carrying its own
+            # evidence, because the content genuinely could not be read -- and saying so
+            # is the honest outcome, not a pass. Observed in practice: GitHub Actions
+            # runner IPs get 403 from Cloudflare while the same request with the same
+            # user-agent returns 200 from a residential IP (verified 2026-09-12).
+            self.info(
+                "sitemap-edge-blocked", sitemap_url,
+                f"sitemap.xml HTTP {st} blocked at the edge (cf-ray {sitemap_headers.get('cf-ray', '?')}); "
+                f"sitemap content NOT verified by this run -- robots.txt was reachable, so this is most "
+                f"likely bot protection against the fetching host rather than a missing sitemap",
+            )
         elif st >= 400:
             self.err("sitemap-missing", sitemap_url, f"sitemap.xml HTTP {st}")
         else:
@@ -655,13 +725,16 @@ class Checker:
                     self.err("sitemap-file-missing", u, f"sitemap url has no file in build output: {candidates[0]}")
 
         titles = {}
+        # Membership test for check 4: the sitemap lists clean URLs, the build
+        # has <page>.html files, so compare normalized route keys.
+        sitemap_keys = {self.seo_key(u) for u in sitemap_urls}
         for f, url in file_to_url.items():
             if f.name.lower() == "404.html":
                 continue  # error page, not indexable content
             html = f.read_text(errors="replace")
             meta = self.parse_meta(html)
             self.check_canonical(url, meta, html)
-            self.check_robots(url, meta, html)
+            self.check_robots(url, meta, html, in_sitemap=self.seo_key(url) in sitemap_keys)
             self.check_title_desc(url, meta, html)
             self.check_soft404(url, meta, html)
             self.check_jsonld(url, meta, html)
@@ -730,6 +803,12 @@ def main():
         print(f"  ERROR   [{e['check']}] {e['url']}: {e['message']}")
     for w in report["warnings"]:
         print(f"  WARNING [{w['check']}] {w['url']}: {w['message']}")
+    # Infos are printed too. A SKIP that the reader cannot see is indistinguishable
+    # from a rule that silently stopped running — the same failure mode the
+    # noindex check above was quietly committing. `noindex-unlisted` in particular
+    # is the line that explains why a noindex page passing this gate is correct.
+    for i in report["infos"]:
+        print(f"  INFO    [{i['check']}] {i['url']}: {i['message']}")
 
     if report["error_count"] > 0:
         print("\nFAIL: indexing-blocking errors found", file=sys.stderr)
