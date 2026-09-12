@@ -70,10 +70,20 @@ baseline = "../../tests/fixtures/sd-baseline/maxpetrusenko"
 # extracts `<loc>` and reduces each to a path.
 coverage_manifest = "../../tests/fixtures/sd-coverage/maxpetrusenko-routes.xml"
 
-# Canonical host SET, not one host: atelier.maxpetrusenko.com is Max's own
-# second surface with its own canonical, so identity props pointing at it are
-# legitimate rather than drift.  The binding is to a set by design.
-allowed_hosts = ["www.maxpetrusenko.com", "atelier.maxpetrusenko.com", "wa.me"]
+# Canonical host SET, not one host.  www.maxpetrusenko.com and wa.me are
+# trusted; atelier.maxpetrusenko.com is DELIBERATELY ABSENT.
+#
+# It was added here during integration as "Max's own second surface" and that
+# made the gate blind to every URL pointing at it.  That was the one place the
+# allowlist absorbed a real finding: the hostname resolved into a different
+# brand's property, and the record plus the Pages project behind it have since
+# been deleted (NXDOMAIN; a 530 from the edge while the local resolver cache
+# drained).  Trusting a host that no longer exists is indefensible, and the
+# site's own references to it were removed rather than exempted -- the gate
+# reads 0 url-host findings because nothing points there, not because the host
+# is trusted.  If atelier ever returns as a real Max-owned surface, re-admit it
+# here with the reason recorded and a date.
+allowed_hosts = ["www.maxpetrusenko.com", "wa.me"]
 
 # LANE MANDATE: this repo runs report-only for the whole wiring lane. Findings
 # never produce exit 1; internal failures still exit 2 (§A5.3). Band promotion is
