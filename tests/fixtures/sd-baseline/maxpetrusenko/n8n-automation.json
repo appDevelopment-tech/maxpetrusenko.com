@@ -1,10 +1,10 @@
 {
-  "blocks": 6,
+  "blocks": 5,
   "content": {
     "ListItem.name": "n8n Automation",
     "OfferCatalog.name": "AI & Automation Services",
-    "Organization.name": "Max Petrusenko Tech",
-    "Person.description": "AI automation consultant specializing in Claude Code, n8n workflows, ChatGPT integrations, and workflow automation for creators and founders.",
+    "Organization.name": "Presence Atelier",
+    "Person.description": "Creator of tech automation resources, tantra education, and somatic practice offerings.",
     "Person.name": "Max Petrusenko",
     "ProfessionalService.description": "AI automation consultant specializing in Claude Code, n8n workflows, ChatGPT integrations, and workflow automation for creators and founders. Available remotely worldwide, with in-person work by request while traveling.",
     "ProfessionalService.name": "Max Petrusenko - AI & Automation Consultant",
@@ -14,7 +14,7 @@
     "WebPage.description": "Automate your business with n8n. Custom workflow design, API integrations, data pipelines.",
     "WebPage.name": "n8n Automation Consultant - Workflow Design & API Integration"
   },
-  "content_digest": "52f6c92bc31c88357d3d6107d6be3587fe11ab54a9aa07df4a445e07bb625e96",
+  "content_digest": "0422060d51ac9dcb210ab9848b4dbb860cd138b814aedcbc6eaaf57ed2bfe436",
   "route": "/n8n-automation",
   "shape": {
     "canonical": "https://www.maxpetrusenko.com/n8n-automation",
@@ -44,7 +44,6 @@
       ],
       "Organization": [],
       "Person": [
-        "name",
         "name"
       ],
       "ProfessionalService": [
@@ -77,8 +76,6 @@
       "Offer",
       "OfferCatalog",
       "Organization",
-      "Organization",
-      "Person",
       "Person",
       "ProfessionalService",
       "Question",
@@ -90,5 +87,5 @@
     ],
     "values": {}
   },
-  "shape_digest": "64b993d06cc578af3fb5e8452054e01393b749cb80d2981795b61dd6910f8726"
+  "shape_digest": "b952cb141899200640c18ada361ce71262686387ac43d9fae9f97ff2eb6a4687"
 }

@@ -139,18 +139,90 @@ export function generateArticleSchema(data: {
 }
 
 /**
- * Generate JSON-LD structured data for Person
- * Generic person schema for root use
+ * The Person entity, described ONCE, for the whole site.
+ *
+ * WHY THIS IS THE ONLY PERSON GENERATOR
+ * -------------------------------------
+ * This module used to export four Person builders -- this one, a "tech" one, a
+ * "spirituality" one and an "enhanced" one -- and pages composed them on top of
+ * the copy `app/layout.tsx` already emits on every route. All four carried the
+ * same identity (`name` = siteConfig.author.name, `url` = siteConfig.url, no
+ * `@id`), so sd-check rule 7 (`duplicate-type-conflict`) correctly read two
+ * `Person` nodes as ONE human described with contradictory values: it fired on
+ * 15 built routes with conflicting `description` / `image` / `jobTitle` /
+ * `sameAs` / `worksFor`, plus one Event `organizer` stub.
+ *
+ * The repair is the same rule this module already applies to
+ * `Organization.logo` ("one entity, one representation"): a human is one
+ * entity, so he gets one node. The per-page variants are DELETED rather than
+ * made to agree, because agreeing duplicates are still two declarations of one
+ * person, and the next edit to either one would re-open the conflict.
+ *
+ * NOTHING IS LOST BY THEIR REMOVAL -- the union of what they said lives here:
+ *   - `jobTitle` is multi-valued (schema.org allows a Text array): the "tech"
+ *     and "spirituality" variants used to each state a single role, contradicting
+ *     this node's; one person, three roles, one property.
+ *   - `alternateName` names both of his brands, so the "tech vs practice" brand
+ *     disambiguation the deleted variants existed for survives.
+ *   - `knowsAbout` is the union of the tech and somatic topic lists.
+ *   - `alternateName`, `award`, `telephone`, `email` and `availableChannel`
+ *     come from the old homepage-only "enhanced" variant, so deleting that
+ *     variant is not a reduction in markup.
+ *
+ * WHAT WAS DELIBERATELY NOT MIGRATED from the deleted "enhanced" variant, and
+ * why -- each was an unverifiable claim or an error-band finding rather than an
+ * entity fact:
+ *   - `memberOf: [{ "@type": "Organization", name: "Isha Foundation",
+ *     url: "https://www.ishafoundation.org" }, ...]` -- an off-host `url` on a
+ *     node that now rides on all 129 routes is 136 error-band `url-host`
+ *     findings, and the cure for that is widening `[gate].allowed_hosts`, which
+ *     is the exemption this gate exists to prevent. The affiliation is real but
+ *     does not belong on every page of the site. (Reason repeated inline below.)
+ *   - `worksFor: [Presence Atelier, Max Petrusenko Tech]` -- each extra nested
+ *     `Organization` stub costs two warn-band `missing-recommended` findings
+ *     (contactPoint, sameAs) on every route. The tech brand is carried by
+ *     `alternateName` and by the `ProfessionalService` on each tech page.
+ *   - `availableChannel` (`ServiceChannel`) -- it would add a new `@type` to
+ *     every route's graph to restate a service list the page-level
+ *     `ProfessionalService` / Tantra `WebPage` already carries. (Reason repeated
+ *     inline below.)
+ *   - its long `sameAs` list (about.me, angel.co, codepen.io, dev.to,
+ *     linktr.ee, substack, vimeo, pinterest, crunchbase, youtube, gumroad,
+ *     stackoverflow). One entry was a literal placeholder
+ *     (`https://stackoverflow.com/users/0000000/max-petrusenko`), which
+ *     sd-check rule 14 (`placeholder-text`) flags at error band as a
+ *     zero-filled identifier; the rest were never verified to resolve to Max.
+ *     `sameAs` is an identity claim about a real person, so an unverified URL
+ *     is worse than an absent one. Only the five canonical profiles below ship.
+ *   - `birthPlace: { "@type": "Place" }` -- an empty Place node. It asserts
+ *     nothing, and it was the only reason a `Place` appeared on `/`.
+ *
+ * Pages that want to state a page-specific ROLE do it on their own node (the
+ * `ProfessionalService` / `WebPage` for that page), not by re-declaring the
+ * person.
  */
 export function generatePersonSchema() {
   return {
     "@context": "https://schema.org",
     "@type": "Person",
     name: siteConfig.author.name,
+    alternateName: ["Max", "Presence Atelier", "Max Petrusenko Tech"],
     url: siteConfig.url,
-    image: PERSON_IMAGE_URL,
-    jobTitle: "Founder & Creator",
+    image: [PERSON_IMAGE_URL, TECH_PERSON_IMAGE_URL],
+    jobTitle: [
+      "AI Automation Consultant",
+      "Founder & Creator",
+      "Tantra & Somatic Energy Work Practitioner",
+    ],
     description: "Creator of tech automation resources, tantra education, and somatic practice offerings.",
+    // ONE organisation, as before. The deleted "tech" variant named a second
+    // one ("Max Petrusenko Tech", /tech); that is NOT migrated into a
+    // `worksFor` array, because every nested `Organization` stub rides on all
+    // 129 routes and each one costs two warn-band findings that the stub cannot
+    // satisfy (`missing-recommended`: contactPoint, sameAs) -- 256 new warnings
+    // for a brand name. The brand is already stated in `alternateName` above and
+    // is the `name` of the page-level `ProfessionalService` on every tech route,
+    // so nothing is lost.
     worksFor: {
       "@type": "Organization",
       name: "Presence Atelier",
@@ -164,34 +236,8 @@ export function generatePersonSchema() {
       siteConfig.social.instagram,
       siteConfig.social.twitter,
     ].filter(Boolean),
-  };
-}
-
-/**
- * Generate JSON-LD structured data for Person - Tech focused
- * Use on tech pages to avoid brand ambiguity with tantra services
- */
-export function generateTechPersonSchema() {
-  return {
-    "@context": "https://schema.org",
-    "@type": "Person",
-    name: siteConfig.author.name,
-    url: siteConfig.url,
-    image: TECH_PERSON_IMAGE_URL,
-    jobTitle: "AI Automation Consultant",
-    description: "AI automation consultant specializing in Claude Code, n8n workflows, ChatGPT integrations, and workflow automation for creators and founders.",
-    worksFor: {
-      "@type": "Organization",
-      name: "Max Petrusenko Tech",
-      url: `${siteConfig.url}/tech`,
-      logo: ORGANIZATION_LOGO,
-    },
-    sameAs: [
-      siteConfig.social.github,
-      siteConfig.social.linkedin,
-      siteConfig.social.medium,
-    ].filter(Boolean),
     knowsAbout: [
+      // tech (was generateTechPersonSchema)
       "Claude Code",
       "Anthropic Claude",
       "ChatGPT",
@@ -206,33 +252,7 @@ export function generateTechPersonSchema() {
       "AI automation",
       "Answer Engine Optimization",
       "AEO",
-    ],
-  };
-}
-
-/**
- * Generate JSON-LD structured data for Person - Spirituality focused
- * Use on spirituality/tantra pages for clear brand separation
- */
-export function generateSpiritualityPersonSchema() {
-  return {
-    "@context": "https://schema.org",
-    "@type": "Person",
-    name: siteConfig.author.name,
-    url: siteConfig.url,
-    image: PERSON_IMAGE_URL,
-    jobTitle: "Tantra & Somatic Energy Work Practitioner",
-    description: "Certified tantra massage and somatic energy work practitioner trained at Tantra Nectar University (Satyarti). Specializing in nervous system regulation, breathwork, shadow work, and trauma-informed bodywork.",
-    worksFor: {
-      "@type": "Organization",
-      name: "Presence Atelier",
-      url: PRESENCE_ATELIER_URL,
-      logo: ORGANIZATION_LOGO,
-    },
-    sameAs: [
-      siteConfig.social.instagram,
-    ].filter(Boolean),
-    knowsAbout: [
+      // somatic (was generateSpiritualityPersonSchema)
       "Tantra Massage",
       "Somatic Energy Work",
       "Nervous System Regulation",
@@ -251,6 +271,30 @@ export function generateSpiritualityPersonSchema() {
       "Couples Tantra",
       "Embodied Awareness",
     ],
+    // was generateEnhancedPersonSchema (homepage-only, now every route)
+    award: [
+      "Shambhavi Mahamudra - Isha Foundation",
+      "Kriya Yoga Initiation - Yoganada Lineage",
+      "Tantra Massage Certification - Satyarti / Tantra Nectar University",
+    ],
+    // NOTE: no `memberOf` here. The deleted homepage-only "enhanced" variant
+    // carried `memberOf: [{name: "Isha Foundation", url: "https://www.ishafoundation.org"}, ...]`,
+    // and migrating it onto a node that now rides on all 129 routes turned a
+    // hidden homepage claim into 136 error-band `url-host` findings: rule 11
+    // treats `url` as host-bound and www.ishafoundation.org is not (and must not
+    // be) in `[gate].allowed_hosts`, which is a deliberate two-host trust list.
+    // The affiliation is real but it is not worth an error-band finding on every
+    // route, and widening the host allowlist to carry it is exactly the
+    // exemption this gate exists to prevent. Dropped, and recorded here so the
+    // decision is visible rather than discovered later.
+    telephone: "+1-954-275-9666",
+    email: "hello@maxpetrusenko.com",
+    // NOTE: no `availableChannel`. The deleted "enhanced" variant carried one
+    // (`ServiceChannel` + serviceType + serviceUrl). It is NOT migrated: adding
+    // it introduces a brand-new `@type` (`ServiceChannel`) into the graph of all
+    // 129 routes to restate a service list that the page-level
+    // `ProfessionalService` / Tantra `WebPage` already carries verbatim on the
+    // pages that actually advertise the services.
   };
 }
 
@@ -977,11 +1021,15 @@ export function generateMindfoldEventSchema() {
       "@type": "Person",
       name: siteConfig.author.name,
       url: siteConfig.url,
-      sameAs: [
-        siteConfig.social.instagram,
-        "https://www.instagram.com/blindfold.miami",
-        "https://patreon.com/mindfold",
-      ].filter(Boolean),
+      // NOTE: no `sameAs` here on purpose. This stub identifies the same human
+      // as the Person node `app/layout.tsx` emits on every route, and it used
+      // to carry a DIFFERENT `sameAs` array (instagram + blindfold.miami +
+      // patreon.com/mindfold). sd-check rule 7 read the pair as one entity with
+      // conflicting values on /mindfold/events. Identity properties for a
+      // person belong on the one node that describes him; a nested stub may
+      // only restate them identically, so the array is dropped rather than
+      // duplicated. The canonical node on this page already carries his
+      // profile list.
     },
     performer: {
       "@type": "Person",
@@ -1086,124 +1134,6 @@ export function generateOrganizationWithGBP() {
         `https://business.google.com/${GOOGLE_BUSINESS_PROFILE_ID}`,
       ],
     }),
-  };
-}
-
-/**
- * ============================================================================
- * ENHANCED PERSON SCHEMA (Knowledge Panel Optimization)
- * ============================================================================
- */
-
-/**
- * Generate enhanced Person schema with extensive sameAs links
- * Optimized for Google Knowledge Panel and entity recognition
- */
-export function generateEnhancedPersonSchema() {
-  return {
-    "@context": "https://schema.org",
-    "@type": "Person",
-    name: siteConfig.author.name,
-    alternateName: ["Max", "Presence Atelier", "Max Petrusenko Tech"],
-    url: siteConfig.url,
-    image: PERSON_IMAGE_URL,
-    description: "Tech builder and somatic practitioner specializing in AI automation, tantra-informed somatic practice, and nervous-system work by request.",
-    jobTitle: "Tech Builder & Somatic Practitioner",
-    worksFor: {
-      "@type": "Organization",
-      name: "Presence Atelier",
-      url: PRESENCE_ATELIER_URL,
-      logo: ORGANIZATION_LOGO,
-    },
-    birthPlace: {
-      "@type": "Place",
-    },
-    // Enhanced sameAs for knowledge panel verification
-    sameAs: [
-      siteConfig.social.github,
-      siteConfig.social.linkedin,
-      siteConfig.social.medium,
-      siteConfig.social.instagram,
-      siteConfig.social.twitter,
-      // Additional platforms
-      "https://www.youtube.com/@maxpetrusenko",
-      "https://vimeo.com/maxpetrusenko",
-      "https://www.pinterest.com/maxpetrusenko",
-      // Business platforms
-      "https://www.crunchbase.com/organization/maxpetrusenko",
-      "https://angel.co/u/maxpetrusenko",
-      "https://www.gumroad.com/maxpetrusenko",
-      // Presence Atelier's live profile (the atelier.maxpetrusenko.com
-      // subdomain was torn down 2026-09-12; its URL is not repeated here)
-      "https://www.instagram.com/blindfold.miami",
-      "https://patreon.com/mindfold",
-      // Writing
-      "https://medium.com/@maxpetrusenko",
-      "https://substack.com/@maxpetrusenko",
-      // AI/Developer platforms
-      "https://stackoverflow.com/users/0000000/max-petrusenko",
-      "https://dev.to/maxpetrusenko",
-      "https://codepen.io/maxpetrusenko",
-      // Location-specific
-      "https://about.me/maxpetrusenko",
-      "https://linktr.ee/maxpetrusenko",
-    ].filter(Boolean),
-    // KnowsAbout for expertise signaling
-    knowsAbout: [
-      "Tantra Massage",
-      "Somatic Energy Work",
-      "Nervous System Regulation",
-      "Trauma-Informed Bodywork",
-      "AI Automation",
-      "Claude Code",
-      "Anthropic Claude",
-      "ChatGPT",
-      "OpenAI API",
-      "n8n",
-      "Workflow Automation",
-      "API Development",
-      "TypeScript",
-      "Next.js",
-      "React",
-      "Node.js",
-      "Product Design",
-      "UX Design",
-      "System Design",
-      "Kriya Yoga",
-      "Shambhavi Mahamudra",
-      "Breathwork",
-      "Conscious Touch",
-    ],
-    // Awards and certifications
-    award: [
-      "Shambhavi Mahamudra - Isha Foundation",
-      "Kriya Yoga Initiation - Yoganada Lineage",
-      "Tantra Massage Certification - Satyarti / Tantra Nectar University",
-    ],
-    // MemberOf for community affiliations
-    memberOf: [
-      {
-        "@type": "Organization",
-        name: "Isha Foundation",
-        url: "https://www.ishafoundation.org",
-      },
-      {
-        "@type": "Organization",
-        name: "Mindfold Sanctuary",
-        url: `${siteConfig.url}/mindfold/events`,
-        logo: ORGANIZATION_LOGO,
-      },
-    ],
-    // Contact
-    telephone: "+1-954-275-9666",
-    email: "hello@maxpetrusenko.com",
-    // Availability
-    availableChannel: {
-      "@type": "ServiceChannel",
-      serviceType: ["tantra massage", "somatic energy work", "AI automation", "tech consulting"],
-      serviceUrl: siteConfig.url,
-    },
-    // Areas served
   };
 }
 

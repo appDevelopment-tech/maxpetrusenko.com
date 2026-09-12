@@ -13,7 +13,6 @@ import {
   generateProfessionalServiceSchema,
   generateTechServiceSchema,
   generateHomeFAQSchema,
-  generateEnhancedPersonSchema,
 } from "@/lib/seo/structured-data";
 import { fetchArticles, isLocalArticle } from "@/lib/cms/articles";
 import { homeFaqEntries } from "@/lib/seo/home-faq";
@@ -90,7 +89,6 @@ export default async function HomePage({ searchParams }: HomePageProps) {
       <JsonLd type="WebPage" data={generateProfessionalServiceSchema()} />
       <JsonLd type="ProfessionalService" data={generateTechServiceSchema()} />
       <JsonLd type="FAQPage" data={generateHomeFAQSchema()} />
-      <JsonLd type="Person" data={generateEnhancedPersonSchema()} />
       {/*
         Ratings: the homepage emits NO AggregateRating at all. It previously
         emitted three — a WebPage one from generateProfessionalServiceSchema(),

@@ -1,14 +1,14 @@
 {
-  "blocks": 4,
+  "blocks": 3,
   "content": {
     "ListItem.name": "Case Studies",
-    "Organization.name": "Max Petrusenko Tech",
-    "Person.description": "AI automation consultant specializing in Claude Code, n8n workflows, ChatGPT integrations, and workflow automation for creators and founders.",
+    "Organization.name": "Presence Atelier",
+    "Person.description": "Creator of tech automation resources, tantra education, and somatic practice offerings.",
     "Person.name": "Max Petrusenko",
     "WebPage.description": "Detailed case studies from AI automation and software development projects.",
     "WebPage.name": "Case Studies - Project Outcomes"
   },
-  "content_digest": "741b1b6b1fb9dbfc9ffe8cdf532bb228f638857bc51cc1f75152a451b5d5fe68",
+  "content_digest": "85e44a16d35eaf7aaad072a05c1331a01c9a0e45220fe48676d945b60a211b3e",
   "route": "/tech/case-studies",
   "shape": {
     "canonical": "https://www.maxpetrusenko.com/tech/case-studies",
@@ -24,7 +24,6 @@
       ],
       "Organization": [],
       "Person": [
-        "name",
         "name"
       ],
       "WebPage": []
@@ -35,12 +34,10 @@
       "ListItem",
       "ListItem",
       "Organization",
-      "Organization",
-      "Person",
       "Person",
       "WebPage"
     ],
     "values": {}
   },
-  "shape_digest": "37cea986e638b049e966417fdfcd00c4ea2cce1e95fdbb07f664ce9e5abd9b79"
+  "shape_digest": "b7655aa79b5e4637b112b045b88b49eb78500ece856f75859420b15b47c293f6"
 }

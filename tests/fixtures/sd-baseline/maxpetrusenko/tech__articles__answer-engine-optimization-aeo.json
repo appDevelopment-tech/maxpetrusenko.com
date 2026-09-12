@@ -1,16 +1,16 @@
 {
-  "blocks": 5,
+  "blocks": 4,
   "content": {
     "ListItem.name": "Answer Engine Optimization Guide",
-    "Organization.name": "Max Petrusenko Tech",
-    "Person.description": "AI automation consultant specializing in Claude Code, n8n workflows, ChatGPT integrations, and workflow automation for creators and founders.",
+    "Organization.name": "Max Petrusenko",
+    "Person.description": "Creator of tech automation resources, tantra education, and somatic practice offerings.",
     "Person.name": "Max Petrusenko",
     "TechArticle.description": "Practical AEO guide for 2026: audit answer-engine readiness, improve structured extraction, and increase citation visibility in AI search.",
     "TechArticle.headline": "Answer Engine Optimization (AEO) Guide for 2026",
     "WebPage.description": "Practical AEO guide for 2026: audit answer-engine readiness and structure pages for AI citation.",
     "WebPage.name": "Answer Engine Optimization (AEO) Guide for 2026"
   },
-  "content_digest": "cc5aea10275c201246cd7229ac1184d07b2c09901132b4b974869dddab1b8a87",
+  "content_digest": "372515f0262d272ff28adff7a047b896aad4cf52bfe274d0c4a93717e0d8eabc",
   "route": "/tech/articles/answer-engine-optimization-aeo",
   "shape": {
     "canonical": "https://www.maxpetrusenko.com/tech/articles/answer-engine-optimization-aeo",
@@ -28,7 +28,6 @@
       "Organization": [],
       "Person": [
         "name",
-        "name",
         "name"
       ],
       "WebPage": []
@@ -41,8 +40,6 @@
       "ListItem",
       "Organization",
       "Organization",
-      "Organization",
-      "Person",
       "Person",
       "Person",
       "TechArticle",
@@ -50,5 +47,5 @@
     ],
     "values": {}
   },
-  "shape_digest": "b8a61719eb52f65e138cd49320059365b517ae1752d0f8cda4c55d5fbd21d39d"
+  "shape_digest": "fca5c3c13b39370f9f526cb37be54044fc3d72270125567e2997af606ec3cc45"
 }

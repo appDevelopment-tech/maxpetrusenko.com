@@ -1,10 +1,10 @@
 {
-  "blocks": 6,
+  "blocks": 5,
   "content": {
     "ListItem.name": "Claude Code Consultant",
     "OfferCatalog.name": "AI & Automation Services",
-    "Organization.name": "Max Petrusenko Tech",
-    "Person.description": "AI automation consultant specializing in Claude Code, n8n workflows, ChatGPT integrations, and workflow automation for creators and founders.",
+    "Organization.name": "Presence Atelier",
+    "Person.description": "Creator of tech automation resources, tantra education, and somatic practice offerings.",
     "Person.name": "Max Petrusenko",
     "ProfessionalService.description": "AI automation consultant specializing in Claude Code, n8n workflows, ChatGPT integrations, and workflow automation for creators and founders. Available remotely worldwide, with in-person work by request while traveling.",
     "ProfessionalService.name": "Max Petrusenko - AI & Automation Consultant",
@@ -14,7 +14,7 @@
     "WebPage.description": "Get your team productive with Claude Code fast. Sub-agent configuration, custom skills, workflow integration.",
     "WebPage.name": "Claude Code Consultant - Setup, Configuration & Team Training"
   },
-  "content_digest": "4a5ef5a23fe6ed648e6adace4fd1b04680e05d1c5eca73717fff2407716b89eb",
+  "content_digest": "4a0ad0da39126c8fb363868fe05f672e0751e49cea0fb600aa4d2cb1b9efaff5",
   "route": "/claude-code-consultant",
   "shape": {
     "canonical": "https://www.maxpetrusenko.com/claude-code-consultant",
@@ -44,7 +44,6 @@
       ],
       "Organization": [],
       "Person": [
-        "name",
         "name"
       ],
       "ProfessionalService": [
@@ -77,8 +76,6 @@
       "Offer",
       "OfferCatalog",
       "Organization",
-      "Organization",
-      "Person",
       "Person",
       "ProfessionalService",
       "Question",
@@ -90,5 +87,5 @@
     ],
     "values": {}
   },
-  "shape_digest": "8975689ed111da7509b62fba2bb3ce44b82893abbeb15c13609315e2e8574067"
+  "shape_digest": "59d64019d5b7c5175faa8e2379aa709eb9fea447807b9ca553e771f87fa4b843"
 }

@@ -8,7 +8,6 @@ import {
   generateWebPageSchema,
   generateBreadcrumbSchema,
   generateTechServiceSchema,
-  generateTechPersonSchema,
 } from "@/lib/seo/structured-data";
 
 export const metadata = generateMetadata({
@@ -52,7 +51,6 @@ export default function ClaudeCodeConsultantPage() {
         ])}
       />
       <JsonLd type="ProfessionalService" data={generateTechServiceSchema()} />
-      <JsonLd type="Person" data={generateTechPersonSchema()} />
 
       <div className="hero-portrait-wrap">
         <div className="hero-portrait-bg">

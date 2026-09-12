@@ -7,7 +7,6 @@ import {
   generateWebPageSchema,
   generateTechArticleSchema,
   generateBreadcrumbSchema,
-  generateTechPersonSchema,
 } from "@/lib/seo/structured-data";
 
 export const metadata = generateMetadata({
@@ -61,7 +60,6 @@ export default function SEOIsDeadArticle() {
           datePublished: "2026-02-02",
         })}
       />
-      <JsonLd type="Person" data={generateTechPersonSchema()} />
 
       <div className="container">
         <article className="article">

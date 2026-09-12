@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { generateMetadata, absoluteUrl } from "@/lib/seo/metadata";
 import { JsonLd } from "@/components/seo/JsonLd";
-import { generateWebPageSchema, generateTechArticleSchema, generateBreadcrumbSchema, generateTechPersonSchema } from "@/lib/seo/structured-data";
+import { generateWebPageSchema, generateTechArticleSchema, generateBreadcrumbSchema } from "@/lib/seo/structured-data";
 
 export const metadata = generateMetadata({
   title: "Case Study: $253k Saved with Claude Code Automation",
@@ -44,7 +44,6 @@ export default function ClaudeCodeCaseStudy() {
           datePublished: "2025-01-28",
         })}
       />
-      <JsonLd type="Person" data={generateTechPersonSchema()} />
 
       <div className="container">
         <article className="article">
