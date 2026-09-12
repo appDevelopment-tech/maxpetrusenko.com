@@ -46,21 +46,6 @@ on:
   # PR can run the real gate with no chance of touching production.  Path-scoped
   # to the same set as the push trigger.
   pull_request:
-    branches:
-      - main
-    paths:
-      - 'nextjs/**'
-      - 'public/**'
-      - 'tests/fixtures/sd-baseline/**'
-      - 'tests/fixtures/sd-coverage/**'
-      - '.github/scripts/web-seo-check.py'
-      - '.github/scripts/sd-check.py'
-      - '.github/scripts/sd-policy.toml'
-      - '.github/scripts/sd-gate.toml'
-      - '.github/scripts/schema-org-types.txt'
-      - '.github/workflows/seo-indexing-gate.yml'
-
-concurrency:
   group: seo-indexing-gate-${{ github.ref }}
   cancel-in-progress: true
 
