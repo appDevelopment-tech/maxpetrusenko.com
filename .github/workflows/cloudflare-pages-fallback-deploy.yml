@@ -66,11 +66,15 @@ jobs:
 
       - name: Validate structured-data surface parity
         working-directory: nextjs
+        env:
+          # §A4.2 adapter pin — see seo-indexing-gate.yml. Bump with the lockfile.
+          NEXT_ON_PAGES_PIN: '1.13.16'
         run: |
           node scripts/check-sd-surface-parity.mjs \
             --surface static=.vercel/output/static \
             --surface fallback='.vercel/output/functions/**/*prerender-fallback.html' \
-            --sample 3 \
+            --sample 0 \
+            --expect-adapter "${NEXT_ON_PAGES_PIN}" \
             --report-only \
             --json /tmp/sd-parity-fallback-deploy.json
 

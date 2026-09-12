@@ -137,19 +137,28 @@ jobs:
 
       - name: Run structured-data surface-parity check
         working-directory: nextjs
+        env:
+          # §A4.2 adapter pin. Bump this in the same commit as the lockfile:
+          # a change to @cloudflare/next-on-pages alters the output layout the
+          # parity check keys off, so the check must fail rather than silently
+          # compare a layout it was never validated against (exit 2).
+          NEXT_ON_PAGES_PIN: '1.13.16'
         run: |
           node scripts/check-sd-surface-parity.mjs \
             --surface static=.vercel/output/static \
             --surface fallback='.vercel/output/functions/**/*prerender-fallback.html' \
-            --sample 3 \
+            --sample 0 \
+            --expect-adapter "${NEXT_ON_PAGES_PIN}" \
             --report-only \
             --json /tmp/sd-parity.json
-        # --sample 3 spans templates on every build; the full set is the weekly
-        # run (`--sample 0`). --report-only is this lane's promotion knob: drop
-        # it alongside the sd-gate.toml band promotion.
-        # The report records the resolved @cloudflare/next-on-pages version; a
-        # version change invalidates a stored parity result (§A4.2) and requires
-        # the full run, because the adapter's output layout is internal API.
+        # --sample 0 compares the FULL route set. The previous --sample 3
+        # compared 3 of 60 routes and a real 1-in-60 divergence read as a pass
+        # (review 2026-09-12); the full set is a few hundred small HTML files,
+        # sub-second, so there is no runtime reason to sample. --report-only
+        # stays this lane's promotion knob: drop it alongside the sd-gate.toml
+        # band promotion.
+        # A surface whose files are all excluded routes now fails hard (exit 2),
+        # so a run that compares nothing can never be green.
 
       - name: Upload SEO reports
         if: always()

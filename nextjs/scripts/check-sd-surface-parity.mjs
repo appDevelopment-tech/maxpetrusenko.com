@@ -22,7 +22,9 @@
  * records the resolved version from `package-lock.json` in its result and, when
  * asked to compare against a stored result (`--baseline-result`), refuses to
  * compare across a version change — a version bump invalidates the recorded
- * parity result and forces a re-run.
+ * parity result and forces a re-run. `--expect-adapter VER` is the state-free
+ * form of the same rule for CI: the pinned version must match the resolved one
+ * or the check exits 2, so a lockfile bump cannot silently pass.
  *
  * ROUTE-KEY DERIVATION (§A4.3, mirrored from sd-check.py)
  * ------------------------------------------------------
@@ -57,7 +59,7 @@
  *   node scripts/check-sd-surface-parity.mjs \
  *     --surface static=.vercel/output/static \
  *     --surface fallback='.vercel/output/functions/**\/*prerender-fallback.html' \
- *     --sample 3 --report-only --json /tmp/sd-parity.json
+ *     --sample 0 --expect-adapter 1.13.16 --report-only --json /tmp/sd-parity.json
  */
 
 import fs from "node:fs";
@@ -82,30 +84,44 @@ function usage() {
 
   --surface LABEL=PATH   a surface to compare (repeatable, >= 2 required).
                          PATH may be a directory or a glob.
-  --sample N             routes to sample; 0 = every route (default 3)
+  --sample N             routes to sample; 0 = every route (default 0 = all)
   --root DIR             repo package dir the route keys are relative to
                          (default: the parent of this script's dir)
   --json PATH            write the parity report JSON ('-' = stdout)
   --write-result PATH    write this run's result (records the adapter version)
   --baseline-result PATH compare against a stored result; a different adapter
                          version invalidates it and forces a re-run
+  --expect-adapter VER   fail (exit 2) unless the resolved
+                         @cloudflare/next-on-pages version equals VER. The
+                         adapter's output layout is internal API, so a version
+                         bump invalidates the comparison and forces a re-run.
   --report-only          never exit 1 on divergence (internal failures still 2)
   --strict               exit 1 when the sampled set is empty
   --quiet                do not print the table
   -h, --help             show this help
 
 Surfaces that do not exist are an internal error (exit 2): a typo'd path must
-not read as "no divergence".`;
+not read as "no divergence". A surface whose files are ALL excluded routes
+(404.html / _not-found* / *.rsc / cdn-cgi/* / .tmp-*) is also an internal error:
+a parity check that compares nothing must never be green.`;
 }
 
 function parseArgs(argv) {
   const opts = {
     surfaces: [],
-    sample: 3,
+    // Default = the FULL route set. A sample that is not shown to be
+    // representative is a silent coverage hole: the previous default of 3
+    // compared 3 of 60 routes and a real 1-in-60 divergence read as exit 0
+    // (found in adversarial review 2026-09-12). The full set is a few hundred
+    // small HTML files per surface — reading and comparing all of them is
+    // sub-second, so there is no runtime reason to sample. `--sample N` remains
+    // available for a deliberately cheap interactive run.
+    sample: 0,
     root: DEFAULT_ROOT,
     json: null,
     writeResult: null,
     baselineResult: null,
+    expectAdapter: null,
     reportOnly: false,
     strict: false,
     quiet: false,
@@ -150,6 +166,9 @@ function parseArgs(argv) {
         break;
       case "--baseline-result":
         opts.baselineResult = next();
+        break;
+      case "--expect-adapter":
+        opts.expectAdapter = next();
         break;
       case "--report-only":
         opts.reportOnly = true;
@@ -281,11 +300,23 @@ function expandSurface(spec, root) {
   }
 
   // Glob: anchor at the longest literal prefix, then filter with the pattern.
+  // The literal head MUST resolve to a real directory. Falling back to the
+  // parent directory (the previous behaviour) made a typo'd glob silently
+  // rescan an unintended tree and fabricate route keys like `/../func/r00`
+  // (found in adversarial review 2026-09-12): a typo must be an error, not a
+  // different scan.
   const firstMagic = spec.target.search(/[*?]/);
   const literalHead = spec.target.slice(0, firstMagic);
   const headNoSlash = literalHead.replace(/\/+$/, "");
   const surfaceRoot = path.resolve(root, headNoSlash.length > 0 ? headNoSlash : ".");
-  const startDir = fs.existsSync(surfaceRoot) ? surfaceRoot : path.dirname(surfaceRoot);
+  if (!fs.existsSync(surfaceRoot) || !fs.statSync(surfaceRoot).isDirectory()) {
+    throw new InternalError(
+      `surface ${JSON.stringify(spec.label)} matched nothing: the glob's literal head ` +
+        `${JSON.stringify(headNoSlash || ".")} does not resolve to a directory under ` +
+        `${root} (refusing to rescan a parent directory)`,
+    );
+  }
+  const startDir = surfaceRoot;
 
   const pattern = path
     .relative(surfaceRoot, path.resolve(root, spec.target))
@@ -436,6 +467,15 @@ function buildSurfaceTable(spec, root) {
 
   for (const file of files) {
     const rel = path.relative(surfaceRoot, file).split(path.sep).join("/");
+    // Defensive: a route key must never escape the surface root. The glob
+    // literal-head guard above should make this unreachable, but a fabricated
+    // `/../…` key (previously produced) must be a hard error, not a table row.
+    if (rel.startsWith("..")) {
+      throw new InternalError(
+        `surface ${JSON.stringify(spec.label)}: expanded file ${file} escapes the ` +
+          `surface root ${surfaceRoot}; refusing to derive a route key`,
+      );
+    }
     if (isExcludedRoute(rel)) continue;
 
     const key = deriveRouteKey(rel);
@@ -466,6 +506,21 @@ function buildSurfaceTable(spec, root) {
       loserBlocks: loser.shape.blocks,
     });
     entries.set(key, winner);
+  }
+
+  // A surface that yields zero comparable routes must never be green: the
+  // previous code checked only that HTML FILES existed, so a surface whose
+  // files are all excluded routes reported `sampled 0 of 0` and exit 0
+  // (found in adversarial review 2026-09-12). The sole defence was `--strict`,
+  // which no caller passed.
+  if (entries.size === 0) {
+    throw new InternalError(
+      `surface ${JSON.stringify(spec.label)} matched ${files.length} HTML file(s) ` +
+        `but yielded 0 comparable routes (every file is an excluded route: ` +
+        `404.html / _not-found* / *.rsc / cdn-cgi/* / .tmp-*). ` +
+        `A parity check that compares nothing must never pass — fix the surface ` +
+        `path or the exclusion set.`,
+    );
   }
 
   return { label: spec.label, target: spec.target, files: files.length, entries, collisions };
@@ -579,6 +634,21 @@ function main(argv) {
   const opts = parseArgs(argv);
   const adapterVersion = resolveAdapterVersion(opts.root);
 
+  // §A4.2 made load-bearing. The adapter's output layout is internal API, so a
+  // record of the resolved version is only protection if something refuses to
+  // compare across a change. `--baseline-result`/`--write-result` did that but
+  // no caller passed them, leaving the recorded version inert (found in
+  // adversarial review 2026-09-12). `--expect-adapter` is the state-free form:
+  // the wired invocation pins the version and a bump fails the check.
+  if (opts.expectAdapter && adapterVersion !== opts.expectAdapter) {
+    throw new InternalError(
+      `adapter pin mismatch: the caller pinned ${ADAPTER_PACKAGE}@${opts.expectAdapter}, ` +
+        `this run resolved ${ADAPTER_PACKAGE}@${adapterVersion}. The adapter's output ` +
+        `layout is internal API, so a version bump invalidates a recorded parity ` +
+        `result — re-run the build and update the pinned version before trusting a pass.`,
+    );
+  }
+
   const surfaces = opts.surfaces.map((spec) => buildSurfaceTable(spec, opts.root));
 
   const allRoutes = new Set();
@@ -595,6 +665,15 @@ function main(argv) {
     `adapter ${ADAPTER_PACKAGE}@${adapterVersion} | routes ${routeCounts} | ` +
       `sampled ${sampled}${opts.sample === 0 ? " (full set)" : ` of ${allRoutes.size}`}`,
   );
+
+  // Make partial coverage loud: a divergence on an unsampled route is simply
+  // not compared, and under --report-only it would not even be reported.
+  if (opts.sample > 0 && sampled < allRoutes.size) {
+    note(
+      `coverage: sampled ${sampled} of ${allRoutes.size} route(s) (--sample ${opts.sample}); ` +
+        `a divergence on an unsampled route is NOT compared. Omit --sample for the full set.`,
+    );
+  }
 
   if (!opts.quiet) {
     const headers = ["route", ...surfaces.map((s) => `${s.label} blk/types`)];
@@ -709,8 +788,15 @@ function main(argv) {
     return { code: 1, result };
   }
 
-  if (opts.strict && sampled === 0) {
-    note("--strict: no routes were sampled, nothing was actually compared.");
+  // A zero-route comparison can never be green, with or without --strict. The
+  // zero-route surfaces already throw above; this is the belt-and-braces guard
+  // so no future path can reach a green exit having compared nothing. (--strict
+  // is kept as a no-op-compatible flag for existing callers.)
+  if (sampled === 0) {
+    note(
+      "no routes were sampled: nothing was actually compared. " +
+        "A check that compares nothing must not pass.",
+    );
     return { code: 1, result };
   }
 
