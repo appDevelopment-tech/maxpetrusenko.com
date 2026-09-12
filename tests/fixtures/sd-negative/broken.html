@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>negative control — this page is deliberately invalid</title>
+<!-- Two error-band defects on purpose: no @context on the root block, and a
+     dangling @id reference that resolves to nothing. If the gate ever passes
+     this file, the gate has stopped being load-bearing and this step fails. -->
+<script type="application/ld+json">
+{
+  "@type": "Article",
+  "headline": "negative control",
+  "author": { "@id": "https://www.maxpetrusenko.com/#nobody" },
+  "publisher": { "@id": "https://www.maxpetrusenko.com/#alsonobody" }
+}
+</script>
+</head>
+<body><h1>negative control</h1></body>
+</html>
