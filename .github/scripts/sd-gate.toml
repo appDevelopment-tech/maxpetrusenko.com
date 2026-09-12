@@ -74,7 +74,7 @@ allowed_hosts = ["www.maxpetrusenko.com", "atelier.maxpetrusenko.com", "wa.me"]
 # LANE MANDATE: this repo runs report-only for the whole wiring lane. Findings
 # never produce exit 1; internal failures still exit 2 (§A5.3). Band promotion is
 # an integration decision (§D1/R3) and is recorded in [bands] below.
-report_only = true
+report_only = false
 strict = false
 
 # Per-rule band overrides. Empty on purpose: nothing is promoted yet, and a
