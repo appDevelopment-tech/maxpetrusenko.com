@@ -604,6 +604,9 @@ class Checker:
         sitemap_url = f"{base}/sitemap.xml"
         st, final, sitemap_headers, sitemap_body = self.fetch(sitemap_url)
         text = sitemap_body.decode("utf-8", errors="replace") if sitemap_body else ""
+        # case-insensitive: Cloudflare sends CF-RAY, urllib preserves the sent casing,
+        # and a lookup that misses puts "?" in the one line that exists to carry evidence
+        ray = next((v for k, v in (sitemap_headers or {}).items() if k.lower() == "cf-ray"), "?")
         urls = []
         if st == 0:
             self.err("sitemap-fetch", sitemap_url, "network error fetching sitemap.xml")
@@ -616,7 +619,7 @@ class Checker:
             # user-agent returns 200 from a residential IP (verified 2026-09-12).
             self.info(
                 "sitemap-edge-blocked", sitemap_url,
-                f"sitemap.xml HTTP {st} blocked at the edge (cf-ray {sitemap_headers.get('cf-ray', '?')}); "
+                f"sitemap.xml HTTP {st} blocked at the edge (cf-ray {ray}); "
                 f"sitemap content NOT verified by this run -- robots.txt was reachable, so this is most "
                 f"likely bot protection against the fetching host rather than a missing sitemap",
             )
