@@ -91,18 +91,81 @@ allowed_hosts = ["www.maxpetrusenko.com", "wa.me"]
 report_only = true
 strict = false
 
+# markup_optional -- routes that may legitimately carry NO JSON-LD (rule E
+# `no-markup`).  Absence of this key means EVERY walked route must carry
+# structured data.  Matching is on the derived lowercase route key, whole-segment
+# or prefix glob, and the skip is PRINTED into the report and the notes array --
+# an exemption a reader cannot see is indistinguishable from a page that quietly
+# dropped its markup.
+#
+#   /tantra-massage-ubud   PERMANENT REDIRECT, not a content page.
+#                          nextjs/app/tantra-massage-ubud/page.tsx is a 3-line
+#                          stub whose whole body is `redirect("/spirituality")`,
+#                          so it emits HTTP 307 and never renders a document.
+#                          The adapter still emits a prerender-fallback artifact
+#                          for the path (the Next.js error shell carrying the
+#                          NEXT_REDIRECT digest), and that artifact is what the
+#                          surface walk reads and what the coverage manifest
+#                          lists -- hence one `no-markup` finding for a route
+#                          that cannot have markup by construction.
+#                          Adding a JSON-LD block to a redirect would mean
+#                          inventing markup for a page no crawler indexes: the
+#                          redirect target /spirituality is the page that
+#                          carries the practice's structured data.
+markup_optional = ["/tantra-massage-ubud"]
+
 # Per-rule band overrides. Empty on purpose: nothing is promoted yet, and a
 # promotion must be a one-line diff here rather than an edit to a workflow.
 #
-# Burn-down classes waiting on integration (measured 2026-09-12, report-only):
-#   url-host              829 E  external sameAs profiles + atelier backlink URLs
-#   missing-required      165 E  nested Organization/WebPage stubs outside the type table
-#   duplicate-type-conflict 15 E  Person emitted twice with different values per page
-#   rating-consistency      7 E  aggregateRating claims N reviews with 0 Review nodes
-#   date-sanity             2 E  /mindfold/events startDate > +1 day
-#   multi-aggregaterating   0 E  (fixed in this lane on /; `/` is not in the surface)
+# MEASURED ERROR BAND, after the burn-down (2026-09-12, pinned vendored sd-check
+# 1.5.0, REAL `npm run pages:build` surface, 129 routes):
+#
+#   coverage                1 E  manifest route "/" has no baseline entry -- see
+#                                THE RESIDUAL below. NOT fixable in this file.
+#   duplicate-type-conflict 0 E  was 15 E  -- one human was declared twice per page
+#   no-markup               0 E  was  1 E  -- /tantra-massage-ubud, declared above
+#   url-host                0 E
+#   missing-required        0 E
+#   rating-consistency      0 E
+#   date-sanity             0 E
 #   placeholder-text        0 E
-#   context-missing         0 E  (atelier's @context is already present at 6f9a20b)
+#   context-missing         0 E
+#
+# summary line: error=1 warn=878 info=32 routes_checked=129 routes_expected=130
+#
+# THE RESIDUAL, STATED PLAINLY -- and why report_only stays true.
+# The one remaining error-band finding is `coverage`, direction 2
+# (manifest -> baseline), for the homepage "/".
+#   * WHAT THE RULE COMPARES: `check_coverage()` compares the coverage MANIFEST
+#     against the BASELINE INDEX (both directions), not against the surface walk.
+#     Direction 2 = every manifest route that has no baseline entry.
+#   * WHY "/" CAN NEVER SATISFY IT: "/" is in the manifest deliberately
+#     (tests/fixtures/sd-coverage/maxpetrusenko-routes.xml documents the reason),
+#     and it cannot be baselined because the build emits no HTML for it.
+#     app/page.tsx awaits fetchArticles(), which calls parseMediumRSS() over the
+#     network, so the route is a DYNAMIC function: it lands as
+#     `.vercel/output/functions/index.func` and there is no
+#     `index.html` in `.vercel/output/static` and no `*prerender-fallback.html`
+#     for it either -- verified on this build. A dir-mode gate that reads HTML
+#     files therefore cannot read the homepage, in any configuration.
+#   * NO EXEMPTION KEY EXISTS: `sd-check.py --list-config-contract` enumerates
+#     every recognised [gate] key, and the ONLY route-level exemption is
+#     `markup_optional`, which affects `no-markup` alone. Writing an
+#     unrecognised key here would be a silent no-op that LOOKS like a fix, which
+#     is worse than the finding.
+#   * THE HONEST FIX IS VALIDATOR-SIDE: a `coverage_optional` route list
+#     alongside `markup_optional`, matched the same way and printed as a skip in
+#     the report's notes. That is a change to the manager canonical
+#     `sd-check.py`/config contract and is routed separately. It is NOT
+#     faked here: inventing a baseline entry for a page the build cannot emit, or
+#     deleting "/" from the expected-route manifest, would both hide a real gap
+#     rather than close it.
+#   * SO report_only STAYS TRUE. The error band is 1, not 0, and flipping now
+#     would make every run of this gate fail on a finding that no change in this
+#     repo can clear -- the opposite of what the flip is for. The homepage's
+#     markup is not unguarded meanwhile: it is asserted at source level by
+#     nextjs/lib/seo/structured-data.contract.test.mjs, which calls
+#     generatePersonSchema() and composes the exact homepage block set.
 [bands]
 
 # NOTE: wa.me is in allowed_hosts (not reference_allowlist) because the two
