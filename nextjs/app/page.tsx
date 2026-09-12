@@ -2,7 +2,6 @@ import Image from "next/image";
 import Link from "next/link";
 import dynamic from "next/dynamic";
 import { redirect } from "next/navigation";
-import { siteConfig } from "@/config/site";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { DirectAnswer } from "@/components/seo/DirectAnswer";
 import { generateMetadata, absoluteUrl } from "@/lib/seo/metadata";
@@ -316,14 +315,6 @@ export default async function HomePage({ searchParams }: HomePageProps) {
                   <Link href="/spirituality" className="rounded-xl border border-[rgba(12,17,21,0.09)] bg-white px-4 py-3 text-sm font-semibold transition hover:border-[rgba(14,97,93,0.3)]">
                     Somatic and tantra resources
                   </Link>
-                  <a
-                    href={siteConfig.externalLinks.atelier}
-                    target="_blank"
-                    rel="noopener"
-                    className="rounded-xl border border-[rgba(12,17,21,0.09)] bg-white px-4 py-3 text-sm font-semibold transition hover:border-[rgba(210,163,93,0.35)]"
-                  >
-                    Spirituality &amp; Mindfold (subdomain)
-                  </a>
                 </div>
               </div>
             </div>
