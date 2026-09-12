@@ -1,0 +1,102 @@
+# sd-gate.toml — the invocation is data (plan §A5.2 / §A1.9)
+#
+# Read with `python3 .github/scripts/sd-check.py --config .github/scripts/sd-gate.toml`.
+# Kept in the repo, hashed by the drift guard, so the same validator cannot run
+# with silently different strictness in two repos.
+#
+# PATH RESOLUTION: Gate.resolve() joins every relative value below with the
+# DIRECTORY OF THIS FILE (`.github/scripts/`), not the repo root. Hence the
+# `../../` prefixes. Verified against sd-check 1.1.0 (sha256 fcd38e52...).
+#
+# TOML has no partial dates: a month-only date must be QUOTED ("2026-06").
+# Unquoted partial dates make the file malformed, and a malformed config is an
+# internal failure — exit 2, "the gate broke", never "the site broke".
+
+[gate]
+mode  = "dir"
+site  = "www.maxpetrusenko.com"
+
+# Surface choice — MEASURED, not assumed.
+#
+# Both adapter shapes were built twice from a clean `.vercel/output` on
+# 2026-09-12 (base 6f9a20b, @cloudflare/next-on-pages 1.13.16) and read with
+# sd-check 1.0.0:
+#
+#   .vercel/output/static ........................... 203 HTML files -> 131 route keys
+#     of which 69 keys are DUPLICATED: `medium/<slug>.html` (the real page,
+#     2 JSON-LD blocks) AND `medium/<slug>/index.html` (a 0-block twin). The
+#     twin is re-emitted by every clean build, so it is adapter output, not
+#     stale residue.
+#   .vercel/output/functions/**/*prerender-fallback.html  131 HTML files -> 129 route keys
+#   fallback-only route keys ........................ 0
+#   static-only route keys .......................... 2  (/500, /cdn-cgi/errors/*; 0 JSON-LD each)
+#
+# The plan's §A4 preflight predicted "62 static files plus 61 MORE that exist
+# only as prerender-fallbacks, so reading static/ alone misses about half the
+# routes". That does NOT reproduce on this tree: the fallback surface is a
+# strict SUBSET of static by route key and every one of its 129 routes carries
+# the same block count and @type multiset as its static twin (asserted by
+# `nextjs/scripts/check-sd-surface-parity.mjs`, `npm run sd:parity`).
+#
+# One surface only, and it is the FALLBACK surface, deliberately:
+#   - sd-check does not dedupe route keys within a surface, so the 69 static
+#     twins are each validated against the same baseline entry. Measured
+#     consequence of pointing the gate at `static/`: 69 false `shape-digest`
+#     errors (E) plus 69 false `content-snapshot` warnings on EVERY run, for
+#     routes whose markup is perfectly fine. Once bands are promoted that would
+#     block every deploy for a reason that has nothing to do with the site.
+#   - the fallback surface covers 129/129 content routes with 0 duplicate keys,
+#     and is provably equivalent to the served static HTML on every one of them
+#     (parity result, same adapter version).
+#   - adding the fallback surface ON TOP OF static doubles every finding
+#     (1018 -> 2036 errors) with zero additional route coverage.
+#
+# MIGRATION TRIGGER: when @cloudflare/next-on-pages stops emitting the
+# `<slug>/index.html` twins (or sd-check gains per-surface dedupe), switch this
+# value to `../../nextjs/.vercel/output/static`. The parity run prints the
+# duplicate-key count, so the switch is visible without re-measuring by hand.
+surface = ["../../nextjs/.vercel/output/functions/**/*prerender-fallback.html"]
+
+policy = "sd-policy.toml"
+
+baseline = "../../tests/fixtures/sd-baseline/maxpetrusenko"
+
+# The committed expected-route list (§A4.4: never capture a baseline from a
+# different surface than the gate reads). Sitemap-shaped XML; the validator
+# extracts `<loc>` and reduces each to a path.
+coverage_manifest = "../../tests/fixtures/sd-coverage/maxpetrusenko-routes.xml"
+
+# Canonical host SET, not one host: atelier.maxpetrusenko.com is Max's own
+# second surface with its own canonical, so identity props pointing at it are
+# legitimate rather than drift.  The binding is to a set by design.
+allowed_hosts = ["www.maxpetrusenko.com", "atelier.maxpetrusenko.com", "wa.me"]
+
+# LANE MANDATE: this repo runs report-only for the whole wiring lane. Findings
+# never produce exit 1; internal failures still exit 2 (§A5.3). Band promotion is
+# an integration decision (§D1/R3) and is recorded in [bands] below.
+report_only = true
+strict = false
+
+# Per-rule band overrides. Empty on purpose: nothing is promoted yet, and a
+# promotion must be a one-line diff here rather than an edit to a workflow.
+#
+# Burn-down classes waiting on integration (measured 2026-09-12, report-only):
+#   url-host              829 E  external sameAs profiles + atelier backlink URLs
+#   missing-required      165 E  nested Organization/WebPage stubs outside the type table
+#   duplicate-type-conflict 15 E  Person emitted twice with different values per page
+#   rating-consistency      7 E  aggregateRating claims N reviews with 0 Review nodes
+#   date-sanity             2 E  /mindfold/events startDate > +1 day
+#   multi-aggregaterating   0 E  (fixed in this lane on /; `/` is not in the surface)
+#   placeholder-text        0 E
+#   context-missing         0 E  (atelier's @context is already present at 6f9a20b)
+[bands]
+
+# NOTE: wa.me is in allowed_hosts (not reference_allowlist) because the two
+# remaining rule-11 findings on this site are an IDENTITY url on
+# /mindfold/events pointing at the WhatsApp booking link, not an image.
+# TABLE ORDER: [hosts] must stay last in this file. In TOML every key after a
+# table header belongs to that table, so inserting [hosts] above report_only
+# moves report_only out of [gate] and silently turns report-only into a
+# failing gate. Measured during integration: exit 1, 191 error-band findings.
+[hosts]
+reference_allowlist = []

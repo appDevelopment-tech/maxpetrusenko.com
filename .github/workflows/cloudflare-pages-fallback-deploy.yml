@@ -31,6 +31,11 @@ jobs:
           cache: npm
           cache-dependency-path: nextjs/package-lock.json
 
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12' # sd-check asserts >= 3.11 (tomllib) and exits 2 below it
+
       - name: Install dependencies
         run: npm ci
 
@@ -43,9 +48,40 @@ jobs:
       - name: Build Pages output
         run: npm run pages:build
 
-      - name: Validate JSON-LD
+      # ---------------------------------------------------------------------
+      # Replaces the standalone `python3 scripts/check-jsonld.py .` step.
+      # check-jsonld.py was parse-only and ran nowhere on push; sd-check is the
+      # canonical validator and its parse rule (rule 1, band E) is a strict
+      # superset. Strictness comes from sd-gate.toml, not from this step.
+      #
+      # NOTE: the gate reads the built artifacts, so it must run AFTER
+      # pages:build — that is why it is not inside verify:predeploy.
+      # ---------------------------------------------------------------------
+      - name: Validate structured data (sd-check, dir mode)
         working-directory: .
-        run: python3 scripts/check-jsonld.py .
+        run: |
+          python3 .github/scripts/sd-check.py \
+            --config .github/scripts/sd-gate.toml \
+            --json /tmp/sd-report-fallback-deploy.json
+
+      - name: Validate structured-data surface parity
+        working-directory: nextjs
+        run: |
+          node scripts/check-sd-surface-parity.mjs \
+            --surface static=.vercel/output/static \
+            --surface fallback='.vercel/output/functions/**/*prerender-fallback.html' \
+            --sample 3 \
+            --report-only \
+            --json /tmp/sd-parity-fallback-deploy.json
+
+      - name: Upload structured-data reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sd-report-fallback-deploy
+          path: |
+            /tmp/sd-report-fallback-deploy.json
+            /tmp/sd-parity-fallback-deploy.json
 
       - name: Deploy to Cloudflare Pages
         run: npx wrangler pages deploy .vercel/output/static --project-name=maxpetrusenko-nextjs --branch=main

@@ -1,0 +1,29 @@
+{
+  "blocks": 1,
+  "content": {
+    "Organization.name": "Presence Atelier",
+    "Person.description": "Creator of tech automation resources, tantra education, and somatic practice offerings.",
+    "Person.name": "Max Petrusenko"
+  },
+  "content_digest": "3b758e40268e699f91b0d66dc106dddd28eeefe9609e26596c4cbe23dfaf0138",
+  "route": "/medium/youtube-brainwashing-feed-boring-sbwtelpwvl4",
+  "shape": {
+    "canonical": "https://www.maxpetrusenko.com/medium/youtube-brainwashing-feed-boring-sbwtelpwvl4/",
+    "ids": [],
+    "required_present": {
+      "Organization": [
+        "name",
+        "url"
+      ],
+      "Person": [
+        "name"
+      ]
+    },
+    "types": [
+      "Organization",
+      "Person"
+    ],
+    "values": {}
+  },
+  "shape_digest": "4b451944f2a65d59f6054c2ea2e3edd13aa0b1bf729a9387bfdf3dba1bcf143b"
+}

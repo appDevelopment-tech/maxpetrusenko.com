@@ -1,0 +1,47 @@
+{
+  "blocks": 3,
+  "content": {
+    "ListItem.name": "Privacy Policy",
+    "Organization.name": "Presence Atelier",
+    "Person.description": "Creator of tech automation resources, tantra education, and somatic practice offerings.",
+    "Person.name": "Max Petrusenko",
+    "WebPage.description": "Privacy policy for Max Petrusenko websites, apps, AI tools, newsletters, events, and consulting services.",
+    "WebPage.name": "Privacy Policy"
+  },
+  "content_digest": "11c77a83b07648a000e46a492bd1b5436736c5e315a3d34bc46d4fe9d87b39ad",
+  "route": "/privacy-policy",
+  "shape": {
+    "canonical": "https://www.maxpetrusenko.com/privacy-policy",
+    "ids": [],
+    "required_present": {
+      "BreadcrumbList": [
+        "itemListElement"
+      ],
+      "ListItem": [
+        "position",
+        "position"
+      ],
+      "Organization": [
+        "name",
+        "url"
+      ],
+      "Person": [
+        "name"
+      ],
+      "WebPage": [
+        "name",
+        "url"
+      ]
+    },
+    "types": [
+      "BreadcrumbList",
+      "ListItem",
+      "ListItem",
+      "Organization",
+      "Person",
+      "WebPage"
+    ],
+    "values": {}
+  },
+  "shape_digest": "83913ba22b0ee7032abd8a5bfb776d81ab0ff84dd2de91bbd3f9afa6dda0abfd"
+}

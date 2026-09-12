@@ -1,0 +1,64 @@
+{
+  "blocks": 3,
+  "content": {
+    "Article.description": "The practical environment standards that make deep somatic work safer and more effective.",
+    "Article.headline": "How I Prepare the Temple Space for Tantra Sessions",
+    "ListItem.name": "Temple Space Preparation",
+    "Organization.name": "Max Petrusenko",
+    "Person.description": "Creator of tech automation resources, tantra education, and somatic practice offerings.",
+    "Person.name": "Max Petrusenko"
+  },
+  "content_digest": "f86de053eb41ae3002733b4ab08d19396d31def80d3df5894636b2dda3532b24",
+  "route": "/spirituality/blog/temple-space-preparation",
+  "shape": {
+    "canonical": "https://www.maxpetrusenko.com/spirituality/blog/temple-space-preparation",
+    "ids": [
+      "https://www.maxpetrusenko.com/spirituality/blog/temple-space-preparation"
+    ],
+    "required_present": {
+      "Article": [
+        "author",
+        "datePublished",
+        "headline"
+      ],
+      "BreadcrumbList": [
+        "itemListElement"
+      ],
+      "ImageObject": [
+        "url"
+      ],
+      "ListItem": [
+        "position",
+        "position",
+        "position",
+        "position"
+      ],
+      "Organization": [
+        "name",
+        "name",
+        "url"
+      ],
+      "Person": [
+        "name",
+        "name"
+      ],
+      "WebPage": []
+    },
+    "types": [
+      "Article",
+      "BreadcrumbList",
+      "ImageObject",
+      "ListItem",
+      "ListItem",
+      "ListItem",
+      "ListItem",
+      "Organization",
+      "Organization",
+      "Person",
+      "Person",
+      "WebPage"
+    ],
+    "values": {}
+  },
+  "shape_digest": "4e522fc142a58fe5be52b98c36dfd535f317829d62c4444603541a156d9c364a"
+}

@@ -1,0 +1,97 @@
+{
+  "blocks": 5,
+  "content": {
+    "ListItem.name": "AI Automation",
+    "OfferCatalog.name": "AI & Automation Services",
+    "Organization.name": "Max Petrusenko Tech",
+    "Person.description": "AI automation consultant specializing in Claude Code, n8n workflows, ChatGPT integrations, and workflow automation for creators and founders.",
+    "Person.name": "Max Petrusenko",
+    "ProfessionalService.description": "AI automation consultant specializing in Claude Code, n8n workflows, ChatGPT integrations, and workflow automation for creators and founders. Available remotely worldwide, with in-person work by request while traveling.",
+    "ProfessionalService.name": "Max Petrusenko - AI & Automation Consultant",
+    "Service.description": "Shape the right product, design calm UX flows, and ship outcomes that matter.",
+    "Service.name": "Product & UX Consulting",
+    "WebPage.description": "AI automation consulting for content workflows and business process automation.",
+    "WebPage.name": "AI Automation Services"
+  },
+  "content_digest": "1ead6a08da96e1ba3392d37d00b0cb20036700cdfa0082daa6f679cbacbe5d63",
+  "route": "/tech/ai-automation",
+  "shape": {
+    "canonical": "https://www.maxpetrusenko.com/tech/ai-automation",
+    "ids": [],
+    "required_present": {
+      "AggregateRating": [
+        "ratingValue"
+      ],
+      "BreadcrumbList": [
+        "itemListElement"
+      ],
+      "ImageObject": [
+        "url"
+      ],
+      "ListItem": [
+        "position",
+        "position",
+        "position"
+      ],
+      "Offer": [],
+      "OfferCatalog": [
+        "itemListElement",
+        "name"
+      ],
+      "Organization": [
+        "name",
+        "name",
+        "url",
+        "url"
+      ],
+      "Person": [
+        "name",
+        "name"
+      ],
+      "ProfessionalService": [
+        "name"
+      ],
+      "Service": [
+        "name",
+        "name",
+        "name",
+        "name"
+      ],
+      "WebPage": [
+        "name",
+        "url"
+      ]
+    },
+    "types": [
+      "AggregateRating",
+      "Audience",
+      "BreadcrumbList",
+      "ImageObject",
+      "ListItem",
+      "ListItem",
+      "ListItem",
+      "Offer",
+      "Offer",
+      "Offer",
+      "Offer",
+      "OfferCatalog",
+      "Organization",
+      "Organization",
+      "Person",
+      "Person",
+      "ProfessionalService",
+      "Service",
+      "Service",
+      "Service",
+      "Service",
+      "WebPage"
+    ],
+    "values": {
+      "AggregateRating.bestRating": "5",
+      "AggregateRating.ratingValue": "4.9",
+      "AggregateRating.reviewCount": "6",
+      "AggregateRating.worstRating": "1"
+    }
+  },
+  "shape_digest": "daa66926d1bcfde028d0961e592ad264f9fafe9a1762c0a9a51715e3a689347c"
+}

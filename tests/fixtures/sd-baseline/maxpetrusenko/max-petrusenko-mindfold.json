@@ -1,0 +1,84 @@
+{
+  "blocks": 6,
+  "content": {
+    "ItemList.description": "Branded Mindfold reference page for Max Petrusenko linking blindfolded presence journeys, event booking, private group formats, and related somatic context.",
+    "ItemList.name": "Max Petrusenko Mindfold reference links",
+    "ListItem.name": "Who Is Max",
+    "Organization.name": "Presence Atelier",
+    "Person.description": "Creator of tech automation resources, tantra education, and somatic practice offerings.",
+    "Person.name": "Max Petrusenko",
+    "Question.name": "What is Mindfold by Max Petrusenko?",
+    "WebPage.description": "Branded Mindfold reference page for Max Petrusenko linking blindfolded presence journeys, event booking, private group formats, and related somatic context.",
+    "WebPage.name": "Max Petrusenko Mindfold"
+  },
+  "content_digest": "829ca75e3084695d11f1f70029a8bb737020c79fa2789c2a3187b5f91e3b64f8",
+  "route": "/max-petrusenko-mindfold",
+  "shape": {
+    "canonical": "https://www.maxpetrusenko.com/max-petrusenko-mindfold",
+    "ids": [],
+    "required_present": {
+      "Answer": [
+        "text"
+      ],
+      "BreadcrumbList": [
+        "itemListElement"
+      ],
+      "FAQPage": [
+        "mainEntity"
+      ],
+      "ItemList": [
+        "itemListElement"
+      ],
+      "ListItem": [
+        "position",
+        "position",
+        "position",
+        "position",
+        "position",
+        "position",
+        "position",
+        "position"
+      ],
+      "Organization": [
+        "name",
+        "name",
+        "url",
+        "url"
+      ],
+      "Person": [
+        "name",
+        "name"
+      ],
+      "Question": [
+        "acceptedAnswer",
+        "name"
+      ],
+      "WebPage": [
+        "name",
+        "url"
+      ]
+    },
+    "types": [
+      "Answer",
+      "BreadcrumbList",
+      "FAQPage",
+      "ItemList",
+      "ListItem",
+      "ListItem",
+      "ListItem",
+      "ListItem",
+      "ListItem",
+      "ListItem",
+      "ListItem",
+      "ListItem",
+      "Organization",
+      "Organization",
+      "Person",
+      "Person",
+      "Question",
+      "WebPage"
+    ],
+    "values": {}
+  },
+  "shape_digest": "d7978d2e6cd6b96cfeee34bb5ff11ed86703fe7fd3e20ec5646c1b09ef73b591"
+}

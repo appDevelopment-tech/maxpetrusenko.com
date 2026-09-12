@@ -1,0 +1,29 @@
+{
+  "blocks": 1,
+  "content": {
+    "Organization.name": "Presence Atelier",
+    "Person.description": "Creator of tech automation resources, tantra education, and somatic practice offerings.",
+    "Person.name": "Max Petrusenko"
+  },
+  "content_digest": "3b758e40268e699f91b0d66dc106dddd28eeefe9609e26596c4cbe23dfaf0138",
+  "route": "/medium/youtube-company-ruining-fruit-nygnp0s0zq",
+  "shape": {
+    "canonical": "https://www.maxpetrusenko.com/medium/youtube-company-ruining-fruit-nygnp0s0zq/",
+    "ids": [],
+    "required_present": {
+      "Organization": [
+        "name",
+        "url"
+      ],
+      "Person": [
+        "name"
+      ]
+    },
+    "types": [
+      "Organization",
+      "Person"
+    ],
+    "values": {}
+  },
+  "shape_digest": "028b50575d9a45bdb2a68a918e4f71ab7a5b2eddc3ff4bd9ae87a29d18264e67"
+}

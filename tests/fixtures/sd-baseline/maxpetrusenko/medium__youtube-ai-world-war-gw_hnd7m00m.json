@@ -1,0 +1,29 @@
+{
+  "blocks": 1,
+  "content": {
+    "Organization.name": "Presence Atelier",
+    "Person.description": "Creator of tech automation resources, tantra education, and somatic practice offerings.",
+    "Person.name": "Max Petrusenko"
+  },
+  "content_digest": "3b758e40268e699f91b0d66dc106dddd28eeefe9609e26596c4cbe23dfaf0138",
+  "route": "/medium/youtube-ai-world-war-gw_hnd7m00m",
+  "shape": {
+    "canonical": "https://www.maxpetrusenko.com/medium/youtube-ai-world-war-gw_hnd7m00m/",
+    "ids": [],
+    "required_present": {
+      "Organization": [
+        "name",
+        "url"
+      ],
+      "Person": [
+        "name"
+      ]
+    },
+    "types": [
+      "Organization",
+      "Person"
+    ],
+    "values": {}
+  },
+  "shape_digest": "57cf6ce90835818077182880c767803661ef554dbb325ea9d8e1c928bdc3f2e8"
+}

@@ -1,0 +1,47 @@
+{
+  "blocks": 3,
+  "content": {
+    "ListItem.name": "Proof",
+    "Organization.name": "Presence Atelier",
+    "Person.description": "Creator of tech automation resources, tantra education, and somatic practice offerings.",
+    "Person.name": "Max Petrusenko",
+    "WebPage.description": "Case studies, projects, and validation for Max Petrusenko's work.",
+    "WebPage.name": "Proof - Case Studies and Validation"
+  },
+  "content_digest": "a5adfd2382b5b8dde676365cbcf61d217f1dfe940eb0f0a8fbfd49fb61a46804",
+  "route": "/proof",
+  "shape": {
+    "canonical": "https://www.maxpetrusenko.com/proof",
+    "ids": [],
+    "required_present": {
+      "BreadcrumbList": [
+        "itemListElement"
+      ],
+      "ListItem": [
+        "position",
+        "position"
+      ],
+      "Organization": [
+        "name",
+        "url"
+      ],
+      "Person": [
+        "name"
+      ],
+      "WebPage": [
+        "name",
+        "url"
+      ]
+    },
+    "types": [
+      "BreadcrumbList",
+      "ListItem",
+      "ListItem",
+      "Organization",
+      "Person",
+      "WebPage"
+    ],
+    "values": {}
+  },
+  "shape_digest": "f8f6adcf48fbef532b6b6c757e6a286125a8fffe35509bc636176338a0b28e11"
+}

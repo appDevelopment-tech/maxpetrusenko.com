@@ -1,0 +1,29 @@
+{
+  "blocks": 1,
+  "content": {
+    "Organization.name": "Presence Atelier",
+    "Person.description": "Creator of tech automation resources, tantra education, and somatic practice offerings.",
+    "Person.name": "Max Petrusenko"
+  },
+  "content_digest": "3b758e40268e699f91b0d66dc106dddd28eeefe9609e26596c4cbe23dfaf0138",
+  "route": "/medium/youtube-ai-scammers-dont-hang-up-lk3jcuitec",
+  "shape": {
+    "canonical": "https://www.maxpetrusenko.com/medium/youtube-ai-scammers-dont-hang-up-lk3jcuitec/",
+    "ids": [],
+    "required_present": {
+      "Organization": [
+        "name",
+        "url"
+      ],
+      "Person": [
+        "name"
+      ]
+    },
+    "types": [
+      "Organization",
+      "Person"
+    ],
+    "values": {}
+  },
+  "shape_digest": "5e7d10fd444d7945fbe879bc8bca8be8891e663c786a90d4b4a3370461af0d2f"
+}

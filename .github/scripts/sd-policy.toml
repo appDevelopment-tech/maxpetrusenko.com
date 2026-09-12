@@ -1,0 +1,269 @@
+# sd-policy.toml -- Google structured-data policy as DATA, not code.
+#
+# Owned by the manager repo (canonical).  Vendored verbatim into consumer repos
+# by the orchestrator (§D1/R2).  Reacting to an announcement is a data edit, not
+# a code change (§A1.1).
+#
+# ---------------------------------------------------------------------------
+# HONEST LIMIT (stated here on purpose, §A2.4 rule 5)
+# ---------------------------------------------------------------------------
+# Whether a cited date ACTUALLY APPEARS in the cited source cannot be automated.
+# Every entry carries source_url + last_verified, and the weekly staleness job
+# (§A2.3) HEADs every source_url and fails past `staleness_max_days`.  That
+# calendar forcing function is the whole mechanism.  Do not read a green
+# staleness run as "the citation says what we think it says".
+#
+# ---------------------------------------------------------------------------
+# Match semantics (§A2.2)
+# ---------------------------------------------------------------------------
+# An entry fires when:   node @type in match.types
+#                    AND every property in match.all_props is present
+#                    AND match.any_props is absent or intersects
+# Precedence: an entry WITH property constraints wins over a type-only entry.
+#   Required because the `learning-video` predicate (VideoObject + a learning
+#   property) collides with the ACTIVE generic VideoObject row.
+# Bands:  E error, W warn, I info, "-" observation only (never affects exit).
+# Status: active | reinstated | retired_from_reporting | feature_removed |
+#         out_of_scope | quota
+#
+# match.types MUST resolve against the pinned snapshot named in
+# [meta].vocab_snapshot.  A key on a feature name can never fire: it passes
+# silently while the markup goes unmatched.  That is a gate configuration
+# error and the validator exits 2 on it (§A2.4 rule 1).
+#
+# Year-month values are quoted strings: TOML has no year-month type, and
+# pretending otherwise would make "2026-06" silently mean something else.
+#
+# A documentary entry (`match.types = []`) never matches a node.  It exists so
+# policy facts with no schema.org type -- quotas, report features -- live in the
+# same data file with the same citation discipline.  It can never fire, which
+# is exactly its stated band ("-").
+
+[meta]
+schema_version     = 1
+policy_version     = 1
+staleness_max_days = 90
+vocab_snapshot     = "schema-org-types.txt"   # pinned list, §A2.4
+vocab_version      = "30.0"
+vocab_fetched      = 2026-09-12
+vocab_source_url   = "https://schema.org/version/latest/schemaorg-current-https.jsonld"
+
+# ===========================================================================
+# Retired-from-reporting and feature-removed rows.  Never block; never chase.
+# ===========================================================================
+
+[[policy]]
+id            = "faqpage-rich-result"
+match         = { types = ["FAQPage"] }
+status        = "retired_from_reporting"
+band          = "I"
+announced     = 2026-05-07
+reporting_end = "2026-06"
+api_end       = "2026-08"
+source_url    = "https://developers.google.com/search/docs/appearance/structured-data/faqpage"
+last_verified = 2026-09-12
+note          = "Markup stays valid and is still ingested. Never block on it; never chase it."
+
+[[policy]]
+id            = "howto"
+match         = { types = ["HowTo"] }
+status        = "retired_from_reporting"
+band          = "I"
+announced     = 2026-05-07
+reporting_end = "2026-06"
+api_end       = "2026-08"
+source_url    = "https://developers.google.com/search/docs/appearance/structured-data/how-to"
+last_verified = 2026-09-12
+note          = "Retired from reporting with FAQ rich results. Markup is harmless; do not block the deploy on it."
+
+[[policy]]
+id            = "learning-video"
+match         = { types = ["VideoObject"], any_props = ["learningResourceType", "educationalAlignment", "teaches", "assesses"] }
+status        = "feature_removed"
+band          = "I"
+announced     = 2025-06-12
+effective     = 2025-09-09
+api_end       = "2025-12"
+bigquery_null_from = 2025-10-01
+source_url    = "https://developers.google.com/search/blog/2025/06/simplifying-search-results"
+last_verified = 2026-09-12
+note          = "Generic VideoObject rich results are still live: this predicate must not suppress the VideoObject required-props row for plain videos."
+
+[[policy]]
+id            = "practice-problem"
+match         = { types = ["Quiz"] }
+status        = "feature_removed"
+band          = "I"
+announced     = 2025-11-05
+effective     = "2026-01"
+source_url    = "https://developers.google.com/search/updates"
+last_verified = 2026-09-12
+note          = "'PracticeProblem' is not a schema.org type and must never be a policy key. The feature is titled 'Practice Problem (Quiz)'; markup is Quiz + hasPart of Question."
+
+[[policy]]
+id            = "sitelinks-searchbox"
+match         = { types = ["WebSite"], any_props = ["potentialAction", "SearchAction"] }
+status        = "feature_removed"
+band          = "I"
+announced     = 2024-10-21
+effective     = 2024-11-21
+source_url    = "https://developers.google.com/search/blog/2024/10/sitelinks-search-box"
+last_verified = 2026-09-12
+note          = "Removed globally 2024-11-21; leftover markup is explicitly harmless."
+
+[[policy]]
+id            = "june-2025-retirements"
+match         = { types = ["ClaimReview", "SpecialAnnouncement"] }
+status        = "feature_removed"
+band          = "I"
+announced     = 2025-06-12
+effective     = 2025-09-09
+api_end       = "2025-12"
+bigquery_null_from = 2025-10-01
+source_url    = "https://developers.google.com/search/blog/2025/06/simplifying-search-results"
+last_verified = 2026-09-12
+note          = "Both ARE real schema.org types. Retired from Google's rich-result surface, still valid markup."
+
+[[policy]]
+id            = "course-carousel"
+match         = { types = ["Course"] }
+status        = "feature_removed"
+band          = "I"
+announced     = 2025-06-12
+effective     = 2025-09-09
+api_end       = "2025-12"
+bigquery_null_from = 2025-10-01
+source_url    = "https://developers.google.com/search/blog/2025/06/simplifying-search-results"
+last_verified = 2026-09-12
+note          = "Only the Course CAROUSEL was retired. The single-result course card is live, so required Course props stay governed by the required-props table (info band)."
+
+[[policy]]
+id            = "vehicle-listing"
+match         = { types = ["Vehicle", "Car"], any_props = ["offers"] }
+status        = "feature_removed"
+band          = "I"
+announced     = 2025-06-12
+effective     = 2025-09-09
+api_end       = "2025-12"
+bigquery_null_from = 2025-10-01
+source_url    = "https://developers.google.com/search/blog/2025/06/simplifying-search-results"
+last_verified = 2026-09-12
+note          = "The vehicle-listing feature is gone. 'VehicleListing' is NOT a schema.org type and must never be a policy key; the markup type is Vehicle/Car."
+
+[[policy]]
+id            = "news-features-nutrition"
+match         = { types = ["NutritionInformation", "MenuItem"] }
+status        = "feature_removed"
+band          = "I"
+announced     = 2025-11-05
+effective     = "2026-01"
+source_url    = "https://developers.google.com/search/updates"
+last_verified = 2026-09-12
+note          = "Nutrition Information news feature retired from reporting."
+
+[[policy]]
+id            = "news-features-nearby-offers"
+match         = { types = ["Event", "Menu"], any_props = ["offers", "hasMenu"] }
+status        = "feature_removed"
+band          = "I"
+announced     = 2025-11-05
+effective     = "2026-01"
+source_url    = "https://developers.google.com/search/updates"
+last_verified = 2026-09-12
+note          = "Nearby Offers and Events news feature retired from reporting."
+
+[[policy]]
+id            = "news-features-tv-season"
+match         = { types = ["TVSeason", "TVSeries"], any_props = ["partOfSeries"] }
+status        = "feature_removed"
+band          = "I"
+announced     = 2025-11-05
+effective     = "2026-01"
+source_url    = "https://developers.google.com/search/updates"
+last_verified = 2026-09-12
+note          = "TV Season Selector news feature retired from reporting."
+
+[[policy]]
+id            = "news-features-bikeshare"
+match         = { types = [] }
+status        = "feature_removed"
+band          = "-"
+announced     = 2025-11-05
+effective     = "2026-01"
+source_url    = "https://developers.google.com/search/updates"
+last_verified = 2026-09-12
+note          = "Local Bikeshare Station Status has no schema.org type; documentary entry only, can never match a node."
+
+# ===========================================================================
+# Active types.  These govern required properties.
+# ===========================================================================
+
+[[policy]]
+id            = "book-actions"
+match         = { types = ["Book"] }
+status        = "active"        # reinstated 2025-11; NEVER flag as deprecated
+band          = "-"
+history       = "flagged_deprecated 2025-06-12; deprecation banner removed 2025-11 (a Search feature still consumes the markup); absent from the 2025-09-09 removal list"
+source_url    = "https://developers.google.com/search/updates"
+last_verified = 2026-09-12
+note          = "Required-props table governs. A missing required prop on Book is an E."
+
+[[policy]]
+id            = "video-object-generic"
+match         = { types = ["VideoObject"] }
+status        = "active"
+band          = "-"
+source_url    = "https://developers.google.com/search/docs/appearance/structured-data/video"
+last_verified = 2026-09-12
+note          = "Generic VideoObject rich results are live. This is the type-only counterpart the learning-video predicate must win over, per the declared precedence rule."
+
+[[policy]]
+id            = "article-rich-results"
+match         = { types = ["Article", "BlogPosting", "NewsArticle"] }
+status        = "active"
+band          = "-"
+source_url    = "https://developers.google.com/search/docs/appearance/structured-data/article"
+last_verified = 2026-09-12
+note          = "Active. Required props are E via the required-props table."
+
+[[policy]]
+id            = "local-business-rich-results"
+match         = { types = ["LocalBusiness"] }
+status        = "active"
+band          = "-"
+source_url    = "https://developers.google.com/search/docs/appearance/structured-data/local-business"
+last_verified = 2026-09-12
+note          = "Active. Self-serving review snippets are W (rule 17)."
+
+# ===========================================================================
+# Out of scope / quota / reporting.  Documentary where no type exists.
+# ===========================================================================
+
+[[policy]]
+id            = "dataset-search-only"
+match         = { types = ["Dataset"] }
+status        = "out_of_scope"
+band          = "-"
+source_url    = "https://developers.google.com/search/docs/appearance/structured-data/dataset"
+last_verified = 2026-09-12
+note          = "Dataset rich results are Dataset Search only; Google Search ignores the markup. Out of scope for this gate."
+
+[[policy]]
+id            = "url-inspection-quota"
+match         = { types = [] }
+status        = "quota"
+band          = "-"
+source_url    = "https://developers.google.com/webmaster-tools/limits"
+last_verified = 2026-09-12
+note          = "Per-site 2,000 QPD + 600 QPM. Per-project 10,000,000 QPD + 15,000 QPM. Documentary: a quota, not a node predicate."
+
+[[policy]]
+id            = "gen-ai-performance-reports"
+match         = { types = [] }
+status        = "active"
+band          = "-"
+announced     = 2026-06-03
+effective     = 2026-08-31
+source_url    = "https://developers.google.com/search/blog"
+last_verified = 2026-09-12
+note          = "TWO reports (Search and Discover). Impressions only: no clicks, CTR, position or query data; property totals do not reconcile with page sums. Three legitimate causes of an empty report: low AI impressions, a direct opt-out, or an opt-out inherited from a parent property."

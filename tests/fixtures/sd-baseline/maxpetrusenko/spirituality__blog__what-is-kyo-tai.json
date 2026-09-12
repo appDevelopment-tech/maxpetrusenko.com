@@ -1,0 +1,64 @@
+{
+  "blocks": 3,
+  "content": {
+    "Article.description": "A practical definition of Kyo-tai as a two-body somatic practice shaped by contact, bodywork, and energetic listening.",
+    "Article.headline": "What Is Kyo-tai? A Two-Body Somatic Practice",
+    "ListItem.name": "What Is Kyo-tai?",
+    "Organization.name": "Max Petrusenko",
+    "Person.description": "Creator of tech automation resources, tantra education, and somatic practice offerings.",
+    "Person.name": "Max Petrusenko"
+  },
+  "content_digest": "934a358e591a32a6afaa38221c49c154b90c283655717009ff38f91452bdc68a",
+  "route": "/spirituality/blog/what-is-kyo-tai",
+  "shape": {
+    "canonical": "https://www.maxpetrusenko.com/spirituality/blog/what-is-kyo-tai",
+    "ids": [
+      "https://www.maxpetrusenko.com/spirituality/blog/what-is-kyo-tai"
+    ],
+    "required_present": {
+      "Article": [
+        "author",
+        "datePublished",
+        "headline"
+      ],
+      "BreadcrumbList": [
+        "itemListElement"
+      ],
+      "ImageObject": [
+        "url"
+      ],
+      "ListItem": [
+        "position",
+        "position",
+        "position",
+        "position"
+      ],
+      "Organization": [
+        "name",
+        "name",
+        "url"
+      ],
+      "Person": [
+        "name",
+        "name"
+      ],
+      "WebPage": []
+    },
+    "types": [
+      "Article",
+      "BreadcrumbList",
+      "ImageObject",
+      "ListItem",
+      "ListItem",
+      "ListItem",
+      "ListItem",
+      "Organization",
+      "Organization",
+      "Person",
+      "Person",
+      "WebPage"
+    ],
+    "values": {}
+  },
+  "shape_digest": "dd9352c9bb28a5bcbe8938cc555fa9a41dfbfdff0074a566e9fdb94c8ca9a29c"
+}

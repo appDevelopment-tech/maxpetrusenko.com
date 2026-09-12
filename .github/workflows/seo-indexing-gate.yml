@@ -4,12 +4,25 @@ name: SEO Indexing Gate
 # "Alternate page with proper canonical tag", noindex, robots blocks,
 # sitemap 404s, thin content, JSON-LD/favicon/og issues) BEFORE a deploy.
 #
-#   push → main : runs LOCAL dir-check on the built Pages output (no network,
+#   push → main : runs LOCAL dir-checks on the built Pages output (no network,
 #                 no Cloudflare rate-limit risk). Blocks on errors.
 #   workflow_dispatch : runs LIVE crawl of the production site after deploy.
 #
 # Usage: python3 .github/scripts/web-seo-check.py --dir <out> --url <base>
 #        or --url <base> for live mode. Exit 0 = pass, 1 = errors, 2 = warnings.
+#
+# Structured-data half of the gate (added 2026-09-12):
+#   python3 .github/scripts/sd-check.py     --config .github/scripts/sd-gate.toml
+#   node    nextjs/scripts/check-sd-surface-parity.mjs ...
+# `sd-gate.toml` is the invocation: it holds mode, surface, baseline, coverage
+# manifest and the per-rule bands (plan §A5.2). Strictness is NOT set here — a
+# band promotion is a one-line diff in that file, not a workflow edit (§D1/R3).
+# Exit-code contract (§A5.3), for both tools:
+#   0 = no error-band findings / no divergence   → step passes
+#   1 = findings                                 → step fails
+#   2 = the gate broke (bad config, unreadable surface) → step fails, and the
+#       message says the GATE broke, not the site.
+# No `|| true` anywhere, and no exit-2 special-casing.
 
 on:
   push:
@@ -18,7 +31,14 @@ on:
     paths:
       - 'nextjs/**'
       - 'public/**'
+      - 'atelier/**'
+      - 'tests/fixtures/sd-baseline/**'
+      - 'tests/fixtures/sd-coverage/**'
       - '.github/scripts/web-seo-check.py'
+      - '.github/scripts/sd-check.py'
+      - '.github/scripts/sd-policy.toml'
+      - '.github/scripts/sd-gate.toml'
+      - '.github/scripts/schema-org-types.txt'
       - '.github/workflows/seo-indexing-gate.yml'
   workflow_dispatch:
 
@@ -51,6 +71,11 @@ jobs:
           cache: npm
           cache-dependency-path: nextjs/package-lock.json
 
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12' # sd-check asserts >= 3.11 (tomllib) and exits 2 below it
+
       - name: Install dependencies
         run: npm ci
 
@@ -78,12 +103,44 @@ jobs:
             --json /tmp/seo-report-atelier.json
         # exit 1 blocks; exit 2 (warnings) reported but allowed
 
-      - name: Upload SEO report
+      # ---------------------------------------------------------------------
+      # Structured-data gate. Offline; reads the built artifacts + the local
+      # policy file only. Strictness lives in sd-gate.toml (report_only = true
+      # for the wiring lane).
+      # ---------------------------------------------------------------------
+      - name: Run structured-data gate (dir mode)
+        working-directory: .
+        run: |
+          python3 .github/scripts/sd-check.py \
+            --config .github/scripts/sd-gate.toml \
+            --json /tmp/sd-report.json
+
+      - name: Run structured-data surface-parity check
+        working-directory: nextjs
+        run: |
+          node scripts/check-sd-surface-parity.mjs \
+            --surface static=.vercel/output/static \
+            --surface fallback='.vercel/output/functions/**/*prerender-fallback.html' \
+            --sample 3 \
+            --report-only \
+            --json /tmp/sd-parity.json
+        # --sample 3 spans templates on every build; the full set is the weekly
+        # run (`--sample 0`). --report-only is this lane's promotion knob: drop
+        # it alongside the sd-gate.toml band promotion.
+        # The report records the resolved @cloudflare/next-on-pages version; a
+        # version change invalidates a stored parity result (§A4.2) and requires
+        # the full run, because the adapter's output layout is internal API.
+
+      - name: Upload SEO reports
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: seo-report
-          path: /tmp/seo-report.json
+          path: |
+            /tmp/seo-report.json
+            /tmp/seo-report-atelier.json
+            /tmp/sd-report.json
+            /tmp/sd-parity.json
 
   live-check:
     name: Live site SEO check (post-deploy)

@@ -1,0 +1,47 @@
+{
+  "blocks": 3,
+  "content": {
+    "ListItem.name": "Chinola",
+    "Organization.name": "Presence Atelier",
+    "Person.description": "Creator of tech automation resources, tantra education, and somatic practice offerings.",
+    "Person.name": "Max Petrusenko",
+    "WebPage.description": "Client preview of a day one passion fruit detection prototype using annotated video.",
+    "WebPage.name": "Chinola Vision Demo"
+  },
+  "content_digest": "faa6f2c95ca10c15167c7fe7b43475069b9e1bf02673ff855f8fd1c675dce94d",
+  "route": "/chinola",
+  "shape": {
+    "canonical": "https://www.maxpetrusenko.com/chinola",
+    "ids": [],
+    "required_present": {
+      "BreadcrumbList": [
+        "itemListElement"
+      ],
+      "ListItem": [
+        "position",
+        "position"
+      ],
+      "Organization": [
+        "name",
+        "url"
+      ],
+      "Person": [
+        "name"
+      ],
+      "WebPage": [
+        "name",
+        "url"
+      ]
+    },
+    "types": [
+      "BreadcrumbList",
+      "ListItem",
+      "ListItem",
+      "Organization",
+      "Person",
+      "WebPage"
+    ],
+    "values": {}
+  },
+  "shape_digest": "eabcf6fc8a4f29496b46f9f7a253b76384eb1520edb29aea658d1e9cb182f0fa"
+}

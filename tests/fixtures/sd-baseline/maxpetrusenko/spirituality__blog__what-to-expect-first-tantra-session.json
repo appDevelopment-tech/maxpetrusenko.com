@@ -1,0 +1,64 @@
+{
+  "blocks": 3,
+  "content": {
+    "Article.description": "A complete guide to your first tantra massage session by request. Learn what to expect from arrival to integration.",
+    "Article.headline": "What to Expect in Your First Tantra Massage Session",
+    "ListItem.name": "What to Expect in Your First Tantra Session",
+    "Organization.name": "Max Petrusenko",
+    "Person.description": "Creator of tech automation resources, tantra education, and somatic practice offerings.",
+    "Person.name": "Max Petrusenko"
+  },
+  "content_digest": "0d14630f71ee289e695b6446479b4130c8d176162a6c525029a70781ba9dbe0b",
+  "route": "/spirituality/blog/what-to-expect-first-tantra-session",
+  "shape": {
+    "canonical": "https://www.maxpetrusenko.com/spirituality/blog/what-to-expect-first-tantra-session",
+    "ids": [
+      "https://www.maxpetrusenko.com/spirituality/blog/what-to-expect-first-tantra-session"
+    ],
+    "required_present": {
+      "Article": [
+        "author",
+        "datePublished",
+        "headline"
+      ],
+      "BreadcrumbList": [
+        "itemListElement"
+      ],
+      "ImageObject": [
+        "url"
+      ],
+      "ListItem": [
+        "position",
+        "position",
+        "position",
+        "position"
+      ],
+      "Organization": [
+        "name",
+        "name",
+        "url"
+      ],
+      "Person": [
+        "name",
+        "name"
+      ],
+      "WebPage": []
+    },
+    "types": [
+      "Article",
+      "BreadcrumbList",
+      "ImageObject",
+      "ListItem",
+      "ListItem",
+      "ListItem",
+      "ListItem",
+      "Organization",
+      "Organization",
+      "Person",
+      "Person",
+      "WebPage"
+    ],
+    "values": {}
+  },
+  "shape_digest": "03587db9470f65af93178cd1f058a8316e825571c828106ac37386b80a2ec80e"
+}

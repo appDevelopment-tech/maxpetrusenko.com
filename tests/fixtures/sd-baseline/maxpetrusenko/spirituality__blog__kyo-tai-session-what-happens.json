@@ -1,0 +1,64 @@
+{
+  "blocks": 3,
+  "content": {
+    "Article.description": "A practical walkthrough of what happens before, during, and after a Kyo-tai session.",
+    "Article.headline": "What Happens in a Kyo-tai Session",
+    "ListItem.name": "What Happens in a Kyo-tai Session",
+    "Organization.name": "Max Petrusenko",
+    "Person.description": "Creator of tech automation resources, tantra education, and somatic practice offerings.",
+    "Person.name": "Max Petrusenko"
+  },
+  "content_digest": "6fa1b369e79cc589ad0ee702b5ca827912e27086410fcfa7f3437185a0f564db",
+  "route": "/spirituality/blog/kyo-tai-session-what-happens",
+  "shape": {
+    "canonical": "https://www.maxpetrusenko.com/spirituality/blog/kyo-tai-session-what-happens",
+    "ids": [
+      "https://www.maxpetrusenko.com/spirituality/blog/kyo-tai-session-what-happens"
+    ],
+    "required_present": {
+      "Article": [
+        "author",
+        "datePublished",
+        "headline"
+      ],
+      "BreadcrumbList": [
+        "itemListElement"
+      ],
+      "ImageObject": [
+        "url"
+      ],
+      "ListItem": [
+        "position",
+        "position",
+        "position",
+        "position"
+      ],
+      "Organization": [
+        "name",
+        "name",
+        "url"
+      ],
+      "Person": [
+        "name",
+        "name"
+      ],
+      "WebPage": []
+    },
+    "types": [
+      "Article",
+      "BreadcrumbList",
+      "ImageObject",
+      "ListItem",
+      "ListItem",
+      "ListItem",
+      "ListItem",
+      "Organization",
+      "Organization",
+      "Person",
+      "Person",
+      "WebPage"
+    ],
+    "values": {}
+  },
+  "shape_digest": "b9ee9065b879b8d22e78014148f9f82907a4ecec49830f9eaf50b22ed363aaa1"
+}

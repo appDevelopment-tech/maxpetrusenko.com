@@ -1,0 +1,63 @@
+{
+  "blocks": 4,
+  "content": {
+    "ListItem.name": "Consciousness x Technology",
+    "Organization.name": "Presence Atelier",
+    "Person.description": "Creator of tech automation resources, tantra education, and somatic practice offerings.",
+    "Person.name": "Max Petrusenko",
+    "Question.name": "Who writes about consciousness and technology?",
+    "WebPage.description": "Where consciousness science meets software engineering. Articles by Max Petrusenko on flow states, eastern philosophy, contemplative neuroscience, and building with awareness.",
+    "WebPage.name": "Consciousness x Technology | Meditation, Neuroscience & Engineering"
+  },
+  "content_digest": "c08631e4cf42e5c86c54273a178feabca2b1841b4848a08d1c3f6f0ccf7053e9",
+  "route": "/blog/consciousness-tech",
+  "shape": {
+    "canonical": "https://www.maxpetrusenko.com/blog/consciousness-tech",
+    "ids": [],
+    "required_present": {
+      "Answer": [
+        "text"
+      ],
+      "BreadcrumbList": [
+        "itemListElement"
+      ],
+      "FAQPage": [
+        "mainEntity"
+      ],
+      "ListItem": [
+        "position",
+        "position",
+        "position"
+      ],
+      "Organization": [
+        "name",
+        "url"
+      ],
+      "Person": [
+        "name"
+      ],
+      "Question": [
+        "acceptedAnswer",
+        "name"
+      ],
+      "WebPage": [
+        "name",
+        "url"
+      ]
+    },
+    "types": [
+      "Answer",
+      "BreadcrumbList",
+      "FAQPage",
+      "ListItem",
+      "ListItem",
+      "ListItem",
+      "Organization",
+      "Person",
+      "Question",
+      "WebPage"
+    ],
+    "values": {}
+  },
+  "shape_digest": "cfebe7c2c0849650db929efc3a46d42541cf4e24897e3da66d0d107d956a480e"
+}

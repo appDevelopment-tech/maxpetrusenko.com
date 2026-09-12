@@ -1,0 +1,76 @@
+{
+  "blocks": 4,
+  "content": {
+    "ListItem.name": "AI Consulting Reddit",
+    "Organization.name": "Presence Atelier",
+    "Person.description": "Creator of tech automation resources, tantra education, and somatic practice offerings.",
+    "Person.name": "Max Petrusenko",
+    "Question.name": "How do I pick a good AI consultant?",
+    "WebPage.description": "What people on Reddit actually ask about AI consulting: is it worth it, how much does it cost, and how do you pick a good consultant.",
+    "WebPage.name": "AI Consulting Reddit"
+  },
+  "content_digest": "58746655e31c600eddad4df3d3b259e5c921261e05bb1a8007b73918f67700ad",
+  "route": "/ai-consulting-reddit",
+  "shape": {
+    "canonical": "https://www.maxpetrusenko.com/ai-consulting-reddit",
+    "ids": [],
+    "required_present": {
+      "Answer": [
+        "text",
+        "text",
+        "text",
+        "text"
+      ],
+      "BreadcrumbList": [
+        "itemListElement"
+      ],
+      "FAQPage": [
+        "mainEntity"
+      ],
+      "ListItem": [
+        "position",
+        "position"
+      ],
+      "Organization": [
+        "name",
+        "url"
+      ],
+      "Person": [
+        "name"
+      ],
+      "Question": [
+        "acceptedAnswer",
+        "acceptedAnswer",
+        "acceptedAnswer",
+        "acceptedAnswer",
+        "name",
+        "name",
+        "name",
+        "name"
+      ],
+      "WebPage": [
+        "name",
+        "url"
+      ]
+    },
+    "types": [
+      "Answer",
+      "Answer",
+      "Answer",
+      "Answer",
+      "BreadcrumbList",
+      "FAQPage",
+      "ListItem",
+      "ListItem",
+      "Organization",
+      "Person",
+      "Question",
+      "Question",
+      "Question",
+      "Question",
+      "WebPage"
+    ],
+    "values": {}
+  },
+  "shape_digest": "eb327125e1e571cc4c006621075fd32bc82b7398dcc09b6c921f0f18127f4329"
+}

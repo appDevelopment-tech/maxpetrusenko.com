@@ -1,0 +1,84 @@
+{
+  "blocks": 6,
+  "content": {
+    "ItemList.description": "Branded somatic reference page for Max Petrusenko covering tantra-informed bodywork, nervous system regulation, Kyo-tai, training, and spirituality routes.",
+    "ItemList.name": "Max Petrusenko Somatic Practice reference links",
+    "ListItem.name": "Tantra-Informed Somatic Work",
+    "Organization.name": "Presence Atelier",
+    "Person.description": "Creator of tech automation resources, tantra education, and somatic practice offerings.",
+    "Person.name": "Max Petrusenko",
+    "Question.name": "What somatic work does Max Petrusenko offer?",
+    "WebPage.description": "Branded somatic reference page for Max Petrusenko covering tantra-informed bodywork, nervous system regulation, Kyo-tai, training, and spirituality routes.",
+    "WebPage.name": "Max Petrusenko Somatic Practice"
+  },
+  "content_digest": "36294f9a60ce7d5259c9377338e78bb45233a217810e314a885ca3b00d96b6d5",
+  "route": "/max-petrusenko-somatic",
+  "shape": {
+    "canonical": "https://www.maxpetrusenko.com/max-petrusenko-somatic",
+    "ids": [],
+    "required_present": {
+      "Answer": [
+        "text"
+      ],
+      "BreadcrumbList": [
+        "itemListElement"
+      ],
+      "FAQPage": [
+        "mainEntity"
+      ],
+      "ItemList": [
+        "itemListElement"
+      ],
+      "ListItem": [
+        "position",
+        "position",
+        "position",
+        "position",
+        "position",
+        "position",
+        "position",
+        "position"
+      ],
+      "Organization": [
+        "name",
+        "name",
+        "url",
+        "url"
+      ],
+      "Person": [
+        "name",
+        "name"
+      ],
+      "Question": [
+        "acceptedAnswer",
+        "name"
+      ],
+      "WebPage": [
+        "name",
+        "url"
+      ]
+    },
+    "types": [
+      "Answer",
+      "BreadcrumbList",
+      "FAQPage",
+      "ItemList",
+      "ListItem",
+      "ListItem",
+      "ListItem",
+      "ListItem",
+      "ListItem",
+      "ListItem",
+      "ListItem",
+      "ListItem",
+      "Organization",
+      "Organization",
+      "Person",
+      "Person",
+      "Question",
+      "WebPage"
+    ],
+    "values": {}
+  },
+  "shape_digest": "3e9488391ce0012cde50072c101230aa88b943b06800b3a0dc47298335748872"
+}

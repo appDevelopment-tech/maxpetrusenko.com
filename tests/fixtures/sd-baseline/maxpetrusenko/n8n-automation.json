@@ -1,0 +1,111 @@
+{
+  "blocks": 6,
+  "content": {
+    "ListItem.name": "n8n Automation",
+    "OfferCatalog.name": "AI & Automation Services",
+    "Organization.name": "Max Petrusenko Tech",
+    "Person.description": "AI automation consultant specializing in Claude Code, n8n workflows, ChatGPT integrations, and workflow automation for creators and founders.",
+    "Person.name": "Max Petrusenko",
+    "ProfessionalService.description": "AI automation consultant specializing in Claude Code, n8n workflows, ChatGPT integrations, and workflow automation for creators and founders. Available remotely worldwide, with in-person work by request while traveling.",
+    "ProfessionalService.name": "Max Petrusenko - AI & Automation Consultant",
+    "Question.name": "What does an n8n automation consultant do?",
+    "Service.description": "Shape the right product, design calm UX flows, and ship outcomes that matter.",
+    "Service.name": "Product & UX Consulting",
+    "WebPage.description": "Automate your business with n8n. Custom workflow design, API integrations, data pipelines.",
+    "WebPage.name": "n8n Automation Consultant - Workflow Design & API Integration"
+  },
+  "content_digest": "52f6c92bc31c88357d3d6107d6be3587fe11ab54a9aa07df4a445e07bb625e96",
+  "route": "/n8n-automation",
+  "shape": {
+    "canonical": "https://www.maxpetrusenko.com/n8n-automation",
+    "ids": [],
+    "required_present": {
+      "AggregateRating": [
+        "ratingValue"
+      ],
+      "Answer": [
+        "text"
+      ],
+      "BreadcrumbList": [
+        "itemListElement"
+      ],
+      "FAQPage": [
+        "mainEntity"
+      ],
+      "ImageObject": [
+        "url"
+      ],
+      "ListItem": [
+        "position",
+        "position",
+        "position"
+      ],
+      "Offer": [],
+      "OfferCatalog": [
+        "itemListElement",
+        "name"
+      ],
+      "Organization": [
+        "name",
+        "name",
+        "url",
+        "url"
+      ],
+      "Person": [
+        "name",
+        "name"
+      ],
+      "ProfessionalService": [
+        "name"
+      ],
+      "Question": [
+        "acceptedAnswer",
+        "name"
+      ],
+      "Service": [
+        "name",
+        "name",
+        "name",
+        "name"
+      ],
+      "WebPage": [
+        "name",
+        "url"
+      ]
+    },
+    "types": [
+      "AggregateRating",
+      "Answer",
+      "Audience",
+      "BreadcrumbList",
+      "FAQPage",
+      "ImageObject",
+      "ListItem",
+      "ListItem",
+      "ListItem",
+      "Offer",
+      "Offer",
+      "Offer",
+      "Offer",
+      "OfferCatalog",
+      "Organization",
+      "Organization",
+      "Person",
+      "Person",
+      "ProfessionalService",
+      "Question",
+      "Service",
+      "Service",
+      "Service",
+      "Service",
+      "WebPage"
+    ],
+    "values": {
+      "AggregateRating.bestRating": "5",
+      "AggregateRating.ratingValue": "4.9",
+      "AggregateRating.reviewCount": "6",
+      "AggregateRating.worstRating": "1"
+    }
+  },
+  "shape_digest": "e84ec66680d87f52c241f27bbfb1177428be809eea3a898d367d1ed8363578a9"
+}

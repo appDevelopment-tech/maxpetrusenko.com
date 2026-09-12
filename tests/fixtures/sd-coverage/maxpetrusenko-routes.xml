@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Expected-route manifest for the structured-data gate (sd-gate.toml coverage_manifest).
+
+  Consumed by sd-check rule 24 (coverage assertion, both directions):
+    direction 1  a baseline route that produced no extraction  -> E (W under --report-only)
+    direction 2  a manifest route with no baseline entry      -> E (W under --report-only)
+
+  Shape: sitemap XML. The validator extracts the loc elements and reduces each
+  to a URL path.
+
+  DERIVATION (re-run this whenever routes change):
+    1. node nextjs/scripts/check-sd-surface-parity.mjs \
+         --surface static=nextjs/.vercel/output/static \
+         --surface fallback="nextjs/.vercel/output/functions/**/*prerender-fallback.html" \
+         --sample 0 --report-only --write-result /tmp/sd-parity-result.json
+    2. take every rows[].route from that result, plus "/" (see below), and rewrite this file.
+
+  WHY "/" IS LISTED EVEN THOUGH THE GATE CANNOT READ IT:
+    app/page.tsx renders dynamically (it awaits fetchArticles()), so neither
+    .vercel/output/static nor the prerender-fallback surface contains an HTML
+    artifact for "/". Listing it keeps the gap VISIBLE as a coverage finding on
+    every run (W while report_only = true, E once promoted) instead of silently
+    absent. The homepage markup itself is guarded at source level by
+    nextjs/lib/seo/structured-data.contract.test.mjs.
+
+  Routes deliberately NOT listed (system/error artifacts, no JSON-LD, not pages):
+    /404  /500  /cdn-cgi/**  *.rsc*  _not-found*  .tmp-*
+
+  Generated: 2026-09-12 from adapter @cloudflare/next-on-pages@1.13.16
+-->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://www.maxpetrusenko.com/about</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/admin/concierge</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/ai-consulting-reddit</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/ai-workflow-automation</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/blog</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/blog/consciousness-tech</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/chinola</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/chinola/review/farm-michael-7d4e9c</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/chinola/review/kaggle-health-open-v1</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/claude-code-consultant</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/consciousness-assistant</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/couples-tantra-massage</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/explore/hero-2</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/explore/hero-3</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/identity</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/inbox</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/inbox/sign-in</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/links</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/max-petrusenko-aeo-geo</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/max-petrusenko-ai-automation</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/max-petrusenko-mindfold</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/max-petrusenko-reviews</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/max-petrusenko-somatic</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/medium/cooperation-great-filter</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/medium/medicine-is-learning-to-listen-before-we-have-words</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/medium/negative-time</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/medium/not-ready-for-biocomputing</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/medium/work-takes-everything</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/medium/your-agents-md-was-written-for-a-worse-model</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/medium/youtube-ai-agent-loops-human-loop-7clj8ih784q</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/medium/youtube-ai-born-9-seconds-9xloavituvi</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/medium/youtube-ai-bought-robot-car-ipamktb5csq</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/medium/youtube-ai-civilization-minecraft-urdbco-csk4</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/medium/youtube-ai-scammers-dont-hang-up-lk3jcuitec</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/medium/youtube-ai-world-war-gw_hnd7m00m</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/medium/youtube-amazon-inflate-prices-5otf7bj5lxi</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/medium/youtube-american-war-machine-t0oqriimva</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/medium/youtube-baby-never-solo-project-atbjl3cwd8</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/medium/youtube-biggest-trading-loss-oln5sktcx9e</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/medium/youtube-body-not-die-on-schedule-tsxvuyi0eia</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/medium/youtube-body-thinks-before-mind-bgyi1l1p4nw</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/medium/youtube-body-transplant-toples-lfvctmt5ydy</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/medium/youtube-brain-overload-information-t0qq9r__xiq</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/medium/youtube-brainwashing-feed-boring-sbwtelpwvl4</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/medium/youtube-china-quietly-saved-world-bka0bkb6zo0</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/medium/youtube-chinese-ai-suddenly-good-miudp4xv7io</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/medium/youtube-collapse-of-ai-xaambu5ohvw</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/medium/youtube-company-ruining-fruit-nygnp0s0zq</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/medium/youtube-deepseek-v4-what-not-to-read-xjupuobpt-4</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/medium/youtube-diamond-scam-collapsing-qf78spqj37o</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/medium/youtube-doing-nothing-first-nzd5ifpydce</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/medium/youtube-easiest-way-make-world-smarter-xrcwwzxj8gk</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/medium/youtube-europe-fusion-reactor-bpuakw1dyek</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/medium/youtube-gaming-market-breaking-eo5w2s-h5di</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/medium/youtube-google-interface-reality-9oq5vaybgv0</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/medium/youtube-gottman-5-to-1-couples-hqa06hmcayo</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/medium/youtube-government-scam-rules-u4odaxoqrt8</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/medium/youtube-gps-jamming-clue-space-tz23g-uxcga</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/medium/youtube-happiness-drugs-guide-zcamgnowzvk</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/medium/youtube-harari-mass-delusion-i4l1fr-t3ze</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/medium/youtube-human-skill-robot-training-data-hzkb1ybozgg</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/medium/youtube-humanity-never-leave-solar-system-cyl3x88kegg</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/medium/youtube-immune-system-actually-works-lxfek8g8cui</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/medium/youtube-laundry-detergent-water-snzurrtpony</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/medium/youtube-life-nonlife-boundary-ws6opg41od4</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/medium/youtube-lorem-ipsum-mystery-kl1pdqzqhm4</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/medium/youtube-microplastics-wmayvwnx4vy</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/medium/youtube-modern-life-feels-fake-iy-uw2gmnvi</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/medium/youtube-modern-middle-east-bloehymgc78</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/medium/youtube-monster-head-cognitive-biases-hwzjwzni_dc</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/medium/youtube-most-controversial-idea-physics-oi91ke_wocs</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/medium/youtube-negative-time-trap-xxlg8zilt9c</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/medium/youtube-not-possible-tcxerornjn0</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/medium/youtube-not-ready-biocomputing-ukhsbqcfvwq</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/medium/youtube-oligarchy-paperwork-4s25ffbfw4m</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/medium/youtube-ozempic-5ggagpjdri8</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/medium/youtube-phone-dreams-hrzc6na62bo</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/medium/youtube-psychedelic-commercialization-5meo-dmt-9m-3vuxxxfa</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/medium/youtube-putin-war-wealth-ifvqlskt04e</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/medium/youtube-reach-pluto-fly-sun-sod3ofduytw</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/medium/youtube-real-reason-us-cant-beat-iran-ddbysg0alw</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/medium/youtube-sam-altman-worry-openai-_eytkvzqbnq</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/medium/youtube-seven-dimensions-explained-gpfxmhwv8w</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/medium/youtube-simple-question-socialism-couldnt-answer-mmhyhneaxxy</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/medium/youtube-switch-to-linux-9sdku5vdqeq</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/medium/youtube-think-clearly-genius-mjtgkm-h__m</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/medium/youtube-time-disappears-experiment-bryyy4gjx9w</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/medium/youtube-use-hermes-right-now-qqegio4juxg</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/medium/youtube-want-management-modern-life-iyuw2gmnvi</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/medium/youtube-why-you-dont-trust-tap-water-wchwqnoe95w</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/medium/youtube-work-religion-money-7-kiumlpg84</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/medium/youtube-worried-about-sam-altman-eytkvzqbnq</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/mindfold/events</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/n8n-automation</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/performance</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/privacy-policy</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/proof</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/socialmedia</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/somatic</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/somatic/approach</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/somatic/modalities</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/somatic/training</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/spirituality</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/spirituality/articles</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/spirituality/articles/tantra-trauma-ptsd</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/spirituality/blog</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/spirituality/blog/kyo-tai-session-what-happens</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/spirituality/blog/questions-to-ask-tantra-practitioner</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/spirituality/blog/tantra-vs-regular-massage</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/spirituality/blog/temple-space-preparation</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/spirituality/blog/what-is-kyo-tai</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/spirituality/blog/what-to-expect-first-tantra-session</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/tantra-massage-ubud</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/tech</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/tech/ai-automation</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/tech/articles</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/tech/articles/answer-engine-optimization-aeo</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/tech/articles/bitcoin-as-strong-money</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/tech/articles/chatgpt-api-integration</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/tech/articles/claude-code-setup</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/tech/articles/generative-ai-score-websites</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/tech/articles/generative-engine-optimization-geo</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/tech/articles/n8n-workflow-automation</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/tech/articles/openclaw-installation-playbook</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/tech/articles/seo-is-dead</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/tech/case-studies</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/tech/case-studies/claude-code-automation</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/terms-of-service</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/who-is-max-petrusenko</loc></url>
+  <url><loc>https://www.maxpetrusenko.com/</loc></url>
+</urlset>

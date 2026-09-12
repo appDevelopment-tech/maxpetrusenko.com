@@ -1,0 +1,84 @@
+{
+  "blocks": 6,
+  "content": {
+    "ItemList.description": "Branded AI automation reference page for Max Petrusenko: Claude Code consulting, n8n workflows, ChatGPT integrations, and production automation systems.",
+    "ItemList.name": "Max Petrusenko AI Automation reference links",
+    "ListItem.name": "Reviews",
+    "Organization.name": "Presence Atelier",
+    "Person.description": "Creator of tech automation resources, tantra education, and somatic practice offerings.",
+    "Person.name": "Max Petrusenko",
+    "Question.name": "What AI automation work does Max Petrusenko do?",
+    "WebPage.description": "Branded AI automation reference page for Max Petrusenko: Claude Code consulting, n8n workflows, ChatGPT integrations, and production automation systems.",
+    "WebPage.name": "Max Petrusenko AI Automation"
+  },
+  "content_digest": "c55b0177625681315a0619436840cf3120d8ab2d4487c4a6c0c04508f93662ca",
+  "route": "/max-petrusenko-ai-automation",
+  "shape": {
+    "canonical": "https://www.maxpetrusenko.com/max-petrusenko-ai-automation",
+    "ids": [],
+    "required_present": {
+      "Answer": [
+        "text"
+      ],
+      "BreadcrumbList": [
+        "itemListElement"
+      ],
+      "FAQPage": [
+        "mainEntity"
+      ],
+      "ItemList": [
+        "itemListElement"
+      ],
+      "ListItem": [
+        "position",
+        "position",
+        "position",
+        "position",
+        "position",
+        "position",
+        "position",
+        "position"
+      ],
+      "Organization": [
+        "name",
+        "name",
+        "url",
+        "url"
+      ],
+      "Person": [
+        "name",
+        "name"
+      ],
+      "Question": [
+        "acceptedAnswer",
+        "name"
+      ],
+      "WebPage": [
+        "name",
+        "url"
+      ]
+    },
+    "types": [
+      "Answer",
+      "BreadcrumbList",
+      "FAQPage",
+      "ItemList",
+      "ListItem",
+      "ListItem",
+      "ListItem",
+      "ListItem",
+      "ListItem",
+      "ListItem",
+      "ListItem",
+      "ListItem",
+      "Organization",
+      "Organization",
+      "Person",
+      "Person",
+      "Question",
+      "WebPage"
+    ],
+    "values": {}
+  },
+  "shape_digest": "7c4771c910a4b3bb28e0e5e334dd8336ec33cfd887cdf3b8386f57e744d4174d"
+}

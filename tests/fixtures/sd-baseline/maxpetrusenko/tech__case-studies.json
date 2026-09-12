@@ -1,0 +1,54 @@
+{
+  "blocks": 4,
+  "content": {
+    "ListItem.name": "Case Studies",
+    "Organization.name": "Max Petrusenko Tech",
+    "Person.description": "AI automation consultant specializing in Claude Code, n8n workflows, ChatGPT integrations, and workflow automation for creators and founders.",
+    "Person.name": "Max Petrusenko",
+    "WebPage.description": "Detailed case studies from AI automation and software development projects.",
+    "WebPage.name": "Case Studies - Project Outcomes"
+  },
+  "content_digest": "741b1b6b1fb9dbfc9ffe8cdf532bb228f638857bc51cc1f75152a451b5d5fe68",
+  "route": "/tech/case-studies",
+  "shape": {
+    "canonical": "https://www.maxpetrusenko.com/tech/case-studies",
+    "ids": [],
+    "required_present": {
+      "BreadcrumbList": [
+        "itemListElement"
+      ],
+      "ListItem": [
+        "position",
+        "position",
+        "position"
+      ],
+      "Organization": [
+        "name",
+        "name",
+        "url",
+        "url"
+      ],
+      "Person": [
+        "name",
+        "name"
+      ],
+      "WebPage": [
+        "name",
+        "url"
+      ]
+    },
+    "types": [
+      "BreadcrumbList",
+      "ListItem",
+      "ListItem",
+      "ListItem",
+      "Organization",
+      "Organization",
+      "Person",
+      "Person",
+      "WebPage"
+    ],
+    "values": {}
+  },
+  "shape_digest": "6e815706f39e12f77da1ed9b781586d9a65ecc1178a09bcec53b3c38454a44ec"
+}
