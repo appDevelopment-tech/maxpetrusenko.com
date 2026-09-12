@@ -31,7 +31,6 @@ on:
     paths:
       - 'nextjs/**'
       - 'public/**'
-      - 'atelier/**'
       - 'tests/fixtures/sd-baseline/**'
       - 'tests/fixtures/sd-coverage/**'
       - '.github/scripts/web-seo-check.py'
@@ -52,7 +51,6 @@ on:
     paths:
       - 'nextjs/**'
       - 'public/**'
-      - 'atelier/**'
       - 'tests/fixtures/sd-baseline/**'
       - 'tests/fixtures/sd-coverage/**'
       - '.github/scripts/web-seo-check.py'
