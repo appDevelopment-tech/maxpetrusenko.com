@@ -93,14 +93,21 @@ export default async function HomePage({ searchParams }: HomePageProps) {
       <JsonLd type="FAQPage" data={generateHomeFAQSchema()} />
       <JsonLd type="Person" data={generateEnhancedPersonSchema()} />
       {/*
-        Rule 8: at most ONE AggregateRating per entity per page. The homepage
-        previously emitted three (WebPage from generateProfessionalServiceSchema,
-        ProfessionalService from generateTechServiceSchema, and a bare
-        root-level AggregateRating). The bare root node is gone — an
-        AggregateRating is not a standalone entity, it belongs on the thing
-        being rated — and the WebPage copy is gone from the generator. The one
-        that stays rides on the ProfessionalService node above, which is the
-        entity on this page that actually collects reviews.
+        Ratings: the homepage emits NO AggregateRating at all. It previously
+        emitted three — a WebPage one from generateProfessionalServiceSchema(),
+        a ProfessionalService one from generateTechServiceSchema(), and a bare
+        root-level AggregateRating ("Max Petrusenko" / Organization) — and all
+        three rated Max on Max's own site. Google's review-snippet policy makes
+        that ineligible: "If the entity that's being reviewed controls the
+        reviews about itself, their pages that use LocalBusiness or any other
+        type of Organization structured data are ineligible for star review
+        feature." Each one also carried a hardcoded 4.9 that no user supplied.
+        The generators are deleted, not just uncalled; the absence is asserted
+        by nextjs/lib/seo/structured-data.contract.test.mjs.
+
+        NOTE: the visible "4.9/5 client experience rating" stat card further
+        down this page is page copy and was deliberately NOT touched by that
+        change. Whether it stays is a separate editorial decision.
       */}
 
       <div className="hero-portrait-wrap">

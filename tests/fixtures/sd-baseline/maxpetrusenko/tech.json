@@ -20,9 +20,6 @@
     "canonical": "https://www.maxpetrusenko.com/tech",
     "ids": [],
     "required_present": {
-      "AggregateRating": [
-        "ratingValue"
-      ],
       "Answer": [
         "text",
         "text",
@@ -95,7 +92,6 @@
       ]
     },
     "types": [
-      "AggregateRating",
       "Answer",
       "Answer",
       "Answer",
@@ -135,12 +131,7 @@
       "WebPage",
       "WebPage"
     ],
-    "values": {
-      "AggregateRating.bestRating": "5",
-      "AggregateRating.ratingValue": "4.9",
-      "AggregateRating.reviewCount": "6",
-      "AggregateRating.worstRating": "1"
-    }
+    "values": {}
   },
-  "shape_digest": "39ca612bd74de7dc1a7b62857cdff48c74df1a604492d017a1947492a0bce6dc"
+  "shape_digest": "b2ed92f15addded204ba207aa4eb984ffbf14b02b9a9c21690a5288d6ee928e0"
 }

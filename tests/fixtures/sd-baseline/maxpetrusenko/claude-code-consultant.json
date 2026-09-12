@@ -20,9 +20,6 @@
     "canonical": "https://www.maxpetrusenko.com/claude-code-consultant",
     "ids": [],
     "required_present": {
-      "AggregateRating": [
-        "ratingValue"
-      ],
       "Answer": [
         "text"
       ],
@@ -74,7 +71,6 @@
       ]
     },
     "types": [
-      "AggregateRating",
       "Answer",
       "Audience",
       "BreadcrumbList",
@@ -100,12 +96,7 @@
       "Service",
       "WebPage"
     ],
-    "values": {
-      "AggregateRating.bestRating": "5",
-      "AggregateRating.ratingValue": "4.9",
-      "AggregateRating.reviewCount": "6",
-      "AggregateRating.worstRating": "1"
-    }
+    "values": {}
   },
-  "shape_digest": "ae31abcd817f09cf0e34759d32d798671cf3744ad90f4b87256639c6d1e537e1"
+  "shape_digest": "db39fdd24566722be6f75b0dacc3858823a69e76fb4a6d7b2c1e070acd40f33e"
 }

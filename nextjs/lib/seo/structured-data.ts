@@ -1,5 +1,4 @@
 import { siteConfig } from "@/config/site";
-import { testimonials } from "@/lib/cms/testimonials";
 import { buildHomeFaqMainEntity } from "@/lib/seo/home-faq";
 
 /**
@@ -303,14 +302,14 @@ export function generateProfessionalServiceSchema() {
     },
     "image": BRAND_LOGO_URL,
     "telephone": "+1-954-275-9666",
-    // NOTE: no `aggregateRating` here. This node is a WebPage — a rating on a
-    // WebPage is not a review-snippet pattern, and rule 8 (at-most-one
-    // AggregateRating per entity per page) is the wrong place to carry a
-    // business rating. The page-level rating belongs on the entity that
-    // actually collects reviews; see `generateTechServiceSchema()`
-    // (ProfessionalService) and `generateAggregateRatingSchema()`.
-    // Removing it also clears rule 16 (`rating-consistency`) on /spirituality and
-    // on /, where it claimed reviews with no Review nodes on the page.
+    // NOTE: no `aggregateRating` here, and none anywhere else in this module.
+    // This node is a WebPage, and a rating on a WebPage is not a
+    // review-snippet pattern. The business rating that used to live here — and
+    // on `generateTechServiceSchema()`, and in the deleted
+    // `generateAggregateRatingSchema()` — was self-serving, so Google's
+    // review-snippet policy makes it ineligible: a site cannot earn a star
+    // result for rating its own Organization/ProfessionalService. The absence
+    // is asserted by `structured-data.contract.test.mjs`.
     "hasOfferCatalog": {
       "@type": "OfferCatalog",
       "name": "Tantra-informed somatic practice pathways",
@@ -581,24 +580,22 @@ export { SERVICE_LOCATIONS };
 /**
  * Generate JSON-LD structured data for Tech/AI ProfessionalService
  * Optimized for AI discoverability - Claude Code, n8n, ChatGPT integrations
- * Now includes AggregateRating for social proof
+ *
+ * NOTE: no `aggregateRating` here, deliberately. This node rates Max's own
+ * business, on Max's own site, from a hardcoded literal. Google's
+ * review-snippet policy is explicit that self-serving reviews are ineligible:
+ * "If the entity that's being reviewed controls the reviews about itself,
+ * their pages that use LocalBusiness or any other type of Organization
+ * structured data are ineligible for star review feature", and "Ratings must
+ * be sourced directly from users." ProfessionalService is a LocalBusiness
+ * subtype, so a star result was never achievable. The absence is asserted by
+ * `nextjs/lib/seo/structured-data.contract.test.mjs`.
  */
 export function generateTechServiceSchema() {
-  const techTestimonials = testimonials.filter((t) => t.type === "tech");
-
   return {
     "@context": "https://schema.org",
     "@type": "ProfessionalService",
     name: "Max Petrusenko - AI & Automation Consultant",
-    ...(techTestimonials.length > 0 ? {
-      aggregateRating: {
-        "@type": "AggregateRating",
-        ratingValue: "4.9",
-        reviewCount: techTestimonials.length.toString(),
-        bestRating: "5",
-        worstRating: "1",
-      }
-    } : {}),
     description: "AI automation consultant specializing in Claude Code, n8n workflows, ChatGPT integrations, and workflow automation for creators and founders. Available remotely worldwide, with in-person work by request while traveling.",
     url: `${siteConfig.url}/tech`,
     logo: {
@@ -1032,143 +1029,6 @@ export function generateScheduleActionSchema(_serviceType: "tantra" | "tech" | "
 }
 
 /**
- * ============================================================================
- * REVIEW & RATING SCHEMA
- * ============================================================================
- */
-
-/**
- * Generate individual Review schema from a testimonial
- * Used alongside AggregateRating for comprehensive social proof
- */
-export function generateReviewSchema(testimonial: {
-  quote: string;
-  author: string;
-  role?: string;
-  location?: string;
-  type: "tech" | "spirituality" | "mindfold";
-}, serviceName: string) {
-  return {
-    "@context": "https://schema.org",
-    "@type": "Review",
-    itemReviewed: {
-      "@type": "Service",
-      name: serviceName === "tantra" ? "Presence Atelier - Tantra-Informed Somatic Practice" :
-           serviceName === "tech" ? "AI & Automation Services" :
-           "Mindfold Sanctuary - Sensory Journeys",
-      url: serviceName === "tantra" ? `${siteConfig.url}/spirituality` :
-           serviceName === "tech" ? `${siteConfig.url}/tech` :
-           `${siteConfig.url}/mindfold/events`,
-    },
-    reviewRating: {
-      "@type": "Rating",
-      ratingValue: "5",
-      bestRating: "5",
-      worstRating: "1",
-    },
-    author: {
-      "@type": "Person",
-      name: testimonial.author,
-      ...(testimonial.role && { description: testimonial.role }),
-    },
-    reviewBody: testimonial.quote,
-    publisher: {
-      "@type": "Organization",
-      name: siteConfig.name,
-    },
-    reviewAspect: testimonial.type === "spirituality" ? "tantra massage, somatic energy work, nervous system reset" :
-                  testimonial.type === "tech" ? "AI automation, Claude Code, n8n workflows" :
-                  "blindfold journey, sensory deprivation, presence work",
-  };
-}
-
-/**
- * Generate all Review schemas for a service type
- * Returns an array of individual review schemas
- */
-export function generateAllReviewsSchema(serviceType: "tech" | "spirituality" | "mindfold") {
-  // NOTE: this used to be `const { testimonials } = require("@/lib/cms/testimonials")`.
-  // `require` is not defined in ESM scope, so the function threw under `node --test`
-  // (and under any ESM loader) while quietly working inside the webpack bundle.
-  // `testimonials` is already imported at the top of this module — use it.
-  const filtered = testimonials.filter((t: { type: string }) => t.type === serviceType);
-
-  return filtered.map((t: { quote: string; author: string; role?: string; location?: string; type: string }) =>
-    generateReviewSchema(t as Parameters<typeof generateReviewSchema>[0], serviceType)
-  );
-}
-
-/**
- * Generate AggregateRating schema from testimonials
- * Adds social proof and E-E-A-T signals for SEO
- */
-export function generateAggregateRatingSchema(serviceType: "spirituality" | "tech" | "mindfold" | "all") {
-  // Filter testimonials by type
-  const filteredTestimonials = serviceType === "all"
-    ? testimonials
-    : testimonials.filter((t) => t.type === serviceType);
-
-  // Convert testimonials to Review schema format
-  const reviews = filteredTestimonials.map((t) => ({
-    "@type": "Review",
-    author: {
-      "@type": "Person",
-      name: t.author,
-    },
-    reviewRating: {
-      "@type": "Rating",
-      ratingValue: "5",
-      bestRating: "5",
-    },
-    reviewBody: t.quote,
-    ...(t.role && { description: t.role }),
-  }));
-
-  // Calculate stats
-  const reviewCount = filteredTestimonials.length;
-  const avgRating = 4.9; // Based on 4.9/5 client sentiment from website
-
-  return {
-    "@context": "https://schema.org",
-    "@type": "AggregateRating",
-    ratingValue: avgRating.toString(),
-    reviewCount: reviewCount.toString(),
-    bestRating: "5",
-    worstRating: "1",
-    itemReviewed: {
-      "@type": "Organization",
-      name: serviceType === "all" ? "Max Petrusenko" : `Max Petrusenko - ${serviceType}`,
-    },
-  };
-}
-
-/**
- * Generate full ItemList with reviews for rich snippets
- */
-export function generateItemListWithReviewsSchema(
-  items: Array<{ name: string; description: string; url: string }>,
-  serviceType: "spirituality" | "tech" | "mindfold" | "all"
-) {
-  const rating = generateAggregateRatingSchema(serviceType);
-
-  return {
-    "@context": "https://schema.org",
-    "@type": "ItemList",
-    itemListElement: items.map((item, index) => ({
-      "@type": "ListItem",
-      position: index + 1,
-      item: {
-        "@type": "Service",
-        name: item.name,
-        description: item.description,
-        url: `${siteConfig.url}${item.url}`,
-        aggregateRating: rating,
-      },
-    })),
-  };
-}
-
-/**
  * Update Organization schema with Google Business Profile
  * Add this to your Google Business Profile once verified
  */
@@ -1184,105 +1044,6 @@ export function generateOrganizationWithGBP() {
         `https://business.google.com/${GOOGLE_BUSINESS_PROFILE_ID}`,
       ],
     }),
-    aggregateRating: generateAggregateRatingSchema("spirituality"),
-  };
-}
-
-/**
- * ============================================================================
- * PRIVATE PRACTICE SCHEMA
- * ============================================================================
- */
-
-/**
- * Generate JSON-LD structured data for private practice as a WebPage.
- * Avoid LocalBusiness/ProfessionalService schema for this posture.
- */
-export function generateProfessionalServiceSchemaByRequest() {
-  const reviewCount = testimonials.filter((t) => t.type === "spirituality").length.toString();
-
-  return {
-    "@context": "https://schema.org",
-    "@type": "WebPage",
-    "name": "Tantra-Informed Somatic Practice - Max Petrusenko",
-    "alternateName": "Presence Atelier",
-    "description": "Tantra-informed somatic education and nervous-system practice by request. Boundaries-led sessions focused on breath, presence, regulation, and embodied awareness.",
-    "url": `${siteConfig.url}/spirituality`,
-    "telephone": "+1-954-275-9666",
-    "keywords": "tantra-informed somatic work, somatic education, energy work private practice, nervous system regulation, couples embodiment practice, somatic bodywork",
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": "4.9",
-      "reviewCount": reviewCount,
-      "bestRating": "5",
-      "worstRating": "1"
-    },
-    "hasOfferCatalog": {
-      "@type": "OfferCatalog",
-      "name": "Somatic education and practice by request",
-      "itemListElement": [
-        {
-          "@type": "Offer",
-          "itemOffered": {
-            "@type": "Service",
-            "name": "Nervous System Reset - Tantra-Informed Somatic Practice",
-            "description": "Boundaries-led somatic practice by request for nervous system regulation and conscious presence."
-          }
-        },
-        {
-          "@type": "Offer",
-          "itemOffered": {
-            "@type": "Service",
-            "name": "Deep Repatterning - Somatic Energy Work",
-            "description": "Longer arc for deep rewiring and transformation through somatic energy work by request."
-          }
-        },
-        {
-          "@type": "Offer",
-          "itemOffered": {
-            "@type": "Service",
-            "name": "Couples Tantra Practice",
-            "description": "Partners seeking to deepen connection through tantra-informed somatic practice."
-          }
-        }
-      ]
-    },
-    "audience": {
-      "@type": "Audience",
-      "audienceType": ["men", "women", "couples", "LGBTQ+", "digital nomads", "founders", "creators"]
-    },
-    "availableChannel": {
-      "@type": "ServiceChannel",
-      "serviceType": "tantra-informed somatic practice, breathwork, energy work, embodiment education",
-      "serviceUrl": `${siteConfig.url}/spirituality`
-    }
-  };
-}
-
-/**
- * Generate JSON-LD structured data for somatic education as a WebPage.
- * Not a local-service schema.
- */
-export function generateProfessionalServiceSchemaMiami() {
-  const reviewCount = testimonials.filter((t) => t.type === "spirituality").length.toString();
-
-  return {
-    "@context": "https://schema.org",
-    "@type": "WebPage",
-    "name": "Presence Atelier - Somatic Education & Energy Work",
-    "alternateName": "Max Petrusenko - Somatic Education",
-    "description": "Somatic education and energy work teaching in Fort Lauderdale, Florida. Educational workshops, student teachings, and nervous system training serving South Florida from West Palm Beach to the Keys.",
-    "url": `${siteConfig.url}/spirituality`,
-    "telephone": "+1-954-275-9666",
-    "email": "hello@maxpetrusenko.com",
-    "keywords": "tantra-informed somatic practice, somatic education, energy work, nervous system regulation, couples embodiment practice",
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": "4.9",
-      "reviewCount": reviewCount,
-      "bestRating": "5",
-      "worstRating": "1"
-    }
   };
 }
 

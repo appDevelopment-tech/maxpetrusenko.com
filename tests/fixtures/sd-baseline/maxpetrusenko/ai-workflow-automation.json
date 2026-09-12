@@ -20,9 +20,6 @@
     "canonical": "https://www.maxpetrusenko.com/ai-workflow-automation",
     "ids": [],
     "required_present": {
-      "AggregateRating": [
-        "ratingValue"
-      ],
       "Answer": [
         "text"
       ],
@@ -74,7 +71,6 @@
       ]
     },
     "types": [
-      "AggregateRating",
       "Answer",
       "Audience",
       "BreadcrumbList",
@@ -100,12 +96,7 @@
       "Service",
       "WebPage"
     ],
-    "values": {
-      "AggregateRating.bestRating": "5",
-      "AggregateRating.ratingValue": "4.9",
-      "AggregateRating.reviewCount": "6",
-      "AggregateRating.worstRating": "1"
-    }
+    "values": {}
   },
-  "shape_digest": "677ef6f91077cae6afecbfe7403e83db28aa7885add9896ca95434a052384c0d"
+  "shape_digest": "1ce855779e7b88eb8ae1ad6bbe36ae44c52ecd600c47af6c8364ad628e631240"
 }

@@ -26,8 +26,12 @@
  *  - rule 14 no placeholder tokens anywhere in any string value.
  *  - rule 18 `Organization.logo` (and any `publisher.logo`) is a crawlable
  *            raster, never an SVG.
- *  - rule 8  the homepage composition carries at most ONE AggregateRating per
- *            entity, and no bare root-level AggregateRating.
+ *  - policy  NO self-serving AggregateRating or Review markup anywhere: every
+ *            generator is asserted to emit zero of either, and the homepage
+ *            payload to emit zero, because a site rating its own
+ *            Organization/ProfessionalService is ineligible for Google's star
+ *            review feature. This is an ABSENCE guard — a reintroduction fails
+ *            here before it can reach a build.
  *
  * SCOPE NOTES (deliberate, not oversights)
  * ----------------------------------------
@@ -219,16 +223,7 @@ const FIXTURES = {
   generateMindfoldEventSchema: [],
   // NOTE: takes a leading RELATIVE path; the generator prefixes siteConfig.url.
   generateScheduleActionSchema: ["tech"],
-  generateReviewSchema: [
-    { quote: "Quote", author: "Author", role: "Role", type: "tech" },
-    "AI & Automation Services",
-  ],
-  generateAllReviewsSchema: ["tech"],
-  generateAggregateRatingSchema: ["all"],
-  generateItemListWithReviewsSchema: [[{ name: "Svc", description: "D", url: "/tech" }], "tech"],
   generateOrganizationWithGBP: [],
-  generateProfessionalServiceSchemaByRequest: [],
-  generateProfessionalServiceSchemaMiami: [],
   generateEnhancedPersonSchema: [],
   // NOTE: relative path — the generator prefixes siteConfig.url.
   generateSpeakableSchema: [{ url: "/tech", speakableTexts: ["h2"] }],
@@ -519,33 +514,33 @@ test("contract: the SVG brand mark is left in place for non-JSON-LD consumers", 
 });
 
 // ---------------------------------------------------------------------------
-// 4. rule 8 — the homepage emits at most ONE AggregateRating, on an entity
+// 4. policy — NO self-serving AggregateRating, NO Review, NO rating value
 // ---------------------------------------------------------------------------
+//
+// Google's review-snippet policy (review-snippet, updated 2026-09-08) is
+// explicit:
+//
+//   "If the entity that's being reviewed controls the reviews about itself,
+//    their pages that use LocalBusiness or any other type of Organization
+//    structured data are ineligible for star review feature."
+//   "Ratings must be sourced directly from users."
+//
+// Every AggregateRating this module used to emit rated Max / his own
+// Organization / his own ProfessionalService (a LocalBusiness subtype) from
+// Max's own site. The 4.9 behind them was a hardcoded literal, not anything a
+// user supplied, and the generated "Review" children hardcoded ratingValue "5"
+// while the parent claimed 4.9. The generators are deleted, not merely
+// uncalled. These tests assert the ABSENCE, so a reintroduction fails here
+// before it can reach a build.
 
-/** Mirror of sd-check's rule 8 owner test: group by immediate ancestor node path. */
-function aggregateRatingOwners(payload) {
-  const byOwner = new Map();
-  const walk = (obj, nodePath = "$", ancestors = []) => {
-    if (Array.isArray(obj)) {
-      obj.forEach((v, i) => walk(v, `${nodePath}[${i}]`, ancestors));
-      return;
-    }
-    if (!obj || typeof obj !== "object") return;
-    const hasType = "@type" in obj;
-    if (hasType && typesOf(obj).includes("AggregateRating")) {
-      const owner = ancestors.length > 0 ? ancestors[ancestors.length - 1] : "$";
-      const owners = byOwner.get(owner) ?? [];
-      owners.push(nodePath);
-      byOwner.set(owner, owners);
-    }
-    const nextAncestors = hasType ? [...ancestors, nodePath] : ancestors;
-    for (const [key, value] of Object.entries(obj)) {
-      if (key === "@context") continue;
-      walk(value, `${nodePath}.${key}`, nextAncestors);
-    }
-  };
-  walk(payload);
-  return byOwner;
+/** Every node in the payload carrying @type AggregateRating. */
+function aggregateRatingNodes(payload) {
+  return [...nodes(payload)].filter(([node]) => typesOf(node).includes("AggregateRating"));
+}
+
+/** Every node in the payload carrying @type Review. */
+function reviewNodes(payload) {
+  return [...nodes(payload)].filter(([node]) => typesOf(node).includes("Review"));
 }
 
 /** The exact JSON-LD block set app/page.tsx composes, in order. */
@@ -565,81 +560,98 @@ function homepagePayload() {
   ];
 }
 
-test("contract: the homepage carries exactly one AggregateRating (rule 8)", () => {
-  const payload = homepagePayload();
-  const owners = aggregateRatingOwners(payload);
-
-  const all = [...owners.values()].flat();
-  assert.equal(
-    all.length,
-    1,
-    `homepage must emit exactly one AggregateRating, found ${all.length}: ${all.join(", ")}`,
+test("policy: no generator emits an AggregateRating", () => {
+  const offenders = [];
+  for (const name of allGenerators()) {
+    for (const [, nodePath] of aggregateRatingNodes(invoke(name))) {
+      offenders.push(`${name}() ${nodePath}`);
+    }
+  }
+  assert.deepEqual(
+    offenders,
+    [],
+    "self-serving AggregateRating markup is ineligible under Google's review-snippet " +
+      `policy; these generators must emit none: ${offenders.join(", ")}`,
   );
+});
 
-  for (const [owner, paths] of owners) {
-    assert.equal(
-      paths.length,
-      1,
-      `entity ${owner} carries ${paths.length} AggregateRating nodes (rule 8 allows one): ${paths.join(", ")}`,
-    );
+test("policy: no generator emits a Review (reviews of oneself are the same ineligibility)", () => {
+  const offenders = [];
+  for (const name of allGenerators()) {
+    for (const [, nodePath] of reviewNodes(invoke(name))) {
+      offenders.push(`${name}() ${nodePath}`);
+    }
+  }
+  assert.deepEqual(
+    offenders,
+    [],
+    `a site must not mark up reviews about itself: ${offenders.join(", ")}`,
+  );
+});
+
+test("policy: no generator emits a rating value of any kind", () => {
+  // "Ratings must be sourced directly from users." This module has no
+  // user-sourced rating input, so nothing it emits may carry one.
+  const offenders = [];
+  for (const name of allGenerators()) {
+    const serialized = JSON.stringify(invoke(name));
+    if (/"(ratingValue|ratingCount|reviewCount|ratingAverage)"/.test(serialized)) {
+      offenders.push(name);
+    }
+  }
+  assert.deepEqual(
+    offenders,
+    [],
+    `no generator may emit a rating value without a user-sourced corpus: ${offenders.join(", ")}`,
+  );
+});
+
+test("policy: the rating-only generators are deleted, not merely left uncalled", () => {
+  // Deleting the code path is the point: a dead generator is one import away
+  // from being wired back up.
+  for (const name of [
+    "generateAggregateRatingSchema",
+    "generateReviewSchema",
+    "generateAllReviewsSchema",
+    "generateItemListWithReviewsSchema",
+  ]) {
+    assert.ok(!(name in schemas), `${name}() must stay deleted from structured-data.ts`);
   }
 });
 
-test("contract: the surviving homepage AggregateRating rides on the rated entity, not the page", () => {
+test("policy: the homepage emits zero AggregateRating nodes", () => {
   const payload = homepagePayload();
-  const owners = aggregateRatingOwners(payload);
-
-  // One owner, and it must be a page-graph root block (the payload is an array
-  // of independent <script> blocks, so roots are $[0]..$[n]).
-  assert.equal(owners.size, 1, `expected one AggregateRating owner, got ${owners.size}`);
-  const [ownerPath] = [...owners.keys()];
-  assert.match(
-    ownerPath,
-    /^\$(\[\d+\])?$/,
-    `the AggregateRating owner ${ownerPath} is not a root block`,
+  const found = aggregateRatingNodes(payload).map(([, nodePath]) => nodePath);
+  assert.deepEqual(
+    found,
+    [],
+    `the homepage must emit no AggregateRating at all, found: ${found.join(", ")}`,
   );
-
-  const roots = Array.isArray(payload) ? payload : [payload];
-  const rootIndex = ownerPath === "$" ? null : Number(ownerPath.replace(/^\$\[(\d+)\]$/, "$1"));
-  const ownerNode = rootIndex === null ? payload : roots[rootIndex];
-  assert.ok(ownerNode, `no node found at ${ownerPath}`);
-  assert.ok(
-    typesOf(ownerNode).includes("ProfessionalService"),
-    `the AggregateRating should be attached to the ProfessionalService entity, got ${typesOf(ownerNode).join("|")}`,
-  );
-
-  // and NOT on a WebPage / Organization / Person
-  for (const [node, nodePath] of nodes(payload)) {
-    if (!("aggregateRating" in node)) continue;
-    const types = typesOf(node);
-    assert.ok(
-      types.includes("ProfessionalService") || types.includes("AggregateRating"),
-      `${nodePath} (${types.join("|")}) must not carry an aggregateRating`,
-    );
-  }
 });
 
-test("contract: no generator emits a bare root-level AggregateRating payload", () => {
-  // An AggregateRating is not a standalone entity: it belongs on the item it rates.
-  // app/page.tsx used to render `<JsonLd type="AggregateRating" data={generateAggregateRatingSchema("all")} />`.
-  const payload = schemas.generateAggregateRatingSchema("all");
-  assert.equal(payload["@type"], "AggregateRating");
-  assert.ok(
-    payload.itemReviewed,
-    "generateAggregateRatingSchema() must name the entity it rates via itemReviewed",
-  );
+test("policy: the JsonLd type map carries no AggregateRating or Review entry", () => {
+  // Type-level backstop so `<JsonLd type="AggregateRating" ... />` cannot be
+  // reintroduced without a compile error.
+  const jsonLdSource = fs.readFileSync(path.join(NEXTJS_ROOT, "components", "seo", "JsonLd.tsx"), "utf8");
+  assert.doesNotMatch(jsonLdSource, /AggregateRating:/, "JsonLd.tsx must not map AggregateRating");
+  assert.doesNotMatch(jsonLdSource, /^\s*Review:/m, "JsonLd.tsx must not map Review");
 
-  const homepageBlocks = homepagePayload();
-  assert.ok(
-    !homepageBlocks.some((block) => block["@type"] === "AggregateRating"),
-    "the homepage must not render a standalone AggregateRating block",
+  const typesSource = fs.readFileSync(path.join(NEXTJS_ROOT, "types", "index.ts"), "utf8");
+  assert.doesNotMatch(
+    typesSource,
+    /"AggregateRating"/,
+    'JsonLdProps.type must not include "AggregateRating"',
   );
-  assert.ok(
-    !homepageBlocks.some((block) =>
-      block["@type"] === "WebPage" && "aggregateRating" in block,
-    ),
-    "the homepage must not put an aggregateRating on a WebPage node",
-  );
+  assert.doesNotMatch(typesSource, /"Review"/, 'JsonLdProps.type must not include "Review"');
+});
+
+test("policy: the visible homepage rating card is copy, not markup, and is untracked by schema", () => {
+  // Guard the boundary this change was scoped to: the visible stat card may
+  // stay (it is a separate editorial decision) but it must never be re-wired
+  // into JSON-LD. If a future edit puts it back into schema, the generator
+  // tests above are the ones that must fail — this one documents the intent.
+  const found = aggregateRatingNodes(homepagePayload());
+  assert.equal(found.length, 0, "no schema node may carry the visible 4.9/5 card's value");
 });
 
 // ---------------------------------------------------------------------------
@@ -656,14 +668,14 @@ test("regression: generateProfessionalServiceSchema() no longer carries a rating
   assert.ok(node.hasOfferCatalog, "the offer catalog must survive the rating removal");
 });
 
-test("regression: generateTechServiceSchema() still carries the tech rating", () => {
+test("regression: generateTechServiceSchema() carries no rating", () => {
   const node = schemas.generateTechServiceSchema();
   assert.equal(node["@type"], "ProfessionalService");
-  const rating = node.aggregateRating;
-  assert.ok(rating, "the ProfessionalService should keep its AggregateRating");
-  assert.equal(rating["@type"], "AggregateRating");
-  assert.match(String(rating.ratingValue), /^\d+(\.\d+)?$/);
-  assert.match(String(rating.reviewCount), /^\d+$/);
+  assert.ok(
+    !("aggregateRating" in node),
+    "generateTechServiceSchema() rates Max's own business on Max's own site — ineligible markup",
+  );
+  assert.ok(node.hasOfferCatalog, "the offer catalog must survive the rating removal");
 });
 
 test("regression: the Google Business Profile sentinel never reaches output", () => {
@@ -676,18 +688,12 @@ test("regression: the Google Business Profile sentinel never reaches output", ()
   assert.doesNotMatch(JSON.stringify(homepagePayload()), /TODO_ADD_AFTER_VERIFICATION/);
 });
 
-test("regression: generateAllReviewsSchema() is callable without CommonJS require()", () => {
-  // It used to do `const { testimonials } = require("@/lib/cms/testimonials")`,
-  // which throws "require is not defined in ES module scope" under any ESM loader.
-  for (const serviceType of ["tech", "spirituality", "mindfold"]) {
-    const reviews = schemas.generateAllReviewsSchema(serviceType);
-    assert.ok(Array.isArray(reviews), `generateAllReviewsSchema(${serviceType}) must return an array`);
-    assert.ok(reviews.length > 0, `generateAllReviewsSchema(${serviceType}) returned nothing`);
-    for (const review of reviews) {
-      assert.equal(review["@type"], "Review");
-      assert.ok(review.author, "Review.author is required");
-      assert.ok(review.reviewRating, "Review.reviewRating is required");
-      assert.ok(review.reviewBody, "Review.reviewBody should be present");
-    }
-  }
+test("regression: generateOrganizationWithGBP() carries no rating either", () => {
+  // It used to append `aggregateRating: generateAggregateRatingSchema("spirituality")`
+  // to the Organization — the most explicitly self-serving shape of all.
+  const node = schemas.generateOrganizationWithGBP();
+  assert.ok(
+    !("aggregateRating" in node),
+    "the Organization node must not rate itself",
+  );
 });

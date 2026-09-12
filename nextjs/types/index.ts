@@ -81,7 +81,7 @@ export interface PageMetadata {
 }
 
 export interface JsonLdProps {
-  type: "WebPage" | "Article" | "Person" | "Organization" | "WebSite" | "BreadcrumbList" | "ItemList" | "ProfessionalService" | "FAQPage" | "SoftwareApplication" | "TechArticle" | "AggregateRating" | "Review" | "ProfessionalService" | "Event";
+  type: "WebPage" | "Article" | "Person" | "Organization" | "WebSite" | "BreadcrumbList" | "ItemList" | "ProfessionalService" | "FAQPage" | "SoftwareApplication" | "TechArticle" | "ProfessionalService" | "Event";
   data: Record<string, unknown>;
 }
 

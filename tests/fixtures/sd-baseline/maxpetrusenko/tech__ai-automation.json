@@ -19,9 +19,6 @@
     "canonical": "https://www.maxpetrusenko.com/tech/ai-automation",
     "ids": [],
     "required_present": {
-      "AggregateRating": [
-        "ratingValue"
-      ],
       "BreadcrumbList": [
         "itemListElement"
       ],
@@ -63,7 +60,6 @@
       ]
     },
     "types": [
-      "AggregateRating",
       "Audience",
       "BreadcrumbList",
       "ImageObject",
@@ -86,12 +82,7 @@
       "Service",
       "WebPage"
     ],
-    "values": {
-      "AggregateRating.bestRating": "5",
-      "AggregateRating.ratingValue": "4.9",
-      "AggregateRating.reviewCount": "6",
-      "AggregateRating.worstRating": "1"
-    }
+    "values": {}
   },
-  "shape_digest": "daa66926d1bcfde028d0961e592ad264f9fafe9a1762c0a9a51715e3a689347c"
+  "shape_digest": "e4d19d5a94f56a302df768a82ad03c751f22862f95e59bc18d54e7ee8947dd82"
 }

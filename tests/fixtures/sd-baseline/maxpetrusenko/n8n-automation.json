@@ -20,9 +20,6 @@
     "canonical": "https://www.maxpetrusenko.com/n8n-automation",
     "ids": [],
     "required_present": {
-      "AggregateRating": [
-        "ratingValue"
-      ],
       "Answer": [
         "text"
       ],
@@ -74,7 +71,6 @@
       ]
     },
     "types": [
-      "AggregateRating",
       "Answer",
       "Audience",
       "BreadcrumbList",
@@ -100,12 +96,7 @@
       "Service",
       "WebPage"
     ],
-    "values": {
-      "AggregateRating.bestRating": "5",
-      "AggregateRating.ratingValue": "4.9",
-      "AggregateRating.reviewCount": "6",
-      "AggregateRating.worstRating": "1"
-    }
+    "values": {}
   },
-  "shape_digest": "e84ec66680d87f52c241f27bbfb1177428be809eea3a898d367d1ed8363578a9"
+  "shape_digest": "2cd20c84edc24916c54048a8af14ac70de179a9043ed51483e2d38ce83a53e07"
 }
