@@ -59,10 +59,6 @@ on:
       - '.github/scripts/sd-gate.toml'
       - '.github/scripts/schema-org-types.txt'
       - '.github/workflows/seo-indexing-gate.yml'
-      - '.github/workflows/seo-indexing-gate.yml'
-      - '.github/scripts/sd-check.py'
-      - '.github/scripts/schema-org-types.txt'
-      - 'tests/fixtures/sd-negative/**'
 
 concurrency:
   group: seo-indexing-gate-${{ github.ref }}
@@ -118,18 +114,20 @@ jobs:
 
       # ---------------------------------------------------------------------
       # Structured-data gate. Offline; reads the built artifacts + the local
-      # policy file only. Strictness lives in sd-gate.toml and this repo now
-      # ENFORCES (report_only = false), so an error-band finding fails this job.
+      # policy file only. Strictness lives in sd-gate.toml and this repo ENFORCES
+      # (report_only = false), so an error-band finding fails this job.
       # ---------------------------------------------------------------------
       - name: Negative control - the gate must reject a known-bad fixture
+        working-directory: .
         run: |
-          # Proves the gate is still load-bearing. A validator that quietly stopped
+          # Proves the gate is still load-bearing: a validator that quietly stopped
           # failing would pass every other step and protect nothing.
-          # Self-contained: the fixture is copied to a scratch dir, so it cannot depend
-          # on how a repo path resolves from a workflow step (a relative --dir resolves
-          # against the config's own directory, reads nothing, and exits 2).
-          # Requires exit 1 AND the expected error-band line: exit 2 alone means the run
-          # broke or read nothing, which is NOT the same as rejecting bad markup.
+          # `working-directory: .` is not decoration. This job defaults to nextjs/,
+          # and a step without the override gets python's "can't open file" exit 2 --
+          # which looks exactly like the gate rejecting bad markup. The sibling gate
+          # step sets it the same way.
+          # Requires exit 1 AND the expected error line: exit 2 alone means the run
+          # broke or read nothing, which is not the same as rejecting bad markup.
           rm -rf /tmp/sd-negative && mkdir -p /tmp/sd-negative
           cp "$GITHUB_WORKSPACE/tests/fixtures/sd-negative/broken.html" /tmp/sd-negative/index.html
           set +e
