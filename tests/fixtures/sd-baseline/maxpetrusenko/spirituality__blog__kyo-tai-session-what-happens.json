@@ -16,11 +16,7 @@
       "https://www.maxpetrusenko.com/spirituality/blog/kyo-tai-session-what-happens"
     ],
     "required_present": {
-      "Article": [
-        "author",
-        "datePublished",
-        "headline"
-      ],
+      "Article": [],
       "BreadcrumbList": [
         "itemListElement"
       ],
@@ -33,11 +29,7 @@
         "position",
         "position"
       ],
-      "Organization": [
-        "name",
-        "name",
-        "url"
-      ],
+      "Organization": [],
       "Person": [
         "name",
         "name"
@@ -60,5 +52,5 @@
     ],
     "values": {}
   },
-  "shape_digest": "b9ee9065b879b8d22e78014148f9f82907a4ecec49830f9eaf50b22ed363aaa1"
+  "shape_digest": "57b752ece43d22a652ebe7cf1097a35387d46345a5b8fae6060c6a5467c0e2c3"
 }

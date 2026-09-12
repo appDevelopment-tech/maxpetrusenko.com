@@ -11,10 +11,7 @@
     "canonical": "https://www.maxpetrusenko.com/medium/youtube-body-not-die-on-schedule-tsxvuyi0eia/",
     "ids": [],
     "required_present": {
-      "Organization": [
-        "name",
-        "url"
-      ],
+      "Organization": [],
       "Person": [
         "name"
       ]
@@ -25,5 +22,5 @@
     ],
     "values": {}
   },
-  "shape_digest": "ecf2efa5bc0704cc9f8cce4b55edbb82ca7d25d40b3c6b9d5eaeabbc92b46e94"
+  "shape_digest": "63f2f551794c37b467e8f0abb5fc3b6e4c34271caa27c8e4f2c613256ac6b934"
 }

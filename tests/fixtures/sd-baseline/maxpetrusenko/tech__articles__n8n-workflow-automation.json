@@ -23,11 +23,7 @@
         "position",
         "position"
       ],
-      "Organization": [
-        "name",
-        "name",
-        "url"
-      ],
+      "Organization": [],
       "Person": [
         "name",
         "name"
@@ -47,5 +43,5 @@
     ],
     "values": {}
   },
-  "shape_digest": "db1bb24067e56d5ab93c208f335cd5bdec3c3cef41a4b8164d57b4b08c6ff5f0"
+  "shape_digest": "f67bc6c80a181bd3efd8d21bed62837596e3c7d1131c92dbd0d0f980f44c701f"
 }

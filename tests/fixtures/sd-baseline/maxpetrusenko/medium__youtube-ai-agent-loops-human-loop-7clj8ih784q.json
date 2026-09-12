@@ -11,10 +11,7 @@
     "canonical": "https://www.maxpetrusenko.com/medium/youtube-ai-agent-loops-human-loop-7clj8ih784q/",
     "ids": [],
     "required_present": {
-      "Organization": [
-        "name",
-        "url"
-      ],
+      "Organization": [],
       "Person": [
         "name"
       ]
@@ -25,5 +22,5 @@
     ],
     "values": {}
   },
-  "shape_digest": "e43175b1403ad2b8db616c7b4003b9caf72c7d22eb155eefb97bb91d083153f2"
+  "shape_digest": "ce240017746d41d91188b120aa091a221814d62284bae62c9b96ade2a84f3a52"
 }

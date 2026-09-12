@@ -35,12 +35,7 @@
         "itemListElement",
         "name"
       ],
-      "Organization": [
-        "name",
-        "name",
-        "url",
-        "url"
-      ],
+      "Organization": [],
       "Person": [
         "name",
         "name"
@@ -54,10 +49,7 @@
         "name",
         "name"
       ],
-      "WebPage": [
-        "name",
-        "url"
-      ]
+      "WebPage": []
     },
     "types": [
       "Audience",
@@ -84,5 +76,5 @@
     ],
     "values": {}
   },
-  "shape_digest": "e4d19d5a94f56a302df768a82ad03c751f22862f95e59bc18d54e7ee8947dd82"
+  "shape_digest": "ceb0d9463e3218e7a5187ef569cd2c468c4de4fd7f7bf37899cb5cdc2904d56e"
 }

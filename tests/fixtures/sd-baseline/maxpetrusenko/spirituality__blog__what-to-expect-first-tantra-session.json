@@ -16,11 +16,7 @@
       "https://www.maxpetrusenko.com/spirituality/blog/what-to-expect-first-tantra-session"
     ],
     "required_present": {
-      "Article": [
-        "author",
-        "datePublished",
-        "headline"
-      ],
+      "Article": [],
       "BreadcrumbList": [
         "itemListElement"
       ],
@@ -33,11 +29,7 @@
         "position",
         "position"
       ],
-      "Organization": [
-        "name",
-        "name",
-        "url"
-      ],
+      "Organization": [],
       "Person": [
         "name",
         "name"
@@ -60,5 +52,5 @@
     ],
     "values": {}
   },
-  "shape_digest": "03587db9470f65af93178cd1f058a8316e825571c828106ac37386b80a2ec80e"
+  "shape_digest": "0e4b20b5b0577f9386e737a873c52c5a3feb180297e22d8209f4d9a0486c1f24"
 }

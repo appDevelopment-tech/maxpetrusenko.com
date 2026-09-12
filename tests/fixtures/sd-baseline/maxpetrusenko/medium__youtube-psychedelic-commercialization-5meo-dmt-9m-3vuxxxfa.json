@@ -11,10 +11,7 @@
     "canonical": "https://www.maxpetrusenko.com/medium/youtube-psychedelic-commercialization-5meo-dmt-9m-3vuxxxfa/",
     "ids": [],
     "required_present": {
-      "Organization": [
-        "name",
-        "url"
-      ],
+      "Organization": [],
       "Person": [
         "name"
       ]
@@ -25,5 +22,5 @@
     ],
     "values": {}
   },
-  "shape_digest": "2357d65f3783179707b904172f66afa430ec966280698e93214f86b779a9a398"
+  "shape_digest": "74f8ec5ad72707fa5f10bfbb25ba32425468bc62bbc14d7d3d6ed065e98a9762"
 }

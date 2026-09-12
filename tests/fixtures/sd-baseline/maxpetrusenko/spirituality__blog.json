@@ -22,17 +22,11 @@
         "position",
         "position"
       ],
-      "Organization": [
-        "name",
-        "url"
-      ],
+      "Organization": [],
       "Person": [
         "name"
       ],
-      "WebPage": [
-        "name",
-        "url"
-      ]
+      "WebPage": []
     },
     "types": [
       "BreadcrumbList",
@@ -45,5 +39,5 @@
     ],
     "values": {}
   },
-  "shape_digest": "85fefaab7d0abad2f58f310c324411f7f28e35d5a875b4a9025cfde09fe6a0b2"
+  "shape_digest": "556e140d6750157dc7a46680b14d94f0240ac426901fa04e32f7c42024dda891"
 }

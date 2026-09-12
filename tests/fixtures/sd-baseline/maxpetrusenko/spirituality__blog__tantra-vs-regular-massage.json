@@ -16,11 +16,7 @@
       "https://www.maxpetrusenko.com/spirituality/blog/tantra-vs-regular-massage"
     ],
     "required_present": {
-      "Article": [
-        "author",
-        "datePublished",
-        "headline"
-      ],
+      "Article": [],
       "BreadcrumbList": [
         "itemListElement"
       ],
@@ -33,11 +29,7 @@
         "position",
         "position"
       ],
-      "Organization": [
-        "name",
-        "name",
-        "url"
-      ],
+      "Organization": [],
       "Person": [
         "name",
         "name"
@@ -60,5 +52,5 @@
     ],
     "values": {}
   },
-  "shape_digest": "3313907eaef3bdeb3fc0029d9f6d073c45c8704378b4ce72faca87f42c51612a"
+  "shape_digest": "e7c2e80bd033ab8b2b882b3be0458cf3e93e32debaf6166da3d2d49f845e75e3"
 }

@@ -11,10 +11,7 @@
     "canonical": "https://www.maxpetrusenko.com/medium/youtube-body-transplant-toples-lfvctmt5ydy/",
     "ids": [],
     "required_present": {
-      "Organization": [
-        "name",
-        "url"
-      ],
+      "Organization": [],
       "Person": [
         "name"
       ]
@@ -25,5 +22,5 @@
     ],
     "values": {}
   },
-  "shape_digest": "04938bd27eaf908668f1ec03e727813f2dbd52e4fa526abe9d4a46594d4419a7"
+  "shape_digest": "f7f3bc03bf1c25d6ec7ff224b9a6c7f25219c59326594d56a81063e32c31b9e0"
 }

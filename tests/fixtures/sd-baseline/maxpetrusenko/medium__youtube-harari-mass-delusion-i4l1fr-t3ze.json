@@ -11,10 +11,7 @@
     "canonical": "https://www.maxpetrusenko.com/medium/youtube-harari-mass-delusion-i4l1fr-t3ze/",
     "ids": [],
     "required_present": {
-      "Organization": [
-        "name",
-        "url"
-      ],
+      "Organization": [],
       "Person": [
         "name"
       ]
@@ -25,5 +22,5 @@
     ],
     "values": {}
   },
-  "shape_digest": "a483a1b087e51fac67be5757e24077c418171ccecef36f036e309d3c75e3a2e0"
+  "shape_digest": "064b9f39f02ec0a6d86cad6663bf97ec65cfb90cb4dc5206b4395cbe965d5798"
 }

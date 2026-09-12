@@ -16,11 +16,7 @@
       "https://www.maxpetrusenko.com/spirituality/articles/tantra-trauma-ptsd"
     ],
     "required_present": {
-      "Article": [
-        "author",
-        "datePublished",
-        "headline"
-      ],
+      "Article": [],
       "BreadcrumbList": [
         "itemListElement"
       ],
@@ -33,11 +29,7 @@
         "position",
         "position"
       ],
-      "Organization": [
-        "name",
-        "name",
-        "url"
-      ],
+      "Organization": [],
       "Person": [
         "name",
         "name"
@@ -60,5 +52,5 @@
     ],
     "values": {}
   },
-  "shape_digest": "78da8cc4ebb28501c8b6a4160dd6af9d6b1f7df0da5b2ee9569ff5f3b3575851"
+  "shape_digest": "140e9ee6946d8e2e959b17fb2ca64d407899db1318c165f7a9a5591f7d6c8a16"
 }

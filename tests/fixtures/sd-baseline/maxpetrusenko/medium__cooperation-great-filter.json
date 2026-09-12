@@ -11,10 +11,7 @@
     "canonical": "https://www.maxpetrusenko.com/medium/cooperation-great-filter/",
     "ids": [],
     "required_present": {
-      "Organization": [
-        "name",
-        "url"
-      ],
+      "Organization": [],
       "Person": [
         "name"
       ]
@@ -25,5 +22,5 @@
     ],
     "values": {}
   },
-  "shape_digest": "02e992d3ec71c31bd6566b1c57d1c901b32d54cb70809f59ec41eabaa19f74ec"
+  "shape_digest": "8e62051eb59ed797c963b56560c38a3bc071204322ae9736d9a9703cca9a315e"
 }

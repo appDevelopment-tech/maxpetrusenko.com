@@ -11,10 +11,7 @@
     "canonical": "https://www.maxpetrusenko.com/medium/youtube-chinese-ai-suddenly-good-miudp4xv7io/",
     "ids": [],
     "required_present": {
-      "Organization": [
-        "name",
-        "url"
-      ],
+      "Organization": [],
       "Person": [
         "name"
       ]
@@ -25,5 +22,5 @@
     ],
     "values": {}
   },
-  "shape_digest": "7bdbb7b31efa6e9bb6a4b40b7c422cd389afdfe24acf4bf197bff7cb28610140"
+  "shape_digest": "e755ca72186c383d70cd9661eb49f9337e91766819f6b42729c8a6ad5c64e147"
 }

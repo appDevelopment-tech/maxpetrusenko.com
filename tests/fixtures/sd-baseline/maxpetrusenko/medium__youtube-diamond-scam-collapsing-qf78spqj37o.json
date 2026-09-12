@@ -11,10 +11,7 @@
     "canonical": "https://www.maxpetrusenko.com/medium/youtube-diamond-scam-collapsing-qf78spqj37o/",
     "ids": [],
     "required_present": {
-      "Organization": [
-        "name",
-        "url"
-      ],
+      "Organization": [],
       "Person": [
         "name"
       ]
@@ -25,5 +22,5 @@
     ],
     "values": {}
   },
-  "shape_digest": "ff041266d3a6b6ff4bc0726a721aac39dc880ae1707636b5457649f67adff37d"
+  "shape_digest": "20c15815b002cb36e7135b6e619f9f1264737207efb506fea6cf5230e666f643"
 }

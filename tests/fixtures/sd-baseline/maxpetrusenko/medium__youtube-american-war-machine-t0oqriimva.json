@@ -11,10 +11,7 @@
     "canonical": "https://www.maxpetrusenko.com/medium/youtube-american-war-machine-t0oqriimva/",
     "ids": [],
     "required_present": {
-      "Organization": [
-        "name",
-        "url"
-      ],
+      "Organization": [],
       "Person": [
         "name"
       ]
@@ -25,5 +22,5 @@
     ],
     "values": {}
   },
-  "shape_digest": "74beae35a1b8bbab61883b13fc5ac28692d4cc16889cc4fcbe50daa4ba231904"
+  "shape_digest": "6231956cfcd031ce9a01bd04e685f30329468e9fc2c1fbe44f9890b8aa1ec6b4"
 }

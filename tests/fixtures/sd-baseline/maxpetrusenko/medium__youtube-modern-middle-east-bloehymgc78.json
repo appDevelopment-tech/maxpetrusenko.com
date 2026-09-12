@@ -11,10 +11,7 @@
     "canonical": "https://www.maxpetrusenko.com/medium/youtube-modern-middle-east-bloehymgc78/",
     "ids": [],
     "required_present": {
-      "Organization": [
-        "name",
-        "url"
-      ],
+      "Organization": [],
       "Person": [
         "name"
       ]
@@ -25,5 +22,5 @@
     ],
     "values": {}
   },
-  "shape_digest": "9ee569ad8a6d7f2c1095785df3f59926ba289d75aab068ad5d94687063010737"
+  "shape_digest": "62ed8d713af277c271bbba0a87e036b63f51d0c738ff1c8e451705f139b9fded"
 }

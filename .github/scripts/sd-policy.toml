@@ -235,6 +235,226 @@ source_url    = "https://developers.google.com/search/docs/appearance/structured
 last_verified = 2026-09-12
 note          = "Active. Self-serving review snippets are W (rule 17)."
 
+# ---------------------------------------------------------------------------
+# Self-serving ratings: the star feature's ineligibility rule (rule 13s, band E).
+#
+# DOCUMENTARY BY DESIGN.  match.types = [] and band = "-", so this row can never
+# fire -- and that is the correct modelling, not a shortcut.  The ineligibility
+# predicate is RELATIONAL: "does the page's own entity control the reviews about
+# itself?"  No @type alone expresses it, and a type-only key here would fire on
+# every legitimate third-party review surface (a restaurant's `Organization`
+# node named as `itemReviewed` by a review site is the licensed case).  The
+# band-E enforcement lives in the validator: rule 13s (`self-serving-rating`),
+# keyed on the per-repo `[gate].self_owned_entities` list.  This row is the
+# citation the weekly staleness job keeps alive.
+#
+# Quote verified against the live page on 2026-09-12; the page itself reports
+# "Last updated 2026-09-08 UTC".  The verbatim text below is byte-for-byte from
+# that page (quotes 1, 2 and 4) plus the eligibility warning above the
+# guidelines list (quote 3).
+[[policy]]
+id            = "self-serving-rating-ineligible"
+match         = { types = [] }
+status        = "active"
+band          = "-"
+announced     = 2026-07-24
+source_url    = "https://developers.google.com/search/docs/appearance/structured-data/review-snippet"
+last_verified = 2026-09-12
+quote = '''
+If the entity that's being reviewed controls the reviews about itself, their
+pages that use LocalBusiness or any other type of Organization structured data
+are ineligible for star review feature.
+
+Ratings must be sourced directly from users. Don't rely on human editors to
+create, curate, or compile ratings information for local businesses.
+
+Warning: If your site violates one or more of these guidelines, then Google may
+take manual action against it. Once you have remedied the problem, you can
+submit your site for reconsideration.
+
+Don't include fake or undisclosed incentivized reviews on your page or in your
+structured data markup.
+'''
+note          = 'Active. Source doc dated 2026-09-08; the fake/undisclosed-incentivized-reviews guideline was added 2026-07-24 (Search Central changelog) and is the row that carries the "may take manual action" language. The same page lists Organization as a reviewed-item type only "for sites that capture reviews about other organizations" and Local business only "for sites that capture reviews about other local businesses"; Person, WebSite and Service are not supported reviewed-item types at all. Documentary: never matches a node, so it never blocks. Enforcement is rule 13s in sd-check.py.'
+
+# ===========================================================================
+# Band calibration (1.4.1).  Why these rows exist, and why they are documentary.
+# ===========================================================================
+# 1.4.0 made required-property checking position-aware.  That removed 99 false
+# positives and introduced a new over-strict class: `publisher: Organization`
+# was held to `name` + `logo`, which on 2026-09-12 was 61 error-band findings
+# on tantrastudio and 10 on maxpetrusenko -- a property Google's own docs call
+# recommended, reported as an error.
+#
+# The band definition this file now codifies:
+#   E  Google REQUIRES this property for rich-result eligibility.
+#   W  Google RECOMMENDS, EXPECTS, or does not document a requirement.
+# A property may only be E if a Google page says it is required.  Where a doc
+# says required, E was KEPT (LocalBusiness.address, Event.location,
+# BreadcrumbList.itemListElement, Review.author, VideoObject.name, and the
+# rest of the unchanged table).
+#
+# WHY match.types = []: a band-attribution fact is a statement about the
+# SCHEMA, not a predicate over a node.  Keyed to a real type with band = "-"
+# these rows would emit one observation per matching node on every consumer
+# surface -- six new lines of noise per page, which is the failure mode this
+# whole round exists to remove.  Documentary rows never match (see the file
+# header) and are the correct modelling.  Enforcement lives in
+# sd-check.py's REQUIRED_PROPS / POSITION_REQUIRED tables; these rows are the
+# citation the weekly staleness job keeps alive.
+#
+# Every quote below was retrieved on 2026-09-12.  Each source page self-reports
+# "Last updated 2026-09-08 UTC".  Quotes are byte-for-byte from the rendered
+# page with only its line wrapping and indentation normalised.
+
+[[policy]]
+id            = "band-article-no-required-properties"
+match         = { types = [] }
+status        = "active"
+band          = "-"
+source_url    = "https://developers.google.com/search/docs/appearance/structured-data/article"
+last_verified = 2026-09-12
+quote = '''
+Add as many recommended properties that apply to your web page. There are no required properties; instead, add the properties that apply to your content.
+
+To help Google better understand your page, include as many recommended properties that apply to your web page. There are no required properties; instead, add the properties that apply to your content.
+
+The Google-supported properties are the following:
+Recommended properties
+author
+'''
+note = "1.4.1: headline, author and datePublished were error-band for Article/BlogPosting/NewsArticle. The doc states 'There are no required properties' twice, its ONLY property table is headed 'Recommended properties', and `publisher` is not in that table at all -- it survives only in an author best-practice note ('The name of the publisher. Instead, use the publisher property.') and in two examples. All three properties moved E -> W."
+
+[[policy]]
+id            = "band-organization-no-required-properties"
+match         = { types = [] }
+status        = "active"
+band          = "-"
+source_url    = "https://developers.google.com/search/docs/appearance/structured-data/organization"
+last_verified = 2026-09-12
+quote = '''
+There are no required properties; instead, we recommend adding as many properties that are relevant to your organization.
+
+We recommend focusing on properties that are useful to your users, such as name or alternateName for your business name as well as an indication of real-world presence (for example, address or telephone) and online presence (for example, url or logo).
+'''
+note = "1.4.1: Organization required `name` + `url` at error band. The doc says there are no required properties and names name/url/logo as things it RECOMMENDS. Both moved E -> W. URL-absolute and host-binding enforcement (rules 10/11) is unchanged and independent of this row."
+
+[[policy]]
+id            = "band-publisher-logo-recommended"
+match         = { types = [] }
+status        = "active"
+band          = "-"
+source_url    = "https://developers.google.com/search/docs/appearance/structured-data/organization"
+last_verified = 2026-09-12
+quote = '''
+logo
+URL or ImageObject
+A logo that is representative of your organization, if applicable. Adding this property can help Google better understand which logo you want to show, for example in Search results and knowledge panels.
+Image guidelines: The image must be 112x112px, at minimum. The image URL must be crawlable and indexable.
+'''
+note = "THE finding this round exists for. 1.4.0's POSITION_REQUIRED held a `publisher` Organization to name + logo; `logo` is documented under Recommended properties, and the Article doc does not list `publisher` at all. The publisher position now requires nothing, so a publisher without a logo is a warn-band missing-recommended. That is 61 error-band findings removed on tantrastudio and 10 on maxpetrusenko. The logo's own quality rules (112x112 minimum, bitmap, crawlable) remain error-band under image-reachability (live mode)."
+
+[[policy]]
+id            = "band-postaladdress-subprops-expected"
+match         = { types = [] }
+status        = "active"
+band          = "-"
+source_url    = "https://developers.google.com/search/docs/appearance/structured-data/local-business"
+last_verified = 2026-09-12
+quote = '''
+You must include the required properties for your content to be eligible for display as a rich result.
+
+Required properties
+address
+PostalAddress
+The physical location of the business. Include as many properties as possible. The more properties you provide, the higher quality the result is to users.
+name
+Text
+The name of the business.
+'''
+note = "1.4.1: `address` keeps its E band on LocalBusiness (it is in the doc's own Required properties heading). Its SUB-properties do not: the doc says 'Include as many properties as possible' -- expected, not required -- and the Organization doc lists address.addressCountry / address.addressLocality / address.addressRegion under Recommended properties. PostalAddress.streetAddress, .addressLocality and .addressCountry moved E -> W (3 findings on tantrastudio). Event.location.address remains covered by the Event doc, which names location.address inside ITS Required properties block."
+
+[[policy]]
+id            = "band-webpage-no-required-properties"
+match         = { types = [] }
+status        = "active"
+band          = "-"
+source_url    = "https://developers.google.com/search/docs/appearance/structured-data/speakable"
+last_verified = 2026-09-12
+quote = '''
+Speakable (Article, WebPage) structured data (BETA)
+
+The full definition of speakable is available at schema.org/speakable. You must include the required properties for your content to be eligible for this feature.
+The speakable property can be repeated an arbitrary number of times, with two kinds of possible content-locator values: CSS selectors and xPaths. Use one of the following properties:
+Required properties
+cssSelector
+Text
+Addresses content in the annotated pages (such as class attribute). Use either cssSelector or xPath; don't use both.
+'''
+note = "1.4.1: WebPage.url and WebPage.name were error-band. There is no WebPage rich result: https://developers.google.com/search/docs/appearance/structured-data/webpage returns HTTP 404 (checked 2026-09-12) and WebPage is absent from the Search Gallery list of supported types. The only page that targets WebPage is Speakable (BETA), whose required properties are SpeakableSpecification cssSelector|xPath -- never `url`. Both moved E -> W. The page URL is still policed at E by canonical-align (rule 12), which is the rule that actually enforces it."
+
+[[policy]]
+id            = "band-videoobject-description-recommended"
+match         = { types = [] }
+status        = "active"
+band          = "-"
+source_url    = "https://developers.google.com/search/docs/appearance/structured-data/video"
+last_verified = 2026-09-12
+quote = '''
+Required properties
+name
+Text
+The title of the video. Make sure to use unique text in the name property for each video on your site.
+thumbnailUrl
+Repeated URL
+A URL pointing to the video's unique thumbnail image file. Follow the thumbnail image guidelines.
+uploadDate
+DateTime
+The date and time the video was first published, in ISO 8601 format.
+'''
+note = "1.4.1 sweep finding: the Video doc's Required block names name, thumbnailUrl and uploadDate. `description` is not in it; it was error-band. Moved E -> W. name/thumbnailUrl/uploadDate keep their E band."
+
+[[policy]]
+id            = "band-course-provider-recommended"
+match         = { types = [] }
+status        = "active"
+band          = "-"
+source_url    = "https://developers.google.com/search/docs/appearance/structured-data/course"
+last_verified = 2026-09-12
+quote = '''
+Required properties
+description
+Text
+A description of the course. Display limit of 60 characters.
+name
+Text
+The title of the course.
+Recommended properties
+provider
+Organization
+The organization that publishes the source content of the course. For example, UC Berkeley.
+'''
+note = "1.4.1 sweep finding: `provider` was error-band on Course; the doc lists it as the FIRST recommended property, immediately after the required pair. Moved E -> W, and name/description keep E. Note this one never changed an exit code on either consumer site: Course findings are info-band by INFO_TYPES (§A3)."
+
+[[policy]]
+id            = "band-profilepage-url-recommended"
+match         = { types = [] }
+status        = "active"
+band          = "-"
+source_url    = "https://developers.google.com/search/docs/appearance/structured-data/profile-page"
+last_verified = 2026-09-12
+quote = '''
+Required properties
+mainEntity
+Person or Organization
+The person or organization that this profile page is about. This indicates that the primary focus of this page is information about this entity.
+Try to use the correct type if that information is available (meaning, if you know whether the page represents an individual or an organization); otherwise, default to Person (for example, if it's an unknown type of account).
+Recommended properties
+dateCreated
+DateTime
+'''
+note = "1.4.1 sweep finding: the Profile page doc requires `mainEntity` and `name` (the doc allows `alternateName` to satisfy name). `url` is not required; it was error-band. Moved E -> W; mainEntity and name keep E."
+
 # ===========================================================================
 # Out of scope / quota / reporting.  Documentary where no type exists.
 # ===========================================================================

@@ -11,10 +11,7 @@
     "canonical": "https://www.maxpetrusenko.com/medium/youtube-time-disappears-experiment-bryyy4gjx9w/",
     "ids": [],
     "required_present": {
-      "Organization": [
-        "name",
-        "url"
-      ],
+      "Organization": [],
       "Person": [
         "name"
       ]
@@ -25,5 +22,5 @@
     ],
     "values": {}
   },
-  "shape_digest": "cd69d4efc84f5a0e2435ef304519a96df651019c916edbfa88bb5a0970c01841"
+  "shape_digest": "271b19d645deed5f5331be009906ce37036c81534109e9d57fb23085797a92c4"
 }

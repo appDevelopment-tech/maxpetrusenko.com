@@ -11,10 +11,7 @@
     "canonical": "https://www.maxpetrusenko.com/medium/youtube-gps-jamming-clue-space-tz23g-uxcga/",
     "ids": [],
     "required_present": {
-      "Organization": [
-        "name",
-        "url"
-      ],
+      "Organization": [],
       "Person": [
         "name"
       ]
@@ -25,5 +22,5 @@
     ],
     "values": {}
   },
-  "shape_digest": "3a59b2e87bd1092ce45c5196e799fe9fdc59c6746b71d4731526bc3086e94f2c"
+  "shape_digest": "10ff42bb0fddd201ae516fc87f09cfc044540aa14eae73eab15fc37479f02333"
 }

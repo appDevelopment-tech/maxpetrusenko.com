@@ -11,10 +11,7 @@
     "canonical": "https://www.maxpetrusenko.com/medium/youtube-microplastics-wmayvwnx4vY/",
     "ids": [],
     "required_present": {
-      "Organization": [
-        "name",
-        "url"
-      ],
+      "Organization": [],
       "Person": [
         "name"
       ]
@@ -25,5 +22,5 @@
     ],
     "values": {}
   },
-  "shape_digest": "9bd2ba3edf10f653064449d59841a7cfc88fdf860120c881c3d2ce0478f9da32"
+  "shape_digest": "b63cd8809fade53d5ce6370c38b317bd6058b215c51cfe2b2be6e0c7836a4b2d"
 }

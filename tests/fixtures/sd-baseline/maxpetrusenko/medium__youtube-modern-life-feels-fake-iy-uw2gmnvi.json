@@ -11,10 +11,7 @@
     "canonical": "https://www.maxpetrusenko.com/medium/youtube-modern-life-feels-fake-iy-uw2gmnvi/",
     "ids": [],
     "required_present": {
-      "Organization": [
-        "name",
-        "url"
-      ],
+      "Organization": [],
       "Person": [
         "name"
       ]
@@ -25,5 +22,5 @@
     ],
     "values": {}
   },
-  "shape_digest": "4900f902d15f11560b1fb54ca760fbffed7d5442d6aef7c4f6aea1278e5f01ec"
+  "shape_digest": "1fd49e945076a0a934c6bef5fc4ce3f454baa7aeff6986a3c7714d6af74c7ed6"
 }

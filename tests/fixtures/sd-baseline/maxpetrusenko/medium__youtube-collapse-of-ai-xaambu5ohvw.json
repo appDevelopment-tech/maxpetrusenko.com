@@ -11,10 +11,7 @@
     "canonical": "https://www.maxpetrusenko.com/medium/youtube-collapse-of-ai-XaamBu5ohVw/",
     "ids": [],
     "required_present": {
-      "Organization": [
-        "name",
-        "url"
-      ],
+      "Organization": [],
       "Person": [
         "name"
       ]
@@ -25,5 +22,5 @@
     ],
     "values": {}
   },
-  "shape_digest": "1d882041d896edc54bdc65dd0682583b07b618777f8561534206124b477d0aa9"
+  "shape_digest": "34280bb1c86e6aa4b0791f9fed5886798f6917b14404a4a77b3680bbcdf65d99"
 }

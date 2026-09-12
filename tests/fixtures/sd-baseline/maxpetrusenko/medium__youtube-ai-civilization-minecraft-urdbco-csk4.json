@@ -11,10 +11,7 @@
     "canonical": "https://www.maxpetrusenko.com/medium/youtube-ai-civilization-minecraft-urdbco-csk4/",
     "ids": [],
     "required_present": {
-      "Organization": [
-        "name",
-        "url"
-      ],
+      "Organization": [],
       "Person": [
         "name"
       ]
@@ -25,5 +22,5 @@
     ],
     "values": {}
   },
-  "shape_digest": "d0cc5879cd042219cf21c612ad31056e8a2339b5d2f8141365d69601be690fc1"
+  "shape_digest": "798df33a6a320cf08626a2d6d0d3ad6b9709cb0f2165b819fc802e6803636580"
 }

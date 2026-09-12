@@ -11,10 +11,7 @@
     "canonical": "https://www.maxpetrusenko.com/medium/youtube-brain-overload-information-t0qq9r__xiq/",
     "ids": [],
     "required_present": {
-      "Organization": [
-        "name",
-        "url"
-      ],
+      "Organization": [],
       "Person": [
         "name"
       ]
@@ -25,5 +22,5 @@
     ],
     "values": {}
   },
-  "shape_digest": "936753f4a40ced965bb28e7c969c4f15a836f4a8dcdfdb328318619c15e8a15c"
+  "shape_digest": "ecd23ffdbe2d76eefd5e2ece09b4ef5f3a6c01e11dd9e9502499b9873d15871c"
 }

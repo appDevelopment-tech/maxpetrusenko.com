@@ -11,10 +11,7 @@
     "canonical": "https://www.maxpetrusenko.com/medium/youtube-baby-never-solo-project-atbjl3cwd8/",
     "ids": [],
     "required_present": {
-      "Organization": [
-        "name",
-        "url"
-      ],
+      "Organization": [],
       "Person": [
         "name"
       ]
@@ -25,5 +22,5 @@
     ],
     "values": {}
   },
-  "shape_digest": "5344140cfb74be0a33fa88588f84be031d5fda1b3cb7d6e836a9cc27a882ccaf"
+  "shape_digest": "3cd70c068812bb34db1d34c7d25a48797063e73215c981c61079c5ec27ab83c1"
 }

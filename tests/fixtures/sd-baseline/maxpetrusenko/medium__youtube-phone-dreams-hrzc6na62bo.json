@@ -11,10 +11,7 @@
     "canonical": "https://www.maxpetrusenko.com/medium/youtube-phone-dreams-hrzc6na62bo/",
     "ids": [],
     "required_present": {
-      "Organization": [
-        "name",
-        "url"
-      ],
+      "Organization": [],
       "Person": [
         "name"
       ]
@@ -25,5 +22,5 @@
     ],
     "values": {}
   },
-  "shape_digest": "8595beeb523ab3d109fe5954bd7490ef8809770751b1ab693a41de327d81f893"
+  "shape_digest": "e814e7245bf626acefd3b20f1fa647f5dd27a48499f8e82547c3c2e41a410815"
 }

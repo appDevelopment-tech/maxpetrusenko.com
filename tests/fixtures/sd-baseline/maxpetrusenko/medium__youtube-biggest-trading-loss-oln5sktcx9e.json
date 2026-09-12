@@ -11,10 +11,7 @@
     "canonical": "https://www.maxpetrusenko.com/medium/youtube-biggest-trading-loss-oln5sktcx9e/",
     "ids": [],
     "required_present": {
-      "Organization": [
-        "name",
-        "url"
-      ],
+      "Organization": [],
       "Person": [
         "name"
       ]
@@ -25,5 +22,5 @@
     ],
     "values": {}
   },
-  "shape_digest": "7529b701caa40c69b5bd6e73ee76a20ad590a12a73aa2d284bbccffbabf52aef"
+  "shape_digest": "d01697cd19dd63635807a773aca4b00ec66a5a8cf67635ef6f7e10bb0cad0900"
 }

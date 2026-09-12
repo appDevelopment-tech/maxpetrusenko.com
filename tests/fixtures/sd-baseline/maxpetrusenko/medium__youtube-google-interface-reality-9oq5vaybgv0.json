@@ -11,10 +11,7 @@
     "canonical": "https://www.maxpetrusenko.com/medium/youtube-google-interface-reality-9oq5vaybgv0/",
     "ids": [],
     "required_present": {
-      "Organization": [
-        "name",
-        "url"
-      ],
+      "Organization": [],
       "Person": [
         "name"
       ]
@@ -25,5 +22,5 @@
     ],
     "values": {}
   },
-  "shape_digest": "f6b59800803c55e2b4e43ca5114a4b90802a6ed1b2f998ac66bcaac025fcfead"
+  "shape_digest": "e3f2bc7e5cc31ee48304c318f4a099c378b65933a12daf6f796c5d07fd4c0098"
 }

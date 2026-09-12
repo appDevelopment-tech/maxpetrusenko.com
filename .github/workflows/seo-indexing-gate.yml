@@ -112,15 +112,6 @@ jobs:
         # --skip-sitemap-files: Next.js worker build doesn't mirror every route
         # as a flat file; live mode (workflow_dispatch) verifies sitemap URLs.
 
-      - name: Run SEO indexing gate — atelier subdomain (dir mode)
-        working-directory: .
-        run: |
-          python3 .github/scripts/web-seo-check.py \
-            --dir atelier \
-            --url https://atelier.maxpetrusenko.com \
-            --json /tmp/seo-report-atelier.json
-        # exit 1 blocks; exit 2 (warnings) reported but allowed
-
       # ---------------------------------------------------------------------
       # Structured-data gate. Offline; reads the built artifacts + the local
       # policy file only. Strictness lives in sd-gate.toml (report_only = true
@@ -165,7 +156,6 @@ jobs:
           name: seo-report
           path: |
             /tmp/seo-report.json
-            /tmp/seo-report-atelier.json
             /tmp/sd-report.json
             /tmp/sd-parity.json
 

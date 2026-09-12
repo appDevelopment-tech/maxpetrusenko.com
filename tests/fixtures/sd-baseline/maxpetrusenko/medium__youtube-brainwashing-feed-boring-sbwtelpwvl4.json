@@ -11,10 +11,7 @@
     "canonical": "https://www.maxpetrusenko.com/medium/youtube-brainwashing-feed-boring-sbwtelpwvl4/",
     "ids": [],
     "required_present": {
-      "Organization": [
-        "name",
-        "url"
-      ],
+      "Organization": [],
       "Person": [
         "name"
       ]
@@ -25,5 +22,5 @@
     ],
     "values": {}
   },
-  "shape_digest": "4b451944f2a65d59f6054c2ea2e3edd13aa0b1bf729a9387bfdf3dba1bcf143b"
+  "shape_digest": "eb50ee1cdbba30351841298bf28ea9b9517483e755f957edf1fe80abdc766d54"
 }

@@ -11,10 +11,7 @@
     "canonical": "https://www.maxpetrusenko.com/medium/youtube-think-clearly-genius-mjtgkm-h__m/",
     "ids": [],
     "required_present": {
-      "Organization": [
-        "name",
-        "url"
-      ],
+      "Organization": [],
       "Person": [
         "name"
       ]
@@ -25,5 +22,5 @@
     ],
     "values": {}
   },
-  "shape_digest": "ae6e0684652bef10ad9b0c77f4b0a0ac10e107114c80290b547f03e455e5c805"
+  "shape_digest": "0a51f2d6c2847bfbea475d591adb033e7205feef5ef54b669e11e778e9f045d2"
 }

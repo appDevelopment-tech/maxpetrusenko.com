@@ -11,10 +11,7 @@
     "canonical": "https://www.maxpetrusenko.com/medium/youtube-ai-bought-robot-car-ipamktb5csq/",
     "ids": [],
     "required_present": {
-      "Organization": [
-        "name",
-        "url"
-      ],
+      "Organization": [],
       "Person": [
         "name"
       ]
@@ -25,5 +22,5 @@
     ],
     "values": {}
   },
-  "shape_digest": "cd6e5b7252751114bf11a8529fcc909cc7da57207b785495e5c1f173ff7a29dd"
+  "shape_digest": "673b5671abd08d28098762cccf4c00d2bbed0f0e24e1fca5ccb6c46aa9e02851"
 }

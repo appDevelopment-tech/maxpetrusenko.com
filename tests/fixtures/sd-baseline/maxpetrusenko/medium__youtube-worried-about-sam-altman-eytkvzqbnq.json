@@ -11,10 +11,7 @@
     "canonical": "https://www.maxpetrusenko.com/medium/youtube-Worried-about-Sam-Altman-eytkvzqbnq/",
     "ids": [],
     "required_present": {
-      "Organization": [
-        "name",
-        "url"
-      ],
+      "Organization": [],
       "Person": [
         "name"
       ]
@@ -25,5 +22,5 @@
     ],
     "values": {}
   },
-  "shape_digest": "5e7d33b35eb27ee8c16d263a1b988207b813eaa8b2ef3c757fd2f1c168bcfe61"
+  "shape_digest": "094ce529e58095e6914ad04901a996e44225c6cc50b7e191b9c89a24aa530752"
 }

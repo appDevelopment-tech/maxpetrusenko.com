@@ -42,12 +42,7 @@
         "itemListElement",
         "name"
       ],
-      "Organization": [
-        "name",
-        "name",
-        "url",
-        "url"
-      ],
+      "Organization": [],
       "Person": [
         "name",
         "name"
@@ -65,10 +60,7 @@
         "name",
         "name"
       ],
-      "WebPage": [
-        "name",
-        "url"
-      ]
+      "WebPage": []
     },
     "types": [
       "Answer",
@@ -98,5 +90,5 @@
     ],
     "values": {}
   },
-  "shape_digest": "1ce855779e7b88eb8ae1ad6bbe36ae44c52ecd600c47af6c8364ad628e631240"
+  "shape_digest": "d0768caacd47059dfba7913374b50915ffafa7a880e69b10038f4853f238add3"
 }

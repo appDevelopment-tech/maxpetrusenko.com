@@ -11,10 +11,7 @@
     "canonical": "https://www.maxpetrusenko.com/medium/youtube-not-ready-biocomputing-ukhsbqcfvwq/",
     "ids": [],
     "required_present": {
-      "Organization": [
-        "name",
-        "url"
-      ],
+      "Organization": [],
       "Person": [
         "name"
       ]
@@ -25,5 +22,5 @@
     ],
     "values": {}
   },
-  "shape_digest": "5f192139fc51886e99653e122e4a644e101f71c042ba2d9a74d7801ee81b85d5"
+  "shape_digest": "505c8afcf805001273ac8f831e16beffcdbd9138f73a2231b218180892354c93"
 }

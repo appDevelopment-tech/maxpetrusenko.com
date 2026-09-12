@@ -11,10 +11,7 @@
     "canonical": "https://www.maxpetrusenko.com/medium/your-agents-md-was-written-for-a-worse-model/",
     "ids": [],
     "required_present": {
-      "Organization": [
-        "name",
-        "url"
-      ],
+      "Organization": [],
       "Person": [
         "name"
       ]
@@ -25,5 +22,5 @@
     ],
     "values": {}
   },
-  "shape_digest": "2d2cb1be3fca6ab03827d06dec7d0302fda3151ea21145e80259fa367f50c88c"
+  "shape_digest": "aabb761e5aac7eb3db4b869dc93a60c3e4188577a3fefef49ce54b9ed83c4e39"
 }

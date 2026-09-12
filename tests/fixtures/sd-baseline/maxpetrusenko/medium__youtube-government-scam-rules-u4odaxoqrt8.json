@@ -11,10 +11,7 @@
     "canonical": "https://www.maxpetrusenko.com/medium/youtube-government-scam-rules-u4odaxoqrt8/",
     "ids": [],
     "required_present": {
-      "Organization": [
-        "name",
-        "url"
-      ],
+      "Organization": [],
       "Person": [
         "name"
       ]
@@ -25,5 +22,5 @@
     ],
     "values": {}
   },
-  "shape_digest": "a17f093e5963ac0e22b437f0bd52f354a844d43c185cee6b1d032b8fa62d66b8"
+  "shape_digest": "ecea552643c3a458dfd16a243855fa735a94efdf0185dc02e7c2661ee9968db1"
 }

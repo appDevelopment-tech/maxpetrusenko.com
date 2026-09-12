@@ -11,10 +11,7 @@
     "canonical": "https://www.maxpetrusenko.com/medium/youtube-simple-question-socialism-couldnt-answer-mMHyhneAxXY/",
     "ids": [],
     "required_present": {
-      "Organization": [
-        "name",
-        "url"
-      ],
+      "Organization": [],
       "Person": [
         "name"
       ]
@@ -25,5 +22,5 @@
     ],
     "values": {}
   },
-  "shape_digest": "15f2d03021a5c6225a43859a19ab07918bef594b04d6ea6c33af9cdd5b50700b"
+  "shape_digest": "3d6a8315bc5f079d13799271601f8cbdb0378380b2c11c59d0558ab2c3e51780"
 }

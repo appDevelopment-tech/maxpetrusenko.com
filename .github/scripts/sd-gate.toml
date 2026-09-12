@@ -6,7 +6,11 @@
 #
 # PATH RESOLUTION: Gate.resolve() joins every relative value below with the
 # DIRECTORY OF THIS FILE (`.github/scripts/`), not the repo root. Hence the
-# `../../` prefixes. Verified against sd-check 1.1.0 (sha256 fcd38e52...).
+# `../../` prefixes. Verified against sd-check 1.5.0 (sha256
+# 3f8020499dfae2450768f3734a5927590a985bb030a05f3cbb9e3da01cb3a7ca, vendored; sd-policy.toml
+# 9c56ba5e78673294ea054d0a5b37e445892e3d71be9083f91f69e58d09ecfe64).  The baseline below was
+# re-captured with this vendored 1.5.0 copy: 1.5.0 changed rules 8 and 16 and stopped hashing
+# `required_present`, so the pre-1.5.0 baseline mass-flagged every route on shape-digest.
 #
 # TOML has no partial dates: a month-only date must be QUOTED ("2026-06").
 # Unquoted partial dates make the file malformed, and a malformed config is an

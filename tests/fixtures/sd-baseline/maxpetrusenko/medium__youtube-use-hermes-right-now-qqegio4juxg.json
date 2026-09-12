@@ -11,10 +11,7 @@
     "canonical": "https://www.maxpetrusenko.com/medium/youtube-use-hermes-right-now-qqegio4juxg/",
     "ids": [],
     "required_present": {
-      "Organization": [
-        "name",
-        "url"
-      ],
+      "Organization": [],
       "Person": [
         "name"
       ]
@@ -25,5 +22,5 @@
     ],
     "values": {}
   },
-  "shape_digest": "bd05d4c04458f2fbc3d418924dc051652c265fc6b1771cbe04cf0b09d643dc49"
+  "shape_digest": "004761416378c4fbc9e0ee594bea2844552f930715266ea8dde87dc47a58b4c9"
 }

@@ -16,11 +16,7 @@
       "https://www.maxpetrusenko.com/spirituality/blog/what-is-kyo-tai"
     ],
     "required_present": {
-      "Article": [
-        "author",
-        "datePublished",
-        "headline"
-      ],
+      "Article": [],
       "BreadcrumbList": [
         "itemListElement"
       ],
@@ -33,11 +29,7 @@
         "position",
         "position"
       ],
-      "Organization": [
-        "name",
-        "name",
-        "url"
-      ],
+      "Organization": [],
       "Person": [
         "name",
         "name"
@@ -60,5 +52,5 @@
     ],
     "values": {}
   },
-  "shape_digest": "dd9352c9bb28a5bcbe8938cc555fa9a41dfbfdff0074a566e9fdb94c8ca9a29c"
+  "shape_digest": "cf68ac429afb67deaf06fbe0954f11964e7eab7dec434e8a4cfd419de09ee104"
 }

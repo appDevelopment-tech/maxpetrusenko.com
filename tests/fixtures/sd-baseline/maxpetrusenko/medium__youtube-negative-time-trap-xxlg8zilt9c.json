@@ -11,10 +11,7 @@
     "canonical": "https://www.maxpetrusenko.com/medium/youtube-negative-time-trap-xxlg8zilt9c/",
     "ids": [],
     "required_present": {
-      "Organization": [
-        "name",
-        "url"
-      ],
+      "Organization": [],
       "Person": [
         "name"
       ]
@@ -25,5 +22,5 @@
     ],
     "values": {}
   },
-  "shape_digest": "e979b577921400d029f0dd4fe8fb5fe7e3ffd2afd3eceebc6d3ec805efc528ba"
+  "shape_digest": "2967327e3a9fc3803ea720ca7a4d98b54e52c8e7f8f61708a7af4ff495e3c0c0"
 }

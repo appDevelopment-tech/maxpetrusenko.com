@@ -11,10 +11,7 @@
     "canonical": "https://www.maxpetrusenko.com/medium/youtube-europe-fusion-reactor-bpuakw1dyek/",
     "ids": [],
     "required_present": {
-      "Organization": [
-        "name",
-        "url"
-      ],
+      "Organization": [],
       "Person": [
         "name"
       ]
@@ -25,5 +22,5 @@
     ],
     "values": {}
   },
-  "shape_digest": "8faeb7fad34633482d3d5af5a89cef2ccc2f978c46226217c7a98d142be15a70"
+  "shape_digest": "675d18f622e1f061fb8a00d91f20048f6d867d98dbb305140575f72cd2aceaa9"
 }

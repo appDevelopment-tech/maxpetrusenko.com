@@ -11,10 +11,7 @@
     "canonical": "https://www.maxpetrusenko.com/chinola/review/kaggle-health-open-v1",
     "ids": [],
     "required_present": {
-      "Organization": [
-        "name",
-        "url"
-      ],
+      "Organization": [],
       "Person": [
         "name"
       ]
@@ -25,5 +22,5 @@
     ],
     "values": {}
   },
-  "shape_digest": "4c837b448d46a2faa2ea5ae0e23ec06a8aeba9951d2858cbac809fbb28867eac"
+  "shape_digest": "db9792f1475d33b0a3ce511802a4f02503c481e9cbd8ad227dd2ca8e2a061a5c"
 }

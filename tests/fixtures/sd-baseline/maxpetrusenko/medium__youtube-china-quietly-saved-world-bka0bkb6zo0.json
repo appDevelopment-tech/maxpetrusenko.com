@@ -11,10 +11,7 @@
     "canonical": "https://www.maxpetrusenko.com/medium/youtube-china-quietly-saved-world-bka0bkb6zo0/",
     "ids": [],
     "required_present": {
-      "Organization": [
-        "name",
-        "url"
-      ],
+      "Organization": [],
       "Person": [
         "name"
       ]
@@ -25,5 +22,5 @@
     ],
     "values": {}
   },
-  "shape_digest": "3421585d826fbe2fdc5c7110602f97d079356e53cfd9bda8e76e3883efdd223f"
+  "shape_digest": "7fcf56bfe1bf94c05bce55a5a3201caa29ac1505c2bb0c3e72585f2266c98d41"
 }

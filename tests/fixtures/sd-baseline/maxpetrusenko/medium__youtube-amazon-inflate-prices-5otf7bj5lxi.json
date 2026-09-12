@@ -11,10 +11,7 @@
     "canonical": "https://www.maxpetrusenko.com/medium/youtube-amazon-inflate-prices-5otf7bj5lxi/",
     "ids": [],
     "required_present": {
-      "Organization": [
-        "name",
-        "url"
-      ],
+      "Organization": [],
       "Person": [
         "name"
       ]
@@ -25,5 +22,5 @@
     ],
     "values": {}
   },
-  "shape_digest": "ba1879e885ffbcd859a6d59f43fe334e85cea074e9507cb74e331bb772abfb41"
+  "shape_digest": "662c69d12ea0f5a05b44b4d06e95f1ac787c726308021a722ec86fafbe6aeebe"
 }

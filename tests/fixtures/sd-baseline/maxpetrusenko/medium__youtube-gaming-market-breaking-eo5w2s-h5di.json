@@ -11,10 +11,7 @@
     "canonical": "https://www.maxpetrusenko.com/medium/youtube-gaming-market-breaking-eo5w2s-h5di/",
     "ids": [],
     "required_present": {
-      "Organization": [
-        "name",
-        "url"
-      ],
+      "Organization": [],
       "Person": [
         "name"
       ]
@@ -25,5 +22,5 @@
     ],
     "values": {}
   },
-  "shape_digest": "436a437108a23d33297a6d9d4ecae14d2145c8488dc6b0851e7ad944a6a9ad05"
+  "shape_digest": "db6d6e5a72f116fa654ff2b6faeb7bbdab88b0d5cc171a3844c9b969d6bf7d1a"
 }

@@ -11,10 +11,7 @@
     "canonical": "https://www.maxpetrusenko.com/medium/youtube-happiness-drugs-guide-zcamgnowzvk/",
     "ids": [],
     "required_present": {
-      "Organization": [
-        "name",
-        "url"
-      ],
+      "Organization": [],
       "Person": [
         "name"
       ]
@@ -25,5 +22,5 @@
     ],
     "values": {}
   },
-  "shape_digest": "368d6d3739a56aaa77156e79c3ecd810fabb16412fbad70997e03007d87b0500"
+  "shape_digest": "da377ca6995844029f65c148ed36c10015d630f2936dc6dc94d273feb9def943"
 }

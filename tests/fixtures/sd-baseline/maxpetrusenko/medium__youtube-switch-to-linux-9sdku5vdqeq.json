@@ -11,10 +11,7 @@
     "canonical": "https://www.maxpetrusenko.com/medium/youtube-switch-to-linux-9sdku5vdqeq/",
     "ids": [],
     "required_present": {
-      "Organization": [
-        "name",
-        "url"
-      ],
+      "Organization": [],
       "Person": [
         "name"
       ]
@@ -25,5 +22,5 @@
     ],
     "values": {}
   },
-  "shape_digest": "128609e263ab1f2b8496bd41a977b0d9b020a32bd41cf661d6c3ef9e96bb6fd1"
+  "shape_digest": "32328be0b72cdf01a1cffbce1d0fd9fef075090579bf291f916f9e8fe02099ef"
 }

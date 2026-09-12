@@ -11,10 +11,7 @@
     "canonical": "https://www.maxpetrusenko.com/medium/youtube-ai-world-war-gw_hnd7m00m/",
     "ids": [],
     "required_present": {
-      "Organization": [
-        "name",
-        "url"
-      ],
+      "Organization": [],
       "Person": [
         "name"
       ]
@@ -25,5 +22,5 @@
     ],
     "values": {}
   },
-  "shape_digest": "57cf6ce90835818077182880c767803661ef554dbb325ea9d8e1c928bdc3f2e8"
+  "shape_digest": "e73ffd3a268496eb386c6c53d27b548efa4042d79ba7f8f6286713de4e123248"
 }

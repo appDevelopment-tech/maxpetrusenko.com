@@ -11,10 +11,7 @@
     "canonical": "https://www.maxpetrusenko.com/chinola/review/farm-michael-7d4e9c",
     "ids": [],
     "required_present": {
-      "Organization": [
-        "name",
-        "url"
-      ],
+      "Organization": [],
       "Person": [
         "name"
       ]
@@ -25,5 +22,5 @@
     ],
     "values": {}
   },
-  "shape_digest": "7b40564df494d148b2305e58d220bdab4a99f40cc4c03920facccbaad814e372"
+  "shape_digest": "0387c38d1ed99f26f42e438cf8715fbebfc99294a03637fab3e46fa00399421f"
 }

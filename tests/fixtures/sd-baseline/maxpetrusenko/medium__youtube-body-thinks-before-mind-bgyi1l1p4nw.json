@@ -11,10 +11,7 @@
     "canonical": "https://www.maxpetrusenko.com/medium/youtube-body-thinks-before-mind-bgyi1l1p4nw/",
     "ids": [],
     "required_present": {
-      "Organization": [
-        "name",
-        "url"
-      ],
+      "Organization": [],
       "Person": [
         "name"
       ]
@@ -25,5 +22,5 @@
     ],
     "values": {}
   },
-  "shape_digest": "d7dd07dea24f742920f90f6e4284aaeac95b46e92f708ecccfcfcb9093d80a4f"
+  "shape_digest": "c173a8992a8a33a0fa3c3bab091b63c6fd3bb4836016f89eec2efd63266e1566"
 }

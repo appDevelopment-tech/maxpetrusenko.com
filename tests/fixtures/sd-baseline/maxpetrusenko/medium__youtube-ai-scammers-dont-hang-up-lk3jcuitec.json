@@ -11,10 +11,7 @@
     "canonical": "https://www.maxpetrusenko.com/medium/youtube-ai-scammers-dont-hang-up-lk3jcuitec/",
     "ids": [],
     "required_present": {
-      "Organization": [
-        "name",
-        "url"
-      ],
+      "Organization": [],
       "Person": [
         "name"
       ]
@@ -25,5 +22,5 @@
     ],
     "values": {}
   },
-  "shape_digest": "5e7d10fd444d7945fbe879bc8bca8be8891e663c786a90d4b4a3370461af0d2f"
+  "shape_digest": "02c670c59c518442cd94dad41e40f25c06ba406c0632b6b13fd3c7e089747602"
 }

@@ -16,11 +16,7 @@
       "https://www.maxpetrusenko.com/spirituality/blog/questions-to-ask-tantra-practitioner"
     ],
     "required_present": {
-      "Article": [
-        "author",
-        "datePublished",
-        "headline"
-      ],
+      "Article": [],
       "BreadcrumbList": [
         "itemListElement"
       ],
@@ -33,11 +29,7 @@
         "position",
         "position"
       ],
-      "Organization": [
-        "name",
-        "name",
-        "url"
-      ],
+      "Organization": [],
       "Person": [
         "name",
         "name"
@@ -60,5 +52,5 @@
     ],
     "values": {}
   },
-  "shape_digest": "8d8b0cd85bc452b8e6c9de40e86c814b6549878efa878c5b6da6bee519221599"
+  "shape_digest": "171d37efdb132d50fa051ca79735788d5bc028070a58b8ed6240847280e8618d"
 }

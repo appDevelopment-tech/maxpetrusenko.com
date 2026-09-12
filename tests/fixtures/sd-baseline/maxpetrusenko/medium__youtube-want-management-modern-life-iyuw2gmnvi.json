@@ -11,10 +11,7 @@
     "canonical": "https://www.maxpetrusenko.com/medium/youtube-want-management-modern-life-iyuw2gmnvi/",
     "ids": [],
     "required_present": {
-      "Organization": [
-        "name",
-        "url"
-      ],
+      "Organization": [],
       "Person": [
         "name"
       ]
@@ -25,5 +22,5 @@
     ],
     "values": {}
   },
-  "shape_digest": "90d5679c7ce22a378e1a196a77ecb69ec772758820c9978486e6dee57423c9a4"
+  "shape_digest": "f4db12924f67c229e6b5b2df07844bf4c0f22a889c5a651af691b7e3a471edf2"
 }

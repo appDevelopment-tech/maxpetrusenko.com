@@ -11,10 +11,7 @@
     "canonical": "https://www.maxpetrusenko.com/medium/youtube-immune-system-actually-works-lxfek8g8cui/",
     "ids": [],
     "required_present": {
-      "Organization": [
-        "name",
-        "url"
-      ],
+      "Organization": [],
       "Person": [
         "name"
       ]
@@ -25,5 +22,5 @@
     ],
     "values": {}
   },
-  "shape_digest": "ce49f17bc89a4677d6b1ec5f440639588f6aa4665a85a58dce2ee3c638cc62a3"
+  "shape_digest": "03bec29093eaba16e248532d6c66ec8e1d22fb0392f82f3bc8e72646dc67b1ad"
 }

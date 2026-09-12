@@ -11,10 +11,7 @@
     "canonical": "https://www.maxpetrusenko.com/medium/youtube-oligarchy-paperwork-4s25ffbfw4m/",
     "ids": [],
     "required_present": {
-      "Organization": [
-        "name",
-        "url"
-      ],
+      "Organization": [],
       "Person": [
         "name"
       ]
@@ -25,5 +22,5 @@
     ],
     "values": {}
   },
-  "shape_digest": "b27f91147d08b2fbd2c0ed4ebede8d2818088996331cae391290f27876353cf0"
+  "shape_digest": "19311c93b3794c111ebd3fd7e76c3f486122de499f72e6605951a9ac30dc9301"
 }

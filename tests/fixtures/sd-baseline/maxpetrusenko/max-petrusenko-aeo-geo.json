@@ -39,12 +39,7 @@
         "position",
         "position"
       ],
-      "Organization": [
-        "name",
-        "name",
-        "url",
-        "url"
-      ],
+      "Organization": [],
       "Person": [
         "name",
         "name"
@@ -53,10 +48,7 @@
         "acceptedAnswer",
         "name"
       ],
-      "WebPage": [
-        "name",
-        "url"
-      ]
+      "WebPage": []
     },
     "types": [
       "Answer",
@@ -80,5 +72,5 @@
     ],
     "values": {}
   },
-  "shape_digest": "e8b9f00924a432ebd42e319a13b44b901b9c35b8fbbd36c94224c0add0b46159"
+  "shape_digest": "a5f83dbed1f99d9365f8bb7abff41dc7f9268b0986da30302682eef420463b59"
 }

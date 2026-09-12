@@ -11,10 +11,7 @@
     "canonical": "https://www.maxpetrusenko.com/medium/youtube-most-controversial-idea-physics-oi91ke_wocs/",
     "ids": [],
     "required_present": {
-      "Organization": [
-        "name",
-        "url"
-      ],
+      "Organization": [],
       "Person": [
         "name"
       ]
@@ -25,5 +22,5 @@
     ],
     "values": {}
   },
-  "shape_digest": "65737fe4feefb7d4486ab1514388ae21b0c50e632f06bc18668f48161491b716"
+  "shape_digest": "ab423e00a5d8dd60ce0c797ab43c83496655ffe25808af75a3a26a77580d0f68"
 }

@@ -11,10 +11,7 @@
     "canonical": "https://www.maxpetrusenko.com/medium/youtube-monster-head-cognitive-biases-hwzjwzni_dc/",
     "ids": [],
     "required_present": {
-      "Organization": [
-        "name",
-        "url"
-      ],
+      "Organization": [],
       "Person": [
         "name"
       ]
@@ -25,5 +22,5 @@
     ],
     "values": {}
   },
-  "shape_digest": "301d2232a63e1165657541d322934104e5af0d39eef217415d04d3d3d729b019"
+  "shape_digest": "96d7cfa6e805570dfa9ef98b9502f548c09bf3dc333f63971c2ed5e00b3f85df"
 }

@@ -11,10 +11,7 @@
     "canonical": "https://www.maxpetrusenko.com/medium/youtube-deepseek-v4-what-not-to-read-xjupuobpt-4/",
     "ids": [],
     "required_present": {
-      "Organization": [
-        "name",
-        "url"
-      ],
+      "Organization": [],
       "Person": [
         "name"
       ]
@@ -25,5 +22,5 @@
     ],
     "values": {}
   },
-  "shape_digest": "b50977d066fbc8cf3694ca1c72af83429800c2e299ab24647769620d4654e4fc"
+  "shape_digest": "5c004f086cf0f7eec13c3e73a3134683cb0106ceac868d4d77b2ab075487ce97"
 }

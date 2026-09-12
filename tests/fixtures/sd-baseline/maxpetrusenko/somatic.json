@@ -18,31 +18,19 @@
       "BreadcrumbList": [
         "itemListElement"
       ],
-      "ImageObject": [
-        "url"
-      ],
       "ListItem": [
         "position",
         "position"
       ],
-      "Organization": [
-        "name",
-        "name",
-        "url",
-        "url"
-      ],
+      "Organization": [],
       "Person": [
         "name",
         "name"
       ],
-      "WebPage": [
-        "name",
-        "url"
-      ]
+      "WebPage": []
     },
     "types": [
       "BreadcrumbList",
-      "ImageObject",
       "ListItem",
       "ListItem",
       "Organization",
@@ -53,5 +41,5 @@
     ],
     "values": {}
   },
-  "shape_digest": "7d06cfde3b22fda9715871bf0b1608d80c5773411b5020b3358acd7cf59674ec"
+  "shape_digest": "e1f8229ae427e227db317b5ff5792e9715027e7d59c8b2b342ec3c374078bb69"
 }

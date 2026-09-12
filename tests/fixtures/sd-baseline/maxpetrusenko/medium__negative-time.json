@@ -11,10 +11,7 @@
     "canonical": "https://www.maxpetrusenko.com/medium/negative-time/",
     "ids": [],
     "required_present": {
-      "Organization": [
-        "name",
-        "url"
-      ],
+      "Organization": [],
       "Person": [
         "name"
       ]
@@ -25,5 +22,5 @@
     ],
     "values": {}
   },
-  "shape_digest": "1ae86709b450677df87031412d94b552ca3993b6c063253d163c37a94e2ccf5b"
+  "shape_digest": "2e171f8841db0a2603be7b8a4f1ccfe09c6375cbb6ccb58e05348b51ac2dda25"
 }

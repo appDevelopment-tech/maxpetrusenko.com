@@ -45,7 +45,6 @@
         "mainEntity"
       ],
       "ImageObject": [
-        "url",
         "url"
       ],
       "ListItem": [
@@ -57,14 +56,7 @@
         "itemListElement",
         "name"
       ],
-      "Organization": [
-        "name",
-        "name",
-        "name",
-        "url",
-        "url",
-        "url"
-      ],
+      "Organization": [],
       "Person": [
         "name",
         "name",
@@ -112,14 +104,7 @@
         "name",
         "name"
       ],
-      "WebPage": [
-        "name",
-        "name",
-        "name",
-        "name",
-        "url",
-        "url"
-      ]
+      "WebPage": []
     },
     "types": [
       "Answer",
@@ -142,7 +127,6 @@
       "Audience",
       "BreadcrumbList",
       "FAQPage",
-      "ImageObject",
       "ImageObject",
       "ListItem",
       "ListItem",
@@ -186,5 +170,5 @@
     ],
     "values": {}
   },
-  "shape_digest": "5074f27f1f9b8c77a0a372b4418b8be5c35ce2d27c4f5e4a923686fcad1ee997"
+  "shape_digest": "b7cbd684e47e31d1a0e0fb793ac961ca8f37e1fa60b90d0948bcb4b15adddfb9"
 }

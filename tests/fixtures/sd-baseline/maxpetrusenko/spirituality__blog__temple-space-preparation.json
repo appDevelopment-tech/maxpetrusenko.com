@@ -16,11 +16,7 @@
       "https://www.maxpetrusenko.com/spirituality/blog/temple-space-preparation"
     ],
     "required_present": {
-      "Article": [
-        "author",
-        "datePublished",
-        "headline"
-      ],
+      "Article": [],
       "BreadcrumbList": [
         "itemListElement"
       ],
@@ -33,11 +29,7 @@
         "position",
         "position"
       ],
-      "Organization": [
-        "name",
-        "name",
-        "url"
-      ],
+      "Organization": [],
       "Person": [
         "name",
         "name"
@@ -60,5 +52,5 @@
     ],
     "values": {}
   },
-  "shape_digest": "4e522fc142a58fe5be52b98c36dfd535f317829d62c4444603541a156d9c364a"
+  "shape_digest": "0d76f56be1acd2bbed0216b888524d29087ff8c98c97c175f7d0f48a3b178f95"
 }

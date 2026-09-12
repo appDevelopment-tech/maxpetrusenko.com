@@ -11,10 +11,7 @@
     "canonical": "https://www.maxpetrusenko.com/medium/youtube-not-possible-tcxerornjn0/",
     "ids": [],
     "required_present": {
-      "Organization": [
-        "name",
-        "url"
-      ],
+      "Organization": [],
       "Person": [
         "name"
       ]
@@ -25,5 +22,5 @@
     ],
     "values": {}
   },
-  "shape_digest": "a9a422fa623a70c3d35ff2c843b0b83e64f354bd2694db5eb9d39249eb1887f8"
+  "shape_digest": "7e9404c5d73d2fb941783f5416089f952751d54e7732079e8cf8e4c6d9ae5e7a"
 }

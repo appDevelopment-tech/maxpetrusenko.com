@@ -11,10 +11,7 @@
     "canonical": "https://www.maxpetrusenko.com/medium/youtube-sam-altman-worry-openai-_eytkvzqbnq/",
     "ids": [],
     "required_present": {
-      "Organization": [
-        "name",
-        "url"
-      ],
+      "Organization": [],
       "Person": [
         "name"
       ]
@@ -25,5 +22,5 @@
     ],
     "values": {}
   },
-  "shape_digest": "2832c5a8527171b2fd0c1ff097aeba8a3ae57fae99d5561a01079f35dbffccd7"
+  "shape_digest": "e76b1df337cb5bb3b48634c81a5c3630eb051d7f1196a22ca9bf50713c9a99d6"
 }

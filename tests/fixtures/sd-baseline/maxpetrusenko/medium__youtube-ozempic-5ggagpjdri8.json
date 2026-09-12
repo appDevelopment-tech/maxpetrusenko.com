@@ -11,10 +11,7 @@
     "canonical": "https://www.maxpetrusenko.com/medium/youtube-ozempic-5ggagpjdri8/",
     "ids": [],
     "required_present": {
-      "Organization": [
-        "name",
-        "url"
-      ],
+      "Organization": [],
       "Person": [
         "name"
       ]
@@ -25,5 +22,5 @@
     ],
     "values": {}
   },
-  "shape_digest": "4901b6805c825d57f8db5da753c7d742ab91ac4b792a322528384cbfdbd120d3"
+  "shape_digest": "cba8e88663abf9c63155781254099aa6138f5acd066391d42a74b6b263105ffd"
 }

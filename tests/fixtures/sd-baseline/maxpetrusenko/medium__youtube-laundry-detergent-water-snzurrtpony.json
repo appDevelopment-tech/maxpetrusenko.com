@@ -11,10 +11,7 @@
     "canonical": "https://www.maxpetrusenko.com/medium/youtube-laundry-detergent-water-snzurrtpony/",
     "ids": [],
     "required_present": {
-      "Organization": [
-        "name",
-        "url"
-      ],
+      "Organization": [],
       "Person": [
         "name"
       ]
@@ -25,5 +22,5 @@
     ],
     "values": {}
   },
-  "shape_digest": "f391e66c189753183e39d2620d79aecbb761a17ea64fb9375992f48986150518"
+  "shape_digest": "0b21617da92920fce46709e8a10d5effaae54d898cf2255a38d934813c7d54ed"
 }

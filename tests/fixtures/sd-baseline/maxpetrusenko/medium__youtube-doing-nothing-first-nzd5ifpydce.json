@@ -11,10 +11,7 @@
     "canonical": "https://www.maxpetrusenko.com/medium/youtube-doing-nothing-first-nzd5ifpydce/",
     "ids": [],
     "required_present": {
-      "Organization": [
-        "name",
-        "url"
-      ],
+      "Organization": [],
       "Person": [
         "name"
       ]
@@ -25,5 +22,5 @@
     ],
     "values": {}
   },
-  "shape_digest": "1b99b7cde9257236e4bba2d7f70db9a7f07e38e234d20822a5ef39d685d93c74"
+  "shape_digest": "50d8a33f80a92fde72497b01f9cd5613e5163a11c2b35f548235eb942b7fa3f1"
 }

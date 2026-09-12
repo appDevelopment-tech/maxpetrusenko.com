@@ -11,10 +11,7 @@
     "canonical": "https://www.maxpetrusenko.com/medium/youtube-putin-war-wealth-ifvqlskt04e/",
     "ids": [],
     "required_present": {
-      "Organization": [
-        "name",
-        "url"
-      ],
+      "Organization": [],
       "Person": [
         "name"
       ]
@@ -25,5 +22,5 @@
     ],
     "values": {}
   },
-  "shape_digest": "89b744b31e01455eb1dd2243d83c68d2e826508a95cdacb3264b8bdd0b460974"
+  "shape_digest": "519414b08117062934e049f84884a4b0c63a237f2fc7228ef7e9389dd994d469"
 }

@@ -11,10 +11,7 @@
     "canonical": "https://www.maxpetrusenko.com/medium/youtube-life-nonlife-boundary-ws6opg41od4/",
     "ids": [],
     "required_present": {
-      "Organization": [
-        "name",
-        "url"
-      ],
+      "Organization": [],
       "Person": [
         "name"
       ]
@@ -25,5 +22,5 @@
     ],
     "values": {}
   },
-  "shape_digest": "1fdf93e7491a454c714a24f4689743debdda08cce2d42f1cce458713b5444455"
+  "shape_digest": "b65a5e732d6ed293a0fb7736f70baed5a6f9edba9489447ecc678adaf866cc37"
 }

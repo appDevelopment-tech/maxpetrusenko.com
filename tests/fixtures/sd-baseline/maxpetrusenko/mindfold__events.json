@@ -52,10 +52,7 @@
         "priceCurrency",
         "priceCurrency"
       ],
-      "Organization": [
-        "name",
-        "url"
-      ],
+      "Organization": [],
       "Person": [
         "name",
         "name",
@@ -76,10 +73,7 @@
         "name",
         "name"
       ],
-      "WebPage": [
-        "name",
-        "url"
-      ]
+      "WebPage": []
     },
     "types": [
       "Answer",
@@ -118,5 +112,5 @@
       "Offer.priceCurrency": "USD"
     }
   },
-  "shape_digest": "28cad52f2180c21764f85e24392c0c6d29883a70129c4b3f389d1fa9c9119487"
+  "shape_digest": "eead15a6d4c0927d7e03202e7db9b128739cec5a80fe1fd2e429ee9f0c2abea6"
 }

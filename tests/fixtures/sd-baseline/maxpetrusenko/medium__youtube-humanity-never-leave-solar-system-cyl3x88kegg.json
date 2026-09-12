@@ -11,10 +11,7 @@
     "canonical": "https://www.maxpetrusenko.com/medium/youtube-humanity-never-leave-solar-system-cyl3x88kegg/",
     "ids": [],
     "required_present": {
-      "Organization": [
-        "name",
-        "url"
-      ],
+      "Organization": [],
       "Person": [
         "name"
       ]
@@ -25,5 +22,5 @@
     ],
     "values": {}
   },
-  "shape_digest": "28fb9c741564deab0ad02483565881a1ee91d39fffe330299462655936cddd9b"
+  "shape_digest": "5351e8f5a4a49084b8fd1ed0ae1556f2bb119ee01f520608f3531987d4bd6572"
 }
