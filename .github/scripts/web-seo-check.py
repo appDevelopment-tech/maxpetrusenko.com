@@ -288,7 +288,24 @@ class Checker:
     # -- checks ---------------------------------------------------------------
 
     def check_canonical(self, url, meta, html=""):
-        """Checks 1-3: canonical present, self-referencing, no chain."""
+        """Checks 1-3: canonical present, self-referencing, no chain.
+
+        A page deliberately excluded from indexing has no canonical to check.
+        `noindex` is the stronger directive -- Google drops the URL regardless of
+        what a canonical says -- and the sitemap-membership check already reports
+        these as `noindex-unlisted ... correctly absent from sitemap`, so requiring
+        one contradicted this tool's own classification and produced an
+        error-band finding on pages behaving correctly. Since canonical-missing
+        blocks a deploy, that contradiction stopped a real deploy.
+        """
+        noindex = any("noindex" in r for r in meta.get("robots", []) or [])
+        if noindex:
+            self.info(
+                "canonical-skipped-noindex", url,
+                "page is noindex, so no canonical was required (a canonical is a hint for "
+                "indexable duplicates; noindex is the stronger directive and wins)",
+            )
+            return
         if not meta["canonical"]:
             self.err("canonical-missing", url, "no <link rel=canonical> found")
             return
