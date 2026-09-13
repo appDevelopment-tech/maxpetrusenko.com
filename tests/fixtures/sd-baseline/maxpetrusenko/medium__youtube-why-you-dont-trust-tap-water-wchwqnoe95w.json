@@ -1,26 +1,23 @@
 {
   "blocks": 1,
   "content": {
-    "Organization.name": "Presence Atelier",
-    "Person.description": "Creator of tech automation resources, tantra education, and somatic practice offerings.",
+    "Person.description": "Creator of tech automation resources and somatic practice offerings.",
     "Person.name": "Max Petrusenko"
   },
-  "content_digest": "3b758e40268e699f91b0d66dc106dddd28eeefe9609e26596c4cbe23dfaf0138",
+  "content_digest": "5fafcda288e5adf34c77e58198fe48ea32921fd013149804c4c2d4e8c47d0038",
   "route": "/medium/youtube-why-you-dont-trust-tap-water-wchwqnoe95w",
   "shape": {
     "canonical": "https://www.maxpetrusenko.com/medium/youtube-why-you-dont-trust-tap-water-wchwqnoe95w/",
     "ids": [],
     "required_present": {
-      "Organization": [],
       "Person": [
         "name"
       ]
     },
     "types": [
-      "Organization",
       "Person"
     ],
     "values": {}
   },
-  "shape_digest": "144e5955d0c98bfba747efdbdd3e5b6e273b175b371aaa9ae76d1562fe3d4671"
+  "shape_digest": "0d48b93475e30da7b6fd03056ab1c5561c1df8fe093df01b2f777200cc96a4d6"
 }

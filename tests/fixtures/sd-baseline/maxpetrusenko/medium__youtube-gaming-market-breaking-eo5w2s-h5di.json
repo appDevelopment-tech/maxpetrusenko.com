@@ -1,26 +1,23 @@
 {
   "blocks": 1,
   "content": {
-    "Organization.name": "Presence Atelier",
-    "Person.description": "Creator of tech automation resources, tantra education, and somatic practice offerings.",
+    "Person.description": "Creator of tech automation resources and somatic practice offerings.",
     "Person.name": "Max Petrusenko"
   },
-  "content_digest": "3b758e40268e699f91b0d66dc106dddd28eeefe9609e26596c4cbe23dfaf0138",
+  "content_digest": "5fafcda288e5adf34c77e58198fe48ea32921fd013149804c4c2d4e8c47d0038",
   "route": "/medium/youtube-gaming-market-breaking-eo5w2s-h5di",
   "shape": {
     "canonical": "https://www.maxpetrusenko.com/medium/youtube-gaming-market-breaking-eo5w2s-h5di/",
     "ids": [],
     "required_present": {
-      "Organization": [],
       "Person": [
         "name"
       ]
     },
     "types": [
-      "Organization",
       "Person"
     ],
     "values": {}
   },
-  "shape_digest": "db6d6e5a72f116fa654ff2b6faeb7bbdab88b0d5cc171a3844c9b969d6bf7d1a"
+  "shape_digest": "589b108f35e3e6436a5c428349dde63a78f0d8e938928d249850885d346b10c9"
 }

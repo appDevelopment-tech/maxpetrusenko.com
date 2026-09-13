@@ -1,26 +1,23 @@
 {
   "blocks": 1,
   "content": {
-    "Organization.name": "Presence Atelier",
-    "Person.description": "Creator of tech automation resources, tantra education, and somatic practice offerings.",
+    "Person.description": "Creator of tech automation resources and somatic practice offerings.",
     "Person.name": "Max Petrusenko"
   },
-  "content_digest": "3b758e40268e699f91b0d66dc106dddd28eeefe9609e26596c4cbe23dfaf0138",
+  "content_digest": "5fafcda288e5adf34c77e58198fe48ea32921fd013149804c4c2d4e8c47d0038",
   "route": "/medium/not-ready-for-biocomputing",
   "shape": {
     "canonical": "https://www.maxpetrusenko.com/medium/not-ready-for-biocomputing/",
     "ids": [],
     "required_present": {
-      "Organization": [],
       "Person": [
         "name"
       ]
     },
     "types": [
-      "Organization",
       "Person"
     ],
     "values": {}
   },
-  "shape_digest": "bae2dcefedfbc8e1d7f7569006e05be2d40be7816869a4bd117551283f459feb"
+  "shape_digest": "0e74c1554cf6a51b2f22d56e8f3493e55c34dbf38b5f6129202a15dceb3a577c"
 }

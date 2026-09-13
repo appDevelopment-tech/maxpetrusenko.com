@@ -3,8 +3,7 @@
   "content": {
     "ListItem.name": "Tech",
     "OfferCatalog.name": "AI & Automation Services",
-    "Organization.name": "Presence Atelier",
-    "Person.description": "Creator of tech automation resources, tantra education, and somatic practice offerings.",
+    "Person.description": "Creator of tech automation resources and somatic practice offerings.",
     "Person.name": "Max Petrusenko",
     "ProfessionalService.description": "AI automation consultant specializing in Claude Code, n8n workflows, ChatGPT integrations, and workflow automation for creators and founders. Available remotely worldwide, with in-person work by request while traveling.",
     "ProfessionalService.name": "Max Petrusenko - AI & Automation Consultant",
@@ -14,7 +13,7 @@
     "WebPage.description": "Max Petrusenko helps founders and teams ship AI automations and internal tools in weeks, not months. His work focuses on Claude Code, n8n, and custom agent pipelines that reduce ops load, speed delivery, and replace fragile SaaS workflows. Engagements are hands-on, outcome-driven, and production-ready. A recent Claude Code implementation saved $253k annually with 3x faster feature delivery.",
     "WebPage.name": "What AI automation services does Max Petrusenko offer?"
   },
-  "content_digest": "e49ddf773bd6c36cfb34075e4bb354b02ebdf5ae05a5024b3fcf4d0fbea4b025",
+  "content_digest": "6fbd196518f358ab3cec8c5b54a774e0b1a82232f81d7cd8b2b9b337d28e33b2",
   "route": "/tech",
   "shape": {
     "canonical": "https://www.maxpetrusenko.com/tech",
@@ -48,7 +47,6 @@
         "itemListElement",
         "name"
       ],
-      "Organization": [],
       "Person": [
         "name"
       ],
@@ -101,7 +99,6 @@
       "Offer",
       "Offer",
       "OfferCatalog",
-      "Organization",
       "Person",
       "ProfessionalService",
       "Question",
@@ -121,5 +118,5 @@
     ],
     "values": {}
   },
-  "shape_digest": "fa38fb92b9f8f5072c3cbf1102b5704ee3f6d52f11461e97056e39f20ffefbf3"
+  "shape_digest": "b3d651f8d08eacd50ea1b7d1ccef1860ea14fe489fbbc1e1730e274b369673ec"
 }

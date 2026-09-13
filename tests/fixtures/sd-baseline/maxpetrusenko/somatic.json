@@ -3,13 +3,13 @@
   "content": {
     "ListItem.name": "Somatic",
     "Organization.description": "AI engineer, somatic practitioner, and consciousness technology writer. Bridging agentic coding, contemplative neuroscience, and eastern philosophy.",
-    "Organization.name": "Presence Atelier",
-    "Person.description": "Creator of tech automation resources, tantra education, and somatic practice offerings.",
+    "Organization.name": "Max Petrusenko",
+    "Person.description": "Creator of tech automation resources and somatic practice offerings.",
     "Person.name": "Max Petrusenko",
-    "WebPage.description": "Private somatic sessions for founders and creators. Nervous system reset, tantra massage, and energy work.",
+    "WebPage.description": "Private somatic sessions for founders and creators. Nervous system reset and energy work.",
     "WebPage.name": "Somatic Practice - Nervous System Regulation & Energy Work"
   },
-  "content_digest": "a18fae50d9ef78d5f3d9c19b2d1aab62068a098c54a47011fb50c15abea6f264",
+  "content_digest": "ced9989c84fcc0fb5261f7a22763ddc3b57612b4f594fcf2323854a28f624797",
   "route": "/somatic",
   "shape": {
     "canonical": "https://www.maxpetrusenko.com/somatic",
@@ -34,12 +34,11 @@
       "ListItem",
       "ListItem",
       "Organization",
-      "Organization",
       "Person",
       "Person",
       "WebPage"
     ],
     "values": {}
   },
-  "shape_digest": "e1f8229ae427e227db317b5ff5792e9715027e7d59c8b2b342ec3c374078bb69"
+  "shape_digest": "97781ce244fe34836aad080751ccd488ceb60f51bf28e33a6ee56b3bb5f74408"
 }

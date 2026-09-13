@@ -1,26 +1,23 @@
 {
   "blocks": 1,
   "content": {
-    "Organization.name": "Presence Atelier",
-    "Person.description": "Creator of tech automation resources, tantra education, and somatic practice offerings.",
+    "Person.description": "Creator of tech automation resources and somatic practice offerings.",
     "Person.name": "Max Petrusenko"
   },
-  "content_digest": "3b758e40268e699f91b0d66dc106dddd28eeefe9609e26596c4cbe23dfaf0138",
+  "content_digest": "5fafcda288e5adf34c77e58198fe48ea32921fd013149804c4c2d4e8c47d0038",
   "route": "/medium/youtube-psychedelic-commercialization-5meo-dmt-9m-3vuxxxfa",
   "shape": {
     "canonical": "https://www.maxpetrusenko.com/medium/youtube-psychedelic-commercialization-5meo-dmt-9m-3vuxxxfa/",
     "ids": [],
     "required_present": {
-      "Organization": [],
       "Person": [
         "name"
       ]
     },
     "types": [
-      "Organization",
       "Person"
     ],
     "values": {}
   },
-  "shape_digest": "74f8ec5ad72707fa5f10bfbb25ba32425468bc62bbc14d7d3d6ed065e98a9762"
+  "shape_digest": "e78eb2d557030a2fb7684de05f6401cf8dcd0064046554b15ca97b467c7aafe4"
 }

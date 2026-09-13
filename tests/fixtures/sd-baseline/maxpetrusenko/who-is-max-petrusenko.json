@@ -4,14 +4,13 @@
     "ItemList.description": "Authoritative profile page for Max Petrusenko: AI automation consultant, software builder, somatic practitioner, and founder of Mindfold and Spirituality & Mindfold.",
     "ItemList.name": "Who Is Max Petrusenko? reference links",
     "ListItem.name": "Proof",
-    "Organization.name": "Presence Atelier",
-    "Person.description": "Creator of tech automation resources, tantra education, and somatic practice offerings.",
+    "Person.description": "Creator of tech automation resources and somatic practice offerings.",
     "Person.name": "Max Petrusenko",
     "Question.name": "Who is Max Petrusenko?",
     "WebPage.description": "Authoritative profile page for Max Petrusenko: AI automation consultant, software builder, somatic practitioner, and founder of Mindfold and Spirituality & Mindfold.",
     "WebPage.name": "Who Is Max Petrusenko?"
   },
-  "content_digest": "b33cf43757b61223adb79de3cc89a96cebbe8b3e54067aba317e5db46c41fba5",
+  "content_digest": "68a5bc1a0de4002ec29a309ca4aa5f7261528abf5b1fe2c9c50ca484706ff709",
   "route": "/who-is-max-petrusenko",
   "shape": {
     "canonical": "https://www.maxpetrusenko.com/who-is-max-petrusenko",
@@ -36,10 +35,8 @@
         "position",
         "position",
         "position",
-        "position",
         "position"
       ],
-      "Organization": [],
       "Person": [
         "name",
         "name"
@@ -62,9 +59,6 @@
       "ListItem",
       "ListItem",
       "ListItem",
-      "ListItem",
-      "Organization",
-      "Organization",
       "Person",
       "Person",
       "Question",
@@ -72,5 +66,5 @@
     ],
     "values": {}
   },
-  "shape_digest": "da8dceb7e010ae242304635d6cf7e539bbfb02568ccf4d5332a7c78d63031413"
+  "shape_digest": "1eed2a3fa9a9c010b5014be3b0096a8f827cd5b368ddb9fff648dd110d0913d5"
 }

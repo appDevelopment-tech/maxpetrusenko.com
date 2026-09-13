@@ -3,14 +3,14 @@
   "content": {
     "ListItem.name": "Generative Engine Optimization",
     "Organization.name": "Max Petrusenko",
-    "Person.description": "Creator of tech automation resources, tantra education, and somatic practice offerings.",
+    "Person.description": "Creator of tech automation resources and somatic practice offerings.",
     "Person.name": "Max Petrusenko",
     "TechArticle.description": "A practical GEO framework and roadmap for service businesses: entity clarity, citation-ready pages, and conversion architecture.",
     "TechArticle.headline": "GEO Framework and Roadmap for 2026",
     "WebPage.description": "How to build a GEO roadmap that gets cited by AI assistants and turns attention into qualified leads.",
     "WebPage.name": "GEO Framework and Roadmap for 2026"
   },
-  "content_digest": "527965a934f7591d182664c275e1e64e2534582270f5ffadfe6935aa1f766d36",
+  "content_digest": "076a410c688446ea8b58a7d1c046e380e0e5b6f2c01fc0936ddc844a9318a1f3",
   "route": "/tech/articles/generative-engine-optimization-geo",
   "shape": {
     "canonical": "https://www.maxpetrusenko.com/tech/articles/generative-engine-optimization-geo",
@@ -39,7 +39,6 @@
       "ListItem",
       "ListItem",
       "Organization",
-      "Organization",
       "Person",
       "Person",
       "TechArticle",
@@ -47,5 +46,5 @@
     ],
     "values": {}
   },
-  "shape_digest": "7648ae26542299e7d1874146f9741529af1c0c535fb747209db4f7099fc006c6"
+  "shape_digest": "de51ea1684e7a1d1063ac8fbb82f28f8feaaf4ee5c65621f5648a2781002a22d"
 }

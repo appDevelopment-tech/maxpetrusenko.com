@@ -2,13 +2,12 @@
   "blocks": 3,
   "content": {
     "ListItem.name": "Modalities",
-    "Organization.name": "Presence Atelier",
-    "Person.description": "Creator of tech automation resources, tantra education, and somatic practice offerings.",
+    "Person.description": "Creator of tech automation resources and somatic practice offerings.",
     "Person.name": "Max Petrusenko",
-    "WebPage.description": "Session types: nervous system reset, tantra massage, and Kyo-tai immersion.",
-    "WebPage.name": "Modalities - Nervous System Reset, Tantra Massage, Kyo-Tai"
+    "WebPage.description": "Session type: nervous system reset.",
+    "WebPage.name": "Modalities - Nervous System Reset"
   },
-  "content_digest": "6525a67cf6b09a215644d3bba69ed29538c9e72f5310f9f9f59c761e98ba5ad7",
+  "content_digest": "16879ba9c1842ec1ee2471589287edfde2b3d0d9ea6363f34a820be42c550e3c",
   "route": "/somatic/modalities",
   "shape": {
     "canonical": "https://www.maxpetrusenko.com/somatic/modalities",
@@ -22,7 +21,6 @@
         "position",
         "position"
       ],
-      "Organization": [],
       "Person": [
         "name"
       ],
@@ -33,11 +31,10 @@
       "ListItem",
       "ListItem",
       "ListItem",
-      "Organization",
       "Person",
       "WebPage"
     ],
     "values": {}
   },
-  "shape_digest": "de62b46c86e3a58d9e76f270e3c0c4c2b7225e3b129d38491898d700e28dda54"
+  "shape_digest": "21b4ad096e355cfd19403b486e131678959b26ed3c2fde2840cf516f333bd48b"
 }

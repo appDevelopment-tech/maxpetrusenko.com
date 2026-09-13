@@ -2,13 +2,12 @@
   "blocks": 3,
   "content": {
     "ListItem.name": "Case Studies",
-    "Organization.name": "Presence Atelier",
-    "Person.description": "Creator of tech automation resources, tantra education, and somatic practice offerings.",
+    "Person.description": "Creator of tech automation resources and somatic practice offerings.",
     "Person.name": "Max Petrusenko",
     "WebPage.description": "Detailed case studies from AI automation and software development projects.",
     "WebPage.name": "Case Studies - Project Outcomes"
   },
-  "content_digest": "85e44a16d35eaf7aaad072a05c1331a01c9a0e45220fe48676d945b60a211b3e",
+  "content_digest": "13f2b43098fae1ff362f7d74393414875585dac88b9066bcc0d806fc24989372",
   "route": "/tech/case-studies",
   "shape": {
     "canonical": "https://www.maxpetrusenko.com/tech/case-studies",
@@ -22,7 +21,6 @@
         "position",
         "position"
       ],
-      "Organization": [],
       "Person": [
         "name"
       ],
@@ -33,11 +31,10 @@
       "ListItem",
       "ListItem",
       "ListItem",
-      "Organization",
       "Person",
       "WebPage"
     ],
     "values": {}
   },
-  "shape_digest": "b7655aa79b5e4637b112b045b88b49eb78500ece856f75859420b15b47c293f6"
+  "shape_digest": "8c637531686a8ca89ffa8a2d3b5ab134af5ed7982e616fca93128fba7e84249a"
 }

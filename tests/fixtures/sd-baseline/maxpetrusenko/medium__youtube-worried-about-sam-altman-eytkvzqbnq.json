@@ -1,26 +1,23 @@
 {
   "blocks": 1,
   "content": {
-    "Organization.name": "Presence Atelier",
-    "Person.description": "Creator of tech automation resources, tantra education, and somatic practice offerings.",
+    "Person.description": "Creator of tech automation resources and somatic practice offerings.",
     "Person.name": "Max Petrusenko"
   },
-  "content_digest": "3b758e40268e699f91b0d66dc106dddd28eeefe9609e26596c4cbe23dfaf0138",
+  "content_digest": "5fafcda288e5adf34c77e58198fe48ea32921fd013149804c4c2d4e8c47d0038",
   "route": "/medium/youtube-worried-about-sam-altman-eytkvzqbnq",
   "shape": {
     "canonical": "https://www.maxpetrusenko.com/medium/youtube-Worried-about-Sam-Altman-eytkvzqbnq/",
     "ids": [],
     "required_present": {
-      "Organization": [],
       "Person": [
         "name"
       ]
     },
     "types": [
-      "Organization",
       "Person"
     ],
     "values": {}
   },
-  "shape_digest": "094ce529e58095e6914ad04901a996e44225c6cc50b7e191b9c89a24aa530752"
+  "shape_digest": "1a9d1c7c6eea51199b8b2746637af6dbfb3325010a7728cb76cc9102d744f12f"
 }

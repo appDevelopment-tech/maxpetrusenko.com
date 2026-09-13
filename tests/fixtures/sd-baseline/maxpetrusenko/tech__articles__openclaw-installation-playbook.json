@@ -3,14 +3,14 @@
   "content": {
     "ListItem.name": "OpenClaw Installation Playbook",
     "Organization.name": "Max Petrusenko",
-    "Person.description": "Creator of tech automation resources, tantra education, and somatic practice offerings.",
+    "Person.description": "Creator of tech automation resources and somatic practice offerings.",
     "Person.name": "Max Petrusenko",
     "TechArticle.description": "Environment prep, secure deployment, and rollout guardrails for OpenClaw installations across common deployment targets.",
     "TechArticle.headline": "OpenClaw Installation Guide 2026",
     "WebPage.description": "A field-tested OpenClaw install sequence with deployment targets and operational guardrails.",
     "WebPage.name": "OpenClaw Installation Guide 2026"
   },
-  "content_digest": "e1bed1aad17e3cc823cea7d78358ec9254714bab0f2cf5f7bba2202fd5f47ec9",
+  "content_digest": "143e7d30f1a740a91465ee10ce07ee9722e28d1e9425eac203d6eb81a8ebf6d8",
   "route": "/tech/articles/openclaw-installation-playbook",
   "shape": {
     "canonical": "https://www.maxpetrusenko.com/tech/articles/openclaw-installation-playbook",
@@ -39,7 +39,6 @@
       "ListItem",
       "ListItem",
       "Organization",
-      "Organization",
       "Person",
       "Person",
       "TechArticle",
@@ -47,5 +46,5 @@
     ],
     "values": {}
   },
-  "shape_digest": "070d7be7014fe2e85b513c4d14d53c6f3167ca786db316de46ed28c7d0a85d72"
+  "shape_digest": "dae67a0e8d3469a4ca2a0a4bf7cb2638d05a30b1995c2886dd50577696c5c9d5"
 }

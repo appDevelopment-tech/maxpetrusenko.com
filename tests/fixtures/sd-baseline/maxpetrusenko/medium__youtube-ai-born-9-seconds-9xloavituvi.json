@@ -1,26 +1,23 @@
 {
   "blocks": 1,
   "content": {
-    "Organization.name": "Presence Atelier",
-    "Person.description": "Creator of tech automation resources, tantra education, and somatic practice offerings.",
+    "Person.description": "Creator of tech automation resources and somatic practice offerings.",
     "Person.name": "Max Petrusenko"
   },
-  "content_digest": "3b758e40268e699f91b0d66dc106dddd28eeefe9609e26596c4cbe23dfaf0138",
+  "content_digest": "5fafcda288e5adf34c77e58198fe48ea32921fd013149804c4c2d4e8c47d0038",
   "route": "/medium/youtube-ai-born-9-seconds-9xloavituvi",
   "shape": {
     "canonical": "https://www.maxpetrusenko.com/medium/youtube-ai-born-9-seconds-9xloavituvi/",
     "ids": [],
     "required_present": {
-      "Organization": [],
       "Person": [
         "name"
       ]
     },
     "types": [
-      "Organization",
       "Person"
     ],
     "values": {}
   },
-  "shape_digest": "974840fca43e6c0e9d08d8f994cb6bea6f367562dbe90dc832be97d86682e5c3"
+  "shape_digest": "cf587707608a7025c103b6322be6777113378b0d53addae7beab519d862675c1"
 }

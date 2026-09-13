@@ -6,8 +6,7 @@
     "ListItem.name": "Mindfold",
     "Offer.description": "Custom Mindfold session for your team or small group. We align on setting and pacing together.",
     "Offer.name": "Private / Corporate Event",
-    "Organization.name": "Presence Atelier",
-    "Person.description": "Creator of tech automation resources, tantra education, and somatic practice offerings.",
+    "Person.description": "Creator of tech automation resources and somatic practice offerings.",
     "Person.name": "Max Petrusenko",
     "Place.description": "Location shared after RSVP. Private events available at your venue.",
     "Place.name": "Various locations by request",
@@ -18,7 +17,7 @@
     "WebPage.description": "Blindfolded presence journeys and events. All links for upcoming Mindfold experiences.",
     "WebPage.name": "Mindfold Sanctuary | Events"
   },
-  "content_digest": "1c95a44bf9957874961c99ea5228a3188db4d1c1e9d20c42f94da43d76415244",
+  "content_digest": "1715d0b2f54e232353feb1ee393297051c62a514dc9b08c5a8489ae33b6711e3",
   "route": "/mindfold/events",
   "shape": {
     "canonical": "https://www.maxpetrusenko.com/mindfold/events",
@@ -52,7 +51,6 @@
         "priceCurrency",
         "priceCurrency"
       ],
-      "Organization": [],
       "Person": [
         "name",
         "name",
@@ -92,7 +90,6 @@
       "ListItem",
       "Offer",
       "Offer",
-      "Organization",
       "Person",
       "Person",
       "Person",
@@ -112,5 +109,5 @@
       "Offer.priceCurrency": "USD"
     }
   },
-  "shape_digest": "eead15a6d4c0927d7e03202e7db9b128739cec5a80fe1fd2e429ee9f0c2abea6"
+  "shape_digest": "cacf5b5aa51bca6fe1402ba9af21abde6b5e87586d3f4aecc1ad447b34eedbeb"
 }

@@ -3,14 +3,14 @@
   "content": {
     "ListItem.name": "Bitcoin as Strong Money",
     "Organization.name": "Max Petrusenko",
-    "Person.description": "Creator of tech automation resources, tantra education, and somatic practice offerings.",
+    "Person.description": "Creator of tech automation resources and somatic practice offerings.",
     "Person.name": "Max Petrusenko",
     "TechArticle.description": "A practical case for why people treat Bitcoin as strong money rather than generic crypto speculation.",
     "TechArticle.headline": "Bitcoin as Strong Money",
     "WebPage.description": "Why Bitcoin stands apart from generic crypto: scarcity, neutrality, settlement, and tradeoffs.",
     "WebPage.name": "Bitcoin as Strong Money"
   },
-  "content_digest": "578149d8ffe6f32e12241e0907b275c820af7227d4f8001f8a2103fdb6942a35",
+  "content_digest": "6c8f966e865cc416a2d4a0cc22b0ed7ee32b0d85b51e73f1830b7f10acc5f9f6",
   "route": "/tech/articles/bitcoin-as-strong-money",
   "shape": {
     "canonical": "https://www.maxpetrusenko.com/tech/articles/bitcoin-as-strong-money",
@@ -39,7 +39,6 @@
       "ListItem",
       "ListItem",
       "Organization",
-      "Organization",
       "Person",
       "Person",
       "TechArticle",
@@ -47,5 +46,5 @@
     ],
     "values": {}
   },
-  "shape_digest": "0d79a3228db503187adfb0449527102306cb6f44023ebc3b41f2e51cfde15925"
+  "shape_digest": "ac5688dc898444306ac9fdc6e74cc56c56c277a80dc32ed64d56e9940d3204c8"
 }

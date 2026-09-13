@@ -4,14 +4,13 @@
     "ItemList.description": "Central review and proof page for Max Petrusenko with testimonials across tech, somatic work, and Mindfold, plus case-study and trust routes.",
     "ItemList.name": "Max Petrusenko Reviews reference links",
     "ListItem.name": "Who Is Max",
-    "Organization.name": "Presence Atelier",
-    "Person.description": "Creator of tech automation resources, tantra education, and somatic practice offerings.",
+    "Person.description": "Creator of tech automation resources and somatic practice offerings.",
     "Person.name": "Max Petrusenko",
     "Question.name": "Where can I find reviews for Max Petrusenko?",
     "WebPage.description": "Central review and proof page for Max Petrusenko with testimonials across tech, somatic work, and Mindfold, plus case-study and trust routes.",
     "WebPage.name": "Max Petrusenko Reviews"
   },
-  "content_digest": "34e59c2ab03b156f0cfb83db56d0c45cdea085b0be5541c10c5ff3ea136c8124",
+  "content_digest": "32b546ccd0cd25496e6308323634a06b70be3d6a5f7a9cadf5034c9aedffb256",
   "route": "/max-petrusenko-reviews",
   "shape": {
     "canonical": "https://www.maxpetrusenko.com/max-petrusenko-reviews",
@@ -36,10 +35,8 @@
         "position",
         "position",
         "position",
-        "position",
         "position"
       ],
-      "Organization": [],
       "Person": [
         "name",
         "name"
@@ -62,9 +59,6 @@
       "ListItem",
       "ListItem",
       "ListItem",
-      "ListItem",
-      "Organization",
-      "Organization",
       "Person",
       "Person",
       "Question",
@@ -72,5 +66,5 @@
     ],
     "values": {}
   },
-  "shape_digest": "b442c834bef79df0749096c465c86ee2eee4d7bd39ddd27fa5dfc3116ca4d3f6"
+  "shape_digest": "07544dd1c786bf7d287322a704eb822e69996fc812743cb2e69fe63357fd7f97"
 }

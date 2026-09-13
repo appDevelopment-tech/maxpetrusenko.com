@@ -1,26 +1,23 @@
 {
   "blocks": 1,
   "content": {
-    "Organization.name": "Presence Atelier",
-    "Person.description": "Creator of tech automation resources, tantra education, and somatic practice offerings.",
+    "Person.description": "Creator of tech automation resources and somatic practice offerings.",
     "Person.name": "Max Petrusenko"
   },
-  "content_digest": "3b758e40268e699f91b0d66dc106dddd28eeefe9609e26596c4cbe23dfaf0138",
+  "content_digest": "5fafcda288e5adf34c77e58198fe48ea32921fd013149804c4c2d4e8c47d0038",
   "route": "/medium/youtube-ai-bought-robot-car-ipamktb5csq",
   "shape": {
     "canonical": "https://www.maxpetrusenko.com/medium/youtube-ai-bought-robot-car-ipamktb5csq/",
     "ids": [],
     "required_present": {
-      "Organization": [],
       "Person": [
         "name"
       ]
     },
     "types": [
-      "Organization",
       "Person"
     ],
     "values": {}
   },
-  "shape_digest": "673b5671abd08d28098762cccf4c00d2bbed0f0e24e1fca5ccb6c46aa9e02851"
+  "shape_digest": "ca24a749c99a76d630e4dbf265376901e933d0fd7e878ee394d1e62c8abf6151"
 }

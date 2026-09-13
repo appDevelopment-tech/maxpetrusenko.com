@@ -112,7 +112,7 @@ strict = false
 #                          inventing markup for a page no crawler indexes: the
 #                          redirect target /spirituality is the page that
 #                          carries the practice's structured data.
-markup_optional = ["/tantra-massage-ubud"]
+markup_optional = []  # /tantra-massage-ubud no longer exists; the route was removed with the tantra section
 
 # coverage_optional -- routes that can be in the coverage manifest (the sitemap) but
 # can NEVER have a baseline entry, because the build does not emit a file for them.

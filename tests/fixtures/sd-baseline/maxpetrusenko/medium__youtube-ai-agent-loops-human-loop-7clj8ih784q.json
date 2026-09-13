@@ -1,26 +1,23 @@
 {
   "blocks": 1,
   "content": {
-    "Organization.name": "Presence Atelier",
-    "Person.description": "Creator of tech automation resources, tantra education, and somatic practice offerings.",
+    "Person.description": "Creator of tech automation resources and somatic practice offerings.",
     "Person.name": "Max Petrusenko"
   },
-  "content_digest": "3b758e40268e699f91b0d66dc106dddd28eeefe9609e26596c4cbe23dfaf0138",
+  "content_digest": "5fafcda288e5adf34c77e58198fe48ea32921fd013149804c4c2d4e8c47d0038",
   "route": "/medium/youtube-ai-agent-loops-human-loop-7clj8ih784q",
   "shape": {
     "canonical": "https://www.maxpetrusenko.com/medium/youtube-ai-agent-loops-human-loop-7clj8ih784q/",
     "ids": [],
     "required_present": {
-      "Organization": [],
       "Person": [
         "name"
       ]
     },
     "types": [
-      "Organization",
       "Person"
     ],
     "values": {}
   },
-  "shape_digest": "ce240017746d41d91188b120aa091a221814d62284bae62c9b96ade2a84f3a52"
+  "shape_digest": "c705d8ede7eb70f06749e072cd77df63f16879be6465c2f2810ef77cef14b4d4"
 }

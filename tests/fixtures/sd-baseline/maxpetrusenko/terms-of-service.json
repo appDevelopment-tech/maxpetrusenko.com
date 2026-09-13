@@ -2,13 +2,12 @@
   "blocks": 3,
   "content": {
     "ListItem.name": "Terms of Service",
-    "Organization.name": "Presence Atelier",
-    "Person.description": "Creator of tech automation resources, tantra education, and somatic practice offerings.",
+    "Person.description": "Creator of tech automation resources and somatic practice offerings.",
     "Person.name": "Max Petrusenko",
     "WebPage.description": "Terms of service for Max Petrusenko websites, apps, AI tools, newsletters, events, and consulting services.",
     "WebPage.name": "Terms of Service"
   },
-  "content_digest": "615ff0e0abb9cb959255eb1409593bea9a30cf5358596311446bf1582c1f32bd",
+  "content_digest": "86fe0e0eb3d7d7d5e6c5c76e9f5d376ad542c621c4fcd7a76f893bbd5ec815e8",
   "route": "/terms-of-service",
   "shape": {
     "canonical": "https://www.maxpetrusenko.com/terms-of-service",
@@ -21,7 +20,6 @@
         "position",
         "position"
       ],
-      "Organization": [],
       "Person": [
         "name"
       ],
@@ -31,11 +29,10 @@
       "BreadcrumbList",
       "ListItem",
       "ListItem",
-      "Organization",
       "Person",
       "WebPage"
     ],
     "values": {}
   },
-  "shape_digest": "d72248239e5095aa324f1163b87cec2da8128a690e033d4dd1e875bdde3a3d2a"
+  "shape_digest": "33aaa3b8e49fa9f6d6e1459ccc55b773dfeef332565b48e41b340fd35d5fd9e9"
 }

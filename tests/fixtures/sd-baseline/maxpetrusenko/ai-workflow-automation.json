@@ -3,8 +3,7 @@
   "content": {
     "ListItem.name": "AI Workflow Automation",
     "OfferCatalog.name": "AI & Automation Services",
-    "Organization.name": "Presence Atelier",
-    "Person.description": "Creator of tech automation resources, tantra education, and somatic practice offerings.",
+    "Person.description": "Creator of tech automation resources and somatic practice offerings.",
     "Person.name": "Max Petrusenko",
     "ProfessionalService.description": "AI automation consultant specializing in Claude Code, n8n workflows, ChatGPT integrations, and workflow automation for creators and founders. Available remotely worldwide, with in-person work by request while traveling.",
     "ProfessionalService.name": "Max Petrusenko - AI & Automation Consultant",
@@ -14,7 +13,7 @@
     "WebPage.description": "Automate with AI: content pipelines, data enrichment, document processing.",
     "WebPage.name": "AI Workflow Automation - ChatGPT & Claude Integration Services"
   },
-  "content_digest": "19181b166af9897d8b02578523684c01d6b8b102ed2ddc1910a34520914698a5",
+  "content_digest": "12512faafac07ab9120154f170c90eca47c18404566d656d00e10d4293255e85",
   "route": "/ai-workflow-automation",
   "shape": {
     "canonical": "https://www.maxpetrusenko.com/ai-workflow-automation",
@@ -42,7 +41,6 @@
         "itemListElement",
         "name"
       ],
-      "Organization": [],
       "Person": [
         "name"
       ],
@@ -75,7 +73,6 @@
       "Offer",
       "Offer",
       "OfferCatalog",
-      "Organization",
       "Person",
       "ProfessionalService",
       "Question",
@@ -87,5 +84,5 @@
     ],
     "values": {}
   },
-  "shape_digest": "4b8acdf18dc71615871ba1a206db7c7eac041852a425a3fcd481081d1024927a"
+  "shape_digest": "5a957b7f380bcc4bf3dfb5e734dfcbd032c5d6fedf07dfca58539c18366b90dc"
 }

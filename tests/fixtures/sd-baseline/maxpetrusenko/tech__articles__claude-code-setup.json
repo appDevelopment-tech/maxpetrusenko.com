@@ -3,12 +3,12 @@
   "content": {
     "ListItem.name": "Claude Code Setup Guide",
     "Organization.name": "Max Petrusenko",
-    "Person.description": "Creator of tech automation resources, tantra education, and somatic practice offerings.",
+    "Person.description": "Creator of tech automation resources and somatic practice offerings.",
     "Person.name": "Max Petrusenko",
     "TechArticle.description": "Complete guide to configuring Claude Code with custom sub-agents, skills, and workflows for development teams.",
     "TechArticle.headline": "Claude Code Setup Guide for Development Teams"
   },
-  "content_digest": "cb7abe0296c1ae1b64b3987bce9a2328d1710168a0d3a7ce784f9a29615409d9",
+  "content_digest": "59bebe95217f46bf307758a2a5a9ddf246daa43e1bd3e9b5df3f077b66e60d04",
   "route": "/tech/articles/claude-code-setup",
   "shape": {
     "canonical": "https://www.maxpetrusenko.com/tech/articles/claude-code-setup",
@@ -36,12 +36,11 @@
       "ListItem",
       "ListItem",
       "Organization",
-      "Organization",
       "Person",
       "Person",
       "TechArticle"
     ],
     "values": {}
   },
-  "shape_digest": "ef721dd2a66dd8cedbcbe3f6215613137f3b0359546cc8ffca771f0459f751f1"
+  "shape_digest": "95e120e10b420e8f65e3fd9ed18f6dd7ffbe78e4d69ba9033a4b37e53b56051f"
 }

@@ -1,26 +1,23 @@
 {
   "blocks": 1,
   "content": {
-    "Organization.name": "Presence Atelier",
-    "Person.description": "Creator of tech automation resources, tantra education, and somatic practice offerings.",
+    "Person.description": "Creator of tech automation resources and somatic practice offerings.",
     "Person.name": "Max Petrusenko"
   },
-  "content_digest": "3b758e40268e699f91b0d66dc106dddd28eeefe9609e26596c4cbe23dfaf0138",
+  "content_digest": "5fafcda288e5adf34c77e58198fe48ea32921fd013149804c4c2d4e8c47d0038",
   "route": "/medium/youtube-negative-time-trap-xxlg8zilt9c",
   "shape": {
     "canonical": "https://www.maxpetrusenko.com/medium/youtube-negative-time-trap-xxlg8zilt9c/",
     "ids": [],
     "required_present": {
-      "Organization": [],
       "Person": [
         "name"
       ]
     },
     "types": [
-      "Organization",
       "Person"
     ],
     "values": {}
   },
-  "shape_digest": "2967327e3a9fc3803ea720ca7a4d98b54e52c8e7f8f61708a7af4ff495e3c0c0"
+  "shape_digest": "dfa66c504789590f158edb9aacdaf524a86b76ea2ebd75c065901ec4eb8e2ec1"
 }

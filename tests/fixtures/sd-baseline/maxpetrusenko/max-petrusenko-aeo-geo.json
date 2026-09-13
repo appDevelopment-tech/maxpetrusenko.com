@@ -4,14 +4,13 @@
     "ItemList.description": "Branded AEO and GEO reference page for Max Petrusenko with direct links to his answer engine optimization, generative engine optimization, and AI visibility guides.",
     "ItemList.name": "Max Petrusenko AEO & GEO reference links",
     "ListItem.name": "Who Is Max",
-    "Organization.name": "Presence Atelier",
-    "Person.description": "Creator of tech automation resources, tantra education, and somatic practice offerings.",
+    "Person.description": "Creator of tech automation resources and somatic practice offerings.",
     "Person.name": "Max Petrusenko",
     "Question.name": "What does Max Petrusenko write about in AEO and GEO?",
     "WebPage.description": "Branded AEO and GEO reference page for Max Petrusenko with direct links to his answer engine optimization, generative engine optimization, and AI visibility guides.",
     "WebPage.name": "Max Petrusenko AEO & GEO"
   },
-  "content_digest": "56833798ce2e222f91881da51a29a637daa4ad1cb604bcd0bbe8ebd3ba3446bb",
+  "content_digest": "030350589f3c67e3997f22cb65d2c0303bc8267c6009f56384d78f9a611404e5",
   "route": "/max-petrusenko-aeo-geo",
   "shape": {
     "canonical": "https://www.maxpetrusenko.com/max-petrusenko-aeo-geo",
@@ -39,7 +38,6 @@
         "position",
         "position"
       ],
-      "Organization": [],
       "Person": [
         "name",
         "name"
@@ -63,8 +61,6 @@
       "ListItem",
       "ListItem",
       "ListItem",
-      "Organization",
-      "Organization",
       "Person",
       "Person",
       "Question",
@@ -72,5 +68,5 @@
     ],
     "values": {}
   },
-  "shape_digest": "a5f83dbed1f99d9365f8bb7abff41dc7f9268b0986da30302682eef420463b59"
+  "shape_digest": "4ffa87f611d4d963e995f9919443616f0bf4b5419b3a5565c90ff01a62c4d663"
 }

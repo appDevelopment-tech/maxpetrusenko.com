@@ -2,13 +2,12 @@
   "blocks": 3,
   "content": {
     "ListItem.name": "Approach",
-    "Organization.name": "Presence Atelier",
-    "Person.description": "Creator of tech automation resources, tantra education, and somatic practice offerings.",
+    "Person.description": "Creator of tech automation resources and somatic practice offerings.",
     "Person.name": "Max Petrusenko",
     "WebPage.description": "My approach to somatic energy work: consent-led, boundaries-first, nervous system-focused.",
     "WebPage.name": "Approach - Boundaries-First Somatic Work"
   },
-  "content_digest": "973a450cea3503e31b163c895a867a950ee4a33dfdcad46675b1a929afe3ce43",
+  "content_digest": "78cb0939d9005a0d2a216c50a33bb5009e3cc3f7ea7b47ff1458fd6f2b3981b8",
   "route": "/somatic/approach",
   "shape": {
     "canonical": "https://www.maxpetrusenko.com/somatic/approach",
@@ -22,7 +21,6 @@
         "position",
         "position"
       ],
-      "Organization": [],
       "Person": [
         "name"
       ],
@@ -33,11 +31,10 @@
       "ListItem",
       "ListItem",
       "ListItem",
-      "Organization",
       "Person",
       "WebPage"
     ],
     "values": {}
   },
-  "shape_digest": "0a0a34ed503c4bf043df2021595763ef65a02c796b324f7604253ebc50c21336"
+  "shape_digest": "8c495e0b3ed6e7cea6813dfc97b9a2d317a039d3690954dd5e3d0414fd823975"
 }

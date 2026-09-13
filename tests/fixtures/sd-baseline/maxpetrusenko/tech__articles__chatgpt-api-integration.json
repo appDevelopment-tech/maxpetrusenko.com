@@ -3,12 +3,12 @@
   "content": {
     "ListItem.name": "ChatGPT API Integration",
     "Organization.name": "Max Petrusenko",
-    "Person.description": "Creator of tech automation resources, tantra education, and somatic practice offerings.",
+    "Person.description": "Creator of tech automation resources and somatic practice offerings.",
     "Person.name": "Max Petrusenko",
     "TechArticle.description": "Complete guide to integrating ChatGPT API into your products. Authentication, prompt engineering, function calling, RAG.",
     "TechArticle.headline": "ChatGPT API Integration Best Practices"
   },
-  "content_digest": "3a6523af29258da11b38a6464c1d2a2cae0ea801adf948bc17c36eb6c9c993c6",
+  "content_digest": "92daacdf45b96228a45eae26391c1a864c92c09498458237e8a16da0e396fd2e",
   "route": "/tech/articles/chatgpt-api-integration",
   "shape": {
     "canonical": "https://www.maxpetrusenko.com/tech/articles/chatgpt-api-integration",
@@ -36,12 +36,11 @@
       "ListItem",
       "ListItem",
       "Organization",
-      "Organization",
       "Person",
       "Person",
       "TechArticle"
     ],
     "values": {}
   },
-  "shape_digest": "1e0cf406db6961f2cf8404275a1dc4c24ccc610aca86ddb34b07fa1cf71d9168"
+  "shape_digest": "b4f8d7d8b64950d9add9a01b5739962573895d0580e2c557ccd58dd33f106417"
 }

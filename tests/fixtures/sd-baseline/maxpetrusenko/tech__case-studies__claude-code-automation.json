@@ -3,14 +3,14 @@
   "content": {
     "ListItem.name": "Claude Code Automation Case Study",
     "Organization.name": "Max Petrusenko",
-    "Person.description": "Creator of tech automation resources, tantra education, and somatic practice offerings.",
+    "Person.description": "Creator of tech automation resources and somatic practice offerings.",
     "Person.name": "Max Petrusenko",
     "TechArticle.description": "How a Series B startup saved $253k annually through Claude Code automation. 3x faster feature delivery, 73% fewer bugs, and zero regressions across 127 PRs.",
     "TechArticle.headline": "Case Study: $253k Saved with Claude Code Automation",
     "WebPage.description": "How a Series B startup saved $253k annually through Claude Code automation. 3x faster feature delivery, 73% fewer bugs, and zero regressions across 127 PRs.",
     "WebPage.name": "Case Study: $253k Saved with Claude Code Automation"
   },
-  "content_digest": "e0799104adb411c0d6a1797d3f623e3a4153206b65ea6b130d249c87743acd7f",
+  "content_digest": "c740fec8d5467557e24edcc05de1e7e18620ecb22d156f2f258cf6352efc89fe",
   "route": "/tech/case-studies/claude-code-automation",
   "shape": {
     "canonical": "https://www.maxpetrusenko.com/tech/case-studies/claude-code-automation",
@@ -39,7 +39,6 @@
       "ListItem",
       "ListItem",
       "Organization",
-      "Organization",
       "Person",
       "Person",
       "TechArticle",
@@ -47,5 +46,5 @@
     ],
     "values": {}
   },
-  "shape_digest": "ae8e76cfadee8ef2781f4bd0aa6c9164bedb2c239b52b5a1e08e1ad71520d258"
+  "shape_digest": "3d00e03d8b1e95db37babdb211bb5925e72b7e5d81730d421ced77e96fbbc5a9"
 }

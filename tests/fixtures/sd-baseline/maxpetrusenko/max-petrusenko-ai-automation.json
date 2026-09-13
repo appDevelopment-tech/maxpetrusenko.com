@@ -4,14 +4,13 @@
     "ItemList.description": "Branded AI automation reference page for Max Petrusenko: Claude Code consulting, n8n workflows, ChatGPT integrations, and production automation systems.",
     "ItemList.name": "Max Petrusenko AI Automation reference links",
     "ListItem.name": "Reviews",
-    "Organization.name": "Presence Atelier",
-    "Person.description": "Creator of tech automation resources, tantra education, and somatic practice offerings.",
+    "Person.description": "Creator of tech automation resources and somatic practice offerings.",
     "Person.name": "Max Petrusenko",
     "Question.name": "What AI automation work does Max Petrusenko do?",
     "WebPage.description": "Branded AI automation reference page for Max Petrusenko: Claude Code consulting, n8n workflows, ChatGPT integrations, and production automation systems.",
     "WebPage.name": "Max Petrusenko AI Automation"
   },
-  "content_digest": "c55b0177625681315a0619436840cf3120d8ab2d4487c4a6c0c04508f93662ca",
+  "content_digest": "01733428b743dc3f51d486a4922fad5183ddc9ba3a6111ab7ab2ed85578e5f9c",
   "route": "/max-petrusenko-ai-automation",
   "shape": {
     "canonical": "https://www.maxpetrusenko.com/max-petrusenko-ai-automation",
@@ -39,7 +38,6 @@
         "position",
         "position"
       ],
-      "Organization": [],
       "Person": [
         "name",
         "name"
@@ -63,8 +61,6 @@
       "ListItem",
       "ListItem",
       "ListItem",
-      "Organization",
-      "Organization",
       "Person",
       "Person",
       "Question",
@@ -72,5 +68,5 @@
     ],
     "values": {}
   },
-  "shape_digest": "77c333ef90971fe556907a4cc718b1ce5ddd83361141fd3cf9f7ab9172094f97"
+  "shape_digest": "af5cb4343c94f63b99b451225fe603d30d9b5819a57c9c5440b6f075d267573c"
 }

@@ -2,13 +2,12 @@
   "blocks": 3,
   "content": {
     "ListItem.name": "Training",
-    "Organization.name": "Presence Atelier",
-    "Person.description": "Creator of tech automation resources, tantra education, and somatic practice offerings.",
+    "Person.description": "Creator of tech automation resources and somatic practice offerings.",
     "Person.name": "Max Petrusenko",
-    "WebPage.description": "Training and lineage in somatic and energy work: Shambhavi Mahamudra, Kriya Yoga, Tantra Massage certification.",
+    "WebPage.description": "Training and lineage in somatic and energy work: Shambhavi Mahamudra and Kriya Yoga.",
     "WebPage.name": "Lineage & Training - Somatic Practice Background"
   },
-  "content_digest": "4a884fb9ba59ac4e6496f11eab033e898891fd2f52f5b0de738286d37536e6bd",
+  "content_digest": "173629c609be447f62053069604fc512ca7722b7afe19312174daac45ab47878",
   "route": "/somatic/training",
   "shape": {
     "canonical": "https://www.maxpetrusenko.com/somatic/training",
@@ -22,7 +21,6 @@
         "position",
         "position"
       ],
-      "Organization": [],
       "Person": [
         "name"
       ],
@@ -33,11 +31,10 @@
       "ListItem",
       "ListItem",
       "ListItem",
-      "Organization",
       "Person",
       "WebPage"
     ],
     "values": {}
   },
-  "shape_digest": "53572b4765417f61f1628c6c193d763ea3ee1831ee469aae88cf63626f4094ff"
+  "shape_digest": "814d953fbf482f22b3df86bcb2076de7c2c31eee5553c7faf482630d4e69212e"
 }

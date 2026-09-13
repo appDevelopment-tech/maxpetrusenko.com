@@ -2,13 +2,12 @@
   "blocks": 3,
   "content": {
     "ListItem.name": "Social Media",
-    "Organization.name": "Presence Atelier",
-    "Person.description": "Creator of tech automation resources, tantra education, and somatic practice offerings.",
+    "Person.description": "Creator of tech automation resources and somatic practice offerings.",
     "Person.name": "Max Petrusenko",
     "WebPage.description": "Automated posting dashboard \u2014 AI news across platforms.",
     "WebPage.name": "Social Media Dashboard"
   },
-  "content_digest": "df30042eb32e92f8cc3b4ea19a2ce96deee59144ff4ef306b33b6b94a5150d8b",
+  "content_digest": "838a0fc817bfd7edbabe5f635f2e5431d3003c5584000790a243b6deaf51ae3e",
   "route": "/socialmedia",
   "shape": {
     "canonical": "https://www.maxpetrusenko.com/socialmedia",
@@ -21,7 +20,6 @@
         "position",
         "position"
       ],
-      "Organization": [],
       "Person": [
         "name"
       ],
@@ -31,11 +29,10 @@
       "BreadcrumbList",
       "ListItem",
       "ListItem",
-      "Organization",
       "Person",
       "WebPage"
     ],
     "values": {}
   },
-  "shape_digest": "a10f57132e7da837415e21cf89c3800d0ac5afbd2e2a7c17c64a88630c0d9318"
+  "shape_digest": "dd8f913ee2d4ed674dee2e9108c745c028b92ee1bd745da366504635b6cac61f"
 }

@@ -2,14 +2,13 @@
   "blocks": 4,
   "content": {
     "ListItem.name": "Let's Connect",
-    "Organization.name": "Presence Atelier",
-    "Person.description": "Creator of tech automation resources, tantra education, and somatic practice offerings.",
+    "Person.description": "Creator of tech automation resources and somatic practice offerings.",
     "Person.name": "Max Petrusenko",
     "Question.name": "What is Let's Connect?",
     "WebPage.description": "A gentle concierge for helping visitors find the right lane across somatic work, AI consulting, and consciousness x technology.",
     "WebPage.name": "Let's Connect"
   },
-  "content_digest": "7b8d1641227add61c7b5a1d01f5c5cbe9b5c838838e5f5ea8cc3dd94fb09f7ec",
+  "content_digest": "503af1e21c07d8f5deed62c49fab793e2438a9dd076d49f0b2acc999dbe6823f",
   "route": "/consciousness-assistant",
   "shape": {
     "canonical": "https://www.maxpetrusenko.com/consciousness-assistant",
@@ -30,7 +29,6 @@
         "position",
         "position"
       ],
-      "Organization": [],
       "Person": [
         "name"
       ],
@@ -48,12 +46,11 @@
       "ListItem",
       "ListItem",
       "ListItem",
-      "Organization",
       "Person",
       "Question",
       "WebPage"
     ],
     "values": {}
   },
-  "shape_digest": "4ff823c44926918851ae9db66bb2be21861c7a7989004a9ad8ccc639785bd755"
+  "shape_digest": "920f18142aea84e16a818b58fc392843edf3b9b8eb91424486e21e3688b10b21"
 }

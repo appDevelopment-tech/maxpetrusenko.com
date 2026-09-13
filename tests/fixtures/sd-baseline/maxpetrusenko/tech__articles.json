@@ -2,13 +2,12 @@
   "blocks": 3,
   "content": {
     "ListItem.name": "Articles",
-    "Organization.name": "Presence Atelier",
-    "Person.description": "Creator of tech automation resources, tantra education, and somatic practice offerings.",
+    "Person.description": "Creator of tech automation resources and somatic practice offerings.",
     "Person.name": "Max Petrusenko",
     "WebPage.description": "Technical guides by Max Petrusenko on AI agents, RAG, agentic coding, AEO, GEO, and production AI systems.",
     "WebPage.name": "Tech Articles"
   },
-  "content_digest": "86b2d7ba9f9c8e4ee35e4c2233983122cbfc93d840863192d9269f5da5bf0904",
+  "content_digest": "8e9b5d0c2790dae0d51ab87810ae3aa24ad8cca801ed23d14f2f74af15511b07",
   "route": "/tech/articles",
   "shape": {
     "canonical": "https://www.maxpetrusenko.com/tech/articles",
@@ -22,7 +21,6 @@
         "position",
         "position"
       ],
-      "Organization": [],
       "Person": [
         "name"
       ],
@@ -33,11 +31,10 @@
       "ListItem",
       "ListItem",
       "ListItem",
-      "Organization",
       "Person",
       "WebPage"
     ],
     "values": {}
   },
-  "shape_digest": "ea3f5361934794a1993e0561c6108af0236cdd7ac14a88468e2c3a2210af6820"
+  "shape_digest": "a62f89f12b9aee39a1a369a375d00c62ad30b1163752c05b9ef09e187d77d5ee"
 }

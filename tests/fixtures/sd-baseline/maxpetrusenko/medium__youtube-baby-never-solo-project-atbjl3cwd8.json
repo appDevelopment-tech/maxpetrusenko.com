@@ -1,26 +1,23 @@
 {
   "blocks": 1,
   "content": {
-    "Organization.name": "Presence Atelier",
-    "Person.description": "Creator of tech automation resources, tantra education, and somatic practice offerings.",
+    "Person.description": "Creator of tech automation resources and somatic practice offerings.",
     "Person.name": "Max Petrusenko"
   },
-  "content_digest": "3b758e40268e699f91b0d66dc106dddd28eeefe9609e26596c4cbe23dfaf0138",
+  "content_digest": "5fafcda288e5adf34c77e58198fe48ea32921fd013149804c4c2d4e8c47d0038",
   "route": "/medium/youtube-baby-never-solo-project-atbjl3cwd8",
   "shape": {
     "canonical": "https://www.maxpetrusenko.com/medium/youtube-baby-never-solo-project-atbjl3cwd8/",
     "ids": [],
     "required_present": {
-      "Organization": [],
       "Person": [
         "name"
       ]
     },
     "types": [
-      "Organization",
       "Person"
     ],
     "values": {}
   },
-  "shape_digest": "3cd70c068812bb34db1d34c7d25a48797063e73215c981c61079c5ec27ab83c1"
+  "shape_digest": "a45b6a41f4d309b5dec4006c0cae968b96cfe02404e8ab5a1af1a5adf20c5c4d"
 }

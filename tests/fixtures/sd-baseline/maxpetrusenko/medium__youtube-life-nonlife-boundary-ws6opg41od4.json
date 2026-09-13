@@ -1,26 +1,23 @@
 {
   "blocks": 1,
   "content": {
-    "Organization.name": "Presence Atelier",
-    "Person.description": "Creator of tech automation resources, tantra education, and somatic practice offerings.",
+    "Person.description": "Creator of tech automation resources and somatic practice offerings.",
     "Person.name": "Max Petrusenko"
   },
-  "content_digest": "3b758e40268e699f91b0d66dc106dddd28eeefe9609e26596c4cbe23dfaf0138",
+  "content_digest": "5fafcda288e5adf34c77e58198fe48ea32921fd013149804c4c2d4e8c47d0038",
   "route": "/medium/youtube-life-nonlife-boundary-ws6opg41od4",
   "shape": {
     "canonical": "https://www.maxpetrusenko.com/medium/youtube-life-nonlife-boundary-ws6opg41od4/",
     "ids": [],
     "required_present": {
-      "Organization": [],
       "Person": [
         "name"
       ]
     },
     "types": [
-      "Organization",
       "Person"
     ],
     "values": {}
   },
-  "shape_digest": "b65a5e732d6ed293a0fb7736f70baed5a6f9edba9489447ecc678adaf866cc37"
+  "shape_digest": "c006b74c6962c235ed4fa5d95bfe2c7b61328063707a882e274a6de5b20d8cf7"
 }

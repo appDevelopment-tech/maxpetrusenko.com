@@ -1,26 +1,23 @@
 {
   "blocks": 1,
   "content": {
-    "Organization.name": "Presence Atelier",
-    "Person.description": "Creator of tech automation resources, tantra education, and somatic practice offerings.",
+    "Person.description": "Creator of tech automation resources and somatic practice offerings.",
     "Person.name": "Max Petrusenko"
   },
-  "content_digest": "3b758e40268e699f91b0d66dc106dddd28eeefe9609e26596c4cbe23dfaf0138",
+  "content_digest": "5fafcda288e5adf34c77e58198fe48ea32921fd013149804c4c2d4e8c47d0038",
   "route": "/medium/youtube-amazon-inflate-prices-5otf7bj5lxi",
   "shape": {
     "canonical": "https://www.maxpetrusenko.com/medium/youtube-amazon-inflate-prices-5otf7bj5lxi/",
     "ids": [],
     "required_present": {
-      "Organization": [],
       "Person": [
         "name"
       ]
     },
     "types": [
-      "Organization",
       "Person"
     ],
     "values": {}
   },
-  "shape_digest": "662c69d12ea0f5a05b44b4d06e95f1ac787c726308021a722ec86fafbe6aeebe"
+  "shape_digest": "128290a7fee1f0617224743153b7f958cc5b842eb24b7df92b40bdb580166670"
 }

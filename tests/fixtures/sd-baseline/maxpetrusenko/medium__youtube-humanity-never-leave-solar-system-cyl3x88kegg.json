@@ -1,26 +1,23 @@
 {
   "blocks": 1,
   "content": {
-    "Organization.name": "Presence Atelier",
-    "Person.description": "Creator of tech automation resources, tantra education, and somatic practice offerings.",
+    "Person.description": "Creator of tech automation resources and somatic practice offerings.",
     "Person.name": "Max Petrusenko"
   },
-  "content_digest": "3b758e40268e699f91b0d66dc106dddd28eeefe9609e26596c4cbe23dfaf0138",
+  "content_digest": "5fafcda288e5adf34c77e58198fe48ea32921fd013149804c4c2d4e8c47d0038",
   "route": "/medium/youtube-humanity-never-leave-solar-system-cyl3x88kegg",
   "shape": {
     "canonical": "https://www.maxpetrusenko.com/medium/youtube-humanity-never-leave-solar-system-cyl3x88kegg/",
     "ids": [],
     "required_present": {
-      "Organization": [],
       "Person": [
         "name"
       ]
     },
     "types": [
-      "Organization",
       "Person"
     ],
     "values": {}
   },
-  "shape_digest": "5351e8f5a4a49084b8fd1ed0ae1556f2bb119ee01f520608f3531987d4bd6572"
+  "shape_digest": "dece81906850682dea5e38a4b369a8fc73fc7b6ac8b62ddfaa0c46e1416edf22"
 }

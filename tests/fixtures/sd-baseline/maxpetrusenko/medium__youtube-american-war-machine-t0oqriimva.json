@@ -1,26 +1,23 @@
 {
   "blocks": 1,
   "content": {
-    "Organization.name": "Presence Atelier",
-    "Person.description": "Creator of tech automation resources, tantra education, and somatic practice offerings.",
+    "Person.description": "Creator of tech automation resources and somatic practice offerings.",
     "Person.name": "Max Petrusenko"
   },
-  "content_digest": "3b758e40268e699f91b0d66dc106dddd28eeefe9609e26596c4cbe23dfaf0138",
+  "content_digest": "5fafcda288e5adf34c77e58198fe48ea32921fd013149804c4c2d4e8c47d0038",
   "route": "/medium/youtube-american-war-machine-t0oqriimva",
   "shape": {
     "canonical": "https://www.maxpetrusenko.com/medium/youtube-american-war-machine-t0oqriimva/",
     "ids": [],
     "required_present": {
-      "Organization": [],
       "Person": [
         "name"
       ]
     },
     "types": [
-      "Organization",
       "Person"
     ],
     "values": {}
   },
-  "shape_digest": "6231956cfcd031ce9a01bd04e685f30329468e9fc2c1fbe44f9890b8aa1ec6b4"
+  "shape_digest": "43ffaff643615528a7e0c68e0f7f100435fc0d38b125fac16d2f59f3802d8c87"
 }

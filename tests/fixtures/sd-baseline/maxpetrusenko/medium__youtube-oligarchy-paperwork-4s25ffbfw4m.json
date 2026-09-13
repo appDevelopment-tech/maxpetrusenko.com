@@ -1,26 +1,23 @@
 {
   "blocks": 1,
   "content": {
-    "Organization.name": "Presence Atelier",
-    "Person.description": "Creator of tech automation resources, tantra education, and somatic practice offerings.",
+    "Person.description": "Creator of tech automation resources and somatic practice offerings.",
     "Person.name": "Max Petrusenko"
   },
-  "content_digest": "3b758e40268e699f91b0d66dc106dddd28eeefe9609e26596c4cbe23dfaf0138",
+  "content_digest": "5fafcda288e5adf34c77e58198fe48ea32921fd013149804c4c2d4e8c47d0038",
   "route": "/medium/youtube-oligarchy-paperwork-4s25ffbfw4m",
   "shape": {
     "canonical": "https://www.maxpetrusenko.com/medium/youtube-oligarchy-paperwork-4s25ffbfw4m/",
     "ids": [],
     "required_present": {
-      "Organization": [],
       "Person": [
         "name"
       ]
     },
     "types": [
-      "Organization",
       "Person"
     ],
     "values": {}
   },
-  "shape_digest": "19311c93b3794c111ebd3fd7e76c3f486122de499f72e6605951a9ac30dc9301"
+  "shape_digest": "7594cb8369e88e47dff3a5aaf43ce91f3fd84946e1e5365d84fa83b74edd1972"
 }

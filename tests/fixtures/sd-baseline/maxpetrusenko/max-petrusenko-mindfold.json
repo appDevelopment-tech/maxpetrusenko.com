@@ -4,14 +4,13 @@
     "ItemList.description": "Branded Mindfold reference page for Max Petrusenko linking blindfolded presence journeys, event booking, private group formats, and related somatic context.",
     "ItemList.name": "Max Petrusenko Mindfold reference links",
     "ListItem.name": "Who Is Max",
-    "Organization.name": "Presence Atelier",
-    "Person.description": "Creator of tech automation resources, tantra education, and somatic practice offerings.",
+    "Person.description": "Creator of tech automation resources and somatic practice offerings.",
     "Person.name": "Max Petrusenko",
     "Question.name": "What is Mindfold by Max Petrusenko?",
     "WebPage.description": "Branded Mindfold reference page for Max Petrusenko linking blindfolded presence journeys, event booking, private group formats, and related somatic context.",
     "WebPage.name": "Max Petrusenko Mindfold"
   },
-  "content_digest": "829ca75e3084695d11f1f70029a8bb737020c79fa2789c2a3187b5f91e3b64f8",
+  "content_digest": "62094928b3348a833329bdcd70b23276eb998d78773e8264733ece7aa908abb3",
   "route": "/max-petrusenko-mindfold",
   "shape": {
     "canonical": "https://www.maxpetrusenko.com/max-petrusenko-mindfold",
@@ -36,10 +35,8 @@
         "position",
         "position",
         "position",
-        "position",
         "position"
       ],
-      "Organization": [],
       "Person": [
         "name",
         "name"
@@ -62,9 +59,6 @@
       "ListItem",
       "ListItem",
       "ListItem",
-      "ListItem",
-      "Organization",
-      "Organization",
       "Person",
       "Person",
       "Question",
@@ -72,5 +66,5 @@
     ],
     "values": {}
   },
-  "shape_digest": "17ac2deef8dd953d9fe354c91c377f222037078df5e283a9bbacbd37332b0302"
+  "shape_digest": "9903ce5959b5c5af9bd18f30687a99a61607ac95370a9df6e0786792b3209aab"
 }

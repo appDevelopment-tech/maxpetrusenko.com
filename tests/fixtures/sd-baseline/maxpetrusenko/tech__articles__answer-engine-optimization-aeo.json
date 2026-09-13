@@ -3,14 +3,14 @@
   "content": {
     "ListItem.name": "Answer Engine Optimization Guide",
     "Organization.name": "Max Petrusenko",
-    "Person.description": "Creator of tech automation resources, tantra education, and somatic practice offerings.",
+    "Person.description": "Creator of tech automation resources and somatic practice offerings.",
     "Person.name": "Max Petrusenko",
     "TechArticle.description": "Practical AEO guide for 2026: audit answer-engine readiness, improve structured extraction, and increase citation visibility in AI search.",
     "TechArticle.headline": "Answer Engine Optimization (AEO) Guide for 2026",
     "WebPage.description": "Practical AEO guide for 2026: audit answer-engine readiness and structure pages for AI citation.",
     "WebPage.name": "Answer Engine Optimization (AEO) Guide for 2026"
   },
-  "content_digest": "372515f0262d272ff28adff7a047b896aad4cf52bfe274d0c4a93717e0d8eabc",
+  "content_digest": "aab271408479b04ce5bb16970a2370c946ea1cdc20b9cf29ef4294f87c456700",
   "route": "/tech/articles/answer-engine-optimization-aeo",
   "shape": {
     "canonical": "https://www.maxpetrusenko.com/tech/articles/answer-engine-optimization-aeo",
@@ -39,7 +39,6 @@
       "ListItem",
       "ListItem",
       "Organization",
-      "Organization",
       "Person",
       "Person",
       "TechArticle",
@@ -47,5 +46,5 @@
     ],
     "values": {}
   },
-  "shape_digest": "fca5c3c13b39370f9f526cb37be54044fc3d72270125567e2997af606ec3cc45"
+  "shape_digest": "8299117d7d86c1fc581df8cef9a5808838681d3742a03fd72f821df4f051b8ce"
 }

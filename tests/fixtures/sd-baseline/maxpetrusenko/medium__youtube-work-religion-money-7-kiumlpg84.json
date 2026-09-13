@@ -1,26 +1,23 @@
 {
   "blocks": 1,
   "content": {
-    "Organization.name": "Presence Atelier",
-    "Person.description": "Creator of tech automation resources, tantra education, and somatic practice offerings.",
+    "Person.description": "Creator of tech automation resources and somatic practice offerings.",
     "Person.name": "Max Petrusenko"
   },
-  "content_digest": "3b758e40268e699f91b0d66dc106dddd28eeefe9609e26596c4cbe23dfaf0138",
+  "content_digest": "5fafcda288e5adf34c77e58198fe48ea32921fd013149804c4c2d4e8c47d0038",
   "route": "/medium/youtube-work-religion-money-7-kiumlpg84",
   "shape": {
     "canonical": "https://www.maxpetrusenko.com/medium/youtube-work-religion-money-7-kiumlpg84/",
     "ids": [],
     "required_present": {
-      "Organization": [],
       "Person": [
         "name"
       ]
     },
     "types": [
-      "Organization",
       "Person"
     ],
     "values": {}
   },
-  "shape_digest": "1d358e80f98255c35951daadd15e0291ab4ecd84ec376680e123db245b325062"
+  "shape_digest": "b7c9b4cc8c12c7513de147592cf9309411b5ad0bed73649ea5489d22ba061ab2"
 }

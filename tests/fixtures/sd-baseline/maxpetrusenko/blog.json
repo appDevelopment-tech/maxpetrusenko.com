@@ -2,13 +2,12 @@
   "blocks": 3,
   "content": {
     "ListItem.name": "Blog",
-    "Organization.name": "Presence Atelier",
-    "Person.description": "Creator of tech automation resources, tantra education, and somatic practice offerings.",
+    "Person.description": "Creator of tech automation resources and somatic practice offerings.",
     "Person.name": "Max Petrusenko",
     "WebPage.description": "Articles and essays by Max Petrusenko on security, AI, automation, and systems.",
     "WebPage.name": "Blog"
   },
-  "content_digest": "14110f02c2b78e1bef85158ae1d91869560656e4ac6cbe43a088fbe50cc251a7",
+  "content_digest": "168c3e75e069ca6e51de6466af096ca417a648bf47dad7c55f8534efd170cb53",
   "route": "/blog",
   "shape": {
     "canonical": "https://www.maxpetrusenko.com/blog",
@@ -21,7 +20,6 @@
         "position",
         "position"
       ],
-      "Organization": [],
       "Person": [
         "name"
       ],
@@ -31,11 +29,10 @@
       "BreadcrumbList",
       "ListItem",
       "ListItem",
-      "Organization",
       "Person",
       "WebPage"
     ],
     "values": {}
   },
-  "shape_digest": "35a719563ec464b2a0e4788b5d82dd3c91d481d10dfd926fda28dd5bbbb35e1c"
+  "shape_digest": "b1910e58e7a60f1efea68d3e5f8eaed347be10c227b799416376b6a54376cfb8"
 }

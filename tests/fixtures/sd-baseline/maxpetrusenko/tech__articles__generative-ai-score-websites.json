@@ -3,14 +3,14 @@
   "content": {
     "ListItem.name": "Generative AI Score for Websites",
     "Organization.name": "Max Petrusenko",
-    "Person.description": "Creator of tech automation resources, tantra education, and somatic practice offerings.",
+    "Person.description": "Creator of tech automation resources and somatic practice offerings.",
     "Person.name": "Max Petrusenko",
     "TechArticle.description": "How AI answer engines like ChatGPT, Claude, and Perplexity evaluate and score websites. Learn the factors that influence AI citation, attribution, and recommendation in 2025.",
     "TechArticle.headline": "Generative AI Score for Websites - What AI Engines Value",
     "WebPage.description": "How AI answer engines like ChatGPT, Claude, and Perplexity evaluate and score websites. Learn the factors that influence AI citation and attribution.",
     "WebPage.name": "Generative AI Score for Websites - What AI Engines Value"
   },
-  "content_digest": "f803f1b4e9023b483f1a206580bdedca6037c5695cab7239eeeb16f23430ef12",
+  "content_digest": "8fd8b5be0276a55a919ff164c466379215820d471880ea455ee9bd3454cb3932",
   "route": "/tech/articles/generative-ai-score-websites",
   "shape": {
     "canonical": "https://www.maxpetrusenko.com/tech/articles/generative-ai-score-websites",
@@ -39,7 +39,6 @@
       "ListItem",
       "ListItem",
       "Organization",
-      "Organization",
       "Person",
       "Person",
       "TechArticle",
@@ -47,5 +46,5 @@
     ],
     "values": {}
   },
-  "shape_digest": "b00ea50a2782e29cd7a022fe9286f83c6f3a209cf4226cd4c2e2e5e7aba0ae97"
+  "shape_digest": "91bfccd419426a9965a1709c5463b6a4603fc75e9a69ce72c7161f7a8ae15423"
 }
