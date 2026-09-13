@@ -55,7 +55,7 @@ export const brandedReferencePages: BrandedReferencePageConfig[] = [
       "AI automation consultant, software builder, somatic practitioner, and Mindfold founder. Tech, somatic, and event work all live here under one name.",
     quickFacts: [
       "AI automation, Claude Code, n8n, ChatGPT integrations",
-      "Private somatic and tantra-informed sessions",
+      "Private somatic sessions",
       "Mindfold blindfolded presence journeys and group events",
       "Private sessions paused for now",
     ],
@@ -77,12 +77,6 @@ export const brandedReferencePages: BrandedReferencePageConfig[] = [
         href: "/tech",
         description: "AI automation consulting, services, outcomes, and delivery model.",
         badge: "Work",
-      },
-      {
-        title: "Spirituality",
-        href: "/spirituality",
-        description: "Somatic work, tantra-informed bodywork, and inquiry context.",
-        badge: "Practice",
       },
       {
         title: "Mindfold",
@@ -281,36 +275,28 @@ export const brandedReferencePages: BrandedReferencePageConfig[] = [
     slug: "max-petrusenko-somatic",
     title: "Max Petrusenko Somatic Practice",
     description:
-      "Branded somatic reference page for Max Petrusenko covering tantra-informed bodywork, nervous system regulation, Kyo-tai, training, and spirituality routes.",
+      "Branded somatic reference page for Max Petrusenko covering nervous system regulation, somatic bodywork, training, and the published somatic routes.",
     keywords: [
       "max petrusenko somatic",
-      "max petrusenko tantra",
       "max petrusenko spirituality",
-      "max petrusenko tantra massage",
     ],
     eyebrow: "Somatic reference",
     heroImage: "/images/DSC05764.jpg",
     h1: "Max Petrusenko somatic practice",
     intro:
-      "Branded route for people searching your name together with somatics, tantra, spirituality, or somatic practice. It points to the strongest session, training, and FAQ routes.",
+      "Branded route for people searching your name together with somatics, spirituality, or somatic practice. It points to the strongest session, training, and FAQ routes.",
     question: "What somatic work does Max Petrusenko offer?",
     answer:
-      "Max Petrusenko offers private somatic sessions, tantra-informed bodywork, nervous system regulation work, and Kyo-tai immersion. The strongest public routes on this site explain his approach, session types, training, training background and boundaries-first framing.",
+      "Max Petrusenko offers private somatic sessions, nervous system regulation work, and deep repatterning through embodied presence. The strongest public routes on this site explain his approach, session types, training, training background and boundaries-first framing.",
     displayAnswer:
-      "Private somatic sessions, tantra-informed bodywork, nervous system reset, and Kyo-tai. Main routes below cover approach, modalities, training, and inquiry context.",
+      "Private somatic sessions, nervous system reset, and embodied repatterning. Main routes below cover approach, modalities, training, and inquiry context.",
     quickFacts: [
       "Private sessions for nervous system regulation and deeper repatterning",
       "Approach is consent-led, trauma-aware, and boundaries first",
-      "Kyo-tai, tantra-informed work, and somatic education routes published on-site",
+      "Somatic education routes published on-site",
       "Private sessions paused for now",
     ],
     routeCards: [
-      {
-        title: "Spirituality",
-        href: "/spirituality",
-        description: "Primary branded route for somatic and tantra-informed session inquiries.",
-        badge: "Primary",
-      },
       {
         title: "Somatic",
         href: "/somatic",
@@ -326,7 +312,7 @@ export const brandedReferencePages: BrandedReferencePageConfig[] = [
       {
         title: "Modalities",
         href: "/somatic/modalities",
-        description: "Nervous System Reset, Tantra Massage, and Kyo-tai session types.",
+        description: "Nervous System Reset and somatic session types.",
         badge: "Sessions",
       },
       {
@@ -335,26 +321,18 @@ export const brandedReferencePages: BrandedReferencePageConfig[] = [
         description: "Lineage, certifications, and background shaping the work.",
         badge: "Training",
       },
-      {
-        title: "Tantra-Informed Somatic Work",
-        href: "/spirituality",
-        description: "Somatic reference route with training and availability context.",
-        badge: "Somatic",
-      },
     ],
     searchPhrases: [
       "max petrusenko somatic",
-      "max petrusenko tantra",
       "max petrusenko spirituality",
-      "max petrusenko tantra massage",
     ],
     primaryCta: {
-      href: "/spirituality",
-      label: "Open spirituality",
-    },
-    secondaryCta: {
       href: "/somatic",
       label: "Open somatic",
+    },
+    secondaryCta: {
+      href: "/somatic/approach",
+      label: "Read approach",
     },
   },
   {
@@ -403,12 +381,6 @@ export const brandedReferencePages: BrandedReferencePageConfig[] = [
         href: "/somatic",
         description: "Broader embodied-practice context, including contact-improv adjacent work.",
         badge: "Context",
-      },
-      {
-        title: "Spirituality",
-        href: "/spirituality",
-        description: "Somatic and private-session context around the same practitioner.",
-        badge: "Practice",
       },
       {
         title: "Reviews",
@@ -485,12 +457,6 @@ export const brandedReferencePages: BrandedReferencePageConfig[] = [
         href: "/tech",
         description: "Automation service page with outcomes and delivery framing.",
         badge: "Tech",
-      },
-      {
-        title: "Spirituality",
-        href: "/spirituality",
-        description: "Somatic service route with testimonials and boundaries-first framing.",
-        badge: "Somatic",
       },
       {
         title: "Mindfold",

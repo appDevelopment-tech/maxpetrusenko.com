@@ -97,9 +97,9 @@ export default function AboutPage() {
               </p>
             </div>
             <div className="dark-zone-card card-stripe-spirit">
-              <h3 className="font-serif text-[1.2rem] font-semibold text-[#e2e8f0]">Spirituality &amp; Mindfold</h3>
+              <h3 className="font-serif text-[1.2rem] font-semibold text-[#e2e8f0]">Somatic &amp; Mindfold</h3>
               <p className="mt-3 text-sm leading-relaxed text-[var(--dark-zone-muted)]">
-                Private tantra and somatic sessions with boundaries first and
+                Private somatic sessions with boundaries first and
                 nervous-system pacing.
               </p>
             </div>
@@ -129,17 +129,6 @@ export default function AboutPage() {
               <div className="hero-actions" style={{ marginTop: 12 }}>
                 <Link className="btn secondary" href="/tech">
                   See tech
-                </Link>
-              </div>
-            </div>
-            <div className="card">
-              <h3>Spirituality</h3>
-              <p>
-                Sessions focused on regulation, boundaries, and depth.
-              </p>
-              <div className="hero-actions" style={{ marginTop: 12 }}>
-                <Link className="btn primary" href="/spirituality">
-                  See spirituality
                 </Link>
               </div>
             </div>

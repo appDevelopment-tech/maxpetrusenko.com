@@ -16,23 +16,6 @@ const BRAND_LOGO_URL = `${siteConfig.url}/images/brand-mark.png`;
 const PERSON_IMAGE_URL = `${siteConfig.url}/images/DSC05871.jpg`;
 const TECH_PERSON_IMAGE_URL = `${siteConfig.url}/images/tech-portrait.jpg`;
 
-/**
- * Live web presence of the Presence Atelier practice.
- *
- * atelier.maxpetrusenko.com was torn down 2026-09-12 (Pages project deleted,
- * custom domain unbound) and its leftover DNS record answers HTTP 403
- * "1014 CNAME cross-user banned", so the host must not appear in this module at
- * all. The practice itself is still Max's own and is described live on
- * /spirituality — `public/.ai.txt` already declares the mapping:
- *
- *     Brand: Presence Atelier
- *     Website: https://www.maxpetrusenko.com/spirituality
- *
- * (also `public/llm.txt`: "Spirituality / Presence Atelier: .../spirituality").
- * Every Presence Atelier `url` therefore points here: the brand name stays, the
- * dead host is gone, and no new host is invented.
- */
-const PRESENCE_ATELIER_URL = `${siteConfig.url}/spirituality`;
 
 /**
  * Organization logo for nested Organization nodes.
@@ -178,14 +161,14 @@ export function generateArticleSchema(data: {
  *     findings, and the cure for that is widening `[gate].allowed_hosts`, which
  *     is the exemption this gate exists to prevent. The affiliation is real but
  *     does not belong on every page of the site. (Reason repeated inline below.)
- *   - `worksFor: [Presence Atelier, Max Petrusenko Tech]` -- each extra nested
- *     `Organization` stub costs two warn-band `missing-recommended` findings
- *     (contactPoint, sameAs) on every route. The tech brand is carried by
- *     `alternateName` and by the `ProfessionalService` on each tech page.
+ *   - `worksFor` (nested `Organization` stubs) -- each one costs two warn-band
+ *     `missing-recommended` findings (contactPoint, sameAs) on every route. The
+ *     tech brand is carried by `alternateName` and by the `ProfessionalService`
+ *     on each tech page, and this node no longer declares `worksFor` at all.
  *   - `availableChannel` (`ServiceChannel`) -- it would add a new `@type` to
  *     every route's graph to restate a service list the page-level
- *     `ProfessionalService` / Tantra `WebPage` already carries. (Reason repeated
- *     inline below.)
+ *     `ProfessionalService` / practice `WebPage` already carries. (Reason
+ *     repeated inline below.)
  *   - its long `sameAs` list (about.me, angel.co, codepen.io, dev.to,
  *     linktr.ee, substack, vimeo, pinterest, crunchbase, youtube, gumroad,
  *     stackoverflow). One entry was a literal placeholder
@@ -206,29 +189,24 @@ export function generatePersonSchema() {
     "@context": "https://schema.org",
     "@type": "Person",
     name: siteConfig.author.name,
-    alternateName: ["Max", "Presence Atelier", "Max Petrusenko Tech"],
+    alternateName: ["Max", "Max Petrusenko Tech"],
     url: siteConfig.url,
     image: [PERSON_IMAGE_URL, TECH_PERSON_IMAGE_URL],
     jobTitle: [
       "AI Automation Consultant",
       "Founder & Creator",
-      "Tantra & Somatic Energy Work Practitioner",
+      "Somatic Practitioner",
     ],
-    description: "Creator of tech automation resources, tantra education, and somatic practice offerings.",
-    // ONE organisation, as before. The deleted "tech" variant named a second
-    // one ("Max Petrusenko Tech", /tech); that is NOT migrated into a
-    // `worksFor` array, because every nested `Organization` stub rides on all
-    // 129 routes and each one costs two warn-band findings that the stub cannot
-    // satisfy (`missing-recommended`: contactPoint, sameAs) -- 256 new warnings
-    // for a brand name. The brand is already stated in `alternateName` above and
-    // is the `name` of the page-level `ProfessionalService` on every tech route,
-    // so nothing is lost.
-    worksFor: {
-      "@type": "Organization",
-      name: "Presence Atelier",
-      url: PRESENCE_ATELIER_URL,
-      logo: ORGANIZATION_LOGO,
-    },
+    description: "Creator of tech automation resources and somatic practice offerings.",
+    // NO `worksFor`, deliberately. The deleted "tech" variant used to name a
+    // second organisation ("Max Petrusenko Tech", /tech), and this node also
+    // carried a `worksFor` stub for the practice brand. Both are gone: every
+    // nested `Organization` stub rides on all 129 routes and each one costs two
+    // warn-band findings the stub cannot satisfy (`missing-recommended`:
+    // contactPoint, sameAs), so a brand name is not worth 256 warnings. The tech
+    // brand is already stated in `alternateName` above and is the `name` of the
+    // page-level `ProfessionalService` on every tech route; the somatic practice
+    // is carried by the page-level WebPage on /somatic. Nothing is lost.
     sameAs: [
       siteConfig.social.github,
       siteConfig.social.linkedin,
@@ -253,7 +231,6 @@ export function generatePersonSchema() {
       "Answer Engine Optimization",
       "AEO",
       // somatic (was generateSpiritualityPersonSchema)
-      "Tantra Massage",
       "Somatic Energy Work",
       "Nervous System Regulation",
       "Trauma-Informed Bodywork",
@@ -266,16 +243,13 @@ export function generatePersonSchema() {
       "Meditation",
       "Contemplative Practice",
       "Consciousness Technology",
-      "Tantra Nectar University",
       "Nervous System Reset",
-      "Couples Tantra",
       "Embodied Awareness",
     ],
     // was generateEnhancedPersonSchema (homepage-only, now every route)
     award: [
       "Shambhavi Mahamudra - Isha Foundation",
       "Kriya Yoga Initiation - Yoganada Lineage",
-      "Tantra Massage Certification - Satyarti / Tantra Nectar University",
     ],
     // NOTE: no `memberOf` here. The deleted homepage-only "enhanced" variant
     // carried `memberOf: [{name: "Isha Foundation", url: "https://www.ishafoundation.org"}, ...]`,
@@ -293,8 +267,8 @@ export function generatePersonSchema() {
     // (`ServiceChannel` + serviceType + serviceUrl). It is NOT migrated: adding
     // it introduces a brand-new `@type` (`ServiceChannel`) into the graph of all
     // 129 routes to restate a service list that the page-level
-    // `ProfessionalService` / Tantra `WebPage` already carries verbatim on the
-    // pages that actually advertise the services.
+    // `ProfessionalService` / practice `WebPage` already carries verbatim on
+    // the pages that actually advertise the services.
   };
 }
 
@@ -305,13 +279,13 @@ export function generateOrganizationSchema() {
   return {
     "@context": "https://schema.org",
     "@type": "Organization",
-    name: "Presence Atelier",
-    url: PRESENCE_ATELIER_URL,
+    name: siteConfig.name,
+    url: siteConfig.url,
     // Same representation as every other Organization.logo in this module
     // (a bare URL). An ImageObject here described the SAME entity in a second
     // form, which sd-check reported as `duplicate-type-conflict` on the routes
-    // where this root node and the `worksFor` stub coexist (/somatic,
-    // /spirituality). One entity, one logo representation.
+    // where this root node and a nested organization stub coexist. One entity,
+    // one logo representation.
     logo: ORGANIZATION_LOGO,
     image: BRAND_LOGO_URL,
     founder: {
@@ -370,17 +344,21 @@ const SERVICE_LOCATIONS = {
 };
 
 /**
- * Generate JSON-LD structured data for the tantra-informed somatic practice page.
+ * Generate JSON-LD structured data for the somatic practice page.
  * Keep this as WebPage, not LocalBusiness/ProfessionalService, to avoid
  * anchoring the practice as a commercial/local service.
+ *
+ * The export NAME is unchanged on purpose: `app/page.tsx` composes this node on
+ * the homepage, so renaming or deleting the export would be an edit outside this
+ * module. Only the payload says what it describes.
  */
 export function generateProfessionalServiceSchema() {
   return {
     "@context": "https://schema.org",
     "@type": "WebPage",
-    "name": "Presence Atelier - Tantra-Informed Somatic Practice",
-    "description": "Tantra-informed somatic practice, energy work, breath, boundaries, and embodied awareness by request. Grounded in Tantra Nectar / Satyarti training and nervous-system regulation.",
-    "url": `${siteConfig.url}/spirituality`,
+    "name": "Somatic Practice",
+    "description": "Private somatic practice: energy work, breath, boundaries, and embodied awareness by request.",
+    "url": `${siteConfig.url}/somatic`,
     "logo": {
       "@type": "ImageObject",
       "url": BRAND_LOGO_URL,
@@ -397,14 +375,14 @@ export function generateProfessionalServiceSchema() {
     // is asserted by `structured-data.contract.test.mjs`.
     "hasOfferCatalog": {
       "@type": "OfferCatalog",
-      "name": "Tantra-informed somatic practice pathways",
+      "name": "Somatic practice pathways",
       "itemListElement": [
         {
           "@type": "Offer",
           "itemOffered": {
             "@type": "Service",
             "name": "Nervous System Reset",
-            "description": "Tantra-informed somatic practice for nervous system regulation and conscious presence through breathwork, somatic awareness, and consent-led touch techniques.",
+            "description": "Somatic practice for nervous system regulation and conscious presence through breathwork, somatic awareness, and consent-led touch techniques.",
             "category": "Somatic Practice"
           }
         },
@@ -413,26 +391,8 @@ export function generateProfessionalServiceSchema() {
           "itemOffered": {
             "@type": "Service",
             "name": "Deep Repatterning",
-            "description": "Longer arc for deep rewiring and transformation through somatic energy work and tantric practices.",
+            "description": "A longer arc of somatic energy work across multiple sessions.",
             "category": "Somatic Energy Work"
-          }
-        },
-        {
-          "@type": "Offer",
-          "itemOffered": {
-            "@type": "Service",
-            "name": "Kyo-tai Immersion",
-            "description": "Contact-based embodied awareness practice with clear boundaries for deep pattern release.",
-            "category": "Somatic Practice"
-          }
-        },
-        {
-          "@type": "Offer",
-          "itemOffered": {
-            "@type": "Service",
-            "name": "Couples Tantra Session",
-            "description": "Partners seeking to deepen connection and communication through somatic practice and tantric techniques.",
-            "category": "Couples Tantra"
           }
         }
       ]
@@ -441,11 +401,11 @@ export function generateProfessionalServiceSchema() {
       "@type": "Audience",
       "audienceType": ["men", "women", "couples", "LGBTQ+"]
     },
-    "keywords": "tantra, tantric, tantra massage, somatic energy work, bodywork, breathwork, nervous system reset, couples tantra, energy work, shadow work, Tantra Nectar University, Satyarti, tantra certification",
+    "keywords": "somatic energy work, bodywork, breathwork, nervous system reset, energy work, shadow work, embodied awareness",
     "availableChannel": {
       "@type": "ServiceChannel",
-      "serviceType": "tantra-informed somatic practice, breathwork, energy work, embodiment education",
-      "serviceUrl": `${siteConfig.url}/spirituality`
+      "serviceType": "somatic practice, breathwork, energy work, embodiment education",
+      "serviceUrl": `${siteConfig.url}/somatic`
     }
   };
 }
@@ -459,14 +419,6 @@ export function generateFAQSchema() {
     "@context": "https://schema.org",
     "@type": "FAQPage",
     "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "What is tantra massage?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Tantra massage is a somatic energy work practice combining breathwork, conscious touch, and presence techniques for nervous system regulation and embodied awareness. Sessions are intimate with clear boundaries and consent-led pacing."
-        }
-      },
       {
         "@type": "Question",
         "name": "Is this sexual?",
@@ -576,7 +528,7 @@ export function generateFAQSchema() {
         "name": "What training does Max Petrusenko have?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Max holds a Tantra Massage Certification from Satyarti (Tantra Nectar University), Shambhavi Mahamudra initiation from Isha Foundation, and Kriya Yoga initiation in the Paramahansa Yogananda lineage. He also trained in Amenti Dance workshops for somatic movement."
+          "text": "Max holds Shambhavi Mahamudra initiation from Isha Foundation and Kriya Yoga initiation in the Paramahansa Yogananda lineage. He also trained in Amenti Dance workshops for somatic movement."
         }
       },
       {
@@ -1108,8 +1060,12 @@ export function generateMindfoldEventSchema() {
 /**
  * Deprecated: do not emit ScheduleAction/Reservation schema.
  * Agents were interpreting this as live bookable slots.
+ *
+ * `_serviceType` is accepted for call-site compatibility only; the value is
+ * ignored. The removed practice's member was dropped with the rest of that
+ * section, so a caller cannot name it in type space.
  */
-export function generateScheduleActionSchema(_serviceType: "tantra" | "tech" | "mindfold") {
+export function generateScheduleActionSchema(_serviceType: "tech" | "mindfold") {
   return {
     "@context": "https://schema.org",
     "@type": "WebPage",
@@ -1176,23 +1132,23 @@ export function generateServiceSpeakableSchema() {
   return {
     "@context": "https://schema.org",
     "@type": "SpeakableSpecification",
-    url: `${siteConfig.url}/spirituality`,
+    url: `${siteConfig.url}/somatic`,
     speakable: [
       {
         "@type": "Speakable",
-        text: "Max Petrusenko offers Tantra-informed somatic work by request. No calendar slots are open right now.",
+        text: "Max Petrusenko offers private somatic sessions by request. No calendar slots are open right now.",
       },
       {
         "@type": "Speakable",
-        text: "Sessions are intimate with clear boundaries, focused on nervous system regulation and open-heart presence through breathwork and somatic awareness.",
+        text: "Sessions are intimate with clear boundaries, focused on nervous system regulation and presence through breathwork and somatic awareness.",
       },
       {
         "@type": "Speakable",
-        text: "Services include Nervous System Reset, Deep Repatterning, Kyo-tai Immersion, and Couples Tantra sessions.",
+        text: "Services include Nervous System Reset and Deep Repatterning.",
       },
       {
         "@type": "Speakable",
-        text: "Max is certified in Shambhavi Mahamudra, Kriya Yoga, and Tantra Massage. Sessions are trauma-informed and consent-forward.",
+        text: "Max is certified in Shambhavi Mahamudra and Kriya Yoga. Sessions are consent-forward.",
       },
     ],
   };
@@ -1238,21 +1194,13 @@ export function generateCombinedFAQSchema() {
     "@context": "https://schema.org",
     "@type": "FAQPage",
     mainEntity: [
-      // Somatic/Tantra FAQs
+      // Somatic FAQs
       {
         "@type": "Question",
-        name: "What is tantra massage?",
+        name: "Do you offer somatic sessions for individuals and couples?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Tantra massage is a somatic energy work practice combining breathwork, conscious touch, and presence techniques for nervous system regulation and deep embodied awareness. Sessions are intimate with clear boundaries, focused on energetic expansion, open-heart presence, and somatic rewiring. You remain clothed or draped throughout, with boundaries established together.",
-        },
-      },
-      {
-        "@type": "Question",
-        name: "Do you offer tantra massage for men, women, and couples?",
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: "Yes. I offer 1:1 tantra massage and somatic energy work sessions for individuals of all genders, plus couples sessions for partners seeking to deepen connection and communication through somatic practice. Sessions are LGBTQ+ inclusive and tailored to each individual or couple's intentions.",
+          text: "Yes. I offer 1:1 somatic energy work sessions for individuals of all genders, plus couples sessions for partners seeking to deepen connection and communication through somatic practice. Sessions are LGBTQ+ inclusive and tailored to each individual or couple's intentions.",
         },
       },
       {
@@ -1260,23 +1208,15 @@ export function generateCombinedFAQSchema() {
         name: "What's the difference between Nervous System Reset and Deep Repatterning?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Nervous System Reset is a 90-minute tantra massage session to arrive safely in your body through breathwork and somatic awareness. Deep Repatterning is a longer arc for deep rewiring and transformation across multiple sessions. Kyo-tai Immersion is intensive bodywork for those ready for forceful guidance through contact practice.",
+          text: "Nervous System Reset is a 90-minute somatic session to arrive safely in your body through breathwork and somatic awareness. Deep Repatterning is a longer arc across multiple sessions.",
         },
       },
       {
         "@type": "Question",
-        name: "Where are you currently located for tantra sessions?",
+        name: "Where are somatic sessions available?",
         acceptedAnswer: {
           "@type": "Answer",
           text: "Private sessions are paused for now. Message with a few words about what you’re exploring to confirm fit and next steps.",
-        },
-      },
-      {
-        "@type": "Question",
-        name: "Is tantra massage sexual?",
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: "This is intimate work with clear boundaries. Tantra massage in my practice is a somatic energy work and healing modality focused on open-heart presence. Sessions are intimate with clear boundaries honored. The focus is on nervous system regulation, embodied awareness, and conscious connection.",
         },
       },
       // Tech/AI FAQs
@@ -1317,7 +1257,7 @@ export function generateCombinedFAQSchema() {
         name: "How do I join the inquiry list or consultation?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "For tantra/somatic sessions, WhatsApp +1-954-275-9666 is fastest. You can also email hello@maxpetrusenko.com. For tech consulting, email with your project details. I'll respond to align on timing and approach.",
+          text: "For somatic sessions, WhatsApp +1-954-275-9666 is fastest. You can also email hello@maxpetrusenko.com. For tech consulting, email with your project details. I'll respond to align on timing and approach.",
         },
       },
     ],

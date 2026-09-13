@@ -49,7 +49,7 @@ export function SomaticIntakeTool() {
   function submitQuestion(event: FormEvent) {
     event.preventDefault();
     setError("");
-    setInitialMessage((value) => value.trim() || "I want to ask about tantra massage.");
+    setInitialMessage((value) => value.trim() || "I want to ask about a somatic session.");
     setPhase("intention");
   }
 
@@ -130,7 +130,7 @@ export function SomaticIntakeTool() {
               <textarea
                 id="somatic-question"
                 onChange={(event) => setInitialMessage(event.target.value)}
-                placeholder="I want to ask about a tantra-informed session..."
+                placeholder="I want to ask about a somatic session..."
                 style={{ ...textareaStyle, marginTop: 8 }}
                 value={initialMessage}
               />

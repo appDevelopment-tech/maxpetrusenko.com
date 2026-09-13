@@ -133,7 +133,7 @@ export default function PrivacyPolicyPage() {
 
             <h2 className="font-serif text-xl font-semibold text-[var(--ink)]">7. Sensitive Information and Wellness Boundaries</h2>
             <p>
-              Somatic, tantra, breathwork, mindfulness, and consciousness-related Services are educational,
+              Somatic, breathwork, mindfulness, and consciousness-related Services are educational,
               experiential, and wellness-oriented. They are not medical care, psychotherapy, crisis support,
               legal advice, or financial advice. Any health, trauma, boundary, or personal history details
               you share are voluntary and used only to evaluate fit, prepare appropriately, protect safety,

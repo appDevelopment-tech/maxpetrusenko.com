@@ -21,7 +21,7 @@ const testimonials: Testimonial[] = [
   },
   {
     id: "2",
-    quote: "The tantra massage was exactly what I needed — professional, boundary-conscious, and profoundly relaxing. I left feeling renewed in body and mind.",
+    quote: "The session was exactly what I needed — professional, boundary-conscious, and profoundly relaxing. I left feeling renewed in body and mind.",
     author: "James M.",
     role: "Software Engineer",
     rating: 5,

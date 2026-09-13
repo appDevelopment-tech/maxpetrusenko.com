@@ -181,7 +181,7 @@ function detectServiceFit(
 
   if (
     lane === "somatic" &&
-    /\b(?:session|somatic|boundaries|nervous system|tantra|consent)\b/.test(
+    /\b(?:session|somatic|boundaries|nervous system|consent)\b/.test(
       lowerText
     )
   ) {

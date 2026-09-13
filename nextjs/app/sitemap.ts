@@ -62,7 +62,7 @@ async function getRouteLastModified(
  * Dynamic sitemap generation
  *
  * Generates a sitemap with all static pages plus dynamic content:
- * - Static pages (home, links, tech, spirituality, about, etc.)
+ * - Static pages (home, links, tech, about, etc.)
  * - Blog archive entries (Medium mirrors)
  * - Project pages
  * - Tag pages
@@ -142,12 +142,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     {
       url: `${baseUrl}/tech`,
       lastModified: await getRouteLastModified(appDir, "/tech", fallbackLastModified),
-      changeFrequency: "weekly",
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/spirituality`,
-      lastModified: await getRouteLastModified(appDir, "/spirituality", fallbackLastModified),
       changeFrequency: "weekly",
       priority: 0.8,
     },
@@ -426,99 +420,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: await getRouteLastModified(appDir, "/performance", fallbackLastModified),
       changeFrequency: "weekly",
       priority: 0.8,
-    },
-    // Tantra & SEO pages
-    {
-      url: `${baseUrl}/couples-tantra-massage`,
-      lastModified: await getRouteLastModified(
-        appDir,
-        "/couples-tantra-massage",
-        fallbackLastModified
-      ),
-      changeFrequency: "weekly",
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/spirituality/articles/tantra-trauma-ptsd`,
-      lastModified: await getRouteLastModified(
-        appDir,
-        "/spirituality/articles/tantra-trauma-ptsd",
-        fallbackLastModified
-      ),
-      changeFrequency: "monthly",
-      priority: 0.7,
-    },
-    {
-      url: `${baseUrl}/spirituality/articles`,
-      lastModified: await getRouteLastModified(appDir, "/spirituality/articles", fallbackLastModified),
-      changeFrequency: "weekly",
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/spirituality/blog`,
-      lastModified: await getRouteLastModified(appDir, "/spirituality/blog", fallbackLastModified),
-      changeFrequency: "weekly",
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/spirituality/blog/what-to-expect-first-tantra-session`,
-      lastModified: await getRouteLastModified(
-        appDir,
-        "/spirituality/blog/what-to-expect-first-tantra-session",
-        fallbackLastModified
-      ),
-      changeFrequency: "monthly",
-      priority: 0.7,
-    },
-    {
-      url: `${baseUrl}/spirituality/blog/what-is-kyo-tai`,
-      lastModified: await getRouteLastModified(
-        appDir,
-        "/spirituality/blog/what-is-kyo-tai",
-        fallbackLastModified
-      ),
-      changeFrequency: "monthly",
-      priority: 0.7,
-    },
-    {
-      url: `${baseUrl}/spirituality/blog/kyo-tai-session-what-happens`,
-      lastModified: await getRouteLastModified(
-        appDir,
-        "/spirituality/blog/kyo-tai-session-what-happens",
-        fallbackLastModified
-      ),
-      changeFrequency: "monthly",
-      priority: 0.7,
-    },
-    {
-      url: `${baseUrl}/spirituality/blog/questions-to-ask-tantra-practitioner`,
-      lastModified: await getRouteLastModified(
-        appDir,
-        "/spirituality/blog/questions-to-ask-tantra-practitioner",
-        fallbackLastModified
-      ),
-      changeFrequency: "monthly",
-      priority: 0.7,
-    },
-    {
-      url: `${baseUrl}/spirituality/blog/tantra-vs-regular-massage`,
-      lastModified: await getRouteLastModified(
-        appDir,
-        "/spirituality/blog/tantra-vs-regular-massage",
-        fallbackLastModified
-      ),
-      changeFrequency: "monthly",
-      priority: 0.7,
-    },
-    {
-      url: `${baseUrl}/spirituality/blog/temple-space-preparation`,
-      lastModified: await getRouteLastModified(
-        appDir,
-        "/spirituality/blog/temple-space-preparation",
-        fallbackLastModified
-      ),
-      changeFrequency: "monthly",
-      priority: 0.7,
     },
   ];
 

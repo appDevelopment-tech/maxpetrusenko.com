@@ -24,11 +24,8 @@ const paths = [
   "/ai-consulting-reddit",
   "/mindfold",
   "/mindfold/events",
-  "/spirituality",
-  "/spirituality/articles",
   "/tech/claude-subagents",
-  "/tech/mindfold",
-  "/tech/spirituality-mindfold"
+  "/tech/mindfold"
 ];
 
 const timeoutMs = Number(process.env.UI_SCAN_TIMEOUT_MS || 45000);

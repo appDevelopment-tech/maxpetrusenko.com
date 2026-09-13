@@ -24,12 +24,6 @@ export const homeFaqEntries: HomeFaqEntry[] = [
     lane: "somatic",
   },
   {
-    question: "What is Kyo-tai?",
-    answer:
-      "Kyo-tai is Max Petrusenko's term for a two-body somatic practice that uses contact, pressure, rhythm, and energetic transmission as one shared listening system. It is relational bodywork, not routine massage.",
-    lane: "somatic",
-  },
-  {
     question: "How do I inquire or start a project?",
     answer:
       "Somatic sessions are paused for now; WhatsApp can be used only for future-fit inquiry. For tech work, send your stack or email project context before timing and scope are confirmed.",

@@ -257,7 +257,6 @@ function includesAny(text: string, patterns: RegExp[]): boolean {
 function isSomaticIntent(text: string): boolean {
   return includesAny(text, [
     /\bmassage\b/i,
-    /\btantra\b/i,
     /\bsomatic\b/i,
     /\bsession\b/i,
     /\bbook\b/i,
@@ -354,7 +353,7 @@ function buildLauncherCards(): ConciergeToolBlock {
       {
         id: "somatic-inquiry",
         title: "Join the inquiry list",
-        href: "/spirituality",
+        href: "/somatic",
         imageSrc: "/images/DSC05871.jpg",
         imageAlt: "Somatic session portrait",
         eyebrow: "Somatic work",
@@ -630,7 +629,7 @@ export function buildConciergeToolBlocks(params: {
         {
           id: "somatic-guide",
           title: "What to expect",
-          href: "/spirituality",
+          href: "/somatic",
           imageSrc: "/images/DSC05764.jpg",
           imageAlt: "Somatic work page",
           eyebrow: "Read first",

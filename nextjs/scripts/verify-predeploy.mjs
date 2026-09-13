@@ -17,15 +17,6 @@ const criticalRoutes = [
   "/",
   "/blog",
   "/blog/topics",
-  "/spirituality",
-  "/spirituality/articles",
-  "/spirituality/blog",
-  "/spirituality/blog/what-to-expect-first-tantra-session",
-  "/spirituality/blog/questions-to-ask-tantra-practitioner",
-  "/spirituality/blog/tantra-vs-regular-massage",
-  "/spirituality/blog/temple-space-preparation",
-  "/spirituality/articles/tantra-trauma-ptsd",
-  "/couples-tantra-massage",
   "/tech",
   "/tech/articles",
   "/tech/articles/openclaw-installation-playbook",
@@ -40,8 +31,6 @@ const criticalRoutes = [
 
 const contentDirs = [
   path.join(appDir, "tech", "articles"),
-  path.join(appDir, "spirituality", "articles"),
-  path.join(appDir, "spirituality", "blog"),
 ];
 
 const weakPatterns = [
@@ -93,24 +82,6 @@ function extractSitemapRoutes() {
   }
 
   return [...new Set(routes)];
-}
-
-function verifySpiritualityBlogSlugs() {
-  const file = path.join(appDir, "spirituality", "blog", "page.tsx");
-  const source = fs.readFileSync(file, "utf8");
-  const slugRegex = /slug:\s*"([^"]+)"/g;
-
-  const missing = [];
-  let match;
-  while ((match = slugRegex.exec(source))) {
-    const slug = match[1];
-    const postPage = path.join(appDir, "spirituality", "blog", slug, "page.tsx");
-    if (!fs.existsSync(postPage)) {
-      missing.push(`/spirituality/blog/${slug}`);
-    }
-  }
-
-  return missing;
 }
 
 function collectFiles(dir) {
@@ -187,14 +158,6 @@ function main() {
   if (missingSitemap.length > 0) {
     errors.push(`Sitemap contains missing routes:\n${missingSitemap.map((r) => `  - ${r}`).join("\n")}`);
   }
-
-  const missingBlogPages = verifySpiritualityBlogSlugs();
-  if (missingBlogPages.length > 0) {
-    errors.push(
-      `Spirituality blog index includes routes without pages:\n${missingBlogPages.map((r) => `  - ${r}`).join("\n")}`
-    );
-  }
-
   const weakContent = checkWeakContentPatterns();
   if (weakContent.length > 0) {
     errors.push(

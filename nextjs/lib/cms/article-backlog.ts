@@ -11,71 +11,6 @@ interface BacklogSeed {
 
 const SEEDS: BacklogSeed[] = [
   {
-    slug: "tantra-massage-meaning-vs-myths",
-    title: "Tantra Massage Meaning vs Myths",
-    excerpt:
-      "A practical explanation of tantra massage scope, boundaries, and what clients should expect before booking.",
-    tags: ["Spirituality", "Tantra", "Beginner Guide", "Boundaries"],
-    series: "Tantra",
-    checklist: [
-      "State exactly what the session includes and excludes.",
-      "Set verbal consent checkpoints before touch.",
-      "Document intake, boundaries, and aftercare recommendations.",
-    ],
-  },
-  {
-    slug: "tantra-massage-benefits-for-men",
-    title: "Tantra Massage Benefits for Men",
-    excerpt:
-      "How tantra work supports regulation, emotional range, and healthier intimacy patterns for men.",
-    tags: ["Spirituality", "Tantra", "Men's Health", "Nervous System"],
-    series: "Tantra",
-    checklist: [
-      "Start from regulation, not performance goals.",
-      "Track breath depth and body tension before and after sessions.",
-      "Use integration practices for 72 hours post-session.",
-    ],
-  },
-  {
-    slug: "tantra-massage-benefits-for-women",
-    title: "Tantra Massage Benefits for Women",
-    excerpt:
-      "A boundaries-first guide to safety, pacing, and therapeutic outcomes in tantra sessions for women.",
-    tags: ["Spirituality", "Tantra", "Women's Health", "Safety"],
-    series: "Tantra",
-    checklist: [
-      "Screen practitioner ethics and boundary language in advance.",
-      "Agree on pace and stop signals before session start.",
-      "Plan hydration, rest, and integration time after the session.",
-    ],
-  },
-  {
-    slug: "how-to-choose-a-tantra-practitioner",
-    title: "How to Choose a Tantra Practitioner",
-    excerpt:
-      "Due-diligence framework for selecting a practitioner with strong ethics, communication, and trauma-aware pacing.",
-    tags: ["Spirituality", "Tantra", "Safety", "Client Guide"],
-    series: "Tantra",
-    checklist: [
-      "Ask for explicit consent policy and scope statement.",
-      "Review testimonials for boundaries and professionalism signals.",
-      "Avoid practitioners who cannot explain aftercare.",
-    ],
-  },
-  {
-    slug: "tantra-for-couples-boundaries-and-aftercare",
-    title: "Tantra for Couples: Boundaries and Aftercare",
-    excerpt:
-      "Session design for couples who want more trust, better communication, and clean integration after deep work.",
-    tags: ["Spirituality", "Tantra", "Couples", "Integration"],
-    series: "Tantra",
-    checklist: [
-      "Map individual boundaries before shared exercises.",
-      "Define a shared intention and no-go zones.",
-      "Schedule debrief and repair conversation after session.",
-    ],
-  },
-  {
     slug: "ai-infrastructure-for-startups-minimum-stack",
     title: "AI Infrastructure for Startups: Minimum Stack",
     excerpt:
@@ -771,7 +706,7 @@ const SEEDS: BacklogSeed[] = [
     excerpt:
       "A practical introduction to somatic energy work: what it is, how sessions work, what to expect, and how to find a qualified practitioner.",
     tags: ["Spirituality", "Energy Work", "Beginner Guide", "Somatic"],
-    series: "Tantra",
+    series: "Somatic",
     checklist: [
       "Define energy work in accessible, non-clinical language.",
       "Describe a typical session arc from intake to integration.",
@@ -784,7 +719,7 @@ const SEEDS: BacklogSeed[] = [
     excerpt:
       "A due-diligence framework for finding a spiritual teacher with strong ethics, clear boundaries, and real lineage credentials.",
     tags: ["Spirituality", "Spiritual Teacher", "Safety", "Client Guide"],
-    series: "Tantra",
+    series: "Somatic",
     checklist: [
       "Define what makes a teacher trustworthy vs performative.",
       "List red flags and green flags in teacher-student dynamics.",
@@ -797,7 +732,7 @@ const SEEDS: BacklogSeed[] = [
     excerpt:
       "An accessible introduction to shadow work: what it is, why it matters, and simple somatic practices to begin exploring unconscious patterns safely.",
     tags: ["Spirituality", "Shadow Work", "Beginner Guide", "Somatic"],
-    series: "Tantra",
+    series: "Somatic",
     checklist: [
       "Define shadow work without jargon or spiritual gatekeeping.",
       "Offer 3 entry-level practices with safety notes.",
@@ -810,7 +745,7 @@ const SEEDS: BacklogSeed[] = [
     excerpt:
       "How specific breathing patterns shift the autonomic nervous system from activation toward calm. Practical techniques for daily regulation.",
     tags: ["Spirituality", "Breathwork", "Nervous System", "Regulation"],
-    series: "Tantra",
+    series: "Somatic",
     checklist: [
       "Explain autonomic nervous system basics simply.",
       "Teach 3 breath patterns with step-by-step instructions.",
@@ -1128,13 +1063,6 @@ const USER_REQUEST_TOPICS: TopicSpec[] = [
     description: "Research-to-production bridges for AI teams and technical founders.",
   },
   {
-    slug: "history-of-tantra",
-    label: "History of Tantra",
-    series: "Tantra",
-    tags: ["Spirituality", "Tantra", "History", "Education"],
-    description: "Historical context and modern interpretation pathways for tantra practice.",
-  },
-  {
     slug: "seo",
     label: "SEO",
     series: "SEO",
@@ -1322,14 +1250,6 @@ const USER_REQUEST_TOPICS: TopicSpec[] = [
   },
 ];
 
-const EXTRA_TANTRA_TOPIC: TopicSpec = {
-  slug: "tantra-practice",
-  label: "Tantra Practice",
-  series: "Tantra",
-  tags: ["Spirituality", "Tantra", "Practice", "Integration"],
-  description: "Additional tantra practice topics from multiple operational and relational perspectives.",
-};
-
 export interface ExpansionTopicGroup {
   slug: string;
   label: string;
@@ -1342,7 +1262,6 @@ export const TOPIC_PERSPECTIVE_KEYS: string[] = TOPIC_PERSPECTIVES.map(
 
 export const EXPANSION_TOPIC_GROUPS: ExpansionTopicGroup[] = [
   ...USER_REQUEST_TOPICS,
-  EXTRA_TANTRA_TOPIC,
 ].map((topic) => ({
   slug: topic.slug,
   label: topic.label,
@@ -1364,9 +1283,7 @@ const USER_REQUEST_SEEDS: BacklogSeed[] = USER_REQUEST_TOPICS.flatMap((topic) =>
   createTopicSeeds(topic)
 );
 
-const EXTRA_TANTRA_SEEDS: BacklogSeed[] = createTopicSeeds(EXTRA_TANTRA_TOPIC);
-
-const ALL_SEEDS: BacklogSeed[] = [...SEEDS, ...USER_REQUEST_SEEDS, ...EXTRA_TANTRA_SEEDS];
+const ALL_SEEDS: BacklogSeed[] = [...SEEDS, ...USER_REQUEST_SEEDS];
 
 interface SourceLink {
   label: string;
@@ -1389,40 +1306,6 @@ interface SeriesProfile {
 
 function getSeriesProfile(series: string): SeriesProfile {
   switch (series) {
-    case "Tantra":
-      return {
-        reader: "first-time tantra clients and couples screening practitioners",
-        misconception: "Most people assume tantra outcomes come from intensity; most outcomes actually come from pacing and consent quality.",
-        tension: "Clients want deep transformation quickly, but nervous systems integrate safely only when intensity is matched to readiness.",
-        definition:
-          "Tantra session design is a consent-led protocol combining breath, touch boundaries, pacing, and integration windows to improve regulation and relational clarity.",
-        oldWay: "Choose by marketing language, improvise boundaries in session, debrief late or never.",
-        newWay: "Use explicit intake, verbal consent checkpoints, and post-session integration plan before booking.",
-        failure:
-          "A common rollback case: a session escalates too quickly, activation spikes, and both practitioner and client spend the next week repairing trust instead of integrating progress.",
-        primaryAction: "Run a pre-booking safety screen and ask for the practitioner’s consent protocol in writing.",
-        secondaryActions: [
-          "Document non-negotiable boundaries before session start.",
-          "Use stop/pause language and rehearse it once out loud.",
-          "Schedule a 24-hour integration check-in after the session.",
-        ],
-        uncomfortableLine:
-          "If you cannot state your boundaries clearly, the session will define them for you.",
-        sources: [
-          {
-            label: "WHO - Mental Disorders Fact Sheet",
-            url: "https://www.who.int/news-room/fact-sheets/detail/mental-disorders",
-          },
-          {
-            label: "WHO - Self-Help Plus Stress Management Guide",
-            url: "https://www.who.int/publications/i/item/9789240003927",
-          },
-          {
-            label: "UN Women - Violence Against Women Facts and Figures",
-            url: "https://www.unwomen.org/en/what-we-do/ending-violence-against-women/facts-and-figures",
-          },
-        ],
-      };
     case "Somatic":
       return {
         reader: "people using somatic practice for anxiety, trauma recovery, or high-stress performance cycles",
@@ -1770,8 +1653,6 @@ function buildFaqBlockquotes(seed: BacklogSeed): string {
 
 function getQuantifiedExampleContext(series: string): string {
   switch (series) {
-    case "Tantra":
-      return "tantra practice";
     case "Somatic":
       return "somatic regulation work";
     case "AI Infra":
@@ -1802,8 +1683,6 @@ function buildQuantifiedExample(seed: BacklogSeed): string {
   const topicLabel = getTopicLabel(seed);
 
   switch (seed.series) {
-    case "Tantra":
-      return `For ${topicLabel}, if a tantra practice shows nervous system dysregulation in 4 of every 10 sessions, adding structured grounding can cut that to 1 of 10 within 30 days. The exact ratio depends on the practitioner and client context, but the pattern holds: deliberate checkpoints reduce avoidable setbacks.`;
     case "Bridge":
       return `For ${topicLabel}, a ${context} that ships misaligned outcomes in 5 of every 15 cycles can often be pulled down to 2 of 15 over a quarter once reflective checkpoints are in place. The numbers shift by context, but the mechanism is consistent: structured review surfaces blind spots earlier.`;
     case "AI Infra":

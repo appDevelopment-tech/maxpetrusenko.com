@@ -56,18 +56,6 @@ export const projects: Project[] = [
     tags: ["AI", "Social Automation", "Replies", "Scheduling"],
   },
   {
-    id: "spirituality-mindfold",
-    slug: "spirituality-mindfold",
-    title: "Spirituality & Mindfold",
-    description:
-      "Tantra-informed somatic work by request. Deep rewiring and nervous system reset through embodied presence.",
-    image: "/images/atelier.svg",
-    link: "/spirituality",
-    status: "live",
-    category: "product",
-    tags: ["Somatic", "Tantra", "Coaching", "private practice"],
-  },
-  {
     id: "mindfold",
     slug: "mindfold",
     title: "Mindfold",

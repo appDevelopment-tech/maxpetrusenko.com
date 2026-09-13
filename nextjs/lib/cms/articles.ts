@@ -30,90 +30,6 @@ const LOCAL_ARTICLES_RAW: Article[] = [
     author: { name: "Max Petrusenko" },
   },
   {
-    id: "local-spirit-first-session",
-    slug: "what-to-expect-first-tantra-session",
-    title: "What to Expect in Your First Tantra Massage Session",
-    excerpt:
-      "Nervous about your first tantra session? This guide walks you through everything from arrival to integration, so you can feel prepared and at ease.",
-    content:
-      "<p>This article is published on maxpetrusenko.com. Open the canonical route to read the full version.</p>",
-    image: "/images/article-covers/spirit-first-session.svg",
-    link: "/spirituality/blog/what-to-expect-first-tantra-session",
-    publishedAt: "2026-02-02T00:00:00.000Z",
-    tags: ["Spirituality", "Tantra", "Beginner Guide", "private practice"],
-    author: { name: "Max Petrusenko" },
-  },
-  {
-    id: "local-spirit-questions",
-    slug: "questions-to-ask-tantra-practitioner",
-    title: "5 Questions to Ask Before Booking a Tantra Practitioner",
-    excerpt:
-      "Not all tantra practitioners are the same. Here are the essential questions to ask to ensure safety, professionalism, and alignment.",
-    content:
-      "<p>This article is published on maxpetrusenko.com. Open the canonical route to read the full version.</p>",
-    image: "/images/article-covers/spirit-questions-screening.svg",
-    link: "/spirituality/blog/questions-to-ask-tantra-practitioner",
-    publishedAt: "2026-02-02T00:00:00.000Z",
-    tags: ["Spirituality", "Tantra", "Safety", "Boundaries"],
-    author: { name: "Max Petrusenko" },
-  },
-  {
-    id: "local-spirit-vs-massage",
-    slug: "tantra-vs-regular-massage",
-    title: "Tantra vs. Regular Massage: What's the Difference?",
-    excerpt:
-      "Understanding the key differences between tantra massage and traditional spa massage, from nervous system work to conscious presence.",
-    content:
-      "<p>This article is published on maxpetrusenko.com. Open the canonical route to read the full version.</p>",
-    image: "/images/article-covers/spirit-vs-massage.svg",
-    link: "/spirituality/blog/tantra-vs-regular-massage",
-    publishedAt: "2026-02-02T00:00:00.000Z",
-    tags: ["Spirituality", "Tantra", "Educational", "Somatic"],
-    author: { name: "Max Petrusenko" },
-  },
-  {
-    id: "local-spirit-temple-space",
-    slug: "temple-space-preparation",
-    title: "How I Prepare the Temple Space for Tantra Sessions",
-    excerpt:
-      "A behind-the-scenes look at creating a safe, intentional, and grounded container for tantra work by request.",
-    content:
-      "<p>This article is published on maxpetrusenko.com. Open the canonical route to read the full version.</p>",
-    image: "/images/article-covers/spirit-temple-space.svg",
-    link: "/spirituality/blog/temple-space-preparation",
-    publishedAt: "2026-02-02T00:00:00.000Z",
-    tags: ["Spirituality", "Tantra", "Practice", "private practice"],
-    author: { name: "Max Petrusenko" },
-  },
-  {
-    id: "local-spirit-kyo-tai-intro",
-    slug: "what-is-kyo-tai",
-    title: "What Is Kyo-tai? A Two-Body Somatic Practice",
-    excerpt:
-      "Kyo-tai is my name for a two-body practice that blends contact, pressure, rhythm, and energetic transmission into one listening system.",
-    content:
-      "<p>This article is published on maxpetrusenko.com. Open the canonical route to read the full version.</p>",
-    image: "/images/article-covers/spirit-kyo-tai.svg",
-    link: "/spirituality/blog/what-is-kyo-tai",
-    publishedAt: "2026-03-06T00:00:00.000Z",
-    tags: ["Spirituality", "Kyo-tai", "Somatic", "Contact Improvisation"],
-    author: { name: "Max Petrusenko" },
-  },
-  {
-    id: "local-spirit-kyo-tai-session",
-    slug: "kyo-tai-session-what-happens",
-    title: "What Happens in a Kyo-tai Session",
-    excerpt:
-      "A practical walkthrough of consent, pacing, pressure, energetic intensity, and integration inside a Kyo-tai session.",
-    content:
-      "<p>This article is published on maxpetrusenko.com. Open the canonical route to read the full version.</p>",
-    image: "/images/article-covers/spirit-kyo-tai-session.svg",
-    link: "/spirituality/blog/kyo-tai-session-what-happens",
-    publishedAt: "2026-03-06T00:00:00.000Z",
-    tags: ["Spirituality", "Kyo-tai", "Session Guide", "Boundaries"],
-    author: { name: "Max Petrusenko" },
-  },
-  {
     id: "local-tech-openclaw",
     slug: "openclaw-installation-playbook",
     title: "OpenClaw Installation Playbook for Teams",
@@ -251,14 +167,11 @@ export function getLocalArticles(): Article[] {
 export function getRelatedLocalArticles(currentLink: string, limit = 3): Article[] {
   const normalized = currentLink.split("#")[0].split("?")[0];
   const isTech = normalized.startsWith("/tech/");
-  const isSpirituality = normalized.startsWith("/spirituality/");
 
   let pool = LOCAL_ARTICLES.filter((article) => article.link !== normalized);
 
   if (isTech) {
     pool = pool.filter((article) => article.link.startsWith("/tech/articles/"));
-  } else if (isSpirituality) {
-    pool = pool.filter((article) => article.link.startsWith("/spirituality/"));
   }
 
   return sortArticlesByDateDesc(pool).slice(0, limit);

@@ -163,12 +163,12 @@ export default function LinksPage() {
 
         <section className="section">
           <div className="section-head">
-            <h2>Spirituality & Mindfold</h2>
+            <h2>Somatic & Mindfold</h2>
           </div>
           <div className="tiles">
-            <Link className="tile" href="/spirituality">
+            <Link className="tile" href="/somatic">
               <div className="tile-meta">
-                <span className="tile-title">Spirituality &amp; Mindfold</span>
+                <span className="tile-title">Somatic &amp; Mindfold</span>
                 <span className="tile-desc">Practice notes, FAQs, and inquiry context.</span>
               </div>
               <span className="badge spirit">Visit</span>

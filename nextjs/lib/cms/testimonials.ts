@@ -65,8 +65,8 @@ export const testimonials: Testimonial[] = [
   },
 
   // SPIRITUALITY TESTIMONIALS
-  // From Spirituality & Mindfold practice (live page: maxpetrusenko.com/spirituality;
-  // the atelier.maxpetrusenko.com subdomain was torn down 2026-09-12)
+  // From the Spirituality & Mindfold practice
+  // (the atelier.maxpetrusenko.com subdomain was torn down 2026-09-12)
   // 4.9/5 average sentiment across 217 transformations
 
   // Original testimonials
@@ -77,7 +77,7 @@ export const testimonials: Testimonial[] = [
     type: "spirituality"
   },
   {
-    quote: "The tantra session was deeply safe, slow, and reverent. We co-created every step. I felt honored, not handled.",
+    quote: "The session was deeply safe, slow, and reverent. We co-created every step. I felt honored, not handled.",
     author: "Amrita S.",
     role: "Artist, London",
     type: "spirituality"
@@ -89,49 +89,6 @@ export const testimonials: Testimonial[] = [
     type: "spirituality"
   },
 
-  // NEW private practice-specific testimonials for tantra SEO
-  {
-    quote: "Max responded on WhatsApp within 10 minutes. The tantra massage session by request was transformative - finally released trauma I've carried for years.",
-    author: "Sarah T.",
-    role: "Digital Nomad",
-    location: "private sessions by request",
-    type: "spirituality"
-  },
-  {
-    quote: "I've tried many therapists by request. Max's tantra approach is different - it works through the body, not just the mind. My nervous system actually shifted.",
-    author: "James L.",
-    role: "Entrepreneur",
-    location: "private sessions by request",
-    type: "spirituality"
-  },
-  {
-    quote: "As a trauma survivor, I was nervous about tantra. Max created such a safe container. I finally feel at home in my body. Best decision I made while traveling.",
-    author: "Mika K.",
-    role: "Yoga Teacher",
-    location: "Private client",
-    type: "spirituality"
-  },
-  {
-    quote: "Professional tantra by request is hard to find. Max is certified, trauma-informed, and genuinely skilled. The session was profound - unlike anything else while traveling.",
-    author: "Rachel N.",
-    role: "Therapist",
-    location: "private sessions by request",
-    type: "spirituality"
-  },
-  {
-    quote: "My partner and I did a couples tantra session while traveling. It deepened our connection in ways months of talk therapy couldn't. Highly recommend.",
-    author: "Daniel & Sophie",
-    role: "Couple",
-    location: "Sydney, Australia",
-    type: "spirituality"
-  },
-  {
-    quote: "I was skeptical about tantra massage. But after years of talk therapy, I needed something different. This somatic approach unlocked what years of therapy couldn't.",
-    author: "Alex M.",
-    role: "Software Engineer",
-    location: "private sessions by request",
-    type: "spirituality"
-  },
   {
     quote: "Personal reply, easy booking, and the session itself was incredible. Max is professional, skilled, and creates a beautiful temple space by request.",
     author: "Emma W.",
@@ -147,45 +104,10 @@ export const testimonials: Testimonial[] = [
     type: "spirituality"
   },
   {
-    quote: "I've experienced tantra in India, Thailand, and with a private practitioner. Max's approach is the most grounded and professional I've found. Real skill here.",
-    author: "Rajesh P.",
-    role: "Repeat Client",
-    location: "Singapore",
-    type: "spirituality"
-  },
-  {
-    quote: "As someone with complex PTSD, I'm very careful about touch work. Max's trauma-informed approach made me feel completely safe. This is how tantra should be done.",
-    author: "Taylor B.",
-    role: "Designer",
-    location: "private sessions by request",
-    type: "spirituality"
-  },
-  {
-    quote: "Found Max through a friend's recommendation while by request. The tantra session released shoulder tension I've carried for 5 years. Incredible somatic work.",
-    author: "Nina S.",
-    role: "Dancer",
-    location: "Private client",
-    type: "spirituality"
-  },
-  {
-    quote: "Clear availability by request is rare for quality tantra practitioners. Max is responsive, professional, and careful about the container.",
-    author: "Oscar K.",
-    role: "Retreat Leader",
-    location: "private practice",
-    type: "spirituality"
-  },
-  {
     quote: "The breathwork alone was transformative. But combined with conscious touch, it was next-level. My nervous system needed this. Thank you, quiet presence holder.",
     author: "Linda F.",
     role: "Nurse",
     location: "private sessions by request",
-    type: "spirituality"
-  },
-  {
-    quote: "I was looking for tantra-informed somatic work and found Max. The session exceeded expectations - professional, safe, and deeply healing. Already booked my return.",
-    author: "Priya M.",
-    role: "Digital Nomad",
-    location: "India",
     type: "spirituality"
   },
 

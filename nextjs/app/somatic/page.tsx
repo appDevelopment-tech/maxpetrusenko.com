@@ -12,7 +12,7 @@ import { FaqSection } from "@/components/shared/FaqSection";
 
 export const metadata = generateMetadata({
   title: "Somatic Practice - Nervous System Regulation & Energy Work",
-  description: "Private somatic sessions and tantra massage for founders, creators, and seekers. Nervous system reset, deep repatterning, and conscious presence. Book worldwide.",
+  description: "Private somatic sessions for founders, creators, and seekers. Nervous system reset, deep repatterning, and conscious presence. Book worldwide.",
   ogType: "website",
   canonical: absoluteUrl("/somatic"),
 });
@@ -25,7 +25,7 @@ export default function SomaticPage() {
         type="WebPage"
         data={generateWebPageSchema({
           title: "Somatic Practice - Nervous System Regulation & Energy Work",
-          description: "Private somatic sessions for founders and creators. Nervous system reset, tantra massage, and energy work.",
+          description: "Private somatic sessions for founders and creators. Nervous system reset and energy work.",
           url: "/somatic",
         })}
       />
@@ -63,7 +63,7 @@ export default function SomaticPage() {
             </div>
             <h1 className="clip-reveal clip-reveal-d1">Nervous system regulation for people who lead, create, and need to feel again</h1>
             <p>
-              Private tantra and somatic sessions for founders, artists, and seekers.
+              Private somatic sessions for founders, artists, and seekers.
               Expect focused touch, energetic attunement, and a space built for deep
               rewiring.
             </p>
@@ -76,9 +76,6 @@ export default function SomaticPage() {
               >
                 Join inquiry list
               </a>
-              <Link className="btn secondary" href="/spirituality">
-                Learn More
-              </Link>
             </div>
           </div>
 
@@ -91,20 +88,6 @@ export default function SomaticPage() {
                   <span className="tile-desc">60 minutes • Grounding & regulation</span>
                 </div>
                 <span className="badge spirit">Gentle</span>
-              </div>
-              <div className="tile">
-                <div className="tile-meta">
-                  <span className="tile-title">Tantra-Informed Practice</span>
-                  <span className="tile-desc">By request • Inquiry first</span>
-                </div>
-                <span className="badge spirit">Deep</span>
-              </div>
-              <div className="tile">
-                <div className="tile-meta">
-                  <span className="tile-title">Kyo-tai Immersion</span>
-                  <span className="tile-desc">120 minutes • Forceful guidance</span>
-                </div>
-                <span className="badge spirit">Intense</span>
               </div>
             </div>
             <p style={{ marginTop: 12, fontSize: "0.9em" }}>
@@ -135,8 +118,8 @@ export default function SomaticPage() {
             <Link className="card card-with-actions" href="/somatic/modalities">
               <h3>Modalities</h3>
               <p>
-                Nervous system reset, tantra massage, and Kyo-tai immersion for
-                different depths of work.
+                Nervous system reset and grounding bodywork for different
+                depths of work.
               </p>
               <div className="card-actions-spacer"></div>
               <div className="hero-actions" style={{ marginTop: 12 }}>
@@ -146,8 +129,8 @@ export default function SomaticPage() {
             <Link className="card card-with-actions" href="/somatic/training">
               <h3>Lineage & Training</h3>
               <p>
-                Shambhavi Mahamudra, Kriya Yoga initiation, Tantra Massage
-                certification, and embodied facilitation.
+                Shambhavi Mahamudra, Kriya Yoga initiation, and embodied
+                facilitation.
               </p>
               <div className="card-actions-spacer"></div>
               <div className="hero-actions" style={{ marginTop: 12 }}>
@@ -182,35 +165,6 @@ export default function SomaticPage() {
                 <strong>90% of clients report better sleep same night</strong>
               </p>
             </div>
-            <div className="card">
-              <h3>Tantra-Informed Somatic Practice</h3>
-              <p>
-                Breath, presence, boundaries, and somatic re-patterning for
-                embodied awareness. Consent-led boundary mapping with energy work.
-              </p>
-              <ul className="list" style={{ marginTop: 12 }}>
-                <li>Consent-led boundary mapping</li>
-                <li>Energy channel work + breath pacing</li>
-                <li>Post-session grounding tea + reflection</li>
-              </ul>
-              <p style={{ marginTop: 12 }}>
-                <strong>Deepens connection and self-awareness</strong>
-              </p>
-            </div>
-          </div>
-          <div className="card" style={{ marginTop: 14 }}>
-            <h3>Kyo-Tai Immersion (120 min) — For facilitators and practitioners</h3>
-            <p>
-              Kyo means "shared/common" and tai means "body"—two bodies becoming
-              one integrated system. Somatic unwinding, fascia melt, and
-              contact-based Ki transmission for full-system rewiring.
-            </p>
-            <p style={{ marginTop: 12 }}>
-              <strong>
-                Intense contact practice for those ready for forceful guidance,
-                not gentle massage.
-              </strong>
-            </p>
           </div>
         </section>
 
@@ -347,7 +301,7 @@ export default function SomaticPage() {
               {
                 question: "Is this suitable for first-timers?",
                 answer:
-                  "Absolutely. We begin with breath, boundaries, and intention. The 60-minute Reset is perfect to arrive in your body without overwhelm if you're new to somatic or tantra practices.",
+                  "Absolutely. We begin with breath, boundaries, and intention. The 60-minute Reset is perfect to arrive in your body without overwhelm if you're new to somatic practice.",
               },
               {
                 question: "How do you handle boundaries and consent?",
@@ -360,11 +314,6 @@ export default function SomaticPage() {
                   "Wear loose clothing, arrive hydrated, and avoid heavy meals for 2 hours beforehand. The studio is stocked with linens, oils, tea, and a private shower.",
               },
               {
-                question: "Do you work with couples?",
-                answer:
-                  "Yes, I facilitate couple tantra and energy sessions when intentions are aligned. We run a 15-minute pre-call to set agreements and comfort levels.",
-              },
-              {
                 question: "Where are you currently located?",
                 answer:
                   "Private sessions are paused for now. Message with a few words about what you’re exploring to ask about fit and format options.",
@@ -372,7 +321,7 @@ export default function SomaticPage() {
               {
                 question: "What are the boundaries?",
                 answer:
-                  "Tantra massage in my practice is a somatic energy work and healing modality. Sessions are shaped around clear agreements and respectful boundaries.",
+                  "Somatic sessions in my practice are a gentle energy work and healing modality. Sessions are shaped around clear agreements and respectful boundaries.",
               },
             ]}
           />

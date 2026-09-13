@@ -14,7 +14,6 @@ export const siteConfig: SiteConfig = {
     { name: "Tech", href: "/tech" },
     { name: "Blog", href: "/blog" },
     { name: "Links", href: "/links" },
-    { name: "Spirituality", href: "/spirituality" },
     { name: "About", href: "/about" },
     { name: "Proof", href: "/proof" },
     { name: "Identity", href: "/identity" },
@@ -31,11 +30,11 @@ export const siteConfig: SiteConfig = {
   externalLinks: {
     // `atelier` removed 2026-09-12: atelier.maxpetrusenko.com was torn down
     // (Pages project deleted, custom domain unbound) and the DNS record now
-    // returns HTTP 403 "1014 CNAME cross-user banned". The Presence Atelier
-    // practice is still Max's own and is described live on /spirituality (see
-    // public/llm.txt: "Spirituality / Presence Atelier: .../spirituality"), so
-    // its structured-data url points there. The brand name stays; the dead
-    // host must not come back as an outbound link.
+    // returns HTTP 403 "1014 CNAME cross-user banned".
+    // The `spirituality` section and every route under it were removed from
+    // this site and now return HTTP 410 Gone via middleware.ts. There is
+    // deliberately no replacement surface and no redirect: retired URLs must
+    // not resolve to, or point at, any live successor.
     gumroad: "https://maxpetrusenko.gumroad.com/",
     patreon: "https://patreon.com/maxpetrusenko",
   },

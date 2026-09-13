@@ -32,7 +32,7 @@ function buildHandoffText(body: Record<string, unknown>): string {
       : {};
 
   const parts = [
-    "New tantra/somatic future-fit inquiry from maxpetrusenko.com",
+    "New somatic future-fit inquiry from maxpetrusenko.com",
     line("Name", contact.name ?? questionnaire.name, 120),
     line("Visitor WhatsApp/phone", contact.phone ?? questionnaire.phone, 80),
     line("Email", contact.email ?? questionnaire.email, 160),

@@ -129,8 +129,8 @@ export default function GEOArticle() {
             <h3>2. Intent layer</h3>
             <p>
               Create pages mapped to real query clusters. For this site, that means
-              dedicated pages for terms like <em>tantra-informed somatic work</em>,
-              <em>AEO consultant</em>, and <em>OpenClaw install help</em>.
+              dedicated pages for terms like <em>AEO consultant</em> and
+              <em>OpenClaw install help</em>.
             </p>
 
             <h3>3. Evidence layer</h3>
@@ -180,9 +180,9 @@ export default function GEOArticle() {
 
             <h2>Where to start on this site</h2>
             <p>
-              Prioritize pages tied to real demand first: <Link href="/spirituality">Tantra-Informed Somatic Work</Link>,
-              <Link href="/tech/articles/answer-engine-optimization-aeo"> AEO guide</Link>,
-              and <Link href="/tech/case-studies"> measurable case studies</Link>.
+              Prioritize pages tied to real demand first:
+              <Link href="/tech/articles/answer-engine-optimization-aeo">AEO guide</Link> and
+              <Link href="/tech/case-studies">measurable case studies</Link>.
               Then support them with blog articles that answer adjacent questions.
             </p>
 

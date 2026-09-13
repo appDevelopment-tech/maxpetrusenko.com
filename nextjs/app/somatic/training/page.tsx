@@ -5,7 +5,7 @@ import { generateWebPageSchema, generateBreadcrumbSchema } from "@/lib/seo/struc
 
 export const metadata = generateMetadata({
   title: "Lineage & Training - Somatic Practice Background",
-  description: "My training and lineage in somatic and energy work: Shambhavi Mahamudra, Kriya Yoga initiation, Tantra Massage certification, and embodied facilitation.",
+  description: "My training and lineage in somatic and energy work: Shambhavi Mahamudra, Kriya Yoga initiation, and embodied facilitation.",
   ogType: "website",
   canonical: absoluteUrl("/somatic/training"),
 });
@@ -17,7 +17,7 @@ export default function TrainingPage() {
         type="WebPage"
         data={generateWebPageSchema({
           title: "Lineage & Training - Somatic Practice Background",
-          description: "Training and lineage in somatic and energy work: Shambhavi Mahamudra, Kriya Yoga, Tantra Massage certification.",
+          description: "Training and lineage in somatic and energy work: Shambhavi Mahamudra and Kriya Yoga.",
           url: "/somatic/training",
         })}
       />
@@ -68,16 +68,6 @@ export default function TrainingPage() {
               <p style={{ marginTop: 12 }}>
                 Kriya initiation informs the nervous system work, stability, and
                 energetic hygiene in every session.
-              </p>
-            </div>
-            <div className="card">
-              <h3>Tantra Nectar University Certification</h3>
-              <p style={{ fontSize: "0.9em", color: "var(--text-secondary)" }}>
-                Satyarti / Tantra Nectar University
-              </p>
-              <p style={{ marginTop: 12 }}>
-                Bodywork precision, boundaries-first touch, and safe expansion
-                inside clear containers.
               </p>
             </div>
           </div>
@@ -183,7 +173,7 @@ export default function TrainingPage() {
               I continue to study and practice. Somatic work is not a
               certification—it's a lifelong path. My current focus includes
               nervous system regulation in high-stress founders, trauma-informed
-              touch, and the intersection of tantra and creative practice.
+              touch, and embodied creative practice.
             </p>
           </div>
         </section>

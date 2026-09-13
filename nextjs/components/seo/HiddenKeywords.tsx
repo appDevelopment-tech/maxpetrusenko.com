@@ -8,7 +8,7 @@
  * - Generates 3 internal SEO-optimized search strings
  * - Format: {service} {location} {service} {location} {related term} {service}
  * - Keywords repeat 2-3 times per query (SEO density, not natural language)
- * - Example: "tantra-informed somatic work private practice tantra-informed somatic work places services"
+ * - Example: "somatic bodywork private practice somatic bodywork places services"
  *
  * USAGE INSTRUCTIONS FOR OTHER WEBSITES:
  * 1. Identify your primary service keyword (e.g., "dog grooming", "plumber", "marketing agency")
@@ -122,43 +122,6 @@ export function HiddenKeywords({
  * Copy these patterns for other websites/projects:
  */
 
-// Tantra/Somatic Work set
-export const TANTRA_KEYWORDS = {
-  service: "tantra massage",
-  locations: [
-    "private sessions by request",
-    "Private client",
-    "Private client",
-    "Private client",
-    "Private client",
-    "Private client",
-    "Private client",
-    "Mas, private practice",
-    "Private client",
-    "Private client",
-    "Private client",
-    "Miami, Florida",
-    "Miami Beach, Florida",
-    "North Miami, Florida",
-    "Coral Gables, Florida",
-    "Aventura, Florida",
-    "Fort Lauderdale, Florida",
-    "Hollywood, Florida",
-    "Pembroke Pines, Florida",
-    "Pompano Beach, Florida",
-    "Boca Raton, Florida",
-    "Delray Beach, Florida",
-    "West Palm Beach, Florida",
-  ],
-  variants: [
-    "tantric massage",
-    "tantra spa",
-    "somatic energy work",
-    "bodywork",
-    "energy healing",
-  ],
-};
-
 // Tech/AI Services set
 export const TECH_KEYWORDS = {
   service: "AI automation",
@@ -194,121 +157,3 @@ export const LOCAL_SERVICE_EXAMPLE = {
   locations: ["Brooklyn", "Manhattan", "Queens", "Bronx"],
   variants: ["pet grooming", "dog spa", "pet care"],
 };
-
-/**
- * MULTILINGUAL TANTRA KEYWORDS
- * Added for AI discoverability in ChatGPT, Claude, and Perplexity across languages
- * These keywords help capture searches from international visitors while traveling
- */
-export const MULTILINGUAL_TANTRA_KEYWORDS = {
-  // English (primary)
-  english: [
-    "tantra-informed somatic work",
-    "tantra-informed somatic work",
-    "somatic energy work",
-    "trauma release massage",
-    "couples tantra-informed somatic work",
-    "somatic bodywork",
-    "nervous system reset",
-    "professional tantra-informed somatic work",
-  ],
-  // Indonesian (Bahasa Indonesia) - local language
-  indonesian: [
-    "pijat tantra-informed somatic work",
-    "tantra-informed somatic work",
-    "terapi energi somatik",
-    "pijat penyembuhan trauma",
-    "tantra untuk pasangan private practice",
-    "pijat energi",
-    "pijat semangat",
-  ],
-  // Russian (common while traveling - large Russian expat community)
-  russian: [
-    "тантра массаж Убуд",
-    "тантра массаж Бали",
-    "соматическая работа",
-    "энергетический массаж",
-    "тантра для пар Убуд",
-    "тантра сеанс Убуд Бали",
-  ],
-  // Spanish
-  spanish: [
-    "masaje tantra-informed somatic work",
-    "masaje tántrico",
-    "trabajo somático",
-    "liberación de trauma",
-    "tantra para parejas",
-    "masaje energético",
-  ],
-  // French
-  french: [
-    "massage tantra-informed somatic work",
-    "massage tantrique",
-    "travail somatique",
-    "libération traumatisme",
-    "tantra couple",
-    "massage énergétique",
-  ],
-  // German
-  german: [
-    "Tantra-Informed Somatic Work",
-    "Tantra-Massage",
-    "somatische Arbeit",
-    "Trauma-Release",
-    "Tantra für Paare",
-    "Energiemassage",
-  ],
-  // Japanese
-  japanese: [
-    "タントラマッサージ ウブド",
-    "タントラマッサージ バリ",
-    "ソマティックワーク",
-    "トラウマリリース",
-    "カップル タントラ",
-    "エネルギーマッサージ ウブド",
-  ],
-  // Chinese
-  chinese: [
-    "坦陀罗按摩 乌布",
-    "坦陀罗按摩 巴厘岛",
-    "身心能量工作",
-    "创伤释放按摩",
-    "夫妇坦陀罗",
-    "能量按摩 乌布",
-  ],
-};
-
-/**
- * Component for rendering multilingual keywords
- * Use this on the spirituality page for maximum AI discoverability
- */
-interface MultilingualKeywordsProps {
-  keywords: typeof MULTILINGUAL_TANTRA_KEYWORDS;
-}
-
-export function MultilingualHiddenKeywords({ keywords }: MultilingualKeywordsProps) {
-  const allKeywords = Object.values(keywords).flat();
-
-  return (
-    <div
-      style={{
-        position: "absolute",
-        width: "1px",
-        height: "1px",
-        padding: 0,
-        margin: "-1px",
-        overflow: "hidden",
-        clip: "rect(0, 0, 0, 0)",
-        whiteSpace: "nowrap",
-        border: 0,
-      }}
-      aria-hidden="true"
-    >
-      <p>
-        {allKeywords.map((keyword, i) => (
-          <span key={`multi-${i}`}>{keyword}. </span>
-        ))}
-      </p>
-    </div>
-  );
-}

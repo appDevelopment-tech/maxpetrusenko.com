@@ -26,8 +26,8 @@ test("does not redirect canonical text slugs", () => {
 
 test("redirects non-canonical local blog slugs to their route-first page", () => {
   assert.equal(
-    resolveBlogArticleRedirect("what-to-expect-first-tantra-session", "/spirituality/blog/what-to-expect-first-tantra-session"),
-    "/spirituality/blog/what-to-expect-first-tantra-session"
+    resolveBlogArticleRedirect("ai-infrastructure-security-baseline", "/blog/ai-infrastructure-security-baseline"),
+    null
   );
   assert.equal(
     resolveBlogArticleRedirect("openclaw-installation-playbook", "/tech/articles/openclaw-installation-playbook"),
@@ -54,7 +54,7 @@ test("keeps canonical /blog slugs on-site", () => {
 
 test("redirects missing legacy tag archives to the blog topic index", () => {
   assert.equal(resolveMissingBlogTagRedirect("bitcoin"), "/blog/topics");
-  assert.equal(resolveMissingBlogTagRedirect("kyo-tai"), "/blog/topics");
+  assert.equal(resolveMissingBlogTagRedirect("nonexistent-tag"), "/blog/topics");
   assert.equal(resolveMissingBlogTagRedirect("data"), "/blog/topics");
 });
 

@@ -11,7 +11,7 @@ export const runtime = "edge";
 export const metadata: Metadata = generateMetadata({
   title: "Blog Topic Index",
   description:
-    "Topic hub with all AI, GEO/SEO, tooling, somatic, and tantra article clusters published on maxpetrusenko.com.",
+    "Topic hub with all AI, GEO/SEO, tooling, and somatic article clusters published on maxpetrusenko.com.",
   ogType: "website",
   canonical: absoluteUrl("/blog/topics"),
 });
@@ -33,7 +33,7 @@ export default async function BlogTopicsPage() {
         data={generateWebPageSchema({
           title: "Blog Topic Index",
           description:
-            "Topic hub with all AI, GEO/SEO, tooling, somatic, and tantra article clusters published on maxpetrusenko.com.",
+            "Topic hub with all AI, GEO/SEO, tooling, and somatic article clusters published on maxpetrusenko.com.",
           url: "/blog/topics",
         })}
       />
@@ -50,7 +50,7 @@ export default async function BlogTopicsPage() {
         data={generateItemListSchema(itemList, {
           name: "Blog Topic Cluster Articles",
           description:
-            "Canonical index of topic-cluster articles for AI, GEO, SEO, automation, somatic work, and tantra.",
+            "Canonical index of topic-cluster articles for AI, GEO, SEO, automation, and somatic work.",
         })}
       />
 

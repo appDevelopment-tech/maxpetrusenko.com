@@ -63,9 +63,6 @@ export default function IdentityPage() {
               <Link className="inline-flex items-center gap-2 rounded-[10px] bg-[var(--ink)] px-7 py-3.5 text-[0.95rem] font-semibold text-[var(--sand)] shadow-[0_4px_16px_rgba(12,17,21,0.18)] transition hover:-translate-y-0.5 hover:shadow-[0_8px_28px_rgba(12,17,21,0.24)]" href="/tech">
                 See tech work
               </Link>
-              <Link className="inline-flex items-center gap-2 rounded-[10px] border-[1.5px] border-[var(--line)] bg-transparent px-7 py-3.5 text-[0.95rem] font-semibold text-[var(--ink)] transition hover:-translate-y-0.5 hover:border-[var(--accent-spirit)]" href="/spirituality">
-                See somatic practice
-              </Link>
             </div>
           </div>
         </section>
@@ -99,11 +96,11 @@ export default function IdentityPage() {
             <div className="dark-zone-card card-stripe-spirit">
               <h3 className="font-serif text-[1.25rem] font-semibold text-[#e2e8f0]">Secondary practice</h3>
               <p className="mt-3 text-sm leading-relaxed text-[var(--dark-zone-muted)]">
-                Private somatic bodywork through Spirituality &amp; Mindfold, with sessions
+                Private somatic bodywork, with sessions
                 shaped by request and boundaries-first framing.
               </p>
               <div className="mt-4 flex flex-wrap gap-2">
-                <span className="rounded-md bg-[rgba(14,97,93,0.15)] px-2.5 py-1 text-[0.7rem] font-semibold text-[#2eb8a8]">Spirituality</span>
+                <span className="rounded-md bg-[rgba(14,97,93,0.15)] px-2.5 py-1 text-[0.7rem] font-semibold text-[#2eb8a8]">Somatic</span>
                 <span className="rounded-md bg-[rgba(14,97,93,0.15)] px-2.5 py-1 text-[0.7rem] font-semibold text-[#2eb8a8]">By request</span>
                 <span className="rounded-md bg-[rgba(14,97,93,0.15)] px-2.5 py-1 text-[0.7rem] font-semibold text-[#2eb8a8]">Private sessions</span>
               </div>
@@ -139,23 +136,16 @@ export default function IdentityPage() {
             <div className="card">
               <h3>Somatic Bodywork (Secondary Practice)</h3>
               <p>
-                Through Spirituality &amp; Mindfold, I offer private sessions focused on
+                I offer private sessions focused on
                 regulation, boundaries, and somatic energy work. This is a
                 separate practice from my technical work.
               </p>
               <ul className="list">
-                <li>Tantra & somatic energy work</li>
+                <li>Somatic energy work</li>
                 <li>Regulation & nervous system support</li>
                 <li>Boundary work & relational clarity</li>
                 <li>Private sessions paused for now</li>
               </ul>
-              <Link
-                className="btn secondary"
-                href="/spirituality"
-                style={{ marginTop: 12 }}
-              >
-                Visit practice site
-              </Link>
             </div>
           </div>
         </section>
@@ -174,7 +164,6 @@ export default function IdentityPage() {
               <ul className="list">
                 <li>I am not a marketing agency or SEO consultant</li>
                 <li>I do not offer generic &quot;life coaching&quot;</li>
-                <li>I am not a tantra teacher in any lineage or tradition</li>
                 <li>I do not offer certification programs</li>
                 <li>I am not affiliated with any spiritual organizations</li>
                 <li>I do not do crypto trading or financial advice</li>
@@ -301,8 +290,8 @@ export default function IdentityPage() {
               <li>@blindfold.miami (Instagram - somatic work)</li>
             </ul>
             <p style={{ marginTop: 16, fontSize: "0.9em", opacity: 0.8 }}>
-              If you encounter another person with a similar name in tech,
-              somatics, or spirituality—it is not me. I operate solely under the
+              If you encounter another person with a similar name in tech or
+              somatics—it is not me. I operate solely under the
               identities listed above.
             </p>
           </div>

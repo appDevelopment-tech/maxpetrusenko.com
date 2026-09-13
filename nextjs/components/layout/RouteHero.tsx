@@ -18,8 +18,6 @@ export function RouteHero() {
     "/",
     "/tech",
     "/about",
-    "/spirituality",
-    "/spirituality",
     "/blog",
     "/links",
     "/proof",

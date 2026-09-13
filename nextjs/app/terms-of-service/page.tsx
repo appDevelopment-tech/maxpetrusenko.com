@@ -72,7 +72,7 @@ export default function TermsOfServicePage() {
               <li>Attempt unauthorized access to accounts, admin areas, APIs, infrastructure, or data.</li>
               <li>Submit malware, secrets, private keys, regulated data, or content you do not have rights to use.</li>
               <li>Use AI, automation, or publishing tools to spam, impersonate, harass, or violate platform rules.</li>
-              <li>Sexualize, solicit, or misrepresent somatic, tantra, or Mindfold services.</li>
+              <li>Sexualize, solicit, or misrepresent somatic or Mindfold services.</li>
             </ul>
 
             <h2 className="font-serif text-xl font-semibold text-[var(--ink)]">4. Accounts and Access</h2>
@@ -97,7 +97,7 @@ export default function TermsOfServicePage() {
 
             <h2 className="font-serif text-xl font-semibold text-[var(--ink)]">6. Wellness, Somatic, and Event Boundaries</h2>
             <p>
-              Somatic, tantra, breathwork, mindfulness, and Mindfold offerings are educational, experiential,
+              Somatic, breathwork, mindfulness, and Mindfold offerings are educational, experiential,
               and wellness-oriented. They are not medical treatment, psychotherapy, crisis care, sexual
               services, or a promise of any particular emotional, spiritual, health, business, or performance
               outcome.

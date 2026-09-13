@@ -4,8 +4,8 @@ import { JsonLd } from "@/components/seo/JsonLd";
 import { generateWebPageSchema, generateBreadcrumbSchema } from "@/lib/seo/structured-data";
 
 export const metadata = generateMetadata({
-  title: "Modalities - Nervous System Reset, Tantra Massage, Kyo-Tai",
-  description: "Session types: 60-min nervous system reset, 120-min tantra massage, and 120-min Kyo-tai immersion. Private somatic sessions customized to your needs.",
+  title: "Modalities - Nervous System Reset",
+  description: "Session type: 60-min nervous system reset. Private somatic sessions customized to your needs.",
   ogType: "website",
   canonical: absoluteUrl("/somatic/modalities"),
 });
@@ -16,8 +16,8 @@ export default function ModalitiesPage() {
       <JsonLd
         type="WebPage"
         data={generateWebPageSchema({
-          title: "Modalities - Nervous System Reset, Tantra Massage, Kyo-Tai",
-          description: "Session types: nervous system reset, tantra massage, and Kyo-tai immersion.",
+          title: "Modalities - Nervous System Reset",
+          description: "Session type: nervous system reset.",
           url: "/somatic/modalities",
         })}
       />
@@ -38,7 +38,7 @@ export default function ModalitiesPage() {
             </div>
             <h1 className="clip-reveal clip-reveal-d1">Session Modalities</h1>
             <p>
-              Three depths of work, each customized to your nervous system and
+              Grounding bodywork customized to your nervous system and
               intentions. Choose based on what you're ready for.
             </p>
           </div>
@@ -86,78 +86,6 @@ export default function ModalitiesPage() {
             </div>
           </div>
 
-          {/* Tantra-informed somatic practice */}
-          <div className="card" style={{ marginBottom: 20 }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: 12 }}>
-              <div style={{ flex: 1, minWidth: 280 }}>
-                <h3>Tantra-Informed Somatic Practice</h3>
-                <p style={{ color: "var(--accent)", fontWeight: 500 }}>
-                  By request • Inquiry first
-                </p>
-              </div>
-              <a
-                className="btn primary sm"
-                href="https://wa.me/17865436688?text=Hi%20Max%2C%20I%27d%20like%20to%20ask%20about%20tantra-informed%20somatic%20practice%20availability.%20I%27m%20exploring%3A%20____."
-                target="_blank"
-                rel="noopener"
-              >
-                Join inquiry list
-              </a>
-            </div>
-            <p style={{ marginTop: 12 }}>
-              Breath, presence, boundaries, and somatic repatterning for embodied
-              awareness. Consent-led boundary mapping with energy work and breath
-              pacing.
-            </p>
-            <div style={{ marginTop: 16 }}>
-              <h4>What's included:</h4>
-              <ul className="list" style={{ marginTop: 8, marginLeft: 20 }}>
-                <li>Consent-led boundary mapping</li>
-                <li>Energy channel work + breath pacing</li>
-                <li>Post-session grounding tea + reflection</li>
-              </ul>
-            </div>
-            <div style={{ marginTop: 16, padding: 12, background: "var(--bg-secondary)", borderRadius: 8 }}>
-              <strong>Outcome:</strong> Deepens connection and self-awareness
-            </div>
-          </div>
-
-          {/* Kyo-Tai Immersion */}
-          <div className="card">
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: 12 }}>
-              <div style={{ flex: 1, minWidth: 280 }}>
-                <h3>Kyo-Tai Immersion</h3>
-                <p style={{ color: "var(--accent)", fontWeight: 500 }}>
-                  120 minutes • For facilitators and practitioners
-                </p>
-              </div>
-              <a
-                className="btn primary sm"
-                href="https://wa.me/17865436688?text=Hi%20Max%2C%20I%27d%20like%20to%20join%20the%20inquiry%20list.%20I%27m%20exploring%3A%20Kyo-Tai."
-                target="_blank"
-                rel="noopener"
-              >
-                Inquire
-              </a>
-            </div>
-            <p style={{ marginTop: 12 }}>
-              Kyo means "shared/common" and tai means "body"—two bodies becoming
-              one integrated system. Evokes the deep physical and energetic
-              merging that occurs during contact movement.
-            </p>
-            <div style={{ marginTop: 16 }}>
-              <h4>What's included:</h4>
-              <ul className="list" style={{ marginTop: 8, marginLeft: 20 }}>
-                <li>Somatic unwinding + fascia melt</li>
-                <li>Contact-based Ki transmission for full-system rewiring</li>
-                <li>Guided practice to carry forward and pass on awareness</li>
-              </ul>
-            </div>
-            <div style={{ marginTop: 16, padding: 12, background: "var(--bg-secondary)", borderRadius: 8 }}>
-              <strong>For:</strong> Facilitators and those who treat this as a
-              craft, ready for forceful guidance rather than gentle massage
-            </div>
-          </div>
         </section>
 
         <section className="section">
@@ -168,28 +96,10 @@ export default function ModalitiesPage() {
             <div className="card">
               <h3>Choose Reset if...</h3>
               <ul className="list" style={{ marginTop: 12, marginLeft: 20 }}>
-                <li>You're new to somatic or tantra work</li>
+                <li>You're new to somatic work</li>
                 <li>You're experiencing stress or burnout</li>
                 <li>You want better sleep and regulation</li>
                 <li>You prefer a gentler entry point</li>
-              </ul>
-            </div>
-            <div className="card">
-              <h3>Choose Tantra if...</h3>
-              <ul className="list" style={{ marginTop: 12, marginLeft: 20 }}>
-                <li>You want deeper energetic and emotional opening</li>
-                <li>You're comfortable with conscious touch</li>
-                <li>You want to explore presence and intimacy</li>
-                <li>You've done somatic work before</li>
-              </ul>
-            </div>
-            <div className="card">
-              <h3>Choose Kyo-Tai if...</h3>
-              <ul className="list" style={{ marginTop: 12, marginLeft: 20 }}>
-                <li>You're a practitioner or facilitator</li>
-                <li>You're ready for intense, forceful work</li>
-                <li>You want to experience shared-body contact</li>
-                <li>You've done significant somatic work</li>
               </ul>
             </div>
           </div>

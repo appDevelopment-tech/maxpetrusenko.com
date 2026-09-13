@@ -543,7 +543,7 @@ function homepagePayload() {
   return [
     schemas.generateWebPageSchema({
       title: "Max Petrusenko — Presence & Product",
-      description: "AI automation for creators and founders, plus Tantra-informed somatic work by request.",
+      description: "AI automation for creators and founders, plus somatic bodywork by request.",
       url: "/",
     }),
     schemas.generateWebSiteSchema(),

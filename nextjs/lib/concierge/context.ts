@@ -26,7 +26,7 @@ interface RouteContextRule {
 
 const ROUTE_RULES: RouteContextRule[] = [
   {
-    prefixes: ["/spirituality", "/somatic", "/spirituality"],
+    prefixes: ["/somatic"],
     lane: "somatic",
     label: "somatic work",
     question:

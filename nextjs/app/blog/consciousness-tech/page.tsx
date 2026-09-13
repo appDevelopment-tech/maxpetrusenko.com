@@ -149,9 +149,6 @@ export default function ConsciousnessTechHubPage() {
               <Link className="btn secondary" href="/tech/articles">
                 Tech Articles
               </Link>
-              <Link className="btn secondary" href="/spirituality/blog">
-                Spirituality Blog
-              </Link>
               <Link className="btn secondary" href="/blog/topics">
                 All Topic Clusters
               </Link>

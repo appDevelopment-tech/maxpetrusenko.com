@@ -10,7 +10,7 @@ interface BreathingTextProps {
 
 /**
  * Text that animates in word by word with breathing rhythm
- * Perfect for somatic/spirituality pages to create calm, meditative reading
+ * Perfect for somatic pages to create calm, meditative reading
  */
 export function BreathingText({
   children,

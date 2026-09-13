@@ -89,7 +89,7 @@ export default function ConsciousnessAssistantPage() {
                 flexWrap: "wrap",
               }}
             >
-              <Link className="btn secondary" href="/spirituality">
+              <Link className="btn secondary" href="/somatic">
                 Somatic lane
               </Link>
               <Link className="btn secondary" href="/tech">

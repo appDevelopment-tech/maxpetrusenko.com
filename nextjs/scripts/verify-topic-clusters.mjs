@@ -51,17 +51,14 @@ function main() {
   const seedsBlock = extractArrayBlock(backlog, "const SEEDS: BacklogSeed[]");
   const perspectivesBlock = extractArrayBlock(backlog, "const TOPIC_PERSPECTIVES: TopicPerspective[]");
   const topicsBlock = extractArrayBlock(backlog, "const USER_REQUEST_TOPICS: TopicSpec[]");
-  const extraTopicBlock = extractObjectBlock(backlog, "const EXTRA_TANTRA_TOPIC: TopicSpec");
 
   const baseSeedSlugs = collectMatches(seedsBlock, /slug:\s*"([^"]+)"/g);
   const perspectiveKeys = collectMatches(perspectivesBlock, /key:\s*"([^"]+)"/g);
   const topicSlugs = collectMatches(topicsBlock, /slug:\s*"([^"]+)"/g);
-  const extraTopicSlug = collectMatches(extraTopicBlock, /slug:\s*"([^"]+)"/g)[0];
 
   assert(baseSeedSlugs.length > 0, "No base seeds found in article-backlog.ts", errors);
   assert(perspectiveKeys.length >= 20, `Expected at least 20 perspectives; found ${perspectiveKeys.length}`, errors);
   assert(topicSlugs.length >= 24, `Expected at least 24 requested topics; found ${topicSlugs.length}`, errors);
-  assert(Boolean(extraTopicSlug), "Missing EXTRA_TANTRA_TOPIC slug", errors);
 
   const uniquePerspectiveKeys = new Set(perspectiveKeys);
   const uniqueTopicSlugs = new Set(topicSlugs);
@@ -72,7 +69,7 @@ function main() {
   assert(uniqueBaseSeedSlugs.size === baseSeedSlugs.length, "Duplicate base seed slugs detected", errors);
 
   const generatedSlugs = new Set();
-  for (const topic of [...topicSlugs, extraTopicSlug]) {
+  for (const topic of topicSlugs) {
     for (const key of perspectiveKeys) {
       generatedSlugs.add(`${topic}-${key}`);
     }

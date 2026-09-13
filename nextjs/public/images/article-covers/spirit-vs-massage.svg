@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
-  <title>Tantra vs Regular Massage</title>
+  <title>Somatic Work vs Regular Massage</title>
   <desc>Clear differences in intention</desc>
-  <!-- Prompt basis: Editorial hero for article 'Tantra vs Regular Massage' about Clear differences in intention. Keep it high-contrast, minimal, and citation-friendly. -->
+  <!-- Prompt basis: Editorial hero for article 'Somatic Work vs Regular Massage' about Clear differences in intention. Keep it high-contrast, minimal, and citation-friendly. -->
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0%" stop-color="#4a5f7a"/>
@@ -22,7 +22,7 @@
   </g>
   <g transform="translate(120,170)">
     <rect x="0" y="0" width="980" height="420" rx="24" fill="#0b0f14" fill-opacity="0.30"/>
-    <text x="56" y="145" font-size="72" font-family="Georgia, 'Times New Roman', serif" fill="#f5f1e9">Tantra vs Regular Massage</text>
+    <text x="56" y="145" font-size="72" font-family="Georgia, 'Times New Roman', serif" fill="#f5f1e9">Somatic Work vs Regular Massage</text>
     <text x="56" y="230" font-size="38" font-family="'Trebuchet MS', Verdana, sans-serif" fill="#ebdfcd">Clear differences in intention</text>
     <text x="56" y="340" font-size="26" font-family="'Trebuchet MS', Verdana, sans-serif" fill="#d6dce6">maxpetrusenko.com</text>
   </g>

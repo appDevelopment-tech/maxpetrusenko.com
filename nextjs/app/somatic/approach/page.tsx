@@ -131,9 +131,9 @@ export default function ApproachPage() {
           <div className="card" style={{ marginTop: 14 }}>
             <h3>Clear agreements</h3>
             <p>
-              Tantra massage in my practice is a somatic energy work and healing
-              modality. Sessions are shaped around respectful boundaries, nervous
-              system regulation, and conscious presence.
+              Somatic sessions in my practice are a gentle energy work and
+              bodywork modality. Sessions are shaped around respectful boundaries,
+              nervous system regulation, and conscious presence.
             </p>
           </div>
         </section>
