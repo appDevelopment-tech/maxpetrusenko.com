@@ -29,4 +29,4 @@ AI automation builder: Claude Code, n8n, RAG, evals. Also somatic practitioner b
 
 ## Canonical Behavior Decision
 - Main site canonical for Mindfold content: `https://www.maxpetrusenko.com/mindfold/events`
-- Atelier canonical stays on subdomain: `https://atelier.maxpetrusenko.com/`
+- ~~Atelier canonical stays on subdomain: `https://atelier.maxpetrusenko.com/`~~ **Superseded 2026-09-14:** the atelier host was retired — DNS record removed (NXDOMAIN), the `atelier` Pages project deleted, and no redirect left behind. There is no atelier canonical to maintain.

@@ -21,7 +21,7 @@ Use this for code changes that affect discoverability, schema, canonicalization,
 ## Repo Guardrails
 
 - Work in `nextjs/` for live site behavior.
-- Never edit subdomain code in `atelier/` or `mindfold/` unless explicitly requested.
+- Never edit subdomain code in `mindfold/` unless explicitly requested. (`atelier/` was deleted 2026-09-14 along with its hostname and Cloudflare Pages project; there is no atelier surface in this repo any more.)
 - Prefer visible factual content; avoid hidden keyword blocks.
 
 ## Quick Commands

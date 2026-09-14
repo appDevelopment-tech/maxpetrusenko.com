@@ -101,3 +101,7 @@
 2. Run the existing Next.js test suite through the wrapper script.
 3. Confirm the GitHub remote and final repo visibility.
 4. Summarize what moved and what stayed private.
+
+---
+
+**Superseded 2026-09-14:** the steps in this plan that reference `atelier/` (inspect `atelier/index.html`, copy `atelier/`) are no longer executable. The directory was deleted and the hostname retired — `atelier.maxpetrusenko.com` is NXDOMAIN on 1.1.1.1 and 8.8.8.8, the Cloudflare Pages project `atelier` was deleted, and no redirect remains. Read those steps as historical.

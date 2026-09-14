@@ -1,7 +1,6 @@
 User-agent: *
 Allow: /
 Disallow: /admin/
-Disallow: /atelier/
 Disallow: /mindfold/
 Disallow: /nextjs/
 

@@ -154,3 +154,9 @@ Breakdown:
 - [ ] Sync `nextjs/public/.ai.txt` with current `llms.txt` and spirituality route coverage
 - [ ] Broaden spirituality schema and visible copy without adding duplicate `FAQPage` output
 - [ ] Add supporting spirituality backlog seeds for energy work, shadow work, and consciousness-tech crossover
+
+---
+
+## 2026-09-14 — atelier retirement
+
+The atelier host and its directory are gone: `atelier.maxpetrusenko.com` no longer resolves (NXDOMAIN on 1.1.1.1 and 8.8.8.8), the Cloudflare Pages project `atelier` was deleted, and no redirect was left behind. The checked items above that reference an "Atelier canonical" or the atelier subdomain are historical records of work that has since been superseded — there is no atelier canonical or subdomain to maintain, and nothing in this repo should point at one.

@@ -11,7 +11,7 @@
 **VPS:** Contabo vmi3203669 — 4 vCPU, 8GB RAM, 150GB SSD (9% used), Ubuntu 24.04, IP `173.249.52.27`
 **Coolify:** v4.0.0-beta.470, Traefik proxy on 80/443, dashboard on 8000. Running containers: coolify stack + 1 app.
 **Cloudflare:** Zone `60ee8be619c0096bfe6f88c310993672`, active. DNS for `maxpetrusenko.com` + `southfloridaqigong.com`.
-**Pages:** `maxpetrusenko-nextjs` (root + www), `atelier` (atelier.maxpetrusenko.com), `geo-analyzer-com`, `southfloridaqigong`.
+**Pages:** `maxpetrusenko-nextjs` (root + www), `geo-analyzer-com`, `southfloridaqigong`. (`atelier` project deleted 2026-09-14 — see the DNS table below.)
 **Email:** Amazon SES (11 DKIM records), CF Email Routing on root MX.
 
 ---
@@ -71,8 +71,8 @@ No brute-force protection on SSH.
                        │ HTTPS (CF Origin Cert)
             ┌──────────┼──────────┐
             │          │          │
-     CF Pages    CF Pages    Contabo VPS (173.249.52.27)
-     (nextjs)   (atelier)        │
+     CF Pages                 Contabo VPS (173.249.52.27)
+     (nextjs)                      │
                             ┌────▼────┐
                             │ Traefik │  (reverse proxy, auto-TLS via CF)
                             └────┬────┘
@@ -103,7 +103,7 @@ Detailed rollout and app template:
 |-----------|--------|-------|---------|
 | `maxpetrusenko.com` | CF Pages (`maxpetrusenko-nextjs`) | ☁️ Yes | Main site (keep as-is) |
 | `www.maxpetrusenko.com` | CF Pages (`maxpetrusenko-nextjs`) | ☁️ Yes | www redirect (keep) |
-| `atelier.maxpetrusenko.com` | CF Pages (`atelier-8cw`) | ☁️ Yes | Keep as-is |
+| ~~`atelier.maxpetrusenko.com`~~ | — | — | **RETIRED 2026-09-14.** DNS record removed (NXDOMAIN on 1.1.1.1 + 8.8.8.8), the `atelier` Pages project deleted, and no redirect left behind. It previously 301’d to `tantra-studio.pages.dev`, i.e. the studio brand reachable through a maxpetrusenko.com host, which the anonymity invariant forbids. |
 | `api.maxpetrusenko.com` | A → `173.249.52.27` | ☁️ Yes | Social poster API / webhooks |
 | `coolify.maxpetrusenko.com` | A → `173.249.52.27` | ☁️ Yes | Coolify dashboard (CF Access gated) |
 | `supabase.maxpetrusenko.com` | A → `173.249.52.27` | ☁️ Yes | Shared Supabase API gateway |

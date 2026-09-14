@@ -120,3 +120,7 @@
 - [x] Title duplication removed from page metadata.
 - [x] Medium slug extraction fixed and sitemap deduped.
 - [x] `llm.txt` and `llms.txt` served from `nextjs/public/`.
+
+## 2026-09-14
+
+- [x] Retired the atelier leftovers: deleted `atelier/` from the repo, removed the hostname's DNS record (NXDOMAIN), deleted the `atelier` Cloudflare Pages project, removed the dead-host links and the "Presence Atelier" branding from the dormant legacy static files, and dropped the retired host from `infrastructure-plan.md`. No redirect was left behind, by design. This closes the earlier "Decide Mindfold/Atelier canonical behavior" item above.
