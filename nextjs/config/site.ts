@@ -38,6 +38,65 @@ export const siteConfig: SiteConfig = {
     gumroad: "https://maxpetrusenko.gumroad.com/",
     patreon: "https://patreon.com/maxpetrusenko",
   },
+  // Products and properties Max owns and operates. One canonical host per entry.
+  // The studio/tantra brand is deliberately absent: the anonymity invariant
+  // forbids a maxpetrusenko.com host from linking into it.
+  products: [
+    {
+      title: "GeoAnalyzer",
+      description: "Audits how AI search engines read and cite a site.",
+      href: "https://geo-analyzer.com",
+      badge: "Open",
+    },
+    {
+      title: "Unfollow X",
+      description: "Chrome extension that clears an inactive X following list.",
+      href: "https://unfollow-x.com",
+      badge: "Open",
+    },
+    {
+      title: "SMM Agent",
+      description: "Social posting agent for AI-generated content.",
+      href: "https://smmagent.app",
+      badge: "Open",
+    },
+    {
+      title: "SMMClaw",
+      description: "Companion publishing surface for SMM Agent.",
+      href: "https://smmclaw.app",
+      badge: "Open",
+    },
+    {
+      title: "ClawPoster",
+      description: "Cross-posting surface for AI-native content.",
+      href: "https://clawposter.app",
+      badge: "Open",
+    },
+    {
+      title: "Agent Persona",
+      description: "SaaS for deploying a persistent AI persona.",
+      href: "https://agent-persona.org",
+      badge: "Open",
+    },
+    {
+      title: "AI Math Tutor",
+      description: "Open-source realtime voice tutor stack.",
+      href: "https://aitutor.maxpetrusenko.com",
+      badge: "Open",
+    },
+    {
+      title: "Miami Contact Improv",
+      description: "Independent community map of Contact Improvisation in Miami.",
+      href: "https://miamicontactimprov.com",
+      badge: "Visit",
+    },
+    {
+      title: "Project Wiki",
+      description: "Client-safe project notes and research pages.",
+      href: "https://wiki.maxpetrusenko.com",
+      badge: "Read",
+    },
+  ],
   googleBusinessProfile: {
     // Google Business Profile for Presence Atelier Miami
     // Category: Somatic Education & Energy Work Teaching

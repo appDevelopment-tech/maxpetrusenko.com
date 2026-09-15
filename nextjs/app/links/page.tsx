@@ -163,7 +163,33 @@ export default function LinksPage() {
 
         <section className="section">
           <div className="section-head">
-            <h2>Somatic & Mindfold</h2>
+            <h2>Projects &amp; Products</h2>
+            <span className="section-note">
+              Things I build and run.
+            </span>
+          </div>
+          <div className="tiles">
+            {siteConfig.products.map((product) => (
+              <a
+                key={product.href}
+                className="tile"
+                href={product.href}
+                target="_blank"
+                rel="noopener"
+              >
+                <div className="tile-meta">
+                  <span className="tile-title">{product.title}</span>
+                  <span className="tile-desc">{product.description}</span>
+                </div>
+                <span className="badge">{product.badge}</span>
+              </a>
+            ))}
+          </div>
+        </section>
+
+        <section className="section">
+          <div className="section-head">
+            <h2>Somatic &amp; Mindfold</h2>
           </div>
           <div className="tiles">
             <Link className="tile" href="/somatic">
