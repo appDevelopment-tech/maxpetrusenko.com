@@ -31,6 +31,23 @@ export function Footer() {
           <Link href="/terms-of-service">Terms</Link>
         </div>
       </div>
+      <div className="footer-projects">
+        <div className="footer-projects-title">Projects</div>
+        <div className="footer-projects-links">
+          {siteConfig.products
+            .filter((product) => product.sitewide !== false)
+            .map((product) => (
+              <a
+                key={product.href}
+                href={product.href}
+                target="_blank"
+                rel="noopener"
+              >
+                {product.title}
+              </a>
+            ))}
+        </div>
+      </div>
       <div
         style={{
           display: "flex",

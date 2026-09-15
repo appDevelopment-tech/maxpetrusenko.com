@@ -108,6 +108,13 @@ export interface ProductLink {
   description: string;
   href: string;
   badge: string;
+  /**
+   * Whether the property is safe to link from the site-wide footer, which
+   * renders on every page. Set false while a property is not answering 200 —
+   * a 5xx outbound link repeated across every crawled URL is a quality signal,
+   * not a backlink.
+   */
+  sitewide?: boolean;
 }
 
 export interface NavigationItem {
