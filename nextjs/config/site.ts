@@ -77,6 +77,7 @@ export const siteConfig: SiteConfig = {
       description: "SaaS for deploying a persistent AI persona.",
       href: "https://agent-persona.org",
       badge: "Open",
+      sitewide: false,
     },
     {
       title: "AI Math Tutor",
