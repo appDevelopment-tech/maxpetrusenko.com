@@ -103,6 +103,13 @@ export interface ExternalLinks {
   patreon: string;
 }
 
+export interface ProductLink {
+  title: string;
+  description: string;
+  href: string;
+  badge: string;
+}
+
 export interface NavigationItem {
   name: string;
   href: string;
@@ -120,6 +127,7 @@ export interface SiteConfig {
   navigation: NavigationItem[];
   social: SocialLinks;
   externalLinks: ExternalLinks;
+  products: ProductLink[];
   googleBusinessProfile?: {
     cid: string | null;
     address?: {
