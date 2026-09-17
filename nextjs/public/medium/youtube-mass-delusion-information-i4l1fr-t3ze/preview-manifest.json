@@ -1,0 +1,34 @@
+{
+  "slug": "youtube-mass-delusion-information-i4l1fr-t3ze",
+  "title": "Why Smart Societies Fall for Mass Delusion",
+  "publicUrl": "https://www.maxpetrusenko.com/medium/youtube-mass-delusion-information-i4l1fr-t3ze/",
+  "outputPath": "/private/tmp/maxpet-preview-deploy-mass-delusion/nextjs/public/medium/youtube-mass-delusion-information-i4l1fr-t3ze/index.html",
+  "sourceUrl": "https://www.youtube.com/watch?v=I4l1fr-t3ZE",
+  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-mass-delusion-information-i4l1fr-t3ze/article-v3.md",
+  "articleHash": "880489e21f03ffe516a0ca1ec80fc064b3875b061b4affe58aff4045ccbb7299",
+  "exportedAt": "2026-09-17T05:11:52.649Z",
+  "status": "needs_review",
+  "publishMode": "preview",
+  "copiedImages": [
+    {
+      "src": "assets/hero-overlay.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-mass-delusion-information-i4l1fr-t3ze/assets/hero-overlay.jpg",
+      "destinationPath": "/private/tmp/maxpet-preview-deploy-mass-delusion/nextjs/public/medium/.tmp-youtube-mass-delusion-information-i4l1fr-t3ze-1789621912647/assets/hero-overlay.jpg"
+    },
+    {
+      "src": "assets/section-network.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-mass-delusion-information-i4l1fr-t3ze/assets/section-network.jpg",
+      "destinationPath": "/private/tmp/maxpet-preview-deploy-mass-delusion/nextjs/public/medium/.tmp-youtube-mass-delusion-information-i4l1fr-t3ze-1789621912647/assets/section-network.jpg"
+    },
+    {
+      "src": "assets/section-correction.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-mass-delusion-information-i4l1fr-t3ze/assets/section-correction.jpg",
+      "destinationPath": "/private/tmp/maxpet-preview-deploy-mass-delusion/nextjs/public/medium/.tmp-youtube-mass-delusion-information-i4l1fr-t3ze-1789621912647/assets/section-correction.jpg"
+    }
+  ],
+  "ratings": {
+    "gemini": 9,
+    "gpt": null,
+    "consensus": 9
+  }
+}
