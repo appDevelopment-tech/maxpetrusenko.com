@@ -1,0 +1,34 @@
+{
+  "slug": "youtube-simple-question-socialism-mmhyhneaxxy",
+  "title": "The Simple Question Socialism Couldn't Answer",
+  "publicUrl": "https://www.maxpetrusenko.com/medium/youtube-simple-question-socialism-mmhyhneaxxy/",
+  "outputPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/youtube-simple-question-socialism-mmhyhneaxxy/index.html",
+  "sourceUrl": "https://www.youtube.com/watch?v=mMHyhneAxXY",
+  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-simple-question-socialism-mmhyhneaxxy/article-v3.md",
+  "articleHash": "d1961005d70f52c2910dc870ae77dcfc4e6448a173a482db0f0206d3e5477da5",
+  "exportedAt": "2026-09-18T12:43:13.355Z",
+  "status": "judge_disagreement_gemini9_pass_deepseek8_revise_dispositioned",
+  "publishMode": "preview",
+  "copiedImages": [
+    {
+      "src": "assets/hero-overlay.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-simple-question-socialism-mmhyhneaxxy/assets/hero-overlay.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-simple-question-socialism-mmhyhneaxxy-1789735392764/assets/hero-overlay.jpg"
+    },
+    {
+      "src": "assets/section-store.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-simple-question-socialism-mmhyhneaxxy/assets/section-store.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-simple-question-socialism-mmhyhneaxxy-1789735392764/assets/section-store.jpg"
+    },
+    {
+      "src": "assets/section-line.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-simple-question-socialism-mmhyhneaxxy/assets/section-line.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-simple-question-socialism-mmhyhneaxxy-1789735392764/assets/section-line.jpg"
+    }
+  ],
+  "ratings": {
+    "gemini": 8,
+    "gpt": null,
+    "consensus": 8
+  }
+}
