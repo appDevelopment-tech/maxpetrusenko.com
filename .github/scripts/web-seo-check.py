@@ -12,6 +12,9 @@ in CI, before they show up weeks later in Search Console:
   - Soft 404                                    (200 with 404-ish content)
   - Duplicate field FAQPage / bad JSON-LD
   - Sitemap 404s / sitemap missing from robots.txt
+  - robots.txt pointing `Sitemap:` at ANOTHER host (a crawler of this host is handed
+    a different site's URL list) — measured on smmagent.app / smmclaw.app 2026-09-18
+  - sitemap.xml listing URLs on another host
   - SERP default icon (SVG-only or <48px favicon), broken og:image
 
 Two modes:
@@ -65,6 +68,32 @@ def is_edge_block(body_text: str) -> bool:
     low = (body_text or "")[:4000].lower()
     return any(marker in low for marker in EDGE_BLOCK_MARKERS)
 DEFAULT_DELAY = 0.25
+
+# Registrable-domain approximation for the cross-host sitemap checks. A full public
+# suffix list is not worth a dependency here: the comparison only ever *allows*
+# things (same registrable domain = not a cross-host finding), so a conservative
+# list can produce a missed finding on an exotic suffix but never a false failure.
+MULTI_LABEL_TLDS = frozenset({
+    "co.uk", "org.uk", "ac.uk", "gov.uk", "me.uk",
+    "com.au", "net.au", "org.au",
+    "co.nz", "net.nz", "org.nz",
+    "co.jp", "co.in", "co.za", "co.il", "com.br", "com.mx", "com.sg", "com.tr",
+})
+
+
+def registrable_host(host: str) -> str:
+    """www-stripped, port-stripped, two-label (or known 3-label) suffix of a host."""
+    h = (host or "").split("/")[0].split(":")[0].lower().strip()
+    if h.startswith("www."):
+        h = h[4:]
+    parts = h.split(".")
+    if len(parts) < 3:
+        return h
+    if ".".join(parts[-2:]) in MULTI_LABEL_TLDS:
+        return ".".join(parts[-3:])
+    return ".".join(parts[-2:])
+
+
 SOFT_404_MARKERS = re.compile(
     r"(page not found|404 not found|this page could not be found|"
     r"oops.*not found|error 404|page you (were|are) looking for)", re.I
@@ -375,6 +404,68 @@ class Checker:
                 "page has robots noindex and is correctly absent from sitemap.xml — not a finding",
             )
 
+    def check_robots_sitemap_hosts(self, body, robots_url, base):
+        """Check 6b: a `Sitemap:` line must describe the site being crawled.
+
+        Measured 2026-09-18: smmagent.app and smmclaw.app (two brands served by one
+        Next.js app whose robots route read the *product* canonical) each advertised
+        https://clawposter.app/sitemap.xml. A crawler on smmagent.app is then handed
+        another host's URL list: the host's own pages are only discovered by link
+        following, and the crawler spends its budget on URLs that belong to a
+        different brand. Nothing else in this checker looked at the host of the
+        declared sitemap, so a green run proved nothing about it.
+
+        Host comparison is on the registrable domain, not the exact host, because a
+        legitimate site may serve robots on the apex and advertise the www sitemap
+        (the checker is often invoked with one and the site canonicalises to the
+        other). Comparing the exact host would make that a false failure; comparing
+        the registrable domain still catches the cross-brand case.
+        """
+        base_host = self.host_of(base)
+        declared = [
+            line.split(":", 1)[1].strip()
+            for line in body.splitlines()
+            if line.lower().strip().startswith("sitemap:")
+        ]
+        if not declared:
+            return
+        base_site = registrable_host(base_host)
+        for sm in declared:
+            if not sm.startswith(("http://", "https://")):
+                self.err("robots-sitemap-relative", robots_url, f"Sitemap: must be an absolute URL: {sm}")
+                continue
+            if registrable_host(self.host_of(sm)) != base_site:
+                self.err(
+                    "robots-sitemap-crosshost",
+                    robots_url,
+                    f"Sitemap: points at {self.host_of(sm)}, not {base_host} — crawlers of {base_host} are "
+                    f"handed another site's URL list: {sm}",
+                )
+            else:
+                self.info("robots-sitemap-host-ok", robots_url, f"Sitemap: on {base_host}")
+
+    def check_sitemap_hosts(self, urls, sitemap_url, base):
+        """Check 6c: sitemap <loc> hosts must live on the site being crawled.
+
+        The mirror of 6b: a sitemap that lists another brand's URLs makes the search
+        console property show indexed pages the operator does not own, and the
+        property's own URLs stay undiscovered. Registrable-domain comparison for the
+        same apex/www reason as 6b.
+        """
+        base_site = registrable_host(self.host_of(base))
+        foreign = {}
+        for u in urls:
+            host = self.host_of(u)
+            if not host or registrable_host(host) == base_site:
+                continue
+            foreign.setdefault(host, []).append(u)
+        for host, sample in sorted(foreign.items()):
+            self.err(
+                "sitemap-url-crosshost",
+                sitemap_url,
+                f"{len(sample)} sitemap URL(s) are on {host}, not {base} — e.g. {sample[0]}",
+            )
+
     def check_title_desc(self, url, meta, html=""):
         """Check 7: title + description present, sane lengths, dup detection later."""
         title = meta["title"]
@@ -614,6 +705,7 @@ class Checker:
                 low = line.lower().strip()
                 if low.startswith("disallow:") and low.split(":", 1)[1].strip() in ("/", ""):
                     self.err("robots-block-root", robots_url, f"robots.txt disallows everything: {line}")
+            self.check_robots_sitemap_hosts(text, robots_url, base)
             self.info("robots-ok", robots_url, f"robots.txt HTTP {st}")
         time.sleep(self.delay)
 
@@ -653,6 +745,9 @@ class Checker:
         if self.max_urls:
             urls = urls[: self.max_urls]
 
+        if urls:
+            self.check_sitemap_hosts(urls, sitemap_url, base)
+
         titles = {}
         for i, url in enumerate(urls):
             st, final, html = self.fetch_text(url)
@@ -684,6 +779,7 @@ class Checker:
                 low = line.lower().strip()
                 if low.startswith("disallow:") and low.split(":", 1)[1].strip() in ("/", ""):
                     self.err("robots-block-root", f"{base}/robots.txt", f"robots.txt disallows everything: {line}")
+            self.check_robots_sitemap_hosts(text, f"{base}/robots.txt", base)
         else:
             self.err("robots-missing", f"{base}/robots.txt", "robots.txt not found in build output")
 
@@ -694,6 +790,8 @@ class Checker:
             sitemap_urls = self.parse_sitemap_urls(text)
             if not sitemap_urls:
                 self.warn("sitemap-empty", f"{base}/sitemap.xml", "sitemap.xml parsed but contains no <loc> urls")
+            else:
+                self.check_sitemap_hosts(sitemap_urls, f"{base}/sitemap.xml", base)
         else:
             self.warn("sitemap-missing", f"{base}/sitemap.xml", "sitemap.xml not found in build output")
 
