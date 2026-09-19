@@ -573,6 +573,9 @@ class Checker:
 
     def check_favicon(self, url, meta, html="", local_dir=None):
         """Check 10: PNG/ICO >=48px favicon present (not SVG-only)."""
+        if self.non_page_reason(url):
+            self.info("non-page-skipped", url, f"{self.non_page_reason(url)} — favicon not required")
+            return
         favs = meta["favicons"]
         if not favs:
             self.warn("favicon-missing", url, "no <link rel=icon> found")
@@ -668,6 +671,9 @@ class Checker:
 
     def check_ogimage(self, url, meta, html=""):
         """Check 11: og:image absolute https."""
+        if self.non_page_reason(url):
+            self.info("non-page-skipped", url, f"{self.non_page_reason(url)} — og:image not required")
+            return
         og = meta["og_image"]
         if not og:
             self.warn("og-image-missing", url, "no og:image")
