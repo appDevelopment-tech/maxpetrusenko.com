@@ -1,0 +1,34 @@
+{
+  "slug": "youtube-overdue-collapse-ai-xaambu5ohvw",
+  "title": "The Overdue Collapse of Artificial Intelligence",
+  "publicUrl": "https://www.maxpetrusenko.com/medium/youtube-overdue-collapse-ai-xaambu5ohvw/",
+  "outputPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/youtube-overdue-collapse-ai-xaambu5ohvw/index.html",
+  "sourceUrl": "https://www.youtube.com/watch?v=XaAMbu5ohVw",
+  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-overdue-collapse-ai-xaambu5ohvw/article-v3.md",
+  "articleHash": "e439ea5e2699ad134082a2ecd4b258166e3208eb195e9bbb421a8e6c0078a9b6",
+  "exportedAt": "2026-09-19T10:42:58.347Z",
+  "status": "judge_disagreement_gemini8_pass_deepseek7_revise_dispositioned",
+  "publishMode": "preview",
+  "copiedImages": [
+    {
+      "src": "assets/hero-overlay.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-overdue-collapse-ai-xaambu5ohvw/assets/hero-overlay.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-overdue-collapse-ai-xaambu5ohvw-1789814578344/assets/hero-overlay.jpg"
+    },
+    {
+      "src": "assets/section-board.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-overdue-collapse-ai-xaambu5ohvw/assets/section-board.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-overdue-collapse-ai-xaambu5ohvw-1789814578344/assets/section-board.jpg"
+    },
+    {
+      "src": "assets/section-prevent.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-overdue-collapse-ai-xaambu5ohvw/assets/section-prevent.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-overdue-collapse-ai-xaambu5ohvw-1789814578344/assets/section-prevent.jpg"
+    }
+  ],
+  "ratings": {
+    "gemini": 7,
+    "gpt": null,
+    "consensus": 7
+  }
+}
