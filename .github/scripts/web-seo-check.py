@@ -12,6 +12,9 @@ in CI, before they show up weeks later in Search Console:
   - Soft 404                                    (200 with 404-ish content)
   - Duplicate field FAQPage / bad JSON-LD
   - Sitemap 404s / sitemap missing from robots.txt
+  - robots.txt pointing `Sitemap:` at ANOTHER host (a crawler of this host is handed
+    a different site's URL list) — measured on smmagent.app / smmclaw.app 2026-09-18
+  - sitemap.xml listing URLs on another host
   - SERP default icon (SVG-only or <48px favicon), broken og:image
 
 Two modes:
@@ -65,6 +68,32 @@ def is_edge_block(body_text: str) -> bool:
     low = (body_text or "")[:4000].lower()
     return any(marker in low for marker in EDGE_BLOCK_MARKERS)
 DEFAULT_DELAY = 0.25
+
+# Registrable-domain approximation for the cross-host sitemap checks. A full public
+# suffix list is not worth a dependency here: the comparison only ever *allows*
+# things (same registrable domain = not a cross-host finding), so a conservative
+# list can produce a missed finding on an exotic suffix but never a false failure.
+MULTI_LABEL_TLDS = frozenset({
+    "co.uk", "org.uk", "ac.uk", "gov.uk", "me.uk",
+    "com.au", "net.au", "org.au",
+    "co.nz", "net.nz", "org.nz",
+    "co.jp", "co.in", "co.za", "co.il", "com.br", "com.mx", "com.sg", "com.tr",
+})
+
+
+def registrable_host(host: str) -> str:
+    """www-stripped, port-stripped, two-label (or known 3-label) suffix of a host."""
+    h = (host or "").split("/")[0].split(":")[0].lower().strip()
+    if h.startswith("www."):
+        h = h[4:]
+    parts = h.split(".")
+    if len(parts) < 3:
+        return h
+    if ".".join(parts[-2:]) in MULTI_LABEL_TLDS:
+        return ".".join(parts[-3:])
+    return ".".join(parts[-2:])
+
+
 SOFT_404_MARKERS = re.compile(
     r"(page not found|404 not found|this page could not be found|"
     r"oops.*not found|error 404|page you (were|are) looking for)", re.I
@@ -167,6 +196,31 @@ class Checker:
         except Exception:
             text = body.decode("latin-1", errors="replace")
         return status, final, text
+
+    def probe_redirect(self, url):
+        """First-hop status for a URL, WITHOUT following the redirect.
+
+        urllib follows redirects unconditionally (the allow_redirects argument on
+        fetch() was decorative), which is why a sitemap <loc> that 308s to its
+        canonical form was scored as a clean 200 by every gate in this estate.
+        Returns (status, location).
+        """
+
+        class _NoRedirect(urllib.request.HTTPRedirectHandler):
+            def redirect_request(self, req, fp, code, msg, headers, newurl):
+                return None  # do not follow; surface the 3xx as-is
+
+        opener = urllib.request.build_opener(
+            _NoRedirect(), urllib.request.HTTPSHandler(context=self.ctx)
+        )
+        req = urllib.request.Request(url, headers={"User-Agent": UA, "Accept": "*/*"})
+        try:
+            resp = opener.open(req, timeout=TIMEOUT)
+            return resp.status, (resp.headers.get("Location") or "")
+        except urllib.error.HTTPError as e:
+            return e.code, (e.headers.get("Location") or "")
+        except Exception as e:
+            return 0, f"probe failed: {e}"
 
     # -- html parsing ---------------------------------------------------------
 
@@ -287,6 +341,22 @@ class Checker:
 
     # -- checks ---------------------------------------------------------------
 
+    # Platform-generated error documents and edge-injected paths. They are served,
+    # but they are not pages: Cloudflare injects /cdn-cgi/** at the edge, and
+    # Next.js emits its default 404/500 documents into the build output with no
+    # source file behind them. Nobody can give these a canonical or a description,
+    # so requiring one produced findings that could not be acted on — and a gate
+    # full of unactionable findings teaches its readers to ignore it.
+    # They stay in the scan and are reported as INFO, never dropped silently.
+    NON_PAGE_PATTERNS = (r"/cdn-cgi/", r"/404\.html$", r"/500\.html$")
+
+    def non_page_reason(self, url):
+        path = urllib.parse.urlsplit(url).path or "/"
+        for pat in self.NON_PAGE_PATTERNS:
+            if re.search(pat, path):
+                return "platform-generated error document, not a page"
+        return None
+
     def check_canonical(self, url, meta, html=""):
         """Checks 1-3: canonical present, self-referencing, no chain.
 
@@ -299,6 +369,12 @@ class Checker:
         blocks a deploy, that contradiction stopped a real deploy.
         """
         noindex = any("noindex" in r for r in meta.get("robots", []) or [])
+        if self.non_page_reason(url):
+            self.info(
+                "non-page-skipped", url,
+                f"{self.non_page_reason(url)} — canonical not required",
+            )
+            return
         if noindex:
             self.info(
                 "canonical-skipped-noindex", url,
@@ -375,8 +451,76 @@ class Checker:
                 "page has robots noindex and is correctly absent from sitemap.xml — not a finding",
             )
 
+    def check_robots_sitemap_hosts(self, body, robots_url, base):
+        """Check 6b: a `Sitemap:` line must describe the site being crawled.
+
+        Measured 2026-09-18: smmagent.app and smmclaw.app (two brands served by one
+        Next.js app whose robots route read the *product* canonical) each advertised
+        https://clawposter.app/sitemap.xml. A crawler on smmagent.app is then handed
+        another host's URL list: the host's own pages are only discovered by link
+        following, and the crawler spends its budget on URLs that belong to a
+        different brand. Nothing else in this checker looked at the host of the
+        declared sitemap, so a green run proved nothing about it.
+
+        Host comparison is on the registrable domain, not the exact host, because a
+        legitimate site may serve robots on the apex and advertise the www sitemap
+        (the checker is often invoked with one and the site canonicalises to the
+        other). Comparing the exact host would make that a false failure; comparing
+        the registrable domain still catches the cross-brand case.
+        """
+        base_host = self.host_of(base)
+        declared = [
+            line.split(":", 1)[1].strip()
+            for line in body.splitlines()
+            if line.lower().strip().startswith("sitemap:")
+        ]
+        if not declared:
+            return
+        base_site = registrable_host(base_host)
+        for sm in declared:
+            if not sm.startswith(("http://", "https://")):
+                self.err("robots-sitemap-relative", robots_url, f"Sitemap: must be an absolute URL: {sm}")
+                continue
+            if registrable_host(self.host_of(sm)) != base_site:
+                self.err(
+                    "robots-sitemap-crosshost",
+                    robots_url,
+                    f"Sitemap: points at {self.host_of(sm)}, not {base_host} — crawlers of {base_host} are "
+                    f"handed another site's URL list: {sm}",
+                )
+            else:
+                self.info("robots-sitemap-host-ok", robots_url, f"Sitemap: on {base_host}")
+
+    def check_sitemap_hosts(self, urls, sitemap_url, base):
+        """Check 6c: sitemap <loc> hosts must live on the site being crawled.
+
+        The mirror of 6b: a sitemap that lists another brand's URLs makes the search
+        console property show indexed pages the operator does not own, and the
+        property's own URLs stay undiscovered. Registrable-domain comparison for the
+        same apex/www reason as 6b.
+        """
+        base_site = registrable_host(self.host_of(base))
+        foreign = {}
+        for u in urls:
+            host = self.host_of(u)
+            if not host or registrable_host(host) == base_site:
+                continue
+            foreign.setdefault(host, []).append(u)
+        for host, sample in sorted(foreign.items()):
+            self.err(
+                "sitemap-url-crosshost",
+                sitemap_url,
+                f"{len(sample)} sitemap URL(s) are on {host}, not {base} — e.g. {sample[0]}",
+            )
+
     def check_title_desc(self, url, meta, html=""):
         """Check 7: title + description present, sane lengths, dup detection later."""
+        if self.non_page_reason(url):
+            self.info(
+                "non-page-skipped", url,
+                f"{self.non_page_reason(url)} — title/description not required",
+            )
+            return
         title = meta["title"]
         desc = meta["description"]
         if not title:
@@ -429,6 +573,9 @@ class Checker:
 
     def check_favicon(self, url, meta, html="", local_dir=None):
         """Check 10: PNG/ICO >=48px favicon present (not SVG-only)."""
+        if self.non_page_reason(url):
+            self.info("non-page-skipped", url, f"{self.non_page_reason(url)} — favicon not required")
+            return
         favs = meta["favicons"]
         if not favs:
             self.warn("favicon-missing", url, "no <link rel=icon> found")
@@ -524,6 +671,9 @@ class Checker:
 
     def check_ogimage(self, url, meta, html=""):
         """Check 11: og:image absolute https."""
+        if self.non_page_reason(url):
+            self.info("non-page-skipped", url, f"{self.non_page_reason(url)} — og:image not required")
+            return
         og = meta["og_image"]
         if not og:
             self.warn("og-image-missing", url, "no og:image")
@@ -538,6 +688,12 @@ class Checker:
         Without it Google treats the page as desktop-only and may demote it.
         """
         vp = meta.get("viewport")
+        if self.non_page_reason(url):
+            self.info(
+                "non-page-skipped", url,
+                f"{self.non_page_reason(url)} — viewport not required",
+            )
+            return
         if vp is None:
             self.err("mobile-viewport-missing", url, "no viewport meta — page is not mobile-friendly")
         elif "width=device-width" not in vp:
@@ -614,6 +770,7 @@ class Checker:
                 low = line.lower().strip()
                 if low.startswith("disallow:") and low.split(":", 1)[1].strip() in ("/", ""):
                     self.err("robots-block-root", robots_url, f"robots.txt disallows everything: {line}")
+            self.check_robots_sitemap_hosts(text, robots_url, base)
             self.info("robots-ok", robots_url, f"robots.txt HTTP {st}")
         time.sleep(self.delay)
 
@@ -653,9 +810,28 @@ class Checker:
         if self.max_urls:
             urls = urls[: self.max_urls]
 
+        if urls:
+            self.check_sitemap_hosts(urls, sitemap_url, base)
+
         titles = {}
         for i, url in enumerate(urls):
             st, final, html = self.fetch_text(url)
+            # A sitemap must list the URL that returns 200, never one that redirects.
+            # Google files a redirecting <loc> as "Page with redirect" and can leave the
+            # destination unindexed, which is how southfloridaqigong.com carried three such
+            # URLs (all 308 -> trailing-slash form) through every gate in this estate:
+            # fetch() follows redirects, so the destination's 200 looked like the <loc>'s.
+            # final != url is already proof of a redirect (geturl() returns the request url
+            # verbatim when nothing was followed); the probe only supplies the status code
+            # as evidence, so it is not required to be conclusive.
+            if final and final != url:
+                rst, rloc = self.probe_redirect(url)
+                code_txt = f"HTTP {rst} " if 300 <= rst < 400 else ""
+                self.err(
+                    "sitemap-url-redirect", url,
+                    f"sitemap url {code_txt}redirects to {rloc or final}; a sitemap must list the "
+                    f"200 url, not one that redirects (Google reports 'Page with redirect')",
+                )
             meta = self.run_page_checks(url, st, final, html)
             if meta and meta["title"]:
                 titles.setdefault(meta["title"], []).append(url)
@@ -684,6 +860,7 @@ class Checker:
                 low = line.lower().strip()
                 if low.startswith("disallow:") and low.split(":", 1)[1].strip() in ("/", ""):
                     self.err("robots-block-root", f"{base}/robots.txt", f"robots.txt disallows everything: {line}")
+            self.check_robots_sitemap_hosts(text, f"{base}/robots.txt", base)
         else:
             self.err("robots-missing", f"{base}/robots.txt", "robots.txt not found in build output")
 
@@ -694,6 +871,8 @@ class Checker:
             sitemap_urls = self.parse_sitemap_urls(text)
             if not sitemap_urls:
                 self.warn("sitemap-empty", f"{base}/sitemap.xml", "sitemap.xml parsed but contains no <loc> urls")
+            else:
+                self.check_sitemap_hosts(sitemap_urls, f"{base}/sitemap.xml", base)
         else:
             self.warn("sitemap-missing", f"{base}/sitemap.xml", "sitemap.xml not found in build output")
 
@@ -704,11 +883,30 @@ class Checker:
             "Library", "Page", "admin", "scripts", "tests", "docs", "output",
             ".tmp", "Tantra", ".webtool-bench",
         }
+        # Exclusions are matched against the path RELATIVE to the scanned directory, never
+        # the absolute path. Matching on f.parts meant a build dir that is itself named
+        # dist/out/build — or that sits under .vercel/output — excluded every file inside
+        # it, so the scan found nothing and reported PASS. Measured 2026-09-19: a page with
+        # no canonical at all, under a path containing .vercel/output, scored 0 errors /
+        # 0 warnings while the same fixture at a neutral path scored 3 errors. That is how
+        # `--dir nextjs/.vercel/output/static` (maxpetrusenko.com) and `--dir dist`
+        # (southfloridaqigong) both scanned zero pages with a green result.
         html_files = [
             f
             for f in sorted(d.rglob("*.html"))
-            if not any(part in EXCLUDE_PARTS for part in f.parts)
+            if not any(part in EXCLUDE_PARTS for part in f.relative_to(d).parts)
         ]
+        if not html_files:
+            # A dir-mode gate that examined nothing must never look like a pass. This is
+            # the estate rule "routes_checked > 0"; without it a path typo or an
+            # over-broad exclusion silently retires the whole check.
+            self.err(
+                "dir-empty", str(d),
+                f"no html files found under {d} after exclusions — this gate verified "
+                f"NOTHING and must not pass; check the --dir path and EXCLUDE_PARTS",
+            )
+        else:
+            self.info("dir-surface", str(d), f"scanning {len(html_files)} html file(s)")
         file_to_url = {}
         for f in html_files:
             rel = f.relative_to(d).as_posix()

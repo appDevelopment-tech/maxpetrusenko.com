@@ -4,12 +4,13 @@ name: SEO Indexing Gate
 # "Alternate page with proper canonical tag", noindex, robots blocks,
 # sitemap 404s, thin content, JSON-LD/favicon/og issues) BEFORE a deploy.
 #
-#   push → main : runs LOCAL dir-checks on the built Pages output (no network,
+#   push → main : runs LOCAL dir-check on the built Pages output (no network,
 #                 no Cloudflare rate-limit risk). Blocks on errors.
 #   workflow_dispatch : runs LIVE crawl of the production site after deploy.
 #
 # Usage: python3 .github/scripts/web-seo-check.py --dir <out> --url <base>
 #        or --url <base> for live mode. Exit 0 = pass, 1 = errors, 2 = warnings.
+
 #
 # Structured-data half of the gate (added 2026-09-12):
 #   python3 .github/scripts/sd-check.py     --config .github/scripts/sd-gate.toml
@@ -49,6 +50,16 @@ on:
   # it skips, because the check never appears and the PR waits forever.
   pull_request:
 
+  # Weekly live verification. This repo is PUBLIC, so Actions minutes here are free, and the
+  # live half of this gate only ever ran when someone remembered to dispatch it by hand: the
+  # inputs were checked on push while Google's side was never checked at all. Private-repo
+  # siblings in this estate cannot afford the same cron (billed minutes ran out and silently
+  # stopped their scheduled lanes), so their weekly run comes from the local Hermes watchdog
+  # ~/.hermes/scripts/seo-index-weekly.sh. Any defect this job can see, that watchdog also
+  # sees, for every owned host - this is the tracked-in-CI copy.
+  schedule:
+    - cron: "17 6 * * 1"
+
 concurrency:
   group: seo-indexing-gate-${{ github.ref }}
   cancel-in-progress: true
@@ -62,6 +73,9 @@ env:
 jobs:
   local-build-check:
     name: Local build SEO check (pre-deploy)
+    # A weekly crawl has nothing to prove about a fresh build; skip the (slow) build job on the
+    # cron so the scheduled run is only the live verification.
+    if: github.event_name != 'schedule'
     runs-on: ubuntu-latest
     timeout-minutes: 20
     defaults:
@@ -100,6 +114,13 @@ jobs:
         # exit 1 blocks; exit 2 (warnings) reported but allowed
         # --skip-sitemap-files: Next.js worker build doesn't mirror every route
         # as a flat file; live mode (workflow_dispatch) verifies sitemap URLs.
+
+      # The atelier subdomain used to be scanned here with `--dir atelier`. That
+      # directory is not in this repository (main's root has no atelier/), so the
+      # step failed every run with [dir-missing] "directory does not exist" and the
+      # required check could never pass -- a gate that cannot pass is as useless as
+      # one that cannot fail. If the atelier surface is deployed from somewhere else,
+      # its gate belongs with the thing that builds it.
 
       # ---------------------------------------------------------------------
       # Structured-data gate. Offline; reads the built artifacts + the local
@@ -182,7 +203,7 @@ jobs:
 
   live-check:
     name: Live site SEO check (post-deploy)
-    if: github.event_name == 'workflow_dispatch'
+    if: github.event_name == 'workflow_dispatch' || github.event_name == 'schedule'
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
@@ -194,5 +215,6 @@ jobs:
           python3 .github/scripts/web-seo-check.py \
             --url ${{ env.SITE_URL }} \
             --delay 0.3 \
+            --max 60 \
             --json /tmp/seo-live-report.json
         # serial crawl + 503 retry (Cloudflare rate-limit safe)
