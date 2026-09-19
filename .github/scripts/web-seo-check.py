@@ -341,6 +341,22 @@ class Checker:
 
     # -- checks ---------------------------------------------------------------
 
+    # Platform-generated error documents and edge-injected paths. They are served,
+    # but they are not pages: Cloudflare injects /cdn-cgi/** at the edge, and
+    # Next.js emits its default 404/500 documents into the build output with no
+    # source file behind them. Nobody can give these a canonical or a description,
+    # so requiring one produced findings that could not be acted on — and a gate
+    # full of unactionable findings teaches its readers to ignore it.
+    # They stay in the scan and are reported as INFO, never dropped silently.
+    NON_PAGE_PATTERNS = (r"/cdn-cgi/", r"/404\.html$", r"/500\.html$")
+
+    def non_page_reason(self, url):
+        path = urllib.parse.urlsplit(url).path or "/"
+        for pat in self.NON_PAGE_PATTERNS:
+            if re.search(pat, path):
+                return "platform-generated error document, not a page"
+        return None
+
     def check_canonical(self, url, meta, html=""):
         """Checks 1-3: canonical present, self-referencing, no chain.
 
@@ -353,6 +369,12 @@ class Checker:
         blocks a deploy, that contradiction stopped a real deploy.
         """
         noindex = any("noindex" in r for r in meta.get("robots", []) or [])
+        if self.non_page_reason(url):
+            self.info(
+                "non-page-skipped", url,
+                f"{self.non_page_reason(url)} — canonical not required",
+            )
+            return
         if noindex:
             self.info(
                 "canonical-skipped-noindex", url,
@@ -493,6 +515,12 @@ class Checker:
 
     def check_title_desc(self, url, meta, html=""):
         """Check 7: title + description present, sane lengths, dup detection later."""
+        if self.non_page_reason(url):
+            self.info(
+                "non-page-skipped", url,
+                f"{self.non_page_reason(url)} — title/description not required",
+            )
+            return
         title = meta["title"]
         desc = meta["description"]
         if not title:
@@ -654,6 +682,12 @@ class Checker:
         Without it Google treats the page as desktop-only and may demote it.
         """
         vp = meta.get("viewport")
+        if self.non_page_reason(url):
+            self.info(
+                "non-page-skipped", url,
+                f"{self.non_page_reason(url)} — viewport not required",
+            )
+            return
         if vp is None:
             self.err("mobile-viewport-missing", url, "no viewport meta — page is not mobile-friendly")
         elif "width=device-width" not in vp:
