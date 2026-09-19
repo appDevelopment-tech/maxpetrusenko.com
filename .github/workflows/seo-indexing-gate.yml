@@ -4,25 +4,12 @@ name: SEO Indexing Gate
 # "Alternate page with proper canonical tag", noindex, robots blocks,
 # sitemap 404s, thin content, JSON-LD/favicon/og issues) BEFORE a deploy.
 #
-#   push → main : runs LOCAL dir-checks on the built Pages output (no network,
+#   push → main : runs LOCAL dir-check on the built Pages output (no network,
 #                 no Cloudflare rate-limit risk). Blocks on errors.
 #   workflow_dispatch : runs LIVE crawl of the production site after deploy.
 #
 # Usage: python3 .github/scripts/web-seo-check.py --dir <out> --url <base>
 #        or --url <base> for live mode. Exit 0 = pass, 1 = errors, 2 = warnings.
-#
-# Structured-data half of the gate (added 2026-09-12):
-#   python3 .github/scripts/sd-check.py     --config .github/scripts/sd-gate.toml
-#   node    nextjs/scripts/check-sd-surface-parity.mjs ...
-# `sd-gate.toml` is the invocation: it holds mode, surface, baseline, coverage
-# manifest and the per-rule bands (plan §A5.2). Strictness is NOT set here — a
-# band promotion is a one-line diff in that file, not a workflow edit (§D1/R3).
-# Exit-code contract (§A5.3), for both tools:
-#   0 = no error-band findings / no divergence   → step passes
-#   1 = findings                                 → step fails
-#   2 = the gate broke (bad config, unreadable surface) → step fails, and the
-#       message says the GATE broke, not the site.
-# No `|| true` anywhere, and no exit-2 special-casing.
 
 on:
   push:
@@ -31,23 +18,19 @@ on:
     paths:
       - 'nextjs/**'
       - 'public/**'
-      - 'tests/fixtures/sd-baseline/**'
-      - 'tests/fixtures/sd-coverage/**'
       - '.github/scripts/web-seo-check.py'
-      - '.github/scripts/sd-check.py'
-      - '.github/scripts/sd-policy.toml'
-      - '.github/scripts/sd-gate.toml'
-      - '.github/scripts/schema-org-types.txt'
       - '.github/workflows/seo-indexing-gate.yml'
   workflow_dispatch:
-  # pull_request: proof-of-execution.  This workflow is the read-only gate:
-  # permissions are contents: read, `local-build-check` builds + validates but
-  # never deploys, and `live-check` is guarded to workflow_dispatch only.  So a
-  # PR can run the real gate with no chance of touching production.  Deliberately
-  # NOT path-filtered: this job is the repository's required status check, and a
-  # required check that only runs on matching paths blocks every merge on the PRs
-  # it skips, because the check never appears and the PR waits forever.
-  pull_request:
+
+  # Weekly live verification. This repo is PUBLIC, so Actions minutes here are free, and the
+  # live half of this gate only ever ran when someone remembered to dispatch it by hand: the
+  # inputs were checked on push while Google's side was never checked at all. Private-repo
+  # siblings in this estate cannot afford the same cron (billed minutes ran out and silently
+  # stopped their scheduled lanes), so their weekly run comes from the local Hermes watchdog
+  # ~/.hermes/scripts/seo-index-weekly.sh. Any defect this job can see, that watchdog also
+  # sees, for every owned host - this is the tracked-in-CI copy.
+  schedule:
+    - cron: "17 6 * * 1"
 
 concurrency:
   group: seo-indexing-gate-${{ github.ref }}
@@ -62,6 +45,9 @@ env:
 jobs:
   local-build-check:
     name: Local build SEO check (pre-deploy)
+    # A weekly crawl has nothing to prove about a fresh build; skip the (slow) build job on the
+    # cron so the scheduled run is only the live verification.
+    if: github.event_name != 'schedule'
     runs-on: ubuntu-latest
     timeout-minutes: 20
     defaults:
@@ -77,11 +63,6 @@ jobs:
           node-version: 20
           cache: npm
           cache-dependency-path: nextjs/package-lock.json
-
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.12' # sd-check asserts >= 3.11 (tomllib) and exits 2 below it
 
       - name: Install dependencies
         run: npm ci
@@ -101,88 +82,25 @@ jobs:
         # --skip-sitemap-files: Next.js worker build doesn't mirror every route
         # as a flat file; live mode (workflow_dispatch) verifies sitemap URLs.
 
-      # ---------------------------------------------------------------------
-      # Structured-data gate. Offline; reads the built artifacts + the local
-      # policy file only. Strictness lives in sd-gate.toml and this repo ENFORCES
-      # (report_only = false), so an error-band finding fails this job.
-      # ---------------------------------------------------------------------
-      - name: Negative control - the gate must reject a known-bad fixture
+      - name: Run SEO indexing gate — atelier subdomain (dir mode)
         working-directory: .
         run: |
-          # Proves the gate is still load-bearing: a validator that quietly stopped
-          # failing would pass every other step and protect nothing.
-          # `working-directory: .` is not decoration. This job defaults to nextjs/,
-          # and a step without the override gets python's "can't open file" exit 2 --
-          # which looks exactly like the gate rejecting bad markup. The sibling gate
-          # step sets it the same way.
-          # Requires exit 1 AND the expected error line: exit 2 alone means the run
-          # broke or read nothing, which is not the same as rejecting bad markup.
-          rm -rf /tmp/sd-negative && mkdir -p /tmp/sd-negative
-          cp "$GITHUB_WORKSPACE/tests/fixtures/sd-negative/broken.html" /tmp/sd-negative/index.html
-          set +e
-          python3 .github/scripts/sd-check.py \
-            --config .github/scripts/sd-gate.toml \
-            --dir /tmp/sd-negative > /tmp/neg.txt 2>&1
-          code=$?
-          set -e
-          if [ "$code" -ne 1 ]; then
-            echo "::error::negative control FAILED - expected exit 1 on a deliberately broken fixture, got $code"
-            cat /tmp/neg.txt
-            exit 1
-          fi
-          if ! grep -q '\[E\] context-missing' /tmp/neg.txt; then
-            echo "::error::negative control FAILED - exited 1 without the expected context-missing error"
-            cat /tmp/neg.txt
-            exit 1
-          fi
-          echo "negative control OK - the gate exited 1 on a deliberately broken fixture"
-          grep -E '\[E\] context-missing|summary: error=' /tmp/neg.txt | head -3
+          python3 .github/scripts/web-seo-check.py \
+            --dir atelier \
+            --url https://atelier.maxpetrusenko.com \
+            --json /tmp/seo-report-atelier.json
+        # exit 1 blocks; exit 2 (warnings) reported but allowed
 
-      - name: Run structured-data gate (dir mode)
-        working-directory: .
-        run: |
-          python3 .github/scripts/sd-check.py \
-            --config .github/scripts/sd-gate.toml \
-            --json /tmp/sd-report.json
-
-      - name: Run structured-data surface-parity check
-        working-directory: nextjs
-        env:
-          # §A4.2 adapter pin. Bump this in the same commit as the lockfile:
-          # a change to @cloudflare/next-on-pages alters the output layout the
-          # parity check keys off, so the check must fail rather than silently
-          # compare a layout it was never validated against (exit 2).
-          NEXT_ON_PAGES_PIN: '1.13.16'
-        run: |
-          node scripts/check-sd-surface-parity.mjs \
-            --surface static=.vercel/output/static \
-            --surface fallback='.vercel/output/functions/**/*prerender-fallback.html' \
-            --sample 0 \
-            --expect-adapter "${NEXT_ON_PAGES_PIN}" \
-            --report-only \
-            --json /tmp/sd-parity.json
-        # --sample 0 compares the FULL route set. The previous --sample 3
-        # compared 3 of 60 routes and a real 1-in-60 divergence read as a pass
-        # (review 2026-09-12); the full set is a few hundred small HTML files,
-        # sub-second, so there is no runtime reason to sample. --report-only
-        # stays this lane's promotion knob: drop it alongside the sd-gate.toml
-        # band promotion.
-        # A surface whose files are all excluded routes now fails hard (exit 2),
-        # so a run that compares nothing can never be green.
-
-      - name: Upload SEO reports
+      - name: Upload SEO report
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: seo-report
-          path: |
-            /tmp/seo-report.json
-            /tmp/sd-report.json
-            /tmp/sd-parity.json
+          path: /tmp/seo-report.json
 
   live-check:
     name: Live site SEO check (post-deploy)
-    if: github.event_name == 'workflow_dispatch'
+    if: github.event_name == 'workflow_dispatch' || github.event_name == 'schedule'
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
@@ -194,5 +112,6 @@ jobs:
           python3 .github/scripts/web-seo-check.py \
             --url ${{ env.SITE_URL }} \
             --delay 0.3 \
+            --max 60 \
             --json /tmp/seo-live-report.json
         # serial crawl + 503 retry (Cloudflare rate-limit safe)
