@@ -115,14 +115,12 @@ jobs:
         # --skip-sitemap-files: Next.js worker build doesn't mirror every route
         # as a flat file; live mode (workflow_dispatch) verifies sitemap URLs.
 
-      - name: Run SEO indexing gate — atelier subdomain (dir mode)
-        working-directory: .
-        run: |
-          python3 .github/scripts/web-seo-check.py \
-            --dir atelier \
-            --url https://atelier.maxpetrusenko.com \
-            --json /tmp/seo-report-atelier.json
-        # exit 1 blocks; exit 2 (warnings) reported but allowed
+      # The atelier subdomain used to be scanned here with `--dir atelier`. That
+      # directory is not in this repository (main's root has no atelier/), so the
+      # step failed every run with [dir-missing] "directory does not exist" and the
+      # required check could never pass -- a gate that cannot pass is as useless as
+      # one that cannot fail. If the atelier surface is deployed from somewhere else,
+      # its gate belongs with the thing that builds it.
 
       # ---------------------------------------------------------------------
       # Structured-data gate. Offline; reads the built artifacts + the local
@@ -200,7 +198,6 @@ jobs:
           name: seo-report
           path: |
             /tmp/seo-report.json
-            /tmp/seo-report-atelier.json
             /tmp/sd-report.json
             /tmp/sd-parity.json
 
