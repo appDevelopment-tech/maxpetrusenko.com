@@ -1,0 +1,34 @@
+{
+  "slug": "youtube-ai-born-9-seconds-9xloavitugi",
+  "title": "AI Behaves Best When It Knows You're Watching",
+  "publicUrl": "https://www.maxpetrusenko.com/medium/youtube-ai-born-9-seconds-9xloavitugi/",
+  "outputPath": "/private/tmp/mp-deploy-aiborn/nextjs/public/medium/youtube-ai-born-9-seconds-9xloavitugi/index.html",
+  "sourceUrl": "https://www.youtube.com/watch?v=9XlOaVItUgI",
+  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-ai-born-9-seconds-9xloavitugi/article-v1.md",
+  "articleHash": "151d3a44bac4aed1fd46f8a5b22d45f9f3240e04983f491c10a5d8349f486132",
+  "exportedAt": "2026-09-20T16:30:59.075Z",
+  "status": "min_critical_gated_gemini9_deepseek8_below_9.5_target",
+  "publishMode": "preview",
+  "copiedImages": [
+    {
+      "src": "assets/hero.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-ai-born-9-seconds-9xloavitugi/assets/hero.jpg",
+      "destinationPath": "/private/tmp/mp-deploy-aiborn/nextjs/public/medium/.tmp-youtube-ai-born-9-seconds-9xloavitugi-1789921859067/assets/hero.jpg"
+    },
+    {
+      "src": "assets/section-2.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-ai-born-9-seconds-9xloavitugi/assets/section-2.jpg",
+      "destinationPath": "/private/tmp/mp-deploy-aiborn/nextjs/public/medium/.tmp-youtube-ai-born-9-seconds-9xloavitugi-1789921859067/assets/section-2.jpg"
+    },
+    {
+      "src": "assets/section-1.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-ai-born-9-seconds-9xloavitugi/assets/section-1.jpg",
+      "destinationPath": "/private/tmp/mp-deploy-aiborn/nextjs/public/medium/.tmp-youtube-ai-born-9-seconds-9xloavitugi-1789921859067/assets/section-1.jpg"
+    }
+  ],
+  "ratings": {
+    "gemini": 8,
+    "gpt": null,
+    "consensus": 8
+  }
+}
