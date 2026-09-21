@@ -651,25 +651,6 @@
     @apply px-3 py-2 rounded-xl;
   }
 
-  /* Footer projects: one persistent block so every crawled URL carries the
-     outbound links to the properties Max owns. Sits below the footer bar,
-     which already carries the top border. */
-  .footer-projects {
-    @apply container pb-8 text-sm;
-  }
-
-  .footer-projects-title {
-    @apply text-muted text-xs uppercase tracking-widest mb-3;
-  }
-
-  .footer-projects-links {
-    @apply flex gap-x-5 gap-y-2 flex-wrap text-sm;
-  }
-
-  .footer-projects-links a {
-    @apply underline-offset-4 hover:underline;
-  }
-
   /* Hero */
   .hero {
     display: grid;
