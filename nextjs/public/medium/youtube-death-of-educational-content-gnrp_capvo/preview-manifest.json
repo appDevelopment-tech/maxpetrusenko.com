@@ -1,0 +1,34 @@
+{
+  "slug": "youtube-death-of-educational-content-gnrp_capvo",
+  "title": "They Cloned a 100-Person Studio With One Instruction",
+  "publicUrl": "https://www.maxpetrusenko.com/medium/youtube-death-of-educational-content-gnrp_capvo/",
+  "outputPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/youtube-death-of-educational-content-gnrp_capvo/index.html",
+  "sourceUrl": "https://www.youtube.com/watch?v=-Gnrp_caPvo",
+  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-death-of-educational-content-gnrp_capvo/article-v3.md",
+  "articleHash": "c84d53156a0e03d7f0155938a16a4d5e15f63cd3f20230cf122001448e9d8cff",
+  "exportedAt": "2026-09-21T04:51:57.036Z",
+  "status": "gemini 9/10 pass; deepseek 7/10 revise (items reconciled - reports/rater-findings-reconciliation.md)",
+  "publishMode": "preview",
+  "copiedImages": [
+    {
+      "src": "assets/hero.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-death-of-educational-content-gnrp_capvo/assets/hero.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-death-of-educational-content-gnrp_capvo-1789966317023/assets/hero.jpg"
+    },
+    {
+      "src": "assets/section-1.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-death-of-educational-content-gnrp_capvo/assets/section-1.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-death-of-educational-content-gnrp_capvo-1789966317023/assets/section-1.jpg"
+    },
+    {
+      "src": "assets/section-2.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-death-of-educational-content-gnrp_capvo/assets/section-2.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-death-of-educational-content-gnrp_capvo-1789966317023/assets/section-2.jpg"
+    }
+  ],
+  "ratings": {
+    "gemini": 7,
+    "gpt": null,
+    "consensus": 7
+  }
+}
