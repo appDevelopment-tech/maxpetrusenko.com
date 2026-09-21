@@ -1,0 +1,34 @@
+{
+  "slug": "youtube-putin-war-pay-new-wealth-ifvqlskt04e",
+  "title": "The Cemetery Is Visible From Space. The Payments That Filled It Are Shrinking.",
+  "publicUrl": "https://www.maxpetrusenko.com/medium/youtube-putin-war-pay-new-wealth-ifvqlskt04e/",
+  "outputPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/youtube-putin-war-pay-new-wealth-ifvqlskt04e/index.html",
+  "sourceUrl": "https://www.youtube.com/watch?v=ifVQlskT04E",
+  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-putin-war-pay-new-wealth-ifvqlskt04e/article-v3.md",
+  "articleHash": "7b3173b4610a296c27ad9131bbc8ee5d90090335db9794bd9586fd23c44b64bb",
+  "exportedAt": "2026-09-21T16:47:03.966Z",
+  "status": "gemini 9/10 pass (mustFix: none); deepseek 7/10 revise (items verified/reconciled - reports/rater-findings-reconciliation.md; 3 v4 candidates recorded for Max)",
+  "publishMode": "preview",
+  "copiedImages": [
+    {
+      "src": "assets/hero.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-putin-war-pay-new-wealth-ifvqlskt04e/assets/hero.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-putin-war-pay-new-wealth-ifvqlskt04e-1790009223958/assets/hero.jpg"
+    },
+    {
+      "src": "assets/section-1.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-putin-war-pay-new-wealth-ifvqlskt04e/assets/section-1.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-putin-war-pay-new-wealth-ifvqlskt04e-1790009223958/assets/section-1.jpg"
+    },
+    {
+      "src": "assets/section-2.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-putin-war-pay-new-wealth-ifvqlskt04e/assets/section-2.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-putin-war-pay-new-wealth-ifvqlskt04e-1790009223958/assets/section-2.jpg"
+    }
+  ],
+  "ratings": {
+    "gemini": 7,
+    "gpt": null,
+    "consensus": 7
+  }
+}
