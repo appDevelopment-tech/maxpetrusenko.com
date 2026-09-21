@@ -169,4 +169,75 @@ describe('POST /api/subscribe', () => {
 		expect(status).toBe(200);
 		expect(body.ok).toBe(true);
 	});
+
+	it('stores the acquisition fields a page sends with a signup', async () => {
+		interceptContacts();
+		interceptEmails();
+
+		const { status } = await call('/api/subscribe', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({
+				email: 'reader@example.com',
+				consent: true,
+				source: 'miamicontactimprov:start:door',
+				offer: 'Not ready for this Friday? Get the next dates and 10% off when you are.',
+				campaign: 'ci-october',
+				landing_page: '/start',
+				referrer: 'https://www.instagram.com/',
+				utm_source: 'instagram',
+				utm_medium: 'bio',
+				utm_content: 'link-in-bio',
+				something_else: 'ignored',
+			}),
+		});
+
+		expect(status).toBe(200);
+		const stored = JSON.parse((await env.EMAIL_SUBS.get('reader@example.com')) ?? '{}');
+		expect(stored.source).toBe('miamicontactimprov:start:door');
+		expect(stored.offer).toBe('Not ready for this Friday? Get the next dates and 10% off when you are.');
+		expect(stored.campaign).toBe('ci-october');
+		expect(stored.landing_page).toBe('/start');
+		expect(stored.referrer).toBe('https://www.instagram.com/');
+		expect(stored.utm_source).toBe('instagram');
+		expect(stored.utm_medium).toBe('bio');
+		expect(stored.utm_content).toBe('link-in-bio');
+		expect(stored.something_else).toBeUndefined();
+		// The fields travel with the signup and change nothing else about it.
+		expect(sent.contacts).toHaveLength(1);
+		expect(sent.emails).toHaveLength(1);
+	});
+
+	it('stores a signup from a page that sends no acquisition fields', async () => {
+		interceptContacts();
+		interceptEmails();
+
+		expect((await subscribe('reader@example.com', 'miamicontactimprov:fundamentals')).status).toBe(200);
+
+		const stored = JSON.parse((await env.EMAIL_SUBS.get('reader@example.com')) ?? '{}');
+		expect(Object.keys(stored).sort()).toEqual(['consent', 'email', 'source', 'ts']);
+	});
+
+	it('cuts an overlong field and drops the empty and the untexted ones', async () => {
+		interceptContacts();
+
+		const { status } = await call('/api/subscribe', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({
+				email: 'reader@example.com',
+				consent: true,
+				source: 'maxpetrusenko.com:footer',
+				campaign: 'c'.repeat(500),
+				referrer: 42,
+				offer: '   ',
+			}),
+		});
+
+		expect(status).toBe(200);
+		const stored = JSON.parse((await env.EMAIL_SUBS.get('reader@example.com')) ?? '{}');
+		expect(stored.campaign).toHaveLength(80);
+		expect(stored.referrer).toBeUndefined();
+		expect(stored.offer).toBeUndefined();
+	});
 });

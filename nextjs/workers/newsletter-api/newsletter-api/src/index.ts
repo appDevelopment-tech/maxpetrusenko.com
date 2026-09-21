@@ -12,6 +12,16 @@ interface SubscriptionRequest {
 	email: string;
 	consent: boolean;
 	source?: string;
+	// The acquisition fields a page sends with a signup. All optional: a form on an
+	// older page posts an email, a consent flag and a source, and that has to keep
+	// working exactly as before.
+	offer?: string;
+	campaign?: string;
+	landing_page?: string;
+	referrer?: string;
+	utm_source?: string;
+	utm_medium?: string;
+	utm_content?: string;
 }
 
 interface SubscriptionResponse {
@@ -141,6 +151,35 @@ function sourceOf(record: string | null): string {
 	}
 }
 
+// A signup carries where it came from: the offer that was on screen, the campaign and
+// referrer that brought the reader in, the page they were reading. Each one is text
+// that arrived over the wire, so each is trimmed, cut to a length a KV record can
+// carry, and dropped when it is empty rather than stored as a blank key. Anything not
+// named below is ignored: the record is built from this list, not from the request.
+const MAX_TEXT = 200;
+const MAX_TAG = 80;
+
+function text(value: unknown, max: number): string {
+	return typeof value === 'string' ? value.trim().slice(0, max) : '';
+}
+
+function attribution(body: SubscriptionRequest): Record<string, string> {
+	const fields: Array<[string, string]> = [
+		['offer', text(body.offer, MAX_TEXT)],
+		['campaign', text(body.campaign, MAX_TAG)],
+		['landing_page', text(body.landing_page, MAX_TEXT)],
+		['referrer', text(body.referrer, MAX_TEXT)],
+		['utm_source', text(body.utm_source, MAX_TAG)],
+		['utm_medium', text(body.utm_medium, MAX_TAG)],
+		['utm_content', text(body.utm_content, MAX_TAG)],
+	];
+	const kept: Record<string, string> = {};
+	for (const [key, value] of fields) {
+		if (value) kept[key] = value;
+	}
+	return kept;
+}
+
 export default {
 	async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
 		const url = new URL(request.url);
@@ -182,15 +221,18 @@ export default {
 
 				const previous = sourceOf(await env.EMAIL_SUBS.get(email));
 
-				// Store in KV
+				// Store in KV. The attribution fields are sanitised once and used for
+				// both the record and the log line.
+				const extras = attribution(body);
 				await env.EMAIL_SUBS.put(email, JSON.stringify({
 					email,
 					consent,
 					source,
+					...extras,
 					ts: Date.now(),
 				}));
 
-				console.log('[Subscription saved]', { email, source });
+				console.log('[Subscription saved]', { email, source, offer: extras.offer });
 
 				// One welcome per person, on their first contact-improv signup.
 				const wantsWelcome = source.startsWith(CI_SOURCE_PREFIX)
