@@ -16,6 +16,9 @@
 	"observability": {
 		"enabled": true
 	},
+	"vars": {
+		"RESEND_AUDIENCE_ID": "6da7e1c7-6fe5-446d-b306-00a52f5b9d07"
+	},
 	"kv_namespaces": [
 		{ "binding": "EMAIL_SUBS", "id": "90a570d807f04bc4abb9b46282291e5b" }
 	]
