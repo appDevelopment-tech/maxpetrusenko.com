@@ -49,6 +49,12 @@ interface Env {
 	RESEND_API_KEY?: string;
 	RESEND_AUDIENCE_ID?: string;
 	CI_NEWSLETTER_COUPON?: string;
+	// Meta Conversions API. Until both are set the events endpoint logs what it
+	// would have sent and answers 202, so the wiring can be tested before the ad
+	// account exists.
+	META_PIXEL_ID?: string;
+	META_CAPI_TOKEN?: string;
+	META_TEST_EVENT_CODE?: string;
 }
 
 const RESEND_API = 'https://api.resend.com';
@@ -59,6 +65,18 @@ const CI_SOURCE_PREFIX = 'miamicontactimprov';
 const CI_FROM = 'Contact Improv Miami <hello@miamicontactimprov.com>';
 const CI_SUBJECT = 'Your 10% code for the Fundamentals series';
 const CI_SERIES_LINK = 'https://miamicontactimprov.com/fundamentals';
+
+// Meta Conversions API. The version is pinned here alone; bump it in one place when
+// Meta retires it rather than having it drift through the code.
+const META_GRAPH_API = 'https://graph.facebook.com';
+const META_GRAPH_VERSION = 'v23.0';
+
+// The three events the ad test is scored on. Lead is what a signup is worth,
+// CompleteRegistration is a paid place in the series, and Attend is a body in the
+// room, which is the only number that decides spend. Attend is a custom event name:
+// Meta has no standard one for it, and it reads the same in Events Manager.
+const META_EVENTS = ['Lead', 'CompleteRegistration', 'Attend'] as const;
+type MetaEventName = (typeof META_EVENTS)[number];
 
 function isValidEmail(email: string): boolean {
 	const trimmed = email.trim().toLowerCase();
@@ -83,6 +101,88 @@ function isAdmin(request: Request, env: Env): boolean {
 	const header = request.headers.get('Authorization') || '';
 	if (!header.startsWith('Bearer ')) return false;
 	return tokenMatches(header.slice('Bearer '.length).trim(), expected);
+}
+
+// Meta takes user data as SHA-256 hex of the trimmed, lowercased value, so the
+// address itself never leaves the Worker in a readable form.
+async function sha256Hex(value: string): Promise<string> {
+	const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(value));
+	return Array.from(new Uint8Array(digest))
+		.map((byte) => byte.toString(16).padStart(2, '0'))
+		.join('');
+}
+
+interface EventsRequest {
+	event?: string;
+	email?: string;
+	event_id?: string;
+	value?: number;
+	currency?: string;
+	event_source_url?: string;
+	// Only send these when they came off the attendee's own device. A check-in
+	// script running on Max's laptop would otherwise hand Meta his IP and claim it
+	// was the person at the door, which costs match quality instead of buying it.
+	client_ip_address?: string;
+	client_user_agent?: string;
+}
+
+interface EventsResponse {
+	ok: boolean;
+	event?: string;
+	forwarded?: boolean;
+	error?: string;
+}
+
+// One event, one POST to the pixel. Meta answers with the count it accepted and a
+// message that names the reason when it does not.
+async function forwardToMeta(
+	env: Env,
+	event: MetaEventName,
+	fields: { emailHash: string; eventId: string; value?: number; currency?: string; sourceUrl?: string; ip?: string; agent?: string },
+): Promise<boolean> {
+	const query = new URLSearchParams({ access_token: env.META_CAPI_TOKEN ?? '' });
+	if (env.META_TEST_EVENT_CODE) query.set('test_event_code', env.META_TEST_EVENT_CODE);
+
+	const userData: Record<string, string[]> = { em: [fields.emailHash] };
+	if (fields.ip) userData.client_ip_address = [fields.ip];
+	if (fields.agent) userData.client_user_agent = [fields.agent];
+
+	const payload: Record<string, unknown> = {
+		event_name: event,
+		// Seconds, which is what the API wants, and the moment the Worker accepted
+		// the event rather than the moment Meta got round to reading it.
+		event_time: Math.floor(Date.now() / 1000),
+		event_id: fields.eventId,
+		action_source: 'website',
+		user_data: userData,
+	};
+	if (fields.sourceUrl) payload.event_source_url = fields.sourceUrl;
+	if (typeof fields.value === 'number' && Number.isFinite(fields.value)) {
+		payload.custom_data = { value: fields.value, currency: fields.currency ?? 'USD' };
+	}
+
+	try {
+		const response = await fetch(
+			`${META_GRAPH_API}/${META_GRAPH_VERSION}/${env.META_PIXEL_ID}/events?${query.toString()}`,
+			{
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ data: [payload] }),
+			},
+		);
+		const result = (await response.json().catch(() => null)) as
+			| { events_received?: number; error?: { message?: string } }
+			| null;
+		if (!response.ok) {
+			console.error('[Meta CAPI rejected]', event, response.status, JSON.stringify(result));
+			return false;
+		}
+		console.log('[Meta CAPI accepted]', event, result?.events_received ?? 0, fields.eventId);
+		return true;
+	} catch (error) {
+		console.error('[Meta CAPI failed]', event, error);
+		return false;
+	}
 }
 
 async function resendPost(env: Env, path: string, body: unknown): Promise<Response> {
@@ -260,6 +360,83 @@ export default {
 					{ status: 500, headers: corsHeaders }
 				);
 			}
+		}
+
+		// POST /api/events - Server-side conversion events for the Meta ad test.
+		// The browser never talks to Meta and the site sets no cookies, so the only
+		// identifier here is an address the caller already holds. Every route into
+		// this endpoint is a script Max runs, which is why it wants the admin token.
+		if (url.pathname === '/api/events' && request.method === 'POST') {
+			if (!isAdmin(request, env)) {
+				return Response.json(
+					{ ok: false, error: 'Unauthorized' } as EventsResponse,
+					{ status: 401, headers: corsHeaders }
+				);
+			}
+
+			let body: EventsRequest;
+			try {
+				body = await request.json() as EventsRequest;
+			} catch {
+				return Response.json(
+					{ ok: false, error: 'Invalid JSON' } as EventsResponse,
+					{ status: 400, headers: corsHeaders }
+				);
+			}
+
+			const event = (body.event ?? '').trim();
+			if (!META_EVENTS.includes(event as MetaEventName)) {
+				return Response.json(
+					{ ok: false, error: `Unknown event, expected one of ${META_EVENTS.join(', ')}` } as EventsResponse,
+					{ status: 400, headers: corsHeaders }
+				);
+			}
+
+			const email = (body.email ?? '').trim().toLowerCase();
+			if (!isValidEmail(email)) {
+				return Response.json(
+					{ ok: false, error: 'Invalid email' } as EventsResponse,
+					{ status: 400, headers: corsHeaders }
+				);
+			}
+
+			// Both the match key and the default event id are the hash, so no route
+			// through this endpoint puts a readable address in a log or in a request
+			// that leaves the Worker. An explicit event_id wins, because a caller
+			// replaying a batch wants Meta to fold the retry into the event it
+			// already has instead of counting one person twice.
+			const emailHash = await sha256Hex(email);
+			const eventId = text(body.event_id, MAX_TAG) || `${event}:${emailHash.slice(0, 32)}`;
+			const value = Number.parseFloat(String(body.value ?? ''));
+
+			// No secrets yet: say so in the log and answer 202 with forwarded false.
+			// The endpoint has to be exercisable before the ad account exists, and a
+			// caller whose flow must not stop because of Meta deserves a status that
+			// does not read as failure.
+			if (!env.META_PIXEL_ID || !env.META_CAPI_TOKEN) {
+				console.log('[Meta CAPI skipped]', { event, eventId, reason: 'META_PIXEL_ID or META_CAPI_TOKEN is not set' });
+				return Response.json(
+					{ ok: true, event, forwarded: false } as EventsResponse,
+					{ status: 202, headers: corsHeaders }
+				);
+			}
+
+			const forwarded = await forwardToMeta(env, event as MetaEventName, {
+				emailHash,
+				eventId,
+				value,
+				currency: text(body.currency, 3).toUpperCase() || undefined,
+				sourceUrl: text(body.event_source_url, MAX_TEXT) || undefined,
+				ip: text(body.client_ip_address, 45) || undefined,
+				agent: text(body.client_user_agent, MAX_TEXT) || undefined,
+			});
+
+			// 202 either way: Meta refusing one event is not the caller's failure, and
+			// the log line above names the reason.
+			return Response.json(
+				{ ok: true, event, forwarded } as EventsResponse,
+				{ status: 202, headers: corsHeaders }
+			);
 		}
 
 		// GET /api/list - List all subscriptions (admin endpoint)

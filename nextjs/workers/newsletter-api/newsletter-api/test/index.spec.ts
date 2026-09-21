@@ -1,10 +1,20 @@
 import { env, createExecutionContext, waitOnExecutionContext, fetchMock } from 'cloudflare:test';
-import { describe, it, expect, beforeAll, afterEach } from 'vitest';
+import { describe, it, expect, beforeAll, afterEach, vi } from 'vitest';
 import worker from '../src';
 
 const ADMIN_TOKEN = 'test-admin-token';
 const RESEND_ORIGIN = 'https://api.resend.com';
 const AUDIENCE = 'aud_test';
+const META_ORIGIN = 'https://graph.facebook.com';
+const PIXEL_ID = '1234567890';
+const EVENT_HEADERS = {
+	'Content-Type': 'application/json',
+	Authorization: `Bearer ${ADMIN_TOKEN}`,
+};
+// shasum -a 256 of reader@example.com. Written out rather than recomputed here so
+// the test proves the worker hashes the way Meta's documentation says and not
+// merely in a way that agrees with itself.
+const READER_HASH = 'd108b279434fe1d54ac0f1da633564604b26c2e0e221d108b0fbadb87aba02c0';
 
 // Same shape as production, with throwaway values. No real code or key here.
 function testEnv(overrides: Record<string, unknown> = {}): Env {
@@ -38,7 +48,11 @@ function subscribe(email: string, source: string) {
 
 // Interceptors record the payloads they were called with, so a test can assert
 // on what the worker actually sent to Resend.
-const sent: { contacts: any[]; emails: any[] } = { contacts: [], emails: [] };
+const sent: { contacts: any[]; emails: any[]; meta: { body: any; path: string }[] } = {
+	contacts: [],
+	emails: [],
+	meta: [],
+};
 
 function interceptContacts(status = 201, times = 1) {
 	fetchMock
@@ -62,6 +76,31 @@ function interceptEmails(status = 200, times = 1) {
 		.times(times);
 }
 
+// The pixel URL carries its version and the token in the query string, so the
+// interceptor matches on a pattern and the test reads the path back.
+function interceptMeta(status = 200, times = 1) {
+	fetchMock
+		.get(META_ORIGIN)
+		.intercept({ method: 'POST', path: new RegExp(`/v23\\.0/${PIXEL_ID}/events\\?`) })
+		.reply(status, (opts: any) => {
+			sent.meta.push({ body: JSON.parse(String(opts.body ?? '{}')), path: String(opts.path ?? '') });
+			return status === 200 ? { events_received: 1 } : { error: { message: 'Invalid parameter' } };
+		})
+		.times(times);
+}
+
+function postEvent(payload: Record<string, unknown>, requestEnv: Env = testEnv()) {
+	return call(
+		'/api/events',
+		{
+			method: 'POST',
+			headers: EVENT_HEADERS,
+			body: JSON.stringify(payload),
+		},
+		requestEnv
+	);
+}
+
 beforeAll(() => {
 	fetchMock.activate();
 	fetchMock.disableNetConnect();
@@ -71,6 +110,7 @@ afterEach(async () => {
 	await env.EMAIL_SUBS.delete('reader@example.com');
 	sent.contacts.length = 0;
 	sent.emails.length = 0;
+	sent.meta.length = 0;
 	fetchMock.assertNoPendingInterceptors();
 });
 
@@ -239,5 +279,126 @@ describe('POST /api/subscribe', () => {
 		expect(stored.campaign).toHaveLength(80);
 		expect(stored.referrer).toBeUndefined();
 		expect(stored.offer).toBeUndefined();
+	});
+});
+
+describe('POST /api/events', () => {
+	const pixelEnv = { META_PIXEL_ID: PIXEL_ID, META_CAPI_TOKEN: 'test-capi-token' };
+
+	it('rejects an event with no Authorization header', async () => {
+		const { status, body } = await call('/api/events', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({ event: 'Lead', email: 'reader@example.com' }),
+		});
+		expect(status).toBe(401);
+		expect(body.error).toBe('Unauthorized');
+	});
+
+	it('rejects an event name the pixel does not know, and says which ones it does', async () => {
+		const { status, body } = await postEvent({ event: 'Purchase', email: 'reader@example.com' });
+		expect(status).toBe(400);
+		expect(body.error).toContain('Lead, CompleteRegistration, Attend');
+	});
+
+	it('rejects a malformed address', async () => {
+		const { status, body } = await postEvent({ event: 'Lead', email: 'not-an-email' });
+		expect(status).toBe(400);
+		expect(body.error).toBe('Invalid email');
+	});
+
+	it('logs and answers 202 while the pixel secrets are missing', async () => {
+		const logged = vi.spyOn(console, 'log').mockImplementation(() => {});
+
+		const { status, body } = await postEvent({ event: 'Lead', email: 'reader@example.com' });
+
+		expect(status).toBe(202);
+		expect(body).toEqual({ ok: true, event: 'Lead', forwarded: false });
+		expect(logged).toHaveBeenCalledWith(
+			'[Meta CAPI skipped]',
+			expect.objectContaining({
+				event: 'Lead',
+				reason: expect.stringContaining('META_PIXEL_ID'),
+			})
+		);
+		// No interceptor is registered for this test, and assertNoPendingInterceptors
+		// runs after it: reaching Meta at all would fail here.
+		logged.mockRestore();
+	});
+
+	it('sends a check-in to the pixel as a hashed address and nothing readable', async () => {
+		interceptMeta();
+
+		const { status, body } = await postEvent({ event: 'Attend', email: '  Reader@Example.COM ' }, testEnv(pixelEnv));
+		expect(status).toBe(202);
+		expect(body).toEqual({ ok: true, event: 'Attend', forwarded: true });
+
+		expect(sent.meta).toHaveLength(1);
+		const entry = sent.meta[0].body.data[0];
+		expect(entry.event_name).toBe('Attend');
+		expect(entry.action_source).toBe('website');
+		// The address arrives in whatever case and spacing the caller had, and Meta
+		// only matches the trimmed and lowercased form.
+		expect(entry.user_data).toEqual({ em: [READER_HASH] });
+		expect(Math.abs(entry.event_time - Math.floor(Date.now() / 1000))).toBeLessThan(10);
+		expect(entry.event_id.startsWith('Attend:')).toBe(true);
+		expect(entry.custom_data).toBeUndefined();
+		expect(sent.meta[0].path).toContain(`/v23.0/${PIXEL_ID}/events`);
+		expect(sent.meta[0].path).toContain('access_token=test-capi-token');
+		// Nothing in the payload that leaves the Worker spells the address out.
+		expect(JSON.stringify(sent.meta[0].body)).not.toContain('reader@example.com');
+	});
+
+	it('carries a value and a currency when the caller sends one', async () => {
+		interceptMeta();
+
+		await postEvent({ event: 'CompleteRegistration', email: 'reader@example.com', value: 20, currency: 'usd' }, testEnv(pixelEnv));
+
+		expect(sent.meta[0].body.data[0].custom_data).toEqual({ value: 20, currency: 'USD' });
+	});
+
+	it("keeps the caller's event id so a retried import is not counted twice", async () => {
+		interceptMeta();
+
+		await postEvent({ event: 'Lead', email: 'reader@example.com', event_id: 'import-2026-09-21-014' }, testEnv(pixelEnv));
+
+		expect(sent.meta[0].body.data[0].event_id).toBe('import-2026-09-21-014');
+	});
+
+	it('sends a device address only when the caller says it came off the device', async () => {
+		interceptMeta();
+
+		await postEvent({
+			event: 'Attend',
+			email: 'reader@example.com',
+			client_ip_address: '203.0.113.7',
+			client_user_agent: 'Mozilla/5.0',
+		}, testEnv(pixelEnv));
+
+		expect(sent.meta[0].body.data[0].user_data).toEqual({
+			em: [READER_HASH],
+			client_ip_address: ['203.0.113.7'],
+			client_user_agent: ['Mozilla/5.0'],
+		});
+	});
+
+	it('names the test event code when one is configured, so a dry run stays out of the numbers', async () => {
+		interceptMeta();
+
+		await postEvent({ event: 'Lead', email: 'reader@example.com' }, testEnv({ ...pixelEnv, META_TEST_EVENT_CODE: 'TEST12345' }));
+
+		expect(sent.meta[0].path).toContain('test_event_code=TEST12345');
+	});
+
+	it("keeps the caller's flow when the pixel refuses the event", async () => {
+		interceptMeta(500);
+		const errored = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+		const { status, body } = await postEvent({ event: 'Lead', email: 'reader@example.com' }, testEnv(pixelEnv));
+
+		expect(status).toBe(202);
+		expect(body).toEqual({ ok: true, event: 'Lead', forwarded: false });
+		expect(errored).toHaveBeenCalledWith('[Meta CAPI rejected]', 'Lead', 500, expect.stringContaining('Invalid parameter'));
+		errored.mockRestore();
 	});
 });
