@@ -1,0 +1,44 @@
+# psa-gate.toml — maxpetrusenko.com PSA gate configuration
+# Canonical source: manager/scripts/psa-gate.py
+# PSA gate version: 1.0.0
+# Canonical SHA-256 measured for this wiring: e73f27e908f2788b0d676133b8f6abad53e5e2a9467b14230bebf80999a3b9d3
+# Origin/main calibration (2026-09-22, commit 7ac4f2d):
+#   static surface: 207 pages, 943 default error-band findings.
+#   fallback surface: 127 pages, 527 default error-band findings.
+# The fallback surface is used here because @cloudflare/next-on-pages emits duplicate
+# static Medium artifacts (`medium/<slug>.html` and `medium/<slug>/index.html`) that
+# double-count the same route. This mirrors the structured-data gate's surface choice.
+#
+# Rule judgements from fallback calibration:
+# - paragraph_bloat: 314 findings, all on generated Medium long-form article pages;
+#   0 on first-party marketing/service pages. Example: medium/youtube-microplastics...
+#   has a 170-word paragraph. Treat as warning for editorial article style.
+# - first_h2_late: 65 findings; mostly Medium essays with long ledes, plus private/tool
+#   pages with no section hierarchy. Example: medium/youtube-government-scam... has
+#   402 prose words before the first H2. Warning until article templates are rebuilt.
+# - h2_without_answer: 108 findings; mostly card/listing sections where the H2 is a
+#   category label followed by cards. Real fixes convert section notes from spans to
+#   paragraphs on high-traffic pages, but this broad heuristic is warning-level here.
+# - page_shape and duplicate_heading stay in the error band: they are falsifiable and
+#   point to missing H1/canonical or ambiguous repeated outline labels.
+#
+# Report-only is intentional until error-band count is measured zero for this site.
+
+[gate]
+expected_pages = 127
+error_rules = [
+  "page_shape",
+  "duplicate_heading",
+  "collapsed_content",
+  "heading_hierarchy_inversion",
+]
+warn_rules = [
+  "first_h2_late",
+  "paragraph_bloat",
+  "h2_without_answer",
+  "lede_check",
+  "question_shaped_h2_ratio",
+  "h2_without_answer_warn",
+  "paragraph_bloat_warn",
+]
+exclude_globs = []

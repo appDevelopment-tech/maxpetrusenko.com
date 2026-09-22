@@ -39,6 +39,10 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Install PSA gate dependencies
+        working-directory: .
+        run: python3 -m pip install --quiet beautifulsoup4 lxml
+
       - name: Install Playwright browsers
         run: npx playwright install chromium --with-deps
 
@@ -78,6 +82,15 @@ jobs:
             --report-only \
             --json /tmp/sd-parity-fallback-deploy.json
 
+      - name: Run PSA gate (page structure / summarizability)
+        working-directory: .
+        run: |
+          python3 .github/scripts/psa-gate.py \
+            --dir nextjs/.vercel/output/functions \
+            --config .github/scripts/psa-gate.toml \
+            --report-only \
+            --json /tmp/psa-report-fallback-deploy.json
+
       - name: Upload structured-data reports
         if: always()
         uses: actions/upload-artifact@v4
@@ -86,6 +99,7 @@ jobs:
           path: |
             /tmp/sd-report-fallback-deploy.json
             /tmp/sd-parity-fallback-deploy.json
+            /tmp/psa-report-fallback-deploy.json
 
       - name: Deploy to Cloudflare Pages
         run: npx wrangler pages deploy .vercel/output/static --project-name=maxpetrusenko-nextjs --branch=main

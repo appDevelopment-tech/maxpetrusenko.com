@@ -100,8 +100,21 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Install PSA gate dependencies
+        working-directory: .
+        run: python3 -m pip install --quiet beautifulsoup4 lxml
+
       - name: Build Pages output
         run: npm run pages:build
+
+      - name: Run PSA gate (page structure / summarizability)
+        working-directory: .
+        run: |
+          python3 .github/scripts/psa-gate.py \
+            --dir nextjs/.vercel/output/functions \
+            --config .github/scripts/psa-gate.toml \
+            --report-only \
+            --json /tmp/psa-report.json
 
       - name: Run SEO indexing gate (dir mode)
         working-directory: .
@@ -200,6 +213,7 @@ jobs:
             /tmp/seo-report.json
             /tmp/sd-report.json
             /tmp/sd-parity.json
+            /tmp/psa-report.json
 
   live-check:
     name: Live site SEO check (post-deploy)

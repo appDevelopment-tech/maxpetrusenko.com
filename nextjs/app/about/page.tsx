@@ -90,7 +90,7 @@ export default function AboutPage() {
 
           <div className="mt-10 grid gap-6 md:grid-cols-3">
             <div className="dark-zone-card card-stripe-tech">
-              <h3 className="font-serif text-[1.2rem] font-semibold text-[#e2e8f0]">Tech</h3>
+              <h3 className="font-serif text-[1.2rem] font-semibold text-[#e2e8f0]">Tech delivery</h3>
               <p className="mt-3 text-sm leading-relaxed text-[var(--dark-zone-muted)]">
                 Product shaping, automation builds, and internal systems for teams
                 that want cleaner ops.
@@ -104,7 +104,7 @@ export default function AboutPage() {
               </p>
             </div>
             <div className="dark-zone-card card-stripe-mindfold">
-              <h3 className="font-serif text-[1.2rem] font-semibold text-[#e2e8f0]">Mindfold</h3>
+              <h3 className="font-serif text-[1.2rem] font-semibold text-[#e2e8f0]">Mindfold events</h3>
               <p className="mt-3 text-sm leading-relaxed text-[var(--dark-zone-muted)]">
                 Sensory subtraction journeys built for presence, trust, and deeper
                 perception.
@@ -118,10 +118,13 @@ export default function AboutPage() {
         <section className="section ui-fade-up delay-3">
           <div className="section-head">
             <h2>Working together</h2>
+            <p className="section-note">
+              Start with the lane that matches the work: technical delivery, somatic practice, or Mindfold.
+            </p>
           </div>
           <div className="cards-3 grid">
             <div className="card">
-              <h3>Tech</h3>
+              <h3>Tech projects</h3>
               <p>
                 Product shaping, design/dev, automation. Calm UX and measurable
                 outcomes.
@@ -133,7 +136,7 @@ export default function AboutPage() {
               </div>
             </div>
             <div className="card">
-              <h3>Mindfold</h3>
+              <h3>Mindfold journeys</h3>
               <p>Blindfolded presence journeys for perception and trust.</p>
               <div className="hero-actions" style={{ marginTop: 12 }}>
                 <Link className="btn secondary" href="/mindfold/events">
@@ -147,7 +150,7 @@ export default function AboutPage() {
         <section className="section">
           <div className="section-head">
             <h2>Branded reference pages</h2>
-            <span className="section-note">Direct routes for name-based search queries</span>
+            <p className="section-note">Direct routes for name-based search queries.</p>
           </div>
           <div className="tiles">
             {brandedReferenceLinkCards.map((card) => (

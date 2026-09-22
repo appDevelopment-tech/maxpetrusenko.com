@@ -29,7 +29,7 @@ export default function MaxPetrusenkoReviewsPage() {
         <section className="section">
           <div className="section-head">
             <h2>Published proof routes</h2>
-            <span className="section-note">Best pages for trust checks and deeper evaluation</span>
+            <p className="section-note">Best pages for trust checks and deeper evaluation.</p>
           </div>
           <div className="cards-3 grid">
             <Link className="card" href="/proof">
@@ -50,18 +50,21 @@ export default function MaxPetrusenkoReviewsPage() {
         <Testimonials
           type="tech"
           limit={6}
+          title="Tech reviews"
           note="Tech testimonials published on-site."
           toggleLabel="Show tech reviews"
         />
         <Testimonials
           type="spirituality"
           limit={6}
+          title="Somatic reviews"
           note="Somatic and spirituality testimonials published on-site."
           toggleLabel="Show somatic reviews"
         />
         <Testimonials
           type="mindfold"
           limit={3}
+          title="Mindfold reviews"
           note="Mindfold participant quotes published on-site."
           toggleLabel="Show Mindfold reviews"
         />

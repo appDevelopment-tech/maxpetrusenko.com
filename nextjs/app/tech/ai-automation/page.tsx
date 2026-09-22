@@ -82,9 +82,9 @@ export default function AIAutomationPage() {
         <section className="section">
           <div className="section-head">
             <h2>Services</h2>
-            <span className="section-note">
+            <p className="section-note">
               Clear scope, defined outcomes
-            </span>
+            </p>
           </div>
 
           <div className="cards-2 grid">
@@ -94,7 +94,7 @@ export default function AIAutomationPage() {
                 Automated content pipelines from creation to distribution across
                 platforms.
               </p>
-              <h4>What&apos;s included</h4>
+              <p><strong>What&apos;s included</strong></p>
               <ul className="list">
                 <li>AI-powered content repurposing</li>
                 <li>Automated scheduling & posting</li>
@@ -102,7 +102,7 @@ export default function AIAutomationPage() {
                 <li>Analytics aggregation</li>
                 <li>Error handling & overrides</li>
               </ul>
-              <h4>Typical outcome</h4>
+              <p><strong>Typical outcome</strong></p>
               <p>
                 <strong>80-90% reduction</strong> in manual content work while
                 increasing output 2-3x.
@@ -114,7 +114,7 @@ export default function AIAutomationPage() {
               <p>
                 Connect your tools and automate data flow between platforms.
               </p>
-              <h4>What&apos;s included</h4>
+              <p><strong>What&apos;s included</strong></p>
               <ul className="list">
                 <li>Integration architecture design</li>
                 <li>API implementation & testing</li>
@@ -122,7 +122,7 @@ export default function AIAutomationPage() {
                 <li>Data transformation & mapping</li>
                 <li>Admin dashboards</li>
               </ul>
-              <h4>Typical outcome</h4>
+              <p><strong>Typical outcome</strong></p>
               <p>
                 <strong>Eliminate manual data entry</strong> and reduce errors
                 from copy-paste workflows.
@@ -135,7 +135,7 @@ export default function AIAutomationPage() {
                 Configure Claude Code as an autonomous development agent for your
                 team.
               </p>
-              <h4>What&apos;s included</h4>
+              <p><strong>What&apos;s included</strong></p>
               <ul className="list">
                 <li>Claude Code installation & config</li>
                 <li>Sub-agent system design</li>
@@ -143,7 +143,7 @@ export default function AIAutomationPage() {
                 <li>Workflow integration</li>
                 <li>Team training & documentation</li>
               </ul>
-              <h4>Typical outcome</h4>
+              <p><strong>Typical outcome</strong></p>
               <p>
                 <strong>10x faster</strong> feature development with AI-assisted
                 coding, testing, and refactoring.
@@ -156,7 +156,7 @@ export default function AIAutomationPage() {
                 Build automation workflows with n8n to connect your tools without
                 code.
               </p>
-              <h4>What&apos;s included</h4>
+              <p><strong>What&apos;s included</strong></p>
               <ul className="list">
                 <li>Workflow design & mapping</li>
                 <li>n8n instance setup</li>
@@ -164,7 +164,7 @@ export default function AIAutomationPage() {
                 <li>API credential management</li>
                 <li>Monitoring & alerts</li>
               </ul>
-              <h4>Typical outcome</h4>
+              <p><strong>Typical outcome</strong></p>
               <p>
                 <strong>Automate repetitive tasks</strong> that eat hours every
                 week—social media, reporting, notifications, lead management.
@@ -176,9 +176,9 @@ export default function AIAutomationPage() {
         <section className="section">
           <div className="section-head">
             <h2>The Process</h2>
-            <span className="section-note">
+            <p className="section-note">
               How we work together
-            </span>
+            </p>
           </div>
 
           <div className="cards-4 grid">
@@ -216,6 +216,7 @@ export default function AIAutomationPage() {
         <section className="section">
           <div className="section-head">
             <h2>Who This Is For</h2>
+            <p className="section-note">A quick fit check before scoping the automation work.</p>
           </div>
 
           <div className="cards-2 grid">
@@ -246,6 +247,7 @@ export default function AIAutomationPage() {
         <section className="section">
           <div className="section-head">
             <h2>Tools & Technologies</h2>
+            <p className="section-note">The stack I use most often for reliable AI automation systems.</p>
           </div>
 
           <div className="tags">
@@ -267,9 +269,9 @@ export default function AIAutomationPage() {
         <section className="section">
           <div className="section-head">
             <h2>Pricing</h2>
-            <span className="section-note">
+            <p className="section-note">
               Project-based or retainer
-            </span>
+            </p>
           </div>
 
           <div className="cards-3 grid">
@@ -328,6 +330,7 @@ export default function AIAutomationPage() {
         <section className="section">
           <div className="section-head">
             <h2>FAQ</h2>
+            <p className="section-note">Common questions before starting an automation project.</p>
           </div>
 
           <div className="cards-2 grid">

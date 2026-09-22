@@ -34,9 +34,9 @@ export default function LinksPage() {
         <section className="section ui-fade-up delay-3">
           <div className="section-head">
             <h1>Links</h1>
-            <span className="section-note">
+            <p className="section-note">
               All the ways to connect with Max Petrusenko.
-            </span>
+            </p>
           </div>
           <div className="tiles">
             <a
@@ -57,9 +57,9 @@ export default function LinksPage() {
         <section className="section ui-fade-up delay-3">
           <div className="section-head">
             <h2>Tech & Work</h2>
-            <span className="section-note">
+            <p className="section-note">
               Open the routes you need most.
-            </span>
+            </p>
           </div>
           <div className="tiles">
             <a
@@ -164,9 +164,9 @@ export default function LinksPage() {
         <section className="section">
           <div className="section-head">
             <h2>Projects &amp; Products</h2>
-            <span className="section-note">
+            <p className="section-note">
               Things I build and run.
-            </span>
+            </p>
           </div>
           <div className="tiles">
             {siteConfig.products.map((product) => (
@@ -190,6 +190,9 @@ export default function LinksPage() {
         <section className="section">
           <div className="section-head">
             <h2>Somatic &amp; Mindfold</h2>
+            <p className="section-note">
+              Somatic practice and Mindfold routes stay separate from the tech links.
+            </p>
           </div>
           <div className="tiles">
             <Link className="tile" href="/somatic">

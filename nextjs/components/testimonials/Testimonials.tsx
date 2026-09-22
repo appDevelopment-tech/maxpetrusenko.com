@@ -16,6 +16,8 @@ interface TestimonialsProps {
   defaultOpen?: boolean;
   /** Optional section note */
   note?: string;
+  /** Optional visible section title */
+  title?: string;
   /** Optional toggle label */
   toggleLabel?: string;
 }
@@ -26,6 +28,7 @@ export function Testimonials({
   collapsible = false,
   defaultOpen = false,
   note = "Short, anonymized feedback. Tap to expand.",
+  title = "What people say",
   toggleLabel = "Show testimonials",
 }: TestimonialsProps) {
   const filtered = testimonials.filter((t) => t.type === type).slice(0, limit);
@@ -38,8 +41,8 @@ export function Testimonials({
     <>
       <section className="section">
         <div className="section-head">
-          <h2>What people say</h2>
-          {note ? <span className="section-note">{note}</span> : null}
+          <h2>{title}</h2>
+          {note ? <p className="section-note">{note}</p> : null}
         </div>
         {collapsible ? (
           <details open={defaultOpen} className="card">

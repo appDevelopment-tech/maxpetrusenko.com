@@ -274,9 +274,9 @@ export default async function TechPage() {
           <section className="section ui-fade-up delay-3">
           <div className="section-head">
             <h2>Services Overview</h2>
-            <span className="section-note">
+            <p className="section-note">
               Clear pricing, flexible delivery, global availability
-            </span>
+            </p>
           </div>
           <div className="cards-3 grid">
             <div className="card">
@@ -295,7 +295,7 @@ export default async function TechPage() {
               </p>
             </div>
             <div className="card">
-              <h3>n8n Automation</h3>
+              <h3>n8n Workflow Builds</h3>
               <ul className="list" style={{ marginTop: 12, marginBottom: 16 }}>
                 <li>Workflow design & build</li>
                 <li>API integrations</li>
@@ -310,7 +310,7 @@ export default async function TechPage() {
               </p>
             </div>
             <div className="card">
-              <h3>ChatGPT Integration</h3>
+              <h3>ChatGPT Product Integration</h3>
               <ul className="list" style={{ marginTop: 12, marginBottom: 16 }}>
                 <li>API integration</li>
                 <li>Prompt engineering</li>
@@ -346,7 +346,7 @@ export default async function TechPage() {
           <section className="section">
           <div className="section-head">
             <h2 className="!text-[#e2e8f0]">AI & Automation Services</h2>
-            <span className="section-note !text-[var(--dark-zone-muted)]">Specialized expertise for modern builders.</span>
+            <p className="section-note !text-[var(--dark-zone-muted)]">Specialized expertise for modern builders.</p>
           </div>
           <div className="cards-3 grid">
             <div className="card card-with-actions">
@@ -410,7 +410,7 @@ export default async function TechPage() {
           <section className="section">
           <div className="section-head">
             <h2 className="!text-[#e2e8f0]">Location & Availability</h2>
-            <span className="section-note !text-[var(--dark-zone-muted)]">Remote-first with private options.</span>
+            <p className="section-note !text-[var(--dark-zone-muted)]">Remote-first with private options.</p>
           </div>
           <div className="cards-3 grid">
             <div className="card">
@@ -456,7 +456,7 @@ export default async function TechPage() {
           <section className="section">
             <div className="section-head">
               <h2>Featured surfaces</h2>
-              <span className="section-note">Bigger product cards. Real screens. Clear positioning.</span>
+              <p className="section-note">Bigger product cards. Real screens. Clear positioning.</p>
             </div>
             <div className="feature-showcase-grid">
               {featuredOperatorApps.map((app) => {
@@ -508,7 +508,7 @@ export default async function TechPage() {
           <section className="section">
           <div className="section-head">
             <h2>Recent work</h2>
-            <span className="section-note">Product + build shipped recently.</span>
+            <p className="section-note">Product + build shipped recently.</p>
           </div>
           <div className="article-list">
             <a
@@ -759,6 +759,7 @@ export default async function TechPage() {
           <section className="section">
           <div className="section-head">
             <h2>Ways to collaborate</h2>
+            <p className="section-note">Choose the collaboration shape that matches the stage of the product.</p>
           </div>
           <div className="cards-3 grid">
             <div className="card">
@@ -791,7 +792,7 @@ export default async function TechPage() {
           <section className="section">
           <div className="section-head">
             <h2 className="!text-[#e2e8f0]">Recent articles</h2>
-            <span className="section-note !text-[var(--dark-zone-muted)]">Security, automation, and systems. Also published on Medium.</span>
+            <p className="section-note !text-[var(--dark-zone-muted)]">Security, automation, and systems. Also published on Medium.</p>
           </div>
           <div className="article-list">
             {recentArticles.map((article) => {
@@ -855,7 +856,7 @@ export default async function TechPage() {
           <section className="section">
           <div className="section-head">
             <h2 className="!text-[#e2e8f0]">Implementation playbooks</h2>
-            <span className="section-note !text-[var(--dark-zone-muted)]">High-intent guides for teams shipping AI systems.</span>
+            <p className="section-note !text-[var(--dark-zone-muted)]">High-intent guides for teams shipping AI systems.</p>
           </div>
           <div className="cards-3 grid">
             <div className="card">
@@ -895,6 +896,7 @@ export default async function TechPage() {
           <section className="section">
           <div className="section-head">
             <h2>Frequently Asked Questions</h2>
+            <p className="section-note">Direct answers for teams evaluating AI automation work.</p>
           </div>
           <FaqSection
             columns={3}
