@@ -1,0 +1,24 @@
+{
+  "slug": "youtube-ukraine-pulling-off-impossible-eyhcrjiqzuq",
+  "title": "Ukraine Is Pulling Off Something Impossible in Crimea. Look at the Lights.",
+  "publicUrl": "https://www.maxpetrusenko.com/medium/youtube-ukraine-pulling-off-impossible-eyhcrjiqzuq/",
+  "outputPath": "/Users/maxsmacmini/.hermes/cache/scratch/mp-push-ukraine/nextjs/public/medium/youtube-ukraine-pulling-off-impossible-eyhcrjiqzuq/index.html",
+  "sourceUrl": "https://www.youtube.com/watch?v=eYhCRjIQzuQ",
+  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-ukraine-pulling-off-impossible-eyhcrjiqzuq/article-v3.md",
+  "articleHash": "12c60d8f4e9fe2bf6dcc2a05ecfbdd28d54aaebb5cdcf7e763a5d3d68780f9f7",
+  "exportedAt": "2026-09-22T10:44:34.133Z",
+  "status": "gemini 9.5/10 pass (title 9.5, subtitle 9.5; mustFix: none critical); deepseek 7/10 revise (all items reconciled against captures - reports/rater-findings-reconciliation.md; v4 candidates recorded for Max)",
+  "publishMode": "preview",
+  "copiedImages": [
+    {
+      "src": "assets/hero.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-ukraine-pulling-off-impossible-eyhcrjiqzuq/assets/hero.jpg",
+      "destinationPath": "/Users/maxsmacmini/.hermes/cache/scratch/mp-push-ukraine/nextjs/public/medium/.tmp-youtube-ukraine-pulling-off-impossible-eyhcrjiqzuq-1790073874130/assets/hero.jpg"
+    }
+  ],
+  "ratings": {
+    "gemini": 7,
+    "gpt": null,
+    "consensus": 7
+  }
+}
