@@ -1,0 +1,24 @@
+{
+  "slug": "youtube-world-turning-on-israel-zohbe5nrabm",
+  "title": "The World Is Turning on Israel. Watch the Paperwork.",
+  "publicUrl": "https://www.maxpetrusenko.com/medium/youtube-world-turning-on-israel-zohbe5nrabm/",
+  "outputPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/youtube-world-turning-on-israel-zohbe5nrabm/index.html",
+  "sourceUrl": "https://www.youtube.com/watch?v=zOHbe5NRabM",
+  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-world-turning-on-israel-zohbe5nrabm/article-v2.md",
+  "articleHash": "22f42772cdd3346a07e72e9bfce7914e3ee72e2019acc9670eb94ad03026cc7d",
+  "exportedAt": "2026-09-23T05:07:57.911Z",
+  "status": "review_ready_with_recorded_blocker",
+  "publishMode": "preview",
+  "copiedImages": [
+    {
+      "src": "assets/hero.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-world-turning-on-israel-zohbe5nrabm/assets/hero.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-world-turning-on-israel-zohbe5nrabm-1790140077909/assets/hero.jpg"
+    }
+  ],
+  "ratings": {
+    "gemini": 9.6,
+    "gpt": null,
+    "consensus": 9.6
+  }
+}
