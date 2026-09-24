@@ -1,24 +1,29 @@
 {
   "slug": "youtube-modern-middle-east-bloehymgc78",
-  "title": "The Oil Deal That Built America’s Middle East",
+  "title": "America Built a Middle East It Can't Leave",
   "publicUrl": "https://www.maxpetrusenko.com/medium/youtube-modern-middle-east-bloehymgc78/",
-  "outputPath": "/tmp/medium-site/public/medium/youtube-modern-middle-east-bloehymgc78/index.html",
-  "sourceUrl": null,
-  "articlePath": "/Users/maxpetrusenko/Desktop/Projects/medium-automation/articles/youtube-modern-middle-east-bloehymgc78/article-medium.md",
-  "articleHash": "4f31faec81f12bdb4a5685bc3c27ab85574f672dc7071a61596d7bb26ce01763",
-  "exportedAt": "2026-09-04T21:18:01.044Z",
-  "status": "needs_review",
+  "outputPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/youtube-modern-middle-east-bloehymgc78/index.html",
+  "sourceUrl": "https://www.youtube.com/watch?v=bLOEhycMG78",
+  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-modern-middle-east-bloehymgc78/article-v3.md",
+  "articleHash": "0fee5439d2fa485eaa290addd0043fd86a406feb871c2dfd9786532073ed1989",
+  "exportedAt": "2026-09-24T05:13:25.431Z",
+  "status": "review_ready_with_recorded_blocker",
   "publishMode": "preview",
   "copiedImages": [
     {
-      "src": "assets/hero-overlay.jpg",
-      "sourcePath": "/Users/maxpetrusenko/Desktop/Projects/medium-automation/articles/youtube-modern-middle-east-bloehymgc78/assets/hero-overlay.jpg",
-      "destinationPath": "/tmp/medium-site/public/medium/.tmp-youtube-modern-middle-east-bloehymgc78-1788556681041/assets/hero-overlay.jpg"
+      "src": "assets/hero.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-modern-middle-east-bloehymgc78/assets/hero.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-modern-middle-east-bloehymgc78-1790226805429/assets/hero.jpg"
+    },
+    {
+      "src": "assets/body-ds-memo.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-modern-middle-east-bloehymgc78/assets/body-ds-memo.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-modern-middle-east-bloehymgc78-1790226805429/assets/body-ds-memo.jpg"
     }
   ],
   "ratings": {
-    "gemini": null,
+    "gemini": 9.4,
     "gpt": null,
-    "consensus": null
+    "consensus": 9.4
   }
 }
