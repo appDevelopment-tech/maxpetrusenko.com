@@ -1,0 +1,34 @@
+{
+  "slug": "youtube-company-ruining-fruit-nyg-np0s0zq",
+  "title": "One Company Sells a Third of America's Berries. It Grows Almost None of Them.",
+  "publicUrl": "https://www.maxpetrusenko.com/medium/youtube-company-ruining-fruit-nyg-np0s0zq/",
+  "outputPath": "/Users/maxsmacmini/.hermes/cache/scratch/mp-push-fruit/nextjs/public/medium/youtube-company-ruining-fruit-nyg-np0s0zq/index.html",
+  "sourceUrl": "https://www.youtube.com/watch?v=nyG-np0S0ZQ",
+  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-company-ruining-fruit-nyg-np0s0zq/article-v2.md",
+  "articleHash": "a863dc7bffeee243d636bef34cf9924fbd0371f21f3288261aafd19f3c60e3d8",
+  "exportedAt": "2026-09-27T16:39:12.933Z",
+  "status": "draft_gates_title_rating_complete_preview_pending",
+  "publishMode": "preview",
+  "copiedImages": [
+    {
+      "src": "assets/hero.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-company-ruining-fruit-nyg-np0s0zq/assets/hero.jpg",
+      "destinationPath": "/Users/maxsmacmini/.hermes/cache/scratch/mp-push-fruit/nextjs/public/medium/.tmp-youtube-company-ruining-fruit-nyg-np0s0zq-1790527152931/assets/hero.jpg"
+    },
+    {
+      "src": "assets/section-label.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-company-ruining-fruit-nyg-np0s0zq/assets/section-label.jpg",
+      "destinationPath": "/Users/maxsmacmini/.hermes/cache/scratch/mp-push-fruit/nextjs/public/medium/.tmp-youtube-company-ruining-fruit-nyg-np0s0zq-1790527152931/assets/section-label.jpg"
+    },
+    {
+      "src": "assets/section-varieties.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-company-ruining-fruit-nyg-np0s0zq/assets/section-varieties.jpg",
+      "destinationPath": "/Users/maxsmacmini/.hermes/cache/scratch/mp-push-fruit/nextjs/public/medium/.tmp-youtube-company-ruining-fruit-nyg-np0s0zq-1790527152931/assets/section-varieties.jpg"
+    }
+  ],
+  "ratings": {
+    "gemini": null,
+    "gpt": null,
+    "consensus": null
+  }
+}
