@@ -12,6 +12,12 @@ interface SubscriptionRequest {
 	email: string;
 	consent: boolean;
 	source?: string;
+	// Optional: a form that only ever asked for an email keeps working with this
+	// unset. Present only on the Miami Contact Improv forms as of 2026-09-28.
+	phone?: string;
+	// Honeypot. A real form never fills this field; a submission that does is
+	// answered as if it worked and never stored.
+	company?: string;
 	// The acquisition fields a page sends with a signup. All optional: a form on an
 	// older page posts an email, a consent flag and a source, and that has to keep
 	// working exactly as before.
@@ -63,7 +69,7 @@ const RESEND_API = 'https://api.resend.com';
 // else, but they get a welcome email carrying the series discount code.
 const CI_SOURCE_PREFIX = 'miamicontactimprov';
 const CI_FROM = 'Contact Improv Miami <hello@miamicontactimprov.com>';
-const CI_SUBJECT = 'Your 10% code for the Fundamentals series';
+const CI_SUBJECT = 'Your 20% code for the Fundamentals series';
 const CI_SERIES_LINK = 'https://miamicontactimprov.com/fundamentals';
 
 // Meta Conversions API. The version is pinned here alone; bump it in one place when
@@ -81,6 +87,16 @@ type MetaEventName = (typeof META_EVENTS)[number];
 function isValidEmail(email: string): boolean {
 	const trimmed = email.trim().toLowerCase();
 	return /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(trimmed);
+}
+
+// Phone is optional, so an empty string is valid (nothing to check). When one is
+// given it only has to look like a phone number: 7 to 15 digits once formatting
+// is stripped, which is the E.164 length range and permissive enough for however
+// someone chooses to type a US or international number.
+function isValidPhone(phone: string): boolean {
+	if (!phone) return true;
+	const digits = phone.replace(/[^0-9]/g, '');
+	return digits.length >= 7 && digits.length <= 15;
 }
 
 // Compares the whole token every time, so the response time does not reveal how
@@ -211,7 +227,7 @@ function welcomeBody(code: string): string {
 
 The Fundamentals series is eight Friday evenings at Inner Motion in Hallandale Beach, 7:00 to 9:00 PM, starting October 2. Come to one class or all eight. No partner and no experience needed, just clothes you can roll in.
 
-Your 10% code is ${code}. Enter it at checkout on the booking page and the price drops.
+Your 20% code is ${code}, good on any class for the next two months. Enter it at checkout on the booking page and the price drops.
 
 Dates, the venue and what we cover: ${CI_SERIES_LINK}
 
@@ -223,6 +239,9 @@ Max`;
 }
 
 async function sendWelcome(env: Env, email: string): Promise<void> {
+	// CI_NEWSLETTER_COUPON: the 20%-off code for the Fundamentals series, set as a
+	// Worker environment variable / secret, never in source. Unset until the Luma
+	// coupon exists; the welcome email is skipped rather than sent with a blank code.
 	const code = env.CI_NEWSLETTER_COUPON;
 	if (!code) {
 		console.error('[Welcome email skipped] CI_NEWSLETTER_COUPON is not set');
@@ -303,6 +322,17 @@ export default {
 				const email = body.email?.trim().toLowerCase();
 				const consent = Boolean(body.consent);
 				const source = (body.source || 'unknown').slice(0, 64);
+				const phone = text(body.phone, 32);
+
+				// Honeypot: a real submission never fills this field. Answer as if it
+				// worked, so a bot filling it learns nothing, and never touch KV or
+				// Resend for it.
+				if (text(body.company, MAX_TAG)) {
+					return Response.json(
+						{ ok: true } as SubscriptionResponse,
+						{ status: 200, headers: corsHeaders }
+					);
+				}
 
 				// Validation
 				if (!email || !isValidEmail(email)) {
@@ -319,15 +349,25 @@ export default {
 					);
 				}
 
+				if (!isValidPhone(phone)) {
+					return Response.json(
+						{ ok: false, error: 'Invalid phone' } as SubscriptionResponse,
+						{ status: 400, headers: corsHeaders }
+					);
+				}
+
 				const previous = sourceOf(await env.EMAIL_SUBS.get(email));
 
 				// Store in KV. The attribution fields are sanitised once and used for
-				// both the record and the log line.
+				// both the record and the log line. Phone is stored only when given:
+				// consent covers texting a number the reader actually left, and an empty
+				// key is not evidence anyone agreed to anything.
 				const extras = attribution(body);
 				await env.EMAIL_SUBS.put(email, JSON.stringify({
 					email,
 					consent,
 					source,
+					...(phone ? { phone } : {}),
 					...extras,
 					ts: Date.now(),
 				}));

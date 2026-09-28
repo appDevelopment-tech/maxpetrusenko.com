@@ -221,7 +221,7 @@ describe('POST /api/subscribe', () => {
 				email: 'reader@example.com',
 				consent: true,
 				source: 'miamicontactimprov:start:door',
-				offer: 'Not ready for this Friday? Get the next dates and 10% off when you are.',
+				offer: 'Not ready for this Friday? Get the next dates and 20% off classes for the next two months.',
 				campaign: 'ci-october',
 				landing_page: '/start',
 				referrer: 'https://www.instagram.com/',
@@ -235,7 +235,7 @@ describe('POST /api/subscribe', () => {
 		expect(status).toBe(200);
 		const stored = JSON.parse((await env.EMAIL_SUBS.get('reader@example.com')) ?? '{}');
 		expect(stored.source).toBe('miamicontactimprov:start:door');
-		expect(stored.offer).toBe('Not ready for this Friday? Get the next dates and 10% off when you are.');
+		expect(stored.offer).toBe('Not ready for this Friday? Get the next dates and 20% off classes for the next two months.');
 		expect(stored.campaign).toBe('ci-october');
 		expect(stored.landing_page).toBe('/start');
 		expect(stored.referrer).toBe('https://www.instagram.com/');
@@ -279,6 +279,69 @@ describe('POST /api/subscribe', () => {
 		expect(stored.campaign).toHaveLength(80);
 		expect(stored.referrer).toBeUndefined();
 		expect(stored.offer).toBeUndefined();
+	});
+
+	it('stores a phone number when one is given', async () => {
+		interceptContacts();
+
+		const { status } = await call('/api/subscribe', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({
+				email: 'reader@example.com',
+				consent: true,
+				source: 'maxpetrusenko.com:footer',
+				phone: '(305) 555-0134',
+			}),
+		});
+
+		expect(status).toBe(200);
+		const stored = JSON.parse((await env.EMAIL_SUBS.get('reader@example.com')) ?? '{}');
+		expect(stored.phone).toBe('(305) 555-0134');
+	});
+
+	it('rejects a phone number that is not enough digits to be one', async () => {
+		const { status, body } = await call('/api/subscribe', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({ email: 'reader@example.com', consent: true, phone: '555' }),
+		});
+
+		expect(status).toBe(400);
+		expect(body.error).toBe('Invalid phone');
+	});
+
+	it('leaves phone out of the record when the field is left blank', async () => {
+		interceptContacts();
+
+		const { status } = await call('/api/subscribe', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({ email: 'reader@example.com', consent: true, source: 'maxpetrusenko.com:footer' }),
+		});
+
+		expect(status).toBe(200);
+		const stored = JSON.parse((await env.EMAIL_SUBS.get('reader@example.com')) ?? '{}');
+		expect(stored.phone).toBeUndefined();
+	});
+
+	it('answers ok without storing or mailing a submission that fills the honeypot', async () => {
+		const { status, body } = await call('/api/subscribe', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({
+				email: 'bot@example.com',
+				consent: true,
+				source: 'miamicontactimprov:fundamentals',
+				company: 'Acme Ltd',
+			}),
+		});
+
+		expect(status).toBe(200);
+		expect(body.ok).toBe(true);
+		expect(await env.EMAIL_SUBS.get('bot@example.com')).toBeNull();
+		expect(sent.contacts).toHaveLength(0);
+		expect(sent.emails).toHaveLength(0);
 	});
 });
 
