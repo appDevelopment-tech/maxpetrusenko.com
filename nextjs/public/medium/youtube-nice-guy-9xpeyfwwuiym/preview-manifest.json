@@ -1,0 +1,39 @@
+{
+  "slug": "youtube-nice-guy-9xpeyfwwuiym",
+  "title": "The Spark Is a Slot Machine",
+  "publicUrl": "https://www.maxpetrusenko.com/medium/youtube-nice-guy-9xpeyfwwuiym/",
+  "outputPath": "/Users/maxsmacmini/.hermes/cache/wt-maxpetrusenko-20260930/nextjs/public/medium/youtube-nice-guy-9xpeyfwwuiym/index.html",
+  "sourceUrl": "https://www.youtube.com/watch?v=9xpEYFWUIyM",
+  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-nice-guy-9xpeyfwwuiym/article-v3.md",
+  "articleHash": "f29f6ea767857374a18cd09f09250dafa1603e0816cda3fb551c84b3efff77ad",
+  "exportedAt": "2026-09-30T17:20:49.263Z",
+  "status": "review_ready_with_recorded_blocker",
+  "publishMode": "preview",
+  "copiedImages": [
+    {
+      "src": "assets/hero.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-nice-guy-9xpeyfwwuiym/assets/hero.jpg",
+      "destinationPath": "/Users/maxsmacmini/.hermes/cache/wt-maxpetrusenko-20260930/nextjs/public/medium/.tmp-youtube-nice-guy-9xpeyfwwuiym-1790788849250/assets/hero.jpg"
+    },
+    {
+      "src": "assets/clip-book.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-nice-guy-9xpeyfwwuiym/assets/clip-book.jpg",
+      "destinationPath": "/Users/maxsmacmini/.hermes/cache/wt-maxpetrusenko-20260930/nextjs/public/medium/.tmp-youtube-nice-guy-9xpeyfwwuiym-1790788849250/assets/clip-book.jpg"
+    },
+    {
+      "src": "assets/clip-comment.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-nice-guy-9xpeyfwwuiym/assets/clip-comment.jpg",
+      "destinationPath": "/Users/maxsmacmini/.hermes/cache/wt-maxpetrusenko-20260930/nextjs/public/medium/.tmp-youtube-nice-guy-9xpeyfwwuiym-1790788849250/assets/clip-comment.jpg"
+    },
+    {
+      "src": "assets/clip-rooftop.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-nice-guy-9xpeyfwwuiym/assets/clip-rooftop.jpg",
+      "destinationPath": "/Users/maxsmacmini/.hermes/cache/wt-maxpetrusenko-20260930/nextjs/public/medium/.tmp-youtube-nice-guy-9xpeyfwwuiym-1790788849250/assets/clip-rooftop.jpg"
+    }
+  ],
+  "ratings": {
+    "gemini": 9.2,
+    "gpt": 8.8,
+    "consensus": 9.2
+  }
+}
