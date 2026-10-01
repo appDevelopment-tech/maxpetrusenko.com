@@ -8,6 +8,8 @@
  * `Authorization: Bearer <ADMIN_TOKEN>`. /api/subscribe stays public.
  */
 
+import { handleCheckout } from './checkout';
+
 interface SubscriptionRequest {
 	email: string;
 	consent: boolean;
@@ -49,7 +51,7 @@ interface ExportedHandler<TEnv> {
 	fetch(request: Request, env: TEnv, ctx: ExecutionContext): Promise<Response>;
 }
 
-interface Env {
+export interface Env {
 	EMAIL_SUBS: KVNamespace;
 	ADMIN_TOKEN?: string;
 	RESEND_API_KEY?: string;
@@ -61,6 +63,8 @@ interface Env {
 	META_PIXEL_ID?: string;
 	META_CAPI_TOKEN?: string;
 	META_TEST_EVENT_CODE?: string;
+	// Test-mode Stripe secret key for /api/checkout. Live mode is a later step.
+	STRIPE_SECRET_KEY?: string;
 }
 
 const RESEND_API = 'https://api.resend.com';
@@ -477,6 +481,11 @@ export default {
 				{ ok: true, event, forwarded } as EventsResponse,
 				{ status: 202, headers: corsHeaders }
 			);
+		}
+
+		// POST /api/checkout - Stripe Checkout Session for a ticket, intro pack, or membership
+		if (url.pathname === '/api/checkout' && request.method === 'POST') {
+			return handleCheckout(request, env, corsHeaders);
 		}
 
 		// GET /api/list - List all subscriptions (admin endpoint)

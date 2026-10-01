@@ -1,0 +1,9 @@
+# Local dev secrets for `wrangler dev`. Copy to .dev.vars and fill in real values.
+# .dev.vars itself is gitignored; never commit real keys.
+ADMIN_TOKEN=change-me
+RESEND_API_KEY=re_placeholder
+CI_NEWSLETTER_COUPON=PLACEHOLDER20
+META_PIXEL_ID=
+META_CAPI_TOKEN=
+META_TEST_EVENT_CODE=
+STRIPE_SECRET_KEY=sk_test_placeholder
