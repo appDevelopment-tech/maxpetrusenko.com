@@ -483,7 +483,7 @@ export default {
 			);
 		}
 
-		// POST /api/checkout - Stripe Checkout Session for a ticket, intro pack, or membership
+		// POST /api/checkout - Stripe Checkout Session for a drop-in ticket (class/jam/combo)
 		if (url.pathname === '/api/checkout' && request.method === 'POST') {
 			return handleCheckout(request, env, corsHeaders);
 		}

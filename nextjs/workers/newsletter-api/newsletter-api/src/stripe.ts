@@ -7,7 +7,7 @@
 
 const STRIPE_API = 'https://api.stripe.com/v1';
 
-export async function findPriceByLookupKey(secretKey: string, lookupKey: string): Promise<{ id: string } | null> {
+export async function findPriceByLookupKey(secretKey: string, lookupKey: string): Promise<{ id: string; unitAmount: number } | null> {
 	const query = new URLSearchParams();
 	query.append('lookup_keys[]', lookupKey);
 	query.set('active', 'true');
@@ -17,13 +17,14 @@ export async function findPriceByLookupKey(secretKey: string, lookupKey: string)
 	});
 	if (!response.ok) return null;
 
-	const payload = (await response.json().catch(() => null)) as { data?: Array<{ id: string }> } | null;
+	const payload = (await response.json().catch(() => null)) as
+		| { data?: Array<{ id: string; unit_amount?: number | null }> }
+		| null;
 	const price = payload?.data?.[0];
-	return price ? { id: price.id } : null;
+	return price ? { id: price.id, unitAmount: price.unit_amount ?? 0 } : null;
 }
 
 export interface CreateCheckoutSessionParams {
-	mode: 'payment' | 'subscription';
 	priceId: string;
 	allowPromotionCodes: boolean;
 	successUrl: string;
@@ -36,7 +37,10 @@ export async function createCheckoutSession(
 	params: CreateCheckoutSessionParams,
 ): Promise<{ url: string } | { error: string }> {
 	const body = new URLSearchParams();
-	body.set('mode', params.mode);
+	// Every drop-in kind (class/jam/combo) is a one-time payment -- memberships
+	// (which would have needed 'subscription' mode) are deferred, see
+	// docs/plans/pricing-events-config.md in the site repo.
+	body.set('mode', 'payment');
 	body.set('line_items[0][price]', params.priceId);
 	body.set('line_items[0][quantity]', '1');
 	body.set('phone_number_collection[enabled]', 'true');

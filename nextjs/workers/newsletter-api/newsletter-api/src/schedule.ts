@@ -2,11 +2,18 @@
  * The Fundamentals class calendar, as a reusable config.
  *
  * Nothing in the UI reads this file yet; it exists so the checkout logic (and,
- * later, check-in/QR/entitlements work) has one place to resolve "which class is
- * this ticket for" instead of each caller hand-rolling dates.
+ * later, check-in/QR/entitlements work) has one place to resolve "which event
+ * is this ticket for" instead of each caller hand-rolling dates.
  */
 
-export type EventType = 'class' | 'jam';
+// 'class' and 'jam' are nights that run exactly one thing. 'combo-capable' is a
+// night that runs both a class and a jam, so a buyer can purchase either one
+// drop-in or the combined ticket for that date.
+export type EventType = 'class' | 'jam' | 'combo-capable';
+
+// What a buyer can actually check out with. Every event's type constrains
+// which kinds are purchasable for it (see `kindAvailableForEvent`).
+export type DropInKind = 'class' | 'jam' | 'combo';
 
 export interface ScheduledEvent {
 	date: string; // 'YYYY-MM-DD'
@@ -24,6 +31,12 @@ const TITLE = 'Fundamentals: Friday class';
 // 2026 is Nov 1. Get this wrong and the last three classes read an hour off on
 // any calendar or cutoff math that trusts the ISO string, and nobody notices
 // until someone shows up at the wrong time.
+//
+// All eight are `type: 'class'` today. No `'jam'` or `'combo-capable'` entries
+// exist yet -- that's deliberate future-proofing per Max (2026-10-01), not a
+// gap to fill here. See docs/plans/pricing-events-config.md in the site repo
+// (maxpetrusenko/miamicontactimprov) for the full pricing model this config
+// supports once jam/combo nights are added.
 export const EVENTS: ScheduledEvent[] = [
 	{ date: '2026-10-02', start: '2026-10-02T19:00:00-04:00', end: '2026-10-02T21:00:00-04:00', type: 'class', title: TITLE },
 	{ date: '2026-10-09', start: '2026-10-09T19:00:00-04:00', end: '2026-10-09T21:00:00-04:00', type: 'class', title: TITLE },
@@ -35,54 +48,60 @@ export const EVENTS: ScheduledEvent[] = [
 	{ date: '2026-11-20', start: '2026-11-20T19:00:00-05:00', end: '2026-11-20T21:00:00-05:00', type: 'class', title: TITLE },
 ];
 
-// The Stripe price lookup key for a drop-in ticket to each event type. `jam` is
-// null: no jam events are in EVENTS yet and no Stripe price exists for one.
-// This is deliberate future-proofing, not a bug — see
-// docs/plans/pricing-events-config.md in the site repo (maxpetrusenko/
-// miamicontactimprov), which carries the full pricing model.
-export const DROP_IN_LOOKUP_KEY_BY_TYPE: Record<EventType, string | null> = {
+// The Stripe price lookup key for each drop-in kind. All three exist in Stripe
+// test mode already (created via scripts/stripe_setup.py in the site repo):
+// ci-ticket-online-friday ($20), ci-jam-dropin ($15), ci-combo-dropin ($30).
+export const KIND_LOOKUP_KEYS: Record<DropInKind, string> = {
 	class: 'ci-ticket-online-friday',
-	jam: null,
+	jam: 'ci-jam-dropin',
+	combo: 'ci-combo-dropin',
 };
 
-// $15, documented default once a jam price exists. Unused until then.
-export const DEFAULT_JAM_DROP_IN_CENTS = 1500;
+// Which kinds a given event type supports. A plain class/jam night only
+// sells its own kind; a combo-capable night sells all three.
+export function kindAvailableForEvent(event: ScheduledEvent, kind: DropInKind): boolean {
+	if (event.type === 'combo-capable') return true;
+	return event.type === kind;
+}
 
-export type ResolvedTicketEvent = { event: ScheduledEvent; cutoff: Date; closed: boolean };
+export type ResolvedEvent = { event: ScheduledEvent; cutoff: Date; closed: boolean };
+export type ResolveEventError = { error: 'unknown_date' } | { error: 'kind_unavailable' };
 
 function cutoffFor(event: ScheduledEvent): Date {
 	return new Date(new Date(event.start).getTime() - 2 * 60 * 60 * 1000);
 }
 
 /**
- * Resolves which scheduled event a ticket purchase is for.
+ * Resolves which scheduled event a purchase of `kind` is for.
  *
  * Takes `now` explicitly rather than reading the clock itself, so it is a pure
  * function: the same inputs always give the same answer, and a test can hand it
  * any instant without mocking global time.
  */
-export function resolveTicketEvent(
-	now: Date,
-	requestedDate?: string,
-): ResolvedTicketEvent | { error: 'unknown_date' } | null {
+export function resolveEvent(now: Date, kind: DropInKind, requestedDate?: string): ResolvedEvent | ResolveEventError | null {
 	if (EVENTS.length === 0) return null;
 
 	if (requestedDate) {
 		const event = EVENTS.find((e) => e.date === requestedDate);
 		if (!event) return { error: 'unknown_date' };
+		if (!kindAvailableForEvent(event, kind)) return { error: 'kind_unavailable' };
 		const cutoff = cutoffFor(event);
 		return { event, cutoff, closed: now.getTime() >= cutoff.getTime() };
 	}
 
-	for (const event of EVENTS) {
+	const candidates = EVENTS.filter((e) => kindAvailableForEvent(e, kind));
+	if (candidates.length === 0) return { error: 'kind_unavailable' };
+
+	for (const event of candidates) {
 		const cutoff = cutoffFor(event);
 		if (now.getTime() < cutoff.getTime()) {
 			return { event, cutoff, closed: false };
 		}
 	}
 
-	// Every cutoff has passed: fall back to the last event so the caller still
-	// has something to report as closed, with a door link, rather than crashing.
-	const event = EVENTS[EVENTS.length - 1];
+	// Every matching event's cutoff has passed: fall back to the last one so the
+	// caller still has something to report as closed, with a door link, rather
+	// than crashing.
+	const event = candidates[candidates.length - 1];
 	return { event, cutoff: cutoffFor(event), closed: true };
 }

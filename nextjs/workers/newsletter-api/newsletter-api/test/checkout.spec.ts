@@ -3,13 +3,12 @@ import { describe, it, expect, beforeAll, afterEach, vi } from 'vitest';
 import worker from '../src';
 
 const STRIPE_ORIGIN = 'https://api.stripe.com';
-const STRIPE_SECRET_KEY = 'sk_test_fake_key_for_vitest';
+const STRIPE_SECRET_KEY = 'sk_test_fixture_not_a_real_key';
 
-const PRICE_IDS: Record<string, string> = {
-	'ci-ticket-online-friday': 'price_ticket_test',
-	'ci-intro-pack': 'price_intro_test',
-	'ci-membership-monthly': 'price_monthly_test',
-	'ci-membership-annual': 'price_annual_test',
+const PRICES: Record<string, { id: string; unit_amount: number }> = {
+	'ci-ticket-online-friday': { id: 'price_class_test', unit_amount: 2000 },
+	'ci-jam-dropin': { id: 'price_jam_test', unit_amount: 1500 },
+	'ci-combo-dropin': { id: 'price_combo_test', unit_amount: 3000 },
 };
 
 function testEnv(overrides: Record<string, unknown> = {}): Env {
@@ -45,8 +44,8 @@ function interceptPrices(times = 1) {
 		.reply(200, (opts: any) => {
 			const url = new URL(String(opts.path), STRIPE_ORIGIN);
 			const lookupKey = url.searchParams.get('lookup_keys[]') ?? '';
-			const priceId = PRICE_IDS[lookupKey];
-			return { data: priceId ? [{ id: priceId }] : [] };
+			const price = PRICES[lookupKey];
+			return { data: price ? [price] : [] };
 		})
 		.times(times);
 }
@@ -75,75 +74,65 @@ afterEach(() => {
 });
 
 describe('POST /api/checkout', () => {
-	it('rejects an unknown plan', async () => {
-		const { status, body } = await checkout({ plan: 'weekly' });
+	it('rejects an unknown kind', async () => {
+		const { status, body } = await checkout({ kind: 'weekly' });
 		expect(status).toBe(400);
-		expect(body.error).toBe('Unknown plan');
+		expect(body.error).toBe('Unknown kind');
 	});
 
-	it('returns a checkout url for a ticket on a future date, with mode=payment and the right price', async () => {
+	it('defaults to kind=class when omitted, and returns a checkout url for a future date', async () => {
 		interceptPrices();
 		interceptSessions();
 
-		const { status, body } = await checkout({ plan: 'ticket', date: '2026-11-20' });
+		const { status, body } = await checkout({ event_date: '2026-11-20' });
 
 		expect(status).toBe(200);
 		expect(body.url).toBe('https://checkout.stripe.com/c/pay/test_1');
 		expect(sent.sessions).toHaveLength(1);
 		const params = sent.sessions[0];
 		expect(params.get('mode')).toBe('payment');
-		expect(params.get('line_items[0][price]')).toBe(PRICE_IDS['ci-ticket-online-friday']);
+		expect(params.get('line_items[0][price]')).toBe(PRICES['ci-ticket-online-friday'].id);
 		expect(params.get('line_items[0][quantity]')).toBe('1');
 		expect(params.get('allow_promotion_codes')).toBe('true');
 		expect(params.get('metadata[class_date]')).toBe('2026-11-20');
-		expect(params.get('metadata[plan]')).toBe('ticket');
-		expect(params.get('success_url')).toContain('plan=ticket&date=2026-11-20');
+		expect(params.get('metadata[kind]')).toBe('class');
+		expect(params.get('metadata[product]')).toBe('ci-class');
+		expect(params.get('success_url')).toContain('kind=class&event_date=2026-11-20&amount=2000');
 	});
 
 	it('answers 409 with a door link once a ticket date is past its cutoff', async () => {
 		// Move the clock past every class's 2-hour-before cutoff so the Oct 2
 		// class (the earliest) reads as closed, without touching real wall time
-		// anywhere resolveTicketEvent itself depends on (it never reads the clock).
+		// anywhere resolveEvent itself depends on (it never reads the clock).
 		vi.useFakeTimers();
 		vi.setSystemTime(new Date('2026-10-02T18:00:00-04:00'));
 
-		const { status, body } = await checkout({ plan: 'ticket', date: '2026-10-02' });
+		const { status, body } = await checkout({ kind: 'class', event_date: '2026-10-02' });
 
 		expect(status).toBe(409);
 		expect(body).toEqual({ closed: true, door_url: 'https://miamicontactimprov.com/pay' });
 	});
 
-	it('returns a checkout url for monthly, with mode=subscription and no allow_promotion_codes field', async () => {
-		interceptPrices();
-		interceptSessions();
-
-		const { status, body } = await checkout({ plan: 'monthly' });
-
-		expect(status).toBe(200);
-		expect(body.url).toContain('https://checkout.stripe.com/');
-		const params = sent.sessions[0];
-		expect(params.get('mode')).toBe('subscription');
-		expect(params.get('line_items[0][price]')).toBe(PRICE_IDS['ci-membership-monthly']);
-		expect(params.has('allow_promotion_codes')).toBe(false);
-		expect(params.get('metadata[plan]')).toBe('monthly');
+	it('answers 409 (kind unavailable) for jam, since no jam date exists in EVENTS yet', async () => {
+		const { status, body } = await checkout({ kind: 'jam' });
+		expect(status).toBe(409);
+		expect(body).toEqual({ closed: true, door_url: 'https://miamicontactimprov.com/pay' });
 	});
 
-	it('returns a checkout url for intro, with mode=payment and allow_promotion_codes', async () => {
-		interceptPrices();
-		interceptSessions();
+	it('answers 409 (kind unavailable) for combo, since no combo-capable date exists in EVENTS yet', async () => {
+		const { status, body } = await checkout({ kind: 'combo' });
+		expect(status).toBe(409);
+		expect(body).toEqual({ closed: true, door_url: 'https://miamicontactimprov.com/pay' });
+	});
 
-		const { status, body } = await checkout({ plan: 'intro' });
-
-		expect(status).toBe(200);
-		expect(body.url).toContain('https://checkout.stripe.com/');
-		const params = sent.sessions[0];
-		expect(params.get('mode')).toBe('payment');
-		expect(params.get('line_items[0][price]')).toBe(PRICE_IDS['ci-intro-pack']);
-		expect(params.get('allow_promotion_codes')).toBe('true');
+	it('answers 400 (unknown date) for a date not in EVENTS at all', async () => {
+		const { status, body } = await checkout({ kind: 'class', event_date: '2099-01-01' });
+		expect(status).toBe(400);
+		expect(body.error).toBe('Unknown class date');
 	});
 
 	it('returns 500 when STRIPE_SECRET_KEY is not configured', async () => {
-		const { status, body } = await checkout({ plan: 'monthly' }, testEnv({ STRIPE_SECRET_KEY: undefined }));
+		const { status, body } = await checkout({ kind: 'class', event_date: '2026-11-20' }, testEnv({ STRIPE_SECRET_KEY: undefined }));
 		expect(status).toBe(500);
 		expect(body.error).toBe('Stripe not configured');
 	});
@@ -154,7 +143,7 @@ describe('POST /api/checkout', () => {
 			.intercept({ method: 'GET', path: /\/v1\/prices\?/ })
 			.reply(200, { data: [] });
 
-		const { status, body } = await checkout({ plan: 'monthly' });
+		const { status, body } = await checkout({ kind: 'class', event_date: '2026-11-20' });
 		expect(status).toBe(500);
 		expect(body.error).toBe('Price not configured');
 	});

@@ -1,22 +1,28 @@
 /**
- * POST /api/checkout - builds a Stripe Checkout Session for a drop-in ticket,
- * the intro pack, or a membership, and hands the caller the URL to redirect to.
+ * POST /api/checkout - builds a Stripe Checkout Session for a drop-in ticket
+ * (class, jam, or class+jam combo) and hands the caller the URL to redirect to.
  *
- * No webhook, no check-in, no QR, no KV ticket record, no CRM sync, no
- * entitlements here - those land in a later, separate PR.
+ * Memberships (monthly/annual) and the intro 3-class pack are deferred -- see
+ * docs/plans/pricing-events-config.md in the site repo (maxpetrusenko/
+ * miamicontactimprov). No webhook, no check-in, no QR, no KV ticket record, no
+ * CRM sync, no entitlements here either - those land in a later, separate PR.
  */
 
 import type { Env } from './index';
-import { DROP_IN_LOOKUP_KEY_BY_TYPE, resolveTicketEvent } from './schedule';
-import { isPlan, planConfig, PLAN_LOOKUP_KEYS, type Plan } from './plans';
+import { KIND_LOOKUP_KEYS, resolveEvent, type DropInKind } from './schedule';
 import { createCheckoutSession, findPriceByLookupKey } from './stripe';
 
 interface CheckoutRequest {
-	plan?: string;
-	date?: string;
+	kind?: string;
+	event_date?: string;
 }
 
 const DOOR_URL = 'https://miamicontactimprov.com/pay';
+const KINDS: DropInKind[] = ['class', 'jam', 'combo'];
+
+function isKind(value: unknown): value is DropInKind {
+	return typeof value === 'string' && (KINDS as string[]).includes(value);
+}
 
 function json(body: unknown, status: number, corsHeaders: Record<string, string>): Response {
 	return Response.json(body, { status, headers: corsHeaders });
@@ -30,67 +36,54 @@ export async function handleCheckout(request: Request, env: Env, corsHeaders: Re
 		return json({ ok: false, error: 'Invalid JSON' }, 400, corsHeaders);
 	}
 
-	const plan = body.plan ?? 'ticket';
-	if (!isPlan(plan)) {
-		return json({ ok: false, error: 'Unknown plan' }, 400, corsHeaders);
+	// 'class' is the only kind with a real bookable date today, so a button
+	// that omits `kind` entirely (the common case) still does the right thing.
+	const kind = body.kind ?? 'class';
+	if (!isKind(kind)) {
+		return json({ ok: false, error: 'Unknown kind' }, 400, corsHeaders);
 	}
 
-	let lookupKey: string | null;
-	let mode: 'payment' | 'subscription';
-	let allowPromotionCodes: boolean;
-	let metadata: Record<string, string>;
-	let successUrl: string;
-	let cancelUrl: string;
-
-	if (plan === 'ticket') {
-		const resolved = resolveTicketEvent(new Date(), body.date);
-		if (resolved === null) {
-			// EVENTS is never empty in practice; guard it anyway rather than crash.
-			return json({ ok: false, error: 'No events configured' }, 500, corsHeaders);
-		}
-		if ('error' in resolved) {
+	const resolved = resolveEvent(new Date(), kind, body.event_date);
+	if (resolved === null) {
+		// EVENTS is never empty in practice; guard it anyway rather than crash.
+		return json({ ok: false, error: 'No events configured' }, 500, corsHeaders);
+	}
+	if ('error' in resolved) {
+		if (resolved.error === 'unknown_date') {
 			return json({ ok: false, error: 'Unknown class date' }, 400, corsHeaders);
 		}
+		// kind_unavailable: nothing sellable online for this kind yet (e.g. jam/
+		// combo before any such date exists in EVENTS). Reads the same to the
+		// caller as a time-based cutoff: not sellable online right now, door is
+		// the fallback either way.
+		return json({ closed: true, door_url: DOOR_URL }, 409, corsHeaders);
+	}
 
-		const { event, closed } = resolved;
-		const dropInKey = DROP_IN_LOOKUP_KEY_BY_TYPE[event.type];
-		if (closed || dropInKey === null) {
-			return json({ closed: true, door_url: DOOR_URL }, 409, corsHeaders);
-		}
-
-		lookupKey = dropInKey;
-		mode = 'payment';
-		allowPromotionCodes = planConfig('ticket').allowPromotionCodes;
-		metadata = { class_date: event.date, product: 'ci-ticket', plan: 'ticket' };
-		successUrl = `https://miamicontactimprov.com/success?plan=ticket&date=${event.date}&session_id={CHECKOUT_SESSION_ID}`;
-		cancelUrl = 'https://miamicontactimprov.com/fundamentals';
-	} else {
-		const nonTicketPlan = plan as Exclude<Plan, 'ticket'>;
-		lookupKey = PLAN_LOOKUP_KEYS[nonTicketPlan];
-		const config = planConfig(plan);
-		mode = config.mode;
-		allowPromotionCodes = config.allowPromotionCodes;
-		metadata = { product: `ci-${plan}`, plan };
-		successUrl = `https://miamicontactimprov.com/success?plan=${plan}&session_id={CHECKOUT_SESSION_ID}`;
-		cancelUrl = 'https://miamicontactimprov.com/pricing';
+	const { event, closed } = resolved;
+	if (closed) {
+		return json({ closed: true, door_url: DOOR_URL }, 409, corsHeaders);
 	}
 
 	if (!env.STRIPE_SECRET_KEY) {
 		return json({ ok: false, error: 'Stripe not configured' }, 500, corsHeaders);
 	}
 
+	const lookupKey = KIND_LOOKUP_KEYS[kind];
 	const price = await findPriceByLookupKey(env.STRIPE_SECRET_KEY, lookupKey);
 	if (!price) {
 		return json({ ok: false, error: 'Price not configured' }, 500, corsHeaders);
 	}
 
+	const successUrl =
+		`https://miamicontactimprov.com/success?kind=${kind}&event_date=${event.date}` +
+		`&amount=${price.unitAmount}&session_id={CHECKOUT_SESSION_ID}`;
+
 	const session = await createCheckoutSession(env.STRIPE_SECRET_KEY, {
-		mode,
 		priceId: price.id,
-		allowPromotionCodes,
+		allowPromotionCodes: true, // all three drop-in kinds allow promo codes
 		successUrl,
-		cancelUrl,
-		metadata,
+		cancelUrl: 'https://miamicontactimprov.com/fundamentals',
+		metadata: { class_date: event.date, kind, product: `ci-${kind}` },
 	});
 
 	if ('error' in session) {
