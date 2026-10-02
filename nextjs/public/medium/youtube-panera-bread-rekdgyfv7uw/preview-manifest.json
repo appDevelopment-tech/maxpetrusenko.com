@@ -1,0 +1,39 @@
+{
+  "slug": "youtube-panera-bread-rekdgyfv7uw",
+  "title": "Panera Kept the Price. Then Came the Frozen Dough.",
+  "publicUrl": "https://www.maxpetrusenko.com/medium/youtube-panera-bread-rekdgyfv7uw/",
+  "outputPath": "/Users/maxsmacmini/.hermes/cache/scratch/mp-push-panera-20261002/nextjs/public/medium/youtube-panera-bread-rekdgyfv7uw/index.html",
+  "sourceUrl": "https://www.youtube.com/watch?v=reKdGyFv7Uw",
+  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-panera-bread-rekdgyfv7uw/article-v3.md",
+  "articleHash": "493ed1794b5002de89bcd4cf5ded37f0ddb877d9bd35584ca5963c2a2492b736",
+  "exportedAt": "2026-10-02T04:51:14.461Z",
+  "status": "review_ready_with_recorded_blocker",
+  "publishMode": "preview",
+  "copiedImages": [
+    {
+      "src": "assets/hero.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-panera-bread-rekdgyfv7uw/assets/hero.jpg",
+      "destinationPath": "/Users/maxsmacmini/.hermes/cache/scratch/mp-push-panera-20261002/nextjs/public/medium/.tmp-youtube-panera-bread-rekdgyfv7uw-1790916674453/assets/hero.jpg"
+    },
+    {
+      "src": "assets/clip-dough.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-panera-bread-rekdgyfv7uw/assets/clip-dough.jpg",
+      "destinationPath": "/Users/maxsmacmini/.hermes/cache/scratch/mp-push-panera-20261002/nextjs/public/medium/.tmp-youtube-panera-bread-rekdgyfv7uw-1790916674453/assets/clip-dough.jpg"
+    },
+    {
+      "src": "assets/clip-lemonade.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-panera-bread-rekdgyfv7uw/assets/clip-lemonade.jpg",
+      "destinationPath": "/Users/maxsmacmini/.hermes/cache/scratch/mp-push-panera-20261002/nextjs/public/medium/.tmp-youtube-panera-bread-rekdgyfv7uw-1790916674453/assets/clip-lemonade.jpg"
+    },
+    {
+      "src": "assets/clip-franchise.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-panera-bread-rekdgyfv7uw/assets/clip-franchise.jpg",
+      "destinationPath": "/Users/maxsmacmini/.hermes/cache/scratch/mp-push-panera-20261002/nextjs/public/medium/.tmp-youtube-panera-bread-rekdgyfv7uw-1790916674453/assets/clip-franchise.jpg"
+    }
+  ],
+  "ratings": {
+    "gemini": 8.5,
+    "gpt": 9.2,
+    "consensus": 8.5
+  }
+}
