@@ -277,3 +277,14 @@ describe('STRIPE_MODE guard', () => {
 		expect(res.body.error).toBe('Stripe not configured');
 	});
 });
+
+describe('webhook beats pending', () => {
+	it('a claimed record never gets a pending marker back', async () => {
+		const { setFirstPending } = await import('../src/tickets');
+		await env.EMAIL_SUBS.put('won@example.com', JSON.stringify({ email: 'won@example.com', first_offer_issued_at: 1, first_discount_claimed: true }));
+		await setFirstPending(testEnv(), 'won@example.com', Date.now() + 1e6);
+		const stored = JSON.parse((await env.EMAIL_SUBS.get('won@example.com')) ?? '{}');
+		expect(stored.first_pending_until).toBeUndefined();
+		expect(stored.first_discount_claimed).toBe(true);
+	});
+});

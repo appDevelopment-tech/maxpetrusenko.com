@@ -28,5 +28,26 @@
 	],
 	"kv_namespaces": [
 		{ "binding": "EMAIL_SUBS", "id": "90a570d807f04bc4abb9b46282291e5b" }
-	]
+	],
+	// Preview Worker for Stripe TEST mode only: own name, own KV, own secrets
+	// (STRIPE_SECRET_KEY sk_test_, STRIPE_WEBHOOK_SECRET from a test-mode endpoint).
+	// No Resend vars, so it never emails anyone. Deploy: wrangler deploy --env preview
+	"env": {
+		"preview": {
+			"name": "newsletter-api-preview",
+			"vars": {
+				"STRIPE_MODE": "test",
+				"SITE_URL": "https://mci-pricing-preview.pages.dev",
+				"EXTRA_ORIGINS": "https://mci-pricing-preview.pages.dev"
+			},
+			"ratelimits": [
+				{ "name": "API_LIMITER", "namespace_id": "1002", "simple": { "limit": 10, "period": 60 } }
+			],
+			"kv_namespaces": [
+				{ "binding": "EMAIL_SUBS", "id": "78056955f4ad43de8190384c997f5e75" },
+				{ "binding": "AMBASSADORS", "id": "3bb91b4d80a745b2bdecbff8c688bdf2" },
+				{ "binding": "IDEAS", "id": "e6ebdfac729243db906d68a228eb076a" }
+			]
+		}
+	}
 }

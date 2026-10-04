@@ -123,8 +123,9 @@ export async function handleCheckout(request: Request, env: Env, corsHeaders: Re
 		return json({ ok: false, error: 'Price not configured' }, 500, corsHeaders);
 	}
 
+	const site = (env.SITE_URL ?? 'https://miamicontactimprov.com').replace(/\/$/, '');
 	const successUrl =
-		`https://miamicontactimprov.com/success?kind=${kind}&event_date=${event.date}` +
+		`${site}/success?kind=${kind}&event_date=${event.date}` +
 		`&amount=${price.unitAmount}&ticket_type=${ticket.type}&session_id={CHECKOUT_SESSION_ID}`;
 
 	const session = await createCheckoutSession(env.STRIPE_SECRET_KEY, {
@@ -132,7 +133,7 @@ export async function handleCheckout(request: Request, env: Env, corsHeaders: Re
 		// Early keeps promotion codes. The $15 offers do not: nothing stacks.
 		allowPromotionCodes: ticket.type === 'early',
 		successUrl,
-		cancelUrl: ticket.type === 'early' ? 'https://miamicontactimprov.com/fundamentals' : 'https://miamicontactimprov.com/tickets',
+		cancelUrl: ticket.type === 'early' ? `${site}/fundamentals` : `${site}/tickets`,
 		customerEmail: ticket.type === 'first' ? ticket.email : undefined,
 		expiresAt: sessionExpiry(nowMs),
 		idempotencyKey: await idempotencyKey(request, ticket, event.date, nowMs),

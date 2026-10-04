@@ -156,6 +156,9 @@ export async function firstClassEligibility(env: Env, email: string, secretKey: 
 export async function setFirstPending(env: Env, email: string, until: number | null): Promise<void> {
 	const record = await readSubscriber(env, email);
 	if (!record) return;
+	// A webhook-confirmed claim always wins: never put a pending marker back on a
+	// record the webhook has already closed.
+	if (until !== null && record.first_discount_claimed) return;
 	const { first_pending_until: _drop, ...rest } = record;
 	await writeSubscriber(env, email, until === null ? rest : { ...rest, first_pending_until: until });
 }

@@ -12,6 +12,7 @@ import { handleCheckout } from './checkout';
 import { handleFirstClass } from './tickets';
 import { corsHeaders as corsFor, isRateLimited, originsFor, type RateLimiter } from './http';
 import { handleStripeWebhook } from './webhook';
+import { handleIdeas, type IdeasKV } from './ideas';
 
 interface SubscriptionRequest {
 	email: string;
@@ -77,6 +78,11 @@ export interface Env {
 	API_LIMITER?: RateLimiter;
 	// Comma-separated extra CORS origins (local dev, previews).
 	EXTRA_ORIGINS?: string;
+	// /ideas demand board storage (src/ideas.ts).
+	IDEAS?: IdeasKV;
+	// Where Checkout sends buyers back to. Default https://miamicontactimprov.com;
+	// the preview Worker points it at the Pages preview.
+	SITE_URL?: string;
 	STRIPE_SECRET_KEY?: string;
 }
 
@@ -502,6 +508,10 @@ export default {
 				{ status: 202, headers: corsHeaders }
 			);
 		}
+
+		// /api/ideas* - demand board (src/ideas.ts)
+		const ideas = await handleIdeas(request, env, url, corsHeaders, isAdmin(request, env));
+		if (ideas) return ideas;
 
 		// POST /api/checkout - Stripe Checkout Session for a drop-in ticket (class/jam/combo)
 		if (url.pathname === '/api/checkout' && request.method === 'POST') {
