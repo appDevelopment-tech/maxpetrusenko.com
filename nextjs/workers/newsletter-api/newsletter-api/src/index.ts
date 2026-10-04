@@ -13,6 +13,7 @@ import { handleFirstClass } from './tickets';
 import { corsHeaders as corsFor, isRateLimited, originsFor, type RateLimiter } from './http';
 import { handleStripeWebhook } from './webhook';
 import { handleIdeas, type IdeasKV } from './ideas';
+import { handleCommunity, type AiBinding, type CommunityKV } from './verify';
 
 interface SubscriptionRequest {
 	email: string;
@@ -80,6 +81,10 @@ export interface Env {
 	EXTRA_ORIGINS?: string;
 	// /ideas demand board storage (src/ideas.ts).
 	IDEAS?: IdeasKV;
+	// Community $15 verification evidence and post/screenshot ownership (src/verify.ts).
+	COMMUNITY?: CommunityKV;
+	// Workers AI, for reading screenshots.
+	AI?: AiBinding;
 	// Where Checkout sends buyers back to. Default https://miamicontactimprov.com;
 	// the preview Worker points it at the Pages preview.
 	SITE_URL?: string;
@@ -512,6 +517,10 @@ export default {
 		// /api/ideas* - demand board (src/ideas.ts)
 		const ideas = await handleIdeas(request, env, url, corsHeaders, isAdmin(request, env));
 		if (ideas) return ideas;
+
+		// /api/community/* - verify a share for the $15 community price (src/verify.ts)
+		const community = await handleCommunity(request, env, url, corsHeaders, isAdmin(request, env));
+		if (community) return community;
 
 		// POST /api/checkout - Stripe Checkout Session for a drop-in ticket (class/jam/combo)
 		if (url.pathname === '/api/checkout' && request.method === 'POST') {

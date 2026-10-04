@@ -3,9 +3,10 @@
  *
  * Pricing (Max, 2026-10-04, docs/plans/pricing-ambassador-2026-10-04.md in the
  * site repo):
- *   early      $20  buy online ahead. Promotion codes still apply.
- *   community  $15  "Share & unlock": the buyer names where they shared the
- *                   class (channel + handle/group). Self-reported, never verified.
+ *   early      $20-40 sliding scale (custom_unit_amount, preset $20). Stripe
+ *                   allows no promotion codes on a custom-amount price.
+ *   community  $15  share the class, then prove it: the post's URL (fetched and
+ *                   read) or a screenshot (OCR). See src/verify.ts.
  *   first      $15  first class for a new person who left an email. Gone after
  *                   their first paid CI checkout.
  *   referral   $15  arrived through miamicontactimprov.com/fr/<name>.
@@ -24,19 +25,16 @@ export const TICKET_TYPES: TicketType[] = ['early', 'community', 'first', 'refer
 
 // One $15 price serves all three reduced offers; metadata tells them apart.
 export const TICKET_LOOKUP_KEYS: Record<TicketType, string> = {
-	early: 'ci-ticket-online-friday',
+	early: 'ci-class-sliding',
 	community: 'ci-class-15',
 	first: 'ci-class-15',
 	referral: 'ci-class-15',
 };
 
-export const SHARE_CHANNELS = ['instagram_story', 'whatsapp_group', 'facebook_group', 'other'] as const;
-export type ShareChannel = (typeof SHARE_CHANNELS)[number];
-
 export interface TicketChoice {
 	type: TicketType;
-	share_channel?: ShareChannel;
-	handle?: string;
+	// community: the id POST /api/community/verify returned for this email.
+	verification_id?: string;
 	referrer?: string;
 	email?: string;
 }
@@ -54,13 +52,6 @@ export function normalizeReferrer(raw: unknown): string | null {
 	return /^[a-z0-9][a-z0-9-]{0,39}$/.test(value) ? value : null;
 }
 
-// A handle or group name is free text the buyer typed. Control characters are
-// dropped and the length is capped well under Stripe's 500-char metadata limit.
-export function cleanHandle(raw: unknown): string {
-	if (typeof raw !== 'string') return '';
-	return raw.replace(/[\u0000-\u001f\u007f]/g, '').trim().slice(0, 80);
-}
-
 export type ParsedTicket = { ok: true; ticket: TicketChoice } | { ok: false; error: string };
 
 export function parseTicket(body: Record<string, unknown>): ParsedTicket {
@@ -72,13 +63,11 @@ export function parseTicket(body: Record<string, unknown>): ParsedTicket {
 		case 'early':
 			return { ok: true, ticket: { type: 'early' } };
 		case 'community': {
-			const channel = body.share_channel;
-			if (typeof channel !== 'string' || !(SHARE_CHANNELS as readonly string[]).includes(channel)) {
-				return { ok: false, error: 'Pick where you shared it' };
-			}
-			const handle = cleanHandle(body.handle);
-			if (!handle) return { ok: false, error: 'Add your handle or the group name' };
-			return { ok: true, ticket: { type: 'community', share_channel: channel as ShareChannel, handle } };
+			const email = normalizeEmail(body.email);
+			if (!isValidEmail(email)) return { ok: false, error: 'Email required for the community price' };
+			const id = typeof body.verification_id === 'string' ? body.verification_id : '';
+			if (!id) return { ok: false, error: 'Verify your post first' };
+			return { ok: true, ticket: { type: 'community', email, verification_id: id } };
 		}
 		case 'referral': {
 			const referrer = normalizeReferrer(body.referrer);

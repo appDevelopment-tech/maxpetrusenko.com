@@ -6,7 +6,7 @@ const STRIPE_ORIGIN = 'https://api.stripe.com';
 const STRIPE_SECRET_KEY = 'sk_test_fixture_not_a_real_key';
 
 const PRICES: Record<string, { id: string; unit_amount: number }> = {
-	'ci-ticket-online-friday': { id: 'price_class_test', unit_amount: 2000 },
+	'ci-class-sliding': { id: 'price_class_test', unit_amount: null as unknown as number },
 	'ci-jam-dropin': { id: 'price_jam_test', unit_amount: 1500 },
 	'ci-combo-dropin': { id: 'price_combo_test', unit_amount: 3000 },
 };
@@ -91,13 +91,15 @@ describe('POST /api/checkout', () => {
 		expect(sent.sessions).toHaveLength(1);
 		const params = sent.sessions[0];
 		expect(params.get('mode')).toBe('payment');
-		expect(params.get('line_items[0][price]')).toBe(PRICES['ci-ticket-online-friday'].id);
+		expect(params.get('line_items[0][price]')).toBe(PRICES['ci-class-sliding'].id);
 		expect(params.get('line_items[0][quantity]')).toBe('1');
-		expect(params.get('allow_promotion_codes')).toBe('true');
+		// custom_unit_amount ($20-40): Stripe refuses promotion codes on it
+		expect(params.has('allow_promotion_codes')).toBe(false);
 		expect(params.get('metadata[class_date]')).toBe('2026-11-20');
 		expect(params.get('metadata[kind]')).toBe('class');
 		expect(params.get('metadata[product]')).toBe('ci-class');
-		expect(params.get('success_url')).toContain('kind=class&event_date=2026-11-20&amount=2000');
+		expect(params.get('success_url')).toContain('kind=class&event_date=2026-11-20&ticket_type=early');
+		expect(params.get('success_url')).not.toContain('amount=');
 	});
 
 	it('answers 409 with a door link once a ticket date is past its cutoff', async () => {

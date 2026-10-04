@@ -52,7 +52,8 @@ export const EVENTS: ScheduledEvent[] = [
 // test mode already (created via scripts/stripe_setup.py in the site repo):
 // ci-ticket-online-friday ($20), ci-jam-dropin ($15), ci-combo-dropin ($30).
 export const KIND_LOOKUP_KEYS: Record<DropInKind, string> = {
-	class: 'ci-ticket-online-friday',
+	// Sliding scale $20-40 (Stripe custom_unit_amount, preset $20). Max, 2026-10-04.
+	class: 'ci-class-sliding',
 	jam: 'ci-jam-dropin',
 	combo: 'ci-combo-dropin',
 };

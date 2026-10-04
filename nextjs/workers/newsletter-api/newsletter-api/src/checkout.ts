@@ -10,6 +10,7 @@
 
 import type { Env } from './index';
 import { KIND_LOOKUP_KEYS, resolveEvent, type DropInKind } from './schedule';
+import { usableEvidence, type Evidence } from './verify';
 import { createCheckoutSession, findPriceByLookupKey, stripeModeError } from './stripe';
 import {
 	firstClassEligibility,
@@ -28,8 +29,7 @@ interface CheckoutRequest {
 	// Ticket type and its fields, see src/tickets.ts. All optional: a button that
 	// sends only { kind } still buys the $20 early ticket exactly as before.
 	ticket_type?: string;
-	share_channel?: string;
-	handle?: string;
+	verification_id?: string;
 	referrer?: string;
 	email?: string;
 }
@@ -115,6 +115,13 @@ export async function handleCheckout(request: Request, env: Env, corsHeaders: Re
 		await setFirstPending(env, ticket.email!, nowMs + PENDING_TTL_MS);
 	}
 
+	// Community: verified evidence for this email (src/verify.ts), or no $15.
+	let evidence: Evidence | null = null;
+	if (ticket.type === 'community') {
+		evidence = await usableEvidence(env, ticket.verification_id, ticket.email!, nowMs);
+		if (!evidence) return json({ ok: false, error: 'community_not_verified' }, 403, corsHeaders);
+	}
+
 	const referrerVerified = ticket.type === 'referral' ? await isKnownAmbassador(env, ticket.referrer!) : false;
 
 	const lookupKey = ticket.type === 'early' ? KIND_LOOKUP_KEYS[kind] : TICKET_LOOKUP_KEYS[ticket.type];
@@ -126,15 +133,16 @@ export async function handleCheckout(request: Request, env: Env, corsHeaders: Re
 	const site = (env.SITE_URL ?? 'https://miamicontactimprov.com').replace(/\/$/, '');
 	const successUrl =
 		`${site}/success?kind=${kind}&event_date=${event.date}` +
-		`&amount=${price.unitAmount}&ticket_type=${ticket.type}&session_id={CHECKOUT_SESSION_ID}`;
+		`${price.unitAmount ? `&amount=${price.unitAmount}` : ''}&ticket_type=${ticket.type}&session_id={CHECKOUT_SESSION_ID}`;
 
 	const session = await createCheckoutSession(env.STRIPE_SECRET_KEY, {
 		priceId: price.id,
-		// Early keeps promotion codes. The $15 offers do not: nothing stacks.
-		allowPromotionCodes: ticket.type === 'early',
+		// No promotion codes: Stripe refuses them on the custom-amount ($20-40)
+		// price, and the $15 offers never stack.
+		allowPromotionCodes: false,
 		successUrl,
 		cancelUrl: ticket.type === 'early' ? `${site}/fundamentals` : `${site}/tickets`,
-		customerEmail: ticket.type === 'first' ? ticket.email : undefined,
+		customerEmail: ticket.email,
 		expiresAt: sessionExpiry(nowMs),
 		idempotencyKey: await idempotencyKey(request, ticket, event.date, nowMs),
 		// Stripe metadata is the record of which offer a sale used. Empty values
@@ -145,8 +153,10 @@ export async function handleCheckout(request: Request, env: Env, corsHeaders: Re
 			kind,
 			product: `ci-${kind}`,
 			ticket_type: ticket.type,
-			share_channel: ticket.share_channel ?? '',
-			handle: ticket.handle ?? '',
+			share_url: evidence?.share_url ?? '',
+			verified: evidence ? 'true' : '',
+			method: evidence?.method ?? '',
+			verification_id: evidence?.id ?? '',
 			referrer: ticket.referrer ?? '',
 			referrer_verified: ticket.type === 'referral' ? String(referrerVerified) : '',
 			first_discount: ticket.type === 'first' ? 'true' : '',
@@ -180,9 +190,9 @@ async function sha256(value: string): Promise<string> {
 // session between two strangers).
 async function idempotencyKey(request: Request, ticket: TicketChoice, eventDate: string, nowMs: number): Promise<string> {
 	const minute = Math.floor(nowMs / 60000);
-	if (ticket.type === 'first') return `ci-first-${await sha256(`${ticket.email}|${eventDate}|first|${minute}`)}`;
+	if (ticket.email) return `ci-${ticket.type}-${await sha256(`${ticket.email}|${eventDate}|${ticket.type}|${minute}`)}`;
 	const ip = request.headers.get('CF-Connecting-IP');
 	if (!ip) return `ci-${crypto.randomUUID()}`;
-	const fields = [ip, eventDate, ticket.type, ticket.share_channel ?? '', ticket.handle ?? '', ticket.referrer ?? '', minute];
+	const fields = [ip, eventDate, ticket.type, ticket.referrer ?? '', minute];
 	return `ci-${await sha256(fields.join('|'))}`;
 }

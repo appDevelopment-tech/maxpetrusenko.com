@@ -22,6 +22,8 @@
 		// "live" only in the go-live step, together with the live key.
 		"STRIPE_MODE": "test"
 	},
+	// Workers AI: reads Community $15 screenshots (src/verify.ts).
+	"ai": { "binding": "AI" },
 	// ~10 requests per minute per client IP on /api/* (src/http.ts).
 	"ratelimits": [
 		{ "name": "API_LIMITER", "namespace_id": "1001", "simple": { "limit": 10, "period": 60 } }
@@ -40,13 +42,15 @@
 				"SITE_URL": "https://mci-pricing-preview.pages.dev",
 				"EXTRA_ORIGINS": "https://mci-pricing-preview.pages.dev"
 			},
+			"ai": { "binding": "AI" },
 			"ratelimits": [
 				{ "name": "API_LIMITER", "namespace_id": "1002", "simple": { "limit": 10, "period": 60 } }
 			],
 			"kv_namespaces": [
 				{ "binding": "EMAIL_SUBS", "id": "78056955f4ad43de8190384c997f5e75" },
 				{ "binding": "AMBASSADORS", "id": "3bb91b4d80a745b2bdecbff8c688bdf2" },
-				{ "binding": "IDEAS", "id": "e6ebdfac729243db906d68a228eb076a" }
+				{ "binding": "IDEAS", "id": "e6ebdfac729243db906d68a228eb076a" },
+				{ "binding": "COMMUNITY", "id": "a61d4811e5f841f2aa8f0419a6c38404" }
 			]
 		}
 	}

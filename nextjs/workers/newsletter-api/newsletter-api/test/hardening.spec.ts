@@ -9,7 +9,7 @@ const WEBHOOK_SECRET = 'whsec_test_only';
 const DATE = '2026-11-20';
 
 const PRICES: Record<string, { id: string; unit_amount: number }> = {
-	'ci-ticket-online-friday': { id: 'price_class_test', unit_amount: 2000 },
+	'ci-class-sliding': { id: 'price_class_test', unit_amount: null as unknown as number },
 	'ci-class-15': { id: 'price_class15_test', unit_amount: 1500 },
 };
 
@@ -138,14 +138,14 @@ describe('idempotency key', () => {
 		expect(created.keys[0]).not.toContain('idem');
 	});
 
-	it('same IP, same offer, same minute: same key and same session; a different handle: a new one', async () => {
+	it('same IP, same offer, same minute: same key and same session; a different referrer: a new one', async () => {
 		freezeClock();
 		interceptStripe({ prices: 3, sessions: 3 });
 		const ip = { 'CF-Connecting-IP': '203.0.113.7' };
-		const body = { ticket_type: 'community', share_channel: 'whatsapp_group', handle: 'group a', event_date: DATE };
+		const body = { ticket_type: 'referral', referrer: 'ana', event_date: DATE };
 		const a = await post('/api/checkout', body, ip);
 		const b = await post('/api/checkout', body, ip);
-		const c = await post('/api/checkout', { ...body, handle: 'group b' }, ip);
+		const c = await post('/api/checkout', { ...body, referrer: 'max' }, ip);
 		expect(created.keys[0]).toBe(created.keys[1]);
 		expect(a.body.url).toBe(b.body.url);
 		expect(created.keys[2]).not.toBe(created.keys[0]);

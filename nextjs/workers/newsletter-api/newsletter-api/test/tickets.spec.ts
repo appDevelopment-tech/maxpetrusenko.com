@@ -1,13 +1,13 @@
 import { env, createExecutionContext, waitOnExecutionContext, fetchMock } from 'cloudflare:test';
 import { describe, it, expect, beforeAll, afterEach } from 'vitest';
 import worker from '../src';
-import { normalizeReferrer, cleanHandle } from '../src/tickets';
+import { normalizeReferrer } from '../src/tickets';
 
 const STRIPE_ORIGIN = 'https://api.stripe.com';
 const STRIPE_SECRET_KEY = 'sk_test_fake_for_tests';
 
 const PRICES: Record<string, { id: string; unit_amount: number }> = {
-	'ci-ticket-online-friday': { id: 'price_class_test', unit_amount: 2000 },
+	'ci-class-sliding': { id: 'price_class_test', unit_amount: null as unknown as number },
 	'ci-class-15': { id: 'price_class15_test', unit_amount: 1500 },
 };
 
@@ -80,14 +80,14 @@ afterEach(() => {
 const DATE = '2026-11-20';
 
 describe('ticket_type on POST /api/checkout', () => {
-	it('early is the default: $20, promo codes on, metadata on session and payment intent', async () => {
+	it('early is the default: the $20-40 sliding price, no promo codes, metadata on session and payment intent', async () => {
 		interceptPrice();
 		interceptSession();
 		const { status } = await post('/api/checkout', { event_date: DATE });
 		expect(status).toBe(200);
 		const p = sent.sessions[0];
 		expect(p.get('line_items[0][price]')).toBe('price_class_test');
-		expect(p.get('allow_promotion_codes')).toBe('true');
+		expect(p.has('allow_promotion_codes')).toBe(false);
 		expect(p.get('metadata[ticket_type]')).toBe('early');
 		expect(p.get('metadata[event]')).toBe(DATE);
 		expect(p.get('payment_intent_data[metadata][ticket_type]')).toBe('early');
@@ -96,33 +96,40 @@ describe('ticket_type on POST /api/checkout', () => {
 		expect(p.get('success_url')).toContain('ticket_type=early');
 	});
 
-	it('community needs a channel and a handle', async () => {
+	it('community needs an email and a verification id; an unknown or foreign id is refused', async () => {
 		expect((await post('/api/checkout', { ticket_type: 'community', event_date: DATE })).status).toBe(400);
-		const noHandle = await post('/api/checkout', { ticket_type: 'community', share_channel: 'whatsapp_group', event_date: DATE });
-		expect(noHandle.status).toBe(400);
-		expect(noHandle.body.error).toBe('Add your handle or the group name');
-		const badChannel = await post('/api/checkout', { ticket_type: 'community', share_channel: 'tiktok', handle: 'x', event_date: DATE });
-		expect(badChannel.status).toBe(400);
+		const noId = await post('/api/checkout', { ticket_type: 'community', email: 'a@example.com', event_date: DATE });
+		expect(noId.body.error).toBe('Verify your post first');
+		const fake = await post('/api/checkout', { ticket_type: 'community', email: 'a@example.com', verification_id: 'vnotreal123', event_date: DATE });
+		expect(fake).toEqual({ status: 403, body: { ok: false, error: 'community_not_verified' } });
+		await env.COMMUNITY.put('evidence:vowner000001', JSON.stringify({ id: 'vowner000001', email: 'owner@example.com', method: 'url', verified: true, ts: Date.now(), content_hash: 'x', excerpt: '' }));
+		const stolen = await post('/api/checkout', { ticket_type: 'community', email: 'thief@example.com', verification_id: 'vowner000001', event_date: DATE });
+		expect(stolen.status).toBe(403);
 	});
 
-	it('community: $15, no promo codes, channel and handle in metadata', async () => {
+	it('community: $15 with share_url, verified=true and method in metadata, email locked', async () => {
+		await env.COMMUNITY.put('evidence:vgood0000001', JSON.stringify({ id: 'vgood0000001', email: 'dancer@example.com', method: 'url', share_url: 'https://example.org/post/1', verified: true, ts: Date.now(), content_hash: 'x', excerpt: '' }));
 		interceptPrice();
 		interceptSession();
-		const { status, body } = await post('/api/checkout', {
-			ticket_type: 'community',
-			share_channel: 'instagram_story',
-			handle: '  @dancer.mia  ',
-			event_date: DATE,
-		});
+		const { status, body } = await post('/api/checkout', { ticket_type: 'community', email: 'Dancer@Example.com', verification_id: 'vgood0000001', event_date: DATE });
 		expect(status).toBe(200);
 		expect(body.url).toContain('checkout.stripe.com');
 		const p = sent.sessions[0];
 		expect(p.get('line_items[0][price]')).toBe('price_class15_test');
 		expect(p.has('allow_promotion_codes')).toBe(false);
+		expect(p.get('customer_email')).toBe('dancer@example.com');
 		expect(p.get('metadata[ticket_type]')).toBe('community');
-		expect(p.get('metadata[share_channel]')).toBe('instagram_story');
-		expect(p.get('metadata[handle]')).toBe('@dancer.mia');
+		expect(p.get('metadata[share_url]')).toBe('https://example.org/post/1');
+		expect(p.get('metadata[verified]')).toBe('true');
+		expect(p.get('metadata[method]')).toBe('url');
+		expect(p.get('payment_intent_data[metadata][verified]')).toBe('true');
 		expect(p.get('cancel_url')).toBe('https://miamicontactimprov.com/tickets');
+	});
+
+	it('community evidence older than a day must be verified again', async () => {
+		await env.COMMUNITY.put('evidence:vold00000001', JSON.stringify({ id: 'vold00000001', email: 'old@example.com', method: 'ocr', verified: true, ts: Date.now() - 25 * 3600 * 1000, content_hash: 'x', excerpt: '' }));
+		const res = await post('/api/checkout', { ticket_type: 'community', email: 'old@example.com', verification_id: 'vold00000001', event_date: DATE });
+		expect(res.status).toBe(403);
 	});
 
 	it('referral: $15 with the referrer in metadata; a malformed name is refused', async () => {
@@ -244,9 +251,4 @@ describe('input helpers', () => {
 		expect(normalizeReferrer(42)).toBeNull();
 	});
 
-	it('cleanHandle trims, strips control characters and caps length', () => {
-		expect(cleanHandle(' @me\n ')).toBe('@me');
-		expect(cleanHandle('x'.repeat(200))).toHaveLength(80);
-		expect(cleanHandle(undefined)).toBe('');
-	});
 });
