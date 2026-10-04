@@ -94,13 +94,26 @@ export function parseTicket(body: Record<string, unknown>): ParsedTicket {
 }
 
 // The subscriber record in EMAIL_SUBS, as far as this file reads or writes it.
-interface SubscriberRecord {
+export interface SubscriberRecord {
 	email?: string;
 	consent?: boolean;
 	source?: string;
 	first_offer_issued_at?: number;
 	first_discount_claimed?: boolean;
+	// Set just before a first-class Checkout Session is created, cleared by the
+	// webhook when that session is paid or expires. While it is in the future,
+	// no second first-class session is created for the email.
+	first_pending_until?: number;
 	[key: string]: unknown;
+}
+
+// Checkout sessions expire after 31 minutes (Stripe's minimum is 30); the
+// pending marker outlives the session by a minute so the two never overlap.
+export const SESSION_TTL_MS = 31 * 60 * 1000;
+export const PENDING_TTL_MS = SESSION_TTL_MS + 60 * 1000;
+
+export function normalizeEmail(raw: unknown): string {
+	return typeof raw === 'string' ? raw.trim().toLowerCase() : '';
 }
 
 export async function readSubscriber(env: Env, email: string): Promise<SubscriberRecord | null> {
@@ -113,25 +126,49 @@ export async function readSubscriber(env: Env, email: string): Promise<Subscribe
 	}
 }
 
-export async function markFirstClaimed(env: Env, email: string, record: SubscriberRecord): Promise<void> {
-	await env.EMAIL_SUBS.put(email, JSON.stringify({ ...record, first_discount_claimed: true }));
+async function writeSubscriber(env: Env, email: string, record: SubscriberRecord): Promise<void> {
+	await env.EMAIL_SUBS.put(email, JSON.stringify(record));
 }
 
-export type FirstEligibility = 'eligible' | 'not_issued' | 'claimed' | 'unknown';
+export type FirstEligibility = 'eligible' | 'not_issued' | 'claimed' | 'pending' | 'unknown';
 
-// Stripe is the source of truth for "has this person already paid for a class";
-// the KV flag only caches a "yes" so a second check is free.
-export async function firstClassEligibility(env: Env, email: string, secretKey: string): Promise<FirstEligibility> {
+/**
+ * Whether this email may start a first-class Checkout now. Stripe is the source
+ * of truth for "has paid for a class"; the KV flag caches a "yes" (set here or by
+ * the webhook). Callers must not tell the client which reason applied: every
+ * value except 'eligible' answers the same way, so the endpoint cannot be used
+ * to learn whether an address has bought a ticket.
+ */
+export async function firstClassEligibility(env: Env, email: string, secretKey: string, nowMs: number): Promise<FirstEligibility> {
 	const record = await readSubscriber(env, email);
 	if (!record?.first_offer_issued_at) return 'not_issued';
 	if (record.first_discount_claimed) return 'claimed';
+	if ((record.first_pending_until ?? 0) > nowMs) return 'pending';
 	const purchased = await hasCompletedCiPurchase(secretKey, email);
 	if (purchased === null) return 'unknown';
 	if (purchased) {
-		await markFirstClaimed(env, email, record);
+		await writeSubscriber(env, email, { ...record, first_discount_claimed: true });
 		return 'claimed';
 	}
 	return 'eligible';
+}
+
+export async function setFirstPending(env: Env, email: string, until: number | null): Promise<void> {
+	const record = await readSubscriber(env, email);
+	if (!record) return;
+	const { first_pending_until: _drop, ...rest } = record;
+	await writeSubscriber(env, email, until === null ? rest : { ...rest, first_pending_until: until });
+}
+
+/**
+ * Ambassador allowlist: AMBASSADORS KV, one key per /fr/<slug>. An unknown slug
+ * still buys at $15 (the link worked for the buyer), but the sale is tagged
+ * referrer_verified=false so the credit ledger can ignore it. No binding yet
+ * (until Max creates the namespace) means every referrer reads as unverified.
+ */
+export async function isKnownAmbassador(env: Env, slug: string): Promise<boolean> {
+	if (!env.AMBASSADORS) return false;
+	return (await env.AMBASSADORS.get(`ambassador:${slug}`)) !== null;
 }
 
 interface FirstClassRequest {
@@ -150,9 +187,10 @@ function json(body: unknown, status: number, corsHeaders: CorsHeaders): Response
  * POST /api/first-class { email, consent }
  *
  * Records that the offer was issued to this address (merged into the existing
- * subscriber record, never overwriting what is there) and says whether the
- * $15 first class is still open to them. 200 either way once the email is
- * stored: eligible:false is an answer, not a failure.
+ * subscriber record, never overwriting what is there). Always answers
+ * { ok: true } once the input is valid: whether the $15 price is still open is
+ * decided at checkout, with one uniform refusal, so this endpoint reveals
+ * nothing about past purchases.
  */
 export async function handleFirstClass(
 	request: Request,
@@ -168,13 +206,12 @@ export async function handleFirstClass(
 	}
 
 	if (typeof body.company === 'string' && body.company.trim()) {
-		return json({ ok: true, eligible: false }, 200, corsHeaders);
+		return json({ ok: true }, 200, corsHeaders);
 	}
 
-	const email = typeof body.email === 'string' ? body.email.trim().toLowerCase() : '';
+	const email = normalizeEmail(body.email);
 	if (!isValidEmail(email)) return json({ ok: false, error: 'Invalid email' }, 400, corsHeaders);
 	if (!body.consent) return json({ ok: false, error: 'Consent required' }, 400, corsHeaders);
-	if (!env.STRIPE_SECRET_KEY) return json({ ok: false, error: 'Stripe not configured' }, 500, corsHeaders);
 
 	const existing = (await readSubscriber(env, email)) ?? {};
 	const record: SubscriberRecord = {
@@ -186,16 +223,8 @@ export async function handleFirstClass(
 		first_offer_issued_at: existing.first_offer_issued_at ?? Date.now(),
 		first_discount_claimed: existing.first_discount_claimed ?? false,
 	};
-	await env.EMAIL_SUBS.put(email, JSON.stringify(record));
+	await writeSubscriber(env, email, record);
 	if (onStored) await onStored(email).catch((error) => console.error('[First-class sync failed]', error));
 
-	const eligibility = await firstClassEligibility(env, email, env.STRIPE_SECRET_KEY);
-	if (eligibility === 'unknown') {
-		return json({ ok: false, error: 'Could not check your first-class price, try again' }, 502, corsHeaders);
-	}
-	return json(
-		eligibility === 'eligible' ? { ok: true, eligible: true } : { ok: true, eligible: false, reason: 'first_discount_claimed' },
-		200,
-		corsHeaders,
-	);
+	return json({ ok: true }, 200, corsHeaders);
 }

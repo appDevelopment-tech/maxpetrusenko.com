@@ -7,3 +7,6 @@ META_PIXEL_ID=
 META_CAPI_TOKEN=
 META_TEST_EVENT_CODE=
 STRIPE_SECRET_KEY=sk_test_placeholder
+STRIPE_WEBHOOK_SECRET=whsec_placeholder
+# Local site build (MCI_API_BASE=http://localhost:8787) runs on another origin.
+EXTRA_ORIGINS=http://localhost:8000,http://localhost:8099

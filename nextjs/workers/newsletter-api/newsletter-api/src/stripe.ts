@@ -7,6 +7,18 @@
 
 const STRIPE_API = 'https://api.stripe.com/v1';
 
+/**
+ * STRIPE_MODE ('test' default, or 'live') must match the key's own prefix
+ * (sk_test_/rk_test_ vs sk_live_/rk_live_). A live key in a test deploy, or the
+ * reverse, is refused before any Stripe call. Returns an error string or null.
+ */
+export function stripeModeError(secretKey: string, mode: string | undefined): string | null {
+	const want = mode ?? 'test';
+	if (want !== 'test' && want !== 'live') return `Unknown STRIPE_MODE ${want}`;
+	const ok = secretKey.startsWith(`sk_${want}_`) || secretKey.startsWith(`rk_${want}_`);
+	return ok ? null : `Stripe key does not match STRIPE_MODE=${want}`;
+}
+
 export async function findPriceByLookupKey(secretKey: string, lookupKey: string): Promise<{ id: string; unitAmount: number } | null> {
 	const query = new URLSearchParams();
 	query.append('lookup_keys[]', lookupKey);
@@ -33,6 +45,11 @@ export interface CreateCheckoutSessionParams {
 	// Locks the Checkout email field. Set for the first-class price, so the paid
 	// session carries the same address the offer was issued to.
 	customerEmail?: string;
+	// Unix seconds. Stripe requires at least 30 minutes from now.
+	expiresAt?: number;
+	// Sent as the Idempotency-Key header: a retry or a double submit with the
+	// same key and the same parameters gets the same session back.
+	idempotencyKey?: string;
 }
 
 export async function createCheckoutSession(
@@ -54,6 +71,9 @@ export async function createCheckoutSession(
 	if (params.allowPromotionCodes) {
 		body.set('allow_promotion_codes', 'true');
 	}
+	if (params.expiresAt) {
+		body.set('expires_at', String(params.expiresAt));
+	}
 	if (params.customerEmail) {
 		body.set('customer_email', params.customerEmail);
 	}
@@ -70,6 +90,7 @@ export async function createCheckoutSession(
 		headers: {
 			Authorization: `Bearer ${secretKey}`,
 			'Content-Type': 'application/x-www-form-urlencoded',
+			...(params.idempotencyKey ? { 'Idempotency-Key': params.idempotencyKey } : {}),
 		},
 		body: body.toString(),
 	});
@@ -96,7 +117,9 @@ export async function createCheckoutSession(
 export async function hasCompletedCiPurchase(secretKey: string, email: string): Promise<boolean | null> {
 	const query = new URLSearchParams();
 	query.set('status', 'complete');
-	query.set('customer_details[email]', email);
+	// Lowercased and trimmed: every address this Worker stores is, and the
+	// first-class Checkout locks customer_email to that same form.
+	query.set('customer_details[email]', email.trim().toLowerCase());
 	query.set('limit', '100');
 
 	const response = await fetch(`${STRIPE_API}/checkout/sessions?${query.toString()}`, {

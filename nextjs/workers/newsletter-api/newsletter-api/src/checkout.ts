@@ -10,8 +10,17 @@
 
 import type { Env } from './index';
 import { KIND_LOOKUP_KEYS, resolveEvent, type DropInKind } from './schedule';
-import { createCheckoutSession, findPriceByLookupKey } from './stripe';
-import { firstClassEligibility, parseTicket, TICKET_LOOKUP_KEYS } from './tickets';
+import { createCheckoutSession, findPriceByLookupKey, stripeModeError } from './stripe';
+import {
+	firstClassEligibility,
+	isKnownAmbassador,
+	parseTicket,
+	PENDING_TTL_MS,
+	SESSION_TTL_MS,
+	setFirstPending,
+	TICKET_LOOKUP_KEYS,
+	type TicketChoice,
+} from './tickets';
 
 interface CheckoutRequest {
 	kind?: string;
@@ -85,19 +94,28 @@ export async function handleCheckout(request: Request, env: Env, corsHeaders: Re
 	if (!env.STRIPE_SECRET_KEY) {
 		return json({ ok: false, error: 'Stripe not configured' }, 500, corsHeaders);
 	}
-
-	if (ticket.type === 'first') {
-		const eligibility = await firstClassEligibility(env, ticket.email!, env.STRIPE_SECRET_KEY);
-		if (eligibility === 'not_issued') {
-			return json({ ok: false, error: 'first_offer_not_issued' }, 403, corsHeaders);
-		}
-		if (eligibility === 'claimed') {
-			return json({ ok: false, error: 'first_discount_claimed' }, 409, corsHeaders);
-		}
-		if (eligibility === 'unknown') {
-			return json({ ok: false, error: 'Could not check your first-class price, try again' }, 502, corsHeaders);
-		}
+	const modeError = stripeModeError(env.STRIPE_SECRET_KEY, env.STRIPE_MODE);
+	if (modeError) {
+		console.error('[Checkout refused]', modeError);
+		return json({ ok: false, error: 'Stripe not configured' }, 500, corsHeaders);
 	}
+
+	const nowMs = Date.now();
+	if (ticket.type === 'first') {
+		// One answer for every refusal (never issued, already paid, a session
+		// already open, Stripe unreachable): the response must not reveal whether
+		// an address has bought a ticket.
+		const eligibility = await firstClassEligibility(env, ticket.email!, env.STRIPE_SECRET_KEY, nowMs);
+		if (eligibility !== 'eligible') {
+			return json({ ok: false, error: 'first_offer_unavailable' }, 409, corsHeaders);
+		}
+		// Written before the session exists, so a second request that reads it
+		// is refused. Two requests that both read before either writes get the
+		// same session from Stripe via the idempotency key below.
+		await setFirstPending(env, ticket.email!, nowMs + PENDING_TTL_MS);
+	}
+
+	const referrerVerified = ticket.type === 'referral' ? await isKnownAmbassador(env, ticket.referrer!) : false;
 
 	const lookupKey = ticket.type === 'early' ? KIND_LOOKUP_KEYS[kind] : TICKET_LOOKUP_KEYS[ticket.type];
 	const price = await findPriceByLookupKey(env.STRIPE_SECRET_KEY, lookupKey);
@@ -116,6 +134,8 @@ export async function handleCheckout(request: Request, env: Env, corsHeaders: Re
 		successUrl,
 		cancelUrl: ticket.type === 'early' ? 'https://miamicontactimprov.com/fundamentals' : 'https://miamicontactimprov.com/tickets',
 		customerEmail: ticket.type === 'first' ? ticket.email : undefined,
+		expiresAt: sessionExpiry(nowMs),
+		idempotencyKey: await idempotencyKey(request, ticket, event.date, nowMs),
 		// Stripe metadata is the record of which offer a sale used. Empty values
 		// are dropped by createCheckoutSession.
 		metadata: {
@@ -127,13 +147,41 @@ export async function handleCheckout(request: Request, env: Env, corsHeaders: Re
 			share_channel: ticket.share_channel ?? '',
 			handle: ticket.handle ?? '',
 			referrer: ticket.referrer ?? '',
+			referrer_verified: ticket.type === 'referral' ? String(referrerVerified) : '',
 			first_discount: ticket.type === 'first' ? 'true' : '',
 		},
 	});
 
 	if ('error' in session) {
+		if (ticket.type === 'first') await setFirstPending(env, ticket.email!, null);
 		return json({ ok: false, error: session.error }, 502, corsHeaders);
 	}
 
 	return json({ url: session.url }, 200, corsHeaders);
+}
+
+// Bucketed to the minute so two requests in the same minute send identical
+// parameters (Stripe rejects a reused idempotency key with different ones).
+// Bucket start + 31 min is always at least 30 min from now, Stripe's minimum.
+function sessionExpiry(nowMs: number): number {
+	const minute = Math.floor(nowMs / 60000) * 60;
+	return minute + SESSION_TTL_MS / 1000;
+}
+
+async function sha256(value: string): Promise<string> {
+	const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(value));
+	return Array.from(new Uint8Array(digest), (b) => b.toString(16).padStart(2, '0')).join('');
+}
+
+// email|event|ticket_type|minute for the first-class price. The other ticket
+// types carry no email, so the client IP stands in for it, plus the offer's own
+// fields; without an IP every request is unique (no dedupe, never a shared
+// session between two strangers).
+async function idempotencyKey(request: Request, ticket: TicketChoice, eventDate: string, nowMs: number): Promise<string> {
+	const minute = Math.floor(nowMs / 60000);
+	if (ticket.type === 'first') return `ci-first-${await sha256(`${ticket.email}|${eventDate}|first|${minute}`)}`;
+	const ip = request.headers.get('CF-Connecting-IP');
+	if (!ip) return `ci-${crypto.randomUUID()}`;
+	const fields = [ip, eventDate, ticket.type, ticket.share_channel ?? '', ticket.handle ?? '', ticket.referrer ?? '', minute];
+	return `ci-${await sha256(fields.join('|'))}`;
 }

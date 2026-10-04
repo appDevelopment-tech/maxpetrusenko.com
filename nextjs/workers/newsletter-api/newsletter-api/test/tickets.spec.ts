@@ -152,19 +152,15 @@ describe('ticket_type on POST /api/checkout', () => {
 });
 
 describe('first-class $15 offer', () => {
-	it('checkout refuses the first-class price for an email that never claimed the offer', async () => {
+	it('checkout refuses the first-class price for an email that never claimed the offer (uniform 409)', async () => {
 		const { status, body } = await post('/api/checkout', { ticket_type: 'first', email: 'new@example.com', event_date: DATE });
-		expect(status).toBe(403);
-		expect(body.error).toBe('first_offer_not_issued');
+		expect(status).toBe(409);
+		expect(body).toEqual({ ok: false, error: 'first_offer_unavailable' });
 	});
 
-	it('capture, then checkout: $15, email locked, first_discount in metadata', async () => {
-		interceptPastSessions([]);
+	it('capture, then checkout: $15, email locked, first_discount, expiry and a pending marker', async () => {
 		const capture = await post('/api/first-class', { email: 'New@Example.com ', consent: true });
-		expect(capture).toEqual({ status: 200, body: { ok: true, eligible: true } });
-		expect(sent.lookups[0].searchParams.get('customer_details[email]')).toBe('new@example.com');
-		expect(sent.lookups[0].searchParams.get('status')).toBe('complete');
-
+		expect(capture).toEqual({ status: 200, body: { ok: true } });
 		const stored = JSON.parse((await env.EMAIL_SUBS.get('new@example.com')) ?? '{}');
 		expect(stored.first_offer_issued_at).toBeTypeOf('number');
 		expect(stored.first_discount_claimed).toBe(false);
@@ -172,37 +168,45 @@ describe('first-class $15 offer', () => {
 		interceptPastSessions([]);
 		interceptPrice();
 		interceptSession();
-		const { status } = await post('/api/checkout', { ticket_type: 'first', email: 'new@example.com', event_date: DATE });
+		const { status } = await post('/api/checkout', { ticket_type: 'first', email: 'NEW@example.com', event_date: DATE });
 		expect(status).toBe(200);
+		expect(sent.lookups[0].searchParams.get('customer_details[email]')).toBe('new@example.com');
+		expect(sent.lookups[0].searchParams.get('status')).toBe('complete');
 		const p = sent.sessions[0];
 		expect(p.get('customer_email')).toBe('new@example.com');
 		expect(p.get('metadata[ticket_type]')).toBe('first');
 		expect(p.get('metadata[first_discount]')).toBe('true');
 		expect(p.has('allow_promotion_codes')).toBe(false);
+		const expiresIn = Number(p.get('expires_at')) - Date.now() / 1000;
+		expect(expiresIn).toBeGreaterThanOrEqual(30 * 60);
+		expect(expiresIn).toBeLessThanOrEqual(31 * 60);
+		const after = JSON.parse((await env.EMAIL_SUBS.get('new@example.com')) ?? '{}');
+		expect(after.first_pending_until).toBeGreaterThan(Date.now() + 30 * 60 * 1000);
 	});
 
-	it('a past paid CI checkout closes the offer, and the KV flag caches it', async () => {
+	it('a past paid CI checkout closes the offer (same 409), and the KV flag caches it', async () => {
+		await post('/api/first-class', { email: 'back@example.com', consent: true });
 		interceptPastSessions([{ metadata: { product: 'ci-class', ticket_type: 'early' } }]);
-		const capture = await post('/api/first-class', { email: 'back@example.com', consent: true });
-		expect(capture.body).toEqual({ ok: true, eligible: false, reason: 'first_discount_claimed' });
+		const first = await post('/api/checkout', { ticket_type: 'first', email: 'back@example.com', event_date: DATE });
+		expect(first).toEqual({ status: 409, body: { ok: false, error: 'first_offer_unavailable' } });
 		const stored = JSON.parse((await env.EMAIL_SUBS.get('back@example.com')) ?? '{}');
 		expect(stored.first_discount_claimed).toBe(true);
 
-		// No Stripe lookup this time: the cached flag answers.
-		const { status, body } = await post('/api/checkout', { ticket_type: 'first', email: 'back@example.com', event_date: DATE });
-		expect(status).toBe(409);
-		expect(body.error).toBe('first_discount_claimed');
+		// No Stripe lookup this time: the cached flag answers, identically.
+		const again = await post('/api/checkout', { ticket_type: 'first', email: 'back@example.com', event_date: DATE });
+		expect(again).toEqual(first);
 	});
 
 	it('a non-CI purchase on the shared Stripe account does not close the offer', async () => {
+		await post('/api/first-class', { email: 'other@example.com', consent: true });
 		interceptPastSessions([{ metadata: { product: 'blindfolded-retreat' } }]);
-		const capture = await post('/api/first-class', { email: 'other@example.com', consent: true });
-		expect(capture.body).toEqual({ ok: true, eligible: true });
+		interceptPrice();
+		interceptSession();
+		expect((await post('/api/checkout', { ticket_type: 'first', email: 'other@example.com', event_date: DATE })).status).toBe(200);
 	});
 
 	it('keeps an existing subscriber record intact when the offer is issued', async () => {
 		await env.EMAIL_SUBS.put('sub@example.com', JSON.stringify({ email: 'sub@example.com', source: 'miamicontactimprov-home', phone: '+1 305 555 0100' }));
-		interceptPastSessions([]);
 		await post('/api/first-class', { email: 'sub@example.com', consent: true });
 		const stored = JSON.parse((await env.EMAIL_SUBS.get('sub@example.com')) ?? '{}');
 		expect(stored.source).toBe('miamicontactimprov-home');
@@ -214,17 +218,19 @@ describe('first-class $15 offer', () => {
 		expect((await post('/api/first-class', { email: 'a@example.com' })).status).toBe(400);
 		expect((await post('/api/first-class', { email: 'nope', consent: true })).status).toBe(400);
 		const bot = await post('/api/first-class', { email: 'bot@example.com', consent: true, company: 'Acme' });
-		expect(bot.status).toBe(200);
+		expect(bot).toEqual({ status: 200, body: { ok: true } });
 		expect(await env.EMAIL_SUBS.get('bot@example.com')).toBeNull();
 	});
 
-	it('fails closed when Stripe cannot answer', async () => {
+	it('fails closed, with the same 409, when Stripe cannot answer', async () => {
+		await post('/api/first-class', { email: 'flaky@example.com', consent: true });
 		fetchMock
 			.get(STRIPE_ORIGIN)
 			.intercept({ method: 'GET', path: /\/v1\/checkout\/sessions\?/ })
 			.reply(500, { error: { message: 'down' } });
-		const { status } = await post('/api/first-class', { email: 'flaky@example.com', consent: true });
-		expect(status).toBe(502);
+		const { status, body } = await post('/api/checkout', { ticket_type: 'first', email: 'flaky@example.com', event_date: DATE });
+		expect(status).toBe(409);
+		expect(body.error).toBe('first_offer_unavailable');
 	});
 });
 
