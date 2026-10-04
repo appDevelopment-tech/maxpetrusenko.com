@@ -9,6 +9,11 @@
  */
 
 import { handleCheckout } from './checkout';
+import { handleFirstClass } from './tickets';
+import { corsHeaders as corsFor, isRateLimited, originsFor, type RateLimiter } from './http';
+import { handleStripeWebhook } from './webhook';
+import { handleIdeas, type IdeasKV } from './ideas';
+import { handleCommunity, type AiBinding, type CommunityKV } from './verify';
 
 interface SubscriptionRequest {
 	email: string;
@@ -63,7 +68,26 @@ export interface Env {
 	META_PIXEL_ID?: string;
 	META_CAPI_TOKEN?: string;
 	META_TEST_EVENT_CODE?: string;
-	// Test-mode Stripe secret key for /api/checkout. Live mode is a later step.
+	// Stripe secret key for /api/checkout. STRIPE_MODE (test by default) must match
+	// its prefix, see stripeModeError in src/stripe.ts.
+	STRIPE_MODE?: string;
+	// Signing secret for POST /api/stripe/webhook (whsec_...). Worker secret.
+	STRIPE_WEBHOOK_SECRET?: string;
+	// Ambassador allowlist (ambassador:<slug> keys). Optional until created.
+	AMBASSADORS?: KVNamespace;
+	// Rate limiting binding, see src/http.ts.
+	API_LIMITER?: RateLimiter;
+	// Comma-separated extra CORS origins (local dev, previews).
+	EXTRA_ORIGINS?: string;
+	// /ideas demand board storage (src/ideas.ts).
+	IDEAS?: IdeasKV;
+	// Community $15 verification evidence and post/screenshot ownership (src/verify.ts).
+	COMMUNITY?: CommunityKV;
+	// Workers AI, for reading screenshots.
+	AI?: AiBinding;
+	// Where Checkout sends buyers back to. Default https://miamicontactimprov.com;
+	// the preview Worker points it at the Pages preview.
+	SITE_URL?: string;
 	STRIPE_SECRET_KEY?: string;
 }
 
@@ -307,16 +331,23 @@ export default {
 	async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
 		const url = new URL(request.url);
 
-		// CORS headers
-		const corsHeaders = {
-			'Access-Control-Allow-Origin': '*',
-			'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-			'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-		};
+		// CORS: only the sites that call each route, see src/http.ts.
+		const corsHeaders = corsFor(request, originsFor(url.pathname, env));
 
 		// Handle CORS preflight
 		if (request.method === 'OPTIONS') {
 			return new Response(null, { headers: corsHeaders });
+		}
+
+		// Stripe calls this one server to server: signature-checked, not rate
+		// limited per IP (Stripe retries from a small set of addresses).
+		if (url.pathname === '/api/stripe/webhook' && request.method === 'POST') {
+			return handleStripeWebhook(request, env);
+		}
+
+		// ~10 requests per minute per client IP on every other /api/* route.
+		if (url.pathname.startsWith('/api/') && (await isRateLimited(request, env))) {
+			return Response.json({ ok: false, error: 'Too many requests' }, { status: 429, headers: corsHeaders });
 		}
 
 		// POST /api/subscribe - Email subscription endpoint
@@ -483,9 +514,25 @@ export default {
 			);
 		}
 
+		// /api/ideas* - demand board (src/ideas.ts)
+		const ideas = await handleIdeas(request, env, url, corsHeaders, isAdmin(request, env));
+		if (ideas) return ideas;
+
+		// /api/community/* - verify a share for the $15 community price (src/verify.ts)
+		const community = await handleCommunity(request, env, url, corsHeaders, isAdmin(request, env));
+		if (community) return community;
+
 		// POST /api/checkout - Stripe Checkout Session for a drop-in ticket (class/jam/combo)
 		if (url.pathname === '/api/checkout' && request.method === 'POST') {
 			return handleCheckout(request, env, corsHeaders);
+		}
+
+		// POST /api/first-class - "New here?" email capture for the $15 first class
+		if (url.pathname === '/api/first-class' && request.method === 'POST') {
+			const sync = env.RESEND_API_KEY && env.RESEND_AUDIENCE_ID
+				? async (email: string) => { ctx.waitUntil(upsertResendContact(env, email)); }
+				: undefined;
+			return handleFirstClass(request, env, corsHeaders, sync);
 		}
 
 		// GET /api/list - List all subscriptions (admin endpoint)
