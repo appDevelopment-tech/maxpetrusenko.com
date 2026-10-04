@@ -30,6 +30,9 @@ export interface CreateCheckoutSessionParams {
 	successUrl: string;
 	cancelUrl: string;
 	metadata: Record<string, string>;
+	// Locks the Checkout email field. Set for the first-class price, so the paid
+	// session carries the same address the offer was issued to.
+	customerEmail?: string;
 }
 
 export async function createCheckoutSession(
@@ -51,8 +54,15 @@ export async function createCheckoutSession(
 	if (params.allowPromotionCodes) {
 		body.set('allow_promotion_codes', 'true');
 	}
+	if (params.customerEmail) {
+		body.set('customer_email', params.customerEmail);
+	}
+	// Same metadata on the session and on its PaymentIntent, so a refund or a
+	// dashboard search from either side shows which offer the sale used.
 	for (const [key, value] of Object.entries(params.metadata)) {
+		if (!value) continue; // Stripe reads an empty value as "unset"; skip it
 		body.set(`metadata[${key}]`, value);
+		body.set(`payment_intent_data[metadata][${key}]`, value);
 	}
 
 	const response = await fetch(`${STRIPE_API}/checkout/sessions`, {
@@ -75,4 +85,28 @@ export async function createCheckoutSession(
 		return { error: 'Stripe did not return a checkout URL' };
 	}
 	return { url: payload.url };
+}
+
+/**
+ * True when this email already has a completed Checkout Session for a CI
+ * product (metadata.product starts with "ci-"). The Stripe account is shared
+ * with other products, hence the filter. null when Stripe could not answer, so
+ * the caller can fail closed instead of guessing.
+ */
+export async function hasCompletedCiPurchase(secretKey: string, email: string): Promise<boolean | null> {
+	const query = new URLSearchParams();
+	query.set('status', 'complete');
+	query.set('customer_details[email]', email);
+	query.set('limit', '100');
+
+	const response = await fetch(`${STRIPE_API}/checkout/sessions?${query.toString()}`, {
+		headers: { Authorization: `Bearer ${secretKey}` },
+	});
+	if (!response.ok) return null;
+
+	const payload = (await response.json().catch(() => null)) as
+		| { data?: Array<{ metadata?: Record<string, string> | null }> }
+		| null;
+	if (!payload?.data) return null;
+	return payload.data.some((session) => (session.metadata?.product ?? '').startsWith('ci-'));
 }

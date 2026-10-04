@@ -9,6 +9,7 @@
  */
 
 import { handleCheckout } from './checkout';
+import { handleFirstClass } from './tickets';
 
 interface SubscriptionRequest {
 	email: string;
@@ -486,6 +487,14 @@ export default {
 		// POST /api/checkout - Stripe Checkout Session for a drop-in ticket (class/jam/combo)
 		if (url.pathname === '/api/checkout' && request.method === 'POST') {
 			return handleCheckout(request, env, corsHeaders);
+		}
+
+		// POST /api/first-class - "New here?" email capture for the $15 first class
+		if (url.pathname === '/api/first-class' && request.method === 'POST') {
+			const sync = env.RESEND_API_KEY && env.RESEND_AUDIENCE_ID
+				? async (email: string) => { ctx.waitUntil(upsertResendContact(env, email)); }
+				: undefined;
+			return handleFirstClass(request, env, corsHeaders, sync);
 		}
 
 		// GET /api/list - List all subscriptions (admin endpoint)
