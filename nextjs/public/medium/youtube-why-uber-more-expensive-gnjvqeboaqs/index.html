@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="article:status" content="preview">
+  <meta name="source-article-sha256" content="bdba699a2a7fce7827400226c91696b13769baf2d2ded83d075cd269aff19d38">
+  <link rel="canonical" href="https://www.maxpetrusenko.com/medium/youtube-why-uber-more-expensive-gnjvqeboaqs/">
+  <title>Your Uber Fare Is an Offer. The Machine That Sets It Is Private.</title><meta name="description" content="A fare used to be a measurement you could rebuild from a meter and a rate card. It is an offer now, computed per request by a model that riders…">
+  <style>
+    :root {
+      color-scheme: light;
+      --paper: #f7f1e7;
+      --ink: #221f1a;
+      --muted: #6d6255;
+      --rule: #d9cbbb;
+      --accent: #8a3f1b;
+      --panel: #fffaf2;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: radial-gradient(circle at top left, #fff7e6 0, #f7f1e7 34%, #eee5d7 100%);
+      color: var(--ink);
+      font-family: Georgia, 'Times New Roman', serif;
+      line-height: 1.66;
+    }
+    main {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 48px 22px 84px;
+    }
+    h1 {
+      margin: 0 0 22px;
+      font-size: clamp(38px, 7vw, 58px);
+      line-height: 0.98;
+      letter-spacing: 0;
+    }
+    h2 {
+      margin: 48px 0 14px;
+      font-size: clamp(25px, 4vw, 33px);
+      line-height: 1.13;
+      letter-spacing: 0;
+    }
+    h3 {
+      margin: 34px 0 12px;
+      font-size: 23px;
+      line-height: 1.2;
+      letter-spacing: 0;
+    }
+    p, li {
+      font-size: 20px;
+      margin: 0 0 20px;
+    }
+    ul { padding-left: 24px; margin: 0 0 28px; }
+    li { margin-bottom: 8px; }
+    a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+    blockquote {
+      margin: 30px 0;
+      padding: 4px 0 4px 22px;
+      border-left: 4px solid var(--accent);
+      color: #433b32;
+      font-style: italic;
+      background: linear-gradient(90deg, rgba(138,63,27,0.06), rgba(138,63,27,0));
+    }
+    blockquote p { margin: 0; font-size: 22px; }
+    figure { margin: 0 0 34px; }
+    img { display: block; width: 100%; height: auto; border-radius: 6px; box-shadow: 0 18px 44px rgba(42, 32, 20, 0.16); }
+    hr { border: 0; border-top: 1px solid var(--rule); margin: 42px 0; }
+    code { background: #eadfce; padding: 2px 5px; border-radius: 4px; font-size: 0.9em; }
+    em { color: #4a4138; }
+    @media (max-width: 620px) {
+      main { padding: 28px 18px 64px; }
+      p, li { font-size: 18px; }
+      blockquote p { font-size: 19px; }
+    }
+  </style>
+<link rel="icon" href="/favicon.ico" sizes="any"><link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png"><link rel="apple-touch-icon" href="/apple-touch-icon.png"></head>
+<body>
+  <main>
+<h2>Your Uber Fare Is an Offer. The Machine That Sets It Is Private.</h2>
+<h3>Eleven colleagues ordered the same ride and compared screens. Quotes spread twenty percent apart, and the explanation stops at GPS.</h3>
+<figure><img src="/medium/youtube-why-uber-more-expensive-gnjvqeboaqs/assets/hero.jpg" alt="Two phone screens showing ride quotes for the same trip."></figure>
+<blockquote><p>A fare used to be a measurement you could rebuild from a meter and a rate card. It is an offer now, computed per request by a model that riders and drivers can&#39;t inspect. Every argument over spreads, take rates, and GPS defenses comes back to that asymmetry.</p></blockquote>
+<p>Eleven colleagues in the same Lower Manhattan office opened the same app at the same moment and ordered the same ride: an UberX to the Plaza Hotel. The quotes came back as a range, about $55 at the low end and about $66 at the high, a spread of roughly twenty percent for people in the same room.</p>
+<p>One rider said he got cheated, and another asked what she had done wrong. Two reactions to one screen, and both aimed suspicion in the wrong direction. Every quote came from the same company, and nobody in the room could see the inputs or the reason for the difference.</p>
+<p>Although the spread looks like noise, it is the output of a system that prices the request you make in that moment, and the arithmetic behind every quote stays out of view from both sides of the screen. Same ride, same minute, many prices, and the one constant is that no one on either side watches the number get set.</p>
+<h3>The fight over the numbers</h3>
+<p>The test that produced that range was small and informal, an anecdote rather than a controlled experiment, and Uber&#39;s first answer was GPS. The company told reporters that same-ride gaps come down to pickup precision. Small differences in pickup location can change the route, the ETA, and the quote; in its own explainer, the company says pickup points can sit up to 32 feet apart (<a href="https://medium.com/uber-under-the-hood/why-can-two-riders-see-different-prices-3303380dd86b" target="_blank" rel="noopener noreferrer">Uber&#39;s own explanation of the mechanic</a>; <a href="https://www.nbcnews.com/business/consumer/uber-lyft-pricing-consumer-reports-rcna349712" target="_blank" rel="noopener noreferrer">the company&#39;s account to NBC News</a>). Pickup drift is real, and what the company has not published is the arithmetic that turns it into a fifth of a fare.</p>
+<p>A bigger public test came in June: Consumer Reports asked 174 volunteers across 18 states to order the same rides minutes apart across 30 routes and reported a median gap of 42.4 percent between the highest and lowest quote (<a href="https://www.consumerreports.org/money/questionable-business-practices/uber-lyft-different-prices-for-same-ride-and-fake-discounts-a1093538909/" target="_blank" rel="noopener noreferrer">the study</a>, <a href="https://www.consumerreports.org/money/questionable-business-practices/uber-lyft-different-prices-for-same-ride-ai-2026/" target="_blank" rel="noopener noreferrer">its methodology</a>). The number then moved in public: Uber used the data CR shared to re-identify volunteers and found collection errors, and CR revised the headline figure down from 49.8 percent (<a href="https://www.consumerreports.org/money/questionable-business-practices/uber-lyft-different-prices-for-same-ride-ai-2026/" target="_blank" rel="noopener noreferrer">the correction</a>). Uber&#39;s counter, drawn from CR&#39;s own dataset, says more than 80 percent of the fares sit within 5 percent of the median (<a href="https://www.uber.com/us/en/newsroom/uber-comment-consumer-reports/" target="_blank" rel="noopener noreferrer">Uber&#39;s rebuttal</a>). CR added something its critics skip: it is not disputing Uber&#39;s claim that base fares go unpersonalized (<a href="https://www.reddit.com/r/IAmA/comments/1ucooly/consumer_reports_investigated_how_uber_and_lyft/" target="_blank" rel="noopener noreferrer">CR&#39;s own answers</a>).</p>
+<p>So dispersion, by itself, proves less than it seems. A November NBER working paper measured identical trips and found fares swinging by around $3.50 between apps, roughly 14 percent, and traced most of that gap to ordinary search frictions: only about 16 percent of riders compare prices before booking (<a href="https://www.nber.org/system/files/working_papers/w34441/w34441.pdf" target="_blank" rel="noopener noreferrer">the paper</a>). The same paper notes that Uber&#39;s API terms discourage automated comparison. That finding covers the gap between apps. It says nothing about why eleven people on the same app, at the same minute, saw one ride priced twenty percent apart.</p>
+<p>None of which makes these machines pure extraction, because an MIT study of New York data found dynamic pricing produced about two thirds of the estimated welfare gains in the market, with riders capturing roughly 72 cents of every dollar of that gain and higher surge predicting shorter waits (<a href="https://ide.mit.edu/sites/default/files/publications/SSRN-id2997190.pdf" target="_blank" rel="noopener noreferrer">the study</a>). The systems create real value, and that value belongs in the accounting too. The study measures surge, the mechanic that balances supply. Dividing that surplus fairly is a separate question, and it turns on what either side can check.</p>
+<p>What survives the noise is narrower and stranger: the price on the screen is a bid, and it may not line up cleanly with either you or the moment.</p>
+<h3>How the meter died</h3>
+<p>The original Uber used a taxi-like rate card: a base charge, a rate per minute, a rate per mile (<a href="https://www.uber.com/ug/en/blog/uber-dynamic-pricing" target="_blank" rel="noopener noreferrer">Uber&#39;s explainer on the old model</a>). Surge multiplied the whole number when demand outran cars. In principle you could rebuild your fare afterward from the receipt, because the meter was a measurement, and measurements can be audited.</p>
+<p>Upfront pricing moved fares away from the old time-and-distance formula, tested from around 2014 and rolled out to regular UberX riders in 2016, turning the fare into a quote produced in advance (<a href="https://therideshareguy.com/30-hour-secret-my-5-non-negotiable-rules-after-32000-rides" target="_blank" rel="noopener noreferrer">how drivers experienced the switch</a>). The driver&#39;s side got the same treatment: pay became a separate point estimate, quoted per trip, also take it or leave it. Uber&#39;s chief executive told investors the company could do better at &quot;targeting of different trips to different drivers based on their preferences or based on behavioral patterns,&quot; aiming for &quot;the right trip, at the right price, to the right driver&quot; (<a href="https://s23.q4cdn.com/407969754/files/doc_events/2024/Feb/07/uber-q4-23-earnings-call-transcript.pdf" target="_blank" rel="noopener noreferrer">the earnings call</a>).</p>
+<figure><img src="/medium/youtube-why-uber-more-expensive-gnjvqeboaqs/assets/frame-01.jpg" alt="Sticky notes laying out the parts of a fare: upfront pricing, base fare, fixed per-minute and per-mile rates, surge."></figure>
+<p>The shift to upfront pricing coincided with a turn in Uber&#39;s finances. Uber reported its first annual operating profit in 2023: $1.11 billion in income from operations, against a $1.83 billion operating loss the year before (<a href="https://www.sec.gov/Archives/edgar/data/1543151/000154315124000008/uberq423earningspressrelea.htm" target="_blank" rel="noopener noreferrer">the company&#39;s results</a>). Net income reached $1.89 billion that year, including about $1.6 billion of pre-tax unrealized gains on equity investments (<a href="https://www.sec.gov/Archives/edgar/data/1543151/000154315124000012/uber-20231231.htm" target="_blank" rel="noopener noreferrer">the annual filing</a>), and by 2024 free cash flow ran about $6.9 billion, up from negative $303 million in 2022 (<a href="https://www.theguardian.com/technology/2025/jun/25/second-study-finds-uber-used-opaque-algorithm-to-dramatically-boost-profits" target="_blank" rel="noopener noreferrer">the Guardian&#39;s reporting</a>). Researchers who study the shift credit upfront pricing as the enabler. One analysis chained two market datasets to estimate average US fares climbing about 83 percent between 2018 and 2022 (<a href="https://www.forbes.com/sites/lensherman/2023/01/16/ubers-new-math-increase-prices-and-squeeze-driver-pay/" target="_blank" rel="noopener noreferrer">the analysis</a>).</p>
+<h3>What the machine can see</h3>
+<p>New York now forces the machine to introduce itself. Under a law in effect since November 24, 2025, a personalized algorithmic price comes with an in-app disclosure in capital letters: &quot;THIS PRICE WAS SET BY AN ALGORITHM USING YOUR PERSONAL DATA&quot; (<a href="https://www.nysenate.gov/legislation/laws/GBS/349-A" target="_blank" rel="noopener noreferrer">the statute</a>; <a href="https://www.governor.ny.gov/news/protecting-new-yorkers-secret-online-price-hikes-governor-hochul-announces-nation-leading" target="_blank" rel="noopener noreferrer">the governor&#39;s announcement</a>). In New York it is the one place the system is legally forced to speak, and the trigger is narrow: the disclosure fires only when personal data sets the price. Uber reads its own notice as a location disclosure, and the statute excludes ride-hailing location data used solely to calculate fare by mileage or duration (<a href="https://thecooldown.com/green-business/uber-new-york-fares-personal-data" target="_blank" rel="noopener noreferrer">coverage of the notice</a>).</p>
+<p>Patents push the question from possibility to capability, and one predicts a user&#39;s state from tapping accuracy, typing speed, and walking speed (<a href="https://patents.google.com/patent/US10762441B2/en" target="_blank" rel="noopener noreferrer">US10762441</a>). Another describes assembling a profile from ride history, down to day-care and school runs that flag &quot;a single working parent&quot; (<a href="https://patents.google.com/patent/US10482559B2/en" target="_blank" rel="noopener noreferrer">US10482559</a>). Capability is where the documents stop, and Uber&#39;s position is explicit: patents do not establish current or past use, and neither one relates to pricing (<a href="https://thecooldown.com/green-business/uber-new-york-fares-personal-data" target="_blank" rel="noopener noreferrer">the company&#39;s statement</a>). This year the company went further and put it in writing: upfront prices are not personalized, protected characteristics are barred, and battery level and phone model are not pricing inputs (<a href="https://tb-static.uber.com/prod/uber-static/uber-sites/_pdf/ai-on-uber/US-Algorithmic-Transparency-2026.pdf" target="_blank" rel="noopener noreferrer">the transparency report</a>).</p>
+<p>Both things can be true in the same record: the documents show capability, the statements show policy, and the full picture stays inside the company. A former Uber researcher has said he saw no use of customer data in base fares while he was there, and CR says it could not determine which factors were used (<a href="https://www.nbcnews.com/business/consumer/uber-lyft-pricing-consumer-reports-rcna349712" target="_blank" rel="noopener noreferrer">the reporting</a>). Columbia&#39;s Len Sherman, studying the same system from the outside, reads the design as two-sided price discrimination: in his account, the platform estimates each side&#39;s willingness to pay or accept (<a href="https://len-sherman.medium.com/how-uber-became-a-cash-generating-machine-ef78e7a97230" target="_blank" rel="noopener noreferrer">Sherman&#39;s study</a>). His framing is contested on methodology, Uber dismisses the samples as &quot;a few individual stories,&quot; and it has not been replicated.</p>
+<h3>The other side of the screen</h3>
+<p>The driver&#39;s side of that sentence is visible in one documented ride this year. The rider paid $70.52 at booking; the driver&#39;s upfront offer opened at $25, and he earned $27.31 before tip. Uber&#39;s service fee came to $21.29, about 30 percent of the fare, and a commercial insurance line took $15.78 (<a href="https://finance.yahoo.com/economy/policy/articles/uber-driver-pay-falling-company-103000718.html" target="_blank" rel="noopener noreferrer">the ride&#39;s receipts, set against the company&#39;s reported data</a>). Wait time was billed at $0.56; the driver received $0.37.</p>
+<figure><img src="/medium/youtube-why-uber-more-expensive-gnjvqeboaqs/assets/frame-02.jpg" alt="A toy car on a printed road surrounded by sticky notes asking what a trip splits into: trip time, driver pay, rider price."></figure>
+<p>The same driver, a former accountant, could not make his own numbers reconcile. Insurance charges for one route had swung between about $15 and $50 across two years, and he could not work out why (<a href="https://finance.yahoo.com/economy/policy/articles/uber-driver-pay-falling-company-103000718.html" target="_blank" rel="noopener noreferrer">the same analysis</a>).</p>
+<p>Scale that tension up and it becomes a public argument about percentages. Researchers at Oxford examined 258 drivers and 1.5 million trips and found the median take rate rising from 25 to 29 percent after the shift to algorithmic pay, above 50 percent on some trips, with inflation-adjusted hourly earnings falling from about £22 to £19 (<a href="https://www.ox.ac.uk/news/2025-06-23-new-oxford-research-reveals-uber-s-algorithmic-pricing-leaves-drivers-and-passengers" target="_blank" rel="noopener noreferrer">the study</a>; <a href="https://www.theguardian.com/technology/2025/jun/19/uk-uber-drivers-earning-less-an-hour-dynamic-pricing-research" target="_blank" rel="noopener noreferrer">coverage</a>). Sherman&#39;s analysis of 24,532 trips by a single driver found take rates climbing from roughly 32 percent to more than 42 percent by the end of 2024, and a 2026 follow-up across three veteran drivers concluded take rates above 50 percent in many US cities (<a href="https://len-sherman.medium.com/how-uber-became-a-cash-generating-machine-ef78e7a97230" target="_blank" rel="noopener noreferrer">the follow-up</a>). Uber answers with its own figures: a US take rate after insurance of &quot;around 20 percent,&quot; roughly 21 percent worldwide after third-party costs, and median US earnings above $30 per utilized hour (<a href="https://www.uber.com/us/en/newsroom/uber-comment-consumer-reports/" target="_blank" rel="noopener noreferrer">the company&#39;s case</a>; <a href="https://medium.com/uber-under-the-hood/understanding-ubers-share-of-driver-earnings-899d5eb733bd" target="_blank" rel="noopener noreferrer">its earnings analysis</a>). The ranges sit far apart, and no neutral denominator exists to referee them, because Uber&#39;s filings do not break out a US take rate (<a href="https://finance.yahoo.com/economy/policy/articles/uber-driver-pay-falling-company-103000718.html" target="_blank" rel="noopener noreferrer">the reporting that says so</a>).</p>
+<h3>The rule that survives</h3>
+<p>If there is a trick, the public record has not surfaced it: nothing in the reporting above identifies a best minute to order or a method for beating the estimate. What the reporting does support is narrower. Compare before you commit, because quotes move between apps and only about 16 percent of riders ever check (<a href="https://www.nber.org/system/files/working_papers/w34441/w34441.pdf" target="_blank" rel="noopener noreferrer">the NBER paper</a>); treat the number on screen as one offer among several, alongside the train and the option to stay in. Keep the receipts. They are the part of the transaction you can show someone else.</p>
+<p>If you drive, run the arithmetic before you commit. Convert every trip to hourly pay after fuel, maintenance, and insurance; a per-ride figure tells you little about the hour (<a href="https://medium.com/uber-under-the-hood/understanding-ubers-share-of-driver-earnings-899d5eb733bd" target="_blank" rel="noopener noreferrer">Uber&#39;s earnings claims</a>; <a href="https://finance.yahoo.com/economy/policy/articles/uber-driver-pay-falling-company-103000718.html" target="_blank" rel="noopener noreferrer">the take-rate analyses</a>). Keep your own log of what you were shown and what you were paid; no single trip tells you much on its own (<a href="https://www.uberpeople.net/threads/upfront-pricing-observations.459154/" target="_blank" rel="noopener noreferrer">driver threads</a>).</p>
+<h3>What a fare is now</h3>
+<p>Stand back and the arrangement is stark: one transaction, two sides who never see each other&#39;s screens, and one private computation between them. What you can verify is small, and what you cannot verify is the price you just paid. So a fare is an offer now: made to you, by a system you never meet, on terms it can keep to itself. One driver put his objection simply: he has no problem with Uber making money; his objection is to money made from asymmetric information.</p>
+<hr>
+<p>Read next: <a href="https://medium.com/@max.petrusenko/you-can-be-completely-right-and-still-miss-the-truth-a2bc0a7f1ea1" target="_blank" rel="noopener noreferrer">You Can Be Completely Right and Still Miss the Truth</a>, a piece about how a correct answer and a complete one can part ways.</p>
+<hr>
+<p>Max Petrusenko writes about the mechanisms underneath the stories, from ant colonies to AI systems. Read more on <a href="https://medium.com/@max.petrusenko" target="_blank" rel="noopener noreferrer">Medium</a>, <a href="https://x.com/petrusenko_max" target="_blank" rel="noopener noreferrer">X</a>, or <a href="https://www.linkedin.com/in/max-petrusenko-40574b4a" target="_blank" rel="noopener noreferrer">LinkedIn</a>.</p>
+<p><strong>If this changed how you read your next fare estimate, pass it on to someone who still believes the price is the price.</strong></p>
+  </main>
+</body>
+</html>

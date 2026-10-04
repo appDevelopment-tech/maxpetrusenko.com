@@ -1,0 +1,34 @@
+{
+  "slug": "youtube-why-uber-more-expensive-gnjvqeboaqs",
+  "title": "Your Uber Fare Is an Offer. The Machine That Sets It Is Private.",
+  "publicUrl": "https://www.maxpetrusenko.com/medium/youtube-why-uber-more-expensive-gnjvqeboaqs/",
+  "outputPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/youtube-why-uber-more-expensive-gnjvqeboaqs/index.html",
+  "sourceUrl": "https://www.youtube.com/watch?v=gnjVqeBoaqs",
+  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-why-uber-more-expensive-gnjvqeboaqs/article-v3.md",
+  "articleHash": "bdba699a2a7fce7827400226c91696b13769baf2d2ded83d075cd269aff19d38",
+  "exportedAt": "2026-10-04T11:13:21.490Z",
+  "status": "review_ready_with_recorded_blocker",
+  "publishMode": "preview",
+  "copiedImages": [
+    {
+      "src": "assets/hero.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-why-uber-more-expensive-gnjvqeboaqs/assets/hero.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-why-uber-more-expensive-gnjvqeboaqs-1791112401485/assets/hero.jpg"
+    },
+    {
+      "src": "assets/frame-01.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-why-uber-more-expensive-gnjvqeboaqs/assets/frame-01.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-why-uber-more-expensive-gnjvqeboaqs-1791112401485/assets/frame-01.jpg"
+    },
+    {
+      "src": "assets/frame-02.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-why-uber-more-expensive-gnjvqeboaqs/assets/frame-02.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-why-uber-more-expensive-gnjvqeboaqs-1791112401485/assets/frame-02.jpg"
+    }
+  ],
+  "ratings": {
+    "gemini": 9.4,
+    "gpt": 9.5,
+    "consensus": 9.4
+  }
+}
