@@ -1,0 +1,40 @@
+{
+  "slug": "youtube-3d-printed-houses-failing-nrlqld_jd_g",
+  "title": "The House Printer Arrived. The Homes Never Did.",
+  "publicUrl": "https://www.maxpetrusenko.com/medium/youtube-3d-printed-houses-failing-nrlqld_jd_g/",
+  "outputPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/youtube-3d-printed-houses-failing-nrlqld_jd_g/index.html",
+  "sourceUrl": "https://www.youtube.com/watch?v=nRLqld_jD_g",
+  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-3d-printed-houses-failing-nrlqld_jd_g/article-v3.md",
+  "articleHash": "b9f973aff4de4fa3957e0a65e0d981894e392bee409aac65581a4bc9e28d33b0",
+  "exportedAt": "2026-10-06T22:45:20.035Z",
+  "status": "review_copy_exported_with_recorded_veto",
+  "publishMode": "preview",
+  "copiedImages": [
+    {
+      "src": "assets/hero.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-3d-printed-houses-failing-nrlqld_jd_g/assets/hero.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-3d-printed-houses-failing-nrlqld_jd_g-1791326720031/assets/hero.jpg"
+    },
+    {
+      "src": "assets/body-printed-interior.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-3d-printed-houses-failing-nrlqld_jd_g/assets/body-printed-interior.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-3d-printed-houses-failing-nrlqld_jd_g-1791326720031/assets/body-printed-interior.jpg"
+    },
+    {
+      "src": "assets/body-cement-plant.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-3d-printed-houses-failing-nrlqld_jd_g/assets/body-cement-plant.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-3d-printed-houses-failing-nrlqld_jd_g-1791326720031/assets/body-cement-plant.jpg"
+    }
+  ],
+  "ratings": {
+    "gemini": {
+      "file": "evals/gpt56-rating-v3.json",
+      "overall": 8.1,
+      "verdict": "revise",
+      "evidence": 6.7,
+      "adversarialGate": "fail_at_cap_recorded (verdict revise; evidence 6.7 < 7.0) — review copy exported with --allow-low-rating transport bypass; routed to human resolution"
+    },
+    "gpt": null,
+    "consensus": null
+  }
+}
