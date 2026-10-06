@@ -1,0 +1,29 @@
+{
+  "slug": "youtube-why-cia-created-pokemon-go-qgcssz4rfgts",
+  "title": "The CIA Didn't Create Pokémon Go. It Funded the Map.",
+  "publicUrl": "https://www.maxpetrusenko.com/medium/youtube-why-cia-created-pokemon-go-qgcssz4rfgts/",
+  "outputPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/youtube-why-cia-created-pokemon-go-qgcssz4rfgts/index.html",
+  "sourceUrl": "https://www.youtube.com/watch?v=qgcsSZ4rFgTs",
+  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-why-cia-created-pokemon-go-qgcssz4rfgts/article-v3.md",
+  "articleHash": "70e86a07486080adea0e649981fa8ef321c7521f6cb498495d236cc47aaf2282",
+  "exportedAt": "2026-10-06T04:24:22.855Z",
+  "status": "review_copy_exported_with_recorded_veto",
+  "publishMode": "preview",
+  "copiedImages": [
+    {
+      "src": "assets/hero.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-why-cia-created-pokemon-go-qgcssz4rfgts/assets/hero.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-why-cia-created-pokemon-go-qgcssz4rfgts-1791260662854/assets/hero.jpg"
+    }
+  ],
+  "ratings": {
+    "gemini": {
+      "file": "evals/rating-v3.json",
+      "overall": 8.4,
+      "verdict": "revise",
+      "adversarialGate": "PASS"
+    },
+    "gpt": null,
+    "consensus": null
+  }
+}
