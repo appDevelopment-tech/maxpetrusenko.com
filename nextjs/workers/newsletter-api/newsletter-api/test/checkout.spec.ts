@@ -66,6 +66,16 @@ function interceptPromo(data: Array<Record<string, unknown>>) {
 		});
 }
 
+function interceptSessionRefusal() {
+	fetchMock
+		.get(STRIPE_ORIGIN)
+		.intercept({ method: 'POST', path: '/v1/checkout/sessions' })
+		.reply(400, (opts: any) => {
+			sent.sessions.push(new URLSearchParams(String(opts.body ?? '')));
+			return { error: { message: 'No such promotion code' } };
+		});
+}
+
 function interceptSessions(times = 1) {
 	fetchMock
 		.get(STRIPE_ORIGIN)
@@ -216,5 +226,46 @@ describe('POST /api/checkout with a ticket code', () => {
 		const { body } = await checkout({ event_date: future });
 		expect(body).not.toHaveProperty('code_status');
 		expect(sent.sessions[0].get('allow_promotion_codes')).toBe('true');
+	});
+
+	it('retries once as a normal checkout when Stripe refuses the session with the discount', async () => {
+		interceptPrices();
+		interceptPromo([usable]);
+		interceptSessionRefusal();
+		interceptSessions();
+
+		const { status, body } = await checkout({ event_date: future, code: 'CI10-K7P2QX' });
+
+		expect(status).toBe(200);
+		expect(body.url).toContain('checkout.stripe.com');
+		expect(body.code_status).toBe('invalid');
+		expect(sent.sessions).toHaveLength(2);
+		expect(sent.sessions[0].get('discounts[0][promotion_code]')).toBe('promo_live1');
+		expect(sent.sessions[0].has('allow_promotion_codes')).toBe(false);
+		expect(sent.sessions[1].has('discounts[0][promotion_code]')).toBe(false);
+		expect(sent.sessions[1].get('allow_promotion_codes')).toBe('true');
+	});
+
+	it('does not retry when no code was involved, and still fails with 502', async () => {
+		interceptPrices();
+		interceptSessionRefusal();
+		const { status } = await checkout({ event_date: future });
+		expect(status).toBe(502);
+		expect(sent.sessions).toHaveLength(1);
+	});
+
+	it('rate limits checkout per IP on its own binding', async () => {
+		const seen: string[] = [];
+		const limited = testEnv({ CHECKOUT_LIMITER: { limit: async ({ key }: { key: string }) => { seen.push(key); return { success: false }; } } });
+		const ctx = createExecutionContext();
+		const res = await worker.fetch(new Request('https://newsletter.test/api/checkout', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json', 'CF-Connecting-IP': '203.0.113.7' },
+			body: JSON.stringify({ event_date: future }),
+		}), limited, ctx);
+		await waitOnExecutionContext(ctx);
+		expect(res.status).toBe(429);
+		expect(seen).toEqual(['203.0.113.7']);
+		expect(sent.sessions).toHaveLength(0);
 	});
 });

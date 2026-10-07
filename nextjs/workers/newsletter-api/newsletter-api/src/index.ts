@@ -29,7 +29,7 @@ interface KVNamespace {
 	get(key: string): Promise<string | null>;
 	put(key: string, value: string, options?: { expirationTtl?: number }): Promise<void>;
 	delete(key: string): Promise<void>;
-	list(): Promise<{ keys: Array<{ name: string }> }>;
+	list(options?: { prefix?: string; cursor?: string }): Promise<{ keys: Array<{ name: string }>; list_complete?: boolean; cursor?: string }>;
 }
 
 interface ExecutionContext {
@@ -68,6 +68,8 @@ export interface Env {
 	// Cloudflare rate limit binding (wrangler.jsonc `ratelimits`): 10 per IP per 60s.
 	SUBSCRIBE_LIMITER?: { limit(options: { key: string }): Promise<{ success: boolean }> };
 	// Second binding for /api/verify, keyed on sha256(normalized email): 5 per 60s.
+	// Third binding for /api/checkout, per IP: 20 per 60s.
+	CHECKOUT_LIMITER?: { limit(options: { key: string }): Promise<{ success: boolean }> };
 	VERIFY_LIMITER?: { limit(options: { key: string }): Promise<{ success: boolean }> };
 }
 
@@ -297,12 +299,13 @@ export default {
 			if (!isAdmin(request, env)) {
 				return Response.json({ ok: false, error: 'Unauthorized' }, { status: 401, headers: corsHeaders });
 			}
-			let body: { dry_run?: unknown; month?: unknown; limit?: unknown } = {};
+			// Anything but a valid JSON body with confirm "send" and dry_run false is a dry run.
+			let body: unknown = null;
 			try {
-				body = (await request.json()) as typeof body;
+				body = await request.json();
 			} catch {}
 			const result = await monthlyRun(env, url.origin, body);
-			return Response.json(result, { status: result.ok ? 200 : 500, headers: corsHeaders });
+			return Response.json(result, { status: result.ok ? 200 : result.locked ? 409 : 500, headers: corsHeaders });
 		}
 
 		// Signed unsubscribe link in the monthly email (GET shows a button, POST acts).
@@ -389,6 +392,19 @@ export default {
 
 		// POST /api/checkout - Stripe Checkout Session for a drop-in ticket (class/jam/combo)
 		if (url.pathname === '/api/checkout' && request.method === 'POST') {
+			if (env.CHECKOUT_LIMITER) {
+				try {
+					const { success } = await env.CHECKOUT_LIMITER.limit({ key: request.headers.get('CF-Connecting-IP') || 'unknown' });
+					if (!success) {
+						return Response.json(
+							{ ok: false, error: 'Too many requests. Try again in a minute.' },
+							{ status: 429, headers: { ...corsHeaders, 'Retry-After': '60' } },
+						);
+					}
+				} catch (error) {
+					console.error('[Checkout rate limit error]', String(error));
+				}
+			}
 			return handleCheckout(request, env, corsHeaders);
 		}
 

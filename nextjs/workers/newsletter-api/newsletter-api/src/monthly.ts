@@ -9,6 +9,11 @@
  * double-mints. A run handles at most `limit` addresses (default 30, max 90) to stay
  * inside the Worker's subrequest budget; `remaining` says whether to run again.
  * The caller decides when to run (quiet hours).
+ *
+ * Safety: a real run needs a valid JSON body with `confirm: "send"` AND `dry_run: false`;
+ * every other call (malformed body, missing or wrong confirm, dry_run omitted) is a dry
+ * run. A KV lock `m20lock:<month>` (600s) stops two runs overlapping, and the batch call
+ * carries an Idempotency-Key so a retried batch cannot double-send.
  */
 
 import type { Env } from './index';
@@ -20,10 +25,12 @@ import { unsubscribeUrl } from './unsub';
 const TTL_SECONDS = 7 * 24 * 60 * 60;
 const BATCH = 100;
 const DEFAULT_LIMIT = 30;
+// The account is on Workers Paid (the read-only /workers/standard check says so), so a
+// run may touch 90 addresses (about 5 subrequests each, under the paid limit).
 const MAX_LIMIT = 90;
 
 interface Contact { id?: string; email: string; unsubscribed?: boolean; first_name?: string | null }
-interface MonthState { code?: string; attempt?: number; minted_at?: number; sent_at?: number }
+interface MonthState { code?: string; attempt?: number; minted_at?: number }
 
 export function currentMonth(now = new Date()): string {
 	const parts = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/New_York', year: 'numeric', month: '2-digit' }).formatToParts(now);
@@ -87,14 +94,52 @@ export interface MonthlyResult {
 	skipped: number;
 	errors: number;
 	remaining: number;
+	locked?: boolean;
 	would_mint?: number;
 	would_send?: number;
 	error?: string;
 }
 
-export async function monthlyRun(env: Env, origin: string, body: { dry_run?: unknown; month?: unknown; limit?: unknown }): Promise<MonthlyResult> {
-	const dry = body.dry_run === true;
+async function sentHashes(env: Env, month: string): Promise<Set<string>> {
+	const prefix = `m20sent:${month}:`;
+	const out = new Set<string>();
+	let cursor: string | undefined;
+	for (let page = 0; page < 20; page++) {
+		const res = await env.EMAIL_SUBS.list({ prefix, cursor });
+		for (const k of res.keys) out.add(k.name.slice(prefix.length));
+		if (res.list_complete !== false || !res.cursor) break;
+		cursor = res.cursor;
+	}
+	return out;
+}
+
+export async function monthlyRun(env: Env, origin: string, rawBody: unknown): Promise<MonthlyResult> {
+	const body = (rawBody && typeof rawBody === 'object' ? rawBody : {}) as { dry_run?: unknown; month?: unknown; limit?: unknown; confirm?: unknown };
+	// Only an explicit, confirmed, non-dry request sends anything.
+	const real = body.confirm === 'send' && body.dry_run === false;
+	const dry = !real;
 	const month = typeof body.month === 'string' && /^\d{4}-(0[1-9]|1[0-2])$/.test(body.month) ? body.month : currentMonth();
+	if (!real) return runInner(env, origin, body, month, true);
+	const lockKey = `m20lock:${month}`;
+	try {
+		if (await env.EMAIL_SUBS.get(lockKey)) {
+			return { ok: false, month, dry_run: false, eligible: 0, minted: 0, sent: 0, skipped: 0, errors: 0, remaining: 0, locked: true, error: 'A monthly run is already in progress.' };
+		}
+		await env.EMAIL_SUBS.put(lockKey, String(Date.now()), { expirationTtl: 600 });
+	} catch (error) {
+		console.error('[Monthly lock failed]', String(error));
+		return { ok: false, month, dry_run: false, eligible: 0, minted: 0, sent: 0, skipped: 0, errors: 0, remaining: 0, error: 'Could not take the run lock.' };
+	}
+	try {
+		return await runInner(env, origin, body, month, false);
+	} finally {
+		try {
+			await env.EMAIL_SUBS.delete(lockKey);
+		} catch {}
+	}
+}
+
+async function runInner(env: Env, origin: string, body: { limit?: unknown }, month: string, dry: boolean): Promise<MonthlyResult> {
 	const limit = Math.min(MAX_LIMIT, Math.max(1, Number.isInteger(body.limit) ? (body.limit as number) : DEFAULT_LIMIT));
 	const out: MonthlyResult = { ok: true, month, dry_run: dry, eligible: 0, minted: 0, sent: 0, skipped: 0, errors: 0, remaining: 0 };
 	if (!env.CI_MONTHLY_COUPON_ID || !env.STRIPE_SECRET_KEY || !env.CI_CONFIRM_SECRET || !env.RESEND_API_KEY || !env.RESEND_AUDIENCE_ID) {
@@ -113,17 +158,15 @@ export async function monthlyRun(env: Env, origin: string, body: { dry_run?: unk
 	});
 	out.eligible = eligible.length;
 
-	const queue: Array<{ contact: Contact; key: string; state: MonthState }> = [];
+	const queue: Array<{ contact: Contact; key: string; state: MonthState; hash: string }> = [];
+	// One KV list call says who is already sent this month, so the per-address state is
+	// read only for the (at most `limit`) addresses this call will actually handle.
+	const sent = await sentHashes(env, month);
 	let wouldMint = 0;
 	let handled = 0;
 	for (const contact of eligible) {
 		const hash = await sha256Hex(normalizeEmail(contact.email));
-		const key = `m20:${month}:${hash}`;
-		let state: MonthState = {};
-		try {
-			state = JSON.parse((await env.EMAIL_SUBS.get(key)) ?? '{}');
-		} catch {}
-		if (state.sent_at) {
+		if (sent.has(hash)) {
 			out.skipped += 1;
 			continue;
 		}
@@ -132,10 +175,15 @@ export async function monthlyRun(env: Env, origin: string, body: { dry_run?: unk
 			continue;
 		}
 		handled += 1;
+		const key = `m20:${month}:${hash}`;
+		let state: MonthState = {};
+		try {
+			state = JSON.parse((await env.EMAIL_SUBS.get(key)) ?? '{}');
+		} catch {}
 		if (!state.minted_at) {
 			if (dry) {
 				wouldMint += 1;
-				queue.push({ contact, key, state });
+				queue.push({ contact, key, state, hash });
 				continue;
 			}
 			const attempt = state.attempt ?? 1;
@@ -168,7 +216,7 @@ export async function monthlyRun(env: Env, origin: string, body: { dry_run?: unk
 				await env.EMAIL_SUBS.put(key, JSON.stringify(state));
 			} catch {}
 		}
-		queue.push({ contact, key, state });
+		queue.push({ contact, key, state, hash });
 	}
 
 	if (dry) return { ...out, would_mint: wouldMint, would_send: queue.length };
@@ -190,9 +238,16 @@ export async function monthlyRun(env: Env, origin: string, body: { dry_run?: unk
 		}));
 		let ok = false;
 		try {
+			// Resend's batch endpoint takes an Idempotency-Key (kept 24h): a retry of the same
+			// batch cannot send twice. The key hashes who is in it and which codes they hold.
+			const batchHash = (await sha256Hex(slice.map((q) => `${q.hash}:${q.state.code}`).sort().join('|'))).slice(0, 32);
 			const response = await fetch(`${RESEND_API}/emails/batch`, {
 				method: 'POST',
-				headers: { Authorization: `Bearer ${env.RESEND_API_KEY}`, 'Content-Type': 'application/json' },
+				headers: {
+					Authorization: `Bearer ${env.RESEND_API_KEY}`,
+					'Content-Type': 'application/json',
+					'Idempotency-Key': `m20-${month}-${batchHash}`,
+				},
 				body: JSON.stringify(messages),
 			});
 			ok = response.ok;
@@ -204,9 +259,9 @@ export async function monthlyRun(env: Env, origin: string, body: { dry_run?: unk
 			out.errors += slice.length;
 			continue;
 		}
-		for (const { key, state } of slice) {
+		for (const { hash } of slice) {
 			try {
-				await env.EMAIL_SUBS.put(key, JSON.stringify({ ...state, sent_at: Date.now() }));
+				await env.EMAIL_SUBS.put(`m20sent:${month}:${hash}`, String(Date.now()));
 			} catch (error) {
 				console.error('[Monthly sent mark failed]', String(error));
 			}

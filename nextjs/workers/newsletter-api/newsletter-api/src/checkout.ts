@@ -92,14 +92,21 @@ export async function handleCheckout(request: Request, env: Env, corsHeaders: Re
 		codeStatus = found ? 'applied' : 'invalid';
 	}
 
-	const session = await createCheckoutSession(env.STRIPE_SECRET_KEY, {
+	const sessionParams = {
 		priceId: price.id,
 		allowPromotionCodes: true, // all three drop-in kinds allow promo codes
-		promotionCodeId,
 		successUrl,
 		cancelUrl: 'https://miamicontactimprov.com/fundamentals',
 		metadata: { class_date: event.date, kind, product: `ci-${kind}` },
-	});
+	};
+	let session = await createCheckoutSession(env.STRIPE_SECRET_KEY, { ...sessionParams, promotionCodeId });
+	// Stripe can still refuse a session that carries the discount (the code was redeemed
+	// between the lookup and now, or it does not apply to this price). Never lose the
+	// sale for that: retry once as a normal checkout with the code box.
+	if ('error' in session && promotionCodeId) {
+		session = await createCheckoutSession(env.STRIPE_SECRET_KEY, sessionParams);
+		codeStatus = 'invalid';
+	}
 
 	if ('error' in session) {
 		return json({ ok: false, error: session.error }, 502, corsHeaders);

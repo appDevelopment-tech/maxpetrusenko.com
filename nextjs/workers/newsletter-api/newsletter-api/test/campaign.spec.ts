@@ -37,7 +37,9 @@ const run = async (body: unknown, e?: Env, auth = true) => {
 	return { status: res.status, body: (await res.json()) as any };
 };
 
-const log: { stripe: Array<{ body: URLSearchParams; headers: Record<string, string> }>; batches: any[][]; patches: any[] } = { stripe: [], batches: [], patches: [] };
+const real = (b: Record<string, unknown> = {}, e?: Env) => run({ confirm: 'send', dry_run: false, ...b }, e);
+
+const log: { stripe: Array<{ body: URLSearchParams; headers: Record<string, string> }>; batches: any[][]; batchHeaders: Array<Record<string, string>>; patches: any[] } = { stripe: [], batches: [], batchHeaders: [], patches: [] };
 
 function contacts(rows: Array<Record<string, unknown>>, hasMore = false) {
 	fetchMock.get(RESEND).intercept({ method: 'GET', path: /^\/audiences\/aud_test\/contacts\?/ }).reply(200, { object: 'list', has_more: hasMore, data: rows });
@@ -52,7 +54,7 @@ function mint(times: number, status = 200) {
 }
 function batch(status = 200, times = 1) {
 	fetchMock.get(RESEND).intercept({ method: 'POST', path: '/emails/batch' })
-		.reply(status, (o: any) => { log.batches.push(JSON.parse(String(o.body))); return { data: [] }; }).times(times);
+		.reply(status, (o: any) => { log.batches.push(JSON.parse(String(o.body))); log.batchHeaders.push(o.headers ?? {}); return { data: [] }; }).times(times);
 }
 const header = (h: Record<string, string>, name: string) => Object.entries(h).find(([k]) => k.toLowerCase() === name)?.[1];
 
@@ -62,7 +64,7 @@ beforeAll(() => {
 });
 afterEach(async () => {
 	for (const k of (await env.EMAIL_SUBS.list()).keys) await env.EMAIL_SUBS.delete(k.name);
-	log.stripe.length = 0; log.batches.length = 0; log.patches.length = 0;
+	log.stripe.length = 0; log.batches.length = 0; log.batchHeaders.length = 0; log.patches.length = 0;
 	fetchMock.assertNoPendingInterceptors();
 });
 
@@ -108,7 +110,7 @@ describe('monthly run', () => {
 	});
 
 	it('reports a missing coupon id instead of running', async () => {
-		const r = await run({ month: '2026-10' }, testEnv({ CI_MONTHLY_COUPON_ID: undefined }));
+		const r = await real({ month: '2026-10' }, testEnv({ CI_MONTHLY_COUPON_ID: undefined }));
 		expect(r.status).toBe(500);
 		expect(r.body.ok).toBe(false);
 	});
@@ -122,7 +124,7 @@ describe('monthly run', () => {
 
 	it('mints one personal 7 day code per eligible address and sends them in a batch, once', async () => {
 		contacts(rows); mint(2); batch();
-		const first = await run({ month: '2026-10' });
+		const first = await real({ month: '2026-10' });
 		expect(first.body).toMatchObject({ eligible: 2, minted: 2, sent: 2, skipped: 0, errors: 0, remaining: 0 });
 
 		const hash = await sha256Hex(normalizeEmail('ana@example.com'));
@@ -136,6 +138,7 @@ describe('monthly run', () => {
 		expect(header(ana.headers, 'stripe-version')).toBe('2025-09-30.clover');
 
 		expect(log.batches).toHaveLength(1);
+		expect(header(log.batchHeaders[0], 'idempotency-key')).toMatch(/^m20-2026-10-[0-9a-f]{32}$/);
 		const mails = log.batches[0];
 		expect(mails).toHaveLength(2);
 		const anaMail = mails.find((m) => m.to[0] === 'ana@example.com');
@@ -152,7 +155,7 @@ describe('monthly run', () => {
 
 		// a rerun in the same month neither mints nor sends again
 		contacts(rows);
-		const again = await run({ month: '2026-10' });
+		const again = await real({ month: '2026-10' });
 		expect(again.body).toMatchObject({ eligible: 2, minted: 0, sent: 0, skipped: 2, errors: 0 });
 		expect(log.stripe).toHaveLength(2);
 		expect(log.batches).toHaveLength(1);
@@ -160,21 +163,21 @@ describe('monthly run', () => {
 
 	it('a new month gets new codes', async () => {
 		contacts(rows); mint(2); batch();
-		await run({ month: '2026-10' });
+		await real({ month: '2026-10' });
 		contacts(rows); mint(2); batch();
-		const next = await run({ month: '2026-11' });
+		const next = await real({ month: '2026-11' });
 		expect(next.body).toMatchObject({ minted: 2, sent: 2, skipped: 0 });
 		expect(log.batches[1][0].subject).toBe('Your 20% code for November');
 	});
 
 	it('keeps a minted code when the batch fails and re-sends that same code on the rerun', async () => {
 		contacts([rows[0]]); mint(1); batch(500);
-		const failed = await run({ month: '2026-10' });
+		const failed = await real({ month: '2026-10' });
 		expect(failed.body).toMatchObject({ minted: 1, sent: 0, errors: 1 });
 		const code = log.batches[0][0].text.match(/CI20-[A-Z0-9]{6}/)[0];
 
 		contacts([rows[0]]); batch();
-		const retry = await run({ month: '2026-10' });
+		const retry = await real({ month: '2026-10' });
 		expect(retry.body).toMatchObject({ minted: 0, sent: 1, errors: 0 });
 		expect(log.stripe).toHaveLength(1);
 		expect(log.batches[1][0].text).toContain(code);
@@ -182,7 +185,7 @@ describe('monthly run', () => {
 
 	it('counts a Stripe refusal as an error and sends nothing for that address', async () => {
 		contacts([rows[0]]); mint(1, 400);
-		const r = await run({ month: '2026-10' });
+		const r = await real({ month: '2026-10' });
 		expect(r.body).toMatchObject({ eligible: 1, minted: 0, sent: 0, errors: 1 });
 		expect(log.batches).toHaveLength(0);
 	});
@@ -190,8 +193,87 @@ describe('monthly run', () => {
 	it('stops at the limit and says how many remain', async () => {
 		contacts([rows[0], { id: 'x', email: 'cara@example.com', unsubscribed: false }, { id: 'y', email: 'dan@example.com', unsubscribed: false }]);
 		mint(2); batch();
-		const r = await run({ month: '2026-10', limit: 2 });
+		const r = await real({ month: '2026-10', limit: 2 });
 		expect(r.body).toMatchObject({ eligible: 3, minted: 2, sent: 2, remaining: 1 });
+	});
+
+
+	async function post(raw: string, auth = true) {
+		const res = await send('/api/ci/monthly-run', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json', ...(auth ? { Authorization: 'Bearer admin_test' } : {}) },
+			body: raw,
+		});
+		return { status: res.status, body: (await res.json()) as any };
+	}
+
+	it('treats anything but a confirmed, non-dry request as a dry run: nothing is minted, sent or stored', async () => {
+		const cases = [
+			'not json at all',
+			'',
+			'null',
+			'[]',
+			'{}',
+			'{"month":"2026-10"}',
+			'{"dry_run":false}',
+			'{"confirm":"send"}',
+			'{"confirm":"yes","dry_run":false}',
+			'{"confirm":"SEND","dry_run":false}',
+			'{"confirm":"send","dry_run":"false"}',
+			'{"confirm":true,"dry_run":false}',
+			'{"confirm":"send","dry_run":true}',
+		];
+		for (const raw of cases) {
+			contacts(rows);
+			const r = await post(raw);
+			expect(r.body.dry_run, raw).toBe(true);
+			expect(r.body.sent, raw).toBe(0);
+			expect(r.body.minted, raw).toBe(0);
+		}
+		expect(log.stripe).toHaveLength(0);
+		expect(log.batches).toHaveLength(0);
+		expect((await env.EMAIL_SUBS.list()).keys).toHaveLength(0);
+	});
+
+	it('a confirmed request with dry_run false really sends', async () => {
+		contacts([rows[0]]); mint(1); batch();
+		const r = await post('{"confirm":"send","dry_run":false,"month":"2026-10"}');
+		expect(r.body).toMatchObject({ dry_run: false, minted: 1, sent: 1 });
+	});
+
+	it('refuses an overlapping run while the month lock is held, and releases it afterwards', async () => {
+		await env.EMAIL_SUBS.put('m20lock:2026-10', String(Date.now()), { expirationTtl: 600 });
+		const blocked = await real({ month: '2026-10' });
+		expect(blocked.status).toBe(409);
+		expect(blocked.body).toMatchObject({ ok: false, locked: true });
+		expect(log.stripe).toHaveLength(0);
+		await env.EMAIL_SUBS.delete('m20lock:2026-10');
+
+		contacts([rows[0]]); mint(1); batch();
+		expect((await real({ month: '2026-10' })).status).toBe(200);
+		expect(await env.EMAIL_SUBS.get('m20lock:2026-10')).toBeNull();
+		// a dry run neither needs nor takes the lock
+		await env.EMAIL_SUBS.put('m20lock:2026-11', String(Date.now()), { expirationTtl: 600 });
+		contacts(rows);
+		expect((await run({ dry_run: true, month: '2026-11' })).status).toBe(200);
+		await env.EMAIL_SUBS.delete('m20lock:2026-11');
+	});
+
+	it('releases the lock even when the run fails part way', async () => {
+		contacts([rows[0]]); mint(1, 400);
+		await real({ month: '2026-10' });
+		expect(await env.EMAIL_SUBS.get('m20lock:2026-10')).toBeNull();
+	});
+
+	it('uses one KV list call for who is sent and reads state only for the addresses it handles', async () => {
+		const many = Array.from({ length: 6 }, (_, i) => ({ id: `r${i}`, email: `p${i}@example.com`, unsubscribed: false }));
+		contacts(many); mint(2); batch();
+		await real({ month: '2026-10', limit: 2 });
+		contacts(many); mint(2); batch();
+		const second = await real({ month: '2026-10', limit: 2 });
+		expect(second.body).toMatchObject({ eligible: 6, skipped: 2, minted: 2, sent: 2, remaining: 2 });
+		const keys = (await env.EMAIL_SUBS.list()).keys.map((k) => k.name);
+		expect(keys.filter((k) => k.startsWith('m20sent:2026-10:'))).toHaveLength(4);
 	});
 
 	it('names the month in New York time', () => {
