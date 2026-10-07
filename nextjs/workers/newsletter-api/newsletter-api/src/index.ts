@@ -10,6 +10,8 @@
 
 import { handleCheckout } from './checkout';
 import { addContact, lookupContact, resendCode, startSignup, verifyCode } from './ci';
+import { monthlyRun } from './monthly';
+import { handleUnsubscribe } from './unsub';
 import {
 	CI_SOURCE_PREFIX, INTERNAL_KEY_PREFIXES, MAX_TAG, MAX_TEXT, attribution, cleanName, isValidEmail, isValidPhone, normalizeEmail, sha256Hex, splitName, text,
 	type SubscriptionRequest,
@@ -59,6 +61,8 @@ export interface Env {
 	TWILIO_AUTH_TOKEN?: string;
 	// Twilio Verify service (VA...) that sends and checks the text one-time code.
 	TWILIO_VERIFY_SID?: string;
+	// Stripe coupon id for the monthly personal 20% codes (percent_off 20, duration once).
+	CI_MONTHLY_COUPON_ID?: string;
 	// Keys the hash of an emailed one-time code (HMAC-SHA256); never leaves the Worker.
 	CI_CONFIRM_SECRET?: string;
 	// Cloudflare rate limit binding (wrangler.jsonc `ratelimits`): 10 per IP per 60s.
@@ -286,6 +290,24 @@ export default {
 					{ status: 500, headers: corsHeaders }
 				);
 			}
+		}
+
+		// POST /api/ci/monthly-run: the monthly 20% campaign. Admin only; see monthly.ts.
+		if (url.pathname === '/api/ci/monthly-run' && request.method === 'POST') {
+			if (!isAdmin(request, env)) {
+				return Response.json({ ok: false, error: 'Unauthorized' }, { status: 401, headers: corsHeaders });
+			}
+			let body: { dry_run?: unknown; month?: unknown; limit?: unknown } = {};
+			try {
+				body = (await request.json()) as typeof body;
+			} catch {}
+			const result = await monthlyRun(env, url.origin, body);
+			return Response.json(result, { status: result.ok ? 200 : 500, headers: corsHeaders });
+		}
+
+		// Signed unsubscribe link in the monthly email (GET shows a button, POST acts).
+		if (url.pathname === '/api/ci/unsubscribe' && (request.method === 'GET' || request.method === 'POST')) {
+			return handleUnsubscribe(request, env);
 		}
 
 		// POST /api/events - Server-side conversion events for the Meta ad test.

@@ -27,6 +27,9 @@ export async function findPriceByLookupKey(secretKey: string, lookupKey: string)
 export interface CreateCheckoutSessionParams {
 	priceId: string;
 	allowPromotionCodes: boolean;
+	// A specific promotion code id. Stripe forbids sending it together with
+	// allow_promotion_codes, so when this is set the checkout page shows no code box.
+	promotionCodeId?: string;
 	successUrl: string;
 	cancelUrl: string;
 	metadata: Record<string, string>;
@@ -48,7 +51,9 @@ export async function createCheckoutSession(
 	body.set('cancel_url', params.cancelUrl);
 	// Only included when true: omitting it entirely when false avoids any
 	// ambiguity about how Stripe treats an explicit `false`.
-	if (params.allowPromotionCodes) {
+	if (params.promotionCodeId) {
+		body.set('discounts[0][promotion_code]', params.promotionCodeId);
+	} else if (params.allowPromotionCodes) {
 		body.set('allow_promotion_codes', 'true');
 	}
 	for (const [key, value] of Object.entries(params.metadata)) {
@@ -112,14 +117,14 @@ export type PromoResult =
 export async function createSingleUseCode(
 	secretKey: string,
 	couponId: string,
-	opts: { code: string; idempotencyKey: string; nowSeconds: number },
+	opts: { code: string; idempotencyKey: string; nowSeconds: number; ttlSeconds?: number },
 ): Promise<PromoResult> {
 	const body = new URLSearchParams();
 	body.set('promotion[type]', 'coupon');
 	body.set('promotion[coupon]', couponId);
 	body.set('code', opts.code);
 	body.set('max_redemptions', '1');
-	body.set('expires_at', String(opts.nowSeconds + PROMO_TTL_SECONDS));
+	body.set('expires_at', String(opts.nowSeconds + (opts.ttlSeconds ?? PROMO_TTL_SECONDS)));
 	try {
 		const response = await fetch(`${STRIPE_API}/promotion_codes`, {
 			method: 'POST',
@@ -169,5 +174,30 @@ export async function promoCodeStatus(secretKey: string, code: string, nowSecond
 		return promo.active && !redeemed && !expired ? 'usable' : 'unusable';
 	} catch {
 		return 'unknown';
+	}
+}
+
+/**
+ * Finds a promotion code a visitor arrived with, only if it can still be redeemed.
+ * Returns its id, or null for unknown, inactive, used or expired (or Stripe unreachable),
+ * so a bad code never blocks a purchase.
+ */
+export async function findUsablePromotionCode(secretKey: string, code: string, nowSeconds: number): Promise<string | null> {
+	try {
+		const query = new URLSearchParams({ code, active: 'true', limit: '1' });
+		const response = await fetch(`${STRIPE_API}/promotion_codes?${query.toString()}`, {
+			headers: { Authorization: `Bearer ${secretKey}`, 'Stripe-Version': STRIPE_PROMO_VERSION },
+		});
+		if (!response.ok) return null;
+		const payload = (await response.json().catch(() => null)) as
+			| { data?: Array<{ id: string; active?: boolean; times_redeemed?: number; max_redemptions?: number | null; expires_at?: number | null }> }
+			| null;
+		const promo = payload?.data?.[0];
+		if (!promo || promo.active === false) return null;
+		if (promo.max_redemptions != null && (promo.times_redeemed ?? 0) >= promo.max_redemptions) return null;
+		if (promo.expires_at != null && promo.expires_at <= nowSeconds) return null;
+		return promo.id;
+	} catch {
+		return null;
 	}
 }

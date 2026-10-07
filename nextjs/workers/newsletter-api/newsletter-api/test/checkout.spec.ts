@@ -50,6 +50,22 @@ function interceptPrices(times = 1) {
 		.times(times);
 }
 
+const lookups: Array<{ query: URLSearchParams; version: string }> = [];
+
+function interceptPromo(data: Array<Record<string, unknown>>) {
+	fetchMock
+		.get(STRIPE_ORIGIN)
+		.intercept({ method: 'GET', path: /\/v1\/promotion_codes\?/ })
+		.reply(200, (opts: any) => {
+			const h = opts.headers ?? {};
+			lookups.push({
+				query: new URL(String(opts.path), STRIPE_ORIGIN).searchParams,
+				version: String(h['stripe-version'] ?? h['Stripe-Version'] ?? ''),
+			});
+			return { data };
+		});
+}
+
 function interceptSessions(times = 1) {
 	fetchMock
 		.get(STRIPE_ORIGIN)
@@ -69,6 +85,7 @@ beforeAll(() => {
 
 afterEach(() => {
 	sent.sessions.length = 0;
+	lookups.length = 0;
 	fetchMock.assertNoPendingInterceptors();
 	vi.useRealTimers();
 });
@@ -146,5 +163,58 @@ describe('POST /api/checkout', () => {
 		const { status, body } = await checkout({ kind: 'class', event_date: '2026-11-20' });
 		expect(status).toBe(500);
 		expect(body.error).toBe('Price not configured');
+	});
+});
+
+describe('POST /api/checkout with a ticket code', () => {
+	const future = '2026-11-20';
+	const usable = { id: 'promo_live1', active: true, times_redeemed: 0, max_redemptions: 1, expires_at: Math.floor(Date.now() / 1000) + 86400 };
+
+	it('applies a valid code directly: discounts[0][promotion_code], no code box, pinned version', async () => {
+		interceptPrices();
+		interceptPromo([usable]);
+		interceptSessions();
+
+		const { body } = await checkout({ event_date: future, code: 'ci10k7p2qx' });
+
+		expect(body.code_status).toBe('applied');
+		const params = sent.sessions[0];
+		expect(params.get('discounts[0][promotion_code]')).toBe('promo_live1');
+		expect(params.has('allow_promotion_codes')).toBe(false);
+		expect(lookups[0].query.get('code')).toBe('CI10-K7P2QX');
+		expect(lookups[0].query.get('active')).toBe('true');
+		expect(lookups[0].version).toBe('2025-09-30.clover');
+	});
+
+	it('falls back to the normal checkout with the code box for an unknown, used or expired code', async () => {
+		for (const entry of [[], [{ ...usable, times_redeemed: 1 }], [{ ...usable, expires_at: 1 }], [{ ...usable, active: false }]]) {
+			interceptPrices();
+			interceptPromo(entry as any);
+			interceptSessions();
+			const { status, body } = await checkout({ event_date: future, code: 'CI10-K7P2QX' });
+			expect(status).toBe(200);
+			expect(body.url).toContain('checkout.stripe.com');
+			expect(body.code_status).toBe('invalid');
+			const params = sent.sessions[sent.sessions.length - 1];
+			expect(params.get('allow_promotion_codes')).toBe('true');
+			expect(params.has('discounts[0][promotion_code]')).toBe(false);
+		}
+	});
+
+	it('treats a malformed code as invalid without asking Stripe, and still sells', async () => {
+		interceptPrices();
+		interceptSessions();
+		const { body } = await checkout({ event_date: future, code: 'not a code' });
+		expect(body.code_status).toBe('invalid');
+		expect(lookups).toHaveLength(0);
+		expect(sent.sessions[0].get('allow_promotion_codes')).toBe('true');
+	});
+
+	it('leaves checkout exactly as before when no code is sent', async () => {
+		interceptPrices();
+		interceptSessions();
+		const { body } = await checkout({ event_date: future });
+		expect(body).not.toHaveProperty('code_status');
+		expect(sent.sessions[0].get('allow_promotion_codes')).toBe('true');
 	});
 });

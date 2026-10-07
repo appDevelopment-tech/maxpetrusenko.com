@@ -10,11 +10,13 @@
 
 import type { Env } from './index';
 import { KIND_LOOKUP_KEYS, resolveEvent, type DropInKind } from './schedule';
-import { createCheckoutSession, findPriceByLookupKey } from './stripe';
+import { createCheckoutSession, findPriceByLookupKey, findUsablePromotionCode } from './stripe';
+import { normalizeTicketCode } from './links';
 
 interface CheckoutRequest {
 	kind?: string;
 	event_date?: string;
+	code?: unknown;
 }
 
 const DOOR_URL = 'https://miamicontactimprov.com/pay';
@@ -78,9 +80,22 @@ export async function handleCheckout(request: Request, env: Env, corsHeaders: Re
 		`https://miamicontactimprov.com/success?kind=${kind}&event_date=${event.date}` +
 		`&amount=${price.unitAmount}&session_id={CHECKOUT_SESSION_ID}`;
 
+	// A code the visitor arrived with (the /t/ link) is applied directly. Anything wrong
+	// with it (unknown, used, expired) falls back to the normal checkout with the code
+	// box, so a bad code never costs a sale; the reply says which happened.
+	let promotionCodeId: string | undefined;
+	let codeStatus: 'applied' | 'invalid' | undefined;
+	if (body.code !== undefined && body.code !== null && body.code !== '') {
+		const code = normalizeTicketCode(body.code);
+		const found = code ? await findUsablePromotionCode(env.STRIPE_SECRET_KEY, code, Math.floor(Date.now() / 1000)) : null;
+		promotionCodeId = found ?? undefined;
+		codeStatus = found ? 'applied' : 'invalid';
+	}
+
 	const session = await createCheckoutSession(env.STRIPE_SECRET_KEY, {
 		priceId: price.id,
 		allowPromotionCodes: true, // all three drop-in kinds allow promo codes
+		promotionCodeId,
 		successUrl,
 		cancelUrl: 'https://miamicontactimprov.com/fundamentals',
 		metadata: { class_date: event.date, kind, product: `ci-${kind}` },
@@ -90,5 +105,5 @@ export async function handleCheckout(request: Request, env: Env, corsHeaders: Re
 		return json({ ok: false, error: session.error }, 502, corsHeaders);
 	}
 
-	return json({ url: session.url }, 200, corsHeaders);
+	return json({ url: session.url, ...(codeStatus ? { code_status: codeStatus } : {}) }, 200, corsHeaders);
 }

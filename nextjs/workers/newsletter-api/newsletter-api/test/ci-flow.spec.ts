@@ -136,6 +136,10 @@ describe('step 2: verify', () => {
 		expect(log.stripe).toHaveLength(1);
 		expect(log.contacts[0]).toMatchObject({ email: EMAIL, first_name: 'Ana', last_name: 'Lopez', unsubscribed: false });
 		expect(log.emails[1].text).toContain(body.code);
+		expect(log.emails[1].text.split('\n')).toContain(body.code);
+		expect(log.emails[1].html).toContain(body.code);
+		expect(log.emails[1].html).toContain(`https://miamicontactimprov.com/t/${body.code.replace('-', '')}`);
+		expect(log.emails[1].html).toContain('Buy your ticket, 10% off applied');
 		const record = JSON.parse((await env.EMAIL_SUBS.get(EMAIL)) as string);
 		expect(record).toMatchObject({ email: EMAIL, name: 'Ana Lopez', verified: 'email' });
 		expect(await env.EMAIL_SUBS.get(await otpKey())).toBeNull();
