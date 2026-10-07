@@ -9,40 +9,24 @@
  */
 
 import { handleCheckout } from './checkout';
-import { createSingleUseCode, promoCodeStatus, randomCodeSuffix } from './stripe';
-import { sendSms, type TwilioEnv } from './sms';
-import { confirmationBody, confirmationLink, confirmPage, plainPage, verifyConfirmation } from './resubscribe';
-
-interface SubscriptionRequest {
-	email: string;
-	consent: boolean;
-	source?: string;
-	// Optional: a form that only ever asked for an email keeps working with this
-	// unset. Present only on the Miami Contact Improv forms as of 2026-09-28.
-	phone?: string;
-	// Honeypot. A real form never fills this field; a submission that does is
-	// answered as if it worked and never stored.
-	company?: string;
-	// The acquisition fields a page sends with a signup. All optional: a form on an
-	// older page posts an email, a consent flag and a source, and that has to keep
-	// working exactly as before.
-	offer?: string;
-	campaign?: string;
-	landing_page?: string;
-	referrer?: string;
-	utm_source?: string;
-	utm_medium?: string;
-	utm_content?: string;
-}
+import { addContact, lookupContact, resendCode, startSignup, verifyCode } from './ci';
+import {
+	CI_SOURCE_PREFIX, INTERNAL_KEY_PREFIXES, MAX_TAG, MAX_TEXT, attribution, cleanName, isValidEmail, isValidPhone, normalizeEmail, sha256Hex, splitName, text,
+	type SubscriptionRequest,
+} from './common';
+export { cleanName, normalizeEmail, splitName };
 
 interface SubscriptionResponse {
 	ok: boolean;
 	error?: string;
+	step?: string;
+	channel?: string;
 }
 
 interface KVNamespace {
 	get(key: string): Promise<string | null>;
 	put(key: string, value: string, options?: { expirationTtl?: number }): Promise<void>;
+	delete(key: string): Promise<void>;
 	list(): Promise<{ keys: Array<{ name: string }> }>;
 }
 
@@ -70,25 +54,22 @@ export interface Env {
 	META_TEST_EVENT_CODE?: string;
 	// Stripe secret key, used by /api/checkout and by the single-use promotion codes.
 	STRIPE_SECRET_KEY?: string;
-	// Twilio REST credentials for texting the code to a phone number left on the form.
+	// Twilio credentials, used only for Twilio Verify one-time codes.
 	TWILIO_ACCOUNT_SID?: string;
 	TWILIO_AUTH_TOKEN?: string;
-	// A sending number (+1...) or a Messaging Service SID (MG...).
-	TWILIO_FROM?: string;
-	// Signs the resubscribe confirmation links.
+	// Twilio Verify service (VA...) that sends and checks the text one-time code.
+	TWILIO_VERIFY_SID?: string;
+	// Keys the hash of an emailed one-time code (HMAC-SHA256); never leaves the Worker.
 	CI_CONFIRM_SECRET?: string;
 	// Cloudflare rate limit binding (wrangler.jsonc `ratelimits`): 10 per IP per 60s.
 	SUBSCRIBE_LIMITER?: { limit(options: { key: string }): Promise<{ success: boolean }> };
+	// Second binding for /api/verify, keyed on sha256(normalized email): 5 per 60s.
+	VERIFY_LIMITER?: { limit(options: { key: string }): Promise<{ success: boolean }> };
 }
 
-const RESEND_API = 'https://api.resend.com';
 
 // Subscribers from the Contact Improv Miami site join the same list as everyone
 // else, but they get a welcome email carrying the series discount code.
-const CI_SOURCE_PREFIX = 'miamicontactimprov';
-const CI_FROM = 'Contact Improv Miami <hello@miamicontactimprov.com>';
-const CI_SUBJECT = 'Your 10% off one event';
-const CI_SERIES_LINK = 'https://miamicontactimprov.com/fundamentals';
 
 // Meta Conversions API. The version is pinned here alone; bump it in one place when
 // Meta retires it rather than having it drift through the code.
@@ -101,21 +82,6 @@ const META_GRAPH_VERSION = 'v23.0';
 // Meta has no standard one for it, and it reads the same in Events Manager.
 const META_EVENTS = ['Lead', 'CompleteRegistration', 'Attend'] as const;
 type MetaEventName = (typeof META_EVENTS)[number];
-
-function isValidEmail(email: string): boolean {
-	const trimmed = email.trim().toLowerCase();
-	return /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(trimmed);
-}
-
-// Phone is optional, so an empty string is valid (nothing to check). When one is
-// given it only has to look like a phone number: 7 to 15 digits once formatting
-// is stripped, which is the E.164 length range and permissive enough for however
-// someone chooses to type a US or international number.
-function isValidPhone(phone: string): boolean {
-	if (!phone) return true;
-	const digits = phone.replace(/[^0-9]/g, '');
-	return digits.length >= 7 && digits.length <= 15;
-}
 
 // Compares the whole token every time, so the response time does not reveal how
 // much of it matched.
@@ -135,15 +101,6 @@ function isAdmin(request: Request, env: Env): boolean {
 	const header = request.headers.get('Authorization') || '';
 	if (!header.startsWith('Bearer ')) return false;
 	return tokenMatches(header.slice('Bearer '.length).trim(), expected);
-}
-
-// Meta takes user data as SHA-256 hex of the trimmed, lowercased value, so the
-// address itself never leaves the Worker in a readable form.
-async function sha256Hex(value: string): Promise<string> {
-	const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(value));
-	return Array.from(new Uint8Array(digest))
-		.map((byte) => byte.toString(16).padStart(2, '0'))
-		.join('');
 }
 
 interface EventsRequest {
@@ -219,323 +176,6 @@ async function forwardToMeta(
 	}
 }
 
-async function resendPost(env: Env, path: string, body: unknown): Promise<Response> {
-	return fetch(`${RESEND_API}${path}`, {
-		method: 'POST',
-		headers: {
-			Authorization: `Bearer ${env.RESEND_API_KEY}`,
-			'Content-Type': 'application/json',
-		},
-		body: JSON.stringify(body),
-	});
-}
-
-type ContactResult = 'created' | 'existing' | 'unsubscribed' | 'failed';
-
-// Looks the contact up and creates it only on a 404. An unsubscribed contact is never
-// flipped here: the public form cannot override an opt-out, so the caller sends a
-// signed confirmation link instead (see resubscribe.ts).
-// Audience-scoped endpoints on purpose: Resend now lists Audiences as deprecated in
-// favour of Segments, but its docs do not show how a new contact is attached to a
-// segment, and this Worker's RESEND_AUDIENCE_ID is the audience the list lives in.
-async function upsertResendContact(env: Env, email: string, kvUnsubscribed: boolean): Promise<ContactResult> {
-	const path = `/audiences/${env.RESEND_AUDIENCE_ID}/contacts/${encodeURIComponent(email)}`;
-	let lookup: Response;
-	try {
-		lookup = await fetch(`${RESEND_API}${path}`, { headers: { Authorization: `Bearer ${env.RESEND_API_KEY}` } });
-	} catch (error) {
-		console.error('[Resend lookup error]', String(error));
-		return 'failed';
-	}
-	if (lookup.ok) {
-		const contact = (await lookup.json().catch(() => null)) as { unsubscribed?: boolean } | null;
-		return contact?.unsubscribed || kvUnsubscribed ? 'unsubscribed' : 'existing';
-	}
-	if (lookup.status !== 404) {
-		console.error('[Resend lookup failed]', lookup.status);
-		return 'failed';
-	}
-	try {
-		const response = await resendPost(env, `/audiences/${env.RESEND_AUDIENCE_ID}/contacts`, { email, unsubscribed: false });
-		if (!response.ok) {
-			console.error('[Resend contact failed]', response.status, await response.text());
-			return 'failed';
-		}
-	} catch (error) {
-		console.error('[Resend create error]', String(error));
-		return 'failed';
-	}
-	return 'created';
-}
-
-// One confirmation email per address per 24 hours. The mark is written first so a
-// double submit cannot send two.
-async function sendConfirmation(env: Env, email: string, origin: string): Promise<void> {
-	if (!env.CI_CONFIRM_SECRET) {
-		console.error('[Confirmation skipped] CI_CONFIRM_SECRET is not set');
-		return;
-	}
-	const key = `ci-confirm:${await sha256Hex(normalizeEmail(email))}`;
-	try {
-		if (await env.EMAIL_SUBS.get(key)) return;
-		await env.EMAIL_SUBS.put(key, String(Date.now()), { expirationTtl: 24 * 60 * 60 });
-	} catch (error) {
-		console.error('[Confirmation skipped] KV unavailable', String(error));
-		return;
-	}
-	const link = await confirmationLink(origin, env.CI_CONFIRM_SECRET, email, Math.floor(Date.now() / 1000));
-	try {
-		const response = await resendPost(env, '/emails', {
-			from: CI_FROM,
-			to: [email],
-			subject: 'Confirm you want emails again',
-			text: confirmationBody(link),
-		});
-		if (!response.ok) console.error('[Confirmation email failed]', response.status);
-	} catch (error) {
-		console.error('[Confirmation email error]', String(error));
-	}
-}
-
-// /api/ci/resubscribe: the only place an opt-out is reversed, and only after a click.
-// GET shows a Confirm button and changes nothing (mail scanners and link previews fetch
-// links). POST re-verifies the signature, PATCHes unsubscribed:false, records
-// resubscribed_at (a repeat is refused), and re-sends the same unused code (email, and
-// SMS if the one-per-number rule allows).
-async function handleResubscribe(request: Request, env: Env): Promise<Response> {
-	const html = (status: number, message: string) =>
-		new Response(plainPage('Contact Improv Miami', message), { status, headers: { 'Content-Type': 'text/html; charset=utf-8' } });
-	if (!env.CI_CONFIRM_SECRET) return html(503, 'This link is not available right now.');
-
-	let params: URLSearchParams | FormData;
-	if (request.method === 'POST') {
-		try {
-			params = await request.formData();
-		} catch {
-			return html(400, 'This link is not valid.');
-		}
-	} else {
-		params = new URL(request.url).searchParams;
-	}
-	const verdict = await verifyConfirmation(env.CI_CONFIRM_SECRET, params, Math.floor(Date.now() / 1000));
-	if (verdict === 'expired') return html(410, 'This link expired. Sign up again on the site to get a new one.');
-	if (verdict !== 'ok') return html(400, 'This link is not valid.');
-	const email = String(params.get('e') ?? '').trim().toLowerCase();
-
-	const doneKey = `ci-resub:${await sha256Hex(normalizeEmail(email))}`;
-	let already = false;
-	try {
-		already = Boolean(await env.EMAIL_SUBS.get(doneKey));
-	} catch (error) {
-		console.error('[Resubscribe state read failed]', String(error));
-	}
-	if (already) return html(200, 'You are already subscribed.');
-
-	if (request.method !== 'POST') {
-		return new Response(
-			confirmPage(email, String(params.get('x') ?? ''), String(params.get('s') ?? '')),
-			{ status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8' } },
-		);
-	}
-
-	try {
-		const response = await fetch(`${RESEND_API}/audiences/${env.RESEND_AUDIENCE_ID}/contacts/${encodeURIComponent(email)}`, {
-			method: 'PATCH',
-			headers: { Authorization: `Bearer ${env.RESEND_API_KEY}`, 'Content-Type': 'application/json' },
-			body: JSON.stringify({ unsubscribed: false }),
-		});
-		if (!response.ok) {
-			console.error('[Resend resubscribe failed]', response.status);
-			return html(502, 'That did not go through. Try the link again in a minute.');
-		}
-	} catch (error) {
-		console.error('[Resend resubscribe error]', String(error));
-		return html(502, 'That did not go through. Try the link again in a minute.');
-	}
-	try {
-		await env.EMAIL_SUBS.put(doneKey, JSON.stringify({ resubscribed_at: Date.now() }));
-	} catch (error) {
-		console.error('[Resubscribe record failed]', String(error));
-	}
-	let phone = '';
-	try {
-		phone = String(JSON.parse((await env.EMAIL_SUBS.get(email)) ?? '{}').phone ?? '');
-	} catch {}
-	await sendWelcome(env, email, phone, true);
-	return new Response(null, { status: 303, headers: { Location: 'https://miamicontactimprov.com/?resubscribed=1' } });
-}
-
-function welcomeBody(code: string): string {
-	return `Thanks for signing up.
-
-Your code is ${code}. It takes 10% off one event, a class or a jam. It works once and is good for 60 days. Enter it at checkout.
-
-Fridays 7:00 to 9:00 PM at Inner Motion in Hallandale Beach. No partner and no experience needed, just clothes you can roll in.
-
-Dates, the venue and what we cover: ${CI_SERIES_LINK}
-
-After this we send an occasional discount, about once a month, 20% off. Reply if you want off the list.
-
-Max`;
-}
-
-// Lowercase, drop a +tag, and for Gmail drop dots, so one person with several aliases
-// of the same mailbox gets one code.
-export function normalizeEmail(email: string): string {
-	const lowered = email.trim().toLowerCase();
-	const at = lowered.lastIndexOf('@');
-	if (at < 1) return lowered;
-	let local = lowered.slice(0, at).split('+')[0];
-	let domain = lowered.slice(at + 1);
-	if (domain === 'gmail.com' || domain === 'googlemail.com') {
-		local = local.replace(/\./g, '');
-		domain = 'gmail.com';
-	}
-	return `${local}@${domain}`;
-}
-
-// Welcome state lives under the normalized address, apart from the subscriber record,
-// so aliases share it. It decides whether to send, not the signup source: a failed
-// Stripe or Resend call leaves welcome_sent_at empty and the next signup retries.
-interface WelcomeState {
-	attempt?: number;
-	pending_code?: string;
-	promo_code?: string;
-	welcome_sent_at?: number;
-	sms_sent_at?: number;
-}
-
-const WELCOME_PREFIX = 'ci10:';
-
-async function readWelcomeState(env: Env, key: string): Promise<WelcomeState> {
-	try {
-		return JSON.parse((await env.EMAIL_SUBS.get(key)) ?? '{}') as WelcomeState;
-	} catch {
-		return {};
-	}
-}
-
-// One 10% code per normalized email, ever. `resend` is a resubscriber: they get the
-// same code again, but only while Stripe says it is unused and unexpired. Email and SMS
-// are independent: one failing never blocks the other, and each retries on a later
-// signup until it has gone out once.
-async function sendWelcome(env: Env, email: string, phone: string, resend: boolean): Promise<void> {
-	if (!env.CI_ONE_EVENT_COUPON_ID || !env.STRIPE_SECRET_KEY) {
-		console.error('[Welcome skipped] CI_ONE_EVENT_COUPON_ID or STRIPE_SECRET_KEY is not set');
-		return;
-	}
-	const normalized = normalizeEmail(email);
-	const hash = await sha256Hex(normalized);
-	const stateKey = `${WELCOME_PREFIX}${hash}`;
-	const state = await readWelcomeState(env, stateKey);
-	const wantSms = Boolean(phone) && (resend || !state.sms_sent_at);
-	const wantEmail = resend || !state.welcome_sent_at;
-	if (!wantEmail && !wantSms) return;
-
-	if (!state.promo_code) {
-		// The code and attempt are saved before Stripe is called (the one write that
-		// cannot wait for the end), so a retry after a lost response replays the same
-		// idempotent request instead of minting a second code.
-		const attempt = state.attempt ?? 1;
-		const code = state.pending_code ?? `CI10-${randomCodeSuffix()}`;
-		try {
-			await env.EMAIL_SUBS.put(stateKey, JSON.stringify({ ...state, attempt, pending_code: code }));
-		} catch (error) {
-			console.error('[Welcome skipped] could not save state', String(error));
-			return;
-		}
-		const result = await createSingleUseCode(env.STRIPE_SECRET_KEY, env.CI_ONE_EVENT_COUPON_ID, {
-			code,
-			idempotencyKey: `ci10-${hash}-${attempt}`,
-			nowSeconds: Math.floor(Date.now() / 1000),
-		});
-		if (!result.ok) {
-			if (result.definite) {
-				// Re-read first: a concurrent signup may have finished minting, and its
-				// code must not be wiped by moving to a new attempt.
-				try {
-					const fresh = await readWelcomeState(env, stateKey);
-					if (!fresh.promo_code) {
-						await env.EMAIL_SUBS.put(stateKey, JSON.stringify({ ...fresh, attempt: attempt + 1, pending_code: undefined }));
-					}
-				} catch (error) {
-					console.error('[Welcome state update failed]', String(error));
-				}
-			}
-			console.error('[Welcome skipped] could not create a promotion code');
-			return;
-		}
-		state.promo_code = result.code;
-		delete state.pending_code;
-		state.attempt = attempt;
-	} else if (resend) {
-		const status = await promoCodeStatus(env.STRIPE_SECRET_KEY, state.promo_code, Math.floor(Date.now() / 1000));
-		if (status !== 'usable') {
-			console.log('[Resubscribe] existing code is used, expired or unverifiable; nothing re-sent');
-			return;
-		}
-	}
-	const code = state.promo_code as string;
-
-	if (wantEmail) {
-		try {
-			const response = await resendPost(env, '/emails', {
-				from: CI_FROM,
-				to: [email],
-				subject: CI_SUBJECT,
-				text: welcomeBody(code),
-			});
-			const payload = (await response.json().catch(() => null)) as { id?: string } | null;
-			if (response.ok) {
-				state.welcome_sent_at = Date.now();
-				console.log('[Welcome email sent]', payload?.id ?? 'no id');
-			} else {
-				console.error('[Welcome email failed]', response.status, JSON.stringify(payload));
-			}
-		} catch (error) {
-			console.error('[Welcome email error]', String(error));
-		}
-	}
-	if (wantSms && (await sendSms(env as TwilioEnv, phone, code))) {
-		state.sms_sent_at = Date.now();
-	}
-	// The single final write for this person's state.
-	try {
-		await env.EMAIL_SUBS.put(stateKey, JSON.stringify(state));
-	} catch (error) {
-		console.error('[Welcome state write failed]', String(error));
-	}
-}
-
-// A signup carries where it came from: the offer that was on screen, the campaign and
-// referrer that brought the reader in, the page they were reading. Each one is text
-// that arrived over the wire, so each is trimmed, cut to a length a KV record can
-// carry, and dropped when it is empty rather than stored as a blank key. Anything not
-// named below is ignored: the record is built from this list, not from the request.
-const MAX_TEXT = 200;
-const MAX_TAG = 80;
-
-function text(value: unknown, max: number): string {
-	return typeof value === 'string' ? value.trim().slice(0, max) : '';
-}
-
-function attribution(body: SubscriptionRequest): Record<string, string> {
-	const fields: Array<[string, string]> = [
-		['offer', text(body.offer, MAX_TEXT)],
-		['campaign', text(body.campaign, MAX_TAG)],
-		['landing_page', text(body.landing_page, MAX_TEXT)],
-		['referrer', text(body.referrer, MAX_TEXT)],
-		['utm_source', text(body.utm_source, MAX_TAG)],
-		['utm_medium', text(body.utm_medium, MAX_TAG)],
-		['utm_content', text(body.utm_content, MAX_TAG)],
-	];
-	const kept: Record<string, string> = {};
-	for (const [key, value] of fields) {
-		if (value) kept[key] = value;
-	}
-	return kept;
-}
-
 export default {
 	async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
 		const url = new URL(request.url);
@@ -552,9 +192,13 @@ export default {
 			return new Response(null, { headers: corsHeaders });
 		}
 
-		// POST /api/subscribe - Email subscription endpoint
-		if (url.pathname === '/api/subscribe' && request.method === 'POST') {
-			// 10 requests per IP per 60 seconds. A limiter outage must not block signups.
+		// POST /api/subscribe: Miami CI sources go through verify-first signup (see ci.ts);
+		// every other site keeps the plain subscribe. POST /api/verify and /api/resend-code
+		// are the other two steps of that flow.
+		const ciRoutes = ['/api/subscribe', '/api/verify', '/api/resend-code'];
+		if (ciRoutes.includes(url.pathname) && request.method === 'POST') {
+			// 10 requests per IP per 60 seconds across all three. A limiter outage must
+			// not block signups.
 			if (env.SUBSCRIBE_LIMITER) {
 				try {
 					const ip = request.headers.get('CF-Connecting-IP') || 'unknown';
@@ -570,88 +214,71 @@ export default {
 				}
 			}
 			try {
+				if (url.pathname === '/api/verify') {
+					const body = (await request.json()) as { email?: unknown; code?: unknown };
+					// A second limit per address, on top of the per-IP one, so a botnet
+					// cannot spread guesses at one mailbox across many IPs.
+					if (env.VERIFY_LIMITER && typeof body.email === 'string') {
+						try {
+							const key = await sha256Hex(normalizeEmail(body.email));
+							const { success } = await env.VERIFY_LIMITER.limit({ key });
+							if (!success) {
+								return Response.json(
+									{ ok: false, error: 'Too many requests. Try again in a minute.' } as SubscriptionResponse,
+									{ status: 429, headers: { ...corsHeaders, 'Retry-After': '60' } },
+								);
+							}
+						} catch (error) {
+							console.error('[Verify rate limit error]', String(error));
+						}
+					}
+					return await verifyCode(env, corsHeaders, body);
+				}
+				if (url.pathname === '/api/resend-code') {
+					return await resendCode(env, corsHeaders, ((await request.json()) as { email?: unknown }).email);
+				}
 				const body = await request.json() as SubscriptionRequest;
 				const email = body.email?.trim().toLowerCase();
 				const consent = Boolean(body.consent);
 				const source = (body.source || 'unknown').slice(0, 64);
 				const phone = text(body.phone, 32);
+				const name = cleanName(body.name);
 
 				// Honeypot: a real submission never fills this field. Answer as if it
-				// worked, so a bot filling it learns nothing, and never touch KV or
-				// Resend for it.
+				// worked and never touch KV or Resend for it.
 				if (text(body.company, MAX_TAG)) {
-					return Response.json(
-						{ ok: true } as SubscriptionResponse,
-						{ status: 200, headers: corsHeaders }
-					);
+					return Response.json({ ok: true } as SubscriptionResponse, { status: 200, headers: corsHeaders });
 				}
-
-				// Validation
 				if (!email || !isValidEmail(email)) {
-					return Response.json(
-						{ ok: false, error: 'Invalid email' } as SubscriptionResponse,
-						{ status: 400, headers: corsHeaders }
-					);
+					return Response.json({ ok: false, error: 'Invalid email' } as SubscriptionResponse, { status: 400, headers: corsHeaders });
 				}
-
 				if (!consent) {
-					return Response.json(
-						{ ok: false, error: 'Consent required' } as SubscriptionResponse,
-						{ status: 400, headers: corsHeaders }
-					);
+					return Response.json({ ok: false, error: 'Consent required' } as SubscriptionResponse, { status: 400, headers: corsHeaders });
 				}
-
 				if (!isValidPhone(phone)) {
-					return Response.json(
-						{ ok: false, error: 'Invalid phone' } as SubscriptionResponse,
-						{ status: 400, headers: corsHeaders }
-					);
+					return Response.json({ ok: false, error: 'Invalid phone' } as SubscriptionResponse, { status: 400, headers: corsHeaders });
 				}
 
-				const previousRecord = await env.EMAIL_SUBS.get(email);
-				let kvUnsubscribed = false;
-				try {
-					kvUnsubscribed = Boolean(JSON.parse(previousRecord ?? '{}').unsubscribed);
-				} catch {}
+				if (source.startsWith(CI_SOURCE_PREFIX)) {
+					return await startSignup(env, corsHeaders, { email, consent, source, rawPhone: phone, name, body });
+				}
 
-				// Store in KV. The attribution fields are sanitised once and used for
-				// both the record and the log line. Phone is stored only when given:
-				// consent covers texting a number the reader actually left, and an empty
-				// key is not evidence anyone agreed to anything.
+				// Plain subscribe for the other sites: store, mirror into Resend, no code.
 				const extras = attribution(body);
 				await env.EMAIL_SUBS.put(email, JSON.stringify({
-					email,
-					consent,
-					source,
+					email, consent, source,
 					...(phone ? { phone } : {}),
+					...(name ? { name } : {}),
 					...extras,
 					ts: Date.now(),
 				}));
-
 				console.log('[Subscription saved]', { email, source, offer: extras.offer });
-
-				// sendWelcome decides from the stored welcome state whether this person
-				// already has their code, so only the source gates it here.
-				const wantsWelcome = source.startsWith(CI_SOURCE_PREFIX);
-
 				if (env.RESEND_API_KEY && env.RESEND_AUDIENCE_ID) {
-					ctx.waitUntil((async () => {
-						const contact = await upsertResendContact(env, email, kvUnsubscribed);
-						if (!wantsWelcome || contact === 'failed') return;
-						if (contact === 'unsubscribed') {
-							await sendConfirmation(env, email, url.origin);
-						} else {
-							await sendWelcome(env, email, phone, false);
-						}
-					})());
+					ctx.waitUntil(addContact(env, email, name, false).then(() => undefined));
 				} else {
 					console.error('[Resend sync skipped] RESEND_API_KEY or RESEND_AUDIENCE_ID is not set');
 				}
-
-				return Response.json(
-					{ ok: true } as SubscriptionResponse,
-					{ status: 200, headers: corsHeaders }
-				);
+				return Response.json({ ok: true } as SubscriptionResponse, { status: 200, headers: corsHeaders });
 			} catch (error) {
 				console.error('[Subscription error]', error);
 				return Response.json(
@@ -659,11 +286,6 @@ export default {
 					{ status: 500, headers: corsHeaders }
 				);
 			}
-		}
-
-		// /api/ci/resubscribe - signed link from the confirmation email (GET shows, POST acts)
-		if (url.pathname === '/api/ci/resubscribe' && (request.method === 'GET' || request.method === 'POST')) {
-			return handleResubscribe(request, env);
 		}
 
 		// POST /api/events - Server-side conversion events for the Meta ad test.
@@ -757,7 +379,7 @@ export default {
 				);
 			}
 			const list = await env.EMAIL_SUBS.list();
-			const keys = list.keys.map((k) => k.name).filter((k) => !k.startsWith(WELCOME_PREFIX));
+			const keys = list.keys.map((k) => k.name).filter((k) => !INTERNAL_KEY_PREFIXES.some((p) => k.startsWith(p)));
 			return Response.json({ keys, count: keys.length }, { headers: corsHeaders });
 		}
 
