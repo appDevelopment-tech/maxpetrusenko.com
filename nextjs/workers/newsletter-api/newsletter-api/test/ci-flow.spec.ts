@@ -1,7 +1,7 @@
 import { env, createExecutionContext, waitOnExecutionContext, fetchMock } from 'cloudflare:test';
 import { describe, it, expect, beforeAll, afterEach, vi } from 'vitest';
 import worker from '../src';
-import { generateCode, hashOtp, spendSend, keyFor, MAX_SENDS_PER_HOUR } from '../src/otp';
+import { generateCode, hashOtp, spendSend, spendPhoneSend, keyFor, MAX_SENDS_PER_HOUR } from '../src/otp';
 import { startVerification } from '../src/sms';
 
 const RESEND = 'https://api.resend.com';
@@ -72,7 +72,7 @@ const usable = () => promoStatus({ active: true, times_redeemed: 0, max_redempti
 function twilio(startStatus = 201, check: 'approved' | 'pending' = 'approved', checks = 1) {
 	fetchMock.get(VERIFY).intercept({ method: 'POST', path: `/v2/Services/${SID}/Verifications` })
 		.reply(startStatus, (o: any) => { log.verifyCalls.push({ path: 'Verifications', body: new URLSearchParams(String(o.body)) }); return { status: 'pending' }; });
-	if (startStatus < 300) {
+	if (startStatus < 300 && checks > 0) {
 		fetchMock.get(VERIFY).intercept({ method: 'POST', path: `/v2/Services/${SID}/VerificationCheck` })
 			.reply(200, (o: any) => { log.verifyCalls.push({ path: 'VerificationCheck', body: new URLSearchParams(String(o.body)) }); return { status: check }; }).times(checks);
 	}
@@ -222,7 +222,7 @@ describe('step 2: verify', () => {
 		await signup();
 		lookup('subscribed'); promoStatus({ active: false, times_redeemed: 1, max_redemptions: 1, expires_at: null });
 		const r = await verify(emailedCode(log.emails.length - 1));
-		expect(r.body).toEqual({ ok: true, code: null, used: true });
+		expect(r.body).toEqual({ ok: true, code: null, used: true, emailed: false });
 	});
 
 	it('answers 502 and gives no code when Stripe cannot mint', async () => {
@@ -290,9 +290,10 @@ describe('text codes through Twilio Verify', () => {
 
 		lookup('missing', 'second@example.com'); twilio();
 		await signup({ phone: '(305) 555-1234' }, undefined, 'second@example.com');
-		lookup('missing', 'second@example.com'); createContact();
+		// no contact lookup, create or promo call: the owner check runs before any of that
 		const r = await verify('222222', 'second@example.com');
-		expect(r.body).toEqual({ ok: true, code: null, used: true });
+		expect(JSON.parse((await env.EMAIL_SUBS.get('second@example.com')) as string).email_verified).toBe(false);
+		expect(r.body).toEqual({ ok: true, code: null, used: true, emailed: false });
 		expect(log.stripe).toHaveLength(1);
 	});
 
@@ -303,6 +304,97 @@ describe('text codes through Twilio Verify', () => {
 		const logged = JSON.stringify(spy.mock.calls);
 		spy.mockRestore();
 		expect(logged).not.toContain('3055551234');
+	});
+});
+
+describe('phone verification does not prove an email', () => {
+	it('shows a minted code to a phone verify only for the phone it was minted for', async () => {
+		lookup('missing'); twilio();
+		await signup({ phone: '3055551234' });
+		lookup('missing'); createContact(); mint(); emails();
+		const first = await verify('111111');
+		expect(first.body.code).toMatch(/^CI10-/);
+
+		await env.EMAIL_SUBS.put(await keyFor('rs', EMAIL), JSON.stringify([Date.now() - 60_000]));
+		lookup('subscribed'); twilio();
+		await signup({ phone: '(305) 555-1234' });
+		lookup('subscribed'); usable();
+		const again = await verify('222222');
+		expect(again.body.code).toBe(first.body.code);
+	});
+
+	it('never shows an existing code to a phone verify from a different phone, or one minted by email', async () => {
+		emails();
+		await signup();
+		lookup('missing'); createContact(); mint(); emails();
+		const minted = await verify(emailedCode());
+		expect(minted.body.code).toMatch(/^CI10-/);
+
+		await env.EMAIL_SUBS.put(await keyFor('rs', EMAIL), JSON.stringify([Date.now() - 60_000]));
+		lookup('subscribed'); twilio();
+		await signup({ phone: '3055559876' });
+		lookup('subscribed'); usable();
+		const r = await verify('333333');
+		expect(r.body).toEqual({ ok: true, code: null, used: true, emailed: false });
+		expect(JSON.stringify(r.body)).not.toContain(minted.body.code);
+		expect(log.stripe).toHaveLength(1);
+	});
+
+	it('keeps an earlier email proof on the record across a later phone verify', async () => {
+		emails();
+		await signup();
+		lookup('missing'); createContact(); mint(); emails();
+		await verify(emailedCode());
+		await env.EMAIL_SUBS.put(await keyFor('rs', EMAIL), JSON.stringify([Date.now() - 60_000]));
+		lookup('subscribed'); twilio();
+		await signup({ phone: '3055559876' });
+		lookup('subscribed'); usable();
+		await verify('444444');
+		expect(JSON.parse((await env.EMAIL_SUBS.get(EMAIL)) as string).email_verified).toBe(true);
+	});
+
+	it('answers step 1 with the same shape for a normal and an opted-out address', async () => {
+		lookup('missing'); twilio(201, 'approved', 0);
+		const normal = await signup({ phone: '3055551234' });
+		lookup('unsubscribed', 'out@example.com'); emails();
+		const out = await signup({ phone: '3055550000' }, undefined, 'out@example.com');
+		expect(Object.keys(normal.body).sort()).toEqual(Object.keys(out.body).sort());
+		expect(normal.body.channel).toBe('sms');
+		expect(out.body.channel).toBe('email'); // the channel that actually sent
+	});
+});
+
+describe('send budgets and the verify limiter', () => {
+	it('allows a phone 3 Verify sends an hour and 6 a day', async () => {
+		const kv = env.EMAIL_SUBS;
+		const t0 = 2_000_000_000_000;
+		for (let i = 0; i < 3; i++) expect((await spendPhoneSend(kv, '+13055550001', t0 + i * 1000)).ok).toBe(true);
+		expect((await spendPhoneSend(kv, '+13055550001', t0 + 5000)).ok).toBe(false);
+		for (let i = 0; i < 3; i++) expect((await spendPhoneSend(kv, '+13055550001', t0 + 3_700_000 + i * 1000)).ok).toBe(true);
+		const daily = await spendPhoneSend(kv, '+13055550001', t0 + 7_500_000);
+		expect(daily.ok).toBe(false);
+		expect((await spendPhoneSend(kv, '+13055550001', t0 + 90_000_000)).ok).toBe(true);
+		expect(await kv.get(`rs:${await (await import('../src/common')).sha256Hex('+13055550001')}`)).not.toBeNull();
+	});
+
+	it('falls back to email when the phone is over its send budget, and 429s a text resend', async () => {
+		const hash = await (await import('../src/common')).sha256Hex('+13055551234');
+		const now = Date.now();
+		await env.EMAIL_SUBS.put(`rs:${hash}`, JSON.stringify([now - 5000, now - 4000, now - 3000]), { expirationTtl: 3600 });
+		lookup('missing'); emails();
+		expect((await signup({ phone: '3055551234' })).body.channel).toBe('email');
+		expect(log.verifyCalls).toHaveLength(0);
+	});
+
+	it('limits /api/verify per email address on a second binding, keyed by hash', async () => {
+		const seen: string[] = [];
+		const e = testEnv({ VERIFY_LIMITER: { limit: async ({ key }: { key: string }) => { seen.push(key); return { success: false }; } } });
+		const r = await post('/api/verify', { email: 'Reader@Example.com', code: '123456' }, e);
+		expect(r.status).toBe(429);
+		expect(seen).toEqual([await (await import('../src/common')).sha256Hex('reader@example.com')]);
+		// not applied to the other endpoints
+		const ok = testEnv({ VERIFY_LIMITER: { limit: async () => { throw new Error('should not be called'); } } });
+		expect((await post('/api/resend-code', { email: 'nobody@example.com' }, ok)).status).toBe(400);
 	});
 });
 

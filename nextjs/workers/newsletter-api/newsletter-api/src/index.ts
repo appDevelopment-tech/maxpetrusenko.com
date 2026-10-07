@@ -63,6 +63,8 @@ export interface Env {
 	CI_CONFIRM_SECRET?: string;
 	// Cloudflare rate limit binding (wrangler.jsonc `ratelimits`): 10 per IP per 60s.
 	SUBSCRIBE_LIMITER?: { limit(options: { key: string }): Promise<{ success: boolean }> };
+	// Second binding for /api/verify, keyed on sha256(normalized email): 5 per 60s.
+	VERIFY_LIMITER?: { limit(options: { key: string }): Promise<{ success: boolean }> };
 }
 
 
@@ -213,7 +215,24 @@ export default {
 			}
 			try {
 				if (url.pathname === '/api/verify') {
-					return await verifyCode(env, corsHeaders, (await request.json()) as { email?: unknown; code?: unknown });
+					const body = (await request.json()) as { email?: unknown; code?: unknown };
+					// A second limit per address, on top of the per-IP one, so a botnet
+					// cannot spread guesses at one mailbox across many IPs.
+					if (env.VERIFY_LIMITER && typeof body.email === 'string') {
+						try {
+							const key = await sha256Hex(normalizeEmail(body.email));
+							const { success } = await env.VERIFY_LIMITER.limit({ key });
+							if (!success) {
+								return Response.json(
+									{ ok: false, error: 'Too many requests. Try again in a minute.' } as SubscriptionResponse,
+									{ status: 429, headers: { ...corsHeaders, 'Retry-After': '60' } },
+								);
+							}
+						} catch (error) {
+							console.error('[Verify rate limit error]', String(error));
+						}
+					}
+					return await verifyCode(env, corsHeaders, body);
 				}
 				if (url.pathname === '/api/resend-code') {
 					return await resendCode(env, corsHeaders, ((await request.json()) as { email?: unknown }).email);

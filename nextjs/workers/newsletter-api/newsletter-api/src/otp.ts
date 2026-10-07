@@ -109,3 +109,20 @@ export async function spendSend(kv: Store, email: string, now = Date.now()): Pro
 	await kv.put(key, JSON.stringify(sends), { expirationTtl: 3600 });
 	return { ok: true };
 }
+
+// Per phone number, so one number cannot be used to flood a stranger with Verify texts
+// whatever emails it is paired with: 3 an hour and 6 a day. The key hashes the E.164
+// number, so it never collides with the per-email `rs:` keys.
+export async function spendPhoneSend(kv: Store, e164: string, now = Date.now()): Promise<Budget> {
+	const key = `rs:${await sha256Hex(e164)}`;
+	let sends: number[] = [];
+	try {
+		sends = (JSON.parse((await kv.get(key)) ?? '[]') as number[]).filter((t) => now - t < 86_400_000);
+	} catch {}
+	const lastHour = sends.filter((t) => now - t < 3_600_000);
+	if (lastHour.length >= 3) return { ok: false, retryAfter: Math.ceil((lastHour[0] + 3_600_000 - now) / 1000) };
+	if (sends.length >= 6) return { ok: false, retryAfter: Math.ceil((sends[0] + 86_400_000 - now) / 1000) };
+	sends.push(now);
+	await kv.put(key, JSON.stringify(sends), { expirationTtl: 86_400 });
+	return { ok: true };
+}

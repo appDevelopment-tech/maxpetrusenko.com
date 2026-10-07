@@ -16,7 +16,7 @@ import type { Env } from './index';
 import { CI_FROM, RESEND_API, attribution, normalizeEmail, resendPost, sha256Hex, splitName, type SubscriptionRequest } from './common';
 import {
 	LOCK_SECONDS, MAX_ATTEMPTS, OTP_TTL_SECONDS, constantTimeEqual, deletePending, generateCode, hashOtp,
-	isLocked, lock, readPending, spendSend, writePending, type Pending,
+	isLocked, lock, readPending, spendPhoneSend, spendSend, writePending, type Pending,
 } from './otp';
 import { checkVerification, startVerification, toE164, verifyConfigured } from './sms';
 import { createSingleUseCode, promoCodeStatus, randomCodeSuffix } from './stripe';
@@ -96,6 +96,9 @@ interface WelcomeState {
 	pending_code?: string;
 	promo_code?: string;
 	welcome_sent_at?: number;
+	// Who the code was minted for: 'email' (a verified mailbox) or sha256 of the verified
+	// phone. A phone verify only ever sees the code if its phone matches.
+	mint_via?: string;
 }
 
 async function readState(env: Env, key: string): Promise<WelcomeState> {
@@ -106,7 +109,7 @@ async function readState(env: Env, key: string): Promise<WelcomeState> {
 	}
 }
 
-type CodeResult = { status: 'ok'; code: string; state: WelcomeState; stateKey: string } | { status: 'used' } | { status: 'error' };
+type CodeResult = { status: 'ok'; code: string; state: WelcomeState; stateKey: string; existing: boolean } | { status: 'used' } | { status: 'error' };
 
 // One code per normalized email, ever. An existing code is returned only while Stripe
 // says it is unused and unexpired; otherwise the person has used their code.
@@ -122,7 +125,7 @@ export async function ensureCode(env: Env, email: string): Promise<CodeResult> {
 
 	if (state.promo_code) {
 		const status = await promoCodeStatus(env.STRIPE_SECRET_KEY, state.promo_code, now);
-		return status === 'usable' ? { status: 'ok', code: state.promo_code, state, stateKey } : { status: 'used' };
+		return status === 'usable' ? { status: 'ok', code: state.promo_code, state, stateKey, existing: true } : { status: 'used' };
 	}
 	// Saved before Stripe is called, so a retry after a lost response replays the same
 	// idempotent request instead of minting a second code.
@@ -154,7 +157,7 @@ export async function ensureCode(env: Env, email: string): Promise<CodeResult> {
 	}
 	const next: WelcomeState = { ...state, promo_code: result.code, attempt };
 	delete next.pending_code;
-	return { status: 'ok', code: result.code, state: next, stateKey };
+	return { status: 'ok', code: result.code, state: next, stateKey, existing: false };
 }
 
 function welcomeBody(code: string, firstName = ''): string {
@@ -199,8 +202,11 @@ export async function startSignup(env: Env, cors: Record<string, string>, p: {
 	// A phone code is only for people whose mailbox is not opted out (see top of file).
 	const e164 = p.rawPhone ? toE164(p.rawPhone) : null;
 	let channel: 'sms' | 'email' = 'email';
+	// An opted-out address, a phone over its own send budget (3 an hour, 6 a day), or a
+	// Twilio failure all fall back to the emailed code; the reply reports the channel that
+	// actually sent.
 	if (e164 && verifyConfigured(env) && (await lookupContact(env, p.email)) !== 'unsubscribed') {
-		if (await startVerification(env, e164)) channel = 'sms';
+		if ((await spendPhoneSend(env.EMAIL_SUBS, e164)).ok && (await startVerification(env, e164))) channel = 'sms';
 	}
 
 	const record: Pending = {
@@ -251,6 +257,10 @@ export async function resendCode(env: Env, cors: Record<string, string>, emailRa
 		return reply(cors, { ok: false, error: 'Please wait a moment before asking for another code.', retry_after: budget.retryAfter }, 429, { 'Retry-After': String(budget.retryAfter) });
 	}
 	if (pending.channel === 'sms') {
+		const phoneBudget = await spendPhoneSend(env.EMAIL_SUBS, pending.phone);
+		if (!phoneBudget.ok) {
+			return reply(cors, { ok: false, error: 'Please wait a while before asking for another text.', retry_after: phoneBudget.retryAfter }, 429, { 'Retry-After': String(phoneBudget.retryAfter) });
+		}
 		if (!(await startVerification(env, pending.phone))) return reply(cors, { ok: false, error: 'That did not go through. Try again.' }, 502);
 	} else {
 		const code = generateCode();
@@ -298,29 +308,48 @@ export async function verifyCode(env: Env, cors: Record<string, string>, body: {
 }
 
 async function finishSignup(env: Env, cors: Record<string, string>, p: Pending): Promise<Response> {
-	const emailVerified = p.channel === 'email';
-	const contact = await addContact(env, p.email, p.name, emailVerified);
-	// Subscriber record only now, after verification.
+	const emailHash = await sha256Hex(normalizeEmail(p.email));
+	const bySms = p.channel === 'sms';
+	const phoneHash = bySms ? await sha256Hex(p.phone) : '';
+	const phoneKey = bySms ? `ph:${phoneHash}` : '';
+	const used = () => reply(cors, { ok: true, code: null, used: true, emailed: false });
+
+	let previous: { email_verified?: boolean; verified?: string } = {};
+	try {
+		previous = JSON.parse((await env.EMAIL_SUBS.get(p.email)) ?? '{}');
+	} catch {}
+	const emailVerified = p.channel === 'email' || Boolean(previous.email_verified) || previous.verified === 'email';
+
+	// One code per phone, checked before anything is created: a phone that already
+	// belongs to a different email proves nothing about this one.
+	const owner = bySms ? await env.EMAIL_SUBS.get(phoneKey) : null;
+	const phoneOk = !bySms || !owner || owner === emailHash;
+
+	// Subscriber record is stored either way, once, after verification.
 	try {
 		await env.EMAIL_SUBS.put(p.email, JSON.stringify({
-			email: p.email, consent: p.consent, source: p.source, verified: p.channel,
+			email: p.email, consent: p.consent, source: p.source, verified: p.channel, email_verified: emailVerified,
 			...(p.rawPhone ? { phone: p.rawPhone } : {}), ...(p.name ? { name: p.name } : {}), ...p.extras, ts: Date.now(),
 		}));
 	} catch (error) {
 		console.error('[Subscriber write failed]', String(error));
 	}
-	// One code per phone too, so a single phone cannot farm codes across many emails.
-	let phoneKey = '';
-	if (p.channel === 'sms') {
-		phoneKey = `ph:${await sha256Hex(p.phone)}`;
-		const owner = await env.EMAIL_SUBS.get(phoneKey);
-		if (owner && owner !== (await sha256Hex(normalizeEmail(p.email)))) return reply(cors, { ok: true, code: null, used: true });
-	}
+	if (!phoneOk) return used();
+
+	// Past the owner check, this phone is the first (or the owning) phone for this email,
+	// which is what lets a phone verify add the Resend contact when no emailed code ever
+	// proved the mailbox. `emailVerified` below is what lets an opt-out be reversed.
+	const contact = await addContact(env, p.email, p.name, p.channel === 'email');
+
 	const result = await ensureCode(env, p.email);
-	if (result.status === 'used') return reply(cors, { ok: true, code: null, used: true });
+	if (result.status === 'used') return used();
 	if (result.status === 'error') return reply(cors, { ok: false, error: 'We could not make your code. Try again.' }, 502);
 
 	const { code, state, stateKey } = result;
+	// A text code never reveals a code that was minted for another phone or by email.
+	if (bySms && result.existing && state.mint_via !== phoneHash) return used();
+	if (!result.existing) state.mint_via = bySms ? phoneHash : 'email';
+
 	// An address that did not verify a code and is opted out gets nothing by email.
 	const mayEmail = contact !== 'unsubscribed';
 	if (mayEmail && !state.welcome_sent_at) {
@@ -334,7 +363,7 @@ async function finishSignup(env: Env, cors: Record<string, string>, p: Pending):
 	}
 	try {
 		await env.EMAIL_SUBS.put(stateKey, JSON.stringify(state));
-		if (phoneKey) await env.EMAIL_SUBS.put(phoneKey, await sha256Hex(normalizeEmail(p.email)));
+		if (phoneKey) await env.EMAIL_SUBS.put(phoneKey, emailHash);
 	} catch (error) {
 		console.error('[Code state write failed]', String(error));
 	}
