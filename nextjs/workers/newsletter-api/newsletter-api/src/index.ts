@@ -20,6 +20,8 @@ interface SubscriptionRequest {
 	// Optional: a form that only ever asked for an email keeps working with this
 	// unset. Present only on the Miami Contact Improv forms as of 2026-09-28.
 	phone?: string;
+	// Optional full name from the form; first word becomes the Resend first_name.
+	name?: string;
 	// Honeypot. A real form never fills this field; a submission that does is
 	// answered as if it worked and never stored.
 	company?: string;
@@ -86,7 +88,7 @@ const RESEND_API = 'https://api.resend.com';
 // Subscribers from the Contact Improv Miami site join the same list as everyone
 // else, but they get a welcome email carrying the series discount code.
 const CI_SOURCE_PREFIX = 'miamicontactimprov';
-const CI_FROM = 'Contact Improv Miami <hello@miamicontactimprov.com>';
+const CI_FROM = 'Miami CI <hello@miamicontactimprov.com>';
 const CI_SUBJECT = 'Your 10% off one event';
 const CI_SERIES_LINK = 'https://miamicontactimprov.com/fundamentals';
 
@@ -238,7 +240,7 @@ type ContactResult = 'created' | 'existing' | 'unsubscribed' | 'failed';
 // Audience-scoped endpoints on purpose: Resend now lists Audiences as deprecated in
 // favour of Segments, but its docs do not show how a new contact is attached to a
 // segment, and this Worker's RESEND_AUDIENCE_ID is the audience the list lives in.
-async function upsertResendContact(env: Env, email: string, kvUnsubscribed: boolean): Promise<ContactResult> {
+async function upsertResendContact(env: Env, email: string, kvUnsubscribed: boolean, name: string): Promise<ContactResult> {
 	const path = `/audiences/${env.RESEND_AUDIENCE_ID}/contacts/${encodeURIComponent(email)}`;
 	let lookup: Response;
 	try {
@@ -256,7 +258,11 @@ async function upsertResendContact(env: Env, email: string, kvUnsubscribed: bool
 		return 'failed';
 	}
 	try {
-		const response = await resendPost(env, `/audiences/${env.RESEND_AUDIENCE_ID}/contacts`, { email, unsubscribed: false });
+		const response = await resendPost(env, `/audiences/${env.RESEND_AUDIENCE_ID}/contacts`, {
+			email,
+			unsubscribed: false,
+			...(name ? { first_name: splitName(name).first, ...(splitName(name).last ? { last_name: splitName(name).last } : {}) } : {}),
+		});
 		if (!response.ok) {
 			console.error('[Resend contact failed]', response.status, await response.text());
 			return 'failed';
@@ -304,7 +310,7 @@ async function sendConfirmation(env: Env, email: string, origin: string): Promis
 // SMS if the one-per-number rule allows).
 async function handleResubscribe(request: Request, env: Env): Promise<Response> {
 	const html = (status: number, message: string) =>
-		new Response(plainPage('Contact Improv Miami', message), { status, headers: { 'Content-Type': 'text/html; charset=utf-8' } });
+		new Response(plainPage('Miami CI', message), { status, headers: { 'Content-Type': 'text/html; charset=utf-8' } });
 	if (!env.CI_CONFIRM_SECRET) return html(503, 'This link is not available right now.');
 
 	let params: URLSearchParams | FormData;
@@ -358,15 +364,18 @@ async function handleResubscribe(request: Request, env: Env): Promise<Response> 
 		console.error('[Resubscribe record failed]', String(error));
 	}
 	let phone = '';
+	let name = '';
 	try {
-		phone = String(JSON.parse((await env.EMAIL_SUBS.get(email)) ?? '{}').phone ?? '');
+		const record = JSON.parse((await env.EMAIL_SUBS.get(email)) ?? '{}');
+		phone = String(record.phone ?? '');
+		name = cleanName(record.name);
 	} catch {}
-	await sendWelcome(env, email, phone, true);
+	await sendWelcome(env, email, phone, true, name);
 	return new Response(null, { status: 303, headers: { Location: 'https://miamicontactimprov.com/?resubscribed=1' } });
 }
 
-function welcomeBody(code: string): string {
-	return `Thanks for signing up.
+function welcomeBody(code: string, firstName = ''): string {
+	return `${firstName ? `Hi ${firstName}, thanks for signing up.` : 'Thanks for signing up.'}
 
 Your code is ${code}. It takes 10% off one event, a class or a jam. It works once and is good for 60 days. Enter it at checkout.
 
@@ -419,7 +428,7 @@ async function readWelcomeState(env: Env, key: string): Promise<WelcomeState> {
 // same code again, but only while Stripe says it is unused and unexpired. Email and SMS
 // are independent: one failing never blocks the other, and each retries on a later
 // signup until it has gone out once.
-async function sendWelcome(env: Env, email: string, phone: string, resend: boolean): Promise<void> {
+async function sendWelcome(env: Env, email: string, phone: string, resend: boolean, name = ''): Promise<void> {
 	if (!env.CI_ONE_EVENT_COUPON_ID || !env.STRIPE_SECRET_KEY) {
 		console.error('[Welcome skipped] CI_ONE_EVENT_COUPON_ID or STRIPE_SECRET_KEY is not set');
 		return;
@@ -483,7 +492,7 @@ async function sendWelcome(env: Env, email: string, phone: string, resend: boole
 				from: CI_FROM,
 				to: [email],
 				subject: CI_SUBJECT,
-				text: welcomeBody(code),
+				text: welcomeBody(code, splitName(name).first),
 			});
 			const payload = (await response.json().catch(() => null)) as { id?: string } | null;
 			if (response.ok) {
@@ -514,6 +523,18 @@ async function sendWelcome(env: Env, email: string, phone: string, resend: boole
 // named below is ignored: the record is built from this list, not from the request.
 const MAX_TEXT = 200;
 const MAX_TAG = 80;
+
+// A person's name from the form: control characters out, whitespace collapsed, 80 chars.
+export function cleanName(value: unknown): string {
+	if (typeof value !== 'string') return '';
+	return value.replace(/[\u0000-\u001f\u007f-\u009f]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 80);
+}
+
+// Split on the first space: "Ana Maria Lopez" is first "Ana", last "Maria Lopez".
+export function splitName(name: string): { first: string; last: string } {
+	const i = name.indexOf(' ');
+	return i === -1 ? { first: name, last: '' } : { first: name.slice(0, i), last: name.slice(i + 1).trim() };
+}
 
 function text(value: unknown, max: number): string {
 	return typeof value === 'string' ? value.trim().slice(0, max) : '';
@@ -575,6 +596,7 @@ export default {
 				const consent = Boolean(body.consent);
 				const source = (body.source || 'unknown').slice(0, 64);
 				const phone = text(body.phone, 32);
+				const name = cleanName(body.name);
 
 				// Honeypot: a real submission never fills this field. Answer as if it
 				// worked, so a bot filling it learns nothing, and never touch KV or
@@ -624,6 +646,7 @@ export default {
 					consent,
 					source,
 					...(phone ? { phone } : {}),
+					...(name ? { name } : {}),
 					...extras,
 					ts: Date.now(),
 				}));
@@ -636,12 +659,12 @@ export default {
 
 				if (env.RESEND_API_KEY && env.RESEND_AUDIENCE_ID) {
 					ctx.waitUntil((async () => {
-						const contact = await upsertResendContact(env, email, kvUnsubscribed);
+						const contact = await upsertResendContact(env, email, kvUnsubscribed, name);
 						if (!wantsWelcome || contact === 'failed') return;
 						if (contact === 'unsubscribed') {
 							await sendConfirmation(env, email, url.origin);
 						} else {
-							await sendWelcome(env, email, phone, false);
+							await sendWelcome(env, email, phone, false, name);
 						}
 					})());
 				} else {

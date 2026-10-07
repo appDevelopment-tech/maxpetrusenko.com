@@ -256,7 +256,7 @@ describe('POST /api/subscribe', () => {
 		expect(sent.emails).toHaveLength(1);
 
 		const mail = sent.emails[0];
-		expect(mail.from).toBe('Contact Improv Miami <hello@miamicontactimprov.com>');
+		expect(mail.from).toBe('Miami CI <hello@miamicontactimprov.com>');
 		expect(mail.to).toEqual(['reader@example.com']);
 		expect(sent.stripe).toHaveLength(1);
 		const promo = new URLSearchParams(sent.stripe[0].body);
@@ -349,6 +349,53 @@ describe('POST /api/subscribe', () => {
 		expect(keys[1]).toMatch(/-2$/);
 	});
 
+	function subscribeWithName(name: unknown) {
+		return call('/api/subscribe', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({ email: 'reader@example.com', consent: true, source: 'miamicontactimprov:popup:home', name }),
+		});
+	}
+
+	it('stores a cleaned name, splits it for Resend, and greets by first name', async () => {
+		interceptContacts();
+		interceptPromo();
+		interceptEmails();
+
+		await subscribeWithName('  Ana \u0007 Maria   Lopez ');
+
+		expect(sent.contacts[0]).toMatchObject({ email: 'reader@example.com', first_name: 'Ana', last_name: 'Maria Lopez' });
+		const stored = JSON.parse((await env.EMAIL_SUBS.get('reader@example.com')) ?? '{}');
+		expect(stored.name).toBe('Ana Maria Lopez');
+		expect(sent.emails[0].text.startsWith('Hi Ana, thanks for signing up.')).toBe(true);
+		expect(sent.emails[0].text.split(/\s+/).filter(Boolean).length).toBeLessThanOrEqual(120);
+	});
+
+	it('works without a name: no name fields, plain greeting', async () => {
+		interceptContacts();
+		interceptPromo();
+		interceptEmails();
+
+		await subscribeWithName(undefined);
+
+		expect(sent.contacts[0]).not.toHaveProperty('first_name');
+		expect(sent.contacts[0]).not.toHaveProperty('last_name');
+		const stored = JSON.parse((await env.EMAIL_SUBS.get('reader@example.com')) ?? '{}');
+		expect(stored).not.toHaveProperty('name');
+		expect(sent.emails[0].text.startsWith('Thanks for signing up.')).toBe(true);
+	});
+
+	it('keeps a single word as first name only and caps the name at 80 characters', async () => {
+		interceptContacts();
+		interceptPromo();
+		interceptEmails();
+
+		await subscribeWithName('Zed' + 'z'.repeat(200));
+
+		expect(sent.contacts[0].first_name).toHaveLength(80);
+		expect(sent.contacts[0]).not.toHaveProperty('last_name');
+	});
+
 	it('texts the code to a phone number, in E.164, within 160 characters', async () => {
 		interceptContacts();
 		interceptPromo();
@@ -363,6 +410,7 @@ describe('POST /api/subscribe', () => {
 		expect(sms.get('To')).toBe('+13055551234');
 		expect(sms.get('From')).toBe('+18335550100');
 		expect(sms.get('Body')).toBe(smsBody(code));
+		expect(sms.get('Body')).toMatch(/^Miami CI: /);
 		expect((sms.get('Body') ?? '').length).toBeLessThanOrEqual(160);
 		expect(sent.sms[0].auth).toBe(`Basic ${btoa('ACtest:twilio_token_test')}`);
 		expect(sent.emails).toHaveLength(1);

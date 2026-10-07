@@ -45,7 +45,7 @@ export async function verifyConfirmation(secret: string, params: URLSearchParams
 }
 
 export function confirmationBody(link: string): string {
-	return `You asked to get emails from Contact Improv Miami again.
+	return `You asked to get emails from Miami CI again.
 
 Confirm here: ${link}
 
@@ -72,6 +72,6 @@ export function confirmPage(email: string, expires: string, sig: string): string
 	const hidden = (name: string, value: string) => `<input type="hidden" name="${name}" value="${escapeHtml(value)}">`;
 	return shell(
 		'Confirm',
-		`<p>Get emails from Contact Improv Miami again?</p><form method="post" action="/api/ci/resubscribe">${hidden('e', email)}${hidden('x', expires)}${hidden('s', sig)}<button type="submit" style="font:inherit;padding:.5rem 1rem">Confirm</button></form>`,
+		`<p>Get emails from Miami CI again?</p><form method="post" action="/api/ci/resubscribe">${hidden('e', email)}${hidden('x', expires)}${hidden('s', sig)}<button type="submit" style="font:inherit;padding:.5rem 1rem">Confirm</button></form>`,
 	);
 }

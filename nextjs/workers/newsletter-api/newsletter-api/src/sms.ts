@@ -27,7 +27,7 @@ export function toE164(raw: string): string | null {
 }
 
 export function smsBody(code: string): string {
-	return `Contact Improv Miami: your 10% code is ${code}, one event, valid 60 days. Book at miamicontactimprov.com. Reply STOP to opt out.`;
+	return `Miami CI: your 10% code is ${code}, one event, valid 60 days. Book at miamicontactimprov.com. Reply STOP to opt out.`;
 }
 
 function mask(phone: string): string {
