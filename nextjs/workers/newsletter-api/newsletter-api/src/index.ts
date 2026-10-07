@@ -11,7 +11,7 @@
 import { handleCheckout } from './checkout';
 import { createSingleUseCode, promoCodeStatus, randomCodeSuffix } from './stripe';
 import { sendSms, type TwilioEnv } from './sms';
-import { confirmationBody, confirmationLink, plainPage, verifyConfirmation } from './resubscribe';
+import { confirmationBody, confirmationLink, confirmPage, plainPage, verifyConfirmation } from './resubscribe';
 
 interface SubscriptionRequest {
 	email: string;
@@ -297,18 +297,47 @@ async function sendConfirmation(env: Env, email: string, origin: string): Promis
 	}
 }
 
-// GET /api/ci/resubscribe: the only place an opt-out is reversed, and only with a
-// valid, unexpired signature. Re-sends the same unused code (email, and SMS if the
-// one-per-number rule allows it).
+// /api/ci/resubscribe: the only place an opt-out is reversed, and only after a click.
+// GET shows a Confirm button and changes nothing (mail scanners and link previews fetch
+// links). POST re-verifies the signature, PATCHes unsubscribed:false, records
+// resubscribed_at (a repeat is refused), and re-sends the same unused code (email, and
+// SMS if the one-per-number rule allows).
 async function handleResubscribe(request: Request, env: Env): Promise<Response> {
-	const params = new URL(request.url).searchParams;
-	const page = (status: number, message: string) =>
+	const html = (status: number, message: string) =>
 		new Response(plainPage('Contact Improv Miami', message), { status, headers: { 'Content-Type': 'text/html; charset=utf-8' } });
-	if (!env.CI_CONFIRM_SECRET) return page(503, 'This link is not available right now.');
+	if (!env.CI_CONFIRM_SECRET) return html(503, 'This link is not available right now.');
+
+	let params: URLSearchParams | FormData;
+	if (request.method === 'POST') {
+		try {
+			params = await request.formData();
+		} catch {
+			return html(400, 'This link is not valid.');
+		}
+	} else {
+		params = new URL(request.url).searchParams;
+	}
 	const verdict = await verifyConfirmation(env.CI_CONFIRM_SECRET, params, Math.floor(Date.now() / 1000));
-	if (verdict === 'expired') return page(410, 'This link expired. Sign up again on the site to get a new one.');
-	if (verdict !== 'ok') return page(400, 'This link is not valid.');
-	const email = (params.get('e') ?? '').trim().toLowerCase();
+	if (verdict === 'expired') return html(410, 'This link expired. Sign up again on the site to get a new one.');
+	if (verdict !== 'ok') return html(400, 'This link is not valid.');
+	const email = String(params.get('e') ?? '').trim().toLowerCase();
+
+	const doneKey = `ci-resub:${await sha256Hex(normalizeEmail(email))}`;
+	let already = false;
+	try {
+		already = Boolean(await env.EMAIL_SUBS.get(doneKey));
+	} catch (error) {
+		console.error('[Resubscribe state read failed]', String(error));
+	}
+	if (already) return html(200, 'You are already subscribed.');
+
+	if (request.method !== 'POST') {
+		return new Response(
+			confirmPage(email, String(params.get('x') ?? ''), String(params.get('s') ?? '')),
+			{ status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8' } },
+		);
+	}
+
 	try {
 		const response = await fetch(`${RESEND_API}/audiences/${env.RESEND_AUDIENCE_ID}/contacts/${encodeURIComponent(email)}`, {
 			method: 'PATCH',
@@ -317,18 +346,23 @@ async function handleResubscribe(request: Request, env: Env): Promise<Response> 
 		});
 		if (!response.ok) {
 			console.error('[Resend resubscribe failed]', response.status);
-			return page(502, 'That did not go through. Try the link again in a minute.');
+			return html(502, 'That did not go through. Try the link again in a minute.');
 		}
 	} catch (error) {
 		console.error('[Resend resubscribe error]', String(error));
-		return page(502, 'That did not go through. Try the link again in a minute.');
+		return html(502, 'That did not go through. Try the link again in a minute.');
+	}
+	try {
+		await env.EMAIL_SUBS.put(doneKey, JSON.stringify({ resubscribed_at: Date.now() }));
+	} catch (error) {
+		console.error('[Resubscribe record failed]', String(error));
 	}
 	let phone = '';
 	try {
 		phone = String(JSON.parse((await env.EMAIL_SUBS.get(email)) ?? '{}').phone ?? '');
 	} catch {}
 	await sendWelcome(env, email, phone, true);
-	return new Response(null, { status: 302, headers: { Location: 'https://miamicontactimprov.com/?resubscribed=1' } });
+	return new Response(null, { status: 303, headers: { Location: 'https://miamicontactimprov.com/?resubscribed=1' } });
 }
 
 function welcomeBody(code: string): string {
@@ -627,8 +661,8 @@ export default {
 			}
 		}
 
-		// GET /api/ci/resubscribe - signed link from the confirmation email
-		if (url.pathname === '/api/ci/resubscribe' && request.method === 'GET') {
+		// /api/ci/resubscribe - signed link from the confirmation email (GET shows, POST acts)
+		if (url.pathname === '/api/ci/resubscribe' && (request.method === 'GET' || request.method === 'POST')) {
 			return handleResubscribe(request, env);
 		}
 

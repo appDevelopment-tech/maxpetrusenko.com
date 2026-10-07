@@ -22,7 +22,7 @@ function constantTimeEqual(a: string, b: string): boolean {
 }
 
 export async function signConfirmation(secret: string, email: string, expires: number): Promise<string> {
-	return hmacHex(secret, `${email.trim().toLowerCase()}.${expires}`);
+	return hmacHex(secret, `${email.trim().toLowerCase()}\n${expires}`);
 }
 
 export async function confirmationLink(origin: string, secret: string, email: string, nowSeconds: number): Promise<string> {
@@ -34,10 +34,10 @@ export async function confirmationLink(origin: string, secret: string, email: st
 
 export type Verdict = 'ok' | 'expired' | 'invalid';
 
-export async function verifyConfirmation(secret: string, params: URLSearchParams, nowSeconds: number): Promise<Verdict> {
-	const email = params.get('e') ?? '';
+export async function verifyConfirmation(secret: string, params: URLSearchParams | FormData, nowSeconds: number): Promise<Verdict> {
+	const email = String(params.get('e') ?? '');
 	const expires = Number(params.get('x'));
-	const sig = params.get('s') ?? '';
+	const sig = String(params.get('s') ?? '');
 	if (!email || !Number.isInteger(expires) || !sig) return 'invalid';
 	const expected = await signConfirmation(secret, email, expires);
 	if (!constantTimeEqual(sig, expected)) return 'invalid';
@@ -54,6 +54,24 @@ The link works for 48 hours. If it was not you, ignore this and nothing changes.
 Max`;
 }
 
+function shell(title: string, bodyHtml: string): string {
+	return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${title}</title></head><body style="font-family:Georgia,serif;max-width:32rem;margin:15vh auto;padding:0 1rem">${bodyHtml}<p><a href="https://miamicontactimprov.com/">miamicontactimprov.com</a></p></body></html>`;
+}
+
 export function plainPage(title: string, message: string): string {
-	return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${title}</title></head><body style="font-family:Georgia,serif;max-width:32rem;margin:15vh auto;padding:0 1rem"><p>${message}</p><p><a href="https://miamicontactimprov.com/">miamicontactimprov.com</a></p></body></html>`;
+	return shell(title, `<p>${message}</p>`);
+}
+
+function escapeHtml(value: string): string {
+	return value.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+// A GET must have no side effects (mail scanners and link previews fetch links), so the
+// link only shows this page; the button posts the same signed values back.
+export function confirmPage(email: string, expires: string, sig: string): string {
+	const hidden = (name: string, value: string) => `<input type="hidden" name="${name}" value="${escapeHtml(value)}">`;
+	return shell(
+		'Confirm',
+		`<p>Get emails from Contact Improv Miami again?</p><form method="post" action="/api/ci/resubscribe">${hidden('e', email)}${hidden('x', expires)}${hidden('s', sig)}<button type="submit" style="font:inherit;padding:.5rem 1rem">Confirm</button></form>`,
+	);
 }

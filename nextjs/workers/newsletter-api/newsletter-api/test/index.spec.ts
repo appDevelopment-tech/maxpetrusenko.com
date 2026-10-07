@@ -452,15 +452,59 @@ describe('POST /api/subscribe', () => {
 		expect(sent.stripe).toHaveLength(1);
 	});
 
+	async function postLink(path: string) {
+		const ctx = createExecutionContext();
+		const res = await worker.fetch(new Request('https://newsletter.test/api/ci/resubscribe', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+			body: new URL(`https://x${path}`).searchParams.toString(),
+		}), testEnv(), ctx);
+		await waitOnExecutionContext(ctx);
+		return res;
+	}
+
+	it('GET on a valid link only shows a Confirm form and changes nothing', async () => {
+		await seedCode();
+		const before = sent.emails.length;
+
+		const res = await getLink(await link('reader@example.com', Math.floor(Date.now() / 1000) + 3600));
+		const html = await res.text();
+
+		expect(res.status).toBe(200);
+		expect(html).toContain('<form method="post" action="/api/ci/resubscribe">');
+		expect(html).toContain('name="e" value="reader@example.com"');
+		expect(html).toContain('name="s"');
+		expect(html).toContain('Confirm');
+		expect(sent.emails).toHaveLength(before);
+		expect((await env.EMAIL_SUBS.list()).keys.some((k) => k.name.startsWith('ci-resub:'))).toBe(false);
+	});
+
+	it('POST resubscribes once and refuses a repeat', async () => {
+		await seedCode();
+		interceptPatch();
+		interceptPromoStatus({ active: true, times_redeemed: 0, max_redemptions: 1, expires_at: Math.floor(Date.now() / 1000) + 86400 });
+		interceptEmails();
+		const path = await link('reader@example.com', Math.floor(Date.now() / 1000) + 3600);
+
+		const first = await postLink(path);
+		expect(first.status).toBe(303);
+		const second = await postLink(path);
+		expect(second.status).toBe(200);
+		expect(await second.text()).toContain('You are already subscribed');
+		expect(sent.emails).toHaveLength(2);
+		const done = (await env.EMAIL_SUBS.list()).keys.map((k) => k.name).find((k) => k.startsWith('ci-resub:')) as string;
+		expect(JSON.parse((await env.EMAIL_SUBS.get(done)) ?? '{}').resubscribed_at).toBeGreaterThan(0);
+	});
+
 	it('a valid signed link resubscribes and re-sends the same unused code', async () => {
 		const code = await seedCode();
 		interceptPatch();
 		interceptPromoStatus({ active: true, times_redeemed: 0, max_redemptions: 1, expires_at: Math.floor(Date.now() / 1000) + 86400 });
 		interceptEmails();
 
-		const res = await getLink(await link('reader@example.com', Math.floor(Date.now() / 1000) + 3600));
+		const res = await postLink(await link('reader@example.com', Math.floor(Date.now() / 1000) + 3600));
 
-		expect(res.status).toBe(302);
+		expect(res.status).toBe(303);
 		expect(res.headers.get('Location')).toBe('https://miamicontactimprov.com/?resubscribed=1');
 		expect(sent.contacts.at(-1)).toEqual({ unsubscribed: false });
 		expect(sent.stripe).toHaveLength(1);
@@ -473,9 +517,9 @@ describe('POST /api/subscribe', () => {
 		interceptPatch();
 		interceptPromoStatus({ active: false, times_redeemed: 1, max_redemptions: 1, expires_at: null });
 
-		const res = await getLink(await link('reader@example.com', Math.floor(Date.now() / 1000) + 3600));
+		const res = await postLink(await link('reader@example.com', Math.floor(Date.now() / 1000) + 3600));
 
-		expect(res.status).toBe(302);
+		expect(res.status).toBe(303);
 		expect(sent.stripe).toHaveLength(1);
 		expect(sent.emails).toHaveLength(1);
 	});
@@ -489,6 +533,8 @@ describe('POST /api/subscribe', () => {
 		expect((await getLink(good.slice(0, -2) + '00')).status).toBe(400);
 		expect((await getLink(await link('reader@example.com', future, 'wrong_secret'))).status).toBe(400);
 		expect((await getLink('/api/ci/resubscribe')).status).toBe(400);
+		expect((await postLink(good.replace('reader%40example.com', 'other%40example.com'))).status).toBe(400);
+		expect((await postLink(await link('reader@example.com', Math.floor(Date.now() / 1000) - 5))).status).toBe(410);
 	});
 
 	it('texts a given number once ever, even for a different email', async () => {
