@@ -20,9 +20,9 @@ import {
 } from './otp';
 import { checkVerification, startVerification, toE164, verifyConfigured } from './sms';
 import { createSingleUseCode, promoCodeStatus, randomCodeSuffix } from './stripe';
+import { codeEmailHtml, codeEmailText, type CodeEmail } from './email';
 
 const CI_SUBJECT = 'Your 10% off one event';
-const CI_SERIES_LINK = 'https://miamicontactimprov.com/fundamentals';
 const WELCOME_PREFIX = 'ci10:';
 
 type Json = Record<string, unknown>;
@@ -160,18 +160,16 @@ export async function ensureCode(env: Env, email: string): Promise<CodeResult> {
 	return { status: 'ok', code: result.code, state: next, stateKey, existing: false };
 }
 
-function welcomeBody(code: string, firstName = ''): string {
-	return `${firstName ? `Hi ${firstName}, thanks for signing up.` : 'Thanks for signing up.'}
-
-Your code is ${code}. It takes 10% off one event, a class or a jam. It works once and is good for 60 days. Enter it at checkout.
-
-Fridays 7:00 to 9:00 PM at Inner Motion in Hallandale Beach. No partner and no experience needed, just clothes you can roll in.
-
-Dates, the venue and what we cover: ${CI_SERIES_LINK}
-
-After this we send an occasional discount, about once a month, 20% off. Reply if you want off the list.
-
-Max`;
+function welcomeEmail(code: string, firstName = ''): CodeEmail {
+	return {
+		greeting: firstName ? `Hi ${firstName}, thanks for signing up.` : 'Thanks for signing up.',
+		intro: 'Your code for 10% off one event, a class or a jam:',
+		code,
+		buttonLabel: 'Buy your ticket, 10% off applied',
+		terms: 'The button applies the code for you. It works once and is good for 60 days.',
+		details: 'Fridays 7:00 to 9:00 PM at Inner Motion in Hallandale Beach. No partner and no experience needed, just clothes you can roll in.',
+		footer: 'After this we send an occasional discount, about once a month, 20% off. Reply if you want off the list.',
+	};
 }
 
 export function otpBody(code: string): string {
@@ -354,7 +352,7 @@ async function finishSignup(env: Env, cors: Record<string, string>, p: Pending):
 	const mayEmail = contact !== 'unsubscribed';
 	if (mayEmail && !state.welcome_sent_at) {
 		try {
-			const response = await resendPost(env, '/emails', { from: CI_FROM, to: [p.email], subject: CI_SUBJECT, text: welcomeBody(code, splitName(p.name).first) });
+			const response = await resendPost(env, '/emails', { from: CI_FROM, to: [p.email], subject: CI_SUBJECT, text: codeEmailText(welcomeEmail(code, splitName(p.name).first)), html: codeEmailHtml(welcomeEmail(code, splitName(p.name).first)) });
 			if (response.ok) state.welcome_sent_at = Date.now();
 			else console.error('[Welcome email failed]', response.status);
 		} catch (error) {

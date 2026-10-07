@@ -10,6 +10,8 @@
 
 import { handleCheckout } from './checkout';
 import { addContact, lookupContact, resendCode, startSignup, verifyCode } from './ci';
+import { monthlyRun } from './monthly';
+import { handleUnsubscribe } from './unsub';
 import {
 	CI_SOURCE_PREFIX, INTERNAL_KEY_PREFIXES, MAX_TAG, MAX_TEXT, attribution, cleanName, isValidEmail, isValidPhone, normalizeEmail, sha256Hex, splitName, text,
 	type SubscriptionRequest,
@@ -27,7 +29,7 @@ interface KVNamespace {
 	get(key: string): Promise<string | null>;
 	put(key: string, value: string, options?: { expirationTtl?: number }): Promise<void>;
 	delete(key: string): Promise<void>;
-	list(): Promise<{ keys: Array<{ name: string }> }>;
+	list(options?: { prefix?: string; cursor?: string }): Promise<{ keys: Array<{ name: string }>; list_complete?: boolean; cursor?: string }>;
 }
 
 interface ExecutionContext {
@@ -59,11 +61,15 @@ export interface Env {
 	TWILIO_AUTH_TOKEN?: string;
 	// Twilio Verify service (VA...) that sends and checks the text one-time code.
 	TWILIO_VERIFY_SID?: string;
+	// Stripe coupon id for the monthly personal 20% codes (percent_off 20, duration once).
+	CI_MONTHLY_COUPON_ID?: string;
 	// Keys the hash of an emailed one-time code (HMAC-SHA256); never leaves the Worker.
 	CI_CONFIRM_SECRET?: string;
 	// Cloudflare rate limit binding (wrangler.jsonc `ratelimits`): 10 per IP per 60s.
 	SUBSCRIBE_LIMITER?: { limit(options: { key: string }): Promise<{ success: boolean }> };
 	// Second binding for /api/verify, keyed on sha256(normalized email): 5 per 60s.
+	// Third binding for /api/checkout, per IP: 20 per 60s.
+	CHECKOUT_LIMITER?: { limit(options: { key: string }): Promise<{ success: boolean }> };
 	VERIFY_LIMITER?: { limit(options: { key: string }): Promise<{ success: boolean }> };
 }
 
@@ -288,6 +294,25 @@ export default {
 			}
 		}
 
+		// POST /api/ci/monthly-run: the monthly 20% campaign. Admin only; see monthly.ts.
+		if (url.pathname === '/api/ci/monthly-run' && request.method === 'POST') {
+			if (!isAdmin(request, env)) {
+				return Response.json({ ok: false, error: 'Unauthorized' }, { status: 401, headers: corsHeaders });
+			}
+			// Anything but a valid JSON body with confirm "send" and dry_run false is a dry run.
+			let body: unknown = null;
+			try {
+				body = await request.json();
+			} catch {}
+			const result = await monthlyRun(env, url.origin, body);
+			return Response.json(result, { status: result.ok ? 200 : result.locked ? 409 : 500, headers: corsHeaders });
+		}
+
+		// Signed unsubscribe link in the monthly email (GET shows a button, POST acts).
+		if (url.pathname === '/api/ci/unsubscribe' && (request.method === 'GET' || request.method === 'POST')) {
+			return handleUnsubscribe(request, env);
+		}
+
 		// POST /api/events - Server-side conversion events for the Meta ad test.
 		// The browser never talks to Meta and the site sets no cookies, so the only
 		// identifier here is an address the caller already holds. Every route into
@@ -367,6 +392,19 @@ export default {
 
 		// POST /api/checkout - Stripe Checkout Session for a drop-in ticket (class/jam/combo)
 		if (url.pathname === '/api/checkout' && request.method === 'POST') {
+			if (env.CHECKOUT_LIMITER) {
+				try {
+					const { success } = await env.CHECKOUT_LIMITER.limit({ key: request.headers.get('CF-Connecting-IP') || 'unknown' });
+					if (!success) {
+						return Response.json(
+							{ ok: false, error: 'Too many requests. Try again in a minute.' },
+							{ status: 429, headers: { ...corsHeaders, 'Retry-After': '60' } },
+						);
+					}
+				} catch (error) {
+					console.error('[Checkout rate limit error]', String(error));
+				}
+			}
 			return handleCheckout(request, env, corsHeaders);
 		}
 

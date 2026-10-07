@@ -6,7 +6,7 @@ export const RESEND_API = 'https://api.resend.com';
 export const CI_SOURCE_PREFIX = 'miamicontactimprov';
 export const CI_FROM = 'Miami CI <hello@miamicontactimprov.com>';
 // KV keys that hold flow state, not subscribers; hidden from /api/list.
-export const INTERNAL_KEY_PREFIXES = ['ci10:', 'otp:', 'lock:', 'rs:', 'ph:'];
+export const INTERNAL_KEY_PREFIXES = ['ci10:', 'otp:', 'lock:', 'rs:', 'ph:', 'm20'];
 export const MAX_TEXT = 200;
 export const MAX_TAG = 80;
 

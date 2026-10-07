@@ -8,6 +8,8 @@ META_PIXEL_ID=
 META_CAPI_TOKEN=
 META_TEST_EVENT_CODE=
 STRIPE_SECRET_KEY=sk_test_placeholder
+# Stripe coupon (percent_off 20, duration once) for the monthly personal codes; create it with tools/create_monthly_coupon.sh.
+CI_MONTHLY_COUPON_ID=
 # Keys the hash of an emailed one-time code (any long random string, e.g. openssl rand -hex 32).
 CI_CONFIRM_SECRET=
 # Twilio Verify sends the text one-time code. Doppler api_keys/dev: BLINDFOLD_DANCE_TWILIO_ACCOUNT_SID,
