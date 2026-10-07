@@ -92,37 +92,53 @@ export function randomCodeSuffix(length = 6): string {
 	return out;
 }
 
+// Pinned because Stripe moved the coupon reference on promotion code creation to
+// `promotion[type]=coupon&promotion[coupon]=<id>` in this version; the body below is
+// written for it and must not drift with the account's default version.
+export const STRIPE_PROMO_VERSION = '2025-09-30.clover';
+export const PROMO_TTL_SECONDS = 60 * 24 * 60 * 60;
+
+export type PromoResult =
+	| { ok: true; code: string }
+	// definite: Stripe answered and refused, so the idempotency key is spent and the
+	// next try needs a fresh key. Not definite (network error): retry the same key.
+	| { ok: false; definite: boolean };
+
 /**
  * Creates a single-use promotion code on an existing coupon. `max_redemptions=1`
- * is what makes the offer once per person: the code goes to one inbox and dies on
- * first use. Returns the code string, or null on any failure (the caller logs and
- * skips the email rather than sending a blank or unusable code).
+ * makes the offer once per person; `expires_at` is 60 days out. The Idempotency-Key
+ * lets a retry of the same attempt replay instead of minting a second code.
  */
-export async function createSingleUseCode(secretKey: string, couponId: string): Promise<string | null> {
-	// A collision on a random 6-char code is a 400; one retry covers it.
-	for (let attempt = 0; attempt < 2; attempt++) {
-		const code = `CI10-${randomCodeSuffix()}`;
-		const body = new URLSearchParams();
-		body.set('coupon', couponId);
-		body.set('code', code);
-		body.set('max_redemptions', '1');
-		try {
-			const response = await fetch(`${STRIPE_API}/promotion_codes`, {
-				method: 'POST',
-				headers: {
-					Authorization: `Bearer ${secretKey}`,
-					'Content-Type': 'application/x-www-form-urlencoded',
-				},
-				body: body.toString(),
-			});
-			const payload = (await response.json().catch(() => null)) as
-				| { code?: string; error?: { message?: string } }
-				| null;
-			if (response.ok && payload?.code) return payload.code;
-			console.error('[Promotion code failed]', response.status, payload?.error?.message ?? '');
-		} catch (error) {
-			console.error('[Promotion code error]', error);
-		}
+export async function createSingleUseCode(
+	secretKey: string,
+	couponId: string,
+	opts: { code: string; idempotencyKey: string; nowSeconds: number },
+): Promise<PromoResult> {
+	const body = new URLSearchParams();
+	body.set('promotion[type]', 'coupon');
+	body.set('promotion[coupon]', couponId);
+	body.set('code', opts.code);
+	body.set('max_redemptions', '1');
+	body.set('expires_at', String(opts.nowSeconds + PROMO_TTL_SECONDS));
+	try {
+		const response = await fetch(`${STRIPE_API}/promotion_codes`, {
+			method: 'POST',
+			headers: {
+				Authorization: `Bearer ${secretKey}`,
+				'Content-Type': 'application/x-www-form-urlencoded',
+				'Stripe-Version': STRIPE_PROMO_VERSION,
+				'Idempotency-Key': opts.idempotencyKey,
+			},
+			body: body.toString(),
+		});
+		const payload = (await response.json().catch(() => null)) as
+			| { code?: string; error?: { message?: string } }
+			| null;
+		if (response.ok && payload?.code) return { ok: true, code: payload.code };
+		console.error('[Promotion code failed]', response.status, payload?.error?.message ?? '');
+		return { ok: false, definite: true };
+	} catch (error) {
+		console.error('[Promotion code error]', error);
+		return { ok: false, definite: false };
 	}
-	return null;
 }

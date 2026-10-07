@@ -9,7 +9,7 @@
  */
 
 import { handleCheckout } from './checkout';
-import { createSingleUseCode } from './stripe';
+import { createSingleUseCode, randomCodeSuffix } from './stripe';
 
 interface SubscriptionRequest {
 	email: string;
@@ -243,41 +243,101 @@ One email a month after this one. Reply if you want off the list.
 Max`;
 }
 
+// Lowercase, drop a +tag, and for Gmail drop dots, so one person with several aliases
+// of the same mailbox gets one code.
+export function normalizeEmail(email: string): string {
+	const lowered = email.trim().toLowerCase();
+	const at = lowered.lastIndexOf('@');
+	if (at < 1) return lowered;
+	let local = lowered.slice(0, at).split('+')[0];
+	let domain = lowered.slice(at + 1);
+	if (domain === 'gmail.com' || domain === 'googlemail.com') {
+		local = local.replace(/\./g, '');
+		domain = 'gmail.com';
+	}
+	return `${local}@${domain}`;
+}
+
+// Welcome state lives under the normalized address, apart from the subscriber record,
+// so aliases share it. It decides whether to send, not the signup source: a failed
+// Stripe or Resend call leaves welcome_sent_at empty and the next signup retries.
+interface WelcomeState {
+	attempt?: number;
+	pending_code?: string;
+	promo_code?: string;
+	welcome_sent_at?: number;
+}
+
+const WELCOME_PREFIX = 'ci10:';
+
+async function readWelcomeState(env: Env, key: string): Promise<WelcomeState> {
+	try {
+		return JSON.parse((await env.EMAIL_SUBS.get(key)) ?? '{}') as WelcomeState;
+	} catch {
+		return {};
+	}
+}
+
 async function sendWelcome(env: Env, email: string): Promise<void> {
-	// Each signup gets its own single-use Stripe promotion code on the coupon named by
-	// CI_ONE_EVENT_COUPON_ID (a Worker secret, never in source). If the coupon id or
-	// the Stripe key is missing, or Stripe refuses, the email is skipped rather than
-	// sent with a blank or unusable code.
+	// Each person gets one single-use Stripe promotion code on the coupon named by
+	// CI_ONE_EVENT_COUPON_ID (a Worker secret). If the coupon id or the Stripe key is
+	// missing, or Stripe refuses, the email is skipped rather than sent with a blank
+	// or unusable code.
 	if (!env.CI_ONE_EVENT_COUPON_ID || !env.STRIPE_SECRET_KEY) {
 		console.error('[Welcome email skipped] CI_ONE_EVENT_COUPON_ID or STRIPE_SECRET_KEY is not set');
 		return;
 	}
-	const code = await createSingleUseCode(env.STRIPE_SECRET_KEY, env.CI_ONE_EVENT_COUPON_ID);
-	if (!code) {
-		console.error('[Welcome email skipped] could not create a promotion code');
-		return;
+	const normalized = normalizeEmail(email);
+	const hash = await sha256Hex(normalized);
+	const stateKey = `${WELCOME_PREFIX}${hash}`;
+	const state = await readWelcomeState(env, stateKey);
+	if (state.welcome_sent_at) return;
+
+	if (!state.promo_code) {
+		// Persist the code and attempt before calling Stripe, so a retry after a lost
+		// response replays the same idempotent request instead of minting a second code.
+		const attempt = state.attempt ?? 1;
+		const code = state.pending_code ?? `CI10-${randomCodeSuffix()}`;
+		await env.EMAIL_SUBS.put(stateKey, JSON.stringify({ ...state, attempt, pending_code: code }));
+		const result = await createSingleUseCode(env.STRIPE_SECRET_KEY, env.CI_ONE_EVENT_COUPON_ID, {
+			code,
+			idempotencyKey: `ci10-${hash}-${attempt}`,
+			nowSeconds: Math.floor(Date.now() / 1000),
+		});
+		if (!result.ok) {
+			if (result.definite) {
+				await env.EMAIL_SUBS.put(stateKey, JSON.stringify({ attempt: attempt + 1 }));
+			}
+			console.error('[Welcome email skipped] could not create a promotion code');
+			return;
+		}
+		state.promo_code = result.code;
+		delete state.pending_code;
+		state.attempt = attempt;
+		await env.EMAIL_SUBS.put(stateKey, JSON.stringify(state));
 	}
+
 	const response = await resendPost(env, '/emails', {
 		from: CI_FROM,
 		to: [email],
 		subject: CI_SUBJECT,
-		text: welcomeBody(code),
+		text: welcomeBody(state.promo_code),
 	});
 	const payload = (await response.json().catch(() => null)) as { id?: string } | null;
 	if (!response.ok) {
 		console.error('[Welcome email failed]', response.status, JSON.stringify(payload));
 		return;
 	}
-	console.log('[Welcome email sent]', payload?.id ?? 'no id');
-}
-
-function sourceOf(record: string | null): string {
-	if (!record) return '';
+	state.welcome_sent_at = Date.now();
+	await env.EMAIL_SUBS.put(stateKey, JSON.stringify(state));
+	// Mirror onto the subscriber record so the admin endpoints show it.
 	try {
-		return String((JSON.parse(record) as { source?: string }).source ?? '');
-	} catch {
-		return '';
+		const record = JSON.parse((await env.EMAIL_SUBS.get(email)) ?? '{}');
+		await env.EMAIL_SUBS.put(email, JSON.stringify({ ...record, promo_code: state.promo_code, welcome_sent_at: state.welcome_sent_at }));
+	} catch (error) {
+		console.error('[Welcome mirror failed]', error);
 	}
+	console.log('[Welcome email sent]', payload?.id ?? 'no id');
 }
 
 // A signup carries where it came from: the offer that was on screen, the campaign and
@@ -366,7 +426,12 @@ export default {
 					);
 				}
 
-				const previous = sourceOf(await env.EMAIL_SUBS.get(email));
+				const previousRecord = await env.EMAIL_SUBS.get(email);
+				let carried: Record<string, unknown> = {};
+				try {
+					const old = JSON.parse(previousRecord ?? '{}');
+					if (old.promo_code) carried = { promo_code: old.promo_code, welcome_sent_at: old.welcome_sent_at };
+				} catch {}
 
 				// Store in KV. The attribution fields are sanitised once and used for
 				// both the record and the log line. Phone is stored only when given:
@@ -379,14 +444,15 @@ export default {
 					source,
 					...(phone ? { phone } : {}),
 					...extras,
+					...carried,
 					ts: Date.now(),
 				}));
 
 				console.log('[Subscription saved]', { email, source, offer: extras.offer });
 
-				// One welcome per person, on their first contact-improv signup.
-				const wantsWelcome = source.startsWith(CI_SOURCE_PREFIX)
-					&& !previous.startsWith(CI_SOURCE_PREFIX);
+				// sendWelcome decides from the stored welcome state whether this person
+				// already has their code, so only the source gates it here.
+				const wantsWelcome = source.startsWith(CI_SOURCE_PREFIX);
 
 				if (env.RESEND_API_KEY && env.RESEND_AUDIENCE_ID) {
 					ctx.waitUntil((async () => {
@@ -503,7 +569,7 @@ export default {
 				);
 			}
 			const list = await env.EMAIL_SUBS.list();
-			const keys = list.keys.map((k) => k.name);
+			const keys = list.keys.map((k) => k.name).filter((k) => !k.startsWith(WELCOME_PREFIX));
 			return Response.json({ keys, count: keys.length }, { headers: corsHeaders });
 		}
 

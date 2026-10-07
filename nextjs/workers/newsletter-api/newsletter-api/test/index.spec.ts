@@ -50,7 +50,7 @@ function subscribe(email: string, source: string) {
 
 // Interceptors record the payloads they were called with, so a test can assert
 // on what the worker actually sent to Resend.
-const sent: { contacts: any[]; emails: any[]; stripe: string[]; meta: { body: any; path: string }[] } = {
+const sent: { contacts: any[]; emails: any[]; stripe: Array<{ body: string; headers: Record<string, string> }>; meta: { body: any; path: string }[] } = {
 	contacts: [],
 	stripe: [],
 	emails: [],
@@ -74,7 +74,7 @@ function interceptPromo(status = 200, times = 1) {
 		.intercept({ method: 'POST', path: '/v1/promotion_codes' })
 		.reply(status, (opts: any) => {
 			const body = String(opts.body ?? '');
-			sent.stripe.push(body);
+			sent.stripe.push({ body, headers: opts.headers ?? {} });
 			const code = new URLSearchParams(body).get('code');
 			return status === 200 ? { id: 'promo_1', code } : { error: { message: 'boom' } };
 		})
@@ -123,7 +123,7 @@ beforeAll(() => {
 });
 
 afterEach(async () => {
-	await env.EMAIL_SUBS.delete('reader@example.com');
+	for (const k of (await env.EMAIL_SUBS.list()).keys) await env.EMAIL_SUBS.delete(k.name);
 	sent.contacts.length = 0;
 	sent.emails.length = 0;
 	sent.stripe.length = 0;
@@ -215,8 +215,9 @@ describe('POST /api/subscribe', () => {
 		expect(mail.from).toBe('Contact Improv Miami <hello@miamicontactimprov.com>');
 		expect(mail.to).toEqual(['reader@example.com']);
 		expect(sent.stripe).toHaveLength(1);
-		const promo = new URLSearchParams(sent.stripe[0]);
-		expect(promo.get('coupon')).toBe('coupon_test10');
+		const promo = new URLSearchParams(sent.stripe[0].body);
+		expect(promo.get('promotion[type]')).toBe('coupon');
+		expect(promo.get('promotion[coupon]')).toBe('coupon_test10');
 		expect(promo.get('max_redemptions')).toBe('1');
 		expect(promo.get('code')).toMatch(/^CI10-[A-Z0-9]{6}$/);
 		expect(mail.subject).toBe('Your 10% off one event');
@@ -228,9 +229,81 @@ describe('POST /api/subscribe', () => {
 		expect(mail.text.split(/\s+/).filter(Boolean).length).toBeLessThanOrEqual(120);
 	});
 
+	it('sends the exact Stripe form body and headers', async () => {
+		interceptContacts();
+		interceptPromo();
+		interceptEmails();
+		const before = Math.floor(Date.now() / 1000);
+
+		await subscribe('reader@example.com', 'miamicontactimprov:start');
+
+		const { body, headers } = sent.stripe[0];
+		const params = new URLSearchParams(body);
+		expect([...params.keys()].sort()).toEqual(
+			['code', 'expires_at', 'max_redemptions', 'promotion[coupon]', 'promotion[type]'],
+		);
+		const expires = Number(params.get('expires_at'));
+		expect(expires - before).toBeGreaterThanOrEqual(60 * 86400);
+		expect(expires - before).toBeLessThan(60 * 86400 + 60);
+		const lower = Object.fromEntries(Object.entries(headers).map(([k, v]) => [k.toLowerCase(), v]));
+		expect(lower['stripe-version']).toBe('2025-09-30.clover');
+		expect(lower['idempotency-key']).toMatch(/^ci10-[0-9a-f]{64}-1$/);
+		expect(lower['content-type']).toBe('application/x-www-form-urlencoded');
+	});
+
+	it('gives aliases of one gmail mailbox a single code', async () => {
+		interceptContacts(201, 2);
+		interceptPromo();
+		interceptEmails();
+
+		await subscribe('first.last+a@gmail.com', 'miamicontactimprov:start');
+		await subscribe('firstlast@googlemail.com', 'miamicontactimprov:start');
+
+		expect(sent.stripe).toHaveLength(1);
+		expect(sent.emails).toHaveLength(1);
+		await env.EMAIL_SUBS.delete('first.last+a@gmail.com');
+		await env.EMAIL_SUBS.delete('firstlast@googlemail.com');
+	});
+
+	it('retries only the email, with the same code, after Resend fails', async () => {
+		interceptContacts(201, 2);
+		interceptPromo();
+		interceptEmails(500);
+		interceptEmails(200);
+
+		await subscribe('reader@example.com', 'miamicontactimprov:start');
+		expect(sent.emails).toHaveLength(1);
+		const code = new URLSearchParams(sent.stripe[0].body).get('code');
+		await subscribe('reader@example.com', 'miamicontactimprov:start');
+
+		expect(sent.stripe).toHaveLength(1);
+		expect(sent.emails).toHaveLength(2);
+		expect(sent.emails[1].text).toContain(code);
+		const stored = JSON.parse((await env.EMAIL_SUBS.get('reader@example.com')) ?? '{}');
+		expect(stored.promo_code).toBe(code);
+		expect(stored.welcome_sent_at).toBeGreaterThan(0);
+	});
+
+	it('uses a fresh idempotency key after Stripe refuses, on the next signup', async () => {
+		interceptContacts(201, 2);
+		interceptPromo(400);
+		interceptPromo();
+		interceptEmails();
+
+		await subscribe('reader@example.com', 'miamicontactimprov:start');
+		expect(sent.emails).toHaveLength(0);
+		await subscribe('reader@example.com', 'miamicontactimprov:start');
+
+		expect(sent.stripe).toHaveLength(2);
+		expect(sent.emails).toHaveLength(1);
+		const keys = sent.stripe.map((r) => Object.entries(r.headers).find(([k]) => k.toLowerCase() === 'idempotency-key')?.[1]);
+		expect(keys[0]).toMatch(/-1$/);
+		expect(keys[1]).toMatch(/-2$/);
+	});
+
 	it('skips the welcome email when Stripe refuses to create the code', async () => {
 		interceptContacts();
-		interceptPromo(400, 2);
+		interceptPromo(400);
 
 		expect((await subscribe('reader@example.com', 'miamicontactimprov:start')).status).toBe(200);
 		expect(sent.emails).toHaveLength(0);
@@ -308,7 +381,8 @@ describe('POST /api/subscribe', () => {
 		expect((await subscribe('reader@example.com', 'miamicontactimprov:fundamentals')).status).toBe(200);
 
 		const stored = JSON.parse((await env.EMAIL_SUBS.get('reader@example.com')) ?? '{}');
-		expect(Object.keys(stored).sort()).toEqual(['consent', 'email', 'source', 'ts']);
+		// promo_code and welcome_sent_at are the welcome state mirrored onto the record.
+		expect(Object.keys(stored).sort()).toEqual(['consent', 'email', 'promo_code', 'source', 'ts', 'welcome_sent_at']);
 	});
 
 	it('cuts an overlong field and drops the empty and the untexted ones', async () => {
