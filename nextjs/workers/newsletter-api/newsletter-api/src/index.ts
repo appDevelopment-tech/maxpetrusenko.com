@@ -9,6 +9,9 @@
  */
 
 import { handleCheckout } from './checkout';
+import { createSingleUseCode, promoCodeStatus, randomCodeSuffix } from './stripe';
+import { sendSms, type TwilioEnv } from './sms';
+import { confirmationBody, confirmationLink, confirmPage, plainPage, verifyConfirmation } from './resubscribe';
 
 interface SubscriptionRequest {
 	email: string;
@@ -39,7 +42,7 @@ interface SubscriptionResponse {
 
 interface KVNamespace {
 	get(key: string): Promise<string | null>;
-	put(key: string, value: string): Promise<void>;
+	put(key: string, value: string, options?: { expirationTtl?: number }): Promise<void>;
 	list(): Promise<{ keys: Array<{ name: string }> }>;
 }
 
@@ -56,15 +59,26 @@ export interface Env {
 	ADMIN_TOKEN?: string;
 	RESEND_API_KEY?: string;
 	RESEND_AUDIENCE_ID?: string;
-	CI_NEWSLETTER_COUPON?: string;
+	// Id of the 10%-off, duration=once Stripe coupon. Each first CI signup gets a
+	// unique single-use promotion code on it, created with STRIPE_SECRET_KEY.
+	CI_ONE_EVENT_COUPON_ID?: string;
 	// Meta Conversions API. Until both are set the events endpoint logs what it
 	// would have sent and answers 202, so the wiring can be tested before the ad
 	// account exists.
 	META_PIXEL_ID?: string;
 	META_CAPI_TOKEN?: string;
 	META_TEST_EVENT_CODE?: string;
-	// Test-mode Stripe secret key for /api/checkout. Live mode is a later step.
+	// Stripe secret key, used by /api/checkout and by the single-use promotion codes.
 	STRIPE_SECRET_KEY?: string;
+	// Twilio REST credentials for texting the code to a phone number left on the form.
+	TWILIO_ACCOUNT_SID?: string;
+	TWILIO_AUTH_TOKEN?: string;
+	// A sending number (+1...) or a Messaging Service SID (MG...).
+	TWILIO_FROM?: string;
+	// Signs the resubscribe confirmation links.
+	CI_CONFIRM_SECRET?: string;
+	// Cloudflare rate limit binding (wrangler.jsonc `ratelimits`): 10 per IP per 60s.
+	SUBSCRIBE_LIMITER?: { limit(options: { key: string }): Promise<{ success: boolean }> };
 }
 
 const RESEND_API = 'https://api.resend.com';
@@ -73,7 +87,7 @@ const RESEND_API = 'https://api.resend.com';
 // else, but they get a welcome email carrying the series discount code.
 const CI_SOURCE_PREFIX = 'miamicontactimprov';
 const CI_FROM = 'Contact Improv Miami <hello@miamicontactimprov.com>';
-const CI_SUBJECT = 'Your 20% code for the Fundamentals series';
+const CI_SUBJECT = 'Your 10% off one event';
 const CI_SERIES_LINK = 'https://miamicontactimprov.com/fundamentals';
 
 // Meta Conversions API. The version is pinned here alone; bump it in one place when
@@ -216,61 +230,280 @@ async function resendPost(env: Env, path: string, body: unknown): Promise<Respon
 	});
 }
 
-async function upsertResendContact(env: Env, email: string): Promise<void> {
-	const response = await resendPost(env, `/audiences/${env.RESEND_AUDIENCE_ID}/contacts`, {
-		email,
-		unsubscribed: false,
-	});
-	if (!response.ok) {
-		console.error('[Resend contact failed]', response.status, await response.text());
+type ContactResult = 'created' | 'existing' | 'unsubscribed' | 'failed';
+
+// Looks the contact up and creates it only on a 404. An unsubscribed contact is never
+// flipped here: the public form cannot override an opt-out, so the caller sends a
+// signed confirmation link instead (see resubscribe.ts).
+// Audience-scoped endpoints on purpose: Resend now lists Audiences as deprecated in
+// favour of Segments, but its docs do not show how a new contact is attached to a
+// segment, and this Worker's RESEND_AUDIENCE_ID is the audience the list lives in.
+async function upsertResendContact(env: Env, email: string, kvUnsubscribed: boolean): Promise<ContactResult> {
+	const path = `/audiences/${env.RESEND_AUDIENCE_ID}/contacts/${encodeURIComponent(email)}`;
+	let lookup: Response;
+	try {
+		lookup = await fetch(`${RESEND_API}${path}`, { headers: { Authorization: `Bearer ${env.RESEND_API_KEY}` } });
+	} catch (error) {
+		console.error('[Resend lookup error]', String(error));
+		return 'failed';
 	}
+	if (lookup.ok) {
+		const contact = (await lookup.json().catch(() => null)) as { unsubscribed?: boolean } | null;
+		return contact?.unsubscribed || kvUnsubscribed ? 'unsubscribed' : 'existing';
+	}
+	if (lookup.status !== 404) {
+		console.error('[Resend lookup failed]', lookup.status);
+		return 'failed';
+	}
+	try {
+		const response = await resendPost(env, `/audiences/${env.RESEND_AUDIENCE_ID}/contacts`, { email, unsubscribed: false });
+		if (!response.ok) {
+			console.error('[Resend contact failed]', response.status, await response.text());
+			return 'failed';
+		}
+	} catch (error) {
+		console.error('[Resend create error]', String(error));
+		return 'failed';
+	}
+	return 'created';
+}
+
+// One confirmation email per address per 24 hours. The mark is written first so a
+// double submit cannot send two.
+async function sendConfirmation(env: Env, email: string, origin: string): Promise<void> {
+	if (!env.CI_CONFIRM_SECRET) {
+		console.error('[Confirmation skipped] CI_CONFIRM_SECRET is not set');
+		return;
+	}
+	const key = `ci-confirm:${await sha256Hex(normalizeEmail(email))}`;
+	try {
+		if (await env.EMAIL_SUBS.get(key)) return;
+		await env.EMAIL_SUBS.put(key, String(Date.now()), { expirationTtl: 24 * 60 * 60 });
+	} catch (error) {
+		console.error('[Confirmation skipped] KV unavailable', String(error));
+		return;
+	}
+	const link = await confirmationLink(origin, env.CI_CONFIRM_SECRET, email, Math.floor(Date.now() / 1000));
+	try {
+		const response = await resendPost(env, '/emails', {
+			from: CI_FROM,
+			to: [email],
+			subject: 'Confirm you want emails again',
+			text: confirmationBody(link),
+		});
+		if (!response.ok) console.error('[Confirmation email failed]', response.status);
+	} catch (error) {
+		console.error('[Confirmation email error]', String(error));
+	}
+}
+
+// /api/ci/resubscribe: the only place an opt-out is reversed, and only after a click.
+// GET shows a Confirm button and changes nothing (mail scanners and link previews fetch
+// links). POST re-verifies the signature, PATCHes unsubscribed:false, records
+// resubscribed_at (a repeat is refused), and re-sends the same unused code (email, and
+// SMS if the one-per-number rule allows).
+async function handleResubscribe(request: Request, env: Env): Promise<Response> {
+	const html = (status: number, message: string) =>
+		new Response(plainPage('Contact Improv Miami', message), { status, headers: { 'Content-Type': 'text/html; charset=utf-8' } });
+	if (!env.CI_CONFIRM_SECRET) return html(503, 'This link is not available right now.');
+
+	let params: URLSearchParams | FormData;
+	if (request.method === 'POST') {
+		try {
+			params = await request.formData();
+		} catch {
+			return html(400, 'This link is not valid.');
+		}
+	} else {
+		params = new URL(request.url).searchParams;
+	}
+	const verdict = await verifyConfirmation(env.CI_CONFIRM_SECRET, params, Math.floor(Date.now() / 1000));
+	if (verdict === 'expired') return html(410, 'This link expired. Sign up again on the site to get a new one.');
+	if (verdict !== 'ok') return html(400, 'This link is not valid.');
+	const email = String(params.get('e') ?? '').trim().toLowerCase();
+
+	const doneKey = `ci-resub:${await sha256Hex(normalizeEmail(email))}`;
+	let already = false;
+	try {
+		already = Boolean(await env.EMAIL_SUBS.get(doneKey));
+	} catch (error) {
+		console.error('[Resubscribe state read failed]', String(error));
+	}
+	if (already) return html(200, 'You are already subscribed.');
+
+	if (request.method !== 'POST') {
+		return new Response(
+			confirmPage(email, String(params.get('x') ?? ''), String(params.get('s') ?? '')),
+			{ status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8' } },
+		);
+	}
+
+	try {
+		const response = await fetch(`${RESEND_API}/audiences/${env.RESEND_AUDIENCE_ID}/contacts/${encodeURIComponent(email)}`, {
+			method: 'PATCH',
+			headers: { Authorization: `Bearer ${env.RESEND_API_KEY}`, 'Content-Type': 'application/json' },
+			body: JSON.stringify({ unsubscribed: false }),
+		});
+		if (!response.ok) {
+			console.error('[Resend resubscribe failed]', response.status);
+			return html(502, 'That did not go through. Try the link again in a minute.');
+		}
+	} catch (error) {
+		console.error('[Resend resubscribe error]', String(error));
+		return html(502, 'That did not go through. Try the link again in a minute.');
+	}
+	try {
+		await env.EMAIL_SUBS.put(doneKey, JSON.stringify({ resubscribed_at: Date.now() }));
+	} catch (error) {
+		console.error('[Resubscribe record failed]', String(error));
+	}
+	let phone = '';
+	try {
+		phone = String(JSON.parse((await env.EMAIL_SUBS.get(email)) ?? '{}').phone ?? '');
+	} catch {}
+	await sendWelcome(env, email, phone, true);
+	return new Response(null, { status: 303, headers: { Location: 'https://miamicontactimprov.com/?resubscribed=1' } });
 }
 
 function welcomeBody(code: string): string {
 	return `Thanks for signing up.
 
-The Fundamentals series is eight Friday evenings at Inner Motion in Hallandale Beach, 7:00 to 9:00 PM, starting October 2. Come to one class or all eight. No partner and no experience needed, just clothes you can roll in.
+Your code is ${code}. It takes 10% off one event, a class or a jam. It works once and is good for 60 days. Enter it at checkout.
 
-Your 20% code is ${code}, good on any class for the next two months. Enter it at checkout on the booking page and the price drops.
+Fridays 7:00 to 9:00 PM at Inner Motion in Hallandale Beach. No partner and no experience needed, just clothes you can roll in.
 
 Dates, the venue and what we cover: ${CI_SERIES_LINK}
 
-If $20 is the reason you are not coming this week, reply to this and we will sort it out.
-
-One email a month after this one. Reply if you want off the list.
+After this we send an occasional discount, about once a month, 20% off. Reply if you want off the list.
 
 Max`;
 }
 
-async function sendWelcome(env: Env, email: string): Promise<void> {
-	// CI_NEWSLETTER_COUPON: the 20%-off code for the Fundamentals series, set as a
-	// Worker environment variable / secret, never in source. Unset until the Luma
-	// coupon exists; the welcome email is skipped rather than sent with a blank code.
-	const code = env.CI_NEWSLETTER_COUPON;
-	if (!code) {
-		console.error('[Welcome email skipped] CI_NEWSLETTER_COUPON is not set');
-		return;
+// Lowercase, drop a +tag, and for Gmail drop dots, so one person with several aliases
+// of the same mailbox gets one code.
+export function normalizeEmail(email: string): string {
+	const lowered = email.trim().toLowerCase();
+	const at = lowered.lastIndexOf('@');
+	if (at < 1) return lowered;
+	let local = lowered.slice(0, at).split('+')[0];
+	let domain = lowered.slice(at + 1);
+	if (domain === 'gmail.com' || domain === 'googlemail.com') {
+		local = local.replace(/\./g, '');
+		domain = 'gmail.com';
 	}
-	const response = await resendPost(env, '/emails', {
-		from: CI_FROM,
-		to: [email],
-		subject: CI_SUBJECT,
-		text: welcomeBody(code),
-	});
-	const payload = (await response.json().catch(() => null)) as { id?: string } | null;
-	if (!response.ok) {
-		console.error('[Welcome email failed]', response.status, JSON.stringify(payload));
-		return;
-	}
-	console.log('[Welcome email sent]', payload?.id ?? 'no id');
+	return `${local}@${domain}`;
 }
 
-function sourceOf(record: string | null): string {
-	if (!record) return '';
+// Welcome state lives under the normalized address, apart from the subscriber record,
+// so aliases share it. It decides whether to send, not the signup source: a failed
+// Stripe or Resend call leaves welcome_sent_at empty and the next signup retries.
+interface WelcomeState {
+	attempt?: number;
+	pending_code?: string;
+	promo_code?: string;
+	welcome_sent_at?: number;
+	sms_sent_at?: number;
+}
+
+const WELCOME_PREFIX = 'ci10:';
+
+async function readWelcomeState(env: Env, key: string): Promise<WelcomeState> {
 	try {
-		return String((JSON.parse(record) as { source?: string }).source ?? '');
+		return JSON.parse((await env.EMAIL_SUBS.get(key)) ?? '{}') as WelcomeState;
 	} catch {
-		return '';
+		return {};
+	}
+}
+
+// One 10% code per normalized email, ever. `resend` is a resubscriber: they get the
+// same code again, but only while Stripe says it is unused and unexpired. Email and SMS
+// are independent: one failing never blocks the other, and each retries on a later
+// signup until it has gone out once.
+async function sendWelcome(env: Env, email: string, phone: string, resend: boolean): Promise<void> {
+	if (!env.CI_ONE_EVENT_COUPON_ID || !env.STRIPE_SECRET_KEY) {
+		console.error('[Welcome skipped] CI_ONE_EVENT_COUPON_ID or STRIPE_SECRET_KEY is not set');
+		return;
+	}
+	const normalized = normalizeEmail(email);
+	const hash = await sha256Hex(normalized);
+	const stateKey = `${WELCOME_PREFIX}${hash}`;
+	const state = await readWelcomeState(env, stateKey);
+	const wantSms = Boolean(phone) && (resend || !state.sms_sent_at);
+	const wantEmail = resend || !state.welcome_sent_at;
+	if (!wantEmail && !wantSms) return;
+
+	if (!state.promo_code) {
+		// The code and attempt are saved before Stripe is called (the one write that
+		// cannot wait for the end), so a retry after a lost response replays the same
+		// idempotent request instead of minting a second code.
+		const attempt = state.attempt ?? 1;
+		const code = state.pending_code ?? `CI10-${randomCodeSuffix()}`;
+		try {
+			await env.EMAIL_SUBS.put(stateKey, JSON.stringify({ ...state, attempt, pending_code: code }));
+		} catch (error) {
+			console.error('[Welcome skipped] could not save state', String(error));
+			return;
+		}
+		const result = await createSingleUseCode(env.STRIPE_SECRET_KEY, env.CI_ONE_EVENT_COUPON_ID, {
+			code,
+			idempotencyKey: `ci10-${hash}-${attempt}`,
+			nowSeconds: Math.floor(Date.now() / 1000),
+		});
+		if (!result.ok) {
+			if (result.definite) {
+				// Re-read first: a concurrent signup may have finished minting, and its
+				// code must not be wiped by moving to a new attempt.
+				try {
+					const fresh = await readWelcomeState(env, stateKey);
+					if (!fresh.promo_code) {
+						await env.EMAIL_SUBS.put(stateKey, JSON.stringify({ ...fresh, attempt: attempt + 1, pending_code: undefined }));
+					}
+				} catch (error) {
+					console.error('[Welcome state update failed]', String(error));
+				}
+			}
+			console.error('[Welcome skipped] could not create a promotion code');
+			return;
+		}
+		state.promo_code = result.code;
+		delete state.pending_code;
+		state.attempt = attempt;
+	} else if (resend) {
+		const status = await promoCodeStatus(env.STRIPE_SECRET_KEY, state.promo_code, Math.floor(Date.now() / 1000));
+		if (status !== 'usable') {
+			console.log('[Resubscribe] existing code is used, expired or unverifiable; nothing re-sent');
+			return;
+		}
+	}
+	const code = state.promo_code as string;
+
+	if (wantEmail) {
+		try {
+			const response = await resendPost(env, '/emails', {
+				from: CI_FROM,
+				to: [email],
+				subject: CI_SUBJECT,
+				text: welcomeBody(code),
+			});
+			const payload = (await response.json().catch(() => null)) as { id?: string } | null;
+			if (response.ok) {
+				state.welcome_sent_at = Date.now();
+				console.log('[Welcome email sent]', payload?.id ?? 'no id');
+			} else {
+				console.error('[Welcome email failed]', response.status, JSON.stringify(payload));
+			}
+		} catch (error) {
+			console.error('[Welcome email error]', String(error));
+		}
+	}
+	if (wantSms && (await sendSms(env as TwilioEnv, phone, code))) {
+		state.sms_sent_at = Date.now();
+	}
+	// The single final write for this person's state.
+	try {
+		await env.EMAIL_SUBS.put(stateKey, JSON.stringify(state));
+	} catch (error) {
+		console.error('[Welcome state write failed]', String(error));
 	}
 }
 
@@ -321,6 +554,21 @@ export default {
 
 		// POST /api/subscribe - Email subscription endpoint
 		if (url.pathname === '/api/subscribe' && request.method === 'POST') {
+			// 10 requests per IP per 60 seconds. A limiter outage must not block signups.
+			if (env.SUBSCRIBE_LIMITER) {
+				try {
+					const ip = request.headers.get('CF-Connecting-IP') || 'unknown';
+					const { success } = await env.SUBSCRIBE_LIMITER.limit({ key: ip });
+					if (!success) {
+						return Response.json(
+							{ ok: false, error: 'Too many requests. Try again in a minute.' } as SubscriptionResponse,
+							{ status: 429, headers: { ...corsHeaders, 'Retry-After': '60' } },
+						);
+					}
+				} catch (error) {
+					console.error('[Rate limit error]', String(error));
+				}
+			}
 			try {
 				const body = await request.json() as SubscriptionRequest;
 				const email = body.email?.trim().toLowerCase();
@@ -360,7 +608,11 @@ export default {
 					);
 				}
 
-				const previous = sourceOf(await env.EMAIL_SUBS.get(email));
+				const previousRecord = await env.EMAIL_SUBS.get(email);
+				let kvUnsubscribed = false;
+				try {
+					kvUnsubscribed = Boolean(JSON.parse(previousRecord ?? '{}').unsubscribed);
+				} catch {}
 
 				// Store in KV. The attribution fields are sanitised once and used for
 				// both the record and the log line. Phone is stored only when given:
@@ -378,15 +630,18 @@ export default {
 
 				console.log('[Subscription saved]', { email, source, offer: extras.offer });
 
-				// One welcome per person, on their first contact-improv signup.
-				const wantsWelcome = source.startsWith(CI_SOURCE_PREFIX)
-					&& !previous.startsWith(CI_SOURCE_PREFIX);
+				// sendWelcome decides from the stored welcome state whether this person
+				// already has their code, so only the source gates it here.
+				const wantsWelcome = source.startsWith(CI_SOURCE_PREFIX);
 
 				if (env.RESEND_API_KEY && env.RESEND_AUDIENCE_ID) {
 					ctx.waitUntil((async () => {
-						await upsertResendContact(env, email);
-						if (wantsWelcome) {
-							await sendWelcome(env, email);
+						const contact = await upsertResendContact(env, email, kvUnsubscribed);
+						if (!wantsWelcome || contact === 'failed') return;
+						if (contact === 'unsubscribed') {
+							await sendConfirmation(env, email, url.origin);
+						} else {
+							await sendWelcome(env, email, phone, false);
 						}
 					})());
 				} else {
@@ -404,6 +659,11 @@ export default {
 					{ status: 500, headers: corsHeaders }
 				);
 			}
+		}
+
+		// /api/ci/resubscribe - signed link from the confirmation email (GET shows, POST acts)
+		if (url.pathname === '/api/ci/resubscribe' && (request.method === 'GET' || request.method === 'POST')) {
+			return handleResubscribe(request, env);
 		}
 
 		// POST /api/events - Server-side conversion events for the Meta ad test.
@@ -497,7 +757,7 @@ export default {
 				);
 			}
 			const list = await env.EMAIL_SUBS.list();
-			const keys = list.keys.map((k) => k.name);
+			const keys = list.keys.map((k) => k.name).filter((k) => !k.startsWith(WELCOME_PREFIX));
 			return Response.json({ keys, count: keys.length }, { headers: corsHeaders });
 		}
 

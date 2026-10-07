@@ -76,3 +76,98 @@ export async function createCheckoutSession(
 	}
 	return { url: payload.url };
 }
+
+// Unambiguous uppercase alphanumerics are not needed here: the code is pasted from an
+// email, so the full A-Z0-9 set is fine. Rejection sampling keeps the draw uniform.
+const CODE_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+
+export function randomCodeSuffix(length = 6): string {
+	let out = '';
+	while (out.length < length) {
+		const bytes = crypto.getRandomValues(new Uint8Array(length * 2));
+		for (const byte of bytes) {
+			if (byte < 252 && out.length < length) out += CODE_CHARS[byte % 36];
+		}
+	}
+	return out;
+}
+
+// Pinned because Stripe moved the coupon reference on promotion code creation to
+// `promotion[type]=coupon&promotion[coupon]=<id>` in this version; the body below is
+// written for it and must not drift with the account's default version.
+export const STRIPE_PROMO_VERSION = '2025-09-30.clover';
+export const PROMO_TTL_SECONDS = 60 * 24 * 60 * 60;
+
+export type PromoResult =
+	| { ok: true; code: string }
+	// definite: Stripe answered and refused, so the idempotency key is spent and the
+	// next try needs a fresh key. Not definite (network error): retry the same key.
+	| { ok: false; definite: boolean };
+
+/**
+ * Creates a single-use promotion code on an existing coupon. `max_redemptions=1`
+ * makes the offer once per person; `expires_at` is 60 days out. The Idempotency-Key
+ * lets a retry of the same attempt replay instead of minting a second code.
+ */
+export async function createSingleUseCode(
+	secretKey: string,
+	couponId: string,
+	opts: { code: string; idempotencyKey: string; nowSeconds: number },
+): Promise<PromoResult> {
+	const body = new URLSearchParams();
+	body.set('promotion[type]', 'coupon');
+	body.set('promotion[coupon]', couponId);
+	body.set('code', opts.code);
+	body.set('max_redemptions', '1');
+	body.set('expires_at', String(opts.nowSeconds + PROMO_TTL_SECONDS));
+	try {
+		const response = await fetch(`${STRIPE_API}/promotion_codes`, {
+			method: 'POST',
+			headers: {
+				Authorization: `Bearer ${secretKey}`,
+				'Content-Type': 'application/x-www-form-urlencoded',
+				'Stripe-Version': STRIPE_PROMO_VERSION,
+				'Idempotency-Key': opts.idempotencyKey,
+			},
+			body: body.toString(),
+		});
+		const payload = (await response.json().catch(() => null)) as
+			| { code?: string; error?: { message?: string; type?: string } }
+			| null;
+		if (response.ok && payload?.code) return { ok: true, code: payload.code };
+		console.error('[Promotion code failed]', response.status, payload?.error?.message ?? '');
+		// A 409 or idempotency_error means another request with this key is in flight or
+		// finished: the key is not spent, so this is not a definite failure.
+		const conflict = response.status === 409 || payload?.error?.type === 'idempotency_error';
+		return { ok: false, definite: !conflict };
+	} catch (error) {
+		console.error('[Promotion code error]', error);
+		return { ok: false, definite: false };
+	}
+}
+
+export type PromoStatus = 'usable' | 'unusable' | 'unknown';
+
+/**
+ * Read-only lookup of a promotion code we minted: is it still unused and unexpired?
+ * 'unknown' means Stripe could not be asked, which the caller treats like unusable
+ * (never re-send a code it cannot vouch for).
+ */
+export async function promoCodeStatus(secretKey: string, code: string, nowSeconds: number): Promise<PromoStatus> {
+	try {
+		const response = await fetch(`${STRIPE_API}/promotion_codes?${new URLSearchParams({ code, limit: '1' }).toString()}`, {
+			headers: { Authorization: `Bearer ${secretKey}`, 'Stripe-Version': STRIPE_PROMO_VERSION },
+		});
+		if (!response.ok) return 'unknown';
+		const payload = (await response.json().catch(() => null)) as
+			| { data?: Array<{ active?: boolean; times_redeemed?: number; max_redemptions?: number | null; expires_at?: number | null }> }
+			| null;
+		const promo = payload?.data?.[0];
+		if (!promo) return 'unknown';
+		const redeemed = (promo.times_redeemed ?? 0) >= (promo.max_redemptions ?? 1);
+		const expired = promo.expires_at != null && promo.expires_at <= nowSeconds;
+		return promo.active && !redeemed && !expired ? 'usable' : 'unusable';
+	} catch {
+		return 'unknown';
+	}
+}
