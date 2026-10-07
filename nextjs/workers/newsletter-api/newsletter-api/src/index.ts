@@ -9,7 +9,8 @@
  */
 
 import { handleCheckout } from './checkout';
-import { createSingleUseCode, randomCodeSuffix } from './stripe';
+import { createSingleUseCode, promoCodeStatus, randomCodeSuffix } from './stripe';
+import { sendSms, type TwilioEnv } from './sms';
 
 interface SubscriptionRequest {
 	email: string;
@@ -68,6 +69,12 @@ export interface Env {
 	META_TEST_EVENT_CODE?: string;
 	// Test-mode Stripe secret key for /api/checkout. Live mode is a later step.
 	STRIPE_SECRET_KEY?: string;
+	// Twilio REST credentials for texting the code to a phone number left on the form.
+	TWILIO_ACCOUNT_SID?: string;
+	TWILIO_AUTH_TOKEN?: string;
+	TWILIO_FROM?: string;
+	// Cloudflare rate limit binding (wrangler.jsonc `ratelimits`): 3 per IP per 60s.
+	SUBSCRIBE_LIMITER?: { limit(options: { key: string }): Promise<{ success: boolean }> };
 }
 
 const RESEND_API = 'https://api.resend.com';
@@ -219,26 +226,52 @@ async function resendPost(env: Env, path: string, body: unknown): Promise<Respon
 	});
 }
 
-async function upsertResendContact(env: Env, email: string): Promise<void> {
+type ContactResult = 'created' | 'existing' | 'resubscribed' | 'failed';
+
+// Looks the contact up first so a person who unsubscribed in Resend is flipped back to
+// subscribed (PATCH) rather than left silently unsubscribed by a create call.
+async function upsertResendContact(env: Env, email: string, kvUnsubscribed: boolean): Promise<ContactResult> {
+	const path = `/audiences/${env.RESEND_AUDIENCE_ID}/contacts/${encodeURIComponent(email)}`;
+	const lookup = await fetch(`${RESEND_API}${path}`, {
+		headers: { Authorization: `Bearer ${env.RESEND_API_KEY}` },
+	});
+	if (lookup.ok) {
+		const contact = (await lookup.json().catch(() => null)) as { unsubscribed?: boolean } | null;
+		if (contact?.unsubscribed || kvUnsubscribed) {
+			const response = await fetch(`${RESEND_API}${path}`, {
+				method: 'PATCH',
+				headers: { Authorization: `Bearer ${env.RESEND_API_KEY}`, 'Content-Type': 'application/json' },
+				body: JSON.stringify({ unsubscribed: false }),
+			});
+			if (!response.ok) {
+				console.error('[Resend resubscribe failed]', response.status);
+				return 'failed';
+			}
+			return 'resubscribed';
+		}
+		return 'existing';
+	}
 	const response = await resendPost(env, `/audiences/${env.RESEND_AUDIENCE_ID}/contacts`, {
 		email,
 		unsubscribed: false,
 	});
 	if (!response.ok) {
 		console.error('[Resend contact failed]', response.status, await response.text());
+		return 'failed';
 	}
+	return kvUnsubscribed ? 'resubscribed' : 'created';
 }
 
 function welcomeBody(code: string): string {
 	return `Thanks for signing up.
 
-Your code is ${code}. It takes 10% off one event, a class or a jam, and it works once. Enter it at checkout.
+Your code is ${code}. It takes 10% off one event, a class or a jam. It works once and is good for 60 days. Enter it at checkout.
 
 Fridays 7:00 to 9:00 PM at Inner Motion in Hallandale Beach. No partner and no experience needed, just clothes you can roll in.
 
 Dates, the venue and what we cover: ${CI_SERIES_LINK}
 
-One email a month after this one. Reply if you want off the list.
+After this we send an occasional discount, about once a month, 20% off. Reply if you want off the list.
 
 Max`;
 }
@@ -266,6 +299,7 @@ interface WelcomeState {
 	pending_code?: string;
 	promo_code?: string;
 	welcome_sent_at?: number;
+	sms_sent_at?: number;
 }
 
 const WELCOME_PREFIX = 'ci10:';
@@ -278,20 +312,22 @@ async function readWelcomeState(env: Env, key: string): Promise<WelcomeState> {
 	}
 }
 
-async function sendWelcome(env: Env, email: string): Promise<void> {
-	// Each person gets one single-use Stripe promotion code on the coupon named by
-	// CI_ONE_EVENT_COUPON_ID (a Worker secret). If the coupon id or the Stripe key is
-	// missing, or Stripe refuses, the email is skipped rather than sent with a blank
-	// or unusable code.
+// One 10% code per normalized email, ever. `resend` is a resubscriber: they get the
+// same code again, but only while Stripe says it is unused and unexpired. Email and SMS
+// are independent: one failing never blocks the other, and each retries on a later
+// signup until it has gone out once.
+async function sendWelcome(env: Env, email: string, phone: string, resend: boolean): Promise<void> {
 	if (!env.CI_ONE_EVENT_COUPON_ID || !env.STRIPE_SECRET_KEY) {
-		console.error('[Welcome email skipped] CI_ONE_EVENT_COUPON_ID or STRIPE_SECRET_KEY is not set');
+		console.error('[Welcome skipped] CI_ONE_EVENT_COUPON_ID or STRIPE_SECRET_KEY is not set');
 		return;
 	}
 	const normalized = normalizeEmail(email);
 	const hash = await sha256Hex(normalized);
 	const stateKey = `${WELCOME_PREFIX}${hash}`;
 	const state = await readWelcomeState(env, stateKey);
-	if (state.welcome_sent_at) return;
+	const wantSms = Boolean(phone) && (resend || !state.sms_sent_at);
+	const wantEmail = resend || !state.welcome_sent_at;
+	if (!wantEmail && !wantSms) return;
 
 	if (!state.promo_code) {
 		// Persist the code and attempt before calling Stripe, so a retry after a lost
@@ -308,36 +344,52 @@ async function sendWelcome(env: Env, email: string): Promise<void> {
 			if (result.definite) {
 				await env.EMAIL_SUBS.put(stateKey, JSON.stringify({ attempt: attempt + 1 }));
 			}
-			console.error('[Welcome email skipped] could not create a promotion code');
+			console.error('[Welcome skipped] could not create a promotion code');
 			return;
 		}
 		state.promo_code = result.code;
 		delete state.pending_code;
 		state.attempt = attempt;
 		await env.EMAIL_SUBS.put(stateKey, JSON.stringify(state));
+	} else if (resend) {
+		const status = await promoCodeStatus(env.STRIPE_SECRET_KEY, state.promo_code, Math.floor(Date.now() / 1000));
+		if (status !== 'usable') {
+			console.log('[Resubscribe] existing code is used, expired or unverifiable; nothing re-sent');
+			return;
+		}
 	}
+	const code = state.promo_code as string;
 
-	const response = await resendPost(env, '/emails', {
-		from: CI_FROM,
-		to: [email],
-		subject: CI_SUBJECT,
-		text: welcomeBody(state.promo_code),
-	});
-	const payload = (await response.json().catch(() => null)) as { id?: string } | null;
-	if (!response.ok) {
-		console.error('[Welcome email failed]', response.status, JSON.stringify(payload));
-		return;
+	if (wantEmail) {
+		try {
+			const response = await resendPost(env, '/emails', {
+				from: CI_FROM,
+				to: [email],
+				subject: CI_SUBJECT,
+				text: welcomeBody(code),
+			});
+			const payload = (await response.json().catch(() => null)) as { id?: string } | null;
+			if (response.ok) {
+				state.welcome_sent_at = Date.now();
+				console.log('[Welcome email sent]', payload?.id ?? 'no id');
+			} else {
+				console.error('[Welcome email failed]', response.status, JSON.stringify(payload));
+			}
+		} catch (error) {
+			console.error('[Welcome email error]', String(error));
+		}
 	}
-	state.welcome_sent_at = Date.now();
+	if (wantSms && (await sendSms(env as TwilioEnv, phone, code))) {
+		state.sms_sent_at = Date.now();
+	}
 	await env.EMAIL_SUBS.put(stateKey, JSON.stringify(state));
 	// Mirror onto the subscriber record so the admin endpoints show it.
 	try {
 		const record = JSON.parse((await env.EMAIL_SUBS.get(email)) ?? '{}');
-		await env.EMAIL_SUBS.put(email, JSON.stringify({ ...record, promo_code: state.promo_code, welcome_sent_at: state.welcome_sent_at }));
+		await env.EMAIL_SUBS.put(email, JSON.stringify({ ...record, promo_code: code, welcome_sent_at: state.welcome_sent_at }));
 	} catch (error) {
-		console.error('[Welcome mirror failed]', error);
+		console.error('[Welcome mirror failed]', String(error));
 	}
-	console.log('[Welcome email sent]', payload?.id ?? 'no id');
 }
 
 // A signup carries where it came from: the offer that was on screen, the campaign and
@@ -387,6 +439,21 @@ export default {
 
 		// POST /api/subscribe - Email subscription endpoint
 		if (url.pathname === '/api/subscribe' && request.method === 'POST') {
+			// 3 requests per IP per 60 seconds. A limiter outage must not block signups.
+			if (env.SUBSCRIBE_LIMITER) {
+				try {
+					const ip = request.headers.get('CF-Connecting-IP') || 'unknown';
+					const { success } = await env.SUBSCRIBE_LIMITER.limit({ key: ip });
+					if (!success) {
+						return Response.json(
+							{ ok: false, error: 'Too many requests. Try again in a minute.' } as SubscriptionResponse,
+							{ status: 429, headers: { ...corsHeaders, 'Retry-After': '60' } },
+						);
+					}
+				} catch (error) {
+					console.error('[Rate limit error]', String(error));
+				}
+			}
 			try {
 				const body = await request.json() as SubscriptionRequest;
 				const email = body.email?.trim().toLowerCase();
@@ -428,8 +495,10 @@ export default {
 
 				const previousRecord = await env.EMAIL_SUBS.get(email);
 				let carried: Record<string, unknown> = {};
+				let kvUnsubscribed = false;
 				try {
 					const old = JSON.parse(previousRecord ?? '{}');
+					kvUnsubscribed = Boolean(old.unsubscribed);
 					if (old.promo_code) carried = { promo_code: old.promo_code, welcome_sent_at: old.welcome_sent_at };
 				} catch {}
 
@@ -456,9 +525,9 @@ export default {
 
 				if (env.RESEND_API_KEY && env.RESEND_AUDIENCE_ID) {
 					ctx.waitUntil((async () => {
-						await upsertResendContact(env, email);
+						const contact = await upsertResendContact(env, email, kvUnsubscribed);
 						if (wantsWelcome) {
-							await sendWelcome(env, email);
+							await sendWelcome(env, email, phone, contact === 'resubscribed');
 						}
 					})());
 				} else {

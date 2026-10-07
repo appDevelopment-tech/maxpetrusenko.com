@@ -142,3 +142,29 @@ export async function createSingleUseCode(
 		return { ok: false, definite: false };
 	}
 }
+
+export type PromoStatus = 'usable' | 'unusable' | 'unknown';
+
+/**
+ * Read-only lookup of a promotion code we minted: is it still unused and unexpired?
+ * 'unknown' means Stripe could not be asked, which the caller treats like unusable
+ * (never re-send a code it cannot vouch for).
+ */
+export async function promoCodeStatus(secretKey: string, code: string, nowSeconds: number): Promise<PromoStatus> {
+	try {
+		const response = await fetch(`${STRIPE_API}/promotion_codes?${new URLSearchParams({ code, limit: '1' }).toString()}`, {
+			headers: { Authorization: `Bearer ${secretKey}`, 'Stripe-Version': STRIPE_PROMO_VERSION },
+		});
+		if (!response.ok) return 'unknown';
+		const payload = (await response.json().catch(() => null)) as
+			| { data?: Array<{ active?: boolean; times_redeemed?: number; max_redemptions?: number | null; expires_at?: number | null }> }
+			| null;
+		const promo = payload?.data?.[0];
+		if (!promo) return 'unknown';
+		const redeemed = (promo.times_redeemed ?? 0) >= (promo.max_redemptions ?? 1);
+		const expired = promo.expires_at != null && promo.expires_at <= nowSeconds;
+		return promo.active && !redeemed && !expired ? 'usable' : 'unusable';
+	} catch {
+		return 'unknown';
+	}
+}

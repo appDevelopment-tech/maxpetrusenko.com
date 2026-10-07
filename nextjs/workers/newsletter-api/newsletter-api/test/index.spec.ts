@@ -1,11 +1,13 @@
 import { env, createExecutionContext, waitOnExecutionContext, fetchMock } from 'cloudflare:test';
 import { describe, it, expect, beforeAll, afterEach, vi } from 'vitest';
-import worker from '../src';
+import worker, { normalizeEmail } from '../src';
+import { toE164, smsBody } from '../src/sms';
 
 const ADMIN_TOKEN = 'test-admin-token';
 const RESEND_ORIGIN = 'https://api.resend.com';
 const AUDIENCE = 'aud_test';
 const STRIPE_ORIGIN = 'https://api.stripe.com';
+const TWILIO_ORIGIN = 'https://api.twilio.com';
 const META_ORIGIN = 'https://graph.facebook.com';
 const PIXEL_ID = '1234567890';
 const EVENT_HEADERS = {
@@ -25,6 +27,9 @@ function testEnv(overrides: Record<string, unknown> = {}): Env {
 		RESEND_AUDIENCE_ID: AUDIENCE,
 		CI_ONE_EVENT_COUPON_ID: 'coupon_test10',
 		STRIPE_SECRET_KEY: 'sk_test_placeholder',
+		TWILIO_ACCOUNT_SID: 'ACtest',
+		TWILIO_AUTH_TOKEN: 'twilio_token_test',
+		TWILIO_FROM: '+18335550100',
 	}, overrides) as unknown as Env;
 }
 
@@ -50,14 +55,24 @@ function subscribe(email: string, source: string) {
 
 // Interceptors record the payloads they were called with, so a test can assert
 // on what the worker actually sent to Resend.
-const sent: { contacts: any[]; emails: any[]; stripe: Array<{ body: string; headers: Record<string, string> }>; meta: { body: any; path: string }[] } = {
+const sent: { contacts: any[]; emails: any[]; sms: Array<{ body: URLSearchParams; auth: string }>;
+	stripe: Array<{ body: string; headers: Record<string, string> }>; meta: { body: any; path: string }[] } = {
 	contacts: [],
+	sms: [],
 	stripe: [],
 	emails: [],
 	meta: [],
 };
 
+const CONTACT_PATH = (email: string) => `/audiences/${AUDIENCE}/contacts/${encodeURIComponent(email)}`;
+
+// The worker looks the contact up first; by default the contact is new (404) and is created.
+function interceptContactLookup(email: string, status = 404, body: unknown = { message: 'not found' }, times = 1) {
+	fetchMock.get(RESEND_ORIGIN).intercept({ method: 'GET', path: CONTACT_PATH(email) }).reply(status, body as any).times(times);
+}
+
 function interceptContacts(status = 201, times = 1) {
+	interceptContactLookup('reader@example.com', 404, undefined, times);
 	fetchMock
 		.get(RESEND_ORIGIN)
 		.intercept({ method: 'POST', path: `/audiences/${AUDIENCE}/contacts` })
@@ -79,6 +94,32 @@ function interceptPromo(status = 200, times = 1) {
 			return status === 200 ? { id: 'promo_1', code } : { error: { message: 'boom' } };
 		})
 		.times(times);
+}
+
+function interceptSms(status = 201, times = 1) {
+	fetchMock
+		.get(TWILIO_ORIGIN)
+		.intercept({ method: 'POST', path: '/2010-04-01/Accounts/ACtest/Messages.json' })
+		.reply(status, (opts: any) => {
+			sent.sms.push({ body: new URLSearchParams(String(opts.body ?? '')), auth: String((opts.headers as any)?.authorization ?? (opts.headers as any)?.Authorization ?? '') });
+			return status < 300 ? { sid: 'SM1' } : { code: 21211, message: 'bad number' };
+		})
+		.times(times);
+}
+
+function interceptPromoStatus(entry: Record<string, unknown>) {
+	fetchMock
+		.get(STRIPE_ORIGIN)
+		.intercept({ method: 'GET', path: /^\/v1\/promotion_codes\?/ })
+		.reply(200, { data: [entry] });
+}
+
+function subscribeWithPhone(email: string, phone: string) {
+	return call('/api/subscribe', {
+		method: 'POST',
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify({ email, consent: true, source: 'miamicontactimprov:start', phone }),
+	});
 }
 
 function interceptEmails(status = 200, times = 1) {
@@ -127,6 +168,7 @@ afterEach(async () => {
 	sent.contacts.length = 0;
 	sent.emails.length = 0;
 	sent.stripe.length = 0;
+	sent.sms.length = 0;
 	sent.meta.length = 0;
 	fetchMock.assertNoPendingInterceptors();
 });
@@ -223,7 +265,8 @@ describe('POST /api/subscribe', () => {
 		expect(mail.subject).toBe('Your 10% off one event');
 		expect(mail.text).toContain(promo.get('code'));
 		expect(mail.text).toContain('10% off one event');
-		expect(mail.text).not.toMatch(/20%|two months|—|–/);
+		expect(mail.text).toContain('occasional discount, about once a month, 20% off');
+		expect(mail.text).not.toMatch(/two months|—|–/);
 		expect(mail.text).toContain('https://miamicontactimprov.com/fundamentals');
 		expect(mail.text.match(/https?:\/\//g) ?? []).toHaveLength(1);
 		expect(mail.text.split(/\s+/).filter(Boolean).length).toBeLessThanOrEqual(120);
@@ -252,7 +295,9 @@ describe('POST /api/subscribe', () => {
 	});
 
 	it('gives aliases of one gmail mailbox a single code', async () => {
-		interceptContacts(201, 2);
+		interceptContactLookup('first.last+a@gmail.com');
+		interceptContactLookup('firstlast@googlemail.com');
+		fetchMock.get(RESEND_ORIGIN).intercept({ method: 'POST', path: `/audiences/${AUDIENCE}/contacts` }).reply(201, { id: 'c' }).times(2);
 		interceptPromo();
 		interceptEmails();
 
@@ -299,6 +344,123 @@ describe('POST /api/subscribe', () => {
 		const keys = sent.stripe.map((r) => Object.entries(r.headers).find(([k]) => k.toLowerCase() === 'idempotency-key')?.[1]);
 		expect(keys[0]).toMatch(/-1$/);
 		expect(keys[1]).toMatch(/-2$/);
+	});
+
+	it('texts the code to a phone number, in E.164, within 160 characters', async () => {
+		interceptContacts();
+		interceptPromo();
+		interceptEmails();
+		interceptSms();
+
+		await subscribeWithPhone('reader@example.com', '(305) 555-1234');
+
+		expect(sent.sms).toHaveLength(1);
+		const code = new URLSearchParams(sent.stripe[0].body).get('code') as string;
+		const sms = sent.sms[0].body;
+		expect(sms.get('To')).toBe('+13055551234');
+		expect(sms.get('From')).toBe('+18335550100');
+		expect(sms.get('Body')).toBe(smsBody(code));
+		expect((sms.get('Body') ?? '').length).toBeLessThanOrEqual(160);
+		expect(sent.sms[0].auth).toBe(`Basic ${btoa('ACtest:twilio_token_test')}`);
+		expect(sent.emails).toHaveLength(1);
+	});
+
+	it('still sends the email when the text fails, and logs neither code nor full phone', async () => {
+		interceptContacts();
+		interceptPromo();
+		interceptEmails();
+		interceptSms(400);
+		const spy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+		await subscribeWithPhone('reader@example.com', '3055551234');
+
+		const logged = JSON.stringify(spy.mock.calls);
+		spy.mockRestore();
+		expect(sent.emails).toHaveLength(1);
+		expect(logged).not.toContain('3055551234');
+		expect(logged).not.toContain('CI10-');
+	});
+
+	it('still sends the text when the email fails', async () => {
+		interceptContacts();
+		interceptPromo();
+		interceptEmails(500);
+		interceptSms();
+
+		await subscribeWithPhone('reader@example.com', '+13055551234');
+
+		expect(sent.sms).toHaveLength(1);
+		const state = JSON.parse((await env.EMAIL_SUBS.get('reader@example.com')) ?? '{}');
+		expect(state.welcome_sent_at).toBeUndefined();
+	});
+
+	it('skips the text when the number cannot be made E.164', async () => {
+		interceptContacts();
+		interceptPromo();
+		interceptEmails();
+
+		await subscribeWithPhone('reader@example.com', '12345678');
+
+		expect(sent.sms).toHaveLength(0);
+		expect(sent.emails).toHaveLength(1);
+	});
+
+	it('flips an unsubscribed contact back and re-sends the same unused code, minting nothing', async () => {
+		interceptContacts(201);
+		interceptPromo();
+		interceptEmails();
+		await subscribe('reader@example.com', 'miamicontactimprov:start');
+		const code = new URLSearchParams(sent.stripe[0].body).get('code') as string;
+
+		interceptContactLookup('reader@example.com', 200, { id: 'c1', unsubscribed: true });
+		fetchMock.get(RESEND_ORIGIN).intercept({ method: 'PATCH', path: CONTACT_PATH('reader@example.com') })
+			.reply(200, (opts: any) => { sent.contacts.push(JSON.parse(String(opts.body ?? '{}'))); return { id: 'c1' }; });
+		interceptPromoStatus({ active: true, times_redeemed: 0, max_redemptions: 1, expires_at: Math.floor(Date.now() / 1000) + 86400 });
+		interceptEmails();
+
+		await subscribe('reader@example.com', 'miamicontactimprov:start');
+
+		expect(sent.contacts.at(-1)).toEqual({ unsubscribed: false });
+		expect(sent.stripe).toHaveLength(1);
+		expect(sent.emails).toHaveLength(2);
+		expect(sent.emails[1].text).toContain(code);
+	});
+
+	it('re-sends nothing to a resubscriber whose code was already used', async () => {
+		interceptContacts(201);
+		interceptPromo();
+		interceptEmails();
+		await subscribe('reader@example.com', 'miamicontactimprov:start');
+
+		interceptContactLookup('reader@example.com', 200, { id: 'c1', unsubscribed: true });
+		fetchMock.get(RESEND_ORIGIN).intercept({ method: 'PATCH', path: CONTACT_PATH('reader@example.com') }).reply(200, { id: 'c1' });
+		interceptPromoStatus({ active: false, times_redeemed: 1, max_redemptions: 1, expires_at: null });
+
+		await subscribe('reader@example.com', 'miamicontactimprov:start');
+
+		expect(sent.stripe).toHaveLength(1);
+		expect(sent.emails).toHaveLength(1);
+	});
+
+	it('answers 429 when the rate limiter says no, and keeps working when it says yes', async () => {
+		const deny = testEnv({ SUBSCRIBE_LIMITER: { limit: async () => ({ success: false }) } });
+		const res = await call('/api/subscribe', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json', 'CF-Connecting-IP': '203.0.113.9' },
+			body: JSON.stringify({ email: 'reader@example.com', consent: true, source: 'other' }),
+		}, deny);
+		expect(res.status).toBe(429);
+		expect(res.body.ok).toBe(false);
+		expect(await env.EMAIL_SUBS.get('reader@example.com')).toBeNull();
+	});
+
+	it('normalizes emails and phones', () => {
+		expect(normalizeEmail('First.Last+x@Gmail.com')).toBe('firstlast@gmail.com');
+		expect(normalizeEmail('a.b+c@example.com')).toBe('a.b@example.com');
+		expect(toE164('305-555-1234')).toBe('+13055551234');
+		expect(toE164('1 305 555 1234')).toBe('+13055551234');
+		expect(toE164('+44 20 7946 0958')).toBe('+442079460958');
+		expect(toE164('12345')).toBeNull();
 	});
 
 	it('skips the welcome email when Stripe refuses to create the code', async () => {
