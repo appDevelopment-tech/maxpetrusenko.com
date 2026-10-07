@@ -8,10 +8,10 @@ META_PIXEL_ID=
 META_CAPI_TOKEN=
 META_TEST_EVENT_CODE=
 STRIPE_SECRET_KEY=sk_test_placeholder
-# Twilio SMS for the discount code. Doppler api_keys/dev: BLINDFOLD_DANCE_TWILIO_ACCOUNT_SID,
-# BLINDFOLD_DANCE_TWILIO_AUTH_TOKEN, BLINDFOLD_DANCE_TWILIO_PHONE_NUMBER (toll-free +1 833).
+# Keys the hash of an emailed one-time code (any long random string, e.g. openssl rand -hex 32).
+CI_CONFIRM_SECRET=
+# Twilio Verify sends the text one-time code. Doppler api_keys/dev: BLINDFOLD_DANCE_TWILIO_ACCOUNT_SID,
+# BLINDFOLD_DANCE_TWILIO_AUTH_TOKEN. Create the service once with tools/create_verify_service.sh.
 TWILIO_ACCOUNT_SID=
 TWILIO_AUTH_TOKEN=
-TWILIO_FROM=
-# Signs the resubscribe confirmation links (any long random string).
-CI_CONFIRM_SECRET=
+TWILIO_VERIFY_SID=
