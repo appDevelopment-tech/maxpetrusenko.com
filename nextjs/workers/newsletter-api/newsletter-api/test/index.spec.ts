@@ -5,6 +5,7 @@ import worker from '../src';
 const ADMIN_TOKEN = 'test-admin-token';
 const RESEND_ORIGIN = 'https://api.resend.com';
 const AUDIENCE = 'aud_test';
+const STRIPE_ORIGIN = 'https://api.stripe.com';
 const META_ORIGIN = 'https://graph.facebook.com';
 const PIXEL_ID = '1234567890';
 const EVENT_HEADERS = {
@@ -22,7 +23,8 @@ function testEnv(overrides: Record<string, unknown> = {}): Env {
 		ADMIN_TOKEN,
 		RESEND_API_KEY: 're_test_key',
 		RESEND_AUDIENCE_ID: AUDIENCE,
-		CI_NEWSLETTER_COUPON: 'TESTCODE',
+		CI_ONE_EVENT_COUPON_ID: 'coupon_test10',
+		STRIPE_SECRET_KEY: 'sk_test_placeholder',
 	}, overrides) as unknown as Env;
 }
 
@@ -48,8 +50,9 @@ function subscribe(email: string, source: string) {
 
 // Interceptors record the payloads they were called with, so a test can assert
 // on what the worker actually sent to Resend.
-const sent: { contacts: any[]; emails: any[]; meta: { body: any; path: string }[] } = {
+const sent: { contacts: any[]; emails: any[]; stripe: string[]; meta: { body: any; path: string }[] } = {
 	contacts: [],
+	stripe: [],
 	emails: [],
 	meta: [],
 };
@@ -61,6 +64,19 @@ function interceptContacts(status = 201, times = 1) {
 		.reply(status, (opts: any) => {
 			sent.contacts.push(JSON.parse(String(opts.body ?? '{}')));
 			return { id: `contact_${sent.contacts.length}` };
+		})
+		.times(times);
+}
+
+function interceptPromo(status = 200, times = 1) {
+	fetchMock
+		.get(STRIPE_ORIGIN)
+		.intercept({ method: 'POST', path: '/v1/promotion_codes' })
+		.reply(status, (opts: any) => {
+			const body = String(opts.body ?? '');
+			sent.stripe.push(body);
+			const code = new URLSearchParams(body).get('code');
+			return status === 200 ? { id: 'promo_1', code } : { error: { message: 'boom' } };
 		})
 		.times(times);
 }
@@ -110,6 +126,7 @@ afterEach(async () => {
 	await env.EMAIL_SUBS.delete('reader@example.com');
 	sent.contacts.length = 0;
 	sent.emails.length = 0;
+	sent.stripe.length = 0;
 	sent.meta.length = 0;
 	fetchMock.assertNoPendingInterceptors();
 });
@@ -184,6 +201,7 @@ describe('POST /api/subscribe', () => {
 
 	it('sends the welcome email once for a contact improv subscriber', async () => {
 		interceptContacts(201, 2);
+		interceptPromo();
 		interceptEmails();
 
 		expect((await subscribe('reader@example.com', 'miamicontactimprov:fundamentals')).status).toBe(200);
@@ -196,10 +214,43 @@ describe('POST /api/subscribe', () => {
 		const mail = sent.emails[0];
 		expect(mail.from).toBe('Contact Improv Miami <hello@miamicontactimprov.com>');
 		expect(mail.to).toEqual(['reader@example.com']);
-		expect(mail.text).toContain('TESTCODE');
+		expect(sent.stripe).toHaveLength(1);
+		const promo = new URLSearchParams(sent.stripe[0]);
+		expect(promo.get('coupon')).toBe('coupon_test10');
+		expect(promo.get('max_redemptions')).toBe('1');
+		expect(promo.get('code')).toMatch(/^CI10-[A-Z0-9]{6}$/);
+		expect(mail.subject).toBe('Your 10% off one event');
+		expect(mail.text).toContain(promo.get('code'));
+		expect(mail.text).toContain('10% off one event');
+		expect(mail.text).not.toMatch(/20%|two months|—|–/);
 		expect(mail.text).toContain('https://miamicontactimprov.com/fundamentals');
 		expect(mail.text.match(/https?:\/\//g) ?? []).toHaveLength(1);
 		expect(mail.text.split(/\s+/).filter(Boolean).length).toBeLessThanOrEqual(120);
+	});
+
+	it('skips the welcome email when Stripe refuses to create the code', async () => {
+		interceptContacts();
+		interceptPromo(400, 2);
+
+		expect((await subscribe('reader@example.com', 'miamicontactimprov:start')).status).toBe(200);
+		expect(sent.emails).toHaveLength(0);
+	});
+
+	it('skips the welcome email when the coupon id is not set', async () => {
+		interceptContacts();
+
+		const { status } = await call(
+			'/api/subscribe',
+			{
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ email: 'reader@example.com', consent: true, source: 'miamicontactimprov:start' }),
+			},
+			testEnv({ CI_ONE_EVENT_COUPON_ID: undefined }),
+		);
+		expect(status).toBe(200);
+		expect(sent.stripe).toHaveLength(0);
+		expect(sent.emails).toHaveLength(0);
 	});
 
 	it('keeps serving the subscriber when Resend fails', async () => {
@@ -212,6 +263,7 @@ describe('POST /api/subscribe', () => {
 
 	it('stores the acquisition fields a page sends with a signup', async () => {
 		interceptContacts();
+		interceptPromo();
 		interceptEmails();
 
 		const { status } = await call('/api/subscribe', {
@@ -221,7 +273,7 @@ describe('POST /api/subscribe', () => {
 				email: 'reader@example.com',
 				consent: true,
 				source: 'miamicontactimprov:start:door',
-				offer: 'Not ready for this Friday? Get the next dates and 20% off classes for the next two months.',
+				offer: 'Not ready for this Friday? Get the next dates and 10% off one event.',
 				campaign: 'ci-october',
 				landing_page: '/start',
 				referrer: 'https://www.instagram.com/',
@@ -235,7 +287,7 @@ describe('POST /api/subscribe', () => {
 		expect(status).toBe(200);
 		const stored = JSON.parse((await env.EMAIL_SUBS.get('reader@example.com')) ?? '{}');
 		expect(stored.source).toBe('miamicontactimprov:start:door');
-		expect(stored.offer).toBe('Not ready for this Friday? Get the next dates and 20% off classes for the next two months.');
+		expect(stored.offer).toBe('Not ready for this Friday? Get the next dates and 10% off one event.');
 		expect(stored.campaign).toBe('ci-october');
 		expect(stored.landing_page).toBe('/start');
 		expect(stored.referrer).toBe('https://www.instagram.com/');
@@ -250,6 +302,7 @@ describe('POST /api/subscribe', () => {
 
 	it('stores a signup from a page that sends no acquisition fields', async () => {
 		interceptContacts();
+		interceptPromo();
 		interceptEmails();
 
 		expect((await subscribe('reader@example.com', 'miamicontactimprov:fundamentals')).status).toBe(200);

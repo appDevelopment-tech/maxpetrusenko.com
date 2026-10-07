@@ -2,7 +2,8 @@
 # .dev.vars itself is gitignored; never commit real keys.
 ADMIN_TOKEN=change-me
 RESEND_API_KEY=re_placeholder
-CI_NEWSLETTER_COUPON=PLACEHOLDER20
+# Stripe coupon id (10% off, duration=once). Unique CI10-XXXXXX codes are minted on it.
+CI_ONE_EVENT_COUPON_ID=
 META_PIXEL_ID=
 META_CAPI_TOKEN=
 META_TEST_EVENT_CODE=

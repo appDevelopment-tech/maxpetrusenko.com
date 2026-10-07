@@ -76,3 +76,53 @@ export async function createCheckoutSession(
 	}
 	return { url: payload.url };
 }
+
+// Unambiguous uppercase alphanumerics are not needed here: the code is pasted from an
+// email, so the full A-Z0-9 set is fine. Rejection sampling keeps the draw uniform.
+const CODE_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+
+export function randomCodeSuffix(length = 6): string {
+	let out = '';
+	while (out.length < length) {
+		const bytes = crypto.getRandomValues(new Uint8Array(length * 2));
+		for (const byte of bytes) {
+			if (byte < 252 && out.length < length) out += CODE_CHARS[byte % 36];
+		}
+	}
+	return out;
+}
+
+/**
+ * Creates a single-use promotion code on an existing coupon. `max_redemptions=1`
+ * is what makes the offer once per person: the code goes to one inbox and dies on
+ * first use. Returns the code string, or null on any failure (the caller logs and
+ * skips the email rather than sending a blank or unusable code).
+ */
+export async function createSingleUseCode(secretKey: string, couponId: string): Promise<string | null> {
+	// A collision on a random 6-char code is a 400; one retry covers it.
+	for (let attempt = 0; attempt < 2; attempt++) {
+		const code = `CI10-${randomCodeSuffix()}`;
+		const body = new URLSearchParams();
+		body.set('coupon', couponId);
+		body.set('code', code);
+		body.set('max_redemptions', '1');
+		try {
+			const response = await fetch(`${STRIPE_API}/promotion_codes`, {
+				method: 'POST',
+				headers: {
+					Authorization: `Bearer ${secretKey}`,
+					'Content-Type': 'application/x-www-form-urlencoded',
+				},
+				body: body.toString(),
+			});
+			const payload = (await response.json().catch(() => null)) as
+				| { code?: string; error?: { message?: string } }
+				| null;
+			if (response.ok && payload?.code) return payload.code;
+			console.error('[Promotion code failed]', response.status, payload?.error?.message ?? '');
+		} catch (error) {
+			console.error('[Promotion code error]', error);
+		}
+	}
+	return null;
+}

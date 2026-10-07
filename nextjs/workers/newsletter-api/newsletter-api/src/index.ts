@@ -9,6 +9,7 @@
  */
 
 import { handleCheckout } from './checkout';
+import { createSingleUseCode } from './stripe';
 
 interface SubscriptionRequest {
 	email: string;
@@ -56,7 +57,9 @@ export interface Env {
 	ADMIN_TOKEN?: string;
 	RESEND_API_KEY?: string;
 	RESEND_AUDIENCE_ID?: string;
-	CI_NEWSLETTER_COUPON?: string;
+	// Id of the 10%-off, duration=once Stripe coupon. Each first CI signup gets a
+	// unique single-use promotion code on it, created with STRIPE_SECRET_KEY.
+	CI_ONE_EVENT_COUPON_ID?: string;
 	// Meta Conversions API. Until both are set the events endpoint logs what it
 	// would have sent and answers 202, so the wiring can be tested before the ad
 	// account exists.
@@ -73,7 +76,7 @@ const RESEND_API = 'https://api.resend.com';
 // else, but they get a welcome email carrying the series discount code.
 const CI_SOURCE_PREFIX = 'miamicontactimprov';
 const CI_FROM = 'Contact Improv Miami <hello@miamicontactimprov.com>';
-const CI_SUBJECT = 'Your 20% code for the Fundamentals series';
+const CI_SUBJECT = 'Your 10% off one event';
 const CI_SERIES_LINK = 'https://miamicontactimprov.com/fundamentals';
 
 // Meta Conversions API. The version is pinned here alone; bump it in one place when
@@ -229,13 +232,11 @@ async function upsertResendContact(env: Env, email: string): Promise<void> {
 function welcomeBody(code: string): string {
 	return `Thanks for signing up.
 
-The Fundamentals series is eight Friday evenings at Inner Motion in Hallandale Beach, 7:00 to 9:00 PM, starting October 2. Come to one class or all eight. No partner and no experience needed, just clothes you can roll in.
+Your code is ${code}. It takes 10% off one event, a class or a jam, and it works once. Enter it at checkout.
 
-Your 20% code is ${code}, good on any class for the next two months. Enter it at checkout on the booking page and the price drops.
+Fridays 7:00 to 9:00 PM at Inner Motion in Hallandale Beach. No partner and no experience needed, just clothes you can roll in.
 
 Dates, the venue and what we cover: ${CI_SERIES_LINK}
-
-If $20 is the reason you are not coming this week, reply to this and we will sort it out.
 
 One email a month after this one. Reply if you want off the list.
 
@@ -243,12 +244,17 @@ Max`;
 }
 
 async function sendWelcome(env: Env, email: string): Promise<void> {
-	// CI_NEWSLETTER_COUPON: the 20%-off code for the Fundamentals series, set as a
-	// Worker environment variable / secret, never in source. Unset until the Luma
-	// coupon exists; the welcome email is skipped rather than sent with a blank code.
-	const code = env.CI_NEWSLETTER_COUPON;
+	// Each signup gets its own single-use Stripe promotion code on the coupon named by
+	// CI_ONE_EVENT_COUPON_ID (a Worker secret, never in source). If the coupon id or
+	// the Stripe key is missing, or Stripe refuses, the email is skipped rather than
+	// sent with a blank or unusable code.
+	if (!env.CI_ONE_EVENT_COUPON_ID || !env.STRIPE_SECRET_KEY) {
+		console.error('[Welcome email skipped] CI_ONE_EVENT_COUPON_ID or STRIPE_SECRET_KEY is not set');
+		return;
+	}
+	const code = await createSingleUseCode(env.STRIPE_SECRET_KEY, env.CI_ONE_EVENT_COUPON_ID);
 	if (!code) {
-		console.error('[Welcome email skipped] CI_NEWSLETTER_COUPON is not set');
+		console.error('[Welcome email skipped] could not create a promotion code');
 		return;
 	}
 	const response = await resendPost(env, '/emails', {
