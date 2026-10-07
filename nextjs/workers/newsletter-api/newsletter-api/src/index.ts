@@ -11,6 +11,7 @@
 import { handleCheckout } from './checkout';
 import { createSingleUseCode, promoCodeStatus, randomCodeSuffix } from './stripe';
 import { sendSms, type TwilioEnv } from './sms';
+import { confirmationBody, confirmationLink, plainPage, verifyConfirmation } from './resubscribe';
 
 interface SubscriptionRequest {
 	email: string;
@@ -41,7 +42,7 @@ interface SubscriptionResponse {
 
 interface KVNamespace {
 	get(key: string): Promise<string | null>;
-	put(key: string, value: string): Promise<void>;
+	put(key: string, value: string, options?: { expirationTtl?: number }): Promise<void>;
 	list(): Promise<{ keys: Array<{ name: string }> }>;
 }
 
@@ -67,13 +68,16 @@ export interface Env {
 	META_PIXEL_ID?: string;
 	META_CAPI_TOKEN?: string;
 	META_TEST_EVENT_CODE?: string;
-	// Test-mode Stripe secret key for /api/checkout. Live mode is a later step.
+	// Stripe secret key, used by /api/checkout and by the single-use promotion codes.
 	STRIPE_SECRET_KEY?: string;
 	// Twilio REST credentials for texting the code to a phone number left on the form.
 	TWILIO_ACCOUNT_SID?: string;
 	TWILIO_AUTH_TOKEN?: string;
+	// A sending number (+1...) or a Messaging Service SID (MG...).
 	TWILIO_FROM?: string;
-	// Cloudflare rate limit binding (wrangler.jsonc `ratelimits`): 3 per IP per 60s.
+	// Signs the resubscribe confirmation links.
+	CI_CONFIRM_SECRET?: string;
+	// Cloudflare rate limit binding (wrangler.jsonc `ratelimits`): 10 per IP per 60s.
 	SUBSCRIBE_LIMITER?: { limit(options: { key: string }): Promise<{ success: boolean }> };
 }
 
@@ -226,40 +230,105 @@ async function resendPost(env: Env, path: string, body: unknown): Promise<Respon
 	});
 }
 
-type ContactResult = 'created' | 'existing' | 'resubscribed' | 'failed';
+type ContactResult = 'created' | 'existing' | 'unsubscribed' | 'failed';
 
-// Looks the contact up first so a person who unsubscribed in Resend is flipped back to
-// subscribed (PATCH) rather than left silently unsubscribed by a create call.
+// Looks the contact up and creates it only on a 404. An unsubscribed contact is never
+// flipped here: the public form cannot override an opt-out, so the caller sends a
+// signed confirmation link instead (see resubscribe.ts).
+// Audience-scoped endpoints on purpose: Resend now lists Audiences as deprecated in
+// favour of Segments, but its docs do not show how a new contact is attached to a
+// segment, and this Worker's RESEND_AUDIENCE_ID is the audience the list lives in.
 async function upsertResendContact(env: Env, email: string, kvUnsubscribed: boolean): Promise<ContactResult> {
 	const path = `/audiences/${env.RESEND_AUDIENCE_ID}/contacts/${encodeURIComponent(email)}`;
-	const lookup = await fetch(`${RESEND_API}${path}`, {
-		headers: { Authorization: `Bearer ${env.RESEND_API_KEY}` },
-	});
-	if (lookup.ok) {
-		const contact = (await lookup.json().catch(() => null)) as { unsubscribed?: boolean } | null;
-		if (contact?.unsubscribed || kvUnsubscribed) {
-			const response = await fetch(`${RESEND_API}${path}`, {
-				method: 'PATCH',
-				headers: { Authorization: `Bearer ${env.RESEND_API_KEY}`, 'Content-Type': 'application/json' },
-				body: JSON.stringify({ unsubscribed: false }),
-			});
-			if (!response.ok) {
-				console.error('[Resend resubscribe failed]', response.status);
-				return 'failed';
-			}
-			return 'resubscribed';
-		}
-		return 'existing';
-	}
-	const response = await resendPost(env, `/audiences/${env.RESEND_AUDIENCE_ID}/contacts`, {
-		email,
-		unsubscribed: false,
-	});
-	if (!response.ok) {
-		console.error('[Resend contact failed]', response.status, await response.text());
+	let lookup: Response;
+	try {
+		lookup = await fetch(`${RESEND_API}${path}`, { headers: { Authorization: `Bearer ${env.RESEND_API_KEY}` } });
+	} catch (error) {
+		console.error('[Resend lookup error]', String(error));
 		return 'failed';
 	}
-	return kvUnsubscribed ? 'resubscribed' : 'created';
+	if (lookup.ok) {
+		const contact = (await lookup.json().catch(() => null)) as { unsubscribed?: boolean } | null;
+		return contact?.unsubscribed || kvUnsubscribed ? 'unsubscribed' : 'existing';
+	}
+	if (lookup.status !== 404) {
+		console.error('[Resend lookup failed]', lookup.status);
+		return 'failed';
+	}
+	try {
+		const response = await resendPost(env, `/audiences/${env.RESEND_AUDIENCE_ID}/contacts`, { email, unsubscribed: false });
+		if (!response.ok) {
+			console.error('[Resend contact failed]', response.status, await response.text());
+			return 'failed';
+		}
+	} catch (error) {
+		console.error('[Resend create error]', String(error));
+		return 'failed';
+	}
+	return 'created';
+}
+
+// One confirmation email per address per 24 hours. The mark is written first so a
+// double submit cannot send two.
+async function sendConfirmation(env: Env, email: string, origin: string): Promise<void> {
+	if (!env.CI_CONFIRM_SECRET) {
+		console.error('[Confirmation skipped] CI_CONFIRM_SECRET is not set');
+		return;
+	}
+	const key = `ci-confirm:${await sha256Hex(normalizeEmail(email))}`;
+	try {
+		if (await env.EMAIL_SUBS.get(key)) return;
+		await env.EMAIL_SUBS.put(key, String(Date.now()), { expirationTtl: 24 * 60 * 60 });
+	} catch (error) {
+		console.error('[Confirmation skipped] KV unavailable', String(error));
+		return;
+	}
+	const link = await confirmationLink(origin, env.CI_CONFIRM_SECRET, email, Math.floor(Date.now() / 1000));
+	try {
+		const response = await resendPost(env, '/emails', {
+			from: CI_FROM,
+			to: [email],
+			subject: 'Confirm you want emails again',
+			text: confirmationBody(link),
+		});
+		if (!response.ok) console.error('[Confirmation email failed]', response.status);
+	} catch (error) {
+		console.error('[Confirmation email error]', String(error));
+	}
+}
+
+// GET /api/ci/resubscribe: the only place an opt-out is reversed, and only with a
+// valid, unexpired signature. Re-sends the same unused code (email, and SMS if the
+// one-per-number rule allows it).
+async function handleResubscribe(request: Request, env: Env): Promise<Response> {
+	const params = new URL(request.url).searchParams;
+	const page = (status: number, message: string) =>
+		new Response(plainPage('Contact Improv Miami', message), { status, headers: { 'Content-Type': 'text/html; charset=utf-8' } });
+	if (!env.CI_CONFIRM_SECRET) return page(503, 'This link is not available right now.');
+	const verdict = await verifyConfirmation(env.CI_CONFIRM_SECRET, params, Math.floor(Date.now() / 1000));
+	if (verdict === 'expired') return page(410, 'This link expired. Sign up again on the site to get a new one.');
+	if (verdict !== 'ok') return page(400, 'This link is not valid.');
+	const email = (params.get('e') ?? '').trim().toLowerCase();
+	try {
+		const response = await fetch(`${RESEND_API}/audiences/${env.RESEND_AUDIENCE_ID}/contacts/${encodeURIComponent(email)}`, {
+			method: 'PATCH',
+			headers: { Authorization: `Bearer ${env.RESEND_API_KEY}`, 'Content-Type': 'application/json' },
+			body: JSON.stringify({ unsubscribed: false }),
+		});
+		if (!response.ok) {
+			console.error('[Resend resubscribe failed]', response.status);
+			return page(502, 'That did not go through. Try the link again in a minute.');
+		}
+	} catch (error) {
+		console.error('[Resend resubscribe error]', String(error));
+		return page(502, 'That did not go through. Try the link again in a minute.');
+	}
+	let phone = '';
+	try {
+		phone = String(JSON.parse((await env.EMAIL_SUBS.get(email)) ?? '{}').phone ?? '');
+	} catch {}
+	await sendWelcome(env, email, phone, true);
+	return new Response(null, { status: 302, headers: { Location: 'https://miamicontactimprov.com/?resubscribed=1' } });
 }
 
 function welcomeBody(code: string): string {
@@ -330,11 +399,17 @@ async function sendWelcome(env: Env, email: string, phone: string, resend: boole
 	if (!wantEmail && !wantSms) return;
 
 	if (!state.promo_code) {
-		// Persist the code and attempt before calling Stripe, so a retry after a lost
-		// response replays the same idempotent request instead of minting a second code.
+		// The code and attempt are saved before Stripe is called (the one write that
+		// cannot wait for the end), so a retry after a lost response replays the same
+		// idempotent request instead of minting a second code.
 		const attempt = state.attempt ?? 1;
 		const code = state.pending_code ?? `CI10-${randomCodeSuffix()}`;
-		await env.EMAIL_SUBS.put(stateKey, JSON.stringify({ ...state, attempt, pending_code: code }));
+		try {
+			await env.EMAIL_SUBS.put(stateKey, JSON.stringify({ ...state, attempt, pending_code: code }));
+		} catch (error) {
+			console.error('[Welcome skipped] could not save state', String(error));
+			return;
+		}
 		const result = await createSingleUseCode(env.STRIPE_SECRET_KEY, env.CI_ONE_EVENT_COUPON_ID, {
 			code,
 			idempotencyKey: `ci10-${hash}-${attempt}`,
@@ -342,7 +417,16 @@ async function sendWelcome(env: Env, email: string, phone: string, resend: boole
 		});
 		if (!result.ok) {
 			if (result.definite) {
-				await env.EMAIL_SUBS.put(stateKey, JSON.stringify({ attempt: attempt + 1 }));
+				// Re-read first: a concurrent signup may have finished minting, and its
+				// code must not be wiped by moving to a new attempt.
+				try {
+					const fresh = await readWelcomeState(env, stateKey);
+					if (!fresh.promo_code) {
+						await env.EMAIL_SUBS.put(stateKey, JSON.stringify({ ...fresh, attempt: attempt + 1, pending_code: undefined }));
+					}
+				} catch (error) {
+					console.error('[Welcome state update failed]', String(error));
+				}
 			}
 			console.error('[Welcome skipped] could not create a promotion code');
 			return;
@@ -350,7 +434,6 @@ async function sendWelcome(env: Env, email: string, phone: string, resend: boole
 		state.promo_code = result.code;
 		delete state.pending_code;
 		state.attempt = attempt;
-		await env.EMAIL_SUBS.put(stateKey, JSON.stringify(state));
 	} else if (resend) {
 		const status = await promoCodeStatus(env.STRIPE_SECRET_KEY, state.promo_code, Math.floor(Date.now() / 1000));
 		if (status !== 'usable') {
@@ -382,13 +465,11 @@ async function sendWelcome(env: Env, email: string, phone: string, resend: boole
 	if (wantSms && (await sendSms(env as TwilioEnv, phone, code))) {
 		state.sms_sent_at = Date.now();
 	}
-	await env.EMAIL_SUBS.put(stateKey, JSON.stringify(state));
-	// Mirror onto the subscriber record so the admin endpoints show it.
+	// The single final write for this person's state.
 	try {
-		const record = JSON.parse((await env.EMAIL_SUBS.get(email)) ?? '{}');
-		await env.EMAIL_SUBS.put(email, JSON.stringify({ ...record, promo_code: code, welcome_sent_at: state.welcome_sent_at }));
+		await env.EMAIL_SUBS.put(stateKey, JSON.stringify(state));
 	} catch (error) {
-		console.error('[Welcome mirror failed]', String(error));
+		console.error('[Welcome state write failed]', String(error));
 	}
 }
 
@@ -439,7 +520,7 @@ export default {
 
 		// POST /api/subscribe - Email subscription endpoint
 		if (url.pathname === '/api/subscribe' && request.method === 'POST') {
-			// 3 requests per IP per 60 seconds. A limiter outage must not block signups.
+			// 10 requests per IP per 60 seconds. A limiter outage must not block signups.
 			if (env.SUBSCRIBE_LIMITER) {
 				try {
 					const ip = request.headers.get('CF-Connecting-IP') || 'unknown';
@@ -494,12 +575,9 @@ export default {
 				}
 
 				const previousRecord = await env.EMAIL_SUBS.get(email);
-				let carried: Record<string, unknown> = {};
 				let kvUnsubscribed = false;
 				try {
-					const old = JSON.parse(previousRecord ?? '{}');
-					kvUnsubscribed = Boolean(old.unsubscribed);
-					if (old.promo_code) carried = { promo_code: old.promo_code, welcome_sent_at: old.welcome_sent_at };
+					kvUnsubscribed = Boolean(JSON.parse(previousRecord ?? '{}').unsubscribed);
 				} catch {}
 
 				// Store in KV. The attribution fields are sanitised once and used for
@@ -513,7 +591,6 @@ export default {
 					source,
 					...(phone ? { phone } : {}),
 					...extras,
-					...carried,
 					ts: Date.now(),
 				}));
 
@@ -526,8 +603,11 @@ export default {
 				if (env.RESEND_API_KEY && env.RESEND_AUDIENCE_ID) {
 					ctx.waitUntil((async () => {
 						const contact = await upsertResendContact(env, email, kvUnsubscribed);
-						if (wantsWelcome) {
-							await sendWelcome(env, email, phone, contact === 'resubscribed');
+						if (!wantsWelcome || contact === 'failed') return;
+						if (contact === 'unsubscribed') {
+							await sendConfirmation(env, email, url.origin);
+						} else {
+							await sendWelcome(env, email, phone, false);
 						}
 					})());
 				} else {
@@ -545,6 +625,11 @@ export default {
 					{ status: 500, headers: corsHeaders }
 				);
 			}
+		}
+
+		// GET /api/ci/resubscribe - signed link from the confirmation email
+		if (url.pathname === '/api/ci/resubscribe' && request.method === 'GET') {
+			return handleResubscribe(request, env);
 		}
 
 		// POST /api/events - Server-side conversion events for the Meta ad test.

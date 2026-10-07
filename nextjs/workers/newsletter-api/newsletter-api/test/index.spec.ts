@@ -2,6 +2,7 @@ import { env, createExecutionContext, waitOnExecutionContext, fetchMock } from '
 import { describe, it, expect, beforeAll, afterEach, vi } from 'vitest';
 import worker, { normalizeEmail } from '../src';
 import { toE164, smsBody } from '../src/sms';
+import { signConfirmation } from '../src/resubscribe';
 
 const ADMIN_TOKEN = 'test-admin-token';
 const RESEND_ORIGIN = 'https://api.resend.com';
@@ -30,6 +31,7 @@ function testEnv(overrides: Record<string, unknown> = {}): Env {
 		TWILIO_ACCOUNT_SID: 'ACtest',
 		TWILIO_AUTH_TOKEN: 'twilio_token_test',
 		TWILIO_FROM: '+18335550100',
+		CI_CONFIRM_SECRET: 'confirm_secret_test',
 	}, overrides) as unknown as Env;
 }
 
@@ -91,7 +93,7 @@ function interceptPromo(status = 200, times = 1) {
 			const body = String(opts.body ?? '');
 			sent.stripe.push({ body, headers: opts.headers ?? {} });
 			const code = new URLSearchParams(body).get('code');
-			return status === 200 ? { id: 'promo_1', code } : { error: { message: 'boom' } };
+			return status === 200 ? { id: 'promo_1', code } : { error: { message: 'boom', type: status === 409 ? 'idempotency_error' : 'invalid_request_error' } };
 		})
 		.times(times);
 }
@@ -324,7 +326,8 @@ describe('POST /api/subscribe', () => {
 		expect(sent.stripe).toHaveLength(1);
 		expect(sent.emails).toHaveLength(2);
 		expect(sent.emails[1].text).toContain(code);
-		const stored = JSON.parse((await env.EMAIL_SUBS.get('reader@example.com')) ?? '{}');
+		const stateKey = (await env.EMAIL_SUBS.list()).keys.map((k) => k.name).find((k) => k.startsWith('ci10:')) as string;
+		const stored = JSON.parse((await env.EMAIL_SUBS.get(stateKey)) ?? '{}');
 		expect(stored.promo_code).toBe(code);
 		expect(stored.welcome_sent_at).toBeGreaterThan(0);
 	});
@@ -390,8 +393,10 @@ describe('POST /api/subscribe', () => {
 		await subscribeWithPhone('reader@example.com', '+13055551234');
 
 		expect(sent.sms).toHaveLength(1);
-		const state = JSON.parse((await env.EMAIL_SUBS.get('reader@example.com')) ?? '{}');
+		const stateKey = (await env.EMAIL_SUBS.list()).keys.map((k) => k.name).find((k) => k.startsWith('ci10:')) as string;
+		const state = JSON.parse((await env.EMAIL_SUBS.get(stateKey)) ?? '{}');
 		expect(state.welcome_sent_at).toBeUndefined();
+		expect(state.sms_sent_at).toBeGreaterThan(0);
 	});
 
 	it('skips the text when the number cannot be made E.164', async () => {
@@ -405,40 +410,144 @@ describe('POST /api/subscribe', () => {
 		expect(sent.emails).toHaveLength(1);
 	});
 
-	it('flips an unsubscribed contact back and re-sends the same unused code, minting nothing', async () => {
+	async function seedCode(): Promise<string> {
 		interceptContacts(201);
 		interceptPromo();
 		interceptEmails();
 		await subscribe('reader@example.com', 'miamicontactimprov:start');
-		const code = new URLSearchParams(sent.stripe[0].body).get('code') as string;
+		return new URLSearchParams(sent.stripe[0].body).get('code') as string;
+	}
 
-		interceptContactLookup('reader@example.com', 200, { id: 'c1', unsubscribed: true });
+	function interceptPatch(status = 200) {
 		fetchMock.get(RESEND_ORIGIN).intercept({ method: 'PATCH', path: CONTACT_PATH('reader@example.com') })
-			.reply(200, (opts: any) => { sent.contacts.push(JSON.parse(String(opts.body ?? '{}'))); return { id: 'c1' }; });
+			.reply(status, (opts: any) => { sent.contacts.push(JSON.parse(String(opts.body ?? '{}'))); return { id: 'c1' }; });
+	}
+
+	async function link(email: string, expires: number, secret = 'confirm_secret_test') {
+		const sig = await signConfirmation(secret, email, expires);
+		return `/api/ci/resubscribe?${new URLSearchParams({ e: email, x: String(expires), s: sig }).toString()}`;
+	}
+
+	async function getLink(path: string) {
+		const ctx = createExecutionContext();
+		const res = await worker.fetch(new Request(`https://newsletter.test${path}`), testEnv(), ctx);
+		await waitOnExecutionContext(ctx);
+		return res;
+	}
+
+	it('never flips an opt-out from the public form: it sends one signed confirmation, once per 24h', async () => {
+		await seedCode();
+		sent.emails.length = 0;
+
+		interceptContactLookup('reader@example.com', 200, { id: 'c1', unsubscribed: true }, 2);
+		interceptEmails();
+		await subscribe('reader@example.com', 'miamicontactimprov:start');
+		await subscribe('reader@example.com', 'miamicontactimprov:start');
+
+		expect(sent.contacts.filter((c) => 'unsubscribed' in c && c.unsubscribed === false && !c.email)).toHaveLength(0);
+		expect(sent.emails).toHaveLength(1);
+		expect(sent.emails[0].subject).toBe('Confirm you want emails again');
+		expect(sent.emails[0].text).toMatch(/\/api\/ci\/resubscribe\?e=reader%40example\.com&x=\d+&s=[0-9a-f]{64}/);
+		expect(sent.emails[0].text).not.toContain('CI10-');
+		expect(sent.stripe).toHaveLength(1);
+	});
+
+	it('a valid signed link resubscribes and re-sends the same unused code', async () => {
+		const code = await seedCode();
+		interceptPatch();
 		interceptPromoStatus({ active: true, times_redeemed: 0, max_redemptions: 1, expires_at: Math.floor(Date.now() / 1000) + 86400 });
 		interceptEmails();
 
-		await subscribe('reader@example.com', 'miamicontactimprov:start');
+		const res = await getLink(await link('reader@example.com', Math.floor(Date.now() / 1000) + 3600));
 
+		expect(res.status).toBe(302);
+		expect(res.headers.get('Location')).toBe('https://miamicontactimprov.com/?resubscribed=1');
 		expect(sent.contacts.at(-1)).toEqual({ unsubscribed: false });
 		expect(sent.stripe).toHaveLength(1);
 		expect(sent.emails).toHaveLength(2);
 		expect(sent.emails[1].text).toContain(code);
 	});
 
-	it('re-sends nothing to a resubscriber whose code was already used', async () => {
-		interceptContacts(201);
-		interceptPromo();
-		interceptEmails();
-		await subscribe('reader@example.com', 'miamicontactimprov:start');
-
-		interceptContactLookup('reader@example.com', 200, { id: 'c1', unsubscribed: true });
-		fetchMock.get(RESEND_ORIGIN).intercept({ method: 'PATCH', path: CONTACT_PATH('reader@example.com') }).reply(200, { id: 'c1' });
+	it('a valid link re-sends nothing when the code was already used', async () => {
+		await seedCode();
+		interceptPatch();
 		interceptPromoStatus({ active: false, times_redeemed: 1, max_redemptions: 1, expires_at: null });
 
+		const res = await getLink(await link('reader@example.com', Math.floor(Date.now() / 1000) + 3600));
+
+		expect(res.status).toBe(302);
+		expect(sent.stripe).toHaveLength(1);
+		expect(sent.emails).toHaveLength(1);
+	});
+
+	it('rejects an expired, tampered or wrongly keyed link without touching Resend', async () => {
+		const future = Math.floor(Date.now() / 1000) + 3600;
+		expect((await getLink(await link('reader@example.com', Math.floor(Date.now() / 1000) - 5))).status).toBe(410);
+		const good = await link('reader@example.com', future);
+		expect((await getLink(good.replace('reader%40example.com', 'other%40example.com'))).status).toBe(400);
+		expect((await getLink(good.replace(/x=\d+/, `x=${future + 99999}`))).status).toBe(400);
+		expect((await getLink(good.slice(0, -2) + '00')).status).toBe(400);
+		expect((await getLink(await link('reader@example.com', future, 'wrong_secret'))).status).toBe(400);
+		expect((await getLink('/api/ci/resubscribe')).status).toBe(400);
+	});
+
+	it('texts a given number once ever, even for a different email', async () => {
+		interceptContacts();
+		interceptPromo();
+		interceptEmails();
+		interceptSms();
+		await subscribeWithPhone('reader@example.com', '3055551234');
+
+		interceptContactLookup('second@example.com');
+		fetchMock.get(RESEND_ORIGIN).intercept({ method: 'POST', path: `/audiences/${AUDIENCE}/contacts` }).reply(201, { id: 'c' });
+		interceptPromo();
+		interceptEmails();
+		await subscribeWithPhone('second@example.com', '(305) 555-1234');
+
+		expect(sent.sms).toHaveLength(1);
+		expect(sent.emails).toHaveLength(2);
+		await env.EMAIL_SUBS.delete('second@example.com');
+	});
+
+	it('sends no text to a non US or Canada number but still emails', async () => {
+		interceptContacts();
+		interceptPromo();
+		interceptEmails();
+
+		await subscribeWithPhone('reader@example.com', '+44 20 7946 0958');
+
+		expect(sent.sms).toHaveLength(0);
+		expect(sent.emails).toHaveLength(1);
+	});
+
+	it('uses MessagingServiceSid when TWILIO_FROM is an MG sid', async () => {
+		interceptContacts();
+		interceptPromo();
+		interceptEmails();
+		interceptSms();
+
+		await call('/api/subscribe', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({ email: 'reader@example.com', consent: true, source: 'miamicontactimprov:start', phone: '3055551234' }),
+		}, testEnv({ TWILIO_FROM: 'MGabc123' }));
+
+		expect(sent.sms[0].body.get('MessagingServiceSid')).toBe('MGabc123');
+		expect(sent.sms[0].body.has('From')).toBe(false);
+	});
+
+	it('treats a Stripe 409 as not definite: the next signup reuses the same attempt and code', async () => {
+		interceptContacts(201, 2);
+		interceptPromo(409);
+		interceptPromo();
+		interceptEmails();
+
+		await subscribe('reader@example.com', 'miamicontactimprov:start');
 		await subscribe('reader@example.com', 'miamicontactimprov:start');
 
-		expect(sent.stripe).toHaveLength(1);
+		const keys = sent.stripe.map((r) => Object.entries(r.headers).find(([k]) => k.toLowerCase() === 'idempotency-key')?.[1]);
+		expect(keys[0]).toBe(keys[1]);
+		expect(new URLSearchParams(sent.stripe[0].body).get('code')).toBe(new URLSearchParams(sent.stripe[1].body).get('code'));
 		expect(sent.emails).toHaveLength(1);
 	});
 
@@ -459,7 +568,9 @@ describe('POST /api/subscribe', () => {
 		expect(normalizeEmail('a.b+c@example.com')).toBe('a.b@example.com');
 		expect(toE164('305-555-1234')).toBe('+13055551234');
 		expect(toE164('1 305 555 1234')).toBe('+13055551234');
-		expect(toE164('+44 20 7946 0958')).toBe('+442079460958');
+		expect(toE164('+44 20 7946 0958')).toBeNull();
+		expect(toE164('+52 55 1234 5678')).toBeNull();
+		expect(toE164('(055) 555-1234')).toBeNull();
 		expect(toE164('12345')).toBeNull();
 	});
 
@@ -543,8 +654,7 @@ describe('POST /api/subscribe', () => {
 		expect((await subscribe('reader@example.com', 'miamicontactimprov:fundamentals')).status).toBe(200);
 
 		const stored = JSON.parse((await env.EMAIL_SUBS.get('reader@example.com')) ?? '{}');
-		// promo_code and welcome_sent_at are the welcome state mirrored onto the record.
-		expect(Object.keys(stored).sort()).toEqual(['consent', 'email', 'promo_code', 'source', 'ts', 'welcome_sent_at']);
+		expect(Object.keys(stored).sort()).toEqual(['consent', 'email', 'source', 'ts']);
 	});
 
 	it('cuts an overlong field and drops the empty and the untexted ones', async () => {

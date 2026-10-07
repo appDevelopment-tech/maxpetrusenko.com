@@ -13,3 +13,5 @@ STRIPE_SECRET_KEY=sk_test_placeholder
 TWILIO_ACCOUNT_SID=
 TWILIO_AUTH_TOKEN=
 TWILIO_FROM=
+# Signs the resubscribe confirmation links (any long random string).
+CI_CONFIRM_SECRET=

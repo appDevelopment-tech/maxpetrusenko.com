@@ -132,11 +132,14 @@ export async function createSingleUseCode(
 			body: body.toString(),
 		});
 		const payload = (await response.json().catch(() => null)) as
-			| { code?: string; error?: { message?: string } }
+			| { code?: string; error?: { message?: string; type?: string } }
 			| null;
 		if (response.ok && payload?.code) return { ok: true, code: payload.code };
 		console.error('[Promotion code failed]', response.status, payload?.error?.message ?? '');
-		return { ok: false, definite: true };
+		// A 409 or idempotency_error means another request with this key is in flight or
+		// finished: the key is not spent, so this is not a definite failure.
+		const conflict = response.status === 409 || payload?.error?.type === 'idempotency_error';
+		return { ok: false, definite: !conflict };
 	} catch (error) {
 		console.error('[Promotion code error]', error);
 		return { ok: false, definite: false };
