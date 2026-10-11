@@ -1,0 +1,29 @@
+{
+  "slug": "youtube-exposing-truth-about-peptides-xpdlsnl4g",
+  "title": "The FDA's Scientists Said No to All Seven Peptides. A Rebuilt Committee Said Yes to Six.",
+  "publicUrl": "https://www.maxpetrusenko.com/medium/youtube-exposing-truth-about-peptides-xpdlsnl4g/",
+  "outputPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/youtube-exposing-truth-about-peptides-xpdlsnl4g/index.html",
+  "sourceUrl": "https://www.youtube.com/watch?v=xpdLs-_nl4g",
+  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-exposing-truth-about-peptides-xpdlsnl4g/article-v1.md",
+  "articleHash": "87e8c816425ca0b71059aa457cf0897cb343cab34049bc73103b5f5c9943c76e",
+  "exportedAt": "2026-10-11T10:52:29.385Z",
+  "status": "needs_review",
+  "publishMode": "preview",
+  "copiedImages": [
+    {
+      "src": "assets/hero.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-exposing-truth-about-peptides-xpdlsnl4g/assets/hero.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-exposing-truth-about-peptides-xpdlsnl4g-1791715949382/assets/hero.jpg"
+    },
+    {
+      "src": "assets/market.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-exposing-truth-about-peptides-xpdlsnl4g/assets/market.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-exposing-truth-about-peptides-xpdlsnl4g-1791715949382/assets/market.jpg"
+    }
+  ],
+  "ratings": {
+    "gemini": null,
+    "gpt": null,
+    "consensus": 6.5
+  }
+}
