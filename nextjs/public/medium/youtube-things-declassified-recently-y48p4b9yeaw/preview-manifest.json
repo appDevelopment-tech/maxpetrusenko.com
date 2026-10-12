@@ -1,0 +1,58 @@
+{
+  "slug": "youtube-things-declassified-recently-y48p4b9yeaw",
+  "title": "The Army Sprayed 33 Communities. The Residents Were Never Asked.",
+  "publicUrl": "https://www.maxpetrusenko.com/medium/youtube-things-declassified-recently-y48p4b9yeaw/",
+  "outputPath": "/tmp/mp-y48-stage/public/medium/youtube-things-declassified-recently-y48p4b9yeaw/index.html",
+  "sourceUrl": null,
+  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-things-declassified-recently-y48p4b9yeaw/article-v2.md",
+  "articleHash": "eef7757407d1340d649ac7555f668273e85b298437cc80e4f9284ca0bb3287ad",
+  "exportedAt": "2026-10-12T22:41:05.272Z",
+  "status": "review_and_gates",
+  "publishMode": "preview",
+  "copiedImages": [
+    {
+      "src": "assets/hero.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-things-declassified-recently-y48p4b9yeaw/assets/hero.jpg",
+      "destinationPath": "/tmp/mp-y48-stage/public/medium/.tmp-youtube-things-declassified-recently-y48p4b9yeaw-1791844865263/assets/hero.jpg"
+    },
+    {
+      "src": "assets/starfish.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-things-declassified-recently-y48p4b9yeaw/assets/starfish.jpg",
+      "destinationPath": "/tmp/mp-y48-stage/public/medium/.tmp-youtube-things-declassified-recently-y48p4b9yeaw-1791844865263/assets/starfish.jpg"
+    },
+    {
+      "src": "assets/missile.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-things-declassified-recently-y48p4b9yeaw/assets/missile.jpg",
+      "destinationPath": "/tmp/mp-y48-stage/public/medium/.tmp-youtube-things-declassified-recently-y48p4b9yeaw-1791844865263/assets/missile.jpg"
+    },
+    {
+      "src": "assets/claw.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-things-declassified-recently-y48p4b9yeaw/assets/claw.jpg",
+      "destinationPath": "/tmp/mp-y48-stage/public/medium/.tmp-youtube-things-declassified-recently-y48p4b9yeaw-1791844865263/assets/claw.jpg"
+    }
+  ],
+  "ratings": {
+    "gemini": {
+      "target": 9.5,
+      "overallRating": 6.6,
+      "gpt56Sol": {
+        "overall": 6.6,
+        "verdict": "revise",
+        "title": 7.1,
+        "subtitle": 6.7,
+        "image": 6.5,
+        "titleClaimMatch": 4.9,
+        "evidenceDiscipline": 5.1,
+        "originalReporting": 8,
+        "spoiler": false
+      },
+      "titleSimplicity": {
+        "title": 8,
+        "subtitle": "4.0-5.0",
+        "consensus": false
+      }
+    },
+    "gpt": null,
+    "consensus": null
+  }
+}
