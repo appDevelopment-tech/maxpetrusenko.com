@@ -1,0 +1,44 @@
+{
+  "slug": "youtube-new-scams-look-completely-real-kvqbplzet4o",
+  "title": "Nothing About These Ten Scams Looks Fake. That's the Scam.",
+  "publicUrl": "https://www.maxpetrusenko.com/medium/youtube-new-scams-look-completely-real-kvqbplzet4o/",
+  "outputPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/youtube-new-scams-look-completely-real-kvqbplzet4o/index.html",
+  "sourceUrl": "https://www.youtube.com/watch?v=KVQbPLZEt4o",
+  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-new-scams-look-completely-real-kvqbplzet4o/article-v3.md",
+  "articleHash": "d0479e0f0e175771d09b1b4654c9220468d71e74738d995ae380dd1947d0f697",
+  "exportedAt": "2026-10-14T04:48:48.948Z",
+  "status": "needs_review",
+  "publishMode": "preview",
+  "copiedImages": [
+    {
+      "src": "assets/hero.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-new-scams-look-completely-real-kvqbplzet4o/assets/hero.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-new-scams-look-completely-real-kvqbplzet4o-1791953328939/assets/hero.jpg"
+    },
+    {
+      "src": "assets/card.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-new-scams-look-completely-real-kvqbplzet4o/assets/card.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-new-scams-look-completely-real-kvqbplzet4o-1791953328939/assets/card.jpg"
+    },
+    {
+      "src": "assets/email.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-new-scams-look-completely-real-kvqbplzet4o/assets/email.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-new-scams-look-completely-real-kvqbplzet4o-1791953328939/assets/email.jpg"
+    },
+    {
+      "src": "assets/puppet.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-new-scams-look-completely-real-kvqbplzet4o/assets/puppet.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-new-scams-look-completely-real-kvqbplzet4o-1791953328939/assets/puppet.jpg"
+    },
+    {
+      "src": "assets/data.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-new-scams-look-completely-real-kvqbplzet4o/assets/data.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-new-scams-look-completely-real-kvqbplzet4o-1791953328939/assets/data.jpg"
+    }
+  ],
+  "ratings": {
+    "gemini": 7.8,
+    "gpt": 7.8,
+    "consensus": 7.8
+  }
+}
