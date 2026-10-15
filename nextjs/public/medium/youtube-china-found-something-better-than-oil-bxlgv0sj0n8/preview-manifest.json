@@ -1,0 +1,44 @@
+{
+  "slug": "youtube-china-found-something-better-than-oil-bxlgv0sj0n8",
+  "title": "The F-35 Needs Magnets Beijing Can Refuse to Ship",
+  "publicUrl": "https://www.maxpetrusenko.com/medium/youtube-china-found-something-better-than-oil-bxlgv0sj0n8/",
+  "outputPath": "/tmp/china-stage-final/public/medium/youtube-china-found-something-better-than-oil-bxlgv0sj0n8/index.html",
+  "sourceUrl": "https://www.youtube.com/watch?v=BXLGV0Sj0n8",
+  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-china-found-something-better-than-oil-bxlgv0sj0n8/article-v3.md",
+  "articleHash": "97f40d4fceca19fad8e58f99dfbdc4316dbca4bcb6be7bc8e91de87e55eaf07e",
+  "exportedAt": "2026-10-15T05:24:22.991Z",
+  "status": "needs_review",
+  "publishMode": "preview",
+  "copiedImages": [
+    {
+      "src": "assets/hero.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-china-found-something-better-than-oil-bxlgv0sj0n8/assets/hero.jpg",
+      "destinationPath": "/tmp/china-stage-final/public/medium/.tmp-youtube-china-found-something-better-than-oil-bxlgv0sj0n8-1792041862984/assets/hero.jpg"
+    },
+    {
+      "src": "assets/newspaper.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-china-found-something-better-than-oil-bxlgv0sj0n8/assets/newspaper.jpg",
+      "destinationPath": "/tmp/china-stage-final/public/medium/.tmp-youtube-china-found-something-better-than-oil-bxlgv0sj0n8-1792041862984/assets/newspaper.jpg"
+    },
+    {
+      "src": "assets/tailings.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-china-found-something-better-than-oil-bxlgv0sj0n8/assets/tailings.jpg",
+      "destinationPath": "/tmp/china-stage-final/public/medium/.tmp-youtube-china-found-something-better-than-oil-bxlgv0sj0n8-1792041862984/assets/tailings.jpg"
+    },
+    {
+      "src": "assets/wto.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-china-found-something-better-than-oil-bxlgv0sj0n8/assets/wto.jpg",
+      "destinationPath": "/tmp/china-stage-final/public/medium/.tmp-youtube-china-found-something-better-than-oil-bxlgv0sj0n8-1792041862984/assets/wto.jpg"
+    },
+    {
+      "src": "assets/magnets.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-china-found-something-better-than-oil-bxlgv0sj0n8/assets/magnets.jpg",
+      "destinationPath": "/tmp/china-stage-final/public/medium/.tmp-youtube-china-found-something-better-than-oil-bxlgv0sj0n8-1792041862984/assets/magnets.jpg"
+    }
+  ],
+  "ratings": {
+    "gemini": 7.5,
+    "gpt": 7.5,
+    "consensus": 7.5
+  }
+}
