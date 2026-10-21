@@ -125,6 +125,9 @@ export default function robots(): MetadataRoute.Robots {
         allow: ["/llm.txt", "/llms.txt", "/.ai.txt", "/sitemap.xml"],
       },
     ],
-    sitemap: `${siteConfig.url}/sitemap.xml`,
+    sitemap: [
+      `${siteConfig.url}/sitemap.xml`,
+      `${siteConfig.url}/blog/weekly/sitemap.xml`,
+    ],
   };
 }
