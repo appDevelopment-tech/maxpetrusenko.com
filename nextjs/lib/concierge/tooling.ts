@@ -11,7 +11,7 @@ import type {
   ConciergeToolBlock,
 } from "./types";
 
-const STUDIO_URL = "https://studio.maxpetrusenko.com";
+const STUDIO_URL = "https://tantrastudio.app";
 
 const SOMATIC_INTENTION_OPTIONS = [
   {
