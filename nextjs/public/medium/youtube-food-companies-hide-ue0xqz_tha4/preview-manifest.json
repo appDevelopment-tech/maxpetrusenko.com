@@ -1,0 +1,39 @@
+{
+  "slug": "youtube-food-companies-hide-ue0xqz_tha4",
+  "title": "Your Body Wants Protein. The Bag Sells the Signal.",
+  "publicUrl": "https://www.maxpetrusenko.com/medium/youtube-food-companies-hide-ue0xqz_tha4/",
+  "outputPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/youtube-food-companies-hide-ue0xqz_tha4/index.html",
+  "sourceUrl": "https://www.youtube.com/watch?v=ue0xQZ_thA4",
+  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-food-companies-hide-ue0xqz_tha4/article-v1.md",
+  "articleHash": "74d920e62c91636a459b949c6a065e2bbfb2a852c9926b75e8c270ab1626c081",
+  "exportedAt": "2026-10-26T10:51:08.858Z",
+  "status": "needs_review",
+  "publishMode": "preview",
+  "copiedImages": [
+    {
+      "src": "assets/hero.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-food-companies-hide-ue0xqz_tha4/assets/hero.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-food-companies-hide-ue0xqz_tha4-1793011868853/assets/hero.jpg"
+    },
+    {
+      "src": "assets/chips-bowl.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-food-companies-hide-ue0xqz_tha4/assets/chips-bowl.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-food-companies-hide-ue0xqz_tha4-1793011868853/assets/chips-bowl.jpg"
+    },
+    {
+      "src": "assets/msg-crystals.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-food-companies-hide-ue0xqz_tha4/assets/msg-crystals.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-food-companies-hide-ue0xqz_tha4-1793011868853/assets/msg-crystals.jpg"
+    },
+    {
+      "src": "assets/nejm-1968.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-food-companies-hide-ue0xqz_tha4/assets/nejm-1968.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-food-companies-hide-ue0xqz_tha4-1793011868853/assets/nejm-1968.jpg"
+    }
+  ],
+  "ratings": {
+    "gemini": null,
+    "gpt": null,
+    "consensus": null
+  }
+}
