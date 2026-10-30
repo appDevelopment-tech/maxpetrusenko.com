@@ -1,9 +1,13 @@
 import Link from "next/link";
+import { seoH1, seoLeadPrefix, seoFaqOpen } from "@/lib/seo/flags";
+import { SeoTldr, SeoRelatedLinks } from "@/components/seo/SeoVariantBlocks";
 import Image from "next/image";
 import { generateMetadata, absoluteUrl } from "@/lib/seo/metadata";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { generateWebPageSchema, generateTechArticleSchema, generateBreadcrumbSchema } from "@/lib/seo/structured-data";
 import { RelatedReading } from "@/components/articles/RelatedReading";
+
+const ARTICLE_PATH = "/tech/articles/generative-ai-score-websites";
 
 export const metadata = generateMetadata({
   title: "Generative AI Score for Websites - What AI Engines Value",
@@ -58,8 +62,8 @@ export default function GenerativeAIScoreArticle() {
             <div className="eyebrow">
               <span className="dot"></span> AI Search Optimization
             </div>
-            <h1>Generative AI Score for Websites</h1>
-            <p className="article-subtitle">
+            <h1>{seoH1(ARTICLE_PATH, "Generative AI Score for Websites")}</h1>
+            <p className="article-subtitle">{seoLeadPrefix(ARTICLE_PATH)}
               How AI answer engines evaluate and score websites. Understanding the factors
               that influence whether ChatGPT, Claude, Perplexity, and other AI engines cite,
               recommend, or trust your content.
@@ -72,6 +76,7 @@ export default function GenerativeAIScoreArticle() {
               <span>By Max Petrusenko</span>
             </div>
           </header>
+          <SeoTldr path={ARTICLE_PATH} />
 
           <div style={{ maxWidth: 900, margin: "26px auto 32px" }}>
             <Image
@@ -349,7 +354,7 @@ export default function GenerativeAIScoreArticle() {
 
             <h2>Frequently Asked Questions</h2>
 
-            <details className="faq-item">
+            <details className="faq-item" open={seoFaqOpen(ARTICLE_PATH)}>
               <summary>How is AI Score different from SEO?</summary>
               <p>
                 Traditional SEO focuses on ranking in blue link search results. AI Score measures
@@ -359,7 +364,7 @@ export default function GenerativeAIScoreArticle() {
               </p>
             </details>
 
-            <details className="faq-item">
+            <details className="faq-item" open={seoFaqOpen(ARTICLE_PATH)}>
               <summary>Which AI engines use these scoring factors?</summary>
               <p>
                 ChatGPT, Claude (Anthropic), Perplexity, Google AI Overviews, and Bing Copilot
@@ -368,7 +373,7 @@ export default function GenerativeAIScoreArticle() {
               </p>
             </details>
 
-            <details className="faq-item">
+            <details className="faq-item" open={seoFaqOpen(ARTICLE_PATH)}>
               <summary>How can I check my current AI Score?</summary>
               <p>
                 There is no official "AI Score" metric yet, but you can evaluate yourself against
@@ -377,7 +382,7 @@ export default function GenerativeAIScoreArticle() {
               </p>
             </details>
 
-            <details className="faq-item">
+            <details className="faq-item" open={seoFaqOpen(ARTICLE_PATH)}>
               <summary>Does this replace traditional SEO?</summary>
               <p>
                 No. AI optimization complements traditional SEO. Technical SEO, backlinks, and
@@ -399,6 +404,7 @@ export default function GenerativeAIScoreArticle() {
             </div>
           </footer>
           <RelatedReading currentLink="/tech/articles/generative-ai-score-websites" />
+<SeoRelatedLinks path={ARTICLE_PATH} />
 </article>
       </div>
     </>

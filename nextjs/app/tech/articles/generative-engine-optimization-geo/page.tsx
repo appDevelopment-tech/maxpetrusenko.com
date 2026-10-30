@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { seoH1, seoLeadPrefix, seoFaqOpen } from "@/lib/seo/flags";
+import { SeoTldr, SeoRelatedLinks } from "@/components/seo/SeoVariantBlocks";
 import Image from "next/image";
 import { RelatedReading } from "@/components/articles/RelatedReading";
 import { generateMetadata, absoluteUrl } from "@/lib/seo/metadata";
@@ -8,6 +10,8 @@ import {
   generateTechArticleSchema,
   generateBreadcrumbSchema,
 } from "@/lib/seo/structured-data";
+
+const ARTICLE_PATH = "/tech/articles/generative-engine-optimization-geo";
 
 export const metadata = generateMetadata({
   title: "GEO Framework and Roadmap for 2026",
@@ -72,8 +76,8 @@ export default function GEOArticle() {
             <div className="eyebrow">
               <span className="dot"></span> AI Visibility Strategy
             </div>
-            <h1>GEO Framework and Roadmap for 2026</h1>
-            <p className="article-subtitle">
+            <h1>{seoH1(ARTICLE_PATH, "GEO Framework and Roadmap for 2026")}</h1>
+            <p className="article-subtitle">{seoLeadPrefix(ARTICLE_PATH)}
               GEO is not a trend label. It is operational search work for how people now
               discover answers in ChatGPT, Claude, Perplexity, and AI-enhanced search.
               If you need a GEO roadmap, this guide breaks the work into concrete steps you can execute weekly.
@@ -86,6 +90,7 @@ export default function GEOArticle() {
               <span>By Max Petrusenko</span>
             </div>
           </header>
+          <SeoTldr path={ARTICLE_PATH} />
 
           <div style={{ maxWidth: 900, margin: "26px auto 32px" }}>
             <Image
@@ -214,6 +219,7 @@ export default function GEOArticle() {
             </div>
           </div>
           <RelatedReading currentLink="/tech/articles/generative-engine-optimization-geo" />
+<SeoRelatedLinks path={ARTICLE_PATH} />
 </article>
       </div>
     </>

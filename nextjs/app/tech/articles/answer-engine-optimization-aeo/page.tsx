@@ -1,9 +1,13 @@
 import Link from "next/link";
+import { seoH1, seoLeadPrefix, seoFaqOpen } from "@/lib/seo/flags";
+import { SeoTldr, SeoRelatedLinks } from "@/components/seo/SeoVariantBlocks";
 import Image from "next/image";
 import { generateMetadata, absoluteUrl } from "@/lib/seo/metadata";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { generateWebPageSchema, generateTechArticleSchema, generateBreadcrumbSchema } from "@/lib/seo/structured-data";
 import { RelatedReading } from "@/components/articles/RelatedReading";
+
+const ARTICLE_PATH = "/tech/articles/answer-engine-optimization-aeo";
 
 export const metadata = generateMetadata({
   title: "Answer Engine Optimization (AEO) Guide for 2026",
@@ -58,8 +62,8 @@ export default function AEOArticle() {
             <div className="eyebrow">
               <span className="dot"></span> AI Search Optimization
             </div>
-            <h1>Answer Engine Optimization (AEO) Guide for 2026</h1>
-            <p className="article-subtitle">
+            <h1>{seoH1(ARTICLE_PATH, "Answer Engine Optimization (AEO) Guide for 2026")}</h1>
+            <p className="article-subtitle">{seoLeadPrefix(ARTICLE_PATH)}
               How to audit and optimize your website for AI-powered answer engines like
               ChatGPT, Claude, Perplexity, and Google AI Overviews. If you need an AEO
               roadmap, this guide starts with structure, trust signals, and query intent.
@@ -72,6 +76,7 @@ export default function AEOArticle() {
               <span>By Max Petrusenko</span>
             </div>
           </header>
+          <SeoTldr path={ARTICLE_PATH} />
 
           <div style={{ maxWidth: 900, margin: "26px auto 32px" }}>
             <Image
@@ -522,7 +527,7 @@ Sitemap: https://example.com/sitemap.xml`}
 
             <h2>Frequently Asked Questions</h2>
 
-            <details className="faq-item">
+            <details className="faq-item" open={seoFaqOpen(ARTICLE_PATH)}>
               <summary>Is AEO replacing SEO?</summary>
               <p>
                 No. AEO complements traditional SEO. Traditional search still exists, and
@@ -532,7 +537,7 @@ Sitemap: https://example.com/sitemap.xml`}
               </p>
             </details>
 
-            <details className="faq-item">
+            <details className="faq-item" open={seoFaqOpen(ARTICLE_PATH)}>
               <summary>How long does AEO take to work?</summary>
               <p>
                 Unlike traditional SEO which can take months, AEO can work immediately once
@@ -542,7 +547,7 @@ Sitemap: https://example.com/sitemap.xml`}
               </p>
             </details>
 
-            <details className="faq-item">
+            <details className="faq-item" open={seoFaqOpen(ARTICLE_PATH)}>
               <summary>Do AI engines pay for content?</summary>
               <p>
                 No, AI engines don't pay for content inclusion. They crawl publicly available
@@ -552,7 +557,7 @@ Sitemap: https://example.com/sitemap.xml`}
               </p>
             </details>
 
-            <details className="faq-item">
+            <details className="faq-item" open={seoFaqOpen(ARTICLE_PATH)}>
               <summary>What's the difference between AEO and GEO?</summary>
               <p>
                 They're the same concept with different names. AEO (Answer Engine Optimization)
@@ -562,7 +567,7 @@ Sitemap: https://example.com/sitemap.xml`}
               </p>
             </details>
 
-            <details className="faq-item">
+            <details className="faq-item" open={seoFaqOpen(ARTICLE_PATH)}>
               <summary>Can I do AEO myself or do I need an expert?</summary>
               <p>
                 The basics of AEO are accessible: create AI guidance files, add structured data,
@@ -590,6 +595,7 @@ Sitemap: https://example.com/sitemap.xml`}
             </p>
           </footer>
           <RelatedReading currentLink="/tech/articles/answer-engine-optimization-aeo" />
+<SeoRelatedLinks path={ARTICLE_PATH} />
 </article>
       </div>
     </>

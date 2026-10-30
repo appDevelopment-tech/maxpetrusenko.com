@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { seoH1, seoLeadPrefix, seoFaqOpen } from "@/lib/seo/flags";
+import { SeoTldr, SeoRelatedLinks } from "@/components/seo/SeoVariantBlocks";
 import Image from "next/image";
 import { RelatedReading } from "@/components/articles/RelatedReading";
 import { generateMetadata, absoluteUrl } from "@/lib/seo/metadata";
@@ -8,6 +10,8 @@ import {
   generateTechArticleSchema,
   generateBreadcrumbSchema,
 } from "@/lib/seo/structured-data";
+
+const ARTICLE_PATH = "/tech/articles/bitcoin-as-strong-money";
 
 export const metadata = generateMetadata({
   title: "Bitcoin as Strong Money",
@@ -72,8 +76,8 @@ export default function BitcoinStrongMoneyArticle() {
             <div className="eyebrow">
               <span className="dot"></span> Money Thesis
             </div>
-            <h1>Bitcoin as Strong Money</h1>
-            <p className="article-subtitle">
+            <h1>{seoH1(ARTICLE_PATH, "Bitcoin as Strong Money")}</h1>
+            <p className="article-subtitle">{seoLeadPrefix(ARTICLE_PATH)}
               Most crypto projects market upside. Bitcoin is usually judged on a
               different axis: whether it behaves like durable, portable, credibly
               scarce money in a world where trust in institutions is thinning out.
@@ -86,6 +90,7 @@ export default function BitcoinStrongMoneyArticle() {
               <span>By Max Petrusenko</span>
             </div>
           </header>
+          <SeoTldr path={ARTICLE_PATH} />
 
           <div style={{ maxWidth: 900, margin: "26px auto 32px" }}>
             <Image
@@ -173,6 +178,7 @@ export default function BitcoinStrongMoneyArticle() {
           </div>
 
           <RelatedReading currentLink="/tech/articles/bitcoin-as-strong-money" />
+        <SeoRelatedLinks path={ARTICLE_PATH} />
         </article>
       </div>
     </>

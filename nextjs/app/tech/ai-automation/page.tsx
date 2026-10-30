@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { seoH1, seoLeadPrefix } from "@/lib/seo/flags";
+import { SeoTldr, SeoRelatedLinks } from "@/components/seo/SeoVariantBlocks";
 import { CircleCheckBig, CircleX } from "lucide-react";
 import { siteConfig } from "@/config/site";
 import { generateMetadata, absoluteUrl } from "@/lib/seo/metadata";
@@ -8,6 +10,8 @@ import {
   generateBreadcrumbSchema,
   generateTechServiceSchema,
 } from "@/lib/seo/structured-data";
+
+const PAGE_PATH = "/tech/ai-automation";
 
 export const metadata = generateMetadata({
   title: "AI Automation Services",
@@ -47,8 +51,10 @@ export default function AIAutomationPage() {
             <div className="eyebrow">
               <span className="dot"></span> AI Automation
             </div>
-            <h1 className="clip-reveal clip-reveal-d1">Production-Grade AI Automation</h1>
+            <h1 className="clip-reveal clip-reveal-d1">{seoH1(PAGE_PATH, "Production-Grade AI Automation")}</h1>
+            <SeoTldr path={PAGE_PATH} />
             <p>
+              {seoLeadPrefix(PAGE_PATH)}
               I build AI-powered systems that reduce manual work, increase
               reliability, and scale without adding headcount. No hype—just
               systems that work.
@@ -385,6 +391,7 @@ export default function AIAutomationPage() {
             </Link>
           </div>
         </section>
+        <SeoRelatedLinks path={PAGE_PATH} />
       </div>
     </>
   );

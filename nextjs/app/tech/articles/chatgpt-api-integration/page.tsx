@@ -1,9 +1,13 @@
 import Link from "next/link";
+import { seoH1, seoLeadPrefix, seoFaqOpen } from "@/lib/seo/flags";
+import { SeoTldr, SeoRelatedLinks } from "@/components/seo/SeoVariantBlocks";
 import Image from "next/image";
 import { generateMetadata, absoluteUrl } from "@/lib/seo/metadata";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { generateTechArticleSchema, generateBreadcrumbSchema } from "@/lib/seo/structured-data";
 import { RelatedReading } from "@/components/articles/RelatedReading";
+
+const ARTICLE_PATH = "/tech/articles/chatgpt-api-integration";
 
 export const metadata = generateMetadata({
   title: "ChatGPT API Integration Best Practices",
@@ -49,8 +53,8 @@ export default function ChatGPTApiArticle() {
             <div className="eyebrow">
               <span className="dot"></span> AI Integration
             </div>
-            <h1>ChatGPT API Integration Best Practices</h1>
-            <p className="article-subtitle">
+            <h1>{seoH1(ARTICLE_PATH, "ChatGPT API Integration Best Practices")}</h1>
+            <p className="article-subtitle">{seoLeadPrefix(ARTICLE_PATH)}
               Complete guide to integrating ChatGPT API into your products. From
               authentication and prompt engineering to function calling, RAG,
               fine-tuning, and production-ready error handling.
@@ -63,6 +67,7 @@ export default function ChatGPTApiArticle() {
               <span>By Max Petrusenko</span>
             </div>
           </header>
+          <SeoTldr path={ARTICLE_PATH} />
 
           <div style={{ maxWidth: 900, margin: "26px auto 32px" }}>
             <Image
@@ -393,7 +398,7 @@ export default function ChatGPTApiArticle() {
 
             <h2>Frequently Asked Questions</h2>
 
-            <details className="faq-item">
+            <details className="faq-item" open={seoFaqOpen(ARTICLE_PATH)}>
               <summary>Should I use GPT-4 or GPT-3.5 Turbo?</summary>
               <p>
                 Start with GPT-4o-mini — it's much cheaper while still being highly
@@ -403,7 +408,7 @@ export default function ChatGPTApiArticle() {
               </p>
             </details>
 
-            <details className="faq-item">
+            <details className="faq-item" open={seoFaqOpen(ARTICLE_PATH)}>
               <summary>How do I reduce API costs?</summary>
               <p>
                 Use smaller models (GPT-4o-mini), cache common responses, set
@@ -413,7 +418,7 @@ export default function ChatGPTApiArticle() {
               </p>
             </details>
 
-            <details className="faq-item">
+            <details className="faq-item" open={seoFaqOpen(ARTICLE_PATH)}>
               <summary>What's the difference between fine-tuning and RAG?</summary>
               <p>
                 RAG provides relevant context to the model at inference time.
@@ -423,7 +428,7 @@ export default function ChatGPTApiArticle() {
               </p>
             </details>
 
-            <details className="faq-item">
+            <details className="faq-item" open={seoFaqOpen(ARTICLE_PATH)}>
               <summary>Can I use ChatGPT API for real-time applications?</summary>
               <p>
                 Yes, but expect 1-3 seconds of latency for typical requests. For
@@ -433,7 +438,7 @@ export default function ChatGPTApiArticle() {
               </p>
             </details>
 
-            <details className="faq-item">
+            <details className="faq-item" open={seoFaqOpen(ARTICLE_PATH)}>
               <summary>How do I handle API rate limits?</summary>
               <p>
                 Implement request queuing, use exponential backoff for retries,
@@ -460,6 +465,7 @@ export default function ChatGPTApiArticle() {
             </p>
           </footer>
           <RelatedReading currentLink="/tech/articles/chatgpt-api-integration" />
+<SeoRelatedLinks path={ARTICLE_PATH} />
 </article>
       </div>
     </>

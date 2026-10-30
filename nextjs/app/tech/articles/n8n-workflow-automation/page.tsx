@@ -1,9 +1,13 @@
 import Link from "next/link";
+import { seoH1, seoLeadPrefix, seoFaqOpen } from "@/lib/seo/flags";
+import { SeoTldr, SeoRelatedLinks } from "@/components/seo/SeoVariantBlocks";
 import Image from "next/image";
 import { generateMetadata, absoluteUrl } from "@/lib/seo/metadata";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { generateTechArticleSchema, generateBreadcrumbSchema } from "@/lib/seo/structured-data";
 import { RelatedReading } from "@/components/articles/RelatedReading";
+
+const ARTICLE_PATH = "/tech/articles/n8n-workflow-automation";
 
 export const metadata = generateMetadata({
   title: "n8n Workflow Automation: From Zero to Production",
@@ -49,8 +53,8 @@ export default function N8nWorkflowArticle() {
             <div className="eyebrow">
               <span className="dot"></span> Automation
             </div>
-            <h1>n8n Workflow Automation: From Zero to Production</h1>
-            <p className="article-subtitle">
+            <h1>{seoH1(ARTICLE_PATH, "n8n Workflow Automation: From Zero to Production")}</h1>
+            <p className="article-subtitle">{seoLeadPrefix(ARTICLE_PATH)}
               Build reliable, production-grade automations with n8n. From simple
               integrations to complex multi-step workflows with proper error handling,
               retry logic, and monitoring.
@@ -63,6 +67,7 @@ export default function N8nWorkflowArticle() {
               <span>By Max Petrusenko</span>
             </div>
           </header>
+          <SeoTldr path={ARTICLE_PATH} />
 
           <div style={{ maxWidth: 900, margin: "26px auto 32px" }}>
             <Image
@@ -396,7 +401,7 @@ export default function N8nWorkflowArticle() {
 
             <h2>Frequently Asked Questions</h2>
 
-            <details className="faq-item">
+            <details className="faq-item" open={seoFaqOpen(ARTICLE_PATH)}>
               <summary>Is n8n free to use?</summary>
               <p>
                 n8n is free when self-hosted — you only pay for your server costs.
@@ -405,7 +410,7 @@ export default function N8nWorkflowArticle() {
               </p>
             </details>
 
-            <details className="faq-item">
+            <details className="faq-item" open={seoFaqOpen(ARTICLE_PATH)}>
               <summary>Can n8n handle large-scale production workloads?</summary>
               <p>
                 Yes. n8n can scale horizontally by running multiple instances behind
@@ -415,7 +420,7 @@ export default function N8nWorkflowArticle() {
               </p>
             </details>
 
-            <details className="faq-item">
+            <details className="faq-item" open={seoFaqOpen(ARTICLE_PATH)}>
               <summary>What's the difference between n8n nodes and workflows?</summary>
               <p>
                 Nodes are individual building blocks that perform specific actions
@@ -425,7 +430,7 @@ export default function N8nWorkflowArticle() {
               </p>
             </details>
 
-            <details className="faq-item">
+            <details className="faq-item" open={seoFaqOpen(ARTICLE_PATH)}>
               <summary>How do I handle API authentication in n8n?</summary>
                 <p>
                   n8n supports credentials storage for authentication. Create a
@@ -435,7 +440,7 @@ export default function N8nWorkflowArticle() {
                 </p>
             </details>
 
-            <details className="faq-item">
+            <details className="faq-item" open={seoFaqOpen(ARTICLE_PATH)}>
               <summary>Can I use custom code in n8n workflows?</summary>
               <p>
                 Absolutely. The Code node lets you write JavaScript/TypeScript
@@ -462,6 +467,7 @@ export default function N8nWorkflowArticle() {
             </p>
           </footer>
           <RelatedReading currentLink="/tech/articles/n8n-workflow-automation" />
+<SeoRelatedLinks path={ARTICLE_PATH} />
 </article>
       </div>
     </>

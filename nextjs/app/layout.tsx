@@ -9,6 +9,8 @@ import { JsonLd } from "@/components/seo/JsonLd";
 import Script from "next/script";
 import { generatePersonSchema } from "@/lib/seo/structured-data";
 import { siteConfig } from "@/config/site";
+import { seoVariantsContent } from "@/lib/seo/flags";
+import { PostHogProvider } from "@/components/analytics/PostHogProvider";
 import "@/styles/globals.css";
 
 import type { Viewport } from "next";
@@ -38,6 +40,8 @@ export const metadata = {
     ],
     apple: "/apple-touch-icon.png",
   },
+  // Fallback for pages without lib/seo generateMetadata; those pages are control for page flags.
+  other: { "seo-variants": seoVariantsContent("/") },
 };
 
 export default function RootLayout({
@@ -51,6 +55,7 @@ export default function RootLayout({
       lang="en"
     >
       <body className={dmSans.className} suppressHydrationWarning>
+        <PostHogProvider />
         <GoogleAnalytics />
         <CloudflareAnalytics />
         <JsonLd type="Person" data={generatePersonSchema()} />

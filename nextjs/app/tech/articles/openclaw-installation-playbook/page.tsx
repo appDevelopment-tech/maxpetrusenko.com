@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { seoH1, seoLeadPrefix, seoFaqOpen } from "@/lib/seo/flags";
+import { SeoTldr, SeoRelatedLinks } from "@/components/seo/SeoVariantBlocks";
 import Image from "next/image";
 import { RelatedReading } from "@/components/articles/RelatedReading";
 import { generateMetadata, absoluteUrl } from "@/lib/seo/metadata";
@@ -8,6 +10,8 @@ import {
   generateTechArticleSchema,
   generateBreadcrumbSchema,
 } from "@/lib/seo/structured-data";
+
+const ARTICLE_PATH = "/tech/articles/openclaw-installation-playbook";
 
 export const metadata = generateMetadata({
   title: "OpenClaw Install Guide 2026 | Teams, Helm, Railway, Dokploy",
@@ -77,8 +81,8 @@ export default function OpenClawInstallArticle() {
             <div className="eyebrow">
               <span className="dot"></span> Implementation Guide
             </div>
-            <h1>OpenClaw Installation Playbook for Teams</h1>
-            <p className="article-subtitle">
+            <h1>{seoH1(ARTICLE_PATH, "OpenClaw Installation Playbook for Teams")}</h1>
+            <p className="article-subtitle">{seoLeadPrefix(ARTICLE_PATH)}
               If you are searching for OpenClaw setup help, Microsoft Teams integration,
               Helm deployment, or Dokploy and Railway rollout guidance, this is the
               sequence I use to avoid fragile installs, broken permissions, and unsafe cutovers.
@@ -91,6 +95,7 @@ export default function OpenClawInstallArticle() {
               <span>By Max Petrusenko</span>
             </div>
           </header>
+          <SeoTldr path={ARTICLE_PATH} />
 
           <div style={{ maxWidth: 900, margin: "26px auto 32px" }}>
             <Image
@@ -211,6 +216,7 @@ export default function OpenClawInstallArticle() {
             </div>
           </div>
           <RelatedReading currentLink="/tech/articles/openclaw-installation-playbook" />
+<SeoRelatedLinks path={ARTICLE_PATH} />
 </article>
       </div>
     </>

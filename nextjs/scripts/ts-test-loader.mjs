@@ -35,7 +35,7 @@ export async function resolve(specifier, context, nextResolve) {
         if (stat.isFile()) {
           return {
             url: pathToFileURL(candidate).href,
-            format: candidate.endsWith(".json") ? "json" : "module",
+            format: "module",
             shortCircuit: true,
           };
         }
@@ -54,6 +54,13 @@ export async function resolve(specifier, context, nextResolve) {
 }
 
 export async function load(url, context, nextLoad) {
+  // Bundlers accept `import data from "./x.json"`; Node needs an import attribute for
+  // that. Serve JSON as an ES module so source files keep the bundler-style import.
+  if (url.endsWith(".json")) {
+    const source = await fs.readFile(new URL(url), "utf8");
+    return { format: "module", shortCircuit: true, source: `export default ${source};` };
+  }
+
   if (url.endsWith(".ts") || url.endsWith(".tsx")) {
     const source = await fs.readFile(new URL(url), "utf8");
     const { outputText } = ts.transpileModule(source, {
