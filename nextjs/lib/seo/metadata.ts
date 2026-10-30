@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import { siteConfig, SEO_DEFAULTS } from "@/config/site";
 import type { PageMetadata } from "@/types";
+import { seoTitle, seoVariantsContent } from "@/lib/seo/flags";
 
 /**
  * Generate metadata for a page
@@ -17,8 +18,13 @@ export function generateMetadata(metadata: PageMetadata): Metadata {
     dateModified,
   } = metadata;
 
-  const titleAlreadyHasBrand = title.toLowerCase().includes(siteConfig.name.toLowerCase());
-  const fullTitle = title === siteConfig.name || titleAlreadyHasBrand ? title : `${title} | ${siteConfig.name}`;
+  // seo-p1-2026-11: derive the page path from the canonical so title (H003) and the
+  // seo-variants meta stay in sync with the rendered page. Control keeps `title` as is.
+  const pagePath = canonical ? new URL(canonical, siteConfig.url).pathname : null;
+  const renderedTitle = pagePath ? seoTitle(pagePath, title) : title;
+
+  const titleAlreadyHasBrand = renderedTitle.toLowerCase().includes(siteConfig.name.toLowerCase());
+  const fullTitle = renderedTitle === siteConfig.name || titleAlreadyHasBrand ? renderedTitle : `${renderedTitle} | ${siteConfig.name}`;
   const imageUrl = ogImage
     ? ogImage.startsWith("http")
       ? ogImage
@@ -26,7 +32,7 @@ export function generateMetadata(metadata: PageMetadata): Metadata {
     : `${siteConfig.url}${SEO_DEFAULTS.ogImage}`;
 
   return {
-    title,
+    title: renderedTitle,
     description,
     keywords: keywords.join(", "),
     authors: [{ name: siteConfig.author.name }],
@@ -43,7 +49,7 @@ export function generateMetadata(metadata: PageMetadata): Metadata {
           url: imageUrl,
           width: 1200,
           height: 630,
-          alt: title,
+          alt: renderedTitle,
         },
       ],
       siteName: siteConfig.name,
@@ -81,6 +87,9 @@ export function generateMetadata(metadata: PageMetadata): Metadata {
       alternates: {
         canonical,
       },
+    }),
+    ...(pagePath && {
+      other: { "seo-variants": seoVariantsContent(pagePath) },
     }),
   };
 }

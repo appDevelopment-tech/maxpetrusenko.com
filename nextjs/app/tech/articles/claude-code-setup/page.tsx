@@ -1,9 +1,13 @@
 import Link from "next/link";
+import { seoH1, seoLeadPrefix, seoFaqOpen } from "@/lib/seo/flags";
+import { SeoTldr, SeoRelatedLinks } from "@/components/seo/SeoVariantBlocks";
 import Image from "next/image";
 import { generateMetadata, absoluteUrl } from "@/lib/seo/metadata";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { generateTechArticleSchema, generateBreadcrumbSchema } from "@/lib/seo/structured-data";
 import { RelatedReading } from "@/components/articles/RelatedReading";
+
+const ARTICLE_PATH = "/tech/articles/claude-code-setup";
 
 export const metadata = generateMetadata({
   title: "Claude Code Setup Guide for Development Teams",
@@ -49,8 +53,8 @@ export default function ClaudeCodeSetupArticle() {
             <div className="eyebrow">
               <span className="dot"></span> AI Development
             </div>
-            <h1>Claude Code Setup Guide for Development Teams</h1>
-            <p className="article-subtitle">
+            <h1>{seoH1(ARTICLE_PATH, "Claude Code Setup Guide for Development Teams")}</h1>
+            <p className="article-subtitle">{seoLeadPrefix(ARTICLE_PATH)}
               Complete guide to configuring Claude Code with custom sub-agents,
               skills, and workflows. Transform your development workflow with
               Anthropic's most powerful AI coding tool.
@@ -63,6 +67,7 @@ export default function ClaudeCodeSetupArticle() {
               <span>By Max Petrusenko</span>
             </div>
           </header>
+          <SeoTldr path={ARTICLE_PATH} />
 
           <div style={{ maxWidth: 900, margin: "26px auto 32px" }}>
             <Image
@@ -366,7 +371,7 @@ export default function ClaudeCodeSetupArticle() {
 
             <h2>Frequently Asked Questions</h2>
 
-            <details className="faq-item">
+            <details className="faq-item" open={seoFaqOpen(ARTICLE_PATH)}>
               <summary>Is Claude Code better than GitHub Copilot?</summary>
               <p>
                 They serve different purposes. Copilot provides inline suggestions
@@ -377,7 +382,7 @@ export default function ClaudeCodeSetupArticle() {
               </p>
             </details>
 
-            <details className="faq-item">
+            <details className="faq-item" open={seoFaqOpen(ARTICLE_PATH)}>
               <summary>Can Claude Code work with my existing codebase?</summary>
               <p>
                 Yes. Claude Code works with any codebase in any language. It's
@@ -387,7 +392,7 @@ export default function ClaudeCodeSetupArticle() {
               </p>
             </details>
 
-            <details className="faq-item">
+            <details className="faq-item" open={seoFaqOpen(ARTICLE_PATH)}>
               <summary>How do I prevent Claude Code from accessing sensitive data?</summary>
               <p>
                 Configure ignore patterns for directories containing secrets,
@@ -397,7 +402,7 @@ export default function ClaudeCodeSetupArticle() {
               </p>
             </details>
 
-            <details className="faq-item">
+            <details className="faq-item" open={seoFaqOpen(ARTICLE_PATH)}>
               <summary>Can multiple developers share Claude Code configurations?</summary>
               <p>
                 Absolutely. Commit your agent configurations and skills to version
@@ -406,7 +411,7 @@ export default function ClaudeCodeSetupArticle() {
               </p>
             </details>
 
-            <details className="faq-item">
+            <details className="faq-item" open={seoFaqOpen(ARTICLE_PATH)}>
               <summary>What's the learning curve for Claude Code?</summary>
               <p>
                 Basic usage can be learned in an hour. Advanced features like
@@ -433,6 +438,7 @@ export default function ClaudeCodeSetupArticle() {
             </p>
           </footer>
           <RelatedReading currentLink="/tech/articles/claude-code-setup" />
+<SeoRelatedLinks path={ARTICLE_PATH} />
 </article>
       </div>
     </>

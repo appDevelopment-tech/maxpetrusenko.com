@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { seoH1, seoLeadPrefix, seoFaqOpen } from "@/lib/seo/flags";
+import { SeoTldr, SeoRelatedLinks } from "@/components/seo/SeoVariantBlocks";
 import Image from "next/image";
 import { RelatedReading } from "@/components/articles/RelatedReading";
 import { generateMetadata, absoluteUrl } from "@/lib/seo/metadata";
@@ -8,6 +10,8 @@ import {
   generateTechArticleSchema,
   generateBreadcrumbSchema,
 } from "@/lib/seo/structured-data";
+
+const ARTICLE_PATH = "/tech/articles/seo-is-dead";
 
 export const metadata = generateMetadata({
   title: "Is SEO Dead in 2026? No - It Split Into Search + Answers",
@@ -71,8 +75,8 @@ export default function SEOIsDeadArticle() {
             <div className="eyebrow">
               <span className="dot"></span> Search Strategy
             </div>
-            <h1>Is SEO Dead in 2026? No. It Split Into Search + Answers.</h1>
-            <p className="article-subtitle">
+            <h1>{seoH1(ARTICLE_PATH, "Is SEO Dead in 2026? No. It Split Into Search + Answers.")}</h1>
+            <p className="article-subtitle">{seoLeadPrefix(ARTICLE_PATH)}
               The phrase "SEO is dead" trends every year. What is actually dead is
               relying on rankings alone. Today, visibility comes from both classical
               Google search and AI-generated answers.
@@ -85,6 +89,7 @@ export default function SEOIsDeadArticle() {
               <span>By Max Petrusenko</span>
             </div>
           </header>
+          <SeoTldr path={ARTICLE_PATH} />
 
           <div style={{ maxWidth: 900, margin: "26px auto 32px" }}>
             <Image
@@ -192,6 +197,7 @@ export default function SEOIsDeadArticle() {
             </div>
           </div>
           <RelatedReading currentLink="/tech/articles/seo-is-dead" />
+<SeoRelatedLinks path={ARTICLE_PATH} />
 </article>
       </div>
     </>

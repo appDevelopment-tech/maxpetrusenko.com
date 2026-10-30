@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "guard:dev-server": "node scripts/guard-no-running-dev.mjs",
-    "test": "node --import ./scripts/register-ts-tests.mjs --test lib/cms/legacy-blog-compat.test.mjs lib/seo/home-faq.test.mjs lib/concierge/transcript.test.mjs lib/concierge/retired-domain.test.mjs next.config.redirects.test.mjs components/motion/utils.test.mjs && node scripts/verify-predeploy.mjs && node scripts/verify-topic-clusters.mjs && npm run ui:scan",
+    "test": "node --import ./scripts/register-ts-tests.mjs --test lib/cms/legacy-blog-compat.test.mjs lib/seo/home-faq.test.mjs lib/seo/seo-flags.test.mjs lib/seo/variants.test.mjs lib/analytics/traffic-class.test.mjs lib/concierge/transcript.test.mjs lib/concierge/retired-domain.test.mjs next.config.redirects.test.mjs components/motion/utils.test.mjs && node scripts/verify-predeploy.mjs && node scripts/verify-topic-clusters.mjs && npm run ui:scan",
     "ui:scan": "node scripts/ui-scan.mjs",
     "train:six-pendulum": "doppler run --project api_keys --config dev -- modal run --write-result app/ailab/six-pendulum-cartpole/sixPendulumPolicy.json scripts/modal-train-six-pendulum-cem.py::train_policy",
     "train:six-pendulum:curriculum": "doppler run --project api_keys --config dev -- modal run --write-result app/ailab/six-pendulum-cartpole/sixPendulumPolicy.json scripts/modal-train-six-pendulum-curriculum.py",
@@ -84,6 +84,7 @@
     "@supabase/supabase-js": "^2.101.1",
     "lucide-react": "^0.468.0",
     "next": "^15.0.0",
+    "posthog-js": "^1.442.1",
     "react": "^18.3.0",
     "react-dom": "^18.3.0"
   },

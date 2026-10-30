@@ -1,5 +1,22 @@
 import { MetadataRoute } from "next";
 import { siteConfig } from "@/config/site";
+import { FLAG, isSiteFlagOn } from "@/lib/seo/flags";
+
+// seo-p1-2026-11 H005: crawlers added when the flag is on. Flag off = prior output.
+export const H005_EXTRA_AGENTS = [
+  "OAI-SearchBot",
+  "ClaudeBot",
+  "Claude-SearchBot",
+  "Claude-User",
+  "Perplexity-User",
+  "Bingbot",
+  "Googlebot",
+  "meta-externalagent",
+  "DuckAssistBot",
+];
+
+const PUBLIC_ALLOW = ["/", "/_next/image", "/_next/static/"];
+const PRIVATE_DISALLOW = ["/api/", "/inbox", "/workspace", "/admin", "/auth"];
 
 /**
  * Robots.txt generation
@@ -19,6 +36,14 @@ import { siteConfig } from "@/config/site";
  * - /.ai.txt - AI discovery protocol
  */
 export default function robots(): MetadataRoute.Robots {
+  const extraAgents = isSiteFlagOn(FLAG.crawlers)
+    ? H005_EXTRA_AGENTS.map((userAgent) => ({
+        userAgent,
+        allow: PUBLIC_ALLOW,
+        disallow: PRIVATE_DISALLOW,
+      }))
+    : [];
+
   return {
     rules: [
       // General crawlers
@@ -119,6 +144,7 @@ export default function robots(): MetadataRoute.Robots {
         allow: ["/", "/_next/image", "/_next/static/"],
         disallow: ["/api/", "/inbox", "/workspace", "/admin", "/auth"],
       },
+      ...extraAgents,
       // Allow AI guidance files specifically
       {
         userAgent: "*",

@@ -6,6 +6,7 @@ import { fetchArticles } from "@/lib/cms/articles";
 import { shouldIndexBlogTagPage } from "@/lib/cms/legacy-blog-compat";
 import { getProjects } from "@/lib/cms/projects";
 import { getCaseStudies } from "@/lib/cms/case-studies";
+import { FLAG, isSiteFlagOn } from "@/lib/seo/flags";
 
 function getValidDate(value?: string | null): Date | null {
   if (!value) return null;
@@ -422,6 +423,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.8,
     },
   ];
+
+  // seo-p1-2026-11 H021: indexable pages that were missing from the sitemap.
+  if (isSiteFlagOn(FLAG.indexing)) {
+    for (const route of ["/ai-workflow-automation", "/claude-code-consultant", "/n8n-automation"]) {
+      staticPages.push({
+        url: `${baseUrl}${route}`,
+        lastModified: await getRouteLastModified(appDir, route, fallbackLastModified),
+        changeFrequency: "monthly",
+        priority: 0.8,
+      });
+    }
+  }
 
   // Dynamic: Projects
   const projects = await getProjects();
