@@ -1,0 +1,258 @@
+# sd-required.toml -- the required/recommended property table, as DATA.
+#
+# Canonical here in manager; vendored verbatim into consumer repos next to sd-check.py.
+# Extracted from sd-check.py with ast (tools/extract_sd_table.py), so the code table and this
+# file cannot disagree: the checker reads THIS file, and the extraction is compared entry for
+# entry. Adding a field Google reports on is a one-line data edit, in one shared place, for
+# every site -- instead of a per-repo dict that covers whatever its author remembered.
+#
+# Semantics, unchanged from the in-code table:
+#   required    -- a Google page says the property is required; missing => error band
+#                  (except INFO_TYPES, which are reported but never block, and the '|'
+#                  alternative syntax, where either side satisfies the requirement)
+#   recommended -- the property is listed by Google but not required; missing => warn band.
+#                  This is the band Google's own Search Console calls 'non-critical'.
+#   info_types  -- node types whose required-props findings are reported, never blocking.
+
+# Top-level keys first: in TOML every key after a [table] header belongs to that table,
+# so an info_types written below [meta] would silently become meta.info_types.
+info_types = [
+  "Answer",
+  "Course",
+  "CourseInstance",
+  "FAQPage",
+  "Question",
+]
+
+[meta]
+schema_version = 1
+table_version  = 1
+source         = "sd-check.py REQUIRED_PROPS (ast-extracted)"
+source_checker = "https://developers.google.com/search/docs/appearance/structured-data/search-gallery"
+
+[[types]]
+name = "Article"
+required = []
+recommended = ["author", "dateModified", "datePublished", "headline", "image", "mainEntityOfPage", "publisher"]
+
+[[types]]
+name = "BlogPosting"
+required = []
+recommended = ["author", "dateModified", "datePublished", "headline", "image", "mainEntityOfPage", "publisher"]
+
+[[types]]
+name = "NewsArticle"
+required = []
+recommended = ["author", "dateModified", "datePublished", "headline", "image", "mainEntityOfPage", "publisher"]
+
+[[types]]
+name = "BreadcrumbList"
+required = ["itemListElement"]
+recommended = []
+
+[[types]]
+name = "ListItem"
+required = ["position"]
+recommended = ["item", "name"]
+
+[[types]]
+name = "Organization"
+required = []
+recommended = ["contactPoint", "logo", "name", "sameAs", "url"]
+
+[[types]]
+name = "Person"
+required = ["name"]
+recommended = ["url", "sameAs", "jobTitle"]
+
+[[types]]
+name = "WebSite"
+required = ["name", "url"]
+recommended = ["potentialAction", "publisher"]
+
+[[types]]
+name = "WebPage"
+required = []
+recommended = ["name", "url", "description", "isPartOf", "inLanguage", "datePublished", "dateModified"]
+
+[[types]]
+name = "AboutPage"
+required = ["name", "url"]
+recommended = ["description", "isPartOf", "inLanguage"]
+
+[[types]]
+name = "CollectionPage"
+required = ["name", "url"]
+recommended = ["description", "isPartOf", "inLanguage"]
+
+[[types]]
+name = "ProfilePage"
+required = ["name", "mainEntity"]
+recommended = ["url", "description"]
+
+[[types]]
+name = "Service"
+required = ["name", "provider"]
+recommended = ["description", "areaServed", "serviceType", "offers"]
+
+[[types]]
+name = "ProfessionalService"
+required = ["name"]
+recommended = ["description", "url", "areaServed", "serviceType", "telephone", "image", "logo", "offers"]
+
+[[types]]
+name = "Offer"
+required = ["price", "priceCurrency"]
+recommended = ["availability", "url", "validFrom"]
+
+[[types]]
+name = "OfferCatalog"
+required = ["name", "itemListElement"]
+recommended = []
+
+[[types]]
+name = "Review"
+required = ["author", "reviewRating"]
+recommended = ["reviewBody", "datePublished", "itemReviewed"]
+
+[[types]]
+name = "AggregateRating"
+required = ["ratingValue", "reviewCount|ratingCount"]
+recommended = ["bestRating", "worstRating"]
+
+[[types]]
+name = "FAQPage"
+required = ["mainEntity"]
+recommended = []
+
+[[types]]
+name = "Question"
+required = ["name", "acceptedAnswer"]
+recommended = []
+
+[[types]]
+name = "Answer"
+required = ["text"]
+recommended = []
+
+[[types]]
+name = "LocalBusiness"
+required = ["name", "address"]
+recommended = ["telephone", "url", "openingHours", "priceRange", "image"]
+
+[[types]]
+name = "Place"
+required = ["name", "address"]
+recommended = ["geo", "url"]
+
+[[types]]
+name = "PostalAddress"
+required = []
+recommended = ["addressCountry", "addressLocality", "addressRegion", "postalCode", "streetAddress"]
+
+[[types]]
+name = "ContactPoint"
+required = ["contactType"]
+recommended = ["telephone", "email", "url", "areaServed"]
+
+[[types]]
+name = "ImageObject"
+required = ["url"]
+recommended = ["width", "height", "caption"]
+
+[[types]]
+name = "Course"
+required = ["name", "description"]
+recommended = ["provider", "hasCourseInstance", "offers"]
+
+[[types]]
+name = "CourseInstance"
+required = ["courseMode"]
+recommended = ["name", "description"]
+
+[[types]]
+name = "Event"
+required = ["name", "startDate", "location"]
+recommended = ["endDate", "description", "image", "offers", "performer", "eventStatus"]
+
+[[types]]
+name = "VideoObject"
+required = ["name", "thumbnailUrl", "uploadDate"]
+recommended = ["description", "duration", "contentUrl", "embedUrl", "publisher"]
+
+[[types]]
+name = "ItemList"
+required = ["itemListElement"]
+recommended = ["numberOfItems", "name"]
+
+[[types]]
+name = "Book"
+required = ["name", "author"]
+recommended = ["isbn", "numberOfPages", "publisher", "bookFormat", "image", "url", "offers"]
+
+# ----------------------------------------------------------------- positional regime
+# What a node needs AT A POSITION, when it hangs off (parent @type, property).
+# '*"' as the parent type means any parent. Tuples are ABSOLUTE for that position: an
+# empty list means 'this position requires nothing' and does NOT fall through to the
+# per-type row above. A position absent here falls through to the per-type row unchanged.
+# This exists because the per-type row was applied to every node everywhere, which is where
+# ~89 unfixable findings came from: a Place used as areaServed, an Organization used as a
+# publisher stub, an Offer used as a catalogue entry are different regimes from the subject.
+
+[[positions]]
+parent = "OfferCatalog"
+property = "itemListElement"
+[[positions.children]]
+type = "Offer"
+required = []
+
+[[positions]]
+parent = "*"
+property = "publisher"
+[[positions.children]]
+type = "Organization"
+required = []
+
+[[positions]]
+parent = "*"
+property = "seller"
+[[positions.children]]
+type = "Organization"
+required = ["name"]
+
+[[positions]]
+parent = "*"
+property = "areaServed"
+[[positions.children]]
+type = "Place"
+required = ["name"]
+[[positions.children]]
+type = "AdministrativeArea"
+required = ["name"]
+[[positions.children]]
+type = "City"
+required = ["name"]
+[[positions.children]]
+type = "Country"
+required = ["name"]
+
+[[positions]]
+parent = "*"
+property = "location"
+[[positions.children]]
+type = "Place"
+required = ["name"]
+[[positions.children]]
+type = "VirtualLocation"
+required = ["name"]
+
+[[positions]]
+parent = "*"
+property = "itemOffered"
+[[positions.children]]
+type = "Service"
+required = ["name"]
+[[positions.children]]
+type = "Product"
+required = ["name"]
+

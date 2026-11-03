@@ -236,7 +236,22 @@ REPORT_SCHEMA_VERSION = 1
 #          EMPTY by default: it changes nothing for any config that does not
 #          name a route, so no consumer's error band moves on the re-vendor.
 #        Finding shape unchanged; report_schema_version stays 1.
-VALIDATOR_VERSION = "1.5.1"
+# 1.6.0 (the shared table becomes load-bearing, and a refused table stops the run):
+#        * sd-required.toml is now the edit surface for REQUIRED_PROPS/POSITION_REQUIRED/
+#          INFO_TYPES.  `SD_REQUIRED_TABLE` overrides its path; a MISSING file falls back to
+#          the in-code tables, but a file that is present and malformed, unreadable, or that
+#          drops/loosens/weakens any in-code entry now exits 2 instead of falling back.  A
+#          data edit can add types, required/recommended properties and positional rules; it
+#          can no longer widen the gate by deleting one (five widening edits were reproduced
+#          as working exploits before being guarded, including an added positional rule whose
+#          empty required list zeroed a nested type's own requirements).
+#        * A scalar where a list of strings belongs is refused rather than iterated per
+#          character, and repeated entries are de-duplicated instead of double-reported.
+#        * The vocabulary snapshot is now a hard requirement of every invocation; it is
+#          vendored beside the policy (`schema-org-types.txt`) and is tracked by the drift
+#          check, because its absence made every invocation exit 2 with no checker running.
+#        Finding shape unchanged; report_schema_version stays 1.
+VALIDATOR_VERSION = "1.6.0"
 
 # --------------------------------------------------------------------------
 # Band / mode catalogue  (§A3)
@@ -464,6 +479,113 @@ POSITION_REQUIRED: "dict[tuple[str, str], dict[str, tuple[str, ...]]]" = {
         "Product": ("name",),
     },
 }
+
+# --------------------------------------------------------------------------
+# The two tables above are the FALLBACK; the shared data file may only TIGHTEN them.
+# --------------------------------------------------------------------------
+# sd-required.toml (canonical in this repo, vendored verbatim into consumer repos
+# beside this file) carries both regimes as DATA, so a field Google reports on is a
+# one-line edit in one place for every site instead of a dict edit per repo.  That
+# per-repo dict is how miamicontactimprov shipped an Event offer with no `validFrom`
+# while Search Console reported `Missing field "validFrom" (in "offers")`: its own gate
+# table had no `Offer` row at all, and this checker -- which has one -- was not running
+# there.  A per-repo table covers whatever its author remembered; one shared file covers
+# every type any of our sites publishes.
+#
+# `scripts/extract_sd_table.py` writes this file from the literals above and its `--check`
+# mode asserts the file still covers them (no write), which is what keeps the two in
+# agreement now that the file, not the code, is the edit surface.
+#
+# The loader accepts a table that ADDS types, ADDS required/recommended properties, or
+# ADDS positional rules.  It refuses -- exit 2, never a silent fallback -- any edit that
+# drops or loosens one of those, because the cheapest way to green a gate otherwise
+# becomes deleting a row, and a refusal means a human edited the table for a reason the
+# ratchet disagrees with.  Only a MISSING file falls back to the in-code tables (a
+# consumer may vendor this script alone).  `SD_REQUIRED_TABLE=/dev/null` reproduces the
+# in-code tables exactly; that is how the extraction is proven.
+def _load_shared_required_table():
+    path = os.environ.get("SD_REQUIRED_TABLE") or os.path.join(
+        os.path.dirname(os.path.abspath(__file__)), "sd-required.toml")
+
+    def refuse(reason: str) -> "NoReturn":
+        print(f"sd-check: shared required-props table at {path} {reason}; refusing to run "
+              f"(a data edit may tighten the gate, never widen it)", file=sys.stderr)
+        raise SystemExit(2)
+
+    try:
+        with open(path, "rb") as fh:
+            data = tomllib.load(fh)
+    except FileNotFoundError:
+        print(f"sd-check: no shared required-props table at {path}; using the in-code tables",
+              file=sys.stderr)
+        return None
+    except (OSError, tomllib.TOMLDecodeError) as exc:
+        refuse(f"could not be read ({exc.__class__.__name__}: {exc})")
+
+    def seq(value: Any, field: str, where: str) -> "tuple[str, ...]":
+        # A scalar where a list belongs is valid TOML and then iterates per CHARACTER, turning
+        # one property name into a finding for every letter in it.  Dedupe too: a repeated
+        # entry reported the same defect twice, which is how a gate loses credibility.
+        if not isinstance(value, (list, tuple)) or any(not isinstance(v, str) for v in value):
+            refuse(f"declares {field} at {where} as {type(value).__name__}, not a list of strings")
+        return tuple(dict.fromkeys(value))
+
+    try:
+        types = {r["name"]: (seq(r.get("required"), "required", str(r["name"])),
+                             seq(r.get("recommended"), "recommended", str(r["name"])))
+                 for r in data.get("types", ())}
+        positions = {(r["parent"], r["property"]):
+                     {c["type"]: seq(c.get("required"), "required",
+                                     f"{r['parent']}.{r['property']}:{c['type']}")
+                      for c in r.get("children", ())}
+                     for r in data.get("positions", ())}
+        info = set(data.get("info_types", ()))
+    except (KeyError, TypeError, AttributeError) as exc:
+        # A malformed shape used to raise at import: a traceback and exit 1 read as "site broke"
+        # when the truth is "gate broke" (exit 2, rule 5).
+        refuse(f"is malformed ({exc.__class__.__name__}: {exc})")
+
+    if not types:
+        refuse("declares no types")
+    # Five ways to widen the gate without adding any coverage.  All five were reproduced as
+    # working exploits before being guarded, and each is a plausible "just make CI green" edit:
+    #   1. dropping or loosening a REQUIRED property of a known type
+    #   2. dropping a positional rule, or loosening one of its children
+    #   3. ADDING a positional rule that replaces a nested type's own requirements with a weaker
+    #      set -- `parent="*" property="offers" type="Offer" required=[]` removed both
+    #      `offers.price` and `offers.priceCurrency` errors and the run still exited 0, so the
+    #      guard cannot only walk positions it already knows
+    #   4. removing a RECOMMENDED property -- the bucket Google's "non-critical" notices name,
+    #      i.e. exactly the field class that produced the Search Console email
+    #   5. promoting a type into the info band so its findings stop being errors
+    loosened = [t for t, (required, recommended) in REQUIRED_PROPS.items()
+                if t not in types
+                or not set(required) <= set(types[t][0])
+                or not set(recommended) <= set(types[t][1])]
+    lost_positions = [f"{parent}.{prop}"
+                      for (parent, prop), children in POSITION_REQUIRED.items()
+                      if any(child not in positions.get((parent, prop), {})
+                             or not set(required) <= set(positions[(parent, prop)][child])
+                             for child, required in children.items())]
+    widened_positions = [f"{parent}.{prop}:{child}"
+                         for (parent, prop), children in positions.items()
+                         for child, required in children.items()
+                         if child not in POSITION_REQUIRED.get((parent, prop), {})
+                         and child in REQUIRED_PROPS
+                         and not set(REQUIRED_PROPS[child][0]) <= set(required)]
+    demoted = sorted(info - INFO_TYPES)
+    if loosened or lost_positions or widened_positions or demoted:
+        refuse("drops or loosens " + str(sorted(loosened)[:4])
+               + ", drops positional rules " + str(sorted(lost_positions)[:4])
+               + ", weakens added positional rules " + str(sorted(widened_positions)[:4])
+               + ", or demotes " + str(demoted[:4]) + " into the info band")
+    return types, positions, info
+
+
+_shared = _load_shared_required_table()
+if _shared is not None:
+    REQUIRED_PROPS, POSITION_REQUIRED, INFO_TYPES = _shared
+
 
 # Rule 10 URL-bearing properties (absolute HTTPS required).
 URL_PROPS = ("url", "@id", "item", "image", "logo", "sameAs")
@@ -3337,15 +3459,23 @@ def load_vocab(policy_path: "str | None", policy_dir: str) -> "tuple[set[str], s
         if name:
             candidates.append(os.path.join(os.path.dirname(os.path.abspath(policy_path)), name))
     candidates.append(os.path.join(policy_dir, "schema-org-types.txt"))
+    # The policy usually names the default snapshot, so the two steps above can yield the
+    # same path; dedupe in order so the failure message does not print it twice.
+    ordered: "list[str]" = []
     for cand in candidates:
-        if cand and os.path.exists(cand):
+        if cand and cand not in ordered:
+            ordered.append(cand)
+    for cand in ordered:
+        if os.path.exists(cand):
             with open(cand, "r", encoding="utf-8") as fh:
                 vocab = {ln.strip() for ln in fh if ln.strip()}
             if not vocab:
                 die("vocabulary snapshot is empty: %s" % cand)
             return vocab, cand
-    die("vocabulary snapshot not found (looked for: %s). Regenerate it with "
-        "scripts/fetch-schema-org-types.py" % ", ".join(c for c in candidates if c))
+    die("vocabulary snapshot not found (looked for: %s). It is a vendored file that sits "
+        "beside the policy (a consumer repo's copy can be used verbatim) and is pinned by "
+        "the policy's vocab_version; manager ships no fetch script, so there is nothing to "
+        "regenerate it from here." % ", ".join(ordered))
 
 
 def main(argv: "list[str] | None" = None) -> int:
