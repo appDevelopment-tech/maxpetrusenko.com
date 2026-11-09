@@ -1,0 +1,29 @@
+{
+  "slug": "youtube-ai-aliens-great-filter-i8baixx1yae",
+  "title": "A Superintelligence Might Be the Loudest Thing in the Galaxy",
+  "publicUrl": "https://www.maxpetrusenko.com/medium/youtube-ai-aliens-great-filter-i8baixx1yae/",
+  "outputPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/youtube-ai-aliens-great-filter-i8baixx1yae/index.html",
+  "sourceUrl": "https://www.youtube.com/watch?v=I8baiXx1yaE",
+  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-ai-aliens-great-filter-i8baixx1yae/article-v3-packaged.md",
+  "articleHash": "532f40423eda4351b34e226c742972f6a8e9f18a8b19e4008602292018b86da6",
+  "exportedAt": "2026-11-09T12:22:52.204Z",
+  "status": "needs_review",
+  "publishMode": "preview",
+  "copiedImages": [
+    {
+      "src": "assets/hero.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-ai-aliens-great-filter-i8baixx1yae/assets/hero.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-ai-aliens-great-filter-i8baixx1yae-1794226972200/assets/hero.jpg"
+    },
+    {
+      "src": "assets/great-filter.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-ai-aliens-great-filter-i8baixx1yae/assets/great-filter.jpg",
+      "destinationPath": "/Users/maxsmacmini/Desktop/Projects/maxpetrusenko.com/nextjs/public/medium/.tmp-youtube-ai-aliens-great-filter-i8baixx1yae-1794226972200/assets/great-filter.jpg"
+    }
+  ],
+  "ratings": {
+    "gemini": 9,
+    "gpt": null,
+    "consensus": null
+  }
+}
