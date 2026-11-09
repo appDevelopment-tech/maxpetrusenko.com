@@ -17,6 +17,7 @@ export const SEO_SITE = config.site;
 export const FLAG = {
   crawlers: "seo_h005_ai_crawlers",
   indexing: "seo_h021_indexing",
+  buyerPages: "seo_h006_buyer_pages",
   titles: "seo_h003_titles",
   keyword: "seo_h013_keyword_placement",
   tldr: "seo_h014_tldr",
