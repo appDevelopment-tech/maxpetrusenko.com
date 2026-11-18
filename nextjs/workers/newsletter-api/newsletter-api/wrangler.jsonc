@@ -25,6 +25,10 @@
 		{ "name": "CHECKOUT_LIMITER", "namespace_id": "48212", "simple": { "limit": 20, "period": 60 } }
 	],
 	"kv_namespaces": [
-		{ "binding": "EMAIL_SUBS", "id": "90a570d807f04bc4abb9b46282291e5b" }
+		{ "binding": "EMAIL_SUBS", "id": "90a570d807f04bc4abb9b46282291e5b" },
+		// Tickets (see src/tickets.ts). PLACEHOLDER id: `wrangler dev` and the tests use a
+		// local store and accept it. Before the first deploy run
+		// `wrangler kv namespace create TICKETS` and paste the real id here.
+		{ "binding": "TICKETS", "id": "REPLACE_WITH_TICKETS_KV_NAMESPACE_ID" }
 	]
 }

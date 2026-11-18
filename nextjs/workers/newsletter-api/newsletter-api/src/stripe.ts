@@ -5,6 +5,8 @@
  * convention rather than adding an SDK.
  */
 
+import type { StripeSession } from './tickets';
+
 const STRIPE_API = 'https://api.stripe.com/v1';
 
 export async function findPriceByLookupKey(secretKey: string, lookupKey: string): Promise<{ id: string; unitAmount: number } | null> {
@@ -197,6 +199,19 @@ export async function findUsablePromotionCode(secretKey: string, code: string, n
 		if (promo.max_redemptions != null && (promo.times_redeemed ?? 0) >= promo.max_redemptions) return null;
 		if (promo.expires_at != null && promo.expires_at <= nowSeconds) return null;
 		return promo.id;
+	} catch {
+		return null;
+	}
+}
+
+/** Reads a Checkout Session back from Stripe: the server-side proof that it was paid. */
+export async function fetchSession(secretKey: string, sessionId: string): Promise<StripeSession | null> {
+	try {
+		const response = await fetch(`${STRIPE_API}/checkout/sessions/${encodeURIComponent(sessionId)}`, {
+			headers: { Authorization: `Bearer ${secretKey}` },
+		});
+		if (!response.ok) return null;
+		return (await response.json()) as StripeSession;
 	} catch {
 		return null;
 	}

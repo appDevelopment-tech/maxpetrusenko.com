@@ -17,3 +17,12 @@ CI_CONFIRM_SECRET=
 TWILIO_ACCOUNT_SID=
 TWILIO_AUTH_TOKEN=
 TWILIO_VERIFY_SID=
+# Ticketing (webhook + QR). Test mode locally: run `stripe listen --forward-to localhost:8787/api/stripe/webhook`
+# and paste the whsec_ it prints. Prod: the signing secret of the live webhook endpoint (Stripe Dashboard,
+# events checkout.session.completed + checkout.session.async_payment_succeeded).
+STRIPE_WEBHOOK_SECRET=
+# Derives the unguessable ticket ids (any long random string, e.g. openssl rand -hex 32). Changing it
+# orphans issued QR codes, so set it once per environment and keep it.
+TICKET_SECRET=
+# Optional: URL prefix the QR encodes. Default https://miamicontactimprov.com/checkin/
+CHECKIN_BASE_URL=
