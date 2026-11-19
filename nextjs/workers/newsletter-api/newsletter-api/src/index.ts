@@ -9,6 +9,7 @@
  */
 
 import { handleCheckout } from './checkout';
+import { handleStripeWebhook, handleTicketLookup } from './stripe-webhook';
 import { addContact, lookupContact, resendCode, startSignup, verifyCode } from './ci';
 import { monthlyRun } from './monthly';
 import { handleUnsubscribe } from './unsub';
@@ -56,6 +57,13 @@ export interface Env {
 	META_TEST_EVENT_CODE?: string;
 	// Stripe secret key, used by /api/checkout and by the single-use promotion codes.
 	STRIPE_SECRET_KEY?: string;
+	// Ticketing (webhook + QR check-in). KV binding for tickets, the endpoint's signing
+	// secret (whsec_...), the key that derives unguessable ticket ids, and an optional
+	// override of the URL the QR encodes (default https://miamicontactimprov.com/checkin/).
+	TICKETS?: KVNamespace;
+	STRIPE_WEBHOOK_SECRET?: string;
+	TICKET_SECRET?: string;
+	CHECKIN_BASE_URL?: string;
 	// Twilio credentials, used only for Twilio Verify one-time codes.
 	TWILIO_ACCOUNT_SID?: string;
 	TWILIO_AUTH_TOKEN?: string;
@@ -406,6 +414,26 @@ export default {
 				}
 			}
 			return handleCheckout(request, env, corsHeaders);
+		}
+
+		// POST /api/stripe/webhook - Stripe-signed; writes the ticket and emails it.
+		if (url.pathname === '/api/stripe/webhook' && request.method === 'POST') {
+			return handleStripeWebhook(request, env);
+		}
+
+		// GET /api/ticket?session_id=... - confirms the payment with Stripe, returns the QR.
+		if (url.pathname === '/api/ticket' && request.method === 'GET') {
+			if (env.CHECKOUT_LIMITER) {
+				try {
+					const { success } = await env.CHECKOUT_LIMITER.limit({ key: request.headers.get('CF-Connecting-IP') || 'unknown' });
+					if (!success) {
+						return Response.json({ ok: false, error: 'Too many requests. Try again in a minute.' }, { status: 429, headers: { ...corsHeaders, 'Retry-After': '60' } });
+					}
+				} catch (error) {
+					console.error('[Ticket rate limit error]', String(error));
+				}
+			}
+			return handleTicketLookup(request, env, corsHeaders);
 		}
 
 		// GET /api/list - List all subscriptions (admin endpoint)

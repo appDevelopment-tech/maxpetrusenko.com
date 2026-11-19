@@ -5,6 +5,8 @@
  * convention rather than adding an SDK.
  */
 
+import type { StripeSession } from './tickets';
+
 const STRIPE_API = 'https://api.stripe.com/v1';
 
 export async function findPriceByLookupKey(secretKey: string, lookupKey: string): Promise<{ id: string; unitAmount: number } | null> {
@@ -199,5 +201,30 @@ export async function findUsablePromotionCode(secretKey: string, code: string, n
 		return promo.id;
 	} catch {
 		return null;
+	}
+}
+
+export class StripeUnavailableError extends Error {}
+
+/**
+ * Reads a Checkout Session back from Stripe: the server-side proof that it was paid.
+ * Returns null only when Stripe says the session does not exist (404); a transient Stripe
+ * or network failure throws StripeUnavailableError so callers can answer 502, not 404.
+ */
+export async function fetchSession(secretKey: string, sessionId: string): Promise<StripeSession | null> {
+	let response: Response;
+	try {
+		response = await fetch(`${STRIPE_API}/checkout/sessions/${encodeURIComponent(sessionId)}`, {
+			headers: { Authorization: `Bearer ${secretKey}` },
+		});
+	} catch {
+		throw new StripeUnavailableError('network error');
+	}
+	if (response.status === 404) return null;
+	if (!response.ok) throw new StripeUnavailableError(`stripe ${response.status}`);
+	try {
+		return (await response.json()) as StripeSession;
+	} catch {
+		throw new StripeUnavailableError('bad stripe response');
 	}
 }

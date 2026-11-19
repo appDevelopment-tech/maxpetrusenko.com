@@ -25,6 +25,8 @@
 		{ "name": "CHECKOUT_LIMITER", "namespace_id": "48212", "simple": { "limit": 20, "period": 60 } }
 	],
 	"kv_namespaces": [
-		{ "binding": "EMAIL_SUBS", "id": "90a570d807f04bc4abb9b46282291e5b" }
+		{ "binding": "EMAIL_SUBS", "id": "90a570d807f04bc4abb9b46282291e5b" },
+		// Tickets (see src/tickets.ts). `wrangler dev` and the tests use a local store.
+		{ "binding": "TICKETS", "id": "2500335aacb44e48b82fbae995eaf645" }
 	]
 }
