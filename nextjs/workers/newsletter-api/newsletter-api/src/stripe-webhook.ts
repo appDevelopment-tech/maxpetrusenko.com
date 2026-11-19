@@ -5,7 +5,7 @@
  */
 
 import type { Env } from './index';
-import { fetchSession } from './stripe';
+import { fetchSession, StripeUnavailableError } from './stripe';
 import { sendTicketEmail } from './ticket-email';
 import { qrSvg } from './qr';
 import { checkinUrl, ensureTicket, type StripeSession } from './tickets';
@@ -89,7 +89,14 @@ export async function handleTicketLookup(request: Request, env: Env, corsHeaders
 	if (!env.STRIPE_SECRET_KEY || !env.TICKETS || !env.TICKET_SECRET) {
 		return Response.json({ ok: false, error: 'Ticketing not configured' }, { status: 500, headers: corsHeaders });
 	}
-	const session = await fetchSession(env.STRIPE_SECRET_KEY, sessionId);
+	let session: StripeSession | null;
+	try {
+		session = await fetchSession(env.STRIPE_SECRET_KEY, sessionId);
+	} catch (error) {
+		if (!(error instanceof StripeUnavailableError)) throw error;
+		console.error('[Ticket lookup] Stripe unavailable', error.message);
+		return Response.json({ ok: false, error: 'Stripe unavailable' }, { status: 502, headers: corsHeaders });
+	}
 	if (!session) return Response.json({ ok: false, error: 'Unknown session' }, { status: 404, headers: corsHeaders });
 	if (session.payment_status !== 'paid') {
 		return Response.json({ ok: false, paid: false }, { status: 402, headers: corsHeaders });

@@ -2,8 +2,8 @@ import { env, createExecutionContext, waitOnExecutionContext, fetchMock } from '
 import { describe, it, expect, beforeAll, beforeEach, afterEach } from 'vitest';
 import worker from '../src';
 import { verifyStripeSignature } from '../src/stripe-webhook';
-import { buildIcs, buildTicketEmail, googleCalendarUrl } from '../src/ticket-email';
-import { ensureTicket, listTicketIdsForDate, ticketIdFor } from '../src/tickets';
+import { buildIcs, buildTicketEmail, googleCalendarUrl, icsEscape, sendTicketEmail } from '../src/ticket-email';
+import { ensureTicket, getTicket, listTicketIdsForDate, saveTicket, ticketIdFor } from '../src/tickets';
 import { qrPng } from '../src/qr';
 import { EVENTS } from '../src/schedule';
 
@@ -232,7 +232,7 @@ describe('email payload', () => {
 
 	it('ics and gcal times honour DST (Oct 30 is EDT, UTC-4)', async () => {
 		const e = testEnv();
-		const r = await ensureTicket(e, session({ metadata: { class_date: '2026-10-30', kind: 'class' } }) as any);
+		const r = await ensureTicket(e, session({ metadata: { class_date: '2026-10-30', kind: 'class', product: 'ci-class' } }) as any);
 		if ('skip' in r) throw new Error('skipped');
 		const event = EVENTS.find((x) => x.date === '2026-10-30')!;
 		expect(buildIcs(r.ticket, event)).toContain('DTSTART:20261030T230000Z');
@@ -243,5 +243,84 @@ describe('email payload', () => {
 		const png = await qrPng('https://miamicontactimprov.com/checkin/abc');
 		expect(Array.from(png.slice(0, 8))).toEqual([137, 80, 78, 71, 13, 10, 26, 10]);
 		expect(new TextDecoder().decode(png.slice(12, 16))).toBe('IHDR');
+	});
+});
+
+describe('review fixes', () => {
+	it('same ticket twice yields a byte-identical email payload', async () => {
+		const e = testEnv();
+		const r = await ensureTicket(e, session() as any);
+		if ('skip' in r) throw new Error('skipped');
+		const event = EVENTS.find((x) => x.date === '2026-11-20')!;
+		const a = await buildTicketEmail(e, r.ticket, event);
+		await new Promise((res) => setTimeout(res, 1100));
+		const b = await buildTicketEmail(e, r.ticket, event);
+		expect(JSON.stringify(b)).toBe(JSON.stringify(a));
+		expect(atob(a.attachments[1].content)).toContain(`DTSTAMP:${new Date(r.ticket.created_at).toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '')}`);
+	});
+
+	it('a Resend 409 (idempotency conflict) marks the ticket sent without throwing', async () => {
+		const e = testEnv();
+		const r = await ensureTicket(e, session() as any);
+		if ('skip' in r) throw new Error('skipped');
+		fetchMock.get(RESEND).intercept({ method: 'POST', path: '/emails' }).reply(409, { message: 'conflict' });
+		expect(await sendTicketEmail(e, r.ticket)).toBe('already_sent');
+		expect((await getTicket(e, r.ticket.id))!.email_sent_at).toBeTruthy();
+	});
+
+	it('does not clobber email_sent_at: ensureTicket never overwrites, send merges onto the fresh record', async () => {
+		const e = testEnv();
+		const r = await ensureTicket(e, session() as any);
+		if ('skip' in r) throw new Error('skipped');
+		// another run records a send and a check-in while ours holds a stale copy
+		await saveTicket(e, { ...r.ticket, email_sent_at: '2026-11-19T10:00:00.000Z', email_id: 'email_first', checked_in_at: '2026-11-20T23:30:00.000Z' });
+		const again = await ensureTicket(e, session() as any);
+		if ('skip' in again) throw new Error('skipped');
+		expect(again.created).toBe(false);
+		expect(again.ticket.email_sent_at).toBe('2026-11-19T10:00:00.000Z');
+		// stale copy (email_sent_at null) must not send again nor reset fields
+		expect(await sendTicketEmail(e, r.ticket)).toBe('already_sent');
+		const stored = (await getTicket(e, r.ticket.id))!;
+		expect(stored).toMatchObject({ email_sent_at: '2026-11-19T10:00:00.000Z', email_id: 'email_first', checked_in_at: '2026-11-20T23:30:00.000Z' });
+	});
+
+	it('a send racing a concurrent check-in keeps the check-in', async () => {
+		const e = testEnv();
+		const r = await ensureTicket(e, session() as any);
+		if ('skip' in r) throw new Error('skipped');
+		fetchMock.get(RESEND).intercept({ method: 'POST', path: '/emails' }).reply(200, async () => {
+			await saveTicket(e, { ...r.ticket, checked_in_at: '2026-11-20T23:30:00.000Z' });
+			return { id: 'email_9' };
+		});
+		expect(await sendTicketEmail(e, r.ticket)).toBe('sent');
+		expect(await getTicket(e, r.ticket.id)).toMatchObject({ checked_in_at: '2026-11-20T23:30:00.000Z', email_id: 'email_9' });
+	});
+
+	it('skips a non-CI product and an unknown class date on a shared Stripe account', async () => {
+		const e = testEnv();
+		const other = await webhook(completed(session({ metadata: { class_date: '2026-11-20', product: 'something-else' } })), e);
+		expect(other.body.skipped).toBe('not a CI product');
+		const noProduct = await webhook(completed(session({ metadata: { class_date: '2026-11-20' } })), e);
+		expect(noProduct.body.skipped).toBe('not a CI product');
+		const unknown = await webhook(completed(session({ metadata: { class_date: '2030-01-04', product: 'ci-class' } })), e);
+		expect(unknown.body.skipped).toBe('unknown class_date');
+		expect((await e.TICKETS!.list()).keys).toHaveLength(0);
+	});
+
+	it('icsEscape escapes backslash, semicolon, comma and newline', () => {
+		expect(icsEscape('a;b,c\\d\ne')).toBe('a\\;b\\,c\\\\d\\ne');
+	});
+
+	it('GET /api/ticket answers 502 on a transient Stripe error and on a network error', async () => {
+		const call = async () => {
+			const ctx = createExecutionContext();
+			const res = await worker.fetch(new Request(`https://newsletter.test/api/ticket?session_id=${SESSION_ID}`), testEnv(), ctx);
+			await waitOnExecutionContext(ctx);
+			return res.status;
+		};
+		fetchMock.get(STRIPE).intercept({ method: 'GET', path: `/v1/checkout/sessions/${SESSION_ID}` }).reply(503, { error: {} });
+		expect(await call()).toBe(502);
+		fetchMock.get(STRIPE).intercept({ method: 'GET', path: `/v1/checkout/sessions/${SESSION_ID}` }).replyWithError(new Error('boom'));
+		expect(await call()).toBe(502);
 	});
 });

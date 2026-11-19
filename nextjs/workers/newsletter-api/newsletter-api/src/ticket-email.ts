@@ -7,7 +7,7 @@ import type { Env } from './index';
 import { CI_FROM, RESEND_API } from './common';
 import { qrPng, toBase64 } from './qr';
 import { EVENTS, type ScheduledEvent } from './schedule';
-import { checkinUrl, saveTicket, type Ticket } from './tickets';
+import { checkinUrl, getTicket, saveTicket, type Ticket } from './tickets';
 
 export const VENUE_NAME = 'Inner Motion Dance Studio';
 export const VENUE_ADDRESS = '216 NE 1st Ave, Hallandale Beach, FL 33009';
@@ -30,8 +30,8 @@ function utcStamp(iso: string): string {
 	return new Date(iso).toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
 }
 
-function icsEscape(value: string): string {
-	return value.replace(/\\/g, '\\\\').replace(/;/g, '\;').replace(/,/g, '\\,').replace(/\r?\n/g, '\\n');
+export function icsEscape(value: string): string {
+	return value.replace(/\\/g, '\\\\').replace(/;/g, '\\;').replace(/,/g, '\\,').replace(/\r?\n/g, '\\n');
 }
 
 // RFC 5545: lines are folded at 75 octets; continuation lines start with one space.
@@ -46,7 +46,9 @@ function fold(line: string): string {
 	return out.join('\r\n');
 }
 
-export function buildIcs(ticket: Ticket, event: ScheduledEvent, now = new Date()): string {
+// DTSTAMP is the ticket's created_at, not the clock: one ticket always yields byte-identical
+// bytes, which the Resend Idempotency-Key relies on.
+export function buildIcs(ticket: Ticket, event: ScheduledEvent): string {
 	const lines = [
 		'BEGIN:VCALENDAR',
 		'VERSION:2.0',
@@ -55,7 +57,7 @@ export function buildIcs(ticket: Ticket, event: ScheduledEvent, now = new Date()
 		'METHOD:PUBLISH',
 		'BEGIN:VEVENT',
 		`UID:${ticket.id}@miamicontactimprov.com`,
-		`DTSTAMP:${utcStamp(now.toISOString())}`,
+		`DTSTAMP:${utcStamp(new Date(ticket.created_at).toISOString())}`,
 		`DTSTART:${utcStamp(event.start)}`,
 		`DTEND:${utcStamp(event.end)}`,
 		`SUMMARY:${icsEscape(classLabel(ticket, event))}`,
@@ -160,12 +162,30 @@ Max`;
 }
 
 /**
+ * Writes email fields onto the freshest copy of the ticket. KV has no compare-and-set, so
+ * re-reading right before the put keeps a concurrent writer's fields (checked_in_at, an
+ * earlier email_sent_at) from being clobbered by our stale in-memory copy.
+ */
+async function patchEmailFields(env: Env, ticket: Ticket, patch: Partial<Pick<Ticket, 'email_sent_at' | 'email_id' | 'email_error'>>): Promise<void> {
+	const fresh = (await getTicket(env, ticket.id)) ?? ticket;
+	const merged: Ticket = { ...fresh, ...patch };
+	if (fresh.email_sent_at) {
+		// Already recorded by another run: keep it, never reset or move it.
+		merged.email_sent_at = fresh.email_sent_at;
+		merged.email_id = fresh.email_id ?? merged.email_id;
+	}
+	await saveTicket(env, merged);
+}
+
+/**
  * Sends the confirmation once per ticket. Safe to call again on a Stripe retry: it
  * returns early when the ticket already records a send, and the Resend idempotency key
  * covers two deliveries racing each other.
  */
 export async function sendTicketEmail(env: Env, ticket: Ticket): Promise<'sent' | 'already_sent' | 'skipped' | 'failed'> {
-	if (ticket.email_sent_at) return 'already_sent';
+	const current = (await getTicket(env, ticket.id)) ?? ticket;
+	if (current.email_sent_at) return 'already_sent';
+	ticket = current;
 	const event = EVENTS.find((e) => e.date === ticket.event_date);
 	if (!ticket.email || !event) {
 		console.error('[Ticket email skipped]', ticket.id, ticket.email ? 'unknown event date' : 'no email on session');
@@ -184,19 +204,25 @@ export async function sendTicketEmail(env: Env, ticket: Ticket): Promise<'sent' 
 		body: JSON.stringify(payload),
 	});
 	const body = (await response.json().catch(() => null)) as { id?: string; message?: string } | null;
+	if (response.status === 409) {
+		// Idempotency conflict: Resend already holds a send for this key (same payload, since
+		// it is deterministic per ticket). Treat as delivered.
+		await patchEmailFields(env, ticket, { email_sent_at: new Date().toISOString(), email_error: null });
+		return 'already_sent';
+	}
 	if (!response.ok) {
 		// A 4xx other than rate limiting or a request timeout is the recipient or the payload
 		// being wrong: retrying for days would not fix it. Record it on the ticket (the host
 		// can see who never got a mail) and let the webhook answer 200. 5xx, 429 and network
 		// errors throw so Stripe retries.
-		if (response.status >= 400 && response.status < 500 && ![408, 409, 429].includes(response.status)) {
+		if (response.status >= 400 && response.status < 500 && ![408, 429].includes(response.status)) {
 			console.error('[Ticket email rejected]', ticket.id, response.status, body?.message ?? '');
-			await saveTicket(env, { ...ticket, email_error: `${response.status}: ${body?.message ?? 'rejected'}` });
+			await patchEmailFields(env, ticket, { email_error: `${response.status}: ${body?.message ?? 'rejected'}` });
 			return 'failed';
 		}
 		throw new Error(`Resend ${response.status}: ${body?.message ?? 'send failed'}`);
 	}
 
-	await saveTicket(env, { ...ticket, email_sent_at: new Date().toISOString(), email_id: body?.id ?? null, email_error: null });
+	await patchEmailFields(env, ticket, { email_sent_at: new Date().toISOString(), email_id: body?.id ?? null, email_error: null });
 	return 'sent';
 }

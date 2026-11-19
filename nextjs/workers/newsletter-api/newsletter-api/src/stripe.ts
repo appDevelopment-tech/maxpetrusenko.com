@@ -204,15 +204,27 @@ export async function findUsablePromotionCode(secretKey: string, code: string, n
 	}
 }
 
-/** Reads a Checkout Session back from Stripe: the server-side proof that it was paid. */
+export class StripeUnavailableError extends Error {}
+
+/**
+ * Reads a Checkout Session back from Stripe: the server-side proof that it was paid.
+ * Returns null only when Stripe says the session does not exist (404); a transient Stripe
+ * or network failure throws StripeUnavailableError so callers can answer 502, not 404.
+ */
 export async function fetchSession(secretKey: string, sessionId: string): Promise<StripeSession | null> {
+	let response: Response;
 	try {
-		const response = await fetch(`${STRIPE_API}/checkout/sessions/${encodeURIComponent(sessionId)}`, {
+		response = await fetch(`${STRIPE_API}/checkout/sessions/${encodeURIComponent(sessionId)}`, {
 			headers: { Authorization: `Bearer ${secretKey}` },
 		});
-		if (!response.ok) return null;
+	} catch {
+		throw new StripeUnavailableError('network error');
+	}
+	if (response.status === 404) return null;
+	if (!response.ok) throw new StripeUnavailableError(`stripe ${response.status}`);
+	try {
 		return (await response.json()) as StripeSession;
 	} catch {
-		return null;
+		throw new StripeUnavailableError('bad stripe response');
 	}
 }

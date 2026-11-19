@@ -14,6 +14,9 @@
 
 import type { Env } from './index';
 import { cleanName } from './common';
+import { EVENTS } from './schedule';
+
+export const CI_PRODUCT = /^ci-(class|jam|combo)$/;
 
 export const CHECKIN_BASE = 'https://miamicontactimprov.com/checkin/';
 
@@ -97,6 +100,10 @@ export async function ensureTicket(env: Env, session: StripeSession, now = new D
 	if (session.payment_status !== 'paid') return { skip: 'not paid' };
 	const eventDate = session.metadata?.class_date;
 	if (!eventDate || !/^\d{4}-\d{2}-\d{2}$/.test(eventDate)) return { skip: 'no class_date metadata' };
+	// The Stripe account is shared with other products: only tickets we created in
+	// checkout.ts (metadata.product = ci-<kind>, for a date on our schedule) are ours.
+	if (!CI_PRODUCT.test(session.metadata?.product ?? '')) return { skip: 'not a CI product' };
+	if (!EVENTS.some((e) => e.date === eventDate)) return { skip: 'unknown class_date' };
 
 	const id = await ticketIdFor(env.TICKET_SECRET, session.id);
 	const existing = await getTicket(env, id);
@@ -119,6 +126,11 @@ export async function ensureTicket(env: Env, session: StripeSession, now = new D
 		email_id: null,
 		email_error: null,
 	};
+	// Re-read right before writing: another run (webhook vs success page) may have created
+	// the ticket, or already sent the email, while we were building this one. Never
+	// overwrite an existing record.
+	const raced = await getTicket(env, id);
+	if (raced) return { ticket: raced, created: false };
 	await saveTicket(env, ticket);
 	await env.TICKETS.put(`date:${eventDate}:${id}`, '1');
 	return { ticket, created: true };
