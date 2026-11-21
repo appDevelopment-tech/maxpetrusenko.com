@@ -17,7 +17,8 @@
 		"enabled": true
 	},
 	"vars": {
-		"RESEND_AUDIENCE_ID": "6da7e1c7-6fe5-446d-b306-00a52f5b9d07"
+		"RESEND_AUDIENCE_ID": "6da7e1c7-6fe5-446d-b306-00a52f5b9d07",
+		"CI_PORTAL_CONFIG_ID": "bpc_1Ue7B6GR8ZpP3RhozQD3cU8Z"
 	},
 	"ratelimits": [
 		{ "name": "SUBSCRIBE_LIMITER", "namespace_id": "48210", "simple": { "limit": 10, "period": 60 } },
