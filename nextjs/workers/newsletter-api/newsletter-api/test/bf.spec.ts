@@ -149,6 +149,34 @@ describe('POST /api/ci/bf-run', () => {
 		const r = await run({ confirm: 'draft', dry_run: false }, undefined, e);
 		expect(r.status).toBe(500);
 		expect(r.body.broadcast).toEqual({ id: null, created: false });
+		// nothing may claim "drafted" when no draft exists
+		expect(r.body.queued).toBeUndefined();
+		expect((await e.TICKETS!.list({ prefix: 'bfq:' })).keys).toHaveLength(0);
+	});
+
+	it('an unreachable Resend also leaves the queue empty', async () => {
+		const e = testEnv();
+		await seed(e);
+		contacts(rows);
+		fetchMock.get(RESEND).intercept({ method: 'POST', path: '/broadcasts' }).replyWithError(new Error('down'));
+		const r = await run({ confirm: 'draft', dry_run: false }, undefined, e);
+		expect(r.status).toBe(500);
+		expect((await e.TICKETS!.list({ prefix: 'bfq:' })).keys).toHaveLength(0);
+	});
+
+	it('says in every response that the draft targets the whole audience, and whether the scan was cut', async () => {
+		const e = testEnv();
+		await seed(e);
+		contacts(rows);
+		const dry = await run({}, undefined, e);
+		expect(dry.body.audience).toBe('all');
+		expect(dry.body.warning).toContain('whole audience');
+		expect(dry.body.truncated).toBe(false);
+		contacts(rows);
+		interceptBroadcast();
+		const real = await run({ confirm: 'draft', dry_run: false }, undefined, e);
+		expect(real.body.audience).toBe('all');
+		expect(real.body.warning).toContain('whole audience');
 	});
 
 	it('refuses to run when Resend is not configured', async () => {

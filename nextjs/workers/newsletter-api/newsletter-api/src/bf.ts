@@ -83,6 +83,11 @@ export interface BfRunResult {
 	already_queued: number;
 	would_queue?: number;
 	queued?: number;
+	truncated: boolean;
+	// Resend broadcasts go to a whole audience here, not to the attendee list. Stated in every
+	// response so nobody approves the draft believing it is attendees-only.
+	audience: 'all';
+	warning: string;
 	broadcast?: { id: string | null; created: boolean };
 	preview: { subject: string; text: string };
 	error?: string;
@@ -93,7 +98,8 @@ export async function bfRun(env: Env, rawBody: unknown, now = new Date()): Promi
 	const real = body.confirm === 'draft' && body.dry_run === false;
 	const mail = bfEmail();
 	const out: BfRunResult = {
-		ok: true, dry_run: !real, campaign: BF_CAMPAIGN, tickets_scanned: 0, attendees: 0, unsubscribed_excluded: 0, already_queued: 0,
+		ok: true, dry_run: !real, campaign: BF_CAMPAIGN, tickets_scanned: 0, attendees: 0, truncated: false, audience: 'all',
+		warning: 'The Resend draft targets the whole audience, not only these attendees. Pick a segment of them in the Resend dashboard before sending, or accept the full audience.', unsubscribed_excluded: 0, already_queued: 0,
 		preview: { subject: mail.subject, text: mail.text },
 	};
 	if (!env.TICKETS || !env.RESEND_API_KEY || !env.RESEND_AUDIENCE_ID) {
@@ -104,8 +110,9 @@ export async function bfRun(env: Env, rawBody: unknown, now = new Date()): Promi
 	const unsubscribed = new Set(contacts.filter((c) => c.unsubscribed && c.email).map((c) => normalizeEmail(c.email)));
 
 	const today = easternDate(now);
-	const tickets = await listTicketsForBf(env);
+	const { tickets, truncated } = await listTicketsForBf(env);
 	out.tickets_scanned = tickets.length;
+	out.truncated = truncated;
 	const seen = new Set<string>();
 	const attendees: Array<{ hash: string }> = [];
 	for (const t of tickets) {
@@ -128,18 +135,13 @@ export async function bfRun(env: Env, rawBody: unknown, now = new Date()): Promi
 	}
 	if (!real) return { ...out, would_queue: fresh.length };
 
-	for (const hash of fresh) {
-		await env.TICKETS.put(`bfq:${hash}`, JSON.stringify({ status: 'drafted', segment: 'attended', campaign: BF_CAMPAIGN, created_at: now.toISOString() }));
-	}
-	out.queued = fresh.length;
-
 	// One broadcast in draft state. Not sending is the absence of a send call, and the
 	// body carries no `send` or `scheduled_at` field.
 	const draftKey = `bfdraft:${BF_CAMPAIGN}`;
 	const existing = await env.TICKETS.get(draftKey);
 	if (existing) {
 		out.broadcast = { id: existing, created: false };
-		return out;
+		return queueDrafted(env, out, fresh, now);
 	}
 	try {
 		const response = await fetch(`${RESEND_API}/broadcasts`, {
@@ -158,5 +160,15 @@ export async function bfRun(env: Env, rawBody: unknown, now = new Date()): Promi
 		console.error('[BF draft error]', String(error));
 		return { ...out, ok: false, error: 'Could not reach Resend.', broadcast: { id: null, created: false } };
 	}
+	return queueDrafted(env, out, fresh, now);
+}
+
+// The queue records what a draft covers, so it is written only once a broadcast draft exists:
+// a refused or unreachable Resend leaves no entry claiming "drafted".
+async function queueDrafted(env: Env, out: BfRunResult, fresh: string[], now: Date): Promise<BfRunResult> {
+	for (const hash of fresh) {
+		await env.TICKETS!.put(`bfq:${hash}`, JSON.stringify({ status: 'drafted', segment: 'attended', campaign: BF_CAMPAIGN, created_at: now.toISOString() }));
+	}
+	out.queued = fresh.length;
 	return out;
 }

@@ -233,8 +233,24 @@ export interface CreateSubscriptionSessionParams {
 	priceId: string;
 	successUrl: string;
 	cancelUrl: string;
+	// An existing Stripe customer (reuse), or an address to prefill. Stripe takes only one.
+	customer?: string;
 	email?: string;
 	metadata: Record<string, string>;
+}
+
+/** The Stripe customer for an address, if there is one. Null on none or on any Stripe trouble. */
+export async function findCustomerByEmail(secretKey: string, email: string): Promise<string | null> {
+	try {
+		const response = await fetch(`${STRIPE_API}/customers?${new URLSearchParams({ email, limit: '1' }).toString()}`, {
+			headers: { Authorization: `Bearer ${secretKey}` },
+		});
+		if (!response.ok) return null;
+		const payload = (await response.json().catch(() => null)) as { data?: Array<{ id?: string }> } | null;
+		return payload?.data?.[0]?.id ?? null;
+	} catch {
+		return null;
+	}
 }
 
 /**
@@ -251,7 +267,8 @@ export async function createSubscriptionSession(secretKey: string, params: Creat
 	body.set('phone_number_collection[enabled]', 'true');
 	body.set('success_url', params.successUrl);
 	body.set('cancel_url', params.cancelUrl);
-	if (params.email) body.set('customer_email', params.email);
+	if (params.customer) body.set('customer', params.customer);
+	else if (params.email) body.set('customer_email', params.email);
 	for (const [key, value] of Object.entries(params.metadata)) {
 		body.set(`metadata[${key}]`, value);
 		if (key === 'product' || key === 'plan') body.set(`subscription_data[metadata][${key}]`, value);

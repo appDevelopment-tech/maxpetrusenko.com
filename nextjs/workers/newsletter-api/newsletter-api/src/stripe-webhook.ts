@@ -51,7 +51,7 @@ export async function verifyStripeSignature(rawBody: string, header: string | nu
 const HANDLED_EVENTS = ['checkout.session.completed', 'checkout.session.async_payment_succeeded'];
 // Membership (subscription) events. A checkout.session.completed in subscription mode is a
 // membership; in payment mode it is a ticket.
-const MEMBERSHIP_ONLY_EVENTS = ['invoice.paid', 'customer.subscription.deleted'];
+const MEMBERSHIP_ONLY_EVENTS = ['invoice.paid', 'customer.subscription.updated', 'customer.subscription.deleted', 'charge.refunded', 'charge.dispute.created'];
 
 export async function handleStripeWebhook(request: Request, env: Env): Promise<Response> {
 	if (!env.STRIPE_WEBHOOK_SECRET || !env.TICKETS || !env.TICKET_SECRET) {
@@ -69,7 +69,7 @@ export async function handleStripeWebhook(request: Request, env: Env): Promise<R
 		return Response.json({ ok: false, error: 'Invalid JSON' }, { status: 400 });
 	}
 	if (event.type && MEMBERSHIP_ONLY_EVENTS.includes(event.type)) return handleMembershipEvent(env, event);
-	if (event.type === 'checkout.session.completed' && event.data?.object?.mode === 'subscription') return handleMembershipEvent(env, event);
+	if (HANDLED_EVENTS.includes(event.type ?? '') && event.data?.object?.mode === 'subscription') return handleMembershipEvent(env, event);
 	const session = event.data?.object;
 	if (!event.type || !HANDLED_EVENTS.includes(event.type) || !session?.id) {
 		return Response.json({ ok: true, ignored: event.type ?? 'unknown' });

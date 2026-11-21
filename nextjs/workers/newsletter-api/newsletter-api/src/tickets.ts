@@ -141,18 +141,18 @@ export async function ensureTicket(env: Env, session: StripeSession, now = new D
 	return { ticket, created: true };
 }
 
-/** Every ticket, for the Black Friday attendee scan. Capped so a run stays inside the subrequest budget. */
-export async function listTicketsForBf(env: Env, max = 600): Promise<Ticket[]> {
-	const out: Ticket[] = [];
+/** Every ticket, for the Black Friday attendee scan. Capped so a run stays inside the subrequest budget; `truncated` says it was. */
+export async function listTicketsForBf(env: Env, max = 600): Promise<{ tickets: Ticket[]; truncated: boolean }> {
+	const tickets: Ticket[] = [];
 	let cursor: string | undefined;
 	do {
 		const page = await env.TICKETS!.list({ prefix: 'tkt:', cursor });
 		for (const key of page.keys) {
-			if (out.length >= max) return out;
+			if (tickets.length >= max) return { tickets, truncated: true };
 			const t = await getTicket(env, key.name.slice('tkt:'.length));
-			if (t) out.push(t);
+			if (t) tickets.push(t);
 		}
 		cursor = page.list_complete === false ? page.cursor : undefined;
 	} while (cursor);
-	return out;
+	return { tickets, truncated: false };
 }

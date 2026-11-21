@@ -68,6 +68,8 @@ export interface Env {
 	CHECKIN_BASE_URL?: string;
 	// Stripe Customer Portal configuration id (bpc_...) for memberships; omitted = the account default.
 	CI_PORTAL_CONFIG_ID?: string;
+	// Salt version for member ids; unset means "v1" (the ids already issued).
+	CI_MEMBER_ID_VERSION?: string;
 	// Twilio credentials, used only for Twilio Verify one-time codes.
 	TWILIO_ACCOUNT_SID?: string;
 	TWILIO_AUTH_TOKEN?: string;
