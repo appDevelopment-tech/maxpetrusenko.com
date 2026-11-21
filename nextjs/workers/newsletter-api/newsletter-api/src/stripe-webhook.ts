@@ -9,6 +9,7 @@ import { fetchSession, StripeUnavailableError } from './stripe';
 import { sendTicketEmail } from './ticket-email';
 import { qrSvg } from './qr';
 import { checkinUrl, ensureTicket, type StripeSession } from './tickets';
+import { handleMembershipEvent } from './membership';
 
 const TOLERANCE_SECONDS = 300;
 
@@ -48,6 +49,9 @@ export async function verifyStripeSignature(rawBody: string, header: string | nu
 }
 
 const HANDLED_EVENTS = ['checkout.session.completed', 'checkout.session.async_payment_succeeded'];
+// Membership (subscription) events. A checkout.session.completed in subscription mode is a
+// membership; in payment mode it is a ticket.
+const MEMBERSHIP_ONLY_EVENTS = ['invoice.paid', 'customer.subscription.deleted'];
 
 export async function handleStripeWebhook(request: Request, env: Env): Promise<Response> {
 	if (!env.STRIPE_WEBHOOK_SECRET || !env.TICKETS || !env.TICKET_SECRET) {
@@ -58,12 +62,14 @@ export async function handleStripeWebhook(request: Request, env: Env): Promise<R
 		return Response.json({ ok: false, error: 'Bad signature' }, { status: 400 });
 	}
 
-	let event: { id?: string; type?: string; data?: { object?: StripeSession } };
+	let event: { id?: string; type?: string; created?: number; data?: { object?: StripeSession } };
 	try {
 		event = JSON.parse(rawBody);
 	} catch {
 		return Response.json({ ok: false, error: 'Invalid JSON' }, { status: 400 });
 	}
+	if (event.type && MEMBERSHIP_ONLY_EVENTS.includes(event.type)) return handleMembershipEvent(env, event);
+	if (event.type === 'checkout.session.completed' && event.data?.object?.mode === 'subscription') return handleMembershipEvent(env, event);
 	const session = event.data?.object;
 	if (!event.type || !HANDLED_EVENTS.includes(event.type) || !session?.id) {
 		return Response.json({ ok: true, ignored: event.type ?? 'unknown' });

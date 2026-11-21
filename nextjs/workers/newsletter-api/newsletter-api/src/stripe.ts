@@ -228,3 +228,59 @@ export async function fetchSession(secretKey: string, sessionId: string): Promis
 		throw new StripeUnavailableError('bad stripe response');
 	}
 }
+
+export interface CreateSubscriptionSessionParams {
+	priceId: string;
+	successUrl: string;
+	cancelUrl: string;
+	email?: string;
+	metadata: Record<string, string>;
+}
+
+/**
+ * Checkout Session in subscription mode for a membership. No promotion codes: memberships
+ * are not discountable (Max, 2026-10-01). The metadata is copied onto the subscription
+ * too, so invoice and subscription events can tell our members from the account's other
+ * products.
+ */
+export async function createSubscriptionSession(secretKey: string, params: CreateSubscriptionSessionParams): Promise<{ url: string } | { error: string }> {
+	const body = new URLSearchParams();
+	body.set('mode', 'subscription');
+	body.set('line_items[0][price]', params.priceId);
+	body.set('line_items[0][quantity]', '1');
+	body.set('phone_number_collection[enabled]', 'true');
+	body.set('success_url', params.successUrl);
+	body.set('cancel_url', params.cancelUrl);
+	if (params.email) body.set('customer_email', params.email);
+	for (const [key, value] of Object.entries(params.metadata)) {
+		body.set(`metadata[${key}]`, value);
+		if (key === 'product' || key === 'plan') body.set(`subscription_data[metadata][${key}]`, value);
+	}
+	const response = await fetch(`${STRIPE_API}/checkout/sessions`, {
+		method: 'POST',
+		headers: { Authorization: `Bearer ${secretKey}`, 'Content-Type': 'application/x-www-form-urlencoded' },
+		body: body.toString(),
+	});
+	const payload = (await response.json().catch(() => null)) as { url?: string; error?: { message?: string } } | null;
+	if (!response.ok) return { error: payload?.error?.message ?? `Stripe error ${response.status}` };
+	if (!payload?.url) return { error: 'Stripe did not return a checkout URL' };
+	return { url: payload.url };
+}
+
+/** A Stripe Customer Portal session (cancel, card, invoices). The URL is short-lived. */
+export async function createPortalSession(
+	secretKey: string,
+	params: { customer: string; returnUrl: string; configuration?: string },
+): Promise<{ url: string } | { error: string }> {
+	const body = new URLSearchParams({ customer: params.customer, return_url: params.returnUrl });
+	if (params.configuration) body.set('configuration', params.configuration);
+	const response = await fetch(`${STRIPE_API}/billing_portal/sessions`, {
+		method: 'POST',
+		headers: { Authorization: `Bearer ${secretKey}`, 'Content-Type': 'application/x-www-form-urlencoded' },
+		body: body.toString(),
+	});
+	const payload = (await response.json().catch(() => null)) as { url?: string; error?: { message?: string } } | null;
+	if (!response.ok) return { error: payload?.error?.message ?? `Stripe error ${response.status}` };
+	if (!payload?.url) return { error: 'Stripe did not return a portal URL' };
+	return { url: payload.url };
+}

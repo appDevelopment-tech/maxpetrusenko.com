@@ -34,7 +34,7 @@ describe('resolveEvent (kind: class)', () => {
 	});
 
 	it('falls back to the last event, closed, once every cutoff has passed', () => {
-		const now = new Date('2026-12-01T00:00:00-05:00');
+		const now = new Date('2031-01-01T00:00:00-05:00');
 		const result = resolveEvent(now, 'class');
 		expect(result && 'event' in result && result.event.date).toBe(EVENTS[EVENTS.length - 1].date);
 		expect(result && 'closed' in result && result.closed).toBe(true);
@@ -49,7 +49,7 @@ describe('resolveEvent (kind: class)', () => {
 
 	it('returns an unknown_date error for a date not in EVENTS', () => {
 		const now = new Date('2026-09-01T00:00:00-04:00');
-		const result = resolveEvent(now, 'class', '2026-12-25');
+		const result = resolveEvent(now, 'class', '2026-12-26');
 		expect(result).toEqual({ error: 'unknown_date' });
 	});
 
@@ -73,14 +73,46 @@ describe('resolveEvent (kind: class)', () => {
 			expect(event.end.endsWith('-05:00')).toBe(true);
 		});
 
-		it('has all eight classes, chronological, 7-9pm', () => {
-			expect(EVENTS).toHaveLength(8);
-			for (const event of EVENTS) {
+		it('is generated: every Friday from 2026-10-02 to the end of 2028, chronological, 7-9pm', () => {
+			expect(EVENTS[0].date).toBe('2026-10-02');
+			expect(EVENTS.slice(0, 8).map((e) => e.date)).toEqual([
+				'2026-10-02', '2026-10-09', '2026-10-16', '2026-10-23', '2026-10-30', '2026-11-06', '2026-11-13', '2026-11-20',
+			]);
+			expect(EVENTS[8].date).toBe('2026-11-27');
+			expect(EVENTS[EVENTS.length - 1].date.startsWith('2028-')).toBe(true);
+			for (let i = 0; i < EVENTS.length; i++) {
+				const event = EVENTS[i];
 				expect(event.type).toBe('class');
 				expect(event.title).toBe('Fundamentals: Friday class');
 				expect(event.start).toContain('T19:00:00');
 				expect(event.end).toContain('T21:00:00');
+				expect(new Date(`${event.date}T12:00:00Z`).getUTCDay()).toBe(5);
+				if (i > 0) {
+					const gap = new Date(`${event.date}T12:00:00Z`).getTime() - new Date(`${EVENTS[i - 1].date}T12:00:00Z`).getTime();
+					expect(gap).toBe(7 * 24 * 60 * 60 * 1000);
+				}
 			}
+		});
+
+		it('every generated start reads 19:00 America/New_York on its own date (DST rule matches Intl)', () => {
+			const fmt = new Intl.DateTimeFormat('en-US', { timeZone: 'America/New_York', hour: '2-digit', minute: '2-digit', hourCycle: 'h23', year: 'numeric', month: '2-digit', day: '2-digit' });
+			for (const event of EVENTS) {
+				const parts = Object.fromEntries(fmt.formatToParts(new Date(event.start)).map((p) => [p.type, p.value]));
+				expect(`${parts.year}-${parts.month}-${parts.day}`).toBe(event.date);
+				expect(`${parts.hour}:${parts.minute}`).toBe('19:00');
+				const endParts = Object.fromEntries(fmt.formatToParts(new Date(event.end)).map((p) => [p.type, p.value]));
+				expect(`${endParts.hour}:${endParts.minute}`).toBe('21:00');
+			}
+		});
+
+		it('has a sellable date after Nov 20, 2026 (Black Friday, Nov 27, is on the calendar)', () => {
+			const now = new Date('2026-11-21T12:00:00-05:00');
+			const result = resolveEvent(now, 'class');
+			expect(result && 'event' in result && result.event.date).toBe('2026-11-27');
+			expect(result && 'closed' in result && result.closed).toBe(false);
+			expect(EVENTS.find((e) => e.date === '2026-11-27')!.start.endsWith('-05:00')).toBe(true);
+			expect(EVENTS.find((e) => e.date === '2027-03-19')!.start.endsWith('-04:00')).toBe(true);
+			expect(EVENTS.find((e) => e.date === '2027-03-12')!.start.endsWith('-05:00')).toBe(true);
 		});
 	});
 });
