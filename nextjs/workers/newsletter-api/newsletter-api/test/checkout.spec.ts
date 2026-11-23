@@ -111,7 +111,7 @@ describe('POST /api/checkout', () => {
 		interceptPrices();
 		interceptSessions();
 
-		const { status, body } = await checkout({ event_date: '2026-11-20' });
+		const { status, body } = await checkout({ event_date: '2028-06-02' });
 
 		expect(status).toBe(200);
 		expect(body.url).toBe('https://checkout.stripe.com/c/pay/test_1');
@@ -121,10 +121,10 @@ describe('POST /api/checkout', () => {
 		expect(params.get('line_items[0][price]')).toBe(PRICES['ci-ticket-online-friday'].id);
 		expect(params.get('line_items[0][quantity]')).toBe('1');
 		expect(params.get('allow_promotion_codes')).toBe('true');
-		expect(params.get('metadata[class_date]')).toBe('2026-11-20');
+		expect(params.get('metadata[class_date]')).toBe('2028-06-02');
 		expect(params.get('metadata[kind]')).toBe('class');
 		expect(params.get('metadata[product]')).toBe('ci-class');
-		expect(params.get('success_url')).toContain('kind=class&event_date=2026-11-20&amount=2000');
+		expect(params.get('success_url')).toContain('kind=class&event_date=2028-06-02&amount=2000');
 	});
 
 	it('answers 409 with a door link once a ticket date is past its cutoff', async () => {
@@ -159,7 +159,7 @@ describe('POST /api/checkout', () => {
 	});
 
 	it('returns 500 when STRIPE_SECRET_KEY is not configured', async () => {
-		const { status, body } = await checkout({ kind: 'class', event_date: '2026-11-20' }, testEnv({ STRIPE_SECRET_KEY: undefined }));
+		const { status, body } = await checkout({ kind: 'class', event_date: '2028-06-02' }, testEnv({ STRIPE_SECRET_KEY: undefined }));
 		expect(status).toBe(500);
 		expect(body.error).toBe('Stripe not configured');
 	});
@@ -170,14 +170,14 @@ describe('POST /api/checkout', () => {
 			.intercept({ method: 'GET', path: /\/v1\/prices\?/ })
 			.reply(200, { data: [] });
 
-		const { status, body } = await checkout({ kind: 'class', event_date: '2026-11-20' });
+		const { status, body } = await checkout({ kind: 'class', event_date: '2028-06-02' });
 		expect(status).toBe(500);
 		expect(body.error).toBe('Price not configured');
 	});
 });
 
 describe('POST /api/checkout with a ticket code', () => {
-	const future = '2026-11-20';
+	const future = '2028-06-02';
 	const usable = { id: 'promo_live1', active: true, times_redeemed: 0, max_redemptions: 1, expires_at: Math.floor(Date.now() / 1000) + 86400 };
 
 	it('applies a valid code directly: discounts[0][promotion_code], no code box, pinned version', async () => {

@@ -46,6 +46,11 @@ export interface StripeSession {
 	currency?: string | null;
 	customer_details?: { name?: string | null; email?: string | null; phone?: string | null } | null;
 	metadata?: Record<string, string> | null;
+	// Subscription checkouts (memberships, see membership.ts).
+	mode?: string | null;
+	created?: number | null;
+	customer?: string | null;
+	subscription?: string | null;
 }
 
 function hex(bytes: ArrayBuffer): string {
@@ -134,4 +139,20 @@ export async function ensureTicket(env: Env, session: StripeSession, now = new D
 	await saveTicket(env, ticket);
 	await env.TICKETS.put(`date:${eventDate}:${id}`, '1');
 	return { ticket, created: true };
+}
+
+/** Every ticket, for the Black Friday attendee scan. Capped so a run stays inside the subrequest budget; `truncated` says it was. */
+export async function listTicketsForBf(env: Env, max = 600): Promise<{ tickets: Ticket[]; truncated: boolean }> {
+	const tickets: Ticket[] = [];
+	let cursor: string | undefined;
+	do {
+		const page = await env.TICKETS!.list({ prefix: 'tkt:', cursor });
+		for (const key of page.keys) {
+			if (tickets.length >= max) return { tickets, truncated: true };
+			const t = await getTicket(env, key.name.slice('tkt:'.length));
+			if (t) tickets.push(t);
+		}
+		cursor = page.list_complete === false ? page.cursor : undefined;
+	} while (cursor);
+	return { tickets, truncated: false };
 }

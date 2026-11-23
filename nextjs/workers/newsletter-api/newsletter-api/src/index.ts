@@ -12,6 +12,9 @@ import { handleCheckout } from './checkout';
 import { handleStripeWebhook, handleTicketLookup } from './stripe-webhook';
 import { addContact, lookupContact, resendCode, startSignup, verifyCode } from './ci';
 import { monthlyRun } from './monthly';
+import { bfRun } from './bf';
+import { handleCheckinLink, handleMemberCheckin as handleSelfCheckin, handleTicketCheckin, handleTicketLookup as handleTicketStatus } from './checkin';
+import { handleMemberCheckin, handleMemberList, handleMembershipCheckout, handleMembershipPortal, handleMembershipSession } from './membership';
 import { handleUnsubscribe } from './unsub';
 import {
 	CI_SOURCE_PREFIX, INTERNAL_KEY_PREFIXES, MAX_TAG, MAX_TEXT, attribution, cleanName, isValidEmail, isValidPhone, normalizeEmail, sha256Hex, splitName, text,
@@ -64,6 +67,10 @@ export interface Env {
 	STRIPE_WEBHOOK_SECRET?: string;
 	TICKET_SECRET?: string;
 	CHECKIN_BASE_URL?: string;
+	// Stripe Customer Portal configuration id (bpc_...) for memberships; omitted = the account default.
+	CI_PORTAL_CONFIG_ID?: string;
+	// Salt version for member ids; unset means "v1" (the ids already issued).
+	CI_MEMBER_ID_VERSION?: string;
 	// Twilio credentials, used only for Twilio Verify one-time codes.
 	TWILIO_ACCOUNT_SID?: string;
 	TWILIO_AUTH_TOKEN?: string;
@@ -414,6 +421,79 @@ export default {
 				}
 			}
 			return handleCheckout(request, env, corsHeaders);
+		}
+
+		// Memberships (see membership.ts). Checkout, session lookup and portal are public and
+		// share the checkout rate limit; the member list and the check-in burn are admin only.
+		if (url.pathname.startsWith('/api/membership/')) {
+			const route = `${request.method} ${url.pathname}`;
+			if (route === 'GET /api/membership/members' || route === 'POST /api/membership/checkin') {
+				if (!isAdmin(request, env)) {
+					return Response.json({ ok: false, error: 'Unauthorized' }, { status: 401, headers: corsHeaders });
+				}
+				return route === 'GET /api/membership/members' ? handleMemberList(env, url, corsHeaders) : handleMemberCheckin(request, env, corsHeaders);
+			}
+			const publicRoutes = ['POST /api/membership/checkout', 'GET /api/membership/session', 'POST /api/membership/portal'];
+			if (publicRoutes.includes(route)) {
+				if (env.CHECKOUT_LIMITER) {
+					try {
+						const { success } = await env.CHECKOUT_LIMITER.limit({ key: request.headers.get('CF-Connecting-IP') || 'unknown' });
+						if (!success) {
+							return Response.json({ ok: false, error: 'Too many requests. Try again in a minute.' }, { status: 429, headers: { ...corsHeaders, 'Retry-After': '60' } });
+						}
+					} catch (error) {
+						console.error('[Membership rate limit error]', String(error));
+					}
+				}
+				if (route === 'POST /api/membership/checkout') return handleMembershipCheckout(request, env, corsHeaders);
+				if (route === 'GET /api/membership/session') return handleMembershipSession(request, env, corsHeaders);
+				return handleMembershipPortal(request, env, corsHeaders);
+			}
+		}
+
+		// Studio self check-in (see checkin.ts). Limits: the link request is per IP and per address
+		// (cooldown in KV); member and ticket scans are limited per token, not per IP, because a
+		// whole class shares the studio's one address.
+		if (url.pathname.startsWith('/api/checkin/')) {
+			const route = `${request.method} ${url.pathname}`;
+			const limited = async (key: string): Promise<Response | null> => {
+				if (!env.CHECKOUT_LIMITER) return null;
+				try {
+					const { success } = await env.CHECKOUT_LIMITER.limit({ key });
+					if (!success) return Response.json({ ok: false, error: 'Too many requests. Try again in a minute.' }, { status: 429, headers: { ...corsHeaders, 'Retry-After': '60' } });
+				} catch (error) {
+					console.error('[Check-in rate limit error]', String(error));
+				}
+				return null;
+			};
+			if (route === 'POST /api/checkin/link') {
+				return (await limited(`link:${request.headers.get('CF-Connecting-IP') || 'unknown'}`)) ?? handleCheckinLink(request, env, corsHeaders);
+			}
+			if (route === 'POST /api/checkin/member' || route === 'POST /api/checkin/ticket') {
+				// Read the token for the limiter key without consuming the body the handler needs.
+				const probe = await request.clone().json().catch(() => ({})) as { member_id?: unknown; ticket_id?: unknown };
+				const token = String(probe.member_id ?? probe.ticket_id ?? '').slice(0, 16) || 'none';
+				const blocked = await limited(`ck:${token}`);
+				if (blocked) return blocked;
+				return route === 'POST /api/checkin/member' ? handleSelfCheckin(request, env, corsHeaders) : handleTicketCheckin(request, env, corsHeaders);
+			}
+			if (route === 'GET /api/checkin/ticket') {
+				const blocked = await limited(`ck:${(url.searchParams.get('id') ?? '').slice(0, 16) || 'none'}`);
+				return blocked ?? handleTicketStatus(request, env, corsHeaders);
+			}
+		}
+
+		// POST /api/ci/bf-run: prepares the Black Friday email. Admin only, never sends; see bf.ts.
+		if (url.pathname === '/api/ci/bf-run' && request.method === 'POST') {
+			if (!isAdmin(request, env)) {
+				return Response.json({ ok: false, error: 'Unauthorized' }, { status: 401, headers: corsHeaders });
+			}
+			let body: unknown = null;
+			try {
+				body = await request.json();
+			} catch {}
+			const result = await bfRun(env, body);
+			return Response.json(result, { status: result.ok ? 200 : 500, headers: corsHeaders });
 		}
 
 		// POST /api/stripe/webhook - Stripe-signed; writes the ticket and emails it.

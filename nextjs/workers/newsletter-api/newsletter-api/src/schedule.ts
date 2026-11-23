@@ -25,28 +25,63 @@ export interface ScheduledEvent {
 
 const TITLE = 'Fundamentals: Friday class';
 
-// Eight Friday evenings, 7:00-9:00 PM America/New_York, at Inner Motion Dance
-// Studio, Hallandale Beach. The offset flips from -04:00 to -05:00 between the
-// Oct 30 and Nov 6 classes: DST ends the first Sunday of November, which in
-// 2026 is Nov 1. Get this wrong and the last three classes read an hour off on
-// any calendar or cutoff math that trusts the ISO string, and nobody notices
-// until someone shows up at the wrong time.
+// Every Friday evening, 7:00-9:00 PM America/New_York, at Inner Motion Dance
+// Studio, Hallandale Beach, generated rather than listed by hand so checkout
+// always has sellable dates. The first class was 2026-10-02; the calendar runs to
+// the end of 2028 (extend SCHEDULE_END_YEAR before it runs out). Holiday Fridays
+// are not skipped: if a class is cancelled, remove nothing here, refund or credit
+// the buyers instead (see the membership credit rules).
 //
-// All eight are `type: 'class'` today. No `'jam'` or `'combo-capable'` entries
+// The UTC offset flips between -04:00 (EDT) and -05:00 (EST) on the US DST dates
+// (second Sunday of March, first Sunday of November). Get this wrong and the
+// classes after a change read an hour off on any calendar or cutoff math that
+// trusts the ISO string. `offsetFor` encodes the rule; the tests check it against
+// Intl for every generated date.
+//
+// All entries are `type: 'class'` today. No `'jam'` or `'combo-capable'` entries
 // exist yet -- that's deliberate future-proofing per Max (2026-10-01), not a
 // gap to fill here. See docs/plans/pricing-events-config.md in the site repo
 // (maxpetrusenko/miamicontactimprov) for the full pricing model this config
 // supports once jam/combo nights are added.
-export const EVENTS: ScheduledEvent[] = [
-	{ date: '2026-10-02', start: '2026-10-02T19:00:00-04:00', end: '2026-10-02T21:00:00-04:00', type: 'class', title: TITLE },
-	{ date: '2026-10-09', start: '2026-10-09T19:00:00-04:00', end: '2026-10-09T21:00:00-04:00', type: 'class', title: TITLE },
-	{ date: '2026-10-16', start: '2026-10-16T19:00:00-04:00', end: '2026-10-16T21:00:00-04:00', type: 'class', title: TITLE },
-	{ date: '2026-10-23', start: '2026-10-23T19:00:00-04:00', end: '2026-10-23T21:00:00-04:00', type: 'class', title: TITLE },
-	{ date: '2026-10-30', start: '2026-10-30T19:00:00-04:00', end: '2026-10-30T21:00:00-04:00', type: 'class', title: TITLE },
-	{ date: '2026-11-06', start: '2026-11-06T19:00:00-05:00', end: '2026-11-06T21:00:00-05:00', type: 'class', title: TITLE },
-	{ date: '2026-11-13', start: '2026-11-13T19:00:00-05:00', end: '2026-11-13T21:00:00-05:00', type: 'class', title: TITLE },
-	{ date: '2026-11-20', start: '2026-11-20T19:00:00-05:00', end: '2026-11-20T21:00:00-05:00', type: 'class', title: TITLE },
-];
+export const FIRST_CLASS_DATE = '2026-10-02';
+export const SCHEDULE_END_YEAR = 2028;
+
+function pad2(n: number): string {
+	return String(n).padStart(2, '0');
+}
+
+function nthSunday(year: number, month0: number, n: number): number {
+	const firstDow = new Date(Date.UTC(year, month0, 1)).getUTCDay();
+	const firstSunday = 1 + ((7 - firstDow) % 7);
+	return firstSunday + (n - 1) * 7;
+}
+
+/** '-04:00' (EDT) or '-05:00' (EST) for a local America/New_York calendar day at 19:00. */
+export function offsetFor(year: number, month1: number, day: number): '-04:00' | '-05:00' {
+	const m = month1 - 1;
+	const dstStart = Date.UTC(year, 2, nthSunday(year, 2, 2));
+	const dstEnd = Date.UTC(year, 10, nthSunday(year, 10, 1));
+	const day0 = Date.UTC(year, m, day);
+	return day0 >= dstStart && day0 < dstEnd ? '-04:00' : '-05:00';
+}
+
+export function generateFridayClasses(firstDate: string, endYear: number): ScheduledEvent[] {
+	const [y0, m0, d0] = firstDate.split('-').map(Number);
+	const out: ScheduledEvent[] = [];
+	for (let t = Date.UTC(y0, m0 - 1, d0); ; t += 7 * 24 * 60 * 60 * 1000) {
+		const d = new Date(t);
+		if (d.getUTCFullYear() > endYear) break;
+		const y = d.getUTCFullYear();
+		const m = d.getUTCMonth() + 1;
+		const day = d.getUTCDate();
+		const date = `${y}-${pad2(m)}-${pad2(day)}`;
+		const off = offsetFor(y, m, day);
+		out.push({ date, start: `${date}T19:00:00${off}`, end: `${date}T21:00:00${off}`, type: 'class', title: TITLE });
+	}
+	return out;
+}
+
+export const EVENTS: ScheduledEvent[] = generateFridayClasses(FIRST_CLASS_DATE, SCHEDULE_END_YEAR);
 
 // The Stripe price lookup key for each drop-in kind. All three exist in Stripe
 // test mode already (created via scripts/stripe_setup.py in the site repo):
@@ -104,4 +139,24 @@ export function resolveEvent(now: Date, kind: DropInKind, requestedDate?: string
 	// than crashing.
 	const event = candidates[candidates.length - 1];
 	return { event, cutoff: cutoffFor(event), closed: true };
+}
+
+// Self check-in opens 30 minutes before the 7:00 PM start (6:30 PM) and closes at the 9:00 PM end.
+export const CHECKIN_OPENS_BEFORE_MS = 30 * 60 * 1000;
+
+function easternDay(now: Date): string {
+	return new Intl.DateTimeFormat('en-CA', { timeZone: 'America/New_York', year: 'numeric', month: '2-digit', day: '2-digit' }).format(now);
+}
+
+/**
+ * The class tonight, if `now` falls on a class date (Eastern), and whether check-in is open.
+ * null on any other day. Pure: takes `now`.
+ */
+export function classWindow(now: Date): { event: ScheduledEvent; open: boolean; opensAt: Date; closesAt: Date } | null {
+	const event = EVENTS.find((e) => e.date === easternDay(now));
+	if (!event) return null;
+	const opensAt = new Date(new Date(event.start).getTime() - CHECKIN_OPENS_BEFORE_MS);
+	const closesAt = new Date(event.end);
+	const t = now.getTime();
+	return { event, open: t >= opensAt.getTime() && t <= closesAt.getTime(), opensAt, closesAt };
 }
