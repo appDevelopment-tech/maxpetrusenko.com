@@ -23,7 +23,7 @@ import { getTicket, isTicketId, saveTicket } from './tickets';
 // The inbox Hermes already watches (cron job brand-inbox-forward): the site's contact address.
 export const SUPPORT_EMAIL = 'hello@miamicontactimprov.com';
 export const CHECKIN_PAGE = 'https://miamicontactimprov.com/checkin';
-const LINK_COOLDOWN_SECONDS = 120;
+const LINK_COOLDOWN_SECONDS = 300;
 
 function json(body: unknown, status: number, cors: Record<string, string>): Response {
 	return Response.json(body, { status, headers: cors });
