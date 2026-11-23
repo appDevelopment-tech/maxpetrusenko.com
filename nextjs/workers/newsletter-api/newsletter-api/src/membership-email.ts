@@ -7,6 +7,7 @@
 import type { Env } from './index';
 import { CI_FROM, RESEND_API, sha256Hex } from './common';
 import { BF_FRIEND_PASSES } from './bf';
+import { CHECKIN_PAGE, SUPPORT_EMAIL } from './checkin';
 import { VENUE_ADDRESS, VENUE_NAME } from './ticket-email';
 import { getEmailState, manageUrl, shortId, type EmailState, type MemberProfile } from './membership';
 
@@ -29,7 +30,8 @@ export function buildMembershipEmail(member: MemberProfile): MembershipEmail {
 		? `Black Friday bonus: your membership includes ${BF_FRIEND_PASSES} bring-a-friend passes, one a month for your first three months. Reply to this email the week you want to use one.`
 		: '';
 	const manage = manageUrl(member.id);
-	const text = [greeting, planLine, covers, where, bf, `Manage or cancel your membership, update your card, see invoices: ${manage}`, 'Questions? Reply to this email.', 'Max']
+	const phone = `${CHECKIN_PAGE}?m=${member.id}`;
+	const text = [greeting, planLine, covers, where, bf, `Open this on the phone you bring to class; after that, scanning the QR at the studio checks you in: ${phone}`, `Manage or cancel your membership, update your card, see invoices: ${manage}`, `Refunds and problems: ${SUPPORT_EMAIL}`, 'Max']
 		.filter(Boolean).join('\n\n');
 	const p = (s: string) => `<p style="margin:0 0 14px">${esc(s)}</p>`;
 	const html = `<!doctype html>
@@ -40,8 +42,10 @@ export function buildMembershipEmail(member: MemberProfile): MembershipEmail {
 <tr><td style="padding:30px 28px;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;color:#171512;font-size:16px;line-height:1.5">
 <p style="margin:0 0 6px;font-size:15px;letter-spacing:2px;text-transform:uppercase;color:#8A7B5E">Miami CI</p>
 ${[greeting, planLine, covers, where, bf].filter(Boolean).map(p).join('\n')}
-<p style="margin:22px 0"><a href="${esc(manage)}" style="display:inline-block;background:#171512;color:#F3EDE1;font-weight:bold;text-decoration:none;padding:15px 26px;border-radius:999px">Manage your membership</a></p>
-<p style="margin:0 0 14px;font-size:14px;color:#4A463D">Cancel, update your card or see invoices there. Questions? Reply to this email.</p>
+<p style="margin:22px 0 10px"><a href="${esc(phone)}" style="display:inline-block;background:#171512;color:#F3EDE1;font-weight:bold;text-decoration:none;padding:15px 26px;border-radius:999px">Add check-in to your phone</a></p>
+<p style="margin:0 0 14px;font-size:14px;color:#4A463D">Open it on the phone you bring to class; after that, scanning the QR at the studio checks you in.</p>
+<p style="margin:0 0 10px"><a href="${esc(manage)}" style="color:#171512;font-weight:bold">Manage your membership</a></p>
+<p style="margin:0 0 14px;font-size:14px;color:#4A463D">Cancel, update your card or see invoices there. Refunds and problems: <a href="mailto:${SUPPORT_EMAIL}" style="color:#4A463D">${SUPPORT_EMAIL}</a></p>
 <p style="margin:0">Max</p>
 </td></tr></table></td></tr></table></body></html>`;
 	return { subject: member.bf ? 'Your Miami CI membership (and your friend passes)' : 'Your Miami CI membership', html, text };

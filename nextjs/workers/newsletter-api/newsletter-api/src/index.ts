@@ -13,6 +13,7 @@ import { handleStripeWebhook, handleTicketLookup } from './stripe-webhook';
 import { addContact, lookupContact, resendCode, startSignup, verifyCode } from './ci';
 import { monthlyRun } from './monthly';
 import { bfRun } from './bf';
+import { handleCheckinLink, handleMemberCheckin as handleSelfCheckin, handleTicketCheckin, handleTicketLookup as handleTicketStatus } from './checkin';
 import { handleMemberCheckin, handleMemberList, handleMembershipCheckout, handleMembershipPortal, handleMembershipSession } from './membership';
 import { handleUnsubscribe } from './unsub';
 import {
@@ -447,6 +448,38 @@ export default {
 				if (route === 'POST /api/membership/checkout') return handleMembershipCheckout(request, env, corsHeaders);
 				if (route === 'GET /api/membership/session') return handleMembershipSession(request, env, corsHeaders);
 				return handleMembershipPortal(request, env, corsHeaders);
+			}
+		}
+
+		// Studio self check-in (see checkin.ts). Limits: the link request is per IP and per address
+		// (cooldown in KV); member and ticket scans are limited per token, not per IP, because a
+		// whole class shares the studio's one address.
+		if (url.pathname.startsWith('/api/checkin/')) {
+			const route = `${request.method} ${url.pathname}`;
+			const limited = async (key: string): Promise<Response | null> => {
+				if (!env.CHECKOUT_LIMITER) return null;
+				try {
+					const { success } = await env.CHECKOUT_LIMITER.limit({ key });
+					if (!success) return Response.json({ ok: false, error: 'Too many requests. Try again in a minute.' }, { status: 429, headers: { ...corsHeaders, 'Retry-After': '60' } });
+				} catch (error) {
+					console.error('[Check-in rate limit error]', String(error));
+				}
+				return null;
+			};
+			if (route === 'POST /api/checkin/link') {
+				return (await limited(`link:${request.headers.get('CF-Connecting-IP') || 'unknown'}`)) ?? handleCheckinLink(request, env, corsHeaders);
+			}
+			if (route === 'POST /api/checkin/member' || route === 'POST /api/checkin/ticket') {
+				// Read the token for the limiter key without consuming the body the handler needs.
+				const probe = await request.clone().json().catch(() => ({})) as { member_id?: unknown; ticket_id?: unknown };
+				const token = String(probe.member_id ?? probe.ticket_id ?? '').slice(0, 16) || 'none';
+				const blocked = await limited(`ck:${token}`);
+				if (blocked) return blocked;
+				return route === 'POST /api/checkin/member' ? handleSelfCheckin(request, env, corsHeaders) : handleTicketCheckin(request, env, corsHeaders);
+			}
+			if (route === 'GET /api/checkin/ticket') {
+				const blocked = await limited(`ck:${(url.searchParams.get('id') ?? '').slice(0, 16) || 'none'}`);
+				return blocked ?? handleTicketStatus(request, env, corsHeaders);
 			}
 		}
 

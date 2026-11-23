@@ -140,3 +140,23 @@ export function resolveEvent(now: Date, kind: DropInKind, requestedDate?: string
 	const event = candidates[candidates.length - 1];
 	return { event, cutoff: cutoffFor(event), closed: true };
 }
+
+// Self check-in opens 30 minutes before the 7:00 PM start (6:30 PM) and closes at the 9:00 PM end.
+export const CHECKIN_OPENS_BEFORE_MS = 30 * 60 * 1000;
+
+function easternDay(now: Date): string {
+	return new Intl.DateTimeFormat('en-CA', { timeZone: 'America/New_York', year: 'numeric', month: '2-digit', day: '2-digit' }).format(now);
+}
+
+/**
+ * The class tonight, if `now` falls on a class date (Eastern), and whether check-in is open.
+ * null on any other day. Pure: takes `now`.
+ */
+export function classWindow(now: Date): { event: ScheduledEvent; open: boolean; opensAt: Date; closesAt: Date } | null {
+	const event = EVENTS.find((e) => e.date === easternDay(now));
+	if (!event) return null;
+	const opensAt = new Date(new Date(event.start).getTime() - CHECKIN_OPENS_BEFORE_MS);
+	const closesAt = new Date(event.end);
+	const t = now.getTime();
+	return { event, open: t >= opensAt.getTime() && t <= closesAt.getTime(), opensAt, closesAt };
+}
