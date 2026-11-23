@@ -1,0 +1,29 @@
+{
+  "slug": "youtube-top-001-percent-playbook-fymftftn-g",
+  "title": "Medium article preview",
+  "publicUrl": "https://www.maxpetrusenko.com/medium/youtube-top-001-percent-playbook-fymftftn-g/",
+  "outputPath": "/Users/maxsmacmini/.hermes/cache/scratch/mp-push-youtube-top-001-percent-fymftftn-g/nextjs/public/medium/youtube-top-001-percent-playbook-fymftftn-g/index.html",
+  "sourceUrl": null,
+  "articlePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-top-001-percent-playbook-fymftftn-g/article-v3.md",
+  "articleHash": "c040c74afe5bffc2748286cfbe8dc37dc6aff4ebc63d7f89920ce08163d99ba1",
+  "exportedAt": "2026-11-23T11:51:17.741Z",
+  "status": "needs_review",
+  "publishMode": "preview",
+  "copiedImages": [
+    {
+      "src": "assets/hero.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-top-001-percent-playbook-fymftftn-g/assets/hero.jpg",
+      "destinationPath": "/Users/maxsmacmini/.hermes/cache/scratch/mp-push-youtube-top-001-percent-fymftftn-g/nextjs/public/medium/.tmp-youtube-top-001-percent-playbook-fymftftn-g-1795434677735/assets/hero.jpg"
+    },
+    {
+      "src": "assets/breakfast.jpg",
+      "sourcePath": "/Users/maxsmacmini/Desktop/Projects/social-poster/data/article-workspace/articles/youtube-top-001-percent-playbook-fymftftn-g/assets/breakfast.jpg",
+      "destinationPath": "/Users/maxsmacmini/.hermes/cache/scratch/mp-push-youtube-top-001-percent-fymftftn-g/nextjs/public/medium/.tmp-youtube-top-001-percent-playbook-fymftftn-g-1795434677735/assets/breakfast.jpg"
+    }
+  ],
+  "ratings": {
+    "gemini": null,
+    "gpt": null,
+    "consensus": null
+  }
+}
