@@ -1,7 +1,8 @@
 /**
  * H001 striking-distance refresh (flag seo_h001). Copy for pages whose GSC queries sit at
- * positions 3-20. A path absent from this map is control. Variant swaps title, H1, first
- * paragraph and adds one H2 section phrased like the target query.
+ * positions 2-20. A path absent from this map is control. Variant swaps title, H1, first
+ * paragraph and adds one H2 section phrased like the target query. Blog pages replace the
+ * excerpt with `lead`; the tech page prepends it to the existing lead (seoLeadPrefix).
  * `title` is the core title; the root template appends " | Max Petrusenko", so keep <= 43 chars.
  * Section copy is general guidance only: no stats, no claims about product behaviour.
  */
@@ -22,7 +23,7 @@ export const strikingVariants: Record<string, StrikingVariant> = {
     h1: "OpenAI API Best Practices: Integrating ChatGPT in Production",
     lead: "These OpenAI API best practices cover authentication, prompt structure, function calling, retrieval, and error handling for ChatGPT integrations that have to stay up.",
     h2: "OpenAI API best practices at a glance",
-    body: "Keep keys on the server, version your prompts, validate every function call argument, retry with backoff, and log failures so you can replay them. Each point has a section below.",
+    body: "Keep keys on the server, structure your prompts clearly, validate function call arguments, and retry failed requests with backoff.",
   },
   "/blog/seo-architecture": {
     query: "seo architecture",
@@ -52,7 +53,7 @@ export const strikingVariants: Record<string, StrikingVariant> = {
     query: "are ai wearables more expensive than regular wearables",
     title: "AI Wearables Cost and ROI Compared",
     h1: "AI Wearables Cost and ROI: Are They More Expensive Than Regular Wearables?",
-    lead: "Are AI wearables more expensive than regular wearables? Often the sticker price differs less than the running cost, so compare total cost against what you actually use.",
+    lead: "Are AI wearables more expensive than regular wearables? Compare sticker price and running cost (subscriptions, replacements) against the features you actually use.",
     h2: "Are AI wearables more expensive than regular wearables?",
     body: "Compare device price, subscriptions, replacement cycle, and the features you would use weekly. Check current prices before buying, since they change often.",
   },

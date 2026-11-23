@@ -75,3 +75,14 @@ test("H001 split: both arms appear, homepage and unlisted paths stay control", a
   assert.equal(assignArm(cfg, "seo_h001", "/", true), "control");
   assert.equal(assignArm(cfg, "seo_h001", "/blog/unlisted", false), "control");
 });
+
+test("H001 arm reaches analytics and does not overlap H003/H013 variants", async () => {
+  const { strikingVariants } = await import("./h001-variants.ts");
+  const { seoVariantsContent, strikingFor } = await import("./flags.ts");
+  const { parseSeoVariants } = await import("../analytics/traffic-class.ts");
+  for (const p of Object.keys(strikingVariants)) {
+    const parsed = parseSeoVariants(seoVariantsContent(p));
+    assert.ok(parsed.seo_h001, `${p}: seo_h001 missing from analytics`);
+    if (strikingFor(p)) assert.ok(!seoPageVariants[p], `${p}: H001 variant overlaps H003/H013 map`);
+  }
+});
