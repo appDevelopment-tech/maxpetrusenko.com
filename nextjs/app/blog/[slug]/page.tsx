@@ -15,6 +15,8 @@ import {
 import { sanitizeMediumHtml, estimateReadTimeMinutes } from "@/lib/api/medium";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { generateArticleSchema, generateBreadcrumbSchema } from "@/lib/seo/structured-data";
+import { seoH1, seoStrikingLead } from "@/lib/seo/flags";
+import { SeoStrikingSection } from "@/components/seo/SeoVariantBlocks";
 import type { Metadata } from "next";
 
 interface ArticlePageProps {
@@ -129,8 +131,8 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
               <span className="dot"></span>{" "}
               {article.tags[0] || "Article"}
             </div>
-            <h1>{article.title}</h1>
-            <p className="article-subtitle">{article.excerpt}</p>
+            <h1>{seoH1(`/blog/${slug}`, article.title)}</h1>
+            <p className="article-subtitle">{seoStrikingLead(`/blog/${slug}`, article.excerpt)}</p>
             <div className="article-meta">
               <time>{publishDate}</time>
               <span>•</span>
@@ -150,6 +152,8 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
               priority
             />
           </div>
+
+          <SeoStrikingSection path={`/blog/${slug}`} />
 
           {/* Article content with prose styling */}
           <div
