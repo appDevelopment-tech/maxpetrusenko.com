@@ -7,6 +7,7 @@ import { shouldIndexBlogTagPage } from "@/lib/cms/legacy-blog-compat";
 import { getProjects } from "@/lib/cms/projects";
 import { getCaseStudies } from "@/lib/cms/case-studies";
 import { FLAG, isSiteFlagOn } from "@/lib/seo/flags";
+import { buyerPages } from "@/lib/seo/buyer-pages";
 
 function getValidDate(value?: string | null): Date | null {
   if (!value) return null;
@@ -430,6 +431,20 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       staticPages.push({
         url: `${baseUrl}${route}`,
         lastModified: await getRouteLastModified(appDir, route, fallbackLastModified),
+        changeFrequency: "monthly",
+        priority: 0.8,
+      });
+    }
+  }
+
+  // seo-p1-2026-11 H006: buyer-intent landing pages exist only while the flag is on.
+  if (isSiteFlagOn(FLAG.buyerPages)) {
+    for (const page of buyerPages) {
+      staticPages.push({
+        url: `${baseUrl}${page.path}`,
+        lastModified: await getRouteLastModified(appDir, page.path, fallbackLastModified, [
+          path.join(process.cwd(), "lib", "seo", "buyer-pages.ts"),
+        ]),
         changeFrequency: "monthly",
         priority: 0.8,
       });
