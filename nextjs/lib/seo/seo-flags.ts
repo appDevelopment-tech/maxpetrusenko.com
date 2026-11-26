@@ -53,7 +53,7 @@ export function assignArm(
   return fnv1a32(`${flagKey}:${normalized}`) % 100 < split * 100 ? "variant" : "control";
 }
 
-const SHORT_KEY = /^seo_(h\d{3})_/;
+const SHORT_KEY = /^seo_(h\d{3})(?:_|$)/;
 
 export function shortKey(flagKey: string): string {
   return flagKey.match(SHORT_KEY)?.[1] ?? flagKey;
