@@ -55,3 +55,34 @@ test("robots adds required AI crawlers and keeps private disallows", () => {
   }
   assert.ok(robots().sitemap.length >= 1);
 });
+
+test("H001 striking-distance copy: title fits, fields filled, no dashes", async () => {
+  const { strikingVariants } = await import("./h001-variants.ts");
+  for (const [route, v] of Object.entries(strikingVariants)) {
+    assert.ok((v.title + BRAND).length <= 60, `${route}: title ${(v.title + BRAND).length}`);
+    for (const f of ["query", "h1", "lead", "h2", "body"]) assert.ok(v[f].trim().length > (f === "query" ? 2 : 10), `${route}.${f}`);
+    assert.ok(!/[–—]/.test(JSON.stringify(v)), `${route}: dash`);
+  }
+});
+
+test("H001 split: both arms appear, homepage and unlisted paths stay control", async () => {
+  const { strikingVariants } = await import("./h001-variants.ts");
+  const { assignArm } = await import("./seo-flags.ts");
+  const cfg = JSON.parse(fs.readFileSync(new URL("../../seo-flags.json", import.meta.url), "utf8"));
+  assert.equal(cfg.flags.seo_h001.scope, "page");
+  const arms = Object.keys(strikingVariants).map((p) => assignArm(cfg, "seo_h001", p));
+  assert.ok(arms.includes("variant") && arms.includes("control"), arms.join());
+  assert.equal(assignArm(cfg, "seo_h001", "/", true), "control");
+  assert.equal(assignArm(cfg, "seo_h001", "/blog/unlisted", false), "control");
+});
+
+test("H001 arm reaches analytics and does not overlap H003/H013 variants", async () => {
+  const { strikingVariants } = await import("./h001-variants.ts");
+  const { seoVariantsContent, strikingFor } = await import("./flags.ts");
+  const { parseSeoVariants } = await import("../analytics/traffic-class.ts");
+  for (const p of Object.keys(strikingVariants)) {
+    const parsed = parseSeoVariants(seoVariantsContent(p));
+    assert.ok(parsed.seo_h001, `${p}: seo_h001 missing from analytics`);
+    if (strikingFor(p)) assert.ok(!seoPageVariants[p], `${p}: H001 variant overlaps H003/H013 map`);
+  }
+});

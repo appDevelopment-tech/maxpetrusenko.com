@@ -4,8 +4,9 @@
  *
  * Memberships (monthly/annual) and the intro 3-class pack are deferred -- see
  * docs/plans/pricing-events-config.md in the site repo (maxpetrusenko/
- * miamicontactimprov). No webhook, no check-in, no QR, no KV ticket record, no
- * CRM sync, no entitlements here either - those land in a later, separate PR.
+ * miamicontactimprov). Paid sessions are turned into tickets (KV record, QR,
+ * confirmation email) by the Stripe webhook in stripe-webhook.ts / tickets.ts.
+ * Still not built: the check-in scanner page, reminders, CRM sync, entitlements.
  */
 
 import type { Env } from './index';

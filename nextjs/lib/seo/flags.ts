@@ -8,6 +8,7 @@ import {
   type SeoArm,
 } from "@/lib/seo/seo-flags";
 import { seoPageVariants, type SeoPageVariant } from "@/lib/seo/variants";
+import { strikingVariants, type StrikingVariant } from "@/lib/seo/h001-variants";
 
 const config = flagsFile as SeoFlagsFile;
 
@@ -23,6 +24,7 @@ export const FLAG = {
   tldr: "seo_h014_tldr",
   faq: "seo_h015_open_faq",
   links: "seo_h022_internal_links",
+  striking: "seo_h001",
 } as const;
 
 export function isSiteFlagOn(flagKey: string): boolean {
@@ -30,6 +32,7 @@ export function isSiteFlagOn(flagKey: string): boolean {
 }
 
 function eligible(flagKey: string, path: string): boolean {
+  if (flagKey === FLAG.striking) return path in strikingVariants;
   const entry = seoPageVariants[path];
   if (!entry) return false;
   return flagKey !== FLAG.faq || entry.hasFaq === true;
@@ -53,11 +56,13 @@ export function seoVariantsContent(path: string): string {
 
 /** H013: H1 text. Control returns the page's current H1. */
 export function seoH1(path: string, current: string): string {
-  return variantFor(FLAG.keyword, path)?.h1 ?? current;
+  return strikingFor(path)?.h1 ?? variantFor(FLAG.keyword, path)?.h1 ?? current;
 }
 
 /** H013: keyword sentence placed before the existing lead. Empty on control. */
 export function seoLeadPrefix(path: string): string {
+  const striking = strikingFor(path);
+  if (striking) return `${striking.lead} `;
   const variant = variantFor(FLAG.keyword, path);
   return variant ? `${variant.leadPrefix} ` : "";
 }
@@ -69,5 +74,17 @@ export function seoFaqOpen(path: string): true | undefined {
 
 /** H003: title override. Control returns the page's current title. */
 export function seoTitle(path: string, current: string): string {
-  return variantFor(FLAG.titles, path)?.title ?? current;
+  return strikingFor(path)?.title ?? variantFor(FLAG.titles, path)?.title ?? current;
+}
+
+/** H001: striking-distance copy for this path, or null when the page is control. Wins over H003/H013 copy. */
+export function strikingFor(path: string): StrikingVariant | null {
+  const normalized = normalizePath(path);
+  const arm: SeoArm = assignArm(config, FLAG.striking, normalized, eligible(FLAG.striking, normalized));
+  return arm === "variant" ? strikingVariants[normalized] : null;
+}
+
+/** H001: first paragraph. Control returns the page's current text. */
+export function seoStrikingLead(path: string, current: string): string {
+  return strikingFor(path)?.lead ?? current;
 }

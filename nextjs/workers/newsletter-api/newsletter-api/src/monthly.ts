@@ -29,7 +29,7 @@ const DEFAULT_LIMIT = 30;
 // run may touch 90 addresses (about 5 subrequests each, under the paid limit).
 const MAX_LIMIT = 90;
 
-interface Contact { id?: string; email: string; unsubscribed?: boolean; first_name?: string | null }
+export interface Contact { id?: string; email: string; unsubscribed?: boolean; first_name?: string | null }
 interface MonthState { code?: string; attempt?: number; minted_at?: number }
 
 export function currentMonth(now = new Date()): string {
@@ -42,7 +42,7 @@ export function monthName(month: string): string {
 	return new Intl.DateTimeFormat('en-US', { timeZone: 'UTC', month: 'long' }).format(new Date(Date.UTC(y, m - 1, 15)));
 }
 
-async function listContacts(env: Env): Promise<Contact[] | null> {
+export async function listContacts(env: Env): Promise<Contact[] | null> {
 	const all: Contact[] = [];
 	let after = '';
 	for (let page = 0; page < 20; page++) {

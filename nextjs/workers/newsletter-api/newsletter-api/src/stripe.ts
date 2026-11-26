@@ -5,6 +5,8 @@
  * convention rather than adding an SDK.
  */
 
+import type { StripeSession } from './tickets';
+
 const STRIPE_API = 'https://api.stripe.com/v1';
 
 export async function findPriceByLookupKey(secretKey: string, lookupKey: string): Promise<{ id: string; unitAmount: number } | null> {
@@ -200,4 +202,102 @@ export async function findUsablePromotionCode(secretKey: string, code: string, n
 	} catch {
 		return null;
 	}
+}
+
+export class StripeUnavailableError extends Error {}
+
+/**
+ * Reads a Checkout Session back from Stripe: the server-side proof that it was paid.
+ * Returns null only when Stripe says the session does not exist (404); a transient Stripe
+ * or network failure throws StripeUnavailableError so callers can answer 502, not 404.
+ */
+export async function fetchSession(secretKey: string, sessionId: string): Promise<StripeSession | null> {
+	let response: Response;
+	try {
+		response = await fetch(`${STRIPE_API}/checkout/sessions/${encodeURIComponent(sessionId)}`, {
+			headers: { Authorization: `Bearer ${secretKey}` },
+		});
+	} catch {
+		throw new StripeUnavailableError('network error');
+	}
+	if (response.status === 404) return null;
+	if (!response.ok) throw new StripeUnavailableError(`stripe ${response.status}`);
+	try {
+		return (await response.json()) as StripeSession;
+	} catch {
+		throw new StripeUnavailableError('bad stripe response');
+	}
+}
+
+export interface CreateSubscriptionSessionParams {
+	priceId: string;
+	successUrl: string;
+	cancelUrl: string;
+	// An existing Stripe customer (reuse), or an address to prefill. Stripe takes only one.
+	customer?: string;
+	email?: string;
+	metadata: Record<string, string>;
+}
+
+/** The Stripe customer for an address, if there is one. Null on none or on any Stripe trouble. */
+export async function findCustomerByEmail(secretKey: string, email: string): Promise<string | null> {
+	try {
+		const response = await fetch(`${STRIPE_API}/customers?${new URLSearchParams({ email, limit: '1' }).toString()}`, {
+			headers: { Authorization: `Bearer ${secretKey}` },
+		});
+		if (!response.ok) return null;
+		const payload = (await response.json().catch(() => null)) as { data?: Array<{ id?: string }> } | null;
+		return payload?.data?.[0]?.id ?? null;
+	} catch {
+		return null;
+	}
+}
+
+/**
+ * Checkout Session in subscription mode for a membership. No promotion codes: memberships
+ * are not discountable (Max, 2026-10-01). The metadata is copied onto the subscription
+ * too, so invoice and subscription events can tell our members from the account's other
+ * products.
+ */
+export async function createSubscriptionSession(secretKey: string, params: CreateSubscriptionSessionParams): Promise<{ url: string } | { error: string }> {
+	const body = new URLSearchParams();
+	body.set('mode', 'subscription');
+	body.set('line_items[0][price]', params.priceId);
+	body.set('line_items[0][quantity]', '1');
+	body.set('phone_number_collection[enabled]', 'true');
+	body.set('success_url', params.successUrl);
+	body.set('cancel_url', params.cancelUrl);
+	if (params.customer) body.set('customer', params.customer);
+	else if (params.email) body.set('customer_email', params.email);
+	for (const [key, value] of Object.entries(params.metadata)) {
+		body.set(`metadata[${key}]`, value);
+		if (key === 'product' || key === 'plan') body.set(`subscription_data[metadata][${key}]`, value);
+	}
+	const response = await fetch(`${STRIPE_API}/checkout/sessions`, {
+		method: 'POST',
+		headers: { Authorization: `Bearer ${secretKey}`, 'Content-Type': 'application/x-www-form-urlencoded' },
+		body: body.toString(),
+	});
+	const payload = (await response.json().catch(() => null)) as { url?: string; error?: { message?: string } } | null;
+	if (!response.ok) return { error: payload?.error?.message ?? `Stripe error ${response.status}` };
+	if (!payload?.url) return { error: 'Stripe did not return a checkout URL' };
+	return { url: payload.url };
+}
+
+/** A Stripe Customer Portal session (cancel, card, invoices). The URL is short-lived. */
+export async function createPortalSession(
+	secretKey: string,
+	params: { customer: string; returnUrl: string; configuration?: string },
+): Promise<{ url: string } | { error: string }> {
+	const body = new URLSearchParams({ customer: params.customer, return_url: params.returnUrl });
+	if (params.configuration) body.set('configuration', params.configuration);
+	const response = await fetch(`${STRIPE_API}/billing_portal/sessions`, {
+		method: 'POST',
+		headers: { Authorization: `Bearer ${secretKey}`, 'Content-Type': 'application/x-www-form-urlencoded' },
+		body: body.toString(),
+	});
+	const payload = (await response.json().catch(() => null)) as { url?: string; error?: { message?: string } } | null;
+	if (!response.ok) return { error: payload?.error?.message ?? `Stripe error ${response.status}` };
+	if (!payload?.url) return { error: 'Stripe did not return a portal URL' };
+	return { url: payload.url };
 }

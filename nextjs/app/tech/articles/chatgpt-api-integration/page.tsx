@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { seoH1, seoLeadPrefix, seoFaqOpen } from "@/lib/seo/flags";
-import { SeoTldr, SeoRelatedLinks } from "@/components/seo/SeoVariantBlocks";
+import { SeoTldr, SeoRelatedLinks, SeoStrikingSection } from "@/components/seo/SeoVariantBlocks";
 import Image from "next/image";
 import { generateMetadata, absoluteUrl } from "@/lib/seo/metadata";
 import { JsonLd } from "@/components/seo/JsonLd";
@@ -68,6 +68,7 @@ export default function ChatGPTApiArticle() {
             </div>
           </header>
           <SeoTldr path={ARTICLE_PATH} />
+          <SeoStrikingSection path={ARTICLE_PATH} />
 
           <div style={{ maxWidth: 900, margin: "26px auto 32px" }}>
             <Image
