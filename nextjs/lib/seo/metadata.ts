@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import { siteConfig, SEO_DEFAULTS } from "@/config/site";
 import type { PageMetadata } from "@/types";
 import { seoTitle, seoVariantsContent } from "@/lib/seo/flags";
+import { snippetOverrides } from "@/lib/seo/snippet-overrides";
 
 /**
  * Generate metadata for a page
@@ -9,7 +10,7 @@ import { seoTitle, seoVariantsContent } from "@/lib/seo/flags";
 export function generateMetadata(metadata: PageMetadata): Metadata {
   const {
     title,
-    description,
+    description: baseDescription,
     ogImage,
     ogType = "website",
     canonical,
@@ -21,7 +22,9 @@ export function generateMetadata(metadata: PageMetadata): Metadata {
   // seo-p1-2026-11: derive the page path from the canonical so title (H003) and the
   // seo-variants meta stay in sync with the rendered page. Control keeps `title` as is.
   const pagePath = canonical ? new URL(canonical, siteConfig.url).pathname : null;
-  const renderedTitle = pagePath ? seoTitle(pagePath, title) : title;
+  const snippet = pagePath ? snippetOverrides[pagePath.replace(/\/$/, "") || "/"] : undefined;
+  const description = snippet?.description ?? baseDescription;
+  const renderedTitle = snippet?.title ?? (pagePath ? seoTitle(pagePath, title) : title);
 
   const titleAlreadyHasBrand = renderedTitle.toLowerCase().includes(siteConfig.name.toLowerCase());
   const fullTitle = renderedTitle === siteConfig.name || titleAlreadyHasBrand ? renderedTitle : `${renderedTitle} | ${siteConfig.name}`;
