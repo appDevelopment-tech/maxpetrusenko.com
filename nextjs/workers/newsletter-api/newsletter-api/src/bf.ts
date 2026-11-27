@@ -49,7 +49,7 @@ export function bfEmail(): BfEmail {
 	const lines = [
 		'Hi,',
 		'From Friday, November 27 through Tuesday, December 1, every membership comes with a free bring-a-friend pass: one a month for your first three months.',
-		'Monthly is $40 for 4 classes a month, and what you do not use rolls over (up to 8 banked). Yearly is $260 for a class every week. The prices have not changed.',
+		'Monthly is $40 for 4 classes a month, and unused classes do not carry over to the next month. Yearly is $260 for a class every week. The prices have not changed.',
 		'Classes run Fridays 7:00 to 9:00 PM at Inner Motion Dance Studio in Hallandale Beach.',
 	];
 	const text = `${lines.join('\n\n')}\n\nJoin: ${BF_PAGE_URL}\n\nMax\n\nUnsubscribe: {{{RESEND_UNSUBSCRIBE_URL}}}`;

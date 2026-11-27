@@ -1,6 +1,6 @@
 /**
- * Memberships: monthly $40 (4 class credits per billing month, unused roll over, 8 banked
- * at most) and yearly $260 (one class a week). Classes only, not jams or workshops.
+ * Memberships: monthly $40 (4 class credits per billing month, unused credits do not carry
+ * over) and yearly $260 (one class a week). Classes only, not jams or workshops.
  *
  * Routes (wired in index.ts):
  *   POST /api/membership/checkout   public   Stripe Checkout, mode=subscription
@@ -20,8 +20,9 @@
  * KV layout (binding TICKETS, same namespace as tickets). One writer family per key,
  * because KV has no compare-and-set:
  *   mem:<memberId>                    MemberProfile  checkout.completed, subscription.updated/deleted, charge events
- *   memcr:<memberId>                  CreditLedger   invoice.paid only (plan, period, replay guard)
- *   memcredit:<memberId>:<creditId>   Credit         invoice.paid only, written once, never modified
+ *   memcr:<memberId>                  CreditLedger   invoice.paid only (plan, period, replay guard, credit_invoice)
+ *   memcredit:<memberId>:<creditId>   Credit         invoice.paid only, written once, never modified;
+ *                                                    creditId = <invoiceId>.<n>, so the key names the period
  *   memburn:<memberId>:<creditId>     class date     check-in only: the claim that spends a credit
  *   memci:<memberId>:<date>           creditId|weekly  one check-in per class date
  *   memwk:<memberId>:<isoWeek>        date           yearly: one class per ISO week
@@ -31,6 +32,10 @@
  * memberId = HMAC-SHA256(TICKET_SECRET, 'ci-member:' + stripe customer id), 128 bits (the
  * default version "v1"; another CI_MEMBER_ID_VERSION salts the input). It is derivable from
  * the customer id alone and doubles as the unguessable key in the "manage" link.
+ *
+ * No rollover: only credits whose invoice is the ledger's credit_invoice (the last granting
+ * invoice.paid) count or can be spent. A new granting invoice moves credit_invoice, which
+ * expires the previous period's unused credits without deleting any key.
  *
  * Spending a credit: the oldest credit with no memburn key is claimed by writing
  * memburn:<id>:<creditId> = date and reading it back; if the value is not our date another
@@ -58,7 +63,6 @@ export const MEMBERSHIP_PRICE_IDS: Record<string, Plan> = {
 };
 export const MEMBERSHIP_PRODUCT = 'ci-membership';
 export const MONTHLY_CREDITS = 4;
-export const MAX_BANKED_CREDITS = 8;
 export const MANAGE_BASE = 'https://miamicontactimprov.com/membership/manage?m=';
 const SITE = 'https://miamicontactimprov.com';
 
@@ -93,6 +97,8 @@ export interface CreditLedger {
 	member_id: string;
 	plan: Plan;
 	invoices: string[]; // invoice ids already applied, replay guard
+	credit_invoice?: string | null; // invoice whose credits are current; earlier ones have expired (unset on pre-expiry ledgers: all credits count)
+	credit_period_start?: string | null; // period start of credit_invoice, guards against an older invoice arriving late
 	period_start: string | null;
 	period_end: string | null;
 	updated_at: string;
@@ -145,6 +151,13 @@ async function creditNames(env: Env, memberId: string): Promise<{ all: string[];
 	return { all, burned: new Set(burned) };
 }
 
+/** Credit ids of the current period only: those granted by the ledger's credit_invoice. */
+function currentIds(all: string[], ledger: CreditLedger | null): string[] {
+	const inv = ledger?.credit_invoice;
+	return inv ? all.filter((c) => c.startsWith(`${inv}.`)) : all;
+}
+
+/** Every credit ever granted (history, expired ones included). */
 export async function listCredits(env: Env, memberId: string): Promise<Credit[]> {
 	const { all } = await creditNames(env, memberId);
 	const out: Credit[] = [];
@@ -159,7 +172,7 @@ export async function listCredits(env: Env, memberId: string): Promise<Credit[]>
 
 export async function creditsRemaining(env: Env, memberId: string): Promise<number> {
 	const { all, burned } = await creditNames(env, memberId);
-	return all.filter((id) => !burned.has(id)).length;
+	return currentIds(all, await getLedger(env, memberId)).filter((id) => !burned.has(id)).length;
 }
 
 function json(body: unknown, status: number, cors: Record<string, string>): Response {
@@ -421,12 +434,18 @@ async function onInvoicePaid(env: Env, inv: any): Promise<Response> {
 	const reason: string = inv.billing_reason ?? '';
 	const grants = (reason === 'subscription_create' || reason === 'subscription_cycle') && typeof inv.amount_paid === 'number' && inv.amount_paid > 0;
 	const now = new Date();
+	const line = inv.lines?.data?.[0];
+	const iso = (s: unknown) => (typeof s === 'number' ? new Date(s * 1000).toISOString() : null);
+	const periodStart = iso(line?.period?.start);
+	// An older invoice delivered after a newer one must not take the current period back.
+	const stale = !!periodStart && !!ledger.credit_period_start && periodStart < ledger.credit_period_start;
 	let granted = 0;
-	if (plan === 'monthly' && grants) {
-		const { all, burned } = await creditNames(env, id);
-		// Credits from this very invoice (a retry after a partial write) do not count against the cap.
-		const unused = all.filter((c) => !burned.has(c) && !c.startsWith(`${invoiceId}.`)).length;
-		granted = Math.max(0, Math.min(MONTHLY_CREDITS, MAX_BANKED_CREDITS - unused));
+	if (plan === 'monthly' && grants && !stale) {
+		// Exactly MONTHLY_CREDITS, whatever was left: the previous period's credits expire when the
+		// ledger below points at this invoice. Nothing is deleted. Credits written by an earlier
+		// attempt of this same invoice are kept (and keep their granted_at).
+		const { all } = await creditNames(env, id);
+		granted = MONTHLY_CREDITS;
 		for (let i = 1; i <= granted; i++) {
 			const creditId = `${invoiceId}.${i}`;
 			if (all.includes(creditId)) continue; // written by an earlier attempt: keep granted_at
@@ -436,9 +455,11 @@ async function onInvoicePaid(env: Env, inv: any): Promise<Response> {
 	}
 	for (const ref of paymentRefs(inv)) await env.TICKETS!.put(`mempay:${ref}`, id);
 
-	const line = inv.lines?.data?.[0];
-	const iso = (s: unknown) => (typeof s === 'number' ? new Date(s * 1000).toISOString() : null);
 	ledger.plan = plan;
+	if (plan === 'monthly' && grants && !stale) {
+		ledger.credit_invoice = invoiceId;
+		ledger.credit_period_start = periodStart ?? ledger.credit_period_start ?? null;
+	}
 	ledger.invoices = [...ledger.invoices, invoiceId].slice(-24);
 	if (line?.period) {
 		ledger.period_start = iso(line.period.start) ?? ledger.period_start;
@@ -543,7 +564,8 @@ export async function handleMemberList(env: Env, url: URL, cors: Record<string, 
 		if (wantStatus && m.status !== wantStatus) continue;
 		const ledger = await getLedger(env, id);
 		const plan = ledger?.plan ?? m.plan;
-		const { all, burned } = await creditNames(env, id);
+		const { all: allNames, burned } = await creditNames(env, id);
+		const all = currentIds(allNames, ledger);
 		const email = await getEmailState(env, id);
 		members.push({
 			id: m.id, name: m.name, email: m.email, phone: m.phone, plan, status: m.status, suspended_reason: m.suspended_reason,
@@ -599,8 +621,8 @@ export async function burnCredit(env: Env, memberId: string, date: string, now =
 		return { ok: true };
 	}
 
-	const { all, burned } = await creditNames(env, memberId);
-	const unusedIds = all.filter((c) => !burned.has(c));
+	const { all: allNames, burned } = await creditNames(env, memberId);
+	const unusedIds = currentIds(allNames, ledger).filter((c) => !burned.has(c));
 	const credits: Credit[] = [];
 	for (const cid of unusedIds) {
 		const c = await readJson<Credit>(env, `memcredit:${memberId}:${cid}`);
