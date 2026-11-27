@@ -13,6 +13,7 @@ import { handleStripeWebhook, handleTicketLookup } from './stripe-webhook';
 import { addContact, lookupContact, resendCode, startSignup, verifyCode } from './ci';
 import { monthlyRun } from './monthly';
 import { bfRun } from './bf';
+import { reminderRun } from './reminder';
 import { handleCheckinLink, handleMemberCheckin as handleSelfCheckin, handleTicketCheckin, handleTicketLookup as handleTicketStatus } from './checkin';
 import { handleMemberCheckin, handleMemberList, handleMembershipCheckout, handleMembershipPortal, handleMembershipSession } from './membership';
 import { handleUnsubscribe } from './unsub';
@@ -494,6 +495,19 @@ export default {
 			} catch {}
 			const result = await bfRun(env, body);
 			return Response.json(result, { status: result.ok ? 200 : 500, headers: corsHeaders });
+		}
+
+		// POST /api/ci/reminder-run: 24h class reminders. Admin only, dry_run by default; see reminder.ts.
+		if (url.pathname === '/api/ci/reminder-run' && request.method === 'POST') {
+			if (!isAdmin(request, env)) {
+				return Response.json({ ok: false, error: 'Unauthorized' }, { status: 401, headers: corsHeaders });
+			}
+			let body: unknown = null;
+			try {
+				body = await request.json();
+			} catch {}
+			const result = await reminderRun(env, body);
+			return Response.json(result, { status: result.ok ? 200 : 409, headers: corsHeaders });
 		}
 
 		// POST /api/stripe/webhook - Stripe-signed; writes the ticket and emails it.

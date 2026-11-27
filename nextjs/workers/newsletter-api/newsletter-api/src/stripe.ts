@@ -229,6 +229,20 @@ export async function fetchSession(secretKey: string, sessionId: string): Promis
 	}
 }
 
+/** The checkout session id that paid a payment intent, or null (none, or any Stripe trouble). */
+export async function findSessionIdByPaymentIntent(secretKey: string, paymentIntent: string): Promise<string | null> {
+	try {
+		const response = await fetch(`${STRIPE_API}/checkout/sessions?payment_intent=${encodeURIComponent(paymentIntent)}&limit=1`, {
+			headers: { Authorization: `Bearer ${secretKey}` },
+		});
+		if (!response.ok) return null;
+		const body = (await response.json()) as { data?: Array<{ id?: string }> };
+		return body.data?.[0]?.id ?? null;
+	} catch {
+		return null;
+	}
+}
+
 export interface CreateSubscriptionSessionParams {
 	priceId: string;
 	successUrl: string;

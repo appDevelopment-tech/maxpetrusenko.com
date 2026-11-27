@@ -5,10 +5,11 @@
  */
 
 import type { Env } from './index';
-import { fetchSession, StripeUnavailableError } from './stripe';
+import { fetchSession, findSessionIdByPaymentIntent, StripeUnavailableError } from './stripe';
 import { sendTicketEmail } from './ticket-email';
 import { qrSvg } from './qr';
-import { checkinUrl, ensureTicket, type StripeSession } from './tickets';
+import { checkinUrl, ensureTicket, markTicketRefunded, type StripeSession } from './tickets';
+import { SUPPORT_EMAIL } from './checkin';
 import { handleMembershipEvent } from './membership';
 
 const TOLERANCE_SECONDS = 300;
@@ -53,6 +54,35 @@ const HANDLED_EVENTS = ['checkout.session.completed', 'checkout.session.async_pa
 // membership; in payment mode it is a ticket.
 const MEMBERSHIP_ONLY_EVENTS = ['invoice.paid', 'customer.subscription.updated', 'customer.subscription.deleted', 'charge.refunded', 'charge.dispute.created'];
 
+/**
+ * charge.refunded (full refunds only) and charge.dispute.created hit either a single-class
+ * ticket or a membership payment. Tickets are tried first through the KV index; a membership
+ * payment is recognised by membership.ts; only when neither matches do we ask Stripe which
+ * checkout session paid, so tickets created before the index still get marked.
+ */
+async function handleChargeProblem(env: Env, event: { type?: string; data?: { object?: any } }): Promise<Response> {
+	const obj = event.data?.object ?? {};
+	const reason = event.type === 'charge.refunded' ? 'refund' : 'dispute';
+	const refs = reason === 'refund' ? (obj.refunded === true ? [obj.payment_intent, obj.id] : []) : [obj.payment_intent, obj.charge];
+	const lookup = (pi: string) => (env.STRIPE_SECRET_KEY ? findSessionIdByPaymentIntent(env.STRIPE_SECRET_KEY, pi) : Promise.resolve(null));
+	try {
+		if (refs.length) {
+			const indexed = await markTicketRefunded(env, refs, reason, lookup, false);
+			if (indexed !== 'not_a_ticket') return Response.json({ ok: true, ticket: indexed, reason });
+		}
+		const res = await handleMembershipEvent(env, event as any);
+		const body = (await res.clone().json().catch(() => null)) as { skipped?: string } | null;
+		if (refs.length && body?.skipped === 'not a CI membership payment') {
+			const found = await markTicketRefunded(env, refs, reason, lookup, true);
+			if (found !== 'not_a_ticket') return Response.json({ ok: true, ticket: found, reason });
+		}
+		return res;
+	} catch (error) {
+		console.error('[Ticket refund failed]', String(error));
+		return Response.json({ ok: false, error: 'Processing failed' }, { status: 500 });
+	}
+}
+
 export async function handleStripeWebhook(request: Request, env: Env): Promise<Response> {
 	if (!env.STRIPE_WEBHOOK_SECRET || !env.TICKETS || !env.TICKET_SECRET) {
 		return Response.json({ ok: false, error: 'Ticketing not configured' }, { status: 500 });
@@ -68,6 +98,7 @@ export async function handleStripeWebhook(request: Request, env: Env): Promise<R
 	} catch {
 		return Response.json({ ok: false, error: 'Invalid JSON' }, { status: 400 });
 	}
+	if (event.type === 'charge.refunded' || event.type === 'charge.dispute.created') return handleChargeProblem(env, event);
 	if (event.type && MEMBERSHIP_ONLY_EVENTS.includes(event.type)) return handleMembershipEvent(env, event);
 	if (HANDLED_EVENTS.includes(event.type ?? '') && event.data?.object?.mode === 'subscription') return handleMembershipEvent(env, event);
 	const session = event.data?.object;
@@ -78,6 +109,7 @@ export async function handleStripeWebhook(request: Request, env: Env): Promise<R
 	try {
 		const result = await ensureTicket(env, session);
 		if ('skip' in result) return Response.json({ ok: true, skipped: result.skip });
+		if (result.ticket.refunded_at) return Response.json({ ok: true, ticket_id: result.ticket.id, refunded: true });
 		const email = await sendTicketEmail(env, result.ticket);
 		return Response.json({ ok: true, ticket_id: result.ticket.id, created: result.created, email });
 	} catch (error) {
@@ -111,6 +143,9 @@ export async function handleTicketLookup(request: Request, env: Env, corsHeaders
 		const result = await ensureTicket(env, session);
 		if ('skip' in result) return Response.json({ ok: false, error: result.skip }, { status: 422, headers: corsHeaders });
 		const t = result.ticket;
+		if (t.refunded_at) {
+			return Response.json({ ok: false, error: 'ticket_refunded', ticket_id: t.id, support_email: SUPPORT_EMAIL }, { status: 403, headers: corsHeaders });
+		}
 		const url = checkinUrl(env, t.id);
 		return Response.json(
 			{ ok: true, paid: true, ticket_id: t.id, event_date: t.event_date, kind: t.kind, amount: t.amount, checkin_url: url, qr_svg: qrSvg(url) },

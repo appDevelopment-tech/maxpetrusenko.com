@@ -10,6 +10,7 @@
  * KV layout (binding TICKETS):
  *   tkt:<ticketId>                   -> Ticket JSON
  *   date:<YYYY-MM-DD>:<ticketId>     -> '1'  (index: list a date's attendees by prefix)
+ *   tpay:<payment_intent>            -> ticketId  (so charge.refunded / charge.dispute.created find the ticket)
  */
 
 import type { Env } from './index';
@@ -35,6 +36,11 @@ export interface Ticket {
 	email_sent_at: string | null;
 	email_id: string | null;
 	email_error: string | null;
+	// Set on tickets created after the refund index existed; lets a refund find the ticket without Stripe.
+	payment_intent?: string | null;
+	// Set when the payment was fully refunded or disputed. A refunded ticket never checks in.
+	refunded_at?: string | null;
+	refund_reason?: 'refund' | 'dispute' | null;
 }
 
 // The slice of a Stripe Checkout Session we read. Both the webhook event and
@@ -48,6 +54,7 @@ export interface StripeSession {
 	metadata?: Record<string, string> | null;
 	// Subscription checkouts (memberships, see membership.ts).
 	mode?: string | null;
+	payment_intent?: string | null;
 	created?: number | null;
 	customer?: string | null;
 	subscription?: string | null;
@@ -111,8 +118,13 @@ export async function ensureTicket(env: Env, session: StripeSession, now = new D
 	if (!EVENTS.some((e) => e.date === eventDate)) return { skip: 'unknown class_date' };
 
 	const id = await ticketIdFor(env.TICKET_SECRET, session.id);
+	const paymentIntent = typeof session.payment_intent === 'string' ? session.payment_intent : '';
 	const existing = await getTicket(env, id);
-	if (existing) return { ticket: existing, created: false };
+	if (existing) {
+		// Backfill the refund index for a ticket written before it existed.
+		if (paymentIntent && !(await env.TICKETS.get(`tpay:${paymentIntent}`))) await env.TICKETS.put(`tpay:${paymentIntent}`, id);
+		return { ticket: existing, created: false };
+	}
 
 	const email = (session.customer_details?.email ?? '').trim();
 	const ticket: Ticket = {
@@ -130,6 +142,9 @@ export async function ensureTicket(env: Env, session: StripeSession, now = new D
 		email_sent_at: null,
 		email_id: null,
 		email_error: null,
+		payment_intent: paymentIntent || null,
+		refunded_at: null,
+		refund_reason: null,
 	};
 	// Re-read right before writing: another run (webhook vs success page) may have created
 	// the ticket, or already sent the email, while we were building this one. Never
@@ -138,6 +153,7 @@ export async function ensureTicket(env: Env, session: StripeSession, now = new D
 	if (raced) return { ticket: raced, created: false };
 	await saveTicket(env, ticket);
 	await env.TICKETS.put(`date:${eventDate}:${id}`, '1');
+	if (paymentIntent) await env.TICKETS.put(`tpay:${paymentIntent}`, id);
 	return { ticket, created: true };
 }
 
@@ -155,4 +171,48 @@ export async function listTicketsForBf(env: Env, max = 600): Promise<{ tickets: 
 		cursor = page.list_complete === false ? page.cursor : undefined;
 	} while (cursor);
 	return { tickets, truncated: false };
+}
+
+export type TicketRefundResult = 'marked' | 'duplicate' | 'not_a_ticket';
+
+/**
+ * A full refund or a dispute on a single-class payment marks the ticket refunded. `refs` are
+ * the charge's payment intent (and charge id). The ticket is found through the `tpay:` index;
+ * a ticket created before the index existed is found through Stripe: the checkout session
+ * for that payment intent gives the session id, and the ticket id derives from it.
+ * `lookup` is injected so tests do not need Stripe.
+ */
+export async function markTicketRefunded(
+	env: Env,
+	refs: unknown[],
+	reason: 'refund' | 'dispute',
+	lookupSessionId: (paymentIntent: string) => Promise<string | null>,
+	allowFallback = true,
+	now = new Date(),
+): Promise<TicketRefundResult> {
+	if (!env.TICKETS || !env.TICKET_SECRET) return 'not_a_ticket';
+	const keys = refs.filter((r): r is string => typeof r === 'string' && r.length > 0);
+	let id = '';
+	for (const ref of keys) {
+		id = (await env.TICKETS.get(`tpay:${ref}`)) ?? '';
+		if (id) break;
+	}
+	if (!id && allowFallback) {
+		for (const ref of keys.filter((k) => k.startsWith('pi_'))) {
+			const sessionId = await lookupSessionId(ref);
+			if (!sessionId) continue;
+			const candidate = await ticketIdFor(env.TICKET_SECRET, sessionId);
+			if (await getTicket(env, candidate)) {
+				id = candidate;
+				await env.TICKETS.put(`tpay:${ref}`, id);
+				break;
+			}
+		}
+	}
+	if (!id) return 'not_a_ticket';
+	const ticket = await getTicket(env, id);
+	if (!ticket) return 'not_a_ticket';
+	if (ticket.refunded_at) return 'duplicate';
+	await saveTicket(env, { ...ticket, refunded_at: now.toISOString(), refund_reason: reason });
+	return 'marked';
 }

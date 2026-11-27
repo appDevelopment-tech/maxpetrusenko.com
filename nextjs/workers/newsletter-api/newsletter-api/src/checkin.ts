@@ -124,6 +124,7 @@ export async function handleTicketLookup(request: Request, env: Env, cors: Recor
 	if (!env.TICKETS) return json({ ok: false, error: 'Check-in not configured' }, 500, cors);
 	const t = await getTicket(env, id);
 	if (!t) return denied('unknown_ticket', 404, cors);
+	if (t.refunded_at) return denied('ticket_refunded', 403, cors, { valid: false });
 	const w = classWindow(now);
 	return json(
 		{
@@ -155,6 +156,7 @@ export async function handleTicketCheckin(request: Request, env: Env, cors: Reco
 	const ticket = await getTicket(env, id);
 	if (!ticket) return denied('unknown_ticket', 404, cors);
 	const base = { name: firstName(ticket.name), kind: ticket.kind, event_date: ticket.event_date };
+	if (ticket.refunded_at) return denied('ticket_refunded', 403, cors, base);
 	if (ticket.checked_in_at) return json({ ok: true, already: true, checked_in_at: ticket.checked_in_at, ...base }, 200, cors);
 
 	const w = classWindow(now);
@@ -164,6 +166,7 @@ export async function handleTicketCheckin(request: Request, env: Env, cors: Reco
 	// Re-read right before writing: the confirmation email patches its own fields on this same
 	// record, and a scan landing on top of it must not erase them.
 	const fresh = (await getTicket(env, id)) ?? ticket;
+	if (fresh.refunded_at) return denied('ticket_refunded', 403, cors, base);
 	if (fresh.checked_in_at) return json({ ok: true, already: true, checked_in_at: fresh.checked_in_at, ...base }, 200, cors);
 	const checkedInAt = now.toISOString();
 	await saveTicket(env, { ...fresh, checked_in_at: checkedInAt });
