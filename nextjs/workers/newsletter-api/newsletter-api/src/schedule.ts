@@ -92,6 +92,44 @@ export const KIND_LOOKUP_KEYS: Record<DropInKind, string> = {
 	combo: 'ci-combo-dropin',
 };
 
+// Day-of class price: $20 until 3:00 PM America/New_York on the class date, then $30
+// until online sales close (2 hours before the 7 PM start). Class tickets only: the
+// jam ($15) and class+jam combo ($30) prices are deliberately unchanged. Both prices
+// live on the same Stripe product; the Worker picks the lookup key server-side.
+export const DAYOF_LOOKUP_KEY = 'ci-class-dayof-30';
+export const DAYOF_SWITCH_HOUR_ET = 15;
+export const STANDARD_CLASS_CENTS = 2000;
+export const DAYOF_CLASS_CENTS = 3000;
+
+export type PriceTier = 'standard' | 'dayof';
+export interface ClassPrice {
+	tier: PriceTier;
+	amount: number; // cents, for display; checkout reads the real amount from Stripe
+	lookupKey: string;
+	/** When the price next changes (the switch to day-of, or the end of online sales), or null. */
+	changesAt: Date | null;
+}
+
+/** The instant the day-of price starts for an event: 15:00 on its date, in that date's Eastern offset. */
+export function dayOfStart(event: ScheduledEvent): Date {
+	const off = event.start.slice(-6);
+	return new Date(`${event.date}T${String(DAYOF_SWITCH_HOUR_ET).padStart(2, '0')}:00:00${off}`);
+}
+
+/**
+ * The class price for `event` at `now`. Pure and server-side only: checkout never
+ * reads a price or a time from the client. Boundary: 14:59:59 -> $20, 15:00:00 -> $30.
+ * Whether sales are still open is a separate question (`resolveEvent().closed`).
+ */
+export function classPriceFor(now: Date, event: ScheduledEvent): ClassPrice {
+	const start = dayOfStart(event).getTime();
+	const t = now.getTime();
+	if (t >= start) {
+		return { tier: 'dayof', amount: DAYOF_CLASS_CENTS, lookupKey: DAYOF_LOOKUP_KEY, changesAt: cutoffFor(event) };
+	}
+	return { tier: 'standard', amount: STANDARD_CLASS_CENTS, lookupKey: KIND_LOOKUP_KEYS.class, changesAt: new Date(start) };
+}
+
 // Which kinds a given event type supports. A plain class/jam night only
 // sells its own kind; a combo-capable night sells all three.
 export function kindAvailableForEvent(event: ScheduledEvent, kind: DropInKind): boolean {

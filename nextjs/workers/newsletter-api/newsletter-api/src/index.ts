@@ -8,7 +8,7 @@
  * `Authorization: Bearer <ADMIN_TOKEN>`. /api/subscribe stays public.
  */
 
-import { handleCheckout } from './checkout';
+import { handleCheckout, handlePrice } from './checkout';
 import { handleStripeWebhook, handleTicketLookup } from './stripe-webhook';
 import { addContact, lookupContact, resendCode, startSignup, verifyCode } from './ci';
 import { monthlyRun } from './monthly';
@@ -421,6 +421,11 @@ export default {
 				}
 			}
 			return handleCheckout(request, env, corsHeaders);
+		}
+
+		// GET /api/price - current drop-in price (class switches to the day-of price at 3 PM ET)
+		if (url.pathname === '/api/price' && request.method === 'GET') {
+			return handlePrice(url, corsHeaders);
 		}
 
 		// Memberships (see membership.ts). Checkout, session lookup and portal are public and
