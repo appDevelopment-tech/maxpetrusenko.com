@@ -60,7 +60,7 @@ export default async function BlogTopicsPage() {
             <div className="eyebrow">
               <span className="dot"></span> Crawl Hub
             </div>
-            <h1>Blog Topic Index</h1>
+            <h1>Blog topics: RAG, GEO, AI agents and evals</h1>
             <p>
               Central link map for article clusters. This page exists to strengthen crawl discovery and
               make topic navigation faster for humans and search systems.
