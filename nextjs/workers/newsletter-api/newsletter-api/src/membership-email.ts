@@ -22,7 +22,7 @@ export function buildMembershipEmail(member: MemberProfile): MembershipEmail {
 	const greeting = first ? `Hi ${first}, welcome in.` : 'Welcome in.';
 	const monthly = member.plan === 'monthly';
 	const planLine = monthly
-		? 'Monthly membership: 4 class credits each billing month. Credits you do not use roll over, up to 8 banked.'
+		? "Monthly membership: 4 classes each billing month. Unused classes don't carry over."
 		: 'Yearly membership: one class every week.';
 	const covers = 'Memberships cover the Friday class, not jams or workshops.';
 	const where = `Fridays 7:00 to 9:00 PM at ${VENUE_NAME}, ${VENUE_ADDRESS}.`;

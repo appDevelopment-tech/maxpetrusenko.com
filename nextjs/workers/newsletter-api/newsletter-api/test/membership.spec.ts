@@ -81,6 +81,9 @@ function subSession(overrides: Record<string, unknown> = {}) {
 const completed = (s: unknown = subSession(), at = '2026-11-20T10:00:00-05:00') => ({ id: 'evt_c', type: 'checkout.session.completed', created: t(at), data: { object: s } });
 
 let invoiceN = 0;
+function periodLines(start: string, end: string) {
+	return { data: [{ period: { start: t(start), end: t(end) }, price: { id: 'price_1Ue7AyGR8ZpP3RhohOxjhayc', lookup_key: 'ci-member-monthly-40' } }] };
+}
 function invoice(overrides: Record<string, unknown> = {}) {
 	invoiceN += 1;
 	return {
@@ -251,7 +254,7 @@ describe('checkout.session.completed (mode=subscription)', () => {
 });
 
 describe('invoice.paid', () => {
-	it('monthly: +4 credits on the first invoice, +4 on renewal, capped at 8 banked, never twice for one invoice', async () => {
+	it('monthly: 4 credits on the first invoice, a renewal replaces them (no rollover), never twice for one invoice', async () => {
 		const id = await memberId();
 		const first = invoice({ billing_reason: 'subscription_create' });
 		expect((await webhook(paid(first))).body).toMatchObject({ ok: true, granted: 4 });
@@ -260,10 +263,13 @@ describe('invoice.paid', () => {
 		const ledger = (await getLedger(testEnv(), id))!;
 		expect(ledger.plan).toBe('monthly');
 		expect(ledger.period_end).toBe('2027-01-01T00:00:00.000Z');
+		expect(ledger.credit_invoice).toBe(first.id);
 
-		expect((await webhook(paid(invoice()))).body.granted).toBe(4);
-		expect((await webhook(paid(invoice()))).body.granted).toBe(0); // already 8 banked
-		const credits = await listCredits(testEnv(), id);
+		const second = invoice({ lines: periodLines('2027-01-01T00:00:00Z', '2027-02-01T00:00:00Z') });
+		expect((await webhook(paid(second))).body.granted).toBe(4);
+		expect(await creditsRemaining(testEnv(), id)).toBe(4); // not 8: the first month's 4 expired
+		expect((await getLedger(testEnv(), id))!.credit_invoice).toBe(second.id);
+		const credits = await listCredits(testEnv(), id); // history kept
 		expect(credits).toHaveLength(8);
 		expect(new Set(credits.map((c) => c.id)).size).toBe(8);
 	});
@@ -279,14 +285,38 @@ describe('invoice.paid', () => {
 		expect(await env.TICKETS!.get(`memcr:${id}`)).not.toContain('"credits"');
 	});
 
-	it('tops up only to the cap when some credits were used', async () => {
+	it('unused credits of the previous period expire; a renewal gives exactly 4 whether 0, 2 or 4 were left', async () => {
+		interceptEmail(1);
+		await webhook(completed());
 		const id = await memberId();
 		await webhook(paid(invoice({ billing_reason: 'subscription_create' })));
 		const credits = await listCredits(testEnv(), id);
 		await env.TICKETS!.put(`memburn:${id}:${credits[0].id}`, '2026-12-04');
 		await env.TICKETS!.put(`memburn:${id}:${credits[1].id}`, '2026-12-11');
-		expect((await webhook(paid(invoice()))).body.granted).toBe(4); // 2 unused + 4 = 6
-		expect((await webhook(paid(invoice()))).body.granted).toBe(2); // 6 + 2 = 8
+		expect(await creditsRemaining(testEnv(), id)).toBe(2);
+		const second = invoice({ lines: periodLines('2027-01-01T00:00:00Z', '2027-02-01T00:00:00Z') });
+		expect((await webhook(paid(second))).body.granted).toBe(4);
+		expect(await creditsRemaining(testEnv(), id)).toBe(4);
+		// expired credits cannot be spent: four check-ins use only the new period's credits
+		const spent = [];
+		for (const d of ['2026-12-04', '2026-12-11', '2026-12-18', '2026-12-25']) {
+			const r: any = await burnCredit(testEnv(), id, d);
+			spent.push(r.credit_id);
+		}
+		expect(spent.every((c) => c.startsWith(`${second.id}.`))).toBe(true);
+		expect(await burnCredit(testEnv(), id, '2027-01-01')).toEqual({ ok: false, error: 'no_credits' });
+		// the old, unspent credits are still on file as history
+		expect((await listCredits(testEnv(), id)).filter((c) => c.used_for === null)).toHaveLength(2);
+	});
+
+	it('an older invoice delivered after a newer one does not bring the old period back', async () => {
+		const id = await memberId();
+		const old = invoice({ billing_reason: 'subscription_create' });
+		const newer = invoice({ lines: periodLines('2027-01-01T00:00:00Z', '2027-02-01T00:00:00Z') });
+		await webhook(paid(newer));
+		expect((await webhook(paid(old))).body.granted).toBe(0);
+		expect((await getLedger(testEnv(), id))!.credit_invoice).toBe(newer.id);
+		expect(await creditsRemaining(testEnv(), id)).toBe(4);
 	});
 
 	it('proration, manual, $0 and amount-less invoices carry no credits', async () => {
@@ -749,8 +779,9 @@ describe('buildMembershipEmail', () => {
 		expect(buildMembershipEmail(base).text).toContain('one class every week');
 		expect(buildMembershipEmail(base).text).not.toContain('Black Friday');
 		const bf = buildMembershipEmail({ ...base, plan: 'monthly', bf: { campaign: 'bf-2026', purchased_at: 'x' } });
-		expect(bf.text).toContain('4 class credits each billing month');
-		expect(bf.text).toContain('up to 8 banked');
+		expect(bf.text).toContain('4 classes each billing month');
+		expect(bf.text).toContain("Unused classes don't carry over");
+		expect(bf.text).not.toMatch(/roll|banked/i);
 		expect(bf.text).toContain('3 bring-a-friend passes, one a month for your first three months');
 		expect(bf.html).toContain('/membership/manage?m=');
 	});
