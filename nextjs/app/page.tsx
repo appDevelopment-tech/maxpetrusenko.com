@@ -41,9 +41,9 @@ const EmailCapture = dynamic(
 );
 
 export const metadata = generateMetadata({
-  title: "Max Petrusenko — Presence & Product",
+  title: "Max Petrusenko | AI Automation and Agent Engineering Consultant",
   description:
-    "Max Petrusenko builds calm products and embodied experiences: AI automation for creators and founders, plus somatic bodywork by request.",
+    "Remote AI automation and agent engineering for SaaS founders and small teams. Claude Code, n8n and API integrations. Book a 15-minute intro call.",
   ogType: "website",
   canonical: absoluteUrl("/"),
 });
@@ -76,8 +76,8 @@ export default async function HomePage({ searchParams }: HomePageProps) {
       <JsonLd
         type="WebPage"
         data={generateWebPageSchema({
-          title: "Max Petrusenko — Presence & Product",
-          description: "AI automation for creators and founders, plus somatic bodywork by request.",
+          title: "Max Petrusenko | AI Automation and Agent Engineering Consultant",
+          description: "Remote AI automation and agent engineering for SaaS founders and small teams.",
           url: "/",
         })}
       />
@@ -124,24 +124,27 @@ export default async function HomePage({ searchParams }: HomePageProps) {
         <section className="relative z-[3] mx-auto w-full max-w-[1080px] px-4 py-28 md:grid md:grid-cols-2 md:gap-12 md:px-6 md:py-32">
           <div>
             <p className="blur-in inline-flex items-center rounded-full border border-[rgba(14,97,93,0.2)] px-4 py-1 text-xs font-semibold shiny-text">
-              Open for Q2 projects
+              Taking new AI automation projects
             </p>
             <h1 className="clip-reveal clip-reveal-d1 mt-5 font-serif text-[clamp(2.4rem,4.8vw,3.75rem)] font-bold leading-[1.06] tracking-tight text-[var(--ink)]">
-              Systems for <span className="text-[0.92em] text-[var(--accent-spirit)]">scale</span>.<br />
-              Presence for depth.
+              AI agents and automations that <span className="text-[0.92em] text-[var(--accent-spirit)]">run your ops</span>.
             </h1>
             <p className="blur-in blur-in-d2 mt-5 max-w-[440px] text-[1.05rem] leading-relaxed text-[var(--ink-soft)]">
-              I build AI automation for SaaS founders and hold somatic space for
-              people ready to feel more. Two crafts, one practitioner.
+              I audit your stack, find the repetitive work, and build the
+              automations with Claude Code, n8n and API integrations. Remote,
+              for SaaS founders and small teams. Eight years of Node.js and Python.
             </p>
             <div className="blur-in blur-in-d3 mt-8 flex flex-wrap gap-3">
-              <Link className="inline-flex items-center gap-2 rounded-[10px] bg-[var(--ink)] px-7 py-3.5 text-[0.95rem] font-semibold text-[var(--sand)] shadow-[0_4px_16px_rgba(12,17,21,0.18)] transition hover:-translate-y-0.5 hover:shadow-[0_8px_28px_rgba(12,17,21,0.24)]" href="/tech">
-                Book a strategy call &rarr;
-              </Link>
+              <a className="inline-flex items-center gap-2 rounded-[10px] bg-[var(--ink)] px-7 py-3.5 text-[0.95rem] font-semibold text-[var(--sand)] shadow-[0_4px_16px_rgba(12,17,21,0.18)] transition hover:-translate-y-0.5 hover:shadow-[0_8px_28px_rgba(12,17,21,0.24)]" href="https://tidycal.com/agentpersona" target="_blank" rel="noopener">
+                Book a 15-minute intro call &rarr;
+              </a>
               <Link className="inline-flex items-center gap-2 rounded-[10px] border-[1.5px] border-[var(--line)] bg-transparent px-7 py-3.5 text-[0.95rem] font-semibold text-[var(--ink)] transition hover:-translate-y-0.5 hover:border-[var(--accent-tech)]" href="/proof">
-                Explore my work
+                See the work
               </Link>
             </div>
+            <p className="blur-in blur-in-d3 mt-4 text-sm text-[var(--ink-soft)]">
+              Not ready to talk? <a className="font-semibold underline" href="#send-your-stack">Send me your stack</a> and get 3 automation ideas by email.
+            </p>
           </div>
         </section>
 
@@ -151,8 +154,8 @@ export default async function HomePage({ searchParams }: HomePageProps) {
         schemaType="WebPage"
         showUi={false}
         question="Who is Max Petrusenko and what services does he offer?"
-        answer="Max Petrusenko is a tech builder and somatic practitioner offering two distinct practices. For tech: AI automation consulting with Claude Code, n8n workflows, and ChatGPT integrations that saved one client $253k annually. For somatic: private sessions for nervous-system regulation and embodied presence, paused for now. No calendar slots are open right now."
-        displayAnswer="Max Petrusenko works across two practices: AI automation for founders and private somatic sessions paused for now. Recent systems built with Claude Code, n8n, and ChatGPT saved one client $253k annually, while the somatic practice offers boundaries-first nervous system practice notes."
+        answer="Max Petrusenko is an AI automation and agent engineering consultant. He audits a team's stack and builds automations with Claude Code, n8n and API integrations, remotely, for SaaS founders and small teams. A 15-minute intro call costs $1 and a full working hour costs $150. He also has a private somatic practice, which is paused for now."
+        displayAnswer="Max Petrusenko is an AI automation and agent engineering consultant who works remotely with SaaS founders and small teams. His somatic practice is paused for now."
       />
 
       {/* Two Paths dark zone */}
@@ -171,7 +174,7 @@ export default async function HomePage({ searchParams }: HomePageProps) {
         <div className="dark-zone-inner">
           <p className="section-eyebrow text-[var(--accent-mindfold)]">Two Paths</p>
           <h2 className="mt-2 font-serif text-[clamp(1.6rem,2.8vw,2.25rem)] font-semibold tracking-wide text-[#e2e8f0]">
-            Choose your entry point
+            Two kinds of work
           </h2>
           <p className="mt-2 max-w-[520px] text-[var(--dark-zone-muted)]">
             Both paths share the same foundation: clarity, precision, and deep
@@ -211,7 +214,7 @@ export default async function HomePage({ searchParams }: HomePageProps) {
           </div>
 
           <div className="mt-8 grid gap-4 sm:grid-cols-3">
-            {["$253k annual cost savings", "73% fewer production bugs", "4.9/5 client experience rating"].map((metric) => (
+            {["8 years of Node.js and Python", "Live products: ClawPoster, Agent Persona, SMM Agent", "Public work on GitHub"].map((metric) => (
               <div key={metric} className="rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-center text-sm font-medium text-[var(--dark-zone-text)]">
                 {metric}
               </div>
@@ -303,12 +306,14 @@ export default async function HomePage({ searchParams }: HomePageProps) {
             </div>
 
             <div className="space-y-6">
-              <StackAnalysisLeadMagnet source="home-hero" />
+              <div id="send-your-stack">
+                <StackAnalysisLeadMagnet source="home-hero" />
+              </div>
               <div className="rounded-[24px] border border-white/10 bg-white/[0.06] p-6 shadow-[0_18px_48px_rgba(4,10,24,0.2)] backdrop-blur-[10px]">
                 <h3 className="text-2xl font-semibold text-[#e2e8f0]">Choose your lane</h3>
                 <div className="mt-4 grid gap-3">
                   <Link href="/tech" className="rounded-xl border border-[rgba(12,17,21,0.09)] bg-white px-4 py-3 text-sm font-semibold transition hover:border-[rgba(15,126,169,0.3)]">
-                    Tech consulting and delivery
+                    AI automation consulting
                   </Link>
                   <Link href="/somatic" className="rounded-xl border border-[rgba(12,17,21,0.09)] bg-white px-4 py-3 text-sm font-semibold transition hover:border-[rgba(14,97,93,0.3)]">
                     Somatic practice
