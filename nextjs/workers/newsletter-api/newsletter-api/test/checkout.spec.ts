@@ -7,6 +7,7 @@ const STRIPE_SECRET_KEY = 'sk_test_fixture_not_a_real_key';
 
 const PRICES: Record<string, { id: string; unit_amount: number }> = {
 	'ci-ticket-online-friday': { id: 'price_class_test', unit_amount: 2000 },
+	'ci-class-dayof-30': { id: 'price_dayof_test', unit_amount: 3000 },
 	'ci-jam-dropin': { id: 'price_jam_test', unit_amount: 1500 },
 	'ci-combo-dropin': { id: 'price_combo_test', unit_amount: 3000 },
 };
@@ -267,5 +268,113 @@ describe('POST /api/checkout with a ticket code', () => {
 		expect(res.status).toBe(429);
 		expect(seen).toEqual(['203.0.113.7']);
 		expect(sent.sessions).toHaveLength(0);
+	});
+});
+
+describe('day-of class price at checkout (Friday 2026-11-27)', () => {
+	const at = (iso: string) => {
+		vi.useFakeTimers();
+		vi.setSystemTime(new Date(iso));
+	};
+
+	it('2:59:59 PM ET on the class day -> the $20 price', async () => {
+		at('2026-11-27T14:59:59-05:00');
+		interceptPrices();
+		interceptSessions();
+		const { status } = await checkout({ kind: 'class', event_date: '2026-11-27' });
+		expect(status).toBe(200);
+		expect(sent.sessions[0].get('line_items[0][price]')).toBe('price_class_test');
+	});
+
+	it('3:00:00 PM ET on the class day -> the $30 price, same product metadata, promo box kept', async () => {
+		at('2026-11-27T15:00:00-05:00');
+		interceptPrices();
+		interceptSessions();
+		const { status } = await checkout({ kind: 'class', event_date: '2026-11-27' });
+		expect(status).toBe(200);
+		const params = sent.sessions[0];
+		expect(params.get('line_items[0][price]')).toBe('price_dayof_test');
+		expect(params.get('metadata[product]')).toBe('ci-class');
+		expect(params.get('metadata[kind]')).toBe('class');
+		expect(params.get('allow_promotion_codes')).toBe('true');
+		expect(params.get('success_url')).toContain('amount=3000');
+	});
+
+	it('with no event_date on the class afternoon, resolves to tonight at $30', async () => {
+		at('2026-11-27T16:30:00-05:00');
+		interceptPrices();
+		interceptSessions();
+		await checkout({ kind: 'class' });
+		expect(sent.sessions[0].get('metadata[class_date]')).toBe('2026-11-27');
+		expect(sent.sessions[0].get('line_items[0][price]')).toBe('price_dayof_test');
+	});
+
+	it('a valid promo code still applies to the $30 price', async () => {
+		at('2026-11-27T15:30:00-05:00');
+		interceptPrices();
+		interceptPromo([{ id: 'promo_1', active: true, times_redeemed: 0, max_redemptions: 1, expires_at: Math.floor(Date.now() / 1000) + 86400 }]);
+		interceptSessions();
+		const { body } = await checkout({ kind: 'class', event_date: '2026-11-27', code: 'ci10k7p2qx' });
+		expect(body.code_status).toBe('applied');
+		expect(sent.sessions[0].get('line_items[0][price]')).toBe('price_dayof_test');
+		expect(sent.sessions[0].get('discounts[0][promotion_code]')).toBe('promo_1');
+	});
+
+	it('another day (Thursday afternoon) -> $20', async () => {
+		at('2026-11-26T16:00:00-05:00');
+		interceptPrices();
+		interceptSessions();
+		await checkout({ kind: 'class', event_date: '2026-11-27' });
+		expect(sent.sessions[0].get('line_items[0][price]')).toBe('price_class_test');
+	});
+
+	it('after 3 PM on the class day, a different (next) Friday is still $20', async () => {
+		at('2026-11-27T15:30:00-05:00');
+		interceptPrices();
+		interceptSessions();
+		await checkout({ kind: 'class', event_date: '2026-12-04' });
+		expect(sent.sessions[0].get('line_items[0][price]')).toBe('price_class_test');
+	});
+
+	it('after online sales close (5 PM ET) -> no sale', async () => {
+		at('2026-11-27T17:00:00-05:00');
+		const { status, body } = await checkout({ kind: 'class', event_date: '2026-11-27' });
+		expect(status).toBe(409);
+		expect(body.closed).toBe(true);
+	});
+
+	it('ignores any price the client sends', async () => {
+		at('2026-11-27T10:00:00-05:00');
+		interceptPrices();
+		interceptSessions();
+		await checkout({ kind: 'class', event_date: '2026-11-27', price: 'price_dayof_test', lookup_key: 'ci-class-dayof-30' });
+		expect(sent.sessions[0].get('line_items[0][price]')).toBe('price_class_test');
+	});
+});
+
+describe('GET /api/price', () => {
+	const at = (iso: string) => {
+		vi.useFakeTimers();
+		vi.setSystemTime(new Date(iso));
+	};
+
+	it('reports $20 before 3 PM and when it changes', async () => {
+		at('2026-11-27T14:59:59-05:00');
+		const { status, body } = await call('/api/price?kind=class&event_date=2026-11-27');
+		expect(status).toBe(200);
+		expect(body).toMatchObject({ ok: true, closed: false, tier: 'standard', amount: 2000, changes_at: '2026-11-27T20:00:00.000Z' });
+	});
+
+	it('reports $30 from 3 PM, until sales close', async () => {
+		at('2026-11-27T15:00:00-05:00');
+		const { body } = await call('/api/price');
+		expect(body).toMatchObject({ event_date: '2026-11-27', tier: 'dayof', amount: 3000, changes_at: '2026-11-27T22:00:00.000Z' });
+	});
+
+	it('reports closed after sales close, and 400 for an unknown kind or date', async () => {
+		at('2026-11-27T17:00:00-05:00');
+		expect((await call('/api/price?kind=class&event_date=2026-11-27')).body).toMatchObject({ closed: true });
+		expect((await call('/api/price?kind=weekly')).status).toBe(400);
+		expect((await call('/api/price?event_date=2099-01-01')).status).toBe(400);
 	});
 });

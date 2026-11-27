@@ -8,6 +8,12 @@ A paid Stripe Checkout Session becomes one ticket: a KV record, a QR code, and a
 2. Stripe calls `POST /api/stripe/webhook` with `checkout.session.completed`. The signature is verified (HMAC-SHA256, 5 minute tolerance, any `v1` entry), then `ensureTicket` writes the ticket and `sendTicketEmail` mails it.
 3. The success page calls `GET /api/ticket?session_id=cs_...`. The Worker reads the session back from Stripe, requires `payment_status=paid`, creates the ticket if the webhook has not yet, and returns `ticket_id`, `checkin_url` and `qr_svg`. It never returns the buyer's email or phone.
 
+## Day-of class price
+
+A class ticket is $20 until 3:00 PM America/New_York on the class date, then $30 until online sales close (2 hours before the 7 PM start). `classPriceFor` in `src/schedule.ts` decides, server-side, at checkout-session creation: lookup key `ci-ticket-online-friday` ($20) or `ci-class-dayof-30` ($30). Both prices sit on the same Stripe product and the session metadata stays `product=ci-class`, so the webhook and `ensureTicket` need no change. Promotion codes apply to both. The price is judged per class date: buying next Friday's class on a Friday afternoon is still $20. Jam ($15) and class+jam ($30) are unchanged.
+
+`GET /api/price?kind=class&event_date=` (public, no Stripe call) returns `{tier, amount, changes_at}` or `{closed: true, door_url}` for the site to display.
+
 ## Idempotency
 
 `ticket id = HMAC-SHA256(TICKET_SECRET, session id)`, 128 bits. The webhook, a Stripe retry, and the success-page lookup all derive the same id, so there is only ever one ticket per session. The email is sent once: the ticket records `email_sent_at`, and Resend gets the idempotency key `ci-ticket-email-<id>`.

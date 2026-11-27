@@ -10,7 +10,7 @@
  */
 
 import type { Env } from './index';
-import { KIND_LOOKUP_KEYS, resolveEvent, type DropInKind } from './schedule';
+import { KIND_LOOKUP_KEYS, classPriceFor, resolveEvent, type DropInKind } from './schedule';
 import { createCheckoutSession, findPriceByLookupKey, findUsablePromotionCode } from './stripe';
 import { normalizeTicketCode } from './links';
 
@@ -71,7 +71,8 @@ export async function handleCheckout(request: Request, env: Env, corsHeaders: Re
 		return json({ ok: false, error: 'Stripe not configured' }, 500, corsHeaders);
 	}
 
-	const lookupKey = KIND_LOOKUP_KEYS[kind];
+	// Class tickets switch to the day-of price at 3 PM ET on the class date; chosen here, never by the client.
+	const lookupKey = kind === 'class' ? classPriceFor(new Date(), event).lookupKey : KIND_LOOKUP_KEYS[kind];
 	const price = await findPriceByLookupKey(env.STRIPE_SECRET_KEY, lookupKey);
 	if (!price) {
 		return json({ ok: false, error: 'Price not configured' }, 500, corsHeaders);
@@ -98,7 +99,7 @@ export async function handleCheckout(request: Request, env: Env, corsHeaders: Re
 		allowPromotionCodes: true, // all three drop-in kinds allow promo codes
 		successUrl,
 		cancelUrl: 'https://miamicontactimprov.com/fundamentals',
-		metadata: { class_date: event.date, kind, product: `ci-${kind}` },
+		metadata: { class_date: event.date, kind, product: `ci-${kind}` }, // product stays ci-<kind> for both class prices: tickets.ts filters on it
 	};
 	let session = await createCheckoutSession(env.STRIPE_SECRET_KEY, { ...sessionParams, promotionCodeId });
 	// Stripe can still refuse a session that carries the discount (the code was redeemed
@@ -114,4 +115,31 @@ export async function handleCheckout(request: Request, env: Env, corsHeaders: Re
 	}
 
 	return json({ url: session.url, ...(codeStatus ? { code_status: codeStatus } : {}) }, 200, corsHeaders);
+}
+
+/**
+ * GET /api/price?kind=class&event_date=YYYY-MM-DD - the price a checkout started now would charge,
+ * so the site can show the right number. Read-only, no Stripe call; checkout stays the authority.
+ */
+export function handlePrice(url: URL, corsHeaders: Record<string, string>): Response {
+	const kind = url.searchParams.get('kind') ?? 'class';
+	if (!isKind(kind)) return json({ ok: false, error: 'Unknown kind' }, 400, corsHeaders);
+	const now = new Date();
+	const resolved = resolveEvent(now, kind, url.searchParams.get('event_date') ?? undefined);
+	if (resolved === null || 'error' in resolved) {
+		return json({ ok: false, error: resolved && resolved.error === 'unknown_date' ? 'Unknown class date' : 'Not sellable online' }, resolved && resolved.error === 'unknown_date' ? 400 : 409, corsHeaders);
+	}
+	const { event, closed } = resolved;
+	const headers = { ...corsHeaders, 'Cache-Control': 'no-store' };
+	if (closed) return json({ ok: true, closed: true, event_date: event.date, door_url: DOOR_URL }, 200, headers);
+	if (kind !== 'class') {
+		const amount = kind === 'jam' ? 1500 : 3000;
+		return json({ ok: true, closed: false, event_date: event.date, tier: 'standard', amount, currency: 'usd' }, 200, headers);
+	}
+	const price = classPriceFor(now, event);
+	return json(
+		{ ok: true, closed: false, event_date: event.date, tier: price.tier, amount: price.amount, currency: 'usd', changes_at: price.changesAt?.toISOString() ?? null },
+		200,
+		headers,
+	);
 }

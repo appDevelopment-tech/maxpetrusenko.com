@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { EVENTS, resolveEvent, kindAvailableForEvent, type ScheduledEvent } from '../src/schedule';
+import { EVENTS, classPriceFor, dayOfStart, resolveEvent, kindAvailableForEvent, type ScheduledEvent } from '../src/schedule';
 
 const TWO_HOURS_MS = 2 * 60 * 60 * 1000;
 
@@ -157,5 +157,38 @@ describe('kindAvailableForEvent', () => {
 		expect(kindAvailableForEvent(comboEvent, 'class')).toBe(true);
 		expect(kindAvailableForEvent(comboEvent, 'jam')).toBe(true);
 		expect(kindAvailableForEvent(comboEvent, 'combo')).toBe(true);
+	});
+});
+
+describe('classPriceFor (day-of price)', () => {
+	const ev = (d: string) => EVENTS.find((e) => e.date === d)!;
+
+	it('is $20 at 2:59:59 PM ET and $30 at 3:00:00 PM ET on an EST class day', () => {
+		const e = ev('2026-11-27');
+		expect(classPriceFor(new Date('2026-11-27T14:59:59-05:00'), e)).toMatchObject({ tier: 'standard', amount: 2000, lookupKey: 'ci-ticket-online-friday' });
+		expect(classPriceFor(new Date('2026-11-27T15:00:00-05:00'), e)).toMatchObject({ tier: 'dayof', amount: 3000, lookupKey: 'ci-class-dayof-30' });
+	});
+
+	it('uses EDT on an EDT class day (2026-10-30)', () => {
+		const e = ev('2026-10-30');
+		expect(dayOfStart(e).toISOString()).toBe('2026-10-30T19:00:00.000Z');
+		expect(classPriceFor(new Date('2026-10-30T14:59:59-04:00'), e).tier).toBe('standard');
+		expect(classPriceFor(new Date('2026-10-30T15:00:00-04:00'), e).tier).toBe('dayof');
+	});
+
+	it('is $20 on every day before the class date', () => {
+		expect(classPriceFor(new Date('2026-11-26T23:59:59-05:00'), ev('2026-11-27')).tier).toBe('standard');
+	});
+
+	it('every generated Friday switches at 15:00 America/New_York (DST-safe)', () => {
+		for (const e of EVENTS) {
+			const hour = Number(new Intl.DateTimeFormat('en-US', { timeZone: 'America/New_York', hour: '2-digit', hourCycle: 'h23' }).format(dayOfStart(e)));
+			expect(hour).toBe(15);
+		}
+	});
+
+	it('the day-of window ends where online sales close', () => {
+		const e = ev('2026-11-27');
+		expect(classPriceFor(new Date('2026-11-27T15:00:00-05:00'), e).changesAt!.toISOString()).toBe('2026-11-27T22:00:00.000Z');
 	});
 });
