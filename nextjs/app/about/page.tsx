@@ -53,23 +53,24 @@ export default function AboutPage() {
               About Max
             </p>
             <h1 className="clip-reveal clip-reveal-d1 mt-5 max-w-[12ch] font-serif text-[clamp(2.35rem,4.8vw,3.75rem)] font-bold leading-[1.06] tracking-tight text-[var(--ink)]">
-              Presence and product, kept distinct.
+              I build AI automation for small teams.
             </h1>
             <p className="blur-in blur-in-d2 mt-5 max-w-[500px] text-[1.05rem] leading-relaxed text-[var(--ink-soft)]">
-              I build calm software systems for teams and hold private somatic work
-              in a separate practice. Same operator. Different containers.
+              I am a software engineer with eight years of Node.js and Python. I
+              audit your stack and build the automations, remotely. My private
+              somatic practice is separate and paused for now.
             </p>
             <div className="blur-in blur-in-d3 mt-8 flex flex-wrap gap-3">
-              <Link className="inline-flex items-center gap-2 rounded-[10px] bg-[var(--ink)] px-7 py-3.5 text-[0.95rem] font-semibold text-[var(--sand)] shadow-[0_4px_16px_rgba(12,17,21,0.18)] transition hover:-translate-y-0.5 hover:shadow-[0_8px_28px_rgba(12,17,21,0.24)]" href="/links">
-                Open link hub
-              </Link>
+              <a className="inline-flex items-center gap-2 rounded-[10px] bg-[var(--ink)] px-7 py-3.5 text-[0.95rem] font-semibold text-[var(--sand)] shadow-[0_4px_16px_rgba(12,17,21,0.18)] transition hover:-translate-y-0.5 hover:shadow-[0_8px_28px_rgba(12,17,21,0.24)]" href="https://tidycal.com/agentpersona" target="_blank" rel="noopener">
+                Book a 15-minute intro call
+              </a>
               <a
                 className="inline-flex items-center gap-2 rounded-[10px] border-[1.5px] border-[var(--line)] bg-transparent px-7 py-3.5 text-[0.95rem] font-semibold text-[var(--ink)] transition hover:-translate-y-0.5 hover:border-[var(--accent-mindfold)]"
                 href="mailto:hello@maxpetrusenko.com?subject=Hello"
                 target="_blank"
                 rel="noopener"
               >
-                Contact Max
+                Email me
               </a>
             </div>
           </div>
